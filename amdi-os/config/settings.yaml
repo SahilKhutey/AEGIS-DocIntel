@@ -1,0 +1,72 @@
+app:
+  name: AEGIS-AMDI-OS
+  version: "1.0.0"
+  description: Adaptive Mathematical Document Intelligence Operating System
+
+engines:
+  geometry:
+    enabled: true
+    spatial_index: sqlite
+  recurrence:
+    enabled: true
+    jaccard_threshold: 0.85
+    minhash_permutations: 128
+  frequency:
+    enabled: true
+    method: tfidf
+  matrix:
+    enabled: true
+    backend: numpy
+  template:
+    enabled: true
+    similarity_threshold: 0.90
+    min_cluster_size: 2
+  graph:
+    enabled: true
+    centrality: pagerank
+  hypergraph:
+    enabled: true
+    proximity_y: 0.12
+  spectral:
+    enabled: true
+    fft_bins: 64
+  semantic:
+    enabled: true
+    max_keyphrase: 5
+    summary_sentences: 2
+
+fusion:
+  default_top_k: 12
+  use_mmr: true
+  mmr_lambda: 0.70
+
+memory:
+  hot_tier_mb: 256
+  warm_tier_mb: 512
+  cold_tier_mb: 2048
+  redis_ttl_seconds: 3600
+
+retrieval:
+  semantic_weight: 0.35
+  bm25_weight: 0.25
+  matrix_weight: 0.20
+  graph_weight: 0.10
+  template_weight: 0.05
+  frequency_weight: 0.05
+
+context:
+  max_tokens: 4096
+  target_tokens: 1500
+  reserve_tokens: 1000
+  table_priority: true
+
+llm:
+  temperature: 0.1
+  max_output_tokens: 2048
+  hallucination_threshold: 0.6
+  citation_required: true
+
+api:
+  max_file_size_mb: 100
+  allowed_extensions: [pdf, docx, pptx, xlsx, png, jpg, jpeg, txt, md]
+  rate_limit_per_minute: 60
