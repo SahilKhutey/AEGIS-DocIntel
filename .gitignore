@@ -1,0 +1,41 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Testing / Benchmarking
+.pytest_cache/
+.benchmarks/
+.cache/
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+
+# OS metadata
+.DS_Store
+Thumbs.db
+
+# TypeScript / Node
+node_modules/
+dist/
+
+# C++ Build outputs
+build/
+bin/
+lib/
+CMakeCache.txt
+CMakeFiles/
+Makefile
+cmake_install.cmake
+
+# Java Build outputs
+target/
+*.class
+
+# Antigravity artifacts (ignore the local brain folder and private gemini app data)
+.gemini/

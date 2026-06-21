@@ -1,0 +1,30 @@
+AMDI-OS SOFTWARE LICENSE AGREEMENT
+Version 1.0 - January 2026
+
+IMPORTANT: PLEASE READ THIS SOFTWARE LICENSE AGREEMENT ("AGREEMENT") CAREFULLY. BY DOWNLOADING, INSTALLING, COPYING, OR USING THE SOFTWARE, YOU AGREE TO BE BOUND BY THE TERMS OF THIS AGREEMENT. IF YOU DO NOT AGREE TO THE TERMS OF THIS AGREEMENT, DO NOT USE THE SOFTWARE.
+
+1. DEFINITIONS
+"Software" means the AMDI-OS (Adaptive Mathematical Document Intelligence Operating System) codebase, including any updates, documentation, libraries, and SDKs.
+"Licensor" means the AMDI-OS Development Team.
+"Licensee" means the individual or entity accessing or using the Software.
+
+2. LICENSE GRANT
+Subject to the terms and conditions of this Agreement and payment of applicable license fees, Licensor grants Licensee a non-exclusive, non-transferable, revocable commercial license to:
+- Install and execute the Software on production servers and cluster environments.
+- Integrate the Software with Licensee's proprietary internal systems.
+- Use the official SDKs (Python, TypeScript, Java, C++) to connect internal applications.
+
+3. RESTRICTIONS
+Licensee shall not:
+- Reverse engineer, decompile, or disassemble the Software, except to the extent permitted by applicable law.
+- Sublicense, lease, rent, or distribute the Software source code to any third party.
+- Use the Software to build a competing document intelligence framework or cloud service.
+
+4. INTELLECTUAL PROPERTY
+All right, title, and interest in and to the Software, including all associated intellectual property rights, remain exclusively with Licensor and its suppliers.
+
+5. WARRANTY DISCLAIMER
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND NON-INFRINGEMENT.
+
+6. LIMITATION OF LIABILITY
+IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES, OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT, OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
