@@ -1,0 +1,2503 @@
+{
+  "eng_001": {
+    "document_id": "eng_001",
+    "category": "engineering_drawings",
+    "entries": [
+      {
+        "question": "What is the tolerance specification for the central cylinder bore?",
+        "expected_answer": "The tolerance for the central cylinder bore is +/- 0.005 mm.",
+        "expected_pages": [
+          2
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "dwg_001",
+            "page": 2,
+            "excerpt": "Cylinder Bore Diameter: 85.000 mm +/- 0.005 mm"
+          }
+        ],
+        "expected_entities": [
+          "+/- 0.005 mm",
+          "cylinder bore"
+        ],
+        "difficulty": "hard",
+        "type": "factual"
+      }
+    ]
+  },
+  "eng_002": {
+    "document_id": "eng_002",
+    "category": "engineering_drawings",
+    "entries": [
+      {
+        "question": "What is the ID of this engineering_drawing?",
+        "expected_answer": "The ID of this engineering_drawing is eng_002.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "eng_002",
+            "page": 1,
+            "excerpt": "Mock Document eng_002"
+          }
+        ],
+        "expected_entities": [
+          "eng_002"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "eng_003": {
+    "document_id": "eng_003",
+    "category": "engineering_drawings",
+    "entries": [
+      {
+        "question": "What is the ID of this engineering_drawing?",
+        "expected_answer": "The ID of this engineering_drawing is eng_003.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "eng_003",
+            "page": 1,
+            "excerpt": "Mock Document eng_003"
+          }
+        ],
+        "expected_entities": [
+          "eng_003"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "eng_004": {
+    "document_id": "eng_004",
+    "category": "engineering_drawings",
+    "entries": [
+      {
+        "question": "What is the ID of this engineering_drawing?",
+        "expected_answer": "The ID of this engineering_drawing is eng_004.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "eng_004",
+            "page": 1,
+            "excerpt": "Mock Document eng_004"
+          }
+        ],
+        "expected_entities": [
+          "eng_004"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "eng_005": {
+    "document_id": "eng_005",
+    "category": "engineering_drawings",
+    "entries": [
+      {
+        "question": "What is the ID of this engineering_drawing?",
+        "expected_answer": "The ID of this engineering_drawing is eng_005.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "eng_005",
+            "page": 1,
+            "excerpt": "Mock Document eng_005"
+          }
+        ],
+        "expected_entities": [
+          "eng_005"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "eng_006": {
+    "document_id": "eng_006",
+    "category": "engineering_drawings",
+    "entries": [
+      {
+        "question": "What is the ID of this engineering_drawing?",
+        "expected_answer": "The ID of this engineering_drawing is eng_006.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "eng_006",
+            "page": 1,
+            "excerpt": "Mock Document eng_006"
+          }
+        ],
+        "expected_entities": [
+          "eng_006"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "eng_007": {
+    "document_id": "eng_007",
+    "category": "engineering_drawings",
+    "entries": [
+      {
+        "question": "What is the ID of this engineering_drawing?",
+        "expected_answer": "The ID of this engineering_drawing is eng_007.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "eng_007",
+            "page": 1,
+            "excerpt": "Mock Document eng_007"
+          }
+        ],
+        "expected_entities": [
+          "eng_007"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "eng_008": {
+    "document_id": "eng_008",
+    "category": "engineering_drawings",
+    "entries": [
+      {
+        "question": "What is the ID of this engineering_drawing?",
+        "expected_answer": "The ID of this engineering_drawing is eng_008.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "eng_008",
+            "page": 1,
+            "excerpt": "Mock Document eng_008"
+          }
+        ],
+        "expected_entities": [
+          "eng_008"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "eng_009": {
+    "document_id": "eng_009",
+    "category": "engineering_drawings",
+    "entries": [
+      {
+        "question": "What is the ID of this engineering_drawing?",
+        "expected_answer": "The ID of this engineering_drawing is eng_009.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "eng_009",
+            "page": 1,
+            "excerpt": "Mock Document eng_009"
+          }
+        ],
+        "expected_entities": [
+          "eng_009"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "eng_010": {
+    "document_id": "eng_010",
+    "category": "engineering_drawings",
+    "entries": [
+      {
+        "question": "What is the ID of this engineering_drawing?",
+        "expected_answer": "The ID of this engineering_drawing is eng_010.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "eng_010",
+            "page": 1,
+            "excerpt": "Mock Document eng_010"
+          }
+        ],
+        "expected_entities": [
+          "eng_010"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "eng_011": {
+    "document_id": "eng_011",
+    "category": "engineering_drawings",
+    "entries": [
+      {
+        "question": "What is the ID of this engineering_drawing?",
+        "expected_answer": "The ID of this engineering_drawing is eng_011.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "eng_011",
+            "page": 1,
+            "excerpt": "Mock Document eng_011"
+          }
+        ],
+        "expected_entities": [
+          "eng_011"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "eng_012": {
+    "document_id": "eng_012",
+    "category": "engineering_drawings",
+    "entries": [
+      {
+        "question": "What is the ID of this engineering_drawing?",
+        "expected_answer": "The ID of this engineering_drawing is eng_012.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "eng_012",
+            "page": 1,
+            "excerpt": "Mock Document eng_012"
+          }
+        ],
+        "expected_entities": [
+          "eng_012"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "eng_013": {
+    "document_id": "eng_013",
+    "category": "engineering_drawings",
+    "entries": [
+      {
+        "question": "What is the ID of this engineering_drawing?",
+        "expected_answer": "The ID of this engineering_drawing is eng_013.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "eng_013",
+            "page": 1,
+            "excerpt": "Mock Document eng_013"
+          }
+        ],
+        "expected_entities": [
+          "eng_013"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "eng_014": {
+    "document_id": "eng_014",
+    "category": "engineering_drawings",
+    "entries": [
+      {
+        "question": "What is the ID of this engineering_drawing?",
+        "expected_answer": "The ID of this engineering_drawing is eng_014.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "eng_014",
+            "page": 1,
+            "excerpt": "Mock Document eng_014"
+          }
+        ],
+        "expected_entities": [
+          "eng_014"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "eng_015": {
+    "document_id": "eng_015",
+    "category": "engineering_drawings",
+    "entries": [
+      {
+        "question": "What is the ID of this engineering_drawing?",
+        "expected_answer": "The ID of this engineering_drawing is eng_015.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "eng_015",
+            "page": 1,
+            "excerpt": "Mock Document eng_015"
+          }
+        ],
+        "expected_entities": [
+          "eng_015"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "eng_016": {
+    "document_id": "eng_016",
+    "category": "engineering_drawings",
+    "entries": [
+      {
+        "question": "What is the ID of this engineering_drawing?",
+        "expected_answer": "The ID of this engineering_drawing is eng_016.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "eng_016",
+            "page": 1,
+            "excerpt": "Mock Document eng_016"
+          }
+        ],
+        "expected_entities": [
+          "eng_016"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "eng_017": {
+    "document_id": "eng_017",
+    "category": "engineering_drawings",
+    "entries": [
+      {
+        "question": "What is the ID of this engineering_drawing?",
+        "expected_answer": "The ID of this engineering_drawing is eng_017.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "eng_017",
+            "page": 1,
+            "excerpt": "Mock Document eng_017"
+          }
+        ],
+        "expected_entities": [
+          "eng_017"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "eng_018": {
+    "document_id": "eng_018",
+    "category": "engineering_drawings",
+    "entries": [
+      {
+        "question": "What is the ID of this engineering_drawing?",
+        "expected_answer": "The ID of this engineering_drawing is eng_018.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "eng_018",
+            "page": 1,
+            "excerpt": "Mock Document eng_018"
+          }
+        ],
+        "expected_entities": [
+          "eng_018"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "eng_019": {
+    "document_id": "eng_019",
+    "category": "engineering_drawings",
+    "entries": [
+      {
+        "question": "What is the ID of this engineering_drawing?",
+        "expected_answer": "The ID of this engineering_drawing is eng_019.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "eng_019",
+            "page": 1,
+            "excerpt": "Mock Document eng_019"
+          }
+        ],
+        "expected_entities": [
+          "eng_019"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "eng_020": {
+    "document_id": "eng_020",
+    "category": "engineering_drawings",
+    "entries": [
+      {
+        "question": "What is the ID of this engineering_drawing?",
+        "expected_answer": "The ID of this engineering_drawing is eng_020.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "eng_020",
+            "page": 1,
+            "excerpt": "Mock Document eng_020"
+          }
+        ],
+        "expected_entities": [
+          "eng_020"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "eng_021": {
+    "document_id": "eng_021",
+    "category": "engineering_drawings",
+    "entries": [
+      {
+        "question": "What is the ID of this engineering_drawing?",
+        "expected_answer": "The ID of this engineering_drawing is eng_021.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "eng_021",
+            "page": 1,
+            "excerpt": "Mock Document eng_021"
+          }
+        ],
+        "expected_entities": [
+          "eng_021"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "eng_022": {
+    "document_id": "eng_022",
+    "category": "engineering_drawings",
+    "entries": [
+      {
+        "question": "What is the ID of this engineering_drawing?",
+        "expected_answer": "The ID of this engineering_drawing is eng_022.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "eng_022",
+            "page": 1,
+            "excerpt": "Mock Document eng_022"
+          }
+        ],
+        "expected_entities": [
+          "eng_022"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "eng_023": {
+    "document_id": "eng_023",
+    "category": "engineering_drawings",
+    "entries": [
+      {
+        "question": "What is the ID of this engineering_drawing?",
+        "expected_answer": "The ID of this engineering_drawing is eng_023.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "eng_023",
+            "page": 1,
+            "excerpt": "Mock Document eng_023"
+          }
+        ],
+        "expected_entities": [
+          "eng_023"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "eng_024": {
+    "document_id": "eng_024",
+    "category": "engineering_drawings",
+    "entries": [
+      {
+        "question": "What is the ID of this engineering_drawing?",
+        "expected_answer": "The ID of this engineering_drawing is eng_024.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "eng_024",
+            "page": 1,
+            "excerpt": "Mock Document eng_024"
+          }
+        ],
+        "expected_entities": [
+          "eng_024"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "eng_025": {
+    "document_id": "eng_025",
+    "category": "engineering_drawings",
+    "entries": [
+      {
+        "question": "What is the ID of this engineering_drawing?",
+        "expected_answer": "The ID of this engineering_drawing is eng_025.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "eng_025",
+            "page": 1,
+            "excerpt": "Mock Document eng_025"
+          }
+        ],
+        "expected_entities": [
+          "eng_025"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "eng_026": {
+    "document_id": "eng_026",
+    "category": "engineering_drawings",
+    "entries": [
+      {
+        "question": "What is the ID of this engineering_drawing?",
+        "expected_answer": "The ID of this engineering_drawing is eng_026.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "eng_026",
+            "page": 1,
+            "excerpt": "Mock Document eng_026"
+          }
+        ],
+        "expected_entities": [
+          "eng_026"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "eng_027": {
+    "document_id": "eng_027",
+    "category": "engineering_drawings",
+    "entries": [
+      {
+        "question": "What is the ID of this engineering_drawing?",
+        "expected_answer": "The ID of this engineering_drawing is eng_027.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "eng_027",
+            "page": 1,
+            "excerpt": "Mock Document eng_027"
+          }
+        ],
+        "expected_entities": [
+          "eng_027"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "eng_028": {
+    "document_id": "eng_028",
+    "category": "engineering_drawings",
+    "entries": [
+      {
+        "question": "What is the ID of this engineering_drawing?",
+        "expected_answer": "The ID of this engineering_drawing is eng_028.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "eng_028",
+            "page": 1,
+            "excerpt": "Mock Document eng_028"
+          }
+        ],
+        "expected_entities": [
+          "eng_028"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "eng_029": {
+    "document_id": "eng_029",
+    "category": "engineering_drawings",
+    "entries": [
+      {
+        "question": "What is the ID of this engineering_drawing?",
+        "expected_answer": "The ID of this engineering_drawing is eng_029.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "eng_029",
+            "page": 1,
+            "excerpt": "Mock Document eng_029"
+          }
+        ],
+        "expected_entities": [
+          "eng_029"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "eng_030": {
+    "document_id": "eng_030",
+    "category": "engineering_drawings",
+    "entries": [
+      {
+        "question": "What is the ID of this engineering_drawing?",
+        "expected_answer": "The ID of this engineering_drawing is eng_030.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "eng_030",
+            "page": 1,
+            "excerpt": "Mock Document eng_030"
+          }
+        ],
+        "expected_entities": [
+          "eng_030"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "eng_031": {
+    "document_id": "eng_031",
+    "category": "engineering_drawings",
+    "entries": [
+      {
+        "question": "What is the ID of this engineering_drawing?",
+        "expected_answer": "The ID of this engineering_drawing is eng_031.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "eng_031",
+            "page": 1,
+            "excerpt": "Mock Document eng_031"
+          }
+        ],
+        "expected_entities": [
+          "eng_031"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "eng_032": {
+    "document_id": "eng_032",
+    "category": "engineering_drawings",
+    "entries": [
+      {
+        "question": "What is the ID of this engineering_drawing?",
+        "expected_answer": "The ID of this engineering_drawing is eng_032.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "eng_032",
+            "page": 1,
+            "excerpt": "Mock Document eng_032"
+          }
+        ],
+        "expected_entities": [
+          "eng_032"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "eng_033": {
+    "document_id": "eng_033",
+    "category": "engineering_drawings",
+    "entries": [
+      {
+        "question": "What is the ID of this engineering_drawing?",
+        "expected_answer": "The ID of this engineering_drawing is eng_033.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "eng_033",
+            "page": 1,
+            "excerpt": "Mock Document eng_033"
+          }
+        ],
+        "expected_entities": [
+          "eng_033"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "eng_034": {
+    "document_id": "eng_034",
+    "category": "engineering_drawings",
+    "entries": [
+      {
+        "question": "What is the ID of this engineering_drawing?",
+        "expected_answer": "The ID of this engineering_drawing is eng_034.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "eng_034",
+            "page": 1,
+            "excerpt": "Mock Document eng_034"
+          }
+        ],
+        "expected_entities": [
+          "eng_034"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "eng_035": {
+    "document_id": "eng_035",
+    "category": "engineering_drawings",
+    "entries": [
+      {
+        "question": "What is the ID of this engineering_drawing?",
+        "expected_answer": "The ID of this engineering_drawing is eng_035.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "eng_035",
+            "page": 1,
+            "excerpt": "Mock Document eng_035"
+          }
+        ],
+        "expected_entities": [
+          "eng_035"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "eng_036": {
+    "document_id": "eng_036",
+    "category": "engineering_drawings",
+    "entries": [
+      {
+        "question": "What is the ID of this engineering_drawing?",
+        "expected_answer": "The ID of this engineering_drawing is eng_036.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "eng_036",
+            "page": 1,
+            "excerpt": "Mock Document eng_036"
+          }
+        ],
+        "expected_entities": [
+          "eng_036"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "eng_037": {
+    "document_id": "eng_037",
+    "category": "engineering_drawings",
+    "entries": [
+      {
+        "question": "What is the ID of this engineering_drawing?",
+        "expected_answer": "The ID of this engineering_drawing is eng_037.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "eng_037",
+            "page": 1,
+            "excerpt": "Mock Document eng_037"
+          }
+        ],
+        "expected_entities": [
+          "eng_037"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "eng_038": {
+    "document_id": "eng_038",
+    "category": "engineering_drawings",
+    "entries": [
+      {
+        "question": "What is the ID of this engineering_drawing?",
+        "expected_answer": "The ID of this engineering_drawing is eng_038.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "eng_038",
+            "page": 1,
+            "excerpt": "Mock Document eng_038"
+          }
+        ],
+        "expected_entities": [
+          "eng_038"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "eng_039": {
+    "document_id": "eng_039",
+    "category": "engineering_drawings",
+    "entries": [
+      {
+        "question": "What is the ID of this engineering_drawing?",
+        "expected_answer": "The ID of this engineering_drawing is eng_039.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "eng_039",
+            "page": 1,
+            "excerpt": "Mock Document eng_039"
+          }
+        ],
+        "expected_entities": [
+          "eng_039"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "eng_040": {
+    "document_id": "eng_040",
+    "category": "engineering_drawings",
+    "entries": [
+      {
+        "question": "What is the ID of this engineering_drawing?",
+        "expected_answer": "The ID of this engineering_drawing is eng_040.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "eng_040",
+            "page": 1,
+            "excerpt": "Mock Document eng_040"
+          }
+        ],
+        "expected_entities": [
+          "eng_040"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "eng_041": {
+    "document_id": "eng_041",
+    "category": "engineering_drawings",
+    "entries": [
+      {
+        "question": "What is the ID of this engineering_drawing?",
+        "expected_answer": "The ID of this engineering_drawing is eng_041.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "eng_041",
+            "page": 1,
+            "excerpt": "Mock Document eng_041"
+          }
+        ],
+        "expected_entities": [
+          "eng_041"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "eng_042": {
+    "document_id": "eng_042",
+    "category": "engineering_drawings",
+    "entries": [
+      {
+        "question": "What is the ID of this engineering_drawing?",
+        "expected_answer": "The ID of this engineering_drawing is eng_042.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "eng_042",
+            "page": 1,
+            "excerpt": "Mock Document eng_042"
+          }
+        ],
+        "expected_entities": [
+          "eng_042"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "eng_043": {
+    "document_id": "eng_043",
+    "category": "engineering_drawings",
+    "entries": [
+      {
+        "question": "What is the ID of this engineering_drawing?",
+        "expected_answer": "The ID of this engineering_drawing is eng_043.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "eng_043",
+            "page": 1,
+            "excerpt": "Mock Document eng_043"
+          }
+        ],
+        "expected_entities": [
+          "eng_043"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "eng_044": {
+    "document_id": "eng_044",
+    "category": "engineering_drawings",
+    "entries": [
+      {
+        "question": "What is the ID of this engineering_drawing?",
+        "expected_answer": "The ID of this engineering_drawing is eng_044.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "eng_044",
+            "page": 1,
+            "excerpt": "Mock Document eng_044"
+          }
+        ],
+        "expected_entities": [
+          "eng_044"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "eng_045": {
+    "document_id": "eng_045",
+    "category": "engineering_drawings",
+    "entries": [
+      {
+        "question": "What is the ID of this engineering_drawing?",
+        "expected_answer": "The ID of this engineering_drawing is eng_045.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "eng_045",
+            "page": 1,
+            "excerpt": "Mock Document eng_045"
+          }
+        ],
+        "expected_entities": [
+          "eng_045"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "eng_046": {
+    "document_id": "eng_046",
+    "category": "engineering_drawings",
+    "entries": [
+      {
+        "question": "What is the ID of this engineering_drawing?",
+        "expected_answer": "The ID of this engineering_drawing is eng_046.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "eng_046",
+            "page": 1,
+            "excerpt": "Mock Document eng_046"
+          }
+        ],
+        "expected_entities": [
+          "eng_046"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "eng_047": {
+    "document_id": "eng_047",
+    "category": "engineering_drawings",
+    "entries": [
+      {
+        "question": "What is the ID of this engineering_drawing?",
+        "expected_answer": "The ID of this engineering_drawing is eng_047.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "eng_047",
+            "page": 1,
+            "excerpt": "Mock Document eng_047"
+          }
+        ],
+        "expected_entities": [
+          "eng_047"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "eng_048": {
+    "document_id": "eng_048",
+    "category": "engineering_drawings",
+    "entries": [
+      {
+        "question": "What is the ID of this engineering_drawing?",
+        "expected_answer": "The ID of this engineering_drawing is eng_048.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "eng_048",
+            "page": 1,
+            "excerpt": "Mock Document eng_048"
+          }
+        ],
+        "expected_entities": [
+          "eng_048"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "eng_049": {
+    "document_id": "eng_049",
+    "category": "engineering_drawings",
+    "entries": [
+      {
+        "question": "What is the ID of this engineering_drawing?",
+        "expected_answer": "The ID of this engineering_drawing is eng_049.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "eng_049",
+            "page": 1,
+            "excerpt": "Mock Document eng_049"
+          }
+        ],
+        "expected_entities": [
+          "eng_049"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "eng_050": {
+    "document_id": "eng_050",
+    "category": "engineering_drawings",
+    "entries": [
+      {
+        "question": "What is the ID of this engineering_drawing?",
+        "expected_answer": "The ID of this engineering_drawing is eng_050.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "eng_050",
+            "page": 1,
+            "excerpt": "Mock Document eng_050"
+          }
+        ],
+        "expected_entities": [
+          "eng_050"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "eng_051": {
+    "document_id": "eng_051",
+    "category": "engineering_drawings",
+    "entries": [
+      {
+        "question": "What is the ID of this engineering_drawing?",
+        "expected_answer": "The ID of this engineering_drawing is eng_051.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "eng_051",
+            "page": 1,
+            "excerpt": "Mock Document eng_051"
+          }
+        ],
+        "expected_entities": [
+          "eng_051"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "eng_052": {
+    "document_id": "eng_052",
+    "category": "engineering_drawings",
+    "entries": [
+      {
+        "question": "What is the ID of this engineering_drawing?",
+        "expected_answer": "The ID of this engineering_drawing is eng_052.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "eng_052",
+            "page": 1,
+            "excerpt": "Mock Document eng_052"
+          }
+        ],
+        "expected_entities": [
+          "eng_052"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "eng_053": {
+    "document_id": "eng_053",
+    "category": "engineering_drawings",
+    "entries": [
+      {
+        "question": "What is the ID of this engineering_drawing?",
+        "expected_answer": "The ID of this engineering_drawing is eng_053.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "eng_053",
+            "page": 1,
+            "excerpt": "Mock Document eng_053"
+          }
+        ],
+        "expected_entities": [
+          "eng_053"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "eng_054": {
+    "document_id": "eng_054",
+    "category": "engineering_drawings",
+    "entries": [
+      {
+        "question": "What is the ID of this engineering_drawing?",
+        "expected_answer": "The ID of this engineering_drawing is eng_054.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "eng_054",
+            "page": 1,
+            "excerpt": "Mock Document eng_054"
+          }
+        ],
+        "expected_entities": [
+          "eng_054"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "eng_055": {
+    "document_id": "eng_055",
+    "category": "engineering_drawings",
+    "entries": [
+      {
+        "question": "What is the ID of this engineering_drawing?",
+        "expected_answer": "The ID of this engineering_drawing is eng_055.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "eng_055",
+            "page": 1,
+            "excerpt": "Mock Document eng_055"
+          }
+        ],
+        "expected_entities": [
+          "eng_055"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "eng_056": {
+    "document_id": "eng_056",
+    "category": "engineering_drawings",
+    "entries": [
+      {
+        "question": "What is the ID of this engineering_drawing?",
+        "expected_answer": "The ID of this engineering_drawing is eng_056.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "eng_056",
+            "page": 1,
+            "excerpt": "Mock Document eng_056"
+          }
+        ],
+        "expected_entities": [
+          "eng_056"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "eng_057": {
+    "document_id": "eng_057",
+    "category": "engineering_drawings",
+    "entries": [
+      {
+        "question": "What is the ID of this engineering_drawing?",
+        "expected_answer": "The ID of this engineering_drawing is eng_057.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "eng_057",
+            "page": 1,
+            "excerpt": "Mock Document eng_057"
+          }
+        ],
+        "expected_entities": [
+          "eng_057"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "eng_058": {
+    "document_id": "eng_058",
+    "category": "engineering_drawings",
+    "entries": [
+      {
+        "question": "What is the ID of this engineering_drawing?",
+        "expected_answer": "The ID of this engineering_drawing is eng_058.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "eng_058",
+            "page": 1,
+            "excerpt": "Mock Document eng_058"
+          }
+        ],
+        "expected_entities": [
+          "eng_058"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "eng_059": {
+    "document_id": "eng_059",
+    "category": "engineering_drawings",
+    "entries": [
+      {
+        "question": "What is the ID of this engineering_drawing?",
+        "expected_answer": "The ID of this engineering_drawing is eng_059.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "eng_059",
+            "page": 1,
+            "excerpt": "Mock Document eng_059"
+          }
+        ],
+        "expected_entities": [
+          "eng_059"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "eng_060": {
+    "document_id": "eng_060",
+    "category": "engineering_drawings",
+    "entries": [
+      {
+        "question": "What is the ID of this engineering_drawing?",
+        "expected_answer": "The ID of this engineering_drawing is eng_060.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "eng_060",
+            "page": 1,
+            "excerpt": "Mock Document eng_060"
+          }
+        ],
+        "expected_entities": [
+          "eng_060"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "eng_061": {
+    "document_id": "eng_061",
+    "category": "engineering_drawings",
+    "entries": [
+      {
+        "question": "What is the ID of this engineering_drawing?",
+        "expected_answer": "The ID of this engineering_drawing is eng_061.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "eng_061",
+            "page": 1,
+            "excerpt": "Mock Document eng_061"
+          }
+        ],
+        "expected_entities": [
+          "eng_061"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "eng_062": {
+    "document_id": "eng_062",
+    "category": "engineering_drawings",
+    "entries": [
+      {
+        "question": "What is the ID of this engineering_drawing?",
+        "expected_answer": "The ID of this engineering_drawing is eng_062.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "eng_062",
+            "page": 1,
+            "excerpt": "Mock Document eng_062"
+          }
+        ],
+        "expected_entities": [
+          "eng_062"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "eng_063": {
+    "document_id": "eng_063",
+    "category": "engineering_drawings",
+    "entries": [
+      {
+        "question": "What is the ID of this engineering_drawing?",
+        "expected_answer": "The ID of this engineering_drawing is eng_063.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "eng_063",
+            "page": 1,
+            "excerpt": "Mock Document eng_063"
+          }
+        ],
+        "expected_entities": [
+          "eng_063"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "eng_064": {
+    "document_id": "eng_064",
+    "category": "engineering_drawings",
+    "entries": [
+      {
+        "question": "What is the ID of this engineering_drawing?",
+        "expected_answer": "The ID of this engineering_drawing is eng_064.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "eng_064",
+            "page": 1,
+            "excerpt": "Mock Document eng_064"
+          }
+        ],
+        "expected_entities": [
+          "eng_064"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "eng_065": {
+    "document_id": "eng_065",
+    "category": "engineering_drawings",
+    "entries": [
+      {
+        "question": "What is the ID of this engineering_drawing?",
+        "expected_answer": "The ID of this engineering_drawing is eng_065.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "eng_065",
+            "page": 1,
+            "excerpt": "Mock Document eng_065"
+          }
+        ],
+        "expected_entities": [
+          "eng_065"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "eng_066": {
+    "document_id": "eng_066",
+    "category": "engineering_drawings",
+    "entries": [
+      {
+        "question": "What is the ID of this engineering_drawing?",
+        "expected_answer": "The ID of this engineering_drawing is eng_066.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "eng_066",
+            "page": 1,
+            "excerpt": "Mock Document eng_066"
+          }
+        ],
+        "expected_entities": [
+          "eng_066"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "eng_067": {
+    "document_id": "eng_067",
+    "category": "engineering_drawings",
+    "entries": [
+      {
+        "question": "What is the ID of this engineering_drawing?",
+        "expected_answer": "The ID of this engineering_drawing is eng_067.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "eng_067",
+            "page": 1,
+            "excerpt": "Mock Document eng_067"
+          }
+        ],
+        "expected_entities": [
+          "eng_067"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "eng_068": {
+    "document_id": "eng_068",
+    "category": "engineering_drawings",
+    "entries": [
+      {
+        "question": "What is the ID of this engineering_drawing?",
+        "expected_answer": "The ID of this engineering_drawing is eng_068.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "eng_068",
+            "page": 1,
+            "excerpt": "Mock Document eng_068"
+          }
+        ],
+        "expected_entities": [
+          "eng_068"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "eng_069": {
+    "document_id": "eng_069",
+    "category": "engineering_drawings",
+    "entries": [
+      {
+        "question": "What is the ID of this engineering_drawing?",
+        "expected_answer": "The ID of this engineering_drawing is eng_069.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "eng_069",
+            "page": 1,
+            "excerpt": "Mock Document eng_069"
+          }
+        ],
+        "expected_entities": [
+          "eng_069"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "eng_070": {
+    "document_id": "eng_070",
+    "category": "engineering_drawings",
+    "entries": [
+      {
+        "question": "What is the ID of this engineering_drawing?",
+        "expected_answer": "The ID of this engineering_drawing is eng_070.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "eng_070",
+            "page": 1,
+            "excerpt": "Mock Document eng_070"
+          }
+        ],
+        "expected_entities": [
+          "eng_070"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "eng_071": {
+    "document_id": "eng_071",
+    "category": "engineering_drawings",
+    "entries": [
+      {
+        "question": "What is the ID of this engineering_drawing?",
+        "expected_answer": "The ID of this engineering_drawing is eng_071.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "eng_071",
+            "page": 1,
+            "excerpt": "Mock Document eng_071"
+          }
+        ],
+        "expected_entities": [
+          "eng_071"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "eng_072": {
+    "document_id": "eng_072",
+    "category": "engineering_drawings",
+    "entries": [
+      {
+        "question": "What is the ID of this engineering_drawing?",
+        "expected_answer": "The ID of this engineering_drawing is eng_072.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "eng_072",
+            "page": 1,
+            "excerpt": "Mock Document eng_072"
+          }
+        ],
+        "expected_entities": [
+          "eng_072"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "eng_073": {
+    "document_id": "eng_073",
+    "category": "engineering_drawings",
+    "entries": [
+      {
+        "question": "What is the ID of this engineering_drawing?",
+        "expected_answer": "The ID of this engineering_drawing is eng_073.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "eng_073",
+            "page": 1,
+            "excerpt": "Mock Document eng_073"
+          }
+        ],
+        "expected_entities": [
+          "eng_073"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "eng_074": {
+    "document_id": "eng_074",
+    "category": "engineering_drawings",
+    "entries": [
+      {
+        "question": "What is the ID of this engineering_drawing?",
+        "expected_answer": "The ID of this engineering_drawing is eng_074.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "eng_074",
+            "page": 1,
+            "excerpt": "Mock Document eng_074"
+          }
+        ],
+        "expected_entities": [
+          "eng_074"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "eng_075": {
+    "document_id": "eng_075",
+    "category": "engineering_drawings",
+    "entries": [
+      {
+        "question": "What is the ID of this engineering_drawing?",
+        "expected_answer": "The ID of this engineering_drawing is eng_075.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "eng_075",
+            "page": 1,
+            "excerpt": "Mock Document eng_075"
+          }
+        ],
+        "expected_entities": [
+          "eng_075"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "eng_076": {
+    "document_id": "eng_076",
+    "category": "engineering_drawings",
+    "entries": [
+      {
+        "question": "What is the ID of this engineering_drawing?",
+        "expected_answer": "The ID of this engineering_drawing is eng_076.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "eng_076",
+            "page": 1,
+            "excerpt": "Mock Document eng_076"
+          }
+        ],
+        "expected_entities": [
+          "eng_076"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "eng_077": {
+    "document_id": "eng_077",
+    "category": "engineering_drawings",
+    "entries": [
+      {
+        "question": "What is the ID of this engineering_drawing?",
+        "expected_answer": "The ID of this engineering_drawing is eng_077.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "eng_077",
+            "page": 1,
+            "excerpt": "Mock Document eng_077"
+          }
+        ],
+        "expected_entities": [
+          "eng_077"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "eng_078": {
+    "document_id": "eng_078",
+    "category": "engineering_drawings",
+    "entries": [
+      {
+        "question": "What is the ID of this engineering_drawing?",
+        "expected_answer": "The ID of this engineering_drawing is eng_078.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "eng_078",
+            "page": 1,
+            "excerpt": "Mock Document eng_078"
+          }
+        ],
+        "expected_entities": [
+          "eng_078"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "eng_079": {
+    "document_id": "eng_079",
+    "category": "engineering_drawings",
+    "entries": [
+      {
+        "question": "What is the ID of this engineering_drawing?",
+        "expected_answer": "The ID of this engineering_drawing is eng_079.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "eng_079",
+            "page": 1,
+            "excerpt": "Mock Document eng_079"
+          }
+        ],
+        "expected_entities": [
+          "eng_079"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "eng_080": {
+    "document_id": "eng_080",
+    "category": "engineering_drawings",
+    "entries": [
+      {
+        "question": "What is the ID of this engineering_drawing?",
+        "expected_answer": "The ID of this engineering_drawing is eng_080.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "eng_080",
+            "page": 1,
+            "excerpt": "Mock Document eng_080"
+          }
+        ],
+        "expected_entities": [
+          "eng_080"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "eng_081": {
+    "document_id": "eng_081",
+    "category": "engineering_drawings",
+    "entries": [
+      {
+        "question": "What is the ID of this engineering_drawing?",
+        "expected_answer": "The ID of this engineering_drawing is eng_081.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "eng_081",
+            "page": 1,
+            "excerpt": "Mock Document eng_081"
+          }
+        ],
+        "expected_entities": [
+          "eng_081"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "eng_082": {
+    "document_id": "eng_082",
+    "category": "engineering_drawings",
+    "entries": [
+      {
+        "question": "What is the ID of this engineering_drawing?",
+        "expected_answer": "The ID of this engineering_drawing is eng_082.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "eng_082",
+            "page": 1,
+            "excerpt": "Mock Document eng_082"
+          }
+        ],
+        "expected_entities": [
+          "eng_082"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "eng_083": {
+    "document_id": "eng_083",
+    "category": "engineering_drawings",
+    "entries": [
+      {
+        "question": "What is the ID of this engineering_drawing?",
+        "expected_answer": "The ID of this engineering_drawing is eng_083.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "eng_083",
+            "page": 1,
+            "excerpt": "Mock Document eng_083"
+          }
+        ],
+        "expected_entities": [
+          "eng_083"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "eng_084": {
+    "document_id": "eng_084",
+    "category": "engineering_drawings",
+    "entries": [
+      {
+        "question": "What is the ID of this engineering_drawing?",
+        "expected_answer": "The ID of this engineering_drawing is eng_084.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "eng_084",
+            "page": 1,
+            "excerpt": "Mock Document eng_084"
+          }
+        ],
+        "expected_entities": [
+          "eng_084"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "eng_085": {
+    "document_id": "eng_085",
+    "category": "engineering_drawings",
+    "entries": [
+      {
+        "question": "What is the ID of this engineering_drawing?",
+        "expected_answer": "The ID of this engineering_drawing is eng_085.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "eng_085",
+            "page": 1,
+            "excerpt": "Mock Document eng_085"
+          }
+        ],
+        "expected_entities": [
+          "eng_085"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "eng_086": {
+    "document_id": "eng_086",
+    "category": "engineering_drawings",
+    "entries": [
+      {
+        "question": "What is the ID of this engineering_drawing?",
+        "expected_answer": "The ID of this engineering_drawing is eng_086.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "eng_086",
+            "page": 1,
+            "excerpt": "Mock Document eng_086"
+          }
+        ],
+        "expected_entities": [
+          "eng_086"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "eng_087": {
+    "document_id": "eng_087",
+    "category": "engineering_drawings",
+    "entries": [
+      {
+        "question": "What is the ID of this engineering_drawing?",
+        "expected_answer": "The ID of this engineering_drawing is eng_087.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "eng_087",
+            "page": 1,
+            "excerpt": "Mock Document eng_087"
+          }
+        ],
+        "expected_entities": [
+          "eng_087"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "eng_088": {
+    "document_id": "eng_088",
+    "category": "engineering_drawings",
+    "entries": [
+      {
+        "question": "What is the ID of this engineering_drawing?",
+        "expected_answer": "The ID of this engineering_drawing is eng_088.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "eng_088",
+            "page": 1,
+            "excerpt": "Mock Document eng_088"
+          }
+        ],
+        "expected_entities": [
+          "eng_088"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "eng_089": {
+    "document_id": "eng_089",
+    "category": "engineering_drawings",
+    "entries": [
+      {
+        "question": "What is the ID of this engineering_drawing?",
+        "expected_answer": "The ID of this engineering_drawing is eng_089.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "eng_089",
+            "page": 1,
+            "excerpt": "Mock Document eng_089"
+          }
+        ],
+        "expected_entities": [
+          "eng_089"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "eng_090": {
+    "document_id": "eng_090",
+    "category": "engineering_drawings",
+    "entries": [
+      {
+        "question": "What is the ID of this engineering_drawing?",
+        "expected_answer": "The ID of this engineering_drawing is eng_090.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "eng_090",
+            "page": 1,
+            "excerpt": "Mock Document eng_090"
+          }
+        ],
+        "expected_entities": [
+          "eng_090"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "eng_091": {
+    "document_id": "eng_091",
+    "category": "engineering_drawings",
+    "entries": [
+      {
+        "question": "What is the ID of this engineering_drawing?",
+        "expected_answer": "The ID of this engineering_drawing is eng_091.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "eng_091",
+            "page": 1,
+            "excerpt": "Mock Document eng_091"
+          }
+        ],
+        "expected_entities": [
+          "eng_091"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "eng_092": {
+    "document_id": "eng_092",
+    "category": "engineering_drawings",
+    "entries": [
+      {
+        "question": "What is the ID of this engineering_drawing?",
+        "expected_answer": "The ID of this engineering_drawing is eng_092.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "eng_092",
+            "page": 1,
+            "excerpt": "Mock Document eng_092"
+          }
+        ],
+        "expected_entities": [
+          "eng_092"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "eng_093": {
+    "document_id": "eng_093",
+    "category": "engineering_drawings",
+    "entries": [
+      {
+        "question": "What is the ID of this engineering_drawing?",
+        "expected_answer": "The ID of this engineering_drawing is eng_093.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "eng_093",
+            "page": 1,
+            "excerpt": "Mock Document eng_093"
+          }
+        ],
+        "expected_entities": [
+          "eng_093"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "eng_094": {
+    "document_id": "eng_094",
+    "category": "engineering_drawings",
+    "entries": [
+      {
+        "question": "What is the ID of this engineering_drawing?",
+        "expected_answer": "The ID of this engineering_drawing is eng_094.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "eng_094",
+            "page": 1,
+            "excerpt": "Mock Document eng_094"
+          }
+        ],
+        "expected_entities": [
+          "eng_094"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "eng_095": {
+    "document_id": "eng_095",
+    "category": "engineering_drawings",
+    "entries": [
+      {
+        "question": "What is the ID of this engineering_drawing?",
+        "expected_answer": "The ID of this engineering_drawing is eng_095.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "eng_095",
+            "page": 1,
+            "excerpt": "Mock Document eng_095"
+          }
+        ],
+        "expected_entities": [
+          "eng_095"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "eng_096": {
+    "document_id": "eng_096",
+    "category": "engineering_drawings",
+    "entries": [
+      {
+        "question": "What is the ID of this engineering_drawing?",
+        "expected_answer": "The ID of this engineering_drawing is eng_096.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "eng_096",
+            "page": 1,
+            "excerpt": "Mock Document eng_096"
+          }
+        ],
+        "expected_entities": [
+          "eng_096"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "eng_097": {
+    "document_id": "eng_097",
+    "category": "engineering_drawings",
+    "entries": [
+      {
+        "question": "What is the ID of this engineering_drawing?",
+        "expected_answer": "The ID of this engineering_drawing is eng_097.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "eng_097",
+            "page": 1,
+            "excerpt": "Mock Document eng_097"
+          }
+        ],
+        "expected_entities": [
+          "eng_097"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "eng_098": {
+    "document_id": "eng_098",
+    "category": "engineering_drawings",
+    "entries": [
+      {
+        "question": "What is the ID of this engineering_drawing?",
+        "expected_answer": "The ID of this engineering_drawing is eng_098.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "eng_098",
+            "page": 1,
+            "excerpt": "Mock Document eng_098"
+          }
+        ],
+        "expected_entities": [
+          "eng_098"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "eng_099": {
+    "document_id": "eng_099",
+    "category": "engineering_drawings",
+    "entries": [
+      {
+        "question": "What is the ID of this engineering_drawing?",
+        "expected_answer": "The ID of this engineering_drawing is eng_099.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "eng_099",
+            "page": 1,
+            "excerpt": "Mock Document eng_099"
+          }
+        ],
+        "expected_entities": [
+          "eng_099"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "eng_100": {
+    "document_id": "eng_100",
+    "category": "engineering_drawings",
+    "entries": [
+      {
+        "question": "What is the ID of this engineering_drawing?",
+        "expected_answer": "The ID of this engineering_drawing is eng_100.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "eng_100",
+            "page": 1,
+            "excerpt": "Mock Document eng_100"
+          }
+        ],
+        "expected_entities": [
+          "eng_100"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  }
+}

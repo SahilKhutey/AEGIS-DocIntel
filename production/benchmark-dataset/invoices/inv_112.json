@@ -1,0 +1,25 @@
+{
+  "document_id": "inv_112",
+  "category": "invoices",
+  "entries": [
+    {
+      "question": "What is the ID of this invoice?",
+      "expected_answer": "The ID of this invoice is inv_112.",
+      "expected_pages": [
+        1
+      ],
+      "expected_citations": [
+        {
+          "doc_id": "inv_112",
+          "page": 1,
+          "excerpt": "Mock Document inv_112"
+        }
+      ],
+      "expected_entities": [
+        "inv_112"
+      ],
+      "difficulty": "easy",
+      "type": "factual"
+    }
+  ]
+}

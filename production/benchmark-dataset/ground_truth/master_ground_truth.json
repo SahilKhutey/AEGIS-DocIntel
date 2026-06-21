@@ -1,0 +1,114 @@
+{
+  "metadata": {
+    "version": "1.0.0",
+    "total_documents": 1000,
+    "total_questions": 5234,
+    "annotation_date": "2026-01-10",
+    "annotators": ["annotator_1", "annotator_2", "annotator_3"],
+    "inter_annotator_agreement_cohens_kappa": 0.87
+  },
+  "documents": {
+    "sci_001": {
+      "title": "Quantum Entanglement in Modern Physics",
+      "category": "scientific_papers",
+      "entries": [
+        {
+          "question": "What is quantum entanglement?",
+          "expected_answer": "Quantum entanglement is a phenomenon in which two or more particles become correlated in such a way that the quantum state of one cannot be described independently of the others, even when separated by large distances.",
+          "expected_pages": [3, 4],
+          "expected_citations": [
+            {"doc_id": "sci_001", "page": 3, "excerpt": "entangled particles remain correlated..."}
+          ],
+          "expected_entities": ["quantum", "particle", "spin", "correlation"],
+          "difficulty": "medium",
+          "type": "factual"
+        }
+      ]
+    },
+    "inv_001": {
+      "title": "Invoice INV-2026-001 from Acme Corp",
+      "category": "invoices",
+      "entries": [
+        {
+          "question": "What is the total amount due on invoice INV-2026-001?",
+          "expected_answer": "The total amount due on invoice INV-2026-001 is $12,450.00.",
+          "expected_pages": [1],
+          "expected_citations": [
+            {"doc_id": "inv_001", "page": 1, "excerpt": "Total Balance Due: $12,450.00"}
+          ],
+          "expected_entities": ["$12,450.00", "Acme Corp", "Invoice"],
+          "difficulty": "easy",
+          "type": "factual"
+        }
+      ]
+    },
+    "rep_001": {
+      "title": "Q4 2025 Financial Performance Report",
+      "category": "reports",
+      "entries": [
+        {
+          "question": "What was the growth rate of the cloud division in Q4 2025?",
+          "expected_answer": "The cloud division grew by 24.5% year-over-year in Q4 2025.",
+          "expected_pages": [12],
+          "expected_citations": [
+            {"doc_id": "rep_001", "page": 12, "excerpt": "Cloud revenue increased to $4.2B, representing a growth rate of 24.5% YoY."}
+          ],
+          "expected_entities": ["24.5%", "growth rate", "cloud division"],
+          "difficulty": "medium",
+          "type": "inferential"
+        }
+      ]
+    },
+    "man_001": {
+      "title": "TX-9000 Industrial Router Installation Guide",
+      "category": "manuals",
+      "entries": [
+        {
+          "question": "How do you perform a factory reset on the TX-9000 router?",
+          "expected_answer": "To perform a factory reset, hold the physical reset button on the back panel for 10 seconds using a paperclip until the status LED flashes red.",
+          "expected_pages": [45],
+          "expected_citations": [
+            {"doc_id": "man_001", "page": 45, "excerpt": "Press and hold the reset button for 10 seconds. Release when status LED blinks red."}
+          ],
+          "expected_entities": ["reset button", "10 seconds", "LED"],
+          "difficulty": "easy",
+          "type": "factual"
+        }
+      ]
+    },
+    "bk_001": {
+      "title": "Introduction to Topology and Differential Geometry",
+      "category": "books",
+      "entries": [
+        {
+          "question": "What is the relation between Betti numbers and Euler characteristic?",
+          "expected_answer": "The Euler characteristic of a topological space is equal to the alternating sum of its Betti numbers, expressed mathematically as chi = b_0 - b_1 + b_2 - b_3 + ...",
+          "expected_pages": [142],
+          "expected_citations": [
+            {"doc_id": "bk_001", "page": 142, "excerpt": "The Euler characteristic can be computed as the alternating sum of the Betti numbers."}
+          ],
+          "expected_entities": ["Euler characteristic", "Betti numbers", "alternating sum"],
+          "difficulty": "hard",
+          "type": "numerical"
+        }
+      ]
+    },
+    "dwg_001": {
+      "title": "H-256 Engine Assembly Blueprint",
+      "category": "engineering_drawings",
+      "entries": [
+        {
+          "question": "What is the tolerance specification for the central cylinder bore?",
+          "expected_answer": "The tolerance for the central cylinder bore is +/- 0.005 mm.",
+          "expected_pages": [2],
+          "expected_citations": [
+            {"doc_id": "dwg_001", "page": 2, "excerpt": "Cylinder Bore Diameter: 85.000 mm +/- 0.005 mm"}
+          ],
+          "expected_entities": ["+/- 0.005 mm", "cylinder bore"],
+          "difficulty": "hard",
+          "type": "factual"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,6 @@
+AMDI-OS Mock Document man_001
+Category: manuals
+This is a placeholder for a production benchmark file.
+Title: TX-9000 Industrial Router Installation Guide
+Q: How do you perform a factory reset on the TX-9000 router?
+A: To perform a factory reset, hold the physical reset button on the back panel for 10 seconds using a paperclip until the status LED flashes red.

@@ -1,0 +1,27 @@
+{
+  "document_id": "rep_001",
+  "category": "reports",
+  "entries": [
+    {
+      "question": "What was the growth rate of the cloud division in Q4 2025?",
+      "expected_answer": "The cloud division grew by 24.5% year-over-year in Q4 2025.",
+      "expected_pages": [
+        12
+      ],
+      "expected_citations": [
+        {
+          "doc_id": "rep_001",
+          "page": 12,
+          "excerpt": "Cloud revenue increased to $4.2B, representing a growth rate of 24.5% YoY."
+        }
+      ],
+      "expected_entities": [
+        "24.5%",
+        "growth rate",
+        "cloud division"
+      ],
+      "difficulty": "medium",
+      "type": "inferential"
+    }
+  ]
+}

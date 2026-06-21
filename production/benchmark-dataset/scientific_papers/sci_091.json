@@ -1,0 +1,25 @@
+{
+  "document_id": "sci_091",
+  "category": "scientific_papers",
+  "entries": [
+    {
+      "question": "What is the ID of this scientific_paper?",
+      "expected_answer": "The ID of this scientific_paper is sci_091.",
+      "expected_pages": [
+        1
+      ],
+      "expected_citations": [
+        {
+          "doc_id": "sci_091",
+          "page": 1,
+          "excerpt": "Mock Document sci_091"
+        }
+      ],
+      "expected_entities": [
+        "sci_091"
+      ],
+      "difficulty": "easy",
+      "type": "factual"
+    }
+  ]
+}

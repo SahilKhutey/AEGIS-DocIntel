@@ -1,0 +1,29 @@
+{
+  "document_id": "sci_001",
+  "category": "scientific_papers",
+  "entries": [
+    {
+      "question": "What is quantum entanglement?",
+      "expected_answer": "Quantum entanglement is a phenomenon in which two or more particles become correlated in such a way that the quantum state of one cannot be described independently of the others, even when separated by large distances.",
+      "expected_pages": [
+        3,
+        4
+      ],
+      "expected_citations": [
+        {
+          "doc_id": "sci_001",
+          "page": 3,
+          "excerpt": "entangled particles remain correlated..."
+        }
+      ],
+      "expected_entities": [
+        "quantum",
+        "particle",
+        "spin",
+        "correlation"
+      ],
+      "difficulty": "medium",
+      "type": "factual"
+    }
+  ]
+}

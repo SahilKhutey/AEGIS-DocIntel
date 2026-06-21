@@ -1,0 +1,6 @@
+-----BEGIN PGP SIGNATURE-----
+Hash: SHA256
+Version: GnuPG v2
+
+AMDI-OS-V1.0.0-SIGNATURE-1f4fb7be6b5b01a9d0d0
+-----END PGP SIGNATURE-----

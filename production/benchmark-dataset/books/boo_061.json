@@ -1,0 +1,25 @@
+{
+  "document_id": "boo_061",
+  "category": "books",
+  "entries": [
+    {
+      "question": "What is the ID of this book?",
+      "expected_answer": "The ID of this book is boo_061.",
+      "expected_pages": [
+        1
+      ],
+      "expected_citations": [
+        {
+          "doc_id": "boo_061",
+          "page": 1,
+          "excerpt": "Mock Document boo_061"
+        }
+      ],
+      "expected_entities": [
+        "boo_061"
+      ],
+      "difficulty": "easy",
+      "type": "factual"
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "document_id": "eng_096",
+  "category": "engineering_drawings",
+  "entries": [
+    {
+      "question": "What is the ID of this engineering_drawing?",
+      "expected_answer": "The ID of this engineering_drawing is eng_096.",
+      "expected_pages": [
+        1
+      ],
+      "expected_citations": [
+        {
+          "doc_id": "eng_096",
+          "page": 1,
+          "excerpt": "Mock Document eng_096"
+        }
+      ],
+      "expected_entities": [
+        "eng_096"
+      ],
+      "difficulty": "easy",
+      "type": "factual"
+    }
+  ]
+}

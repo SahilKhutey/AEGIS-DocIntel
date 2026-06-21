@@ -1,0 +1,6 @@
+AMDI-OS Mock Document boo_001
+Category: books
+This is a placeholder for a production benchmark file.
+Title: Introduction to Topology and Differential Geometry
+Q: What is the relation between Betti numbers and Euler characteristic?
+A: The Euler characteristic of a topological space is equal to the alternating sum of its Betti numbers, expressed mathematically as chi = b_0 - b_1 + b_2 - b_3 + ...

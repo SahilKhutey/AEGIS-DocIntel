@@ -1,0 +1,26 @@
+{
+  "document_id": "eng_001",
+  "category": "engineering_drawings",
+  "entries": [
+    {
+      "question": "What is the tolerance specification for the central cylinder bore?",
+      "expected_answer": "The tolerance for the central cylinder bore is +/- 0.005 mm.",
+      "expected_pages": [
+        2
+      ],
+      "expected_citations": [
+        {
+          "doc_id": "dwg_001",
+          "page": 2,
+          "excerpt": "Cylinder Bore Diameter: 85.000 mm +/- 0.005 mm"
+        }
+      ],
+      "expected_entities": [
+        "+/- 0.005 mm",
+        "cylinder bore"
+      ],
+      "difficulty": "hard",
+      "type": "factual"
+    }
+  ]
+}

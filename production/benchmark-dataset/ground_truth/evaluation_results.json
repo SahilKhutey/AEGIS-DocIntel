@@ -1,0 +1,15 @@
+{
+  "total": 1,
+  "correct": 1,
+  "accuracy": 1.0,
+  "avg_answer_f1": 0.5106382978723403,
+  "avg_page_recall": 1.0,
+  "avg_citation_recall": 1.0,
+  "by_difficulty": {
+    "medium": {
+      "total": 1,
+      "accuracy": 1.0,
+      "answer_f1": 0.5106382978723403
+    }
+  }
+}

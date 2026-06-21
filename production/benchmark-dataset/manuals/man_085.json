@@ -1,0 +1,25 @@
+{
+  "document_id": "man_085",
+  "category": "manuals",
+  "entries": [
+    {
+      "question": "What is the ID of this manual?",
+      "expected_answer": "The ID of this manual is man_085.",
+      "expected_pages": [
+        1
+      ],
+      "expected_citations": [
+        {
+          "doc_id": "man_085",
+          "page": 1,
+          "excerpt": "Mock Document man_085"
+        }
+      ],
+      "expected_entities": [
+        "man_085"
+      ],
+      "difficulty": "easy",
+      "type": "factual"
+    }
+  ]
+}

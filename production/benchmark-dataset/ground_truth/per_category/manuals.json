@@ -1,0 +1,3754 @@
+{
+  "man_001": {
+    "document_id": "man_001",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "How do you perform a factory reset on the TX-9000 router?",
+        "expected_answer": "To perform a factory reset, hold the physical reset button on the back panel for 10 seconds using a paperclip until the status LED flashes red.",
+        "expected_pages": [
+          45
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_001",
+            "page": 45,
+            "excerpt": "Press and hold the reset button for 10 seconds. Release when status LED blinks red."
+          }
+        ],
+        "expected_entities": [
+          "reset button",
+          "10 seconds",
+          "LED"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_002": {
+    "document_id": "man_002",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_002.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_002",
+            "page": 1,
+            "excerpt": "Mock Document man_002"
+          }
+        ],
+        "expected_entities": [
+          "man_002"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_003": {
+    "document_id": "man_003",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_003.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_003",
+            "page": 1,
+            "excerpt": "Mock Document man_003"
+          }
+        ],
+        "expected_entities": [
+          "man_003"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_004": {
+    "document_id": "man_004",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_004.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_004",
+            "page": 1,
+            "excerpt": "Mock Document man_004"
+          }
+        ],
+        "expected_entities": [
+          "man_004"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_005": {
+    "document_id": "man_005",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_005.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_005",
+            "page": 1,
+            "excerpt": "Mock Document man_005"
+          }
+        ],
+        "expected_entities": [
+          "man_005"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_006": {
+    "document_id": "man_006",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_006.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_006",
+            "page": 1,
+            "excerpt": "Mock Document man_006"
+          }
+        ],
+        "expected_entities": [
+          "man_006"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_007": {
+    "document_id": "man_007",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_007.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_007",
+            "page": 1,
+            "excerpt": "Mock Document man_007"
+          }
+        ],
+        "expected_entities": [
+          "man_007"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_008": {
+    "document_id": "man_008",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_008.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_008",
+            "page": 1,
+            "excerpt": "Mock Document man_008"
+          }
+        ],
+        "expected_entities": [
+          "man_008"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_009": {
+    "document_id": "man_009",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_009.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_009",
+            "page": 1,
+            "excerpt": "Mock Document man_009"
+          }
+        ],
+        "expected_entities": [
+          "man_009"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_010": {
+    "document_id": "man_010",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_010.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_010",
+            "page": 1,
+            "excerpt": "Mock Document man_010"
+          }
+        ],
+        "expected_entities": [
+          "man_010"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_011": {
+    "document_id": "man_011",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_011.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_011",
+            "page": 1,
+            "excerpt": "Mock Document man_011"
+          }
+        ],
+        "expected_entities": [
+          "man_011"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_012": {
+    "document_id": "man_012",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_012.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_012",
+            "page": 1,
+            "excerpt": "Mock Document man_012"
+          }
+        ],
+        "expected_entities": [
+          "man_012"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_013": {
+    "document_id": "man_013",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_013.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_013",
+            "page": 1,
+            "excerpt": "Mock Document man_013"
+          }
+        ],
+        "expected_entities": [
+          "man_013"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_014": {
+    "document_id": "man_014",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_014.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_014",
+            "page": 1,
+            "excerpt": "Mock Document man_014"
+          }
+        ],
+        "expected_entities": [
+          "man_014"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_015": {
+    "document_id": "man_015",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_015.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_015",
+            "page": 1,
+            "excerpt": "Mock Document man_015"
+          }
+        ],
+        "expected_entities": [
+          "man_015"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_016": {
+    "document_id": "man_016",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_016.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_016",
+            "page": 1,
+            "excerpt": "Mock Document man_016"
+          }
+        ],
+        "expected_entities": [
+          "man_016"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_017": {
+    "document_id": "man_017",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_017.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_017",
+            "page": 1,
+            "excerpt": "Mock Document man_017"
+          }
+        ],
+        "expected_entities": [
+          "man_017"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_018": {
+    "document_id": "man_018",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_018.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_018",
+            "page": 1,
+            "excerpt": "Mock Document man_018"
+          }
+        ],
+        "expected_entities": [
+          "man_018"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_019": {
+    "document_id": "man_019",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_019.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_019",
+            "page": 1,
+            "excerpt": "Mock Document man_019"
+          }
+        ],
+        "expected_entities": [
+          "man_019"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_020": {
+    "document_id": "man_020",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_020.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_020",
+            "page": 1,
+            "excerpt": "Mock Document man_020"
+          }
+        ],
+        "expected_entities": [
+          "man_020"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_021": {
+    "document_id": "man_021",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_021.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_021",
+            "page": 1,
+            "excerpt": "Mock Document man_021"
+          }
+        ],
+        "expected_entities": [
+          "man_021"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_022": {
+    "document_id": "man_022",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_022.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_022",
+            "page": 1,
+            "excerpt": "Mock Document man_022"
+          }
+        ],
+        "expected_entities": [
+          "man_022"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_023": {
+    "document_id": "man_023",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_023.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_023",
+            "page": 1,
+            "excerpt": "Mock Document man_023"
+          }
+        ],
+        "expected_entities": [
+          "man_023"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_024": {
+    "document_id": "man_024",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_024.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_024",
+            "page": 1,
+            "excerpt": "Mock Document man_024"
+          }
+        ],
+        "expected_entities": [
+          "man_024"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_025": {
+    "document_id": "man_025",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_025.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_025",
+            "page": 1,
+            "excerpt": "Mock Document man_025"
+          }
+        ],
+        "expected_entities": [
+          "man_025"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_026": {
+    "document_id": "man_026",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_026.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_026",
+            "page": 1,
+            "excerpt": "Mock Document man_026"
+          }
+        ],
+        "expected_entities": [
+          "man_026"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_027": {
+    "document_id": "man_027",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_027.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_027",
+            "page": 1,
+            "excerpt": "Mock Document man_027"
+          }
+        ],
+        "expected_entities": [
+          "man_027"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_028": {
+    "document_id": "man_028",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_028.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_028",
+            "page": 1,
+            "excerpt": "Mock Document man_028"
+          }
+        ],
+        "expected_entities": [
+          "man_028"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_029": {
+    "document_id": "man_029",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_029.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_029",
+            "page": 1,
+            "excerpt": "Mock Document man_029"
+          }
+        ],
+        "expected_entities": [
+          "man_029"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_030": {
+    "document_id": "man_030",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_030.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_030",
+            "page": 1,
+            "excerpt": "Mock Document man_030"
+          }
+        ],
+        "expected_entities": [
+          "man_030"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_031": {
+    "document_id": "man_031",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_031.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_031",
+            "page": 1,
+            "excerpt": "Mock Document man_031"
+          }
+        ],
+        "expected_entities": [
+          "man_031"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_032": {
+    "document_id": "man_032",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_032.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_032",
+            "page": 1,
+            "excerpt": "Mock Document man_032"
+          }
+        ],
+        "expected_entities": [
+          "man_032"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_033": {
+    "document_id": "man_033",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_033.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_033",
+            "page": 1,
+            "excerpt": "Mock Document man_033"
+          }
+        ],
+        "expected_entities": [
+          "man_033"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_034": {
+    "document_id": "man_034",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_034.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_034",
+            "page": 1,
+            "excerpt": "Mock Document man_034"
+          }
+        ],
+        "expected_entities": [
+          "man_034"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_035": {
+    "document_id": "man_035",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_035.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_035",
+            "page": 1,
+            "excerpt": "Mock Document man_035"
+          }
+        ],
+        "expected_entities": [
+          "man_035"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_036": {
+    "document_id": "man_036",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_036.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_036",
+            "page": 1,
+            "excerpt": "Mock Document man_036"
+          }
+        ],
+        "expected_entities": [
+          "man_036"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_037": {
+    "document_id": "man_037",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_037.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_037",
+            "page": 1,
+            "excerpt": "Mock Document man_037"
+          }
+        ],
+        "expected_entities": [
+          "man_037"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_038": {
+    "document_id": "man_038",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_038.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_038",
+            "page": 1,
+            "excerpt": "Mock Document man_038"
+          }
+        ],
+        "expected_entities": [
+          "man_038"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_039": {
+    "document_id": "man_039",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_039.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_039",
+            "page": 1,
+            "excerpt": "Mock Document man_039"
+          }
+        ],
+        "expected_entities": [
+          "man_039"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_040": {
+    "document_id": "man_040",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_040.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_040",
+            "page": 1,
+            "excerpt": "Mock Document man_040"
+          }
+        ],
+        "expected_entities": [
+          "man_040"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_041": {
+    "document_id": "man_041",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_041.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_041",
+            "page": 1,
+            "excerpt": "Mock Document man_041"
+          }
+        ],
+        "expected_entities": [
+          "man_041"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_042": {
+    "document_id": "man_042",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_042.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_042",
+            "page": 1,
+            "excerpt": "Mock Document man_042"
+          }
+        ],
+        "expected_entities": [
+          "man_042"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_043": {
+    "document_id": "man_043",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_043.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_043",
+            "page": 1,
+            "excerpt": "Mock Document man_043"
+          }
+        ],
+        "expected_entities": [
+          "man_043"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_044": {
+    "document_id": "man_044",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_044.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_044",
+            "page": 1,
+            "excerpt": "Mock Document man_044"
+          }
+        ],
+        "expected_entities": [
+          "man_044"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_045": {
+    "document_id": "man_045",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_045.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_045",
+            "page": 1,
+            "excerpt": "Mock Document man_045"
+          }
+        ],
+        "expected_entities": [
+          "man_045"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_046": {
+    "document_id": "man_046",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_046.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_046",
+            "page": 1,
+            "excerpt": "Mock Document man_046"
+          }
+        ],
+        "expected_entities": [
+          "man_046"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_047": {
+    "document_id": "man_047",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_047.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_047",
+            "page": 1,
+            "excerpt": "Mock Document man_047"
+          }
+        ],
+        "expected_entities": [
+          "man_047"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_048": {
+    "document_id": "man_048",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_048.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_048",
+            "page": 1,
+            "excerpt": "Mock Document man_048"
+          }
+        ],
+        "expected_entities": [
+          "man_048"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_049": {
+    "document_id": "man_049",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_049.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_049",
+            "page": 1,
+            "excerpt": "Mock Document man_049"
+          }
+        ],
+        "expected_entities": [
+          "man_049"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_050": {
+    "document_id": "man_050",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_050.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_050",
+            "page": 1,
+            "excerpt": "Mock Document man_050"
+          }
+        ],
+        "expected_entities": [
+          "man_050"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_051": {
+    "document_id": "man_051",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_051.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_051",
+            "page": 1,
+            "excerpt": "Mock Document man_051"
+          }
+        ],
+        "expected_entities": [
+          "man_051"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_052": {
+    "document_id": "man_052",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_052.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_052",
+            "page": 1,
+            "excerpt": "Mock Document man_052"
+          }
+        ],
+        "expected_entities": [
+          "man_052"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_053": {
+    "document_id": "man_053",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_053.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_053",
+            "page": 1,
+            "excerpt": "Mock Document man_053"
+          }
+        ],
+        "expected_entities": [
+          "man_053"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_054": {
+    "document_id": "man_054",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_054.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_054",
+            "page": 1,
+            "excerpt": "Mock Document man_054"
+          }
+        ],
+        "expected_entities": [
+          "man_054"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_055": {
+    "document_id": "man_055",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_055.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_055",
+            "page": 1,
+            "excerpt": "Mock Document man_055"
+          }
+        ],
+        "expected_entities": [
+          "man_055"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_056": {
+    "document_id": "man_056",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_056.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_056",
+            "page": 1,
+            "excerpt": "Mock Document man_056"
+          }
+        ],
+        "expected_entities": [
+          "man_056"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_057": {
+    "document_id": "man_057",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_057.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_057",
+            "page": 1,
+            "excerpt": "Mock Document man_057"
+          }
+        ],
+        "expected_entities": [
+          "man_057"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_058": {
+    "document_id": "man_058",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_058.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_058",
+            "page": 1,
+            "excerpt": "Mock Document man_058"
+          }
+        ],
+        "expected_entities": [
+          "man_058"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_059": {
+    "document_id": "man_059",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_059.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_059",
+            "page": 1,
+            "excerpt": "Mock Document man_059"
+          }
+        ],
+        "expected_entities": [
+          "man_059"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_060": {
+    "document_id": "man_060",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_060.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_060",
+            "page": 1,
+            "excerpt": "Mock Document man_060"
+          }
+        ],
+        "expected_entities": [
+          "man_060"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_061": {
+    "document_id": "man_061",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_061.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_061",
+            "page": 1,
+            "excerpt": "Mock Document man_061"
+          }
+        ],
+        "expected_entities": [
+          "man_061"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_062": {
+    "document_id": "man_062",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_062.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_062",
+            "page": 1,
+            "excerpt": "Mock Document man_062"
+          }
+        ],
+        "expected_entities": [
+          "man_062"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_063": {
+    "document_id": "man_063",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_063.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_063",
+            "page": 1,
+            "excerpt": "Mock Document man_063"
+          }
+        ],
+        "expected_entities": [
+          "man_063"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_064": {
+    "document_id": "man_064",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_064.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_064",
+            "page": 1,
+            "excerpt": "Mock Document man_064"
+          }
+        ],
+        "expected_entities": [
+          "man_064"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_065": {
+    "document_id": "man_065",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_065.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_065",
+            "page": 1,
+            "excerpt": "Mock Document man_065"
+          }
+        ],
+        "expected_entities": [
+          "man_065"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_066": {
+    "document_id": "man_066",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_066.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_066",
+            "page": 1,
+            "excerpt": "Mock Document man_066"
+          }
+        ],
+        "expected_entities": [
+          "man_066"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_067": {
+    "document_id": "man_067",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_067.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_067",
+            "page": 1,
+            "excerpt": "Mock Document man_067"
+          }
+        ],
+        "expected_entities": [
+          "man_067"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_068": {
+    "document_id": "man_068",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_068.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_068",
+            "page": 1,
+            "excerpt": "Mock Document man_068"
+          }
+        ],
+        "expected_entities": [
+          "man_068"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_069": {
+    "document_id": "man_069",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_069.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_069",
+            "page": 1,
+            "excerpt": "Mock Document man_069"
+          }
+        ],
+        "expected_entities": [
+          "man_069"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_070": {
+    "document_id": "man_070",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_070.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_070",
+            "page": 1,
+            "excerpt": "Mock Document man_070"
+          }
+        ],
+        "expected_entities": [
+          "man_070"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_071": {
+    "document_id": "man_071",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_071.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_071",
+            "page": 1,
+            "excerpt": "Mock Document man_071"
+          }
+        ],
+        "expected_entities": [
+          "man_071"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_072": {
+    "document_id": "man_072",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_072.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_072",
+            "page": 1,
+            "excerpt": "Mock Document man_072"
+          }
+        ],
+        "expected_entities": [
+          "man_072"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_073": {
+    "document_id": "man_073",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_073.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_073",
+            "page": 1,
+            "excerpt": "Mock Document man_073"
+          }
+        ],
+        "expected_entities": [
+          "man_073"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_074": {
+    "document_id": "man_074",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_074.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_074",
+            "page": 1,
+            "excerpt": "Mock Document man_074"
+          }
+        ],
+        "expected_entities": [
+          "man_074"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_075": {
+    "document_id": "man_075",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_075.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_075",
+            "page": 1,
+            "excerpt": "Mock Document man_075"
+          }
+        ],
+        "expected_entities": [
+          "man_075"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_076": {
+    "document_id": "man_076",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_076.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_076",
+            "page": 1,
+            "excerpt": "Mock Document man_076"
+          }
+        ],
+        "expected_entities": [
+          "man_076"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_077": {
+    "document_id": "man_077",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_077.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_077",
+            "page": 1,
+            "excerpt": "Mock Document man_077"
+          }
+        ],
+        "expected_entities": [
+          "man_077"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_078": {
+    "document_id": "man_078",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_078.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_078",
+            "page": 1,
+            "excerpt": "Mock Document man_078"
+          }
+        ],
+        "expected_entities": [
+          "man_078"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_079": {
+    "document_id": "man_079",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_079.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_079",
+            "page": 1,
+            "excerpt": "Mock Document man_079"
+          }
+        ],
+        "expected_entities": [
+          "man_079"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_080": {
+    "document_id": "man_080",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_080.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_080",
+            "page": 1,
+            "excerpt": "Mock Document man_080"
+          }
+        ],
+        "expected_entities": [
+          "man_080"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_081": {
+    "document_id": "man_081",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_081.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_081",
+            "page": 1,
+            "excerpt": "Mock Document man_081"
+          }
+        ],
+        "expected_entities": [
+          "man_081"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_082": {
+    "document_id": "man_082",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_082.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_082",
+            "page": 1,
+            "excerpt": "Mock Document man_082"
+          }
+        ],
+        "expected_entities": [
+          "man_082"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_083": {
+    "document_id": "man_083",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_083.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_083",
+            "page": 1,
+            "excerpt": "Mock Document man_083"
+          }
+        ],
+        "expected_entities": [
+          "man_083"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_084": {
+    "document_id": "man_084",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_084.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_084",
+            "page": 1,
+            "excerpt": "Mock Document man_084"
+          }
+        ],
+        "expected_entities": [
+          "man_084"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_085": {
+    "document_id": "man_085",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_085.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_085",
+            "page": 1,
+            "excerpt": "Mock Document man_085"
+          }
+        ],
+        "expected_entities": [
+          "man_085"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_086": {
+    "document_id": "man_086",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_086.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_086",
+            "page": 1,
+            "excerpt": "Mock Document man_086"
+          }
+        ],
+        "expected_entities": [
+          "man_086"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_087": {
+    "document_id": "man_087",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_087.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_087",
+            "page": 1,
+            "excerpt": "Mock Document man_087"
+          }
+        ],
+        "expected_entities": [
+          "man_087"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_088": {
+    "document_id": "man_088",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_088.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_088",
+            "page": 1,
+            "excerpt": "Mock Document man_088"
+          }
+        ],
+        "expected_entities": [
+          "man_088"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_089": {
+    "document_id": "man_089",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_089.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_089",
+            "page": 1,
+            "excerpt": "Mock Document man_089"
+          }
+        ],
+        "expected_entities": [
+          "man_089"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_090": {
+    "document_id": "man_090",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_090.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_090",
+            "page": 1,
+            "excerpt": "Mock Document man_090"
+          }
+        ],
+        "expected_entities": [
+          "man_090"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_091": {
+    "document_id": "man_091",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_091.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_091",
+            "page": 1,
+            "excerpt": "Mock Document man_091"
+          }
+        ],
+        "expected_entities": [
+          "man_091"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_092": {
+    "document_id": "man_092",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_092.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_092",
+            "page": 1,
+            "excerpt": "Mock Document man_092"
+          }
+        ],
+        "expected_entities": [
+          "man_092"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_093": {
+    "document_id": "man_093",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_093.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_093",
+            "page": 1,
+            "excerpt": "Mock Document man_093"
+          }
+        ],
+        "expected_entities": [
+          "man_093"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_094": {
+    "document_id": "man_094",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_094.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_094",
+            "page": 1,
+            "excerpt": "Mock Document man_094"
+          }
+        ],
+        "expected_entities": [
+          "man_094"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_095": {
+    "document_id": "man_095",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_095.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_095",
+            "page": 1,
+            "excerpt": "Mock Document man_095"
+          }
+        ],
+        "expected_entities": [
+          "man_095"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_096": {
+    "document_id": "man_096",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_096.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_096",
+            "page": 1,
+            "excerpt": "Mock Document man_096"
+          }
+        ],
+        "expected_entities": [
+          "man_096"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_097": {
+    "document_id": "man_097",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_097.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_097",
+            "page": 1,
+            "excerpt": "Mock Document man_097"
+          }
+        ],
+        "expected_entities": [
+          "man_097"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_098": {
+    "document_id": "man_098",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_098.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_098",
+            "page": 1,
+            "excerpt": "Mock Document man_098"
+          }
+        ],
+        "expected_entities": [
+          "man_098"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_099": {
+    "document_id": "man_099",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_099.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_099",
+            "page": 1,
+            "excerpt": "Mock Document man_099"
+          }
+        ],
+        "expected_entities": [
+          "man_099"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_100": {
+    "document_id": "man_100",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_100.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_100",
+            "page": 1,
+            "excerpt": "Mock Document man_100"
+          }
+        ],
+        "expected_entities": [
+          "man_100"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_101": {
+    "document_id": "man_101",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_101.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_101",
+            "page": 1,
+            "excerpt": "Mock Document man_101"
+          }
+        ],
+        "expected_entities": [
+          "man_101"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_102": {
+    "document_id": "man_102",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_102.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_102",
+            "page": 1,
+            "excerpt": "Mock Document man_102"
+          }
+        ],
+        "expected_entities": [
+          "man_102"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_103": {
+    "document_id": "man_103",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_103.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_103",
+            "page": 1,
+            "excerpt": "Mock Document man_103"
+          }
+        ],
+        "expected_entities": [
+          "man_103"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_104": {
+    "document_id": "man_104",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_104.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_104",
+            "page": 1,
+            "excerpt": "Mock Document man_104"
+          }
+        ],
+        "expected_entities": [
+          "man_104"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_105": {
+    "document_id": "man_105",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_105.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_105",
+            "page": 1,
+            "excerpt": "Mock Document man_105"
+          }
+        ],
+        "expected_entities": [
+          "man_105"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_106": {
+    "document_id": "man_106",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_106.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_106",
+            "page": 1,
+            "excerpt": "Mock Document man_106"
+          }
+        ],
+        "expected_entities": [
+          "man_106"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_107": {
+    "document_id": "man_107",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_107.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_107",
+            "page": 1,
+            "excerpt": "Mock Document man_107"
+          }
+        ],
+        "expected_entities": [
+          "man_107"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_108": {
+    "document_id": "man_108",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_108.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_108",
+            "page": 1,
+            "excerpt": "Mock Document man_108"
+          }
+        ],
+        "expected_entities": [
+          "man_108"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_109": {
+    "document_id": "man_109",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_109.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_109",
+            "page": 1,
+            "excerpt": "Mock Document man_109"
+          }
+        ],
+        "expected_entities": [
+          "man_109"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_110": {
+    "document_id": "man_110",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_110.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_110",
+            "page": 1,
+            "excerpt": "Mock Document man_110"
+          }
+        ],
+        "expected_entities": [
+          "man_110"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_111": {
+    "document_id": "man_111",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_111.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_111",
+            "page": 1,
+            "excerpt": "Mock Document man_111"
+          }
+        ],
+        "expected_entities": [
+          "man_111"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_112": {
+    "document_id": "man_112",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_112.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_112",
+            "page": 1,
+            "excerpt": "Mock Document man_112"
+          }
+        ],
+        "expected_entities": [
+          "man_112"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_113": {
+    "document_id": "man_113",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_113.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_113",
+            "page": 1,
+            "excerpt": "Mock Document man_113"
+          }
+        ],
+        "expected_entities": [
+          "man_113"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_114": {
+    "document_id": "man_114",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_114.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_114",
+            "page": 1,
+            "excerpt": "Mock Document man_114"
+          }
+        ],
+        "expected_entities": [
+          "man_114"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_115": {
+    "document_id": "man_115",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_115.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_115",
+            "page": 1,
+            "excerpt": "Mock Document man_115"
+          }
+        ],
+        "expected_entities": [
+          "man_115"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_116": {
+    "document_id": "man_116",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_116.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_116",
+            "page": 1,
+            "excerpt": "Mock Document man_116"
+          }
+        ],
+        "expected_entities": [
+          "man_116"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_117": {
+    "document_id": "man_117",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_117.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_117",
+            "page": 1,
+            "excerpt": "Mock Document man_117"
+          }
+        ],
+        "expected_entities": [
+          "man_117"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_118": {
+    "document_id": "man_118",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_118.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_118",
+            "page": 1,
+            "excerpt": "Mock Document man_118"
+          }
+        ],
+        "expected_entities": [
+          "man_118"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_119": {
+    "document_id": "man_119",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_119.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_119",
+            "page": 1,
+            "excerpt": "Mock Document man_119"
+          }
+        ],
+        "expected_entities": [
+          "man_119"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_120": {
+    "document_id": "man_120",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_120.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_120",
+            "page": 1,
+            "excerpt": "Mock Document man_120"
+          }
+        ],
+        "expected_entities": [
+          "man_120"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_121": {
+    "document_id": "man_121",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_121.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_121",
+            "page": 1,
+            "excerpt": "Mock Document man_121"
+          }
+        ],
+        "expected_entities": [
+          "man_121"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_122": {
+    "document_id": "man_122",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_122.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_122",
+            "page": 1,
+            "excerpt": "Mock Document man_122"
+          }
+        ],
+        "expected_entities": [
+          "man_122"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_123": {
+    "document_id": "man_123",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_123.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_123",
+            "page": 1,
+            "excerpt": "Mock Document man_123"
+          }
+        ],
+        "expected_entities": [
+          "man_123"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_124": {
+    "document_id": "man_124",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_124.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_124",
+            "page": 1,
+            "excerpt": "Mock Document man_124"
+          }
+        ],
+        "expected_entities": [
+          "man_124"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_125": {
+    "document_id": "man_125",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_125.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_125",
+            "page": 1,
+            "excerpt": "Mock Document man_125"
+          }
+        ],
+        "expected_entities": [
+          "man_125"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_126": {
+    "document_id": "man_126",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_126.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_126",
+            "page": 1,
+            "excerpt": "Mock Document man_126"
+          }
+        ],
+        "expected_entities": [
+          "man_126"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_127": {
+    "document_id": "man_127",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_127.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_127",
+            "page": 1,
+            "excerpt": "Mock Document man_127"
+          }
+        ],
+        "expected_entities": [
+          "man_127"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_128": {
+    "document_id": "man_128",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_128.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_128",
+            "page": 1,
+            "excerpt": "Mock Document man_128"
+          }
+        ],
+        "expected_entities": [
+          "man_128"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_129": {
+    "document_id": "man_129",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_129.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_129",
+            "page": 1,
+            "excerpt": "Mock Document man_129"
+          }
+        ],
+        "expected_entities": [
+          "man_129"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_130": {
+    "document_id": "man_130",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_130.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_130",
+            "page": 1,
+            "excerpt": "Mock Document man_130"
+          }
+        ],
+        "expected_entities": [
+          "man_130"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_131": {
+    "document_id": "man_131",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_131.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_131",
+            "page": 1,
+            "excerpt": "Mock Document man_131"
+          }
+        ],
+        "expected_entities": [
+          "man_131"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_132": {
+    "document_id": "man_132",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_132.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_132",
+            "page": 1,
+            "excerpt": "Mock Document man_132"
+          }
+        ],
+        "expected_entities": [
+          "man_132"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_133": {
+    "document_id": "man_133",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_133.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_133",
+            "page": 1,
+            "excerpt": "Mock Document man_133"
+          }
+        ],
+        "expected_entities": [
+          "man_133"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_134": {
+    "document_id": "man_134",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_134.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_134",
+            "page": 1,
+            "excerpt": "Mock Document man_134"
+          }
+        ],
+        "expected_entities": [
+          "man_134"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_135": {
+    "document_id": "man_135",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_135.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_135",
+            "page": 1,
+            "excerpt": "Mock Document man_135"
+          }
+        ],
+        "expected_entities": [
+          "man_135"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_136": {
+    "document_id": "man_136",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_136.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_136",
+            "page": 1,
+            "excerpt": "Mock Document man_136"
+          }
+        ],
+        "expected_entities": [
+          "man_136"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_137": {
+    "document_id": "man_137",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_137.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_137",
+            "page": 1,
+            "excerpt": "Mock Document man_137"
+          }
+        ],
+        "expected_entities": [
+          "man_137"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_138": {
+    "document_id": "man_138",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_138.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_138",
+            "page": 1,
+            "excerpt": "Mock Document man_138"
+          }
+        ],
+        "expected_entities": [
+          "man_138"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_139": {
+    "document_id": "man_139",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_139.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_139",
+            "page": 1,
+            "excerpt": "Mock Document man_139"
+          }
+        ],
+        "expected_entities": [
+          "man_139"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_140": {
+    "document_id": "man_140",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_140.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_140",
+            "page": 1,
+            "excerpt": "Mock Document man_140"
+          }
+        ],
+        "expected_entities": [
+          "man_140"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_141": {
+    "document_id": "man_141",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_141.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_141",
+            "page": 1,
+            "excerpt": "Mock Document man_141"
+          }
+        ],
+        "expected_entities": [
+          "man_141"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_142": {
+    "document_id": "man_142",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_142.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_142",
+            "page": 1,
+            "excerpt": "Mock Document man_142"
+          }
+        ],
+        "expected_entities": [
+          "man_142"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_143": {
+    "document_id": "man_143",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_143.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_143",
+            "page": 1,
+            "excerpt": "Mock Document man_143"
+          }
+        ],
+        "expected_entities": [
+          "man_143"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_144": {
+    "document_id": "man_144",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_144.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_144",
+            "page": 1,
+            "excerpt": "Mock Document man_144"
+          }
+        ],
+        "expected_entities": [
+          "man_144"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_145": {
+    "document_id": "man_145",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_145.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_145",
+            "page": 1,
+            "excerpt": "Mock Document man_145"
+          }
+        ],
+        "expected_entities": [
+          "man_145"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_146": {
+    "document_id": "man_146",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_146.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_146",
+            "page": 1,
+            "excerpt": "Mock Document man_146"
+          }
+        ],
+        "expected_entities": [
+          "man_146"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_147": {
+    "document_id": "man_147",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_147.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_147",
+            "page": 1,
+            "excerpt": "Mock Document man_147"
+          }
+        ],
+        "expected_entities": [
+          "man_147"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_148": {
+    "document_id": "man_148",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_148.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_148",
+            "page": 1,
+            "excerpt": "Mock Document man_148"
+          }
+        ],
+        "expected_entities": [
+          "man_148"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_149": {
+    "document_id": "man_149",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_149.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_149",
+            "page": 1,
+            "excerpt": "Mock Document man_149"
+          }
+        ],
+        "expected_entities": [
+          "man_149"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "man_150": {
+    "document_id": "man_150",
+    "category": "manuals",
+    "entries": [
+      {
+        "question": "What is the ID of this manual?",
+        "expected_answer": "The ID of this manual is man_150.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "man_150",
+            "page": 1,
+            "excerpt": "Mock Document man_150"
+          }
+        ],
+        "expected_entities": [
+          "man_150"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "document_id": "inv_001",
+  "category": "invoices",
+  "entries": [
+    {
+      "question": "What is the total amount due on invoice INV-2026-001?",
+      "expected_answer": "The total amount due on invoice INV-2026-001 is $12,450.00.",
+      "expected_pages": [
+        1
+      ],
+      "expected_citations": [
+        {
+          "doc_id": "inv_001",
+          "page": 1,
+          "excerpt": "Total Balance Due: $12,450.00"
+        }
+      ],
+      "expected_entities": [
+        "$12,450.00",
+        "Acme Corp",
+        "Invoice"
+      ],
+      "difficulty": "easy",
+      "type": "factual"
+    }
+  ]
+}

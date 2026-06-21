@@ -1,0 +1,5004 @@
+{
+  "inv_001": {
+    "document_id": "inv_001",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the total amount due on invoice INV-2026-001?",
+        "expected_answer": "The total amount due on invoice INV-2026-001 is $12,450.00.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_001",
+            "page": 1,
+            "excerpt": "Total Balance Due: $12,450.00"
+          }
+        ],
+        "expected_entities": [
+          "$12,450.00",
+          "Acme Corp",
+          "Invoice"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_002": {
+    "document_id": "inv_002",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_002.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_002",
+            "page": 1,
+            "excerpt": "Mock Document inv_002"
+          }
+        ],
+        "expected_entities": [
+          "inv_002"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_003": {
+    "document_id": "inv_003",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_003.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_003",
+            "page": 1,
+            "excerpt": "Mock Document inv_003"
+          }
+        ],
+        "expected_entities": [
+          "inv_003"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_004": {
+    "document_id": "inv_004",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_004.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_004",
+            "page": 1,
+            "excerpt": "Mock Document inv_004"
+          }
+        ],
+        "expected_entities": [
+          "inv_004"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_005": {
+    "document_id": "inv_005",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_005.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_005",
+            "page": 1,
+            "excerpt": "Mock Document inv_005"
+          }
+        ],
+        "expected_entities": [
+          "inv_005"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_006": {
+    "document_id": "inv_006",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_006.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_006",
+            "page": 1,
+            "excerpt": "Mock Document inv_006"
+          }
+        ],
+        "expected_entities": [
+          "inv_006"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_007": {
+    "document_id": "inv_007",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_007.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_007",
+            "page": 1,
+            "excerpt": "Mock Document inv_007"
+          }
+        ],
+        "expected_entities": [
+          "inv_007"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_008": {
+    "document_id": "inv_008",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_008.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_008",
+            "page": 1,
+            "excerpt": "Mock Document inv_008"
+          }
+        ],
+        "expected_entities": [
+          "inv_008"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_009": {
+    "document_id": "inv_009",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_009.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_009",
+            "page": 1,
+            "excerpt": "Mock Document inv_009"
+          }
+        ],
+        "expected_entities": [
+          "inv_009"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_010": {
+    "document_id": "inv_010",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_010.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_010",
+            "page": 1,
+            "excerpt": "Mock Document inv_010"
+          }
+        ],
+        "expected_entities": [
+          "inv_010"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_011": {
+    "document_id": "inv_011",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_011.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_011",
+            "page": 1,
+            "excerpt": "Mock Document inv_011"
+          }
+        ],
+        "expected_entities": [
+          "inv_011"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_012": {
+    "document_id": "inv_012",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_012.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_012",
+            "page": 1,
+            "excerpt": "Mock Document inv_012"
+          }
+        ],
+        "expected_entities": [
+          "inv_012"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_013": {
+    "document_id": "inv_013",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_013.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_013",
+            "page": 1,
+            "excerpt": "Mock Document inv_013"
+          }
+        ],
+        "expected_entities": [
+          "inv_013"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_014": {
+    "document_id": "inv_014",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_014.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_014",
+            "page": 1,
+            "excerpt": "Mock Document inv_014"
+          }
+        ],
+        "expected_entities": [
+          "inv_014"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_015": {
+    "document_id": "inv_015",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_015.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_015",
+            "page": 1,
+            "excerpt": "Mock Document inv_015"
+          }
+        ],
+        "expected_entities": [
+          "inv_015"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_016": {
+    "document_id": "inv_016",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_016.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_016",
+            "page": 1,
+            "excerpt": "Mock Document inv_016"
+          }
+        ],
+        "expected_entities": [
+          "inv_016"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_017": {
+    "document_id": "inv_017",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_017.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_017",
+            "page": 1,
+            "excerpt": "Mock Document inv_017"
+          }
+        ],
+        "expected_entities": [
+          "inv_017"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_018": {
+    "document_id": "inv_018",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_018.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_018",
+            "page": 1,
+            "excerpt": "Mock Document inv_018"
+          }
+        ],
+        "expected_entities": [
+          "inv_018"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_019": {
+    "document_id": "inv_019",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_019.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_019",
+            "page": 1,
+            "excerpt": "Mock Document inv_019"
+          }
+        ],
+        "expected_entities": [
+          "inv_019"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_020": {
+    "document_id": "inv_020",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_020.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_020",
+            "page": 1,
+            "excerpt": "Mock Document inv_020"
+          }
+        ],
+        "expected_entities": [
+          "inv_020"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_021": {
+    "document_id": "inv_021",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_021.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_021",
+            "page": 1,
+            "excerpt": "Mock Document inv_021"
+          }
+        ],
+        "expected_entities": [
+          "inv_021"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_022": {
+    "document_id": "inv_022",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_022.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_022",
+            "page": 1,
+            "excerpt": "Mock Document inv_022"
+          }
+        ],
+        "expected_entities": [
+          "inv_022"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_023": {
+    "document_id": "inv_023",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_023.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_023",
+            "page": 1,
+            "excerpt": "Mock Document inv_023"
+          }
+        ],
+        "expected_entities": [
+          "inv_023"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_024": {
+    "document_id": "inv_024",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_024.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_024",
+            "page": 1,
+            "excerpt": "Mock Document inv_024"
+          }
+        ],
+        "expected_entities": [
+          "inv_024"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_025": {
+    "document_id": "inv_025",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_025.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_025",
+            "page": 1,
+            "excerpt": "Mock Document inv_025"
+          }
+        ],
+        "expected_entities": [
+          "inv_025"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_026": {
+    "document_id": "inv_026",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_026.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_026",
+            "page": 1,
+            "excerpt": "Mock Document inv_026"
+          }
+        ],
+        "expected_entities": [
+          "inv_026"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_027": {
+    "document_id": "inv_027",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_027.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_027",
+            "page": 1,
+            "excerpt": "Mock Document inv_027"
+          }
+        ],
+        "expected_entities": [
+          "inv_027"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_028": {
+    "document_id": "inv_028",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_028.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_028",
+            "page": 1,
+            "excerpt": "Mock Document inv_028"
+          }
+        ],
+        "expected_entities": [
+          "inv_028"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_029": {
+    "document_id": "inv_029",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_029.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_029",
+            "page": 1,
+            "excerpt": "Mock Document inv_029"
+          }
+        ],
+        "expected_entities": [
+          "inv_029"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_030": {
+    "document_id": "inv_030",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_030.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_030",
+            "page": 1,
+            "excerpt": "Mock Document inv_030"
+          }
+        ],
+        "expected_entities": [
+          "inv_030"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_031": {
+    "document_id": "inv_031",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_031.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_031",
+            "page": 1,
+            "excerpt": "Mock Document inv_031"
+          }
+        ],
+        "expected_entities": [
+          "inv_031"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_032": {
+    "document_id": "inv_032",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_032.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_032",
+            "page": 1,
+            "excerpt": "Mock Document inv_032"
+          }
+        ],
+        "expected_entities": [
+          "inv_032"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_033": {
+    "document_id": "inv_033",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_033.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_033",
+            "page": 1,
+            "excerpt": "Mock Document inv_033"
+          }
+        ],
+        "expected_entities": [
+          "inv_033"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_034": {
+    "document_id": "inv_034",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_034.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_034",
+            "page": 1,
+            "excerpt": "Mock Document inv_034"
+          }
+        ],
+        "expected_entities": [
+          "inv_034"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_035": {
+    "document_id": "inv_035",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_035.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_035",
+            "page": 1,
+            "excerpt": "Mock Document inv_035"
+          }
+        ],
+        "expected_entities": [
+          "inv_035"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_036": {
+    "document_id": "inv_036",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_036.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_036",
+            "page": 1,
+            "excerpt": "Mock Document inv_036"
+          }
+        ],
+        "expected_entities": [
+          "inv_036"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_037": {
+    "document_id": "inv_037",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_037.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_037",
+            "page": 1,
+            "excerpt": "Mock Document inv_037"
+          }
+        ],
+        "expected_entities": [
+          "inv_037"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_038": {
+    "document_id": "inv_038",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_038.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_038",
+            "page": 1,
+            "excerpt": "Mock Document inv_038"
+          }
+        ],
+        "expected_entities": [
+          "inv_038"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_039": {
+    "document_id": "inv_039",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_039.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_039",
+            "page": 1,
+            "excerpt": "Mock Document inv_039"
+          }
+        ],
+        "expected_entities": [
+          "inv_039"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_040": {
+    "document_id": "inv_040",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_040.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_040",
+            "page": 1,
+            "excerpt": "Mock Document inv_040"
+          }
+        ],
+        "expected_entities": [
+          "inv_040"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_041": {
+    "document_id": "inv_041",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_041.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_041",
+            "page": 1,
+            "excerpt": "Mock Document inv_041"
+          }
+        ],
+        "expected_entities": [
+          "inv_041"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_042": {
+    "document_id": "inv_042",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_042.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_042",
+            "page": 1,
+            "excerpt": "Mock Document inv_042"
+          }
+        ],
+        "expected_entities": [
+          "inv_042"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_043": {
+    "document_id": "inv_043",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_043.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_043",
+            "page": 1,
+            "excerpt": "Mock Document inv_043"
+          }
+        ],
+        "expected_entities": [
+          "inv_043"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_044": {
+    "document_id": "inv_044",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_044.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_044",
+            "page": 1,
+            "excerpt": "Mock Document inv_044"
+          }
+        ],
+        "expected_entities": [
+          "inv_044"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_045": {
+    "document_id": "inv_045",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_045.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_045",
+            "page": 1,
+            "excerpt": "Mock Document inv_045"
+          }
+        ],
+        "expected_entities": [
+          "inv_045"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_046": {
+    "document_id": "inv_046",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_046.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_046",
+            "page": 1,
+            "excerpt": "Mock Document inv_046"
+          }
+        ],
+        "expected_entities": [
+          "inv_046"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_047": {
+    "document_id": "inv_047",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_047.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_047",
+            "page": 1,
+            "excerpt": "Mock Document inv_047"
+          }
+        ],
+        "expected_entities": [
+          "inv_047"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_048": {
+    "document_id": "inv_048",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_048.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_048",
+            "page": 1,
+            "excerpt": "Mock Document inv_048"
+          }
+        ],
+        "expected_entities": [
+          "inv_048"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_049": {
+    "document_id": "inv_049",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_049.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_049",
+            "page": 1,
+            "excerpt": "Mock Document inv_049"
+          }
+        ],
+        "expected_entities": [
+          "inv_049"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_050": {
+    "document_id": "inv_050",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_050.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_050",
+            "page": 1,
+            "excerpt": "Mock Document inv_050"
+          }
+        ],
+        "expected_entities": [
+          "inv_050"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_051": {
+    "document_id": "inv_051",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_051.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_051",
+            "page": 1,
+            "excerpt": "Mock Document inv_051"
+          }
+        ],
+        "expected_entities": [
+          "inv_051"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_052": {
+    "document_id": "inv_052",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_052.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_052",
+            "page": 1,
+            "excerpt": "Mock Document inv_052"
+          }
+        ],
+        "expected_entities": [
+          "inv_052"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_053": {
+    "document_id": "inv_053",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_053.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_053",
+            "page": 1,
+            "excerpt": "Mock Document inv_053"
+          }
+        ],
+        "expected_entities": [
+          "inv_053"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_054": {
+    "document_id": "inv_054",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_054.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_054",
+            "page": 1,
+            "excerpt": "Mock Document inv_054"
+          }
+        ],
+        "expected_entities": [
+          "inv_054"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_055": {
+    "document_id": "inv_055",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_055.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_055",
+            "page": 1,
+            "excerpt": "Mock Document inv_055"
+          }
+        ],
+        "expected_entities": [
+          "inv_055"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_056": {
+    "document_id": "inv_056",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_056.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_056",
+            "page": 1,
+            "excerpt": "Mock Document inv_056"
+          }
+        ],
+        "expected_entities": [
+          "inv_056"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_057": {
+    "document_id": "inv_057",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_057.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_057",
+            "page": 1,
+            "excerpt": "Mock Document inv_057"
+          }
+        ],
+        "expected_entities": [
+          "inv_057"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_058": {
+    "document_id": "inv_058",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_058.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_058",
+            "page": 1,
+            "excerpt": "Mock Document inv_058"
+          }
+        ],
+        "expected_entities": [
+          "inv_058"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_059": {
+    "document_id": "inv_059",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_059.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_059",
+            "page": 1,
+            "excerpt": "Mock Document inv_059"
+          }
+        ],
+        "expected_entities": [
+          "inv_059"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_060": {
+    "document_id": "inv_060",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_060.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_060",
+            "page": 1,
+            "excerpt": "Mock Document inv_060"
+          }
+        ],
+        "expected_entities": [
+          "inv_060"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_061": {
+    "document_id": "inv_061",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_061.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_061",
+            "page": 1,
+            "excerpt": "Mock Document inv_061"
+          }
+        ],
+        "expected_entities": [
+          "inv_061"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_062": {
+    "document_id": "inv_062",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_062.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_062",
+            "page": 1,
+            "excerpt": "Mock Document inv_062"
+          }
+        ],
+        "expected_entities": [
+          "inv_062"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_063": {
+    "document_id": "inv_063",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_063.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_063",
+            "page": 1,
+            "excerpt": "Mock Document inv_063"
+          }
+        ],
+        "expected_entities": [
+          "inv_063"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_064": {
+    "document_id": "inv_064",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_064.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_064",
+            "page": 1,
+            "excerpt": "Mock Document inv_064"
+          }
+        ],
+        "expected_entities": [
+          "inv_064"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_065": {
+    "document_id": "inv_065",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_065.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_065",
+            "page": 1,
+            "excerpt": "Mock Document inv_065"
+          }
+        ],
+        "expected_entities": [
+          "inv_065"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_066": {
+    "document_id": "inv_066",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_066.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_066",
+            "page": 1,
+            "excerpt": "Mock Document inv_066"
+          }
+        ],
+        "expected_entities": [
+          "inv_066"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_067": {
+    "document_id": "inv_067",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_067.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_067",
+            "page": 1,
+            "excerpt": "Mock Document inv_067"
+          }
+        ],
+        "expected_entities": [
+          "inv_067"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_068": {
+    "document_id": "inv_068",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_068.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_068",
+            "page": 1,
+            "excerpt": "Mock Document inv_068"
+          }
+        ],
+        "expected_entities": [
+          "inv_068"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_069": {
+    "document_id": "inv_069",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_069.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_069",
+            "page": 1,
+            "excerpt": "Mock Document inv_069"
+          }
+        ],
+        "expected_entities": [
+          "inv_069"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_070": {
+    "document_id": "inv_070",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_070.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_070",
+            "page": 1,
+            "excerpt": "Mock Document inv_070"
+          }
+        ],
+        "expected_entities": [
+          "inv_070"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_071": {
+    "document_id": "inv_071",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_071.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_071",
+            "page": 1,
+            "excerpt": "Mock Document inv_071"
+          }
+        ],
+        "expected_entities": [
+          "inv_071"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_072": {
+    "document_id": "inv_072",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_072.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_072",
+            "page": 1,
+            "excerpt": "Mock Document inv_072"
+          }
+        ],
+        "expected_entities": [
+          "inv_072"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_073": {
+    "document_id": "inv_073",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_073.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_073",
+            "page": 1,
+            "excerpt": "Mock Document inv_073"
+          }
+        ],
+        "expected_entities": [
+          "inv_073"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_074": {
+    "document_id": "inv_074",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_074.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_074",
+            "page": 1,
+            "excerpt": "Mock Document inv_074"
+          }
+        ],
+        "expected_entities": [
+          "inv_074"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_075": {
+    "document_id": "inv_075",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_075.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_075",
+            "page": 1,
+            "excerpt": "Mock Document inv_075"
+          }
+        ],
+        "expected_entities": [
+          "inv_075"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_076": {
+    "document_id": "inv_076",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_076.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_076",
+            "page": 1,
+            "excerpt": "Mock Document inv_076"
+          }
+        ],
+        "expected_entities": [
+          "inv_076"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_077": {
+    "document_id": "inv_077",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_077.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_077",
+            "page": 1,
+            "excerpt": "Mock Document inv_077"
+          }
+        ],
+        "expected_entities": [
+          "inv_077"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_078": {
+    "document_id": "inv_078",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_078.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_078",
+            "page": 1,
+            "excerpt": "Mock Document inv_078"
+          }
+        ],
+        "expected_entities": [
+          "inv_078"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_079": {
+    "document_id": "inv_079",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_079.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_079",
+            "page": 1,
+            "excerpt": "Mock Document inv_079"
+          }
+        ],
+        "expected_entities": [
+          "inv_079"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_080": {
+    "document_id": "inv_080",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_080.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_080",
+            "page": 1,
+            "excerpt": "Mock Document inv_080"
+          }
+        ],
+        "expected_entities": [
+          "inv_080"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_081": {
+    "document_id": "inv_081",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_081.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_081",
+            "page": 1,
+            "excerpt": "Mock Document inv_081"
+          }
+        ],
+        "expected_entities": [
+          "inv_081"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_082": {
+    "document_id": "inv_082",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_082.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_082",
+            "page": 1,
+            "excerpt": "Mock Document inv_082"
+          }
+        ],
+        "expected_entities": [
+          "inv_082"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_083": {
+    "document_id": "inv_083",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_083.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_083",
+            "page": 1,
+            "excerpt": "Mock Document inv_083"
+          }
+        ],
+        "expected_entities": [
+          "inv_083"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_084": {
+    "document_id": "inv_084",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_084.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_084",
+            "page": 1,
+            "excerpt": "Mock Document inv_084"
+          }
+        ],
+        "expected_entities": [
+          "inv_084"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_085": {
+    "document_id": "inv_085",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_085.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_085",
+            "page": 1,
+            "excerpt": "Mock Document inv_085"
+          }
+        ],
+        "expected_entities": [
+          "inv_085"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_086": {
+    "document_id": "inv_086",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_086.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_086",
+            "page": 1,
+            "excerpt": "Mock Document inv_086"
+          }
+        ],
+        "expected_entities": [
+          "inv_086"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_087": {
+    "document_id": "inv_087",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_087.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_087",
+            "page": 1,
+            "excerpt": "Mock Document inv_087"
+          }
+        ],
+        "expected_entities": [
+          "inv_087"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_088": {
+    "document_id": "inv_088",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_088.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_088",
+            "page": 1,
+            "excerpt": "Mock Document inv_088"
+          }
+        ],
+        "expected_entities": [
+          "inv_088"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_089": {
+    "document_id": "inv_089",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_089.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_089",
+            "page": 1,
+            "excerpt": "Mock Document inv_089"
+          }
+        ],
+        "expected_entities": [
+          "inv_089"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_090": {
+    "document_id": "inv_090",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_090.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_090",
+            "page": 1,
+            "excerpt": "Mock Document inv_090"
+          }
+        ],
+        "expected_entities": [
+          "inv_090"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_091": {
+    "document_id": "inv_091",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_091.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_091",
+            "page": 1,
+            "excerpt": "Mock Document inv_091"
+          }
+        ],
+        "expected_entities": [
+          "inv_091"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_092": {
+    "document_id": "inv_092",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_092.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_092",
+            "page": 1,
+            "excerpt": "Mock Document inv_092"
+          }
+        ],
+        "expected_entities": [
+          "inv_092"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_093": {
+    "document_id": "inv_093",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_093.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_093",
+            "page": 1,
+            "excerpt": "Mock Document inv_093"
+          }
+        ],
+        "expected_entities": [
+          "inv_093"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_094": {
+    "document_id": "inv_094",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_094.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_094",
+            "page": 1,
+            "excerpt": "Mock Document inv_094"
+          }
+        ],
+        "expected_entities": [
+          "inv_094"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_095": {
+    "document_id": "inv_095",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_095.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_095",
+            "page": 1,
+            "excerpt": "Mock Document inv_095"
+          }
+        ],
+        "expected_entities": [
+          "inv_095"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_096": {
+    "document_id": "inv_096",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_096.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_096",
+            "page": 1,
+            "excerpt": "Mock Document inv_096"
+          }
+        ],
+        "expected_entities": [
+          "inv_096"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_097": {
+    "document_id": "inv_097",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_097.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_097",
+            "page": 1,
+            "excerpt": "Mock Document inv_097"
+          }
+        ],
+        "expected_entities": [
+          "inv_097"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_098": {
+    "document_id": "inv_098",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_098.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_098",
+            "page": 1,
+            "excerpt": "Mock Document inv_098"
+          }
+        ],
+        "expected_entities": [
+          "inv_098"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_099": {
+    "document_id": "inv_099",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_099.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_099",
+            "page": 1,
+            "excerpt": "Mock Document inv_099"
+          }
+        ],
+        "expected_entities": [
+          "inv_099"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_100": {
+    "document_id": "inv_100",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_100.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_100",
+            "page": 1,
+            "excerpt": "Mock Document inv_100"
+          }
+        ],
+        "expected_entities": [
+          "inv_100"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_101": {
+    "document_id": "inv_101",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_101.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_101",
+            "page": 1,
+            "excerpt": "Mock Document inv_101"
+          }
+        ],
+        "expected_entities": [
+          "inv_101"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_102": {
+    "document_id": "inv_102",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_102.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_102",
+            "page": 1,
+            "excerpt": "Mock Document inv_102"
+          }
+        ],
+        "expected_entities": [
+          "inv_102"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_103": {
+    "document_id": "inv_103",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_103.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_103",
+            "page": 1,
+            "excerpt": "Mock Document inv_103"
+          }
+        ],
+        "expected_entities": [
+          "inv_103"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_104": {
+    "document_id": "inv_104",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_104.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_104",
+            "page": 1,
+            "excerpt": "Mock Document inv_104"
+          }
+        ],
+        "expected_entities": [
+          "inv_104"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_105": {
+    "document_id": "inv_105",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_105.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_105",
+            "page": 1,
+            "excerpt": "Mock Document inv_105"
+          }
+        ],
+        "expected_entities": [
+          "inv_105"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_106": {
+    "document_id": "inv_106",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_106.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_106",
+            "page": 1,
+            "excerpt": "Mock Document inv_106"
+          }
+        ],
+        "expected_entities": [
+          "inv_106"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_107": {
+    "document_id": "inv_107",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_107.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_107",
+            "page": 1,
+            "excerpt": "Mock Document inv_107"
+          }
+        ],
+        "expected_entities": [
+          "inv_107"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_108": {
+    "document_id": "inv_108",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_108.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_108",
+            "page": 1,
+            "excerpt": "Mock Document inv_108"
+          }
+        ],
+        "expected_entities": [
+          "inv_108"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_109": {
+    "document_id": "inv_109",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_109.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_109",
+            "page": 1,
+            "excerpt": "Mock Document inv_109"
+          }
+        ],
+        "expected_entities": [
+          "inv_109"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_110": {
+    "document_id": "inv_110",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_110.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_110",
+            "page": 1,
+            "excerpt": "Mock Document inv_110"
+          }
+        ],
+        "expected_entities": [
+          "inv_110"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_111": {
+    "document_id": "inv_111",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_111.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_111",
+            "page": 1,
+            "excerpt": "Mock Document inv_111"
+          }
+        ],
+        "expected_entities": [
+          "inv_111"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_112": {
+    "document_id": "inv_112",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_112.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_112",
+            "page": 1,
+            "excerpt": "Mock Document inv_112"
+          }
+        ],
+        "expected_entities": [
+          "inv_112"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_113": {
+    "document_id": "inv_113",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_113.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_113",
+            "page": 1,
+            "excerpt": "Mock Document inv_113"
+          }
+        ],
+        "expected_entities": [
+          "inv_113"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_114": {
+    "document_id": "inv_114",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_114.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_114",
+            "page": 1,
+            "excerpt": "Mock Document inv_114"
+          }
+        ],
+        "expected_entities": [
+          "inv_114"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_115": {
+    "document_id": "inv_115",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_115.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_115",
+            "page": 1,
+            "excerpt": "Mock Document inv_115"
+          }
+        ],
+        "expected_entities": [
+          "inv_115"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_116": {
+    "document_id": "inv_116",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_116.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_116",
+            "page": 1,
+            "excerpt": "Mock Document inv_116"
+          }
+        ],
+        "expected_entities": [
+          "inv_116"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_117": {
+    "document_id": "inv_117",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_117.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_117",
+            "page": 1,
+            "excerpt": "Mock Document inv_117"
+          }
+        ],
+        "expected_entities": [
+          "inv_117"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_118": {
+    "document_id": "inv_118",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_118.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_118",
+            "page": 1,
+            "excerpt": "Mock Document inv_118"
+          }
+        ],
+        "expected_entities": [
+          "inv_118"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_119": {
+    "document_id": "inv_119",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_119.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_119",
+            "page": 1,
+            "excerpt": "Mock Document inv_119"
+          }
+        ],
+        "expected_entities": [
+          "inv_119"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_120": {
+    "document_id": "inv_120",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_120.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_120",
+            "page": 1,
+            "excerpt": "Mock Document inv_120"
+          }
+        ],
+        "expected_entities": [
+          "inv_120"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_121": {
+    "document_id": "inv_121",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_121.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_121",
+            "page": 1,
+            "excerpt": "Mock Document inv_121"
+          }
+        ],
+        "expected_entities": [
+          "inv_121"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_122": {
+    "document_id": "inv_122",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_122.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_122",
+            "page": 1,
+            "excerpt": "Mock Document inv_122"
+          }
+        ],
+        "expected_entities": [
+          "inv_122"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_123": {
+    "document_id": "inv_123",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_123.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_123",
+            "page": 1,
+            "excerpt": "Mock Document inv_123"
+          }
+        ],
+        "expected_entities": [
+          "inv_123"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_124": {
+    "document_id": "inv_124",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_124.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_124",
+            "page": 1,
+            "excerpt": "Mock Document inv_124"
+          }
+        ],
+        "expected_entities": [
+          "inv_124"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_125": {
+    "document_id": "inv_125",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_125.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_125",
+            "page": 1,
+            "excerpt": "Mock Document inv_125"
+          }
+        ],
+        "expected_entities": [
+          "inv_125"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_126": {
+    "document_id": "inv_126",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_126.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_126",
+            "page": 1,
+            "excerpt": "Mock Document inv_126"
+          }
+        ],
+        "expected_entities": [
+          "inv_126"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_127": {
+    "document_id": "inv_127",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_127.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_127",
+            "page": 1,
+            "excerpt": "Mock Document inv_127"
+          }
+        ],
+        "expected_entities": [
+          "inv_127"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_128": {
+    "document_id": "inv_128",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_128.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_128",
+            "page": 1,
+            "excerpt": "Mock Document inv_128"
+          }
+        ],
+        "expected_entities": [
+          "inv_128"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_129": {
+    "document_id": "inv_129",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_129.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_129",
+            "page": 1,
+            "excerpt": "Mock Document inv_129"
+          }
+        ],
+        "expected_entities": [
+          "inv_129"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_130": {
+    "document_id": "inv_130",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_130.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_130",
+            "page": 1,
+            "excerpt": "Mock Document inv_130"
+          }
+        ],
+        "expected_entities": [
+          "inv_130"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_131": {
+    "document_id": "inv_131",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_131.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_131",
+            "page": 1,
+            "excerpt": "Mock Document inv_131"
+          }
+        ],
+        "expected_entities": [
+          "inv_131"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_132": {
+    "document_id": "inv_132",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_132.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_132",
+            "page": 1,
+            "excerpt": "Mock Document inv_132"
+          }
+        ],
+        "expected_entities": [
+          "inv_132"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_133": {
+    "document_id": "inv_133",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_133.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_133",
+            "page": 1,
+            "excerpt": "Mock Document inv_133"
+          }
+        ],
+        "expected_entities": [
+          "inv_133"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_134": {
+    "document_id": "inv_134",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_134.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_134",
+            "page": 1,
+            "excerpt": "Mock Document inv_134"
+          }
+        ],
+        "expected_entities": [
+          "inv_134"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_135": {
+    "document_id": "inv_135",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_135.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_135",
+            "page": 1,
+            "excerpt": "Mock Document inv_135"
+          }
+        ],
+        "expected_entities": [
+          "inv_135"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_136": {
+    "document_id": "inv_136",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_136.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_136",
+            "page": 1,
+            "excerpt": "Mock Document inv_136"
+          }
+        ],
+        "expected_entities": [
+          "inv_136"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_137": {
+    "document_id": "inv_137",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_137.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_137",
+            "page": 1,
+            "excerpt": "Mock Document inv_137"
+          }
+        ],
+        "expected_entities": [
+          "inv_137"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_138": {
+    "document_id": "inv_138",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_138.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_138",
+            "page": 1,
+            "excerpt": "Mock Document inv_138"
+          }
+        ],
+        "expected_entities": [
+          "inv_138"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_139": {
+    "document_id": "inv_139",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_139.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_139",
+            "page": 1,
+            "excerpt": "Mock Document inv_139"
+          }
+        ],
+        "expected_entities": [
+          "inv_139"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_140": {
+    "document_id": "inv_140",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_140.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_140",
+            "page": 1,
+            "excerpt": "Mock Document inv_140"
+          }
+        ],
+        "expected_entities": [
+          "inv_140"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_141": {
+    "document_id": "inv_141",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_141.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_141",
+            "page": 1,
+            "excerpt": "Mock Document inv_141"
+          }
+        ],
+        "expected_entities": [
+          "inv_141"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_142": {
+    "document_id": "inv_142",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_142.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_142",
+            "page": 1,
+            "excerpt": "Mock Document inv_142"
+          }
+        ],
+        "expected_entities": [
+          "inv_142"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_143": {
+    "document_id": "inv_143",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_143.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_143",
+            "page": 1,
+            "excerpt": "Mock Document inv_143"
+          }
+        ],
+        "expected_entities": [
+          "inv_143"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_144": {
+    "document_id": "inv_144",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_144.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_144",
+            "page": 1,
+            "excerpt": "Mock Document inv_144"
+          }
+        ],
+        "expected_entities": [
+          "inv_144"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_145": {
+    "document_id": "inv_145",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_145.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_145",
+            "page": 1,
+            "excerpt": "Mock Document inv_145"
+          }
+        ],
+        "expected_entities": [
+          "inv_145"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_146": {
+    "document_id": "inv_146",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_146.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_146",
+            "page": 1,
+            "excerpt": "Mock Document inv_146"
+          }
+        ],
+        "expected_entities": [
+          "inv_146"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_147": {
+    "document_id": "inv_147",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_147.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_147",
+            "page": 1,
+            "excerpt": "Mock Document inv_147"
+          }
+        ],
+        "expected_entities": [
+          "inv_147"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_148": {
+    "document_id": "inv_148",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_148.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_148",
+            "page": 1,
+            "excerpt": "Mock Document inv_148"
+          }
+        ],
+        "expected_entities": [
+          "inv_148"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_149": {
+    "document_id": "inv_149",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_149.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_149",
+            "page": 1,
+            "excerpt": "Mock Document inv_149"
+          }
+        ],
+        "expected_entities": [
+          "inv_149"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_150": {
+    "document_id": "inv_150",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_150.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_150",
+            "page": 1,
+            "excerpt": "Mock Document inv_150"
+          }
+        ],
+        "expected_entities": [
+          "inv_150"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_151": {
+    "document_id": "inv_151",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_151.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_151",
+            "page": 1,
+            "excerpt": "Mock Document inv_151"
+          }
+        ],
+        "expected_entities": [
+          "inv_151"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_152": {
+    "document_id": "inv_152",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_152.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_152",
+            "page": 1,
+            "excerpt": "Mock Document inv_152"
+          }
+        ],
+        "expected_entities": [
+          "inv_152"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_153": {
+    "document_id": "inv_153",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_153.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_153",
+            "page": 1,
+            "excerpt": "Mock Document inv_153"
+          }
+        ],
+        "expected_entities": [
+          "inv_153"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_154": {
+    "document_id": "inv_154",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_154.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_154",
+            "page": 1,
+            "excerpt": "Mock Document inv_154"
+          }
+        ],
+        "expected_entities": [
+          "inv_154"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_155": {
+    "document_id": "inv_155",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_155.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_155",
+            "page": 1,
+            "excerpt": "Mock Document inv_155"
+          }
+        ],
+        "expected_entities": [
+          "inv_155"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_156": {
+    "document_id": "inv_156",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_156.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_156",
+            "page": 1,
+            "excerpt": "Mock Document inv_156"
+          }
+        ],
+        "expected_entities": [
+          "inv_156"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_157": {
+    "document_id": "inv_157",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_157.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_157",
+            "page": 1,
+            "excerpt": "Mock Document inv_157"
+          }
+        ],
+        "expected_entities": [
+          "inv_157"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_158": {
+    "document_id": "inv_158",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_158.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_158",
+            "page": 1,
+            "excerpt": "Mock Document inv_158"
+          }
+        ],
+        "expected_entities": [
+          "inv_158"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_159": {
+    "document_id": "inv_159",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_159.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_159",
+            "page": 1,
+            "excerpt": "Mock Document inv_159"
+          }
+        ],
+        "expected_entities": [
+          "inv_159"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_160": {
+    "document_id": "inv_160",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_160.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_160",
+            "page": 1,
+            "excerpt": "Mock Document inv_160"
+          }
+        ],
+        "expected_entities": [
+          "inv_160"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_161": {
+    "document_id": "inv_161",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_161.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_161",
+            "page": 1,
+            "excerpt": "Mock Document inv_161"
+          }
+        ],
+        "expected_entities": [
+          "inv_161"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_162": {
+    "document_id": "inv_162",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_162.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_162",
+            "page": 1,
+            "excerpt": "Mock Document inv_162"
+          }
+        ],
+        "expected_entities": [
+          "inv_162"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_163": {
+    "document_id": "inv_163",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_163.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_163",
+            "page": 1,
+            "excerpt": "Mock Document inv_163"
+          }
+        ],
+        "expected_entities": [
+          "inv_163"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_164": {
+    "document_id": "inv_164",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_164.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_164",
+            "page": 1,
+            "excerpt": "Mock Document inv_164"
+          }
+        ],
+        "expected_entities": [
+          "inv_164"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_165": {
+    "document_id": "inv_165",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_165.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_165",
+            "page": 1,
+            "excerpt": "Mock Document inv_165"
+          }
+        ],
+        "expected_entities": [
+          "inv_165"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_166": {
+    "document_id": "inv_166",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_166.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_166",
+            "page": 1,
+            "excerpt": "Mock Document inv_166"
+          }
+        ],
+        "expected_entities": [
+          "inv_166"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_167": {
+    "document_id": "inv_167",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_167.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_167",
+            "page": 1,
+            "excerpt": "Mock Document inv_167"
+          }
+        ],
+        "expected_entities": [
+          "inv_167"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_168": {
+    "document_id": "inv_168",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_168.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_168",
+            "page": 1,
+            "excerpt": "Mock Document inv_168"
+          }
+        ],
+        "expected_entities": [
+          "inv_168"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_169": {
+    "document_id": "inv_169",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_169.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_169",
+            "page": 1,
+            "excerpt": "Mock Document inv_169"
+          }
+        ],
+        "expected_entities": [
+          "inv_169"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_170": {
+    "document_id": "inv_170",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_170.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_170",
+            "page": 1,
+            "excerpt": "Mock Document inv_170"
+          }
+        ],
+        "expected_entities": [
+          "inv_170"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_171": {
+    "document_id": "inv_171",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_171.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_171",
+            "page": 1,
+            "excerpt": "Mock Document inv_171"
+          }
+        ],
+        "expected_entities": [
+          "inv_171"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_172": {
+    "document_id": "inv_172",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_172.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_172",
+            "page": 1,
+            "excerpt": "Mock Document inv_172"
+          }
+        ],
+        "expected_entities": [
+          "inv_172"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_173": {
+    "document_id": "inv_173",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_173.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_173",
+            "page": 1,
+            "excerpt": "Mock Document inv_173"
+          }
+        ],
+        "expected_entities": [
+          "inv_173"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_174": {
+    "document_id": "inv_174",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_174.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_174",
+            "page": 1,
+            "excerpt": "Mock Document inv_174"
+          }
+        ],
+        "expected_entities": [
+          "inv_174"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_175": {
+    "document_id": "inv_175",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_175.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_175",
+            "page": 1,
+            "excerpt": "Mock Document inv_175"
+          }
+        ],
+        "expected_entities": [
+          "inv_175"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_176": {
+    "document_id": "inv_176",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_176.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_176",
+            "page": 1,
+            "excerpt": "Mock Document inv_176"
+          }
+        ],
+        "expected_entities": [
+          "inv_176"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_177": {
+    "document_id": "inv_177",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_177.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_177",
+            "page": 1,
+            "excerpt": "Mock Document inv_177"
+          }
+        ],
+        "expected_entities": [
+          "inv_177"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_178": {
+    "document_id": "inv_178",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_178.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_178",
+            "page": 1,
+            "excerpt": "Mock Document inv_178"
+          }
+        ],
+        "expected_entities": [
+          "inv_178"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_179": {
+    "document_id": "inv_179",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_179.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_179",
+            "page": 1,
+            "excerpt": "Mock Document inv_179"
+          }
+        ],
+        "expected_entities": [
+          "inv_179"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_180": {
+    "document_id": "inv_180",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_180.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_180",
+            "page": 1,
+            "excerpt": "Mock Document inv_180"
+          }
+        ],
+        "expected_entities": [
+          "inv_180"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_181": {
+    "document_id": "inv_181",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_181.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_181",
+            "page": 1,
+            "excerpt": "Mock Document inv_181"
+          }
+        ],
+        "expected_entities": [
+          "inv_181"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_182": {
+    "document_id": "inv_182",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_182.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_182",
+            "page": 1,
+            "excerpt": "Mock Document inv_182"
+          }
+        ],
+        "expected_entities": [
+          "inv_182"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_183": {
+    "document_id": "inv_183",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_183.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_183",
+            "page": 1,
+            "excerpt": "Mock Document inv_183"
+          }
+        ],
+        "expected_entities": [
+          "inv_183"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_184": {
+    "document_id": "inv_184",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_184.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_184",
+            "page": 1,
+            "excerpt": "Mock Document inv_184"
+          }
+        ],
+        "expected_entities": [
+          "inv_184"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_185": {
+    "document_id": "inv_185",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_185.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_185",
+            "page": 1,
+            "excerpt": "Mock Document inv_185"
+          }
+        ],
+        "expected_entities": [
+          "inv_185"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_186": {
+    "document_id": "inv_186",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_186.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_186",
+            "page": 1,
+            "excerpt": "Mock Document inv_186"
+          }
+        ],
+        "expected_entities": [
+          "inv_186"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_187": {
+    "document_id": "inv_187",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_187.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_187",
+            "page": 1,
+            "excerpt": "Mock Document inv_187"
+          }
+        ],
+        "expected_entities": [
+          "inv_187"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_188": {
+    "document_id": "inv_188",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_188.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_188",
+            "page": 1,
+            "excerpt": "Mock Document inv_188"
+          }
+        ],
+        "expected_entities": [
+          "inv_188"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_189": {
+    "document_id": "inv_189",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_189.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_189",
+            "page": 1,
+            "excerpt": "Mock Document inv_189"
+          }
+        ],
+        "expected_entities": [
+          "inv_189"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_190": {
+    "document_id": "inv_190",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_190.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_190",
+            "page": 1,
+            "excerpt": "Mock Document inv_190"
+          }
+        ],
+        "expected_entities": [
+          "inv_190"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_191": {
+    "document_id": "inv_191",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_191.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_191",
+            "page": 1,
+            "excerpt": "Mock Document inv_191"
+          }
+        ],
+        "expected_entities": [
+          "inv_191"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_192": {
+    "document_id": "inv_192",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_192.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_192",
+            "page": 1,
+            "excerpt": "Mock Document inv_192"
+          }
+        ],
+        "expected_entities": [
+          "inv_192"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_193": {
+    "document_id": "inv_193",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_193.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_193",
+            "page": 1,
+            "excerpt": "Mock Document inv_193"
+          }
+        ],
+        "expected_entities": [
+          "inv_193"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_194": {
+    "document_id": "inv_194",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_194.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_194",
+            "page": 1,
+            "excerpt": "Mock Document inv_194"
+          }
+        ],
+        "expected_entities": [
+          "inv_194"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_195": {
+    "document_id": "inv_195",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_195.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_195",
+            "page": 1,
+            "excerpt": "Mock Document inv_195"
+          }
+        ],
+        "expected_entities": [
+          "inv_195"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_196": {
+    "document_id": "inv_196",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_196.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_196",
+            "page": 1,
+            "excerpt": "Mock Document inv_196"
+          }
+        ],
+        "expected_entities": [
+          "inv_196"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_197": {
+    "document_id": "inv_197",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_197.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_197",
+            "page": 1,
+            "excerpt": "Mock Document inv_197"
+          }
+        ],
+        "expected_entities": [
+          "inv_197"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_198": {
+    "document_id": "inv_198",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_198.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_198",
+            "page": 1,
+            "excerpt": "Mock Document inv_198"
+          }
+        ],
+        "expected_entities": [
+          "inv_198"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_199": {
+    "document_id": "inv_199",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_199.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_199",
+            "page": 1,
+            "excerpt": "Mock Document inv_199"
+          }
+        ],
+        "expected_entities": [
+          "inv_199"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "inv_200": {
+    "document_id": "inv_200",
+    "category": "invoices",
+    "entries": [
+      {
+        "question": "What is the ID of this invoice?",
+        "expected_answer": "The ID of this invoice is inv_200.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "inv_200",
+            "page": 1,
+            "excerpt": "Mock Document inv_200"
+          }
+        ],
+        "expected_entities": [
+          "inv_200"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  }
+}

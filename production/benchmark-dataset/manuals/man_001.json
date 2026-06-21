@@ -1,0 +1,27 @@
+{
+  "document_id": "man_001",
+  "category": "manuals",
+  "entries": [
+    {
+      "question": "How do you perform a factory reset on the TX-9000 router?",
+      "expected_answer": "To perform a factory reset, hold the physical reset button on the back panel for 10 seconds using a paperclip until the status LED flashes red.",
+      "expected_pages": [
+        45
+      ],
+      "expected_citations": [
+        {
+          "doc_id": "man_001",
+          "page": 45,
+          "excerpt": "Press and hold the reset button for 10 seconds. Release when status LED blinks red."
+        }
+      ],
+      "expected_entities": [
+        "reset button",
+        "10 seconds",
+        "LED"
+      ],
+      "difficulty": "easy",
+      "type": "factual"
+    }
+  ]
+}

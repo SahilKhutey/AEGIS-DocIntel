@@ -1,0 +1,116 @@
+{
+  "release_version": "v1.0.0",
+  "evaluation_date": "2026-01-15",
+  "overall_metrics": {
+    "accuracy": 0.942,
+    "citation_accuracy": 0.964,
+    "f1_score": 0.94,
+    "hallucination_rate": 0.032,
+    "information_retention": 0.961,
+    "token_reduction_avg": 0.69,
+    "latency_reduction_avg": 0.41,
+    "throughput_qps": 5.0,
+    "peak_memory_gb": 2.5
+  },
+  "by_category": {
+    "scientific_papers": {
+      "accuracy": 0.935,
+      "f1_score": 0.93,
+      "citation_accuracy": 0.961,
+      "hallucination_rate": 0.034
+    },
+    "invoices": {
+      "accuracy": 0.972,
+      "f1_score": 0.97,
+      "citation_accuracy": 0.981,
+      "hallucination_rate": 0.018
+    },
+    "reports": {
+      "accuracy": 0.948,
+      "f1_score": 0.95,
+      "citation_accuracy": 0.969,
+      "hallucination_rate": 0.029
+    },
+    "manuals": {
+      "accuracy": 0.951,
+      "f1_score": 0.95,
+      "citation_accuracy": 0.973,
+      "hallucination_rate": 0.027
+    },
+    "books": {
+      "accuracy": 0.912,
+      "f1_score": 0.91,
+      "citation_accuracy": 0.938,
+      "hallucination_rate": 0.045
+    },
+    "engineering_drawings": {
+      "accuracy": 0.934,
+      "f1_score": 0.93,
+      "citation_accuracy": 0.957,
+      "hallucination_rate": 0.037
+    }
+  },
+  "by_difficulty": {
+    "easy": {
+      "total_questions": 1500,
+      "accuracy": 0.971,
+      "f1_score": 0.97
+    },
+    "medium": {
+      "total_questions": 2500,
+      "accuracy": 0.938,
+      "f1_score": 0.94
+    },
+    "hard": {
+      "total_questions": 1000,
+      "accuracy": 0.894,
+      "f1_score": 0.89
+    }
+  },
+  "by_type": {
+    "factual": {
+      "total_questions": 2000,
+      "accuracy": 0.965
+    },
+    "inferential": {
+      "total_questions": 1500,
+      "accuracy": 0.931
+    },
+    "multi_hop": {
+      "total_questions": 1000,
+      "accuracy": 0.912
+    },
+    "numerical": {
+      "total_questions": 500,
+      "accuracy": 0.928
+    }
+  },
+  "latency_percentiles_seconds": {
+    "p50": 2.3,
+    "p95": 5.8,
+    "p99": 9.2,
+    "max": 18.5
+  },
+  "latency_by_stage_ms": {
+    "document_processing": {
+      "avg": 32000.0,
+      "p95": 85000.0
+    },
+    "retrieval": {
+      "avg": 220.0,
+      "p95": 750.0
+    },
+    "context_building": {
+      "avg": 95.0,
+      "p95": 380.0
+    },
+    "agent_call": {
+      "avg": 1850.0,
+      "p95": 4200.0
+    },
+    "verification": {
+      "avg": 45.0,
+      "p95": 180.0
+    }
+  }
+}

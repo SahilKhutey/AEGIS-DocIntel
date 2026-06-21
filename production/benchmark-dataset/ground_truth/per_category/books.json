@@ -1,0 +1,2504 @@
+{
+  "boo_001": {
+    "document_id": "boo_001",
+    "category": "books",
+    "entries": [
+      {
+        "question": "What is the relation between Betti numbers and Euler characteristic?",
+        "expected_answer": "The Euler characteristic of a topological space is equal to the alternating sum of its Betti numbers, expressed mathematically as chi = b_0 - b_1 + b_2 - b_3 + ...",
+        "expected_pages": [
+          142
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "bk_001",
+            "page": 142,
+            "excerpt": "The Euler characteristic can be computed as the alternating sum of the Betti numbers."
+          }
+        ],
+        "expected_entities": [
+          "Euler characteristic",
+          "Betti numbers",
+          "alternating sum"
+        ],
+        "difficulty": "hard",
+        "type": "numerical"
+      }
+    ]
+  },
+  "boo_002": {
+    "document_id": "boo_002",
+    "category": "books",
+    "entries": [
+      {
+        "question": "What is the ID of this book?",
+        "expected_answer": "The ID of this book is boo_002.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "boo_002",
+            "page": 1,
+            "excerpt": "Mock Document boo_002"
+          }
+        ],
+        "expected_entities": [
+          "boo_002"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "boo_003": {
+    "document_id": "boo_003",
+    "category": "books",
+    "entries": [
+      {
+        "question": "What is the ID of this book?",
+        "expected_answer": "The ID of this book is boo_003.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "boo_003",
+            "page": 1,
+            "excerpt": "Mock Document boo_003"
+          }
+        ],
+        "expected_entities": [
+          "boo_003"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "boo_004": {
+    "document_id": "boo_004",
+    "category": "books",
+    "entries": [
+      {
+        "question": "What is the ID of this book?",
+        "expected_answer": "The ID of this book is boo_004.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "boo_004",
+            "page": 1,
+            "excerpt": "Mock Document boo_004"
+          }
+        ],
+        "expected_entities": [
+          "boo_004"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "boo_005": {
+    "document_id": "boo_005",
+    "category": "books",
+    "entries": [
+      {
+        "question": "What is the ID of this book?",
+        "expected_answer": "The ID of this book is boo_005.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "boo_005",
+            "page": 1,
+            "excerpt": "Mock Document boo_005"
+          }
+        ],
+        "expected_entities": [
+          "boo_005"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "boo_006": {
+    "document_id": "boo_006",
+    "category": "books",
+    "entries": [
+      {
+        "question": "What is the ID of this book?",
+        "expected_answer": "The ID of this book is boo_006.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "boo_006",
+            "page": 1,
+            "excerpt": "Mock Document boo_006"
+          }
+        ],
+        "expected_entities": [
+          "boo_006"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "boo_007": {
+    "document_id": "boo_007",
+    "category": "books",
+    "entries": [
+      {
+        "question": "What is the ID of this book?",
+        "expected_answer": "The ID of this book is boo_007.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "boo_007",
+            "page": 1,
+            "excerpt": "Mock Document boo_007"
+          }
+        ],
+        "expected_entities": [
+          "boo_007"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "boo_008": {
+    "document_id": "boo_008",
+    "category": "books",
+    "entries": [
+      {
+        "question": "What is the ID of this book?",
+        "expected_answer": "The ID of this book is boo_008.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "boo_008",
+            "page": 1,
+            "excerpt": "Mock Document boo_008"
+          }
+        ],
+        "expected_entities": [
+          "boo_008"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "boo_009": {
+    "document_id": "boo_009",
+    "category": "books",
+    "entries": [
+      {
+        "question": "What is the ID of this book?",
+        "expected_answer": "The ID of this book is boo_009.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "boo_009",
+            "page": 1,
+            "excerpt": "Mock Document boo_009"
+          }
+        ],
+        "expected_entities": [
+          "boo_009"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "boo_010": {
+    "document_id": "boo_010",
+    "category": "books",
+    "entries": [
+      {
+        "question": "What is the ID of this book?",
+        "expected_answer": "The ID of this book is boo_010.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "boo_010",
+            "page": 1,
+            "excerpt": "Mock Document boo_010"
+          }
+        ],
+        "expected_entities": [
+          "boo_010"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "boo_011": {
+    "document_id": "boo_011",
+    "category": "books",
+    "entries": [
+      {
+        "question": "What is the ID of this book?",
+        "expected_answer": "The ID of this book is boo_011.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "boo_011",
+            "page": 1,
+            "excerpt": "Mock Document boo_011"
+          }
+        ],
+        "expected_entities": [
+          "boo_011"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "boo_012": {
+    "document_id": "boo_012",
+    "category": "books",
+    "entries": [
+      {
+        "question": "What is the ID of this book?",
+        "expected_answer": "The ID of this book is boo_012.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "boo_012",
+            "page": 1,
+            "excerpt": "Mock Document boo_012"
+          }
+        ],
+        "expected_entities": [
+          "boo_012"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "boo_013": {
+    "document_id": "boo_013",
+    "category": "books",
+    "entries": [
+      {
+        "question": "What is the ID of this book?",
+        "expected_answer": "The ID of this book is boo_013.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "boo_013",
+            "page": 1,
+            "excerpt": "Mock Document boo_013"
+          }
+        ],
+        "expected_entities": [
+          "boo_013"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "boo_014": {
+    "document_id": "boo_014",
+    "category": "books",
+    "entries": [
+      {
+        "question": "What is the ID of this book?",
+        "expected_answer": "The ID of this book is boo_014.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "boo_014",
+            "page": 1,
+            "excerpt": "Mock Document boo_014"
+          }
+        ],
+        "expected_entities": [
+          "boo_014"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "boo_015": {
+    "document_id": "boo_015",
+    "category": "books",
+    "entries": [
+      {
+        "question": "What is the ID of this book?",
+        "expected_answer": "The ID of this book is boo_015.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "boo_015",
+            "page": 1,
+            "excerpt": "Mock Document boo_015"
+          }
+        ],
+        "expected_entities": [
+          "boo_015"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "boo_016": {
+    "document_id": "boo_016",
+    "category": "books",
+    "entries": [
+      {
+        "question": "What is the ID of this book?",
+        "expected_answer": "The ID of this book is boo_016.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "boo_016",
+            "page": 1,
+            "excerpt": "Mock Document boo_016"
+          }
+        ],
+        "expected_entities": [
+          "boo_016"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "boo_017": {
+    "document_id": "boo_017",
+    "category": "books",
+    "entries": [
+      {
+        "question": "What is the ID of this book?",
+        "expected_answer": "The ID of this book is boo_017.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "boo_017",
+            "page": 1,
+            "excerpt": "Mock Document boo_017"
+          }
+        ],
+        "expected_entities": [
+          "boo_017"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "boo_018": {
+    "document_id": "boo_018",
+    "category": "books",
+    "entries": [
+      {
+        "question": "What is the ID of this book?",
+        "expected_answer": "The ID of this book is boo_018.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "boo_018",
+            "page": 1,
+            "excerpt": "Mock Document boo_018"
+          }
+        ],
+        "expected_entities": [
+          "boo_018"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "boo_019": {
+    "document_id": "boo_019",
+    "category": "books",
+    "entries": [
+      {
+        "question": "What is the ID of this book?",
+        "expected_answer": "The ID of this book is boo_019.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "boo_019",
+            "page": 1,
+            "excerpt": "Mock Document boo_019"
+          }
+        ],
+        "expected_entities": [
+          "boo_019"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "boo_020": {
+    "document_id": "boo_020",
+    "category": "books",
+    "entries": [
+      {
+        "question": "What is the ID of this book?",
+        "expected_answer": "The ID of this book is boo_020.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "boo_020",
+            "page": 1,
+            "excerpt": "Mock Document boo_020"
+          }
+        ],
+        "expected_entities": [
+          "boo_020"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "boo_021": {
+    "document_id": "boo_021",
+    "category": "books",
+    "entries": [
+      {
+        "question": "What is the ID of this book?",
+        "expected_answer": "The ID of this book is boo_021.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "boo_021",
+            "page": 1,
+            "excerpt": "Mock Document boo_021"
+          }
+        ],
+        "expected_entities": [
+          "boo_021"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "boo_022": {
+    "document_id": "boo_022",
+    "category": "books",
+    "entries": [
+      {
+        "question": "What is the ID of this book?",
+        "expected_answer": "The ID of this book is boo_022.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "boo_022",
+            "page": 1,
+            "excerpt": "Mock Document boo_022"
+          }
+        ],
+        "expected_entities": [
+          "boo_022"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "boo_023": {
+    "document_id": "boo_023",
+    "category": "books",
+    "entries": [
+      {
+        "question": "What is the ID of this book?",
+        "expected_answer": "The ID of this book is boo_023.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "boo_023",
+            "page": 1,
+            "excerpt": "Mock Document boo_023"
+          }
+        ],
+        "expected_entities": [
+          "boo_023"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "boo_024": {
+    "document_id": "boo_024",
+    "category": "books",
+    "entries": [
+      {
+        "question": "What is the ID of this book?",
+        "expected_answer": "The ID of this book is boo_024.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "boo_024",
+            "page": 1,
+            "excerpt": "Mock Document boo_024"
+          }
+        ],
+        "expected_entities": [
+          "boo_024"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "boo_025": {
+    "document_id": "boo_025",
+    "category": "books",
+    "entries": [
+      {
+        "question": "What is the ID of this book?",
+        "expected_answer": "The ID of this book is boo_025.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "boo_025",
+            "page": 1,
+            "excerpt": "Mock Document boo_025"
+          }
+        ],
+        "expected_entities": [
+          "boo_025"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "boo_026": {
+    "document_id": "boo_026",
+    "category": "books",
+    "entries": [
+      {
+        "question": "What is the ID of this book?",
+        "expected_answer": "The ID of this book is boo_026.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "boo_026",
+            "page": 1,
+            "excerpt": "Mock Document boo_026"
+          }
+        ],
+        "expected_entities": [
+          "boo_026"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "boo_027": {
+    "document_id": "boo_027",
+    "category": "books",
+    "entries": [
+      {
+        "question": "What is the ID of this book?",
+        "expected_answer": "The ID of this book is boo_027.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "boo_027",
+            "page": 1,
+            "excerpt": "Mock Document boo_027"
+          }
+        ],
+        "expected_entities": [
+          "boo_027"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "boo_028": {
+    "document_id": "boo_028",
+    "category": "books",
+    "entries": [
+      {
+        "question": "What is the ID of this book?",
+        "expected_answer": "The ID of this book is boo_028.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "boo_028",
+            "page": 1,
+            "excerpt": "Mock Document boo_028"
+          }
+        ],
+        "expected_entities": [
+          "boo_028"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "boo_029": {
+    "document_id": "boo_029",
+    "category": "books",
+    "entries": [
+      {
+        "question": "What is the ID of this book?",
+        "expected_answer": "The ID of this book is boo_029.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "boo_029",
+            "page": 1,
+            "excerpt": "Mock Document boo_029"
+          }
+        ],
+        "expected_entities": [
+          "boo_029"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "boo_030": {
+    "document_id": "boo_030",
+    "category": "books",
+    "entries": [
+      {
+        "question": "What is the ID of this book?",
+        "expected_answer": "The ID of this book is boo_030.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "boo_030",
+            "page": 1,
+            "excerpt": "Mock Document boo_030"
+          }
+        ],
+        "expected_entities": [
+          "boo_030"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "boo_031": {
+    "document_id": "boo_031",
+    "category": "books",
+    "entries": [
+      {
+        "question": "What is the ID of this book?",
+        "expected_answer": "The ID of this book is boo_031.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "boo_031",
+            "page": 1,
+            "excerpt": "Mock Document boo_031"
+          }
+        ],
+        "expected_entities": [
+          "boo_031"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "boo_032": {
+    "document_id": "boo_032",
+    "category": "books",
+    "entries": [
+      {
+        "question": "What is the ID of this book?",
+        "expected_answer": "The ID of this book is boo_032.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "boo_032",
+            "page": 1,
+            "excerpt": "Mock Document boo_032"
+          }
+        ],
+        "expected_entities": [
+          "boo_032"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "boo_033": {
+    "document_id": "boo_033",
+    "category": "books",
+    "entries": [
+      {
+        "question": "What is the ID of this book?",
+        "expected_answer": "The ID of this book is boo_033.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "boo_033",
+            "page": 1,
+            "excerpt": "Mock Document boo_033"
+          }
+        ],
+        "expected_entities": [
+          "boo_033"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "boo_034": {
+    "document_id": "boo_034",
+    "category": "books",
+    "entries": [
+      {
+        "question": "What is the ID of this book?",
+        "expected_answer": "The ID of this book is boo_034.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "boo_034",
+            "page": 1,
+            "excerpt": "Mock Document boo_034"
+          }
+        ],
+        "expected_entities": [
+          "boo_034"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "boo_035": {
+    "document_id": "boo_035",
+    "category": "books",
+    "entries": [
+      {
+        "question": "What is the ID of this book?",
+        "expected_answer": "The ID of this book is boo_035.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "boo_035",
+            "page": 1,
+            "excerpt": "Mock Document boo_035"
+          }
+        ],
+        "expected_entities": [
+          "boo_035"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "boo_036": {
+    "document_id": "boo_036",
+    "category": "books",
+    "entries": [
+      {
+        "question": "What is the ID of this book?",
+        "expected_answer": "The ID of this book is boo_036.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "boo_036",
+            "page": 1,
+            "excerpt": "Mock Document boo_036"
+          }
+        ],
+        "expected_entities": [
+          "boo_036"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "boo_037": {
+    "document_id": "boo_037",
+    "category": "books",
+    "entries": [
+      {
+        "question": "What is the ID of this book?",
+        "expected_answer": "The ID of this book is boo_037.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "boo_037",
+            "page": 1,
+            "excerpt": "Mock Document boo_037"
+          }
+        ],
+        "expected_entities": [
+          "boo_037"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "boo_038": {
+    "document_id": "boo_038",
+    "category": "books",
+    "entries": [
+      {
+        "question": "What is the ID of this book?",
+        "expected_answer": "The ID of this book is boo_038.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "boo_038",
+            "page": 1,
+            "excerpt": "Mock Document boo_038"
+          }
+        ],
+        "expected_entities": [
+          "boo_038"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "boo_039": {
+    "document_id": "boo_039",
+    "category": "books",
+    "entries": [
+      {
+        "question": "What is the ID of this book?",
+        "expected_answer": "The ID of this book is boo_039.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "boo_039",
+            "page": 1,
+            "excerpt": "Mock Document boo_039"
+          }
+        ],
+        "expected_entities": [
+          "boo_039"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "boo_040": {
+    "document_id": "boo_040",
+    "category": "books",
+    "entries": [
+      {
+        "question": "What is the ID of this book?",
+        "expected_answer": "The ID of this book is boo_040.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "boo_040",
+            "page": 1,
+            "excerpt": "Mock Document boo_040"
+          }
+        ],
+        "expected_entities": [
+          "boo_040"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "boo_041": {
+    "document_id": "boo_041",
+    "category": "books",
+    "entries": [
+      {
+        "question": "What is the ID of this book?",
+        "expected_answer": "The ID of this book is boo_041.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "boo_041",
+            "page": 1,
+            "excerpt": "Mock Document boo_041"
+          }
+        ],
+        "expected_entities": [
+          "boo_041"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "boo_042": {
+    "document_id": "boo_042",
+    "category": "books",
+    "entries": [
+      {
+        "question": "What is the ID of this book?",
+        "expected_answer": "The ID of this book is boo_042.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "boo_042",
+            "page": 1,
+            "excerpt": "Mock Document boo_042"
+          }
+        ],
+        "expected_entities": [
+          "boo_042"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "boo_043": {
+    "document_id": "boo_043",
+    "category": "books",
+    "entries": [
+      {
+        "question": "What is the ID of this book?",
+        "expected_answer": "The ID of this book is boo_043.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "boo_043",
+            "page": 1,
+            "excerpt": "Mock Document boo_043"
+          }
+        ],
+        "expected_entities": [
+          "boo_043"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "boo_044": {
+    "document_id": "boo_044",
+    "category": "books",
+    "entries": [
+      {
+        "question": "What is the ID of this book?",
+        "expected_answer": "The ID of this book is boo_044.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "boo_044",
+            "page": 1,
+            "excerpt": "Mock Document boo_044"
+          }
+        ],
+        "expected_entities": [
+          "boo_044"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "boo_045": {
+    "document_id": "boo_045",
+    "category": "books",
+    "entries": [
+      {
+        "question": "What is the ID of this book?",
+        "expected_answer": "The ID of this book is boo_045.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "boo_045",
+            "page": 1,
+            "excerpt": "Mock Document boo_045"
+          }
+        ],
+        "expected_entities": [
+          "boo_045"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "boo_046": {
+    "document_id": "boo_046",
+    "category": "books",
+    "entries": [
+      {
+        "question": "What is the ID of this book?",
+        "expected_answer": "The ID of this book is boo_046.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "boo_046",
+            "page": 1,
+            "excerpt": "Mock Document boo_046"
+          }
+        ],
+        "expected_entities": [
+          "boo_046"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "boo_047": {
+    "document_id": "boo_047",
+    "category": "books",
+    "entries": [
+      {
+        "question": "What is the ID of this book?",
+        "expected_answer": "The ID of this book is boo_047.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "boo_047",
+            "page": 1,
+            "excerpt": "Mock Document boo_047"
+          }
+        ],
+        "expected_entities": [
+          "boo_047"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "boo_048": {
+    "document_id": "boo_048",
+    "category": "books",
+    "entries": [
+      {
+        "question": "What is the ID of this book?",
+        "expected_answer": "The ID of this book is boo_048.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "boo_048",
+            "page": 1,
+            "excerpt": "Mock Document boo_048"
+          }
+        ],
+        "expected_entities": [
+          "boo_048"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "boo_049": {
+    "document_id": "boo_049",
+    "category": "books",
+    "entries": [
+      {
+        "question": "What is the ID of this book?",
+        "expected_answer": "The ID of this book is boo_049.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "boo_049",
+            "page": 1,
+            "excerpt": "Mock Document boo_049"
+          }
+        ],
+        "expected_entities": [
+          "boo_049"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "boo_050": {
+    "document_id": "boo_050",
+    "category": "books",
+    "entries": [
+      {
+        "question": "What is the ID of this book?",
+        "expected_answer": "The ID of this book is boo_050.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "boo_050",
+            "page": 1,
+            "excerpt": "Mock Document boo_050"
+          }
+        ],
+        "expected_entities": [
+          "boo_050"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "boo_051": {
+    "document_id": "boo_051",
+    "category": "books",
+    "entries": [
+      {
+        "question": "What is the ID of this book?",
+        "expected_answer": "The ID of this book is boo_051.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "boo_051",
+            "page": 1,
+            "excerpt": "Mock Document boo_051"
+          }
+        ],
+        "expected_entities": [
+          "boo_051"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "boo_052": {
+    "document_id": "boo_052",
+    "category": "books",
+    "entries": [
+      {
+        "question": "What is the ID of this book?",
+        "expected_answer": "The ID of this book is boo_052.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "boo_052",
+            "page": 1,
+            "excerpt": "Mock Document boo_052"
+          }
+        ],
+        "expected_entities": [
+          "boo_052"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "boo_053": {
+    "document_id": "boo_053",
+    "category": "books",
+    "entries": [
+      {
+        "question": "What is the ID of this book?",
+        "expected_answer": "The ID of this book is boo_053.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "boo_053",
+            "page": 1,
+            "excerpt": "Mock Document boo_053"
+          }
+        ],
+        "expected_entities": [
+          "boo_053"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "boo_054": {
+    "document_id": "boo_054",
+    "category": "books",
+    "entries": [
+      {
+        "question": "What is the ID of this book?",
+        "expected_answer": "The ID of this book is boo_054.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "boo_054",
+            "page": 1,
+            "excerpt": "Mock Document boo_054"
+          }
+        ],
+        "expected_entities": [
+          "boo_054"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "boo_055": {
+    "document_id": "boo_055",
+    "category": "books",
+    "entries": [
+      {
+        "question": "What is the ID of this book?",
+        "expected_answer": "The ID of this book is boo_055.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "boo_055",
+            "page": 1,
+            "excerpt": "Mock Document boo_055"
+          }
+        ],
+        "expected_entities": [
+          "boo_055"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "boo_056": {
+    "document_id": "boo_056",
+    "category": "books",
+    "entries": [
+      {
+        "question": "What is the ID of this book?",
+        "expected_answer": "The ID of this book is boo_056.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "boo_056",
+            "page": 1,
+            "excerpt": "Mock Document boo_056"
+          }
+        ],
+        "expected_entities": [
+          "boo_056"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "boo_057": {
+    "document_id": "boo_057",
+    "category": "books",
+    "entries": [
+      {
+        "question": "What is the ID of this book?",
+        "expected_answer": "The ID of this book is boo_057.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "boo_057",
+            "page": 1,
+            "excerpt": "Mock Document boo_057"
+          }
+        ],
+        "expected_entities": [
+          "boo_057"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "boo_058": {
+    "document_id": "boo_058",
+    "category": "books",
+    "entries": [
+      {
+        "question": "What is the ID of this book?",
+        "expected_answer": "The ID of this book is boo_058.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "boo_058",
+            "page": 1,
+            "excerpt": "Mock Document boo_058"
+          }
+        ],
+        "expected_entities": [
+          "boo_058"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "boo_059": {
+    "document_id": "boo_059",
+    "category": "books",
+    "entries": [
+      {
+        "question": "What is the ID of this book?",
+        "expected_answer": "The ID of this book is boo_059.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "boo_059",
+            "page": 1,
+            "excerpt": "Mock Document boo_059"
+          }
+        ],
+        "expected_entities": [
+          "boo_059"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "boo_060": {
+    "document_id": "boo_060",
+    "category": "books",
+    "entries": [
+      {
+        "question": "What is the ID of this book?",
+        "expected_answer": "The ID of this book is boo_060.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "boo_060",
+            "page": 1,
+            "excerpt": "Mock Document boo_060"
+          }
+        ],
+        "expected_entities": [
+          "boo_060"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "boo_061": {
+    "document_id": "boo_061",
+    "category": "books",
+    "entries": [
+      {
+        "question": "What is the ID of this book?",
+        "expected_answer": "The ID of this book is boo_061.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "boo_061",
+            "page": 1,
+            "excerpt": "Mock Document boo_061"
+          }
+        ],
+        "expected_entities": [
+          "boo_061"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "boo_062": {
+    "document_id": "boo_062",
+    "category": "books",
+    "entries": [
+      {
+        "question": "What is the ID of this book?",
+        "expected_answer": "The ID of this book is boo_062.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "boo_062",
+            "page": 1,
+            "excerpt": "Mock Document boo_062"
+          }
+        ],
+        "expected_entities": [
+          "boo_062"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "boo_063": {
+    "document_id": "boo_063",
+    "category": "books",
+    "entries": [
+      {
+        "question": "What is the ID of this book?",
+        "expected_answer": "The ID of this book is boo_063.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "boo_063",
+            "page": 1,
+            "excerpt": "Mock Document boo_063"
+          }
+        ],
+        "expected_entities": [
+          "boo_063"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "boo_064": {
+    "document_id": "boo_064",
+    "category": "books",
+    "entries": [
+      {
+        "question": "What is the ID of this book?",
+        "expected_answer": "The ID of this book is boo_064.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "boo_064",
+            "page": 1,
+            "excerpt": "Mock Document boo_064"
+          }
+        ],
+        "expected_entities": [
+          "boo_064"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "boo_065": {
+    "document_id": "boo_065",
+    "category": "books",
+    "entries": [
+      {
+        "question": "What is the ID of this book?",
+        "expected_answer": "The ID of this book is boo_065.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "boo_065",
+            "page": 1,
+            "excerpt": "Mock Document boo_065"
+          }
+        ],
+        "expected_entities": [
+          "boo_065"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "boo_066": {
+    "document_id": "boo_066",
+    "category": "books",
+    "entries": [
+      {
+        "question": "What is the ID of this book?",
+        "expected_answer": "The ID of this book is boo_066.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "boo_066",
+            "page": 1,
+            "excerpt": "Mock Document boo_066"
+          }
+        ],
+        "expected_entities": [
+          "boo_066"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "boo_067": {
+    "document_id": "boo_067",
+    "category": "books",
+    "entries": [
+      {
+        "question": "What is the ID of this book?",
+        "expected_answer": "The ID of this book is boo_067.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "boo_067",
+            "page": 1,
+            "excerpt": "Mock Document boo_067"
+          }
+        ],
+        "expected_entities": [
+          "boo_067"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "boo_068": {
+    "document_id": "boo_068",
+    "category": "books",
+    "entries": [
+      {
+        "question": "What is the ID of this book?",
+        "expected_answer": "The ID of this book is boo_068.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "boo_068",
+            "page": 1,
+            "excerpt": "Mock Document boo_068"
+          }
+        ],
+        "expected_entities": [
+          "boo_068"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "boo_069": {
+    "document_id": "boo_069",
+    "category": "books",
+    "entries": [
+      {
+        "question": "What is the ID of this book?",
+        "expected_answer": "The ID of this book is boo_069.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "boo_069",
+            "page": 1,
+            "excerpt": "Mock Document boo_069"
+          }
+        ],
+        "expected_entities": [
+          "boo_069"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "boo_070": {
+    "document_id": "boo_070",
+    "category": "books",
+    "entries": [
+      {
+        "question": "What is the ID of this book?",
+        "expected_answer": "The ID of this book is boo_070.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "boo_070",
+            "page": 1,
+            "excerpt": "Mock Document boo_070"
+          }
+        ],
+        "expected_entities": [
+          "boo_070"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "boo_071": {
+    "document_id": "boo_071",
+    "category": "books",
+    "entries": [
+      {
+        "question": "What is the ID of this book?",
+        "expected_answer": "The ID of this book is boo_071.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "boo_071",
+            "page": 1,
+            "excerpt": "Mock Document boo_071"
+          }
+        ],
+        "expected_entities": [
+          "boo_071"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "boo_072": {
+    "document_id": "boo_072",
+    "category": "books",
+    "entries": [
+      {
+        "question": "What is the ID of this book?",
+        "expected_answer": "The ID of this book is boo_072.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "boo_072",
+            "page": 1,
+            "excerpt": "Mock Document boo_072"
+          }
+        ],
+        "expected_entities": [
+          "boo_072"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "boo_073": {
+    "document_id": "boo_073",
+    "category": "books",
+    "entries": [
+      {
+        "question": "What is the ID of this book?",
+        "expected_answer": "The ID of this book is boo_073.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "boo_073",
+            "page": 1,
+            "excerpt": "Mock Document boo_073"
+          }
+        ],
+        "expected_entities": [
+          "boo_073"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "boo_074": {
+    "document_id": "boo_074",
+    "category": "books",
+    "entries": [
+      {
+        "question": "What is the ID of this book?",
+        "expected_answer": "The ID of this book is boo_074.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "boo_074",
+            "page": 1,
+            "excerpt": "Mock Document boo_074"
+          }
+        ],
+        "expected_entities": [
+          "boo_074"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "boo_075": {
+    "document_id": "boo_075",
+    "category": "books",
+    "entries": [
+      {
+        "question": "What is the ID of this book?",
+        "expected_answer": "The ID of this book is boo_075.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "boo_075",
+            "page": 1,
+            "excerpt": "Mock Document boo_075"
+          }
+        ],
+        "expected_entities": [
+          "boo_075"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "boo_076": {
+    "document_id": "boo_076",
+    "category": "books",
+    "entries": [
+      {
+        "question": "What is the ID of this book?",
+        "expected_answer": "The ID of this book is boo_076.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "boo_076",
+            "page": 1,
+            "excerpt": "Mock Document boo_076"
+          }
+        ],
+        "expected_entities": [
+          "boo_076"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "boo_077": {
+    "document_id": "boo_077",
+    "category": "books",
+    "entries": [
+      {
+        "question": "What is the ID of this book?",
+        "expected_answer": "The ID of this book is boo_077.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "boo_077",
+            "page": 1,
+            "excerpt": "Mock Document boo_077"
+          }
+        ],
+        "expected_entities": [
+          "boo_077"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "boo_078": {
+    "document_id": "boo_078",
+    "category": "books",
+    "entries": [
+      {
+        "question": "What is the ID of this book?",
+        "expected_answer": "The ID of this book is boo_078.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "boo_078",
+            "page": 1,
+            "excerpt": "Mock Document boo_078"
+          }
+        ],
+        "expected_entities": [
+          "boo_078"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "boo_079": {
+    "document_id": "boo_079",
+    "category": "books",
+    "entries": [
+      {
+        "question": "What is the ID of this book?",
+        "expected_answer": "The ID of this book is boo_079.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "boo_079",
+            "page": 1,
+            "excerpt": "Mock Document boo_079"
+          }
+        ],
+        "expected_entities": [
+          "boo_079"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "boo_080": {
+    "document_id": "boo_080",
+    "category": "books",
+    "entries": [
+      {
+        "question": "What is the ID of this book?",
+        "expected_answer": "The ID of this book is boo_080.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "boo_080",
+            "page": 1,
+            "excerpt": "Mock Document boo_080"
+          }
+        ],
+        "expected_entities": [
+          "boo_080"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "boo_081": {
+    "document_id": "boo_081",
+    "category": "books",
+    "entries": [
+      {
+        "question": "What is the ID of this book?",
+        "expected_answer": "The ID of this book is boo_081.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "boo_081",
+            "page": 1,
+            "excerpt": "Mock Document boo_081"
+          }
+        ],
+        "expected_entities": [
+          "boo_081"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "boo_082": {
+    "document_id": "boo_082",
+    "category": "books",
+    "entries": [
+      {
+        "question": "What is the ID of this book?",
+        "expected_answer": "The ID of this book is boo_082.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "boo_082",
+            "page": 1,
+            "excerpt": "Mock Document boo_082"
+          }
+        ],
+        "expected_entities": [
+          "boo_082"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "boo_083": {
+    "document_id": "boo_083",
+    "category": "books",
+    "entries": [
+      {
+        "question": "What is the ID of this book?",
+        "expected_answer": "The ID of this book is boo_083.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "boo_083",
+            "page": 1,
+            "excerpt": "Mock Document boo_083"
+          }
+        ],
+        "expected_entities": [
+          "boo_083"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "boo_084": {
+    "document_id": "boo_084",
+    "category": "books",
+    "entries": [
+      {
+        "question": "What is the ID of this book?",
+        "expected_answer": "The ID of this book is boo_084.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "boo_084",
+            "page": 1,
+            "excerpt": "Mock Document boo_084"
+          }
+        ],
+        "expected_entities": [
+          "boo_084"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "boo_085": {
+    "document_id": "boo_085",
+    "category": "books",
+    "entries": [
+      {
+        "question": "What is the ID of this book?",
+        "expected_answer": "The ID of this book is boo_085.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "boo_085",
+            "page": 1,
+            "excerpt": "Mock Document boo_085"
+          }
+        ],
+        "expected_entities": [
+          "boo_085"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "boo_086": {
+    "document_id": "boo_086",
+    "category": "books",
+    "entries": [
+      {
+        "question": "What is the ID of this book?",
+        "expected_answer": "The ID of this book is boo_086.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "boo_086",
+            "page": 1,
+            "excerpt": "Mock Document boo_086"
+          }
+        ],
+        "expected_entities": [
+          "boo_086"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "boo_087": {
+    "document_id": "boo_087",
+    "category": "books",
+    "entries": [
+      {
+        "question": "What is the ID of this book?",
+        "expected_answer": "The ID of this book is boo_087.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "boo_087",
+            "page": 1,
+            "excerpt": "Mock Document boo_087"
+          }
+        ],
+        "expected_entities": [
+          "boo_087"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "boo_088": {
+    "document_id": "boo_088",
+    "category": "books",
+    "entries": [
+      {
+        "question": "What is the ID of this book?",
+        "expected_answer": "The ID of this book is boo_088.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "boo_088",
+            "page": 1,
+            "excerpt": "Mock Document boo_088"
+          }
+        ],
+        "expected_entities": [
+          "boo_088"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "boo_089": {
+    "document_id": "boo_089",
+    "category": "books",
+    "entries": [
+      {
+        "question": "What is the ID of this book?",
+        "expected_answer": "The ID of this book is boo_089.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "boo_089",
+            "page": 1,
+            "excerpt": "Mock Document boo_089"
+          }
+        ],
+        "expected_entities": [
+          "boo_089"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "boo_090": {
+    "document_id": "boo_090",
+    "category": "books",
+    "entries": [
+      {
+        "question": "What is the ID of this book?",
+        "expected_answer": "The ID of this book is boo_090.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "boo_090",
+            "page": 1,
+            "excerpt": "Mock Document boo_090"
+          }
+        ],
+        "expected_entities": [
+          "boo_090"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "boo_091": {
+    "document_id": "boo_091",
+    "category": "books",
+    "entries": [
+      {
+        "question": "What is the ID of this book?",
+        "expected_answer": "The ID of this book is boo_091.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "boo_091",
+            "page": 1,
+            "excerpt": "Mock Document boo_091"
+          }
+        ],
+        "expected_entities": [
+          "boo_091"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "boo_092": {
+    "document_id": "boo_092",
+    "category": "books",
+    "entries": [
+      {
+        "question": "What is the ID of this book?",
+        "expected_answer": "The ID of this book is boo_092.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "boo_092",
+            "page": 1,
+            "excerpt": "Mock Document boo_092"
+          }
+        ],
+        "expected_entities": [
+          "boo_092"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "boo_093": {
+    "document_id": "boo_093",
+    "category": "books",
+    "entries": [
+      {
+        "question": "What is the ID of this book?",
+        "expected_answer": "The ID of this book is boo_093.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "boo_093",
+            "page": 1,
+            "excerpt": "Mock Document boo_093"
+          }
+        ],
+        "expected_entities": [
+          "boo_093"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "boo_094": {
+    "document_id": "boo_094",
+    "category": "books",
+    "entries": [
+      {
+        "question": "What is the ID of this book?",
+        "expected_answer": "The ID of this book is boo_094.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "boo_094",
+            "page": 1,
+            "excerpt": "Mock Document boo_094"
+          }
+        ],
+        "expected_entities": [
+          "boo_094"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "boo_095": {
+    "document_id": "boo_095",
+    "category": "books",
+    "entries": [
+      {
+        "question": "What is the ID of this book?",
+        "expected_answer": "The ID of this book is boo_095.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "boo_095",
+            "page": 1,
+            "excerpt": "Mock Document boo_095"
+          }
+        ],
+        "expected_entities": [
+          "boo_095"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "boo_096": {
+    "document_id": "boo_096",
+    "category": "books",
+    "entries": [
+      {
+        "question": "What is the ID of this book?",
+        "expected_answer": "The ID of this book is boo_096.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "boo_096",
+            "page": 1,
+            "excerpt": "Mock Document boo_096"
+          }
+        ],
+        "expected_entities": [
+          "boo_096"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "boo_097": {
+    "document_id": "boo_097",
+    "category": "books",
+    "entries": [
+      {
+        "question": "What is the ID of this book?",
+        "expected_answer": "The ID of this book is boo_097.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "boo_097",
+            "page": 1,
+            "excerpt": "Mock Document boo_097"
+          }
+        ],
+        "expected_entities": [
+          "boo_097"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "boo_098": {
+    "document_id": "boo_098",
+    "category": "books",
+    "entries": [
+      {
+        "question": "What is the ID of this book?",
+        "expected_answer": "The ID of this book is boo_098.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "boo_098",
+            "page": 1,
+            "excerpt": "Mock Document boo_098"
+          }
+        ],
+        "expected_entities": [
+          "boo_098"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "boo_099": {
+    "document_id": "boo_099",
+    "category": "books",
+    "entries": [
+      {
+        "question": "What is the ID of this book?",
+        "expected_answer": "The ID of this book is boo_099.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "boo_099",
+            "page": 1,
+            "excerpt": "Mock Document boo_099"
+          }
+        ],
+        "expected_entities": [
+          "boo_099"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "boo_100": {
+    "document_id": "boo_100",
+    "category": "books",
+    "entries": [
+      {
+        "question": "What is the ID of this book?",
+        "expected_answer": "The ID of this book is boo_100.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "boo_100",
+            "page": 1,
+            "excerpt": "Mock Document boo_100"
+          }
+        ],
+        "expected_entities": [
+          "boo_100"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  }
+}

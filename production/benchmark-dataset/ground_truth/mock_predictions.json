@@ -1,0 +1,9 @@
+{
+  "sci_001": {
+    "What is quantum entanglement?": {
+      "answer": "Quantum entanglement is a phenomenon where particles become correlated so that one state determines the other state.",
+      "pages": [3, 4],
+      "citations": ["sci_001, p.3"]
+    }
+  }
+}

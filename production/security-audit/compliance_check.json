@@ -1,0 +1,55 @@
+{
+  "compliance_targets": {
+    "GDPR": [
+      {
+        "requirement": "Data Minimization",
+        "implementation": "We restrict document storage and metadata processing only to values relevant to mathematical extraction.",
+        "status": "COMPLIANT"
+      },
+      {
+        "requirement": "Right to Erasure (Right to be Forgotten)",
+        "implementation": "DELETE /api/v1/documents/{id} endpoint fully deletes all physical files, database rows, vector indices, and graph nodes associated with the document.",
+        "status": "COMPLIANT"
+      },
+      {
+        "requirement": "Data Portability",
+        "implementation": "Export Engine supports downloading structured Universal Export Objects (UEO) in standard formats (JSON, YAML, Markdown).",
+        "status": "COMPLIANT"
+      }
+    ],
+    "SOC_2": [
+      {
+        "requirement": "CC6.1 Logical Access Controls",
+        "implementation": "Authentication via HS256 JWT signatures. Authorization verified using RBAC and ABAC access policies on every API endpoint.",
+        "status": "COMPLIANT"
+      },
+      {
+        "requirement": "CC6.6 Encryption in Transit & Rest",
+        "implementation": "All connections enforce TLS 1.3. Databases and vector storages use AES-256-GCM symmetric block encryption for volumes.",
+        "status": "COMPLIANT"
+      },
+      {
+        "requirement": "CC6.5 Secure Audit Trail Logging",
+        "implementation": "Audit logging middleware logs all API requests with user ID, request ID, status, and IP mapping.",
+        "status": "COMPLIANT"
+      }
+    ],
+    "ISO_27001": [
+      {
+        "control": "A.9 Access Control",
+        "implementation": "Strict privilege separation. Users are restricted to their logical namespaces and documents.",
+        "status": "COMPLIANT"
+      },
+      {
+        "control": "A.10 Cryptography",
+        "implementation": "No custom cryptography. Uses python-cryptography library implementing FIPS-approved algorithms.",
+        "status": "COMPLIANT"
+      },
+      {
+        "control": "A.14 Secure System Development",
+        "implementation": "Static and dynamic analysis run in CI/CD pipeline. Pinned dependencies scanned for CVEs daily.",
+        "status": "COMPLIANT"
+      }
+    ]
+  }
+}

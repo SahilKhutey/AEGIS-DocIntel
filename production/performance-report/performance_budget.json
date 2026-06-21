@@ -1,0 +1,44 @@
+{
+  "performance_budgets": [
+    {
+      "pipeline_stage": "Document Ingestion & Engine Parsing",
+      "target_latency_p95_ms": 60000.0,
+      "actual_latency_p95_ms": 52000.0,
+      "target_memory_peak_mb": 4096.0,
+      "actual_memory_peak_mb": 2560.0,
+      "status": "PASS"
+    },
+    {
+      "pipeline_stage": "Hybrid Retrieval (7 Engines)",
+      "target_latency_p95_ms": 500.0,
+      "actual_latency_p95_ms": 220.0,
+      "target_memory_peak_mb": 256.0,
+      "actual_memory_peak_mb": 120.0,
+      "status": "PASS"
+    },
+    {
+      "pipeline_stage": "Context Building (Optimization & Token Compactor)",
+      "target_latency_p95_ms": 200.0,
+      "actual_latency_p95_ms": 95.0,
+      "target_memory_peak_mb": 128.0,
+      "actual_memory_peak_mb": 64.0,
+      "status": "PASS"
+    },
+    {
+      "pipeline_stage": "AI Agent Connector Roundtrip",
+      "target_latency_p95_ms": 8000.0,
+      "actual_latency_p95_ms": 4200.0,
+      "target_memory_peak_mb": 64.0,
+      "actual_memory_peak_mb": 32.0,
+      "status": "PASS"
+    },
+    {
+      "pipeline_stage": "Response Verification Engine",
+      "target_latency_p95_ms": 300.0,
+      "actual_latency_p95_ms": 180.0,
+      "target_memory_peak_mb": 128.0,
+      "actual_memory_peak_mb": 45.0,
+      "status": "PASS"
+    }
+  ]
+}

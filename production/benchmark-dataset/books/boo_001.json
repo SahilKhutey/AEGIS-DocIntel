@@ -1,0 +1,27 @@
+{
+  "document_id": "boo_001",
+  "category": "books",
+  "entries": [
+    {
+      "question": "What is the relation between Betti numbers and Euler characteristic?",
+      "expected_answer": "The Euler characteristic of a topological space is equal to the alternating sum of its Betti numbers, expressed mathematically as chi = b_0 - b_1 + b_2 - b_3 + ...",
+      "expected_pages": [
+        142
+      ],
+      "expected_citations": [
+        {
+          "doc_id": "bk_001",
+          "page": 142,
+          "excerpt": "The Euler characteristic can be computed as the alternating sum of the Betti numbers."
+        }
+      ],
+      "expected_entities": [
+        "Euler characteristic",
+        "Betti numbers",
+        "alternating sum"
+      ],
+      "difficulty": "hard",
+      "type": "numerical"
+    }
+  ]
+}

@@ -1,0 +1,6256 @@
+{
+  "sci_001": {
+    "document_id": "sci_001",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is quantum entanglement?",
+        "expected_answer": "Quantum entanglement is a phenomenon in which two or more particles become correlated in such a way that the quantum state of one cannot be described independently of the others, even when separated by large distances.",
+        "expected_pages": [
+          3,
+          4
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_001",
+            "page": 3,
+            "excerpt": "entangled particles remain correlated..."
+          }
+        ],
+        "expected_entities": [
+          "quantum",
+          "particle",
+          "spin",
+          "correlation"
+        ],
+        "difficulty": "medium",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_002": {
+    "document_id": "sci_002",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_002.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_002",
+            "page": 1,
+            "excerpt": "Mock Document sci_002"
+          }
+        ],
+        "expected_entities": [
+          "sci_002"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_003": {
+    "document_id": "sci_003",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_003.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_003",
+            "page": 1,
+            "excerpt": "Mock Document sci_003"
+          }
+        ],
+        "expected_entities": [
+          "sci_003"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_004": {
+    "document_id": "sci_004",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_004.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_004",
+            "page": 1,
+            "excerpt": "Mock Document sci_004"
+          }
+        ],
+        "expected_entities": [
+          "sci_004"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_005": {
+    "document_id": "sci_005",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_005.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_005",
+            "page": 1,
+            "excerpt": "Mock Document sci_005"
+          }
+        ],
+        "expected_entities": [
+          "sci_005"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_006": {
+    "document_id": "sci_006",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_006.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_006",
+            "page": 1,
+            "excerpt": "Mock Document sci_006"
+          }
+        ],
+        "expected_entities": [
+          "sci_006"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_007": {
+    "document_id": "sci_007",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_007.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_007",
+            "page": 1,
+            "excerpt": "Mock Document sci_007"
+          }
+        ],
+        "expected_entities": [
+          "sci_007"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_008": {
+    "document_id": "sci_008",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_008.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_008",
+            "page": 1,
+            "excerpt": "Mock Document sci_008"
+          }
+        ],
+        "expected_entities": [
+          "sci_008"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_009": {
+    "document_id": "sci_009",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_009.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_009",
+            "page": 1,
+            "excerpt": "Mock Document sci_009"
+          }
+        ],
+        "expected_entities": [
+          "sci_009"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_010": {
+    "document_id": "sci_010",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_010.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_010",
+            "page": 1,
+            "excerpt": "Mock Document sci_010"
+          }
+        ],
+        "expected_entities": [
+          "sci_010"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_011": {
+    "document_id": "sci_011",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_011.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_011",
+            "page": 1,
+            "excerpt": "Mock Document sci_011"
+          }
+        ],
+        "expected_entities": [
+          "sci_011"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_012": {
+    "document_id": "sci_012",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_012.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_012",
+            "page": 1,
+            "excerpt": "Mock Document sci_012"
+          }
+        ],
+        "expected_entities": [
+          "sci_012"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_013": {
+    "document_id": "sci_013",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_013.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_013",
+            "page": 1,
+            "excerpt": "Mock Document sci_013"
+          }
+        ],
+        "expected_entities": [
+          "sci_013"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_014": {
+    "document_id": "sci_014",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_014.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_014",
+            "page": 1,
+            "excerpt": "Mock Document sci_014"
+          }
+        ],
+        "expected_entities": [
+          "sci_014"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_015": {
+    "document_id": "sci_015",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_015.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_015",
+            "page": 1,
+            "excerpt": "Mock Document sci_015"
+          }
+        ],
+        "expected_entities": [
+          "sci_015"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_016": {
+    "document_id": "sci_016",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_016.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_016",
+            "page": 1,
+            "excerpt": "Mock Document sci_016"
+          }
+        ],
+        "expected_entities": [
+          "sci_016"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_017": {
+    "document_id": "sci_017",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_017.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_017",
+            "page": 1,
+            "excerpt": "Mock Document sci_017"
+          }
+        ],
+        "expected_entities": [
+          "sci_017"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_018": {
+    "document_id": "sci_018",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_018.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_018",
+            "page": 1,
+            "excerpt": "Mock Document sci_018"
+          }
+        ],
+        "expected_entities": [
+          "sci_018"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_019": {
+    "document_id": "sci_019",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_019.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_019",
+            "page": 1,
+            "excerpt": "Mock Document sci_019"
+          }
+        ],
+        "expected_entities": [
+          "sci_019"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_020": {
+    "document_id": "sci_020",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_020.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_020",
+            "page": 1,
+            "excerpt": "Mock Document sci_020"
+          }
+        ],
+        "expected_entities": [
+          "sci_020"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_021": {
+    "document_id": "sci_021",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_021.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_021",
+            "page": 1,
+            "excerpt": "Mock Document sci_021"
+          }
+        ],
+        "expected_entities": [
+          "sci_021"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_022": {
+    "document_id": "sci_022",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_022.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_022",
+            "page": 1,
+            "excerpt": "Mock Document sci_022"
+          }
+        ],
+        "expected_entities": [
+          "sci_022"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_023": {
+    "document_id": "sci_023",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_023.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_023",
+            "page": 1,
+            "excerpt": "Mock Document sci_023"
+          }
+        ],
+        "expected_entities": [
+          "sci_023"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_024": {
+    "document_id": "sci_024",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_024.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_024",
+            "page": 1,
+            "excerpt": "Mock Document sci_024"
+          }
+        ],
+        "expected_entities": [
+          "sci_024"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_025": {
+    "document_id": "sci_025",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_025.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_025",
+            "page": 1,
+            "excerpt": "Mock Document sci_025"
+          }
+        ],
+        "expected_entities": [
+          "sci_025"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_026": {
+    "document_id": "sci_026",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_026.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_026",
+            "page": 1,
+            "excerpt": "Mock Document sci_026"
+          }
+        ],
+        "expected_entities": [
+          "sci_026"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_027": {
+    "document_id": "sci_027",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_027.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_027",
+            "page": 1,
+            "excerpt": "Mock Document sci_027"
+          }
+        ],
+        "expected_entities": [
+          "sci_027"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_028": {
+    "document_id": "sci_028",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_028.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_028",
+            "page": 1,
+            "excerpt": "Mock Document sci_028"
+          }
+        ],
+        "expected_entities": [
+          "sci_028"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_029": {
+    "document_id": "sci_029",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_029.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_029",
+            "page": 1,
+            "excerpt": "Mock Document sci_029"
+          }
+        ],
+        "expected_entities": [
+          "sci_029"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_030": {
+    "document_id": "sci_030",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_030.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_030",
+            "page": 1,
+            "excerpt": "Mock Document sci_030"
+          }
+        ],
+        "expected_entities": [
+          "sci_030"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_031": {
+    "document_id": "sci_031",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_031.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_031",
+            "page": 1,
+            "excerpt": "Mock Document sci_031"
+          }
+        ],
+        "expected_entities": [
+          "sci_031"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_032": {
+    "document_id": "sci_032",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_032.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_032",
+            "page": 1,
+            "excerpt": "Mock Document sci_032"
+          }
+        ],
+        "expected_entities": [
+          "sci_032"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_033": {
+    "document_id": "sci_033",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_033.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_033",
+            "page": 1,
+            "excerpt": "Mock Document sci_033"
+          }
+        ],
+        "expected_entities": [
+          "sci_033"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_034": {
+    "document_id": "sci_034",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_034.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_034",
+            "page": 1,
+            "excerpt": "Mock Document sci_034"
+          }
+        ],
+        "expected_entities": [
+          "sci_034"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_035": {
+    "document_id": "sci_035",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_035.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_035",
+            "page": 1,
+            "excerpt": "Mock Document sci_035"
+          }
+        ],
+        "expected_entities": [
+          "sci_035"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_036": {
+    "document_id": "sci_036",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_036.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_036",
+            "page": 1,
+            "excerpt": "Mock Document sci_036"
+          }
+        ],
+        "expected_entities": [
+          "sci_036"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_037": {
+    "document_id": "sci_037",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_037.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_037",
+            "page": 1,
+            "excerpt": "Mock Document sci_037"
+          }
+        ],
+        "expected_entities": [
+          "sci_037"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_038": {
+    "document_id": "sci_038",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_038.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_038",
+            "page": 1,
+            "excerpt": "Mock Document sci_038"
+          }
+        ],
+        "expected_entities": [
+          "sci_038"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_039": {
+    "document_id": "sci_039",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_039.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_039",
+            "page": 1,
+            "excerpt": "Mock Document sci_039"
+          }
+        ],
+        "expected_entities": [
+          "sci_039"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_040": {
+    "document_id": "sci_040",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_040.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_040",
+            "page": 1,
+            "excerpt": "Mock Document sci_040"
+          }
+        ],
+        "expected_entities": [
+          "sci_040"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_041": {
+    "document_id": "sci_041",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_041.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_041",
+            "page": 1,
+            "excerpt": "Mock Document sci_041"
+          }
+        ],
+        "expected_entities": [
+          "sci_041"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_042": {
+    "document_id": "sci_042",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_042.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_042",
+            "page": 1,
+            "excerpt": "Mock Document sci_042"
+          }
+        ],
+        "expected_entities": [
+          "sci_042"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_043": {
+    "document_id": "sci_043",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_043.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_043",
+            "page": 1,
+            "excerpt": "Mock Document sci_043"
+          }
+        ],
+        "expected_entities": [
+          "sci_043"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_044": {
+    "document_id": "sci_044",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_044.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_044",
+            "page": 1,
+            "excerpt": "Mock Document sci_044"
+          }
+        ],
+        "expected_entities": [
+          "sci_044"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_045": {
+    "document_id": "sci_045",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_045.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_045",
+            "page": 1,
+            "excerpt": "Mock Document sci_045"
+          }
+        ],
+        "expected_entities": [
+          "sci_045"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_046": {
+    "document_id": "sci_046",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_046.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_046",
+            "page": 1,
+            "excerpt": "Mock Document sci_046"
+          }
+        ],
+        "expected_entities": [
+          "sci_046"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_047": {
+    "document_id": "sci_047",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_047.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_047",
+            "page": 1,
+            "excerpt": "Mock Document sci_047"
+          }
+        ],
+        "expected_entities": [
+          "sci_047"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_048": {
+    "document_id": "sci_048",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_048.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_048",
+            "page": 1,
+            "excerpt": "Mock Document sci_048"
+          }
+        ],
+        "expected_entities": [
+          "sci_048"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_049": {
+    "document_id": "sci_049",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_049.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_049",
+            "page": 1,
+            "excerpt": "Mock Document sci_049"
+          }
+        ],
+        "expected_entities": [
+          "sci_049"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_050": {
+    "document_id": "sci_050",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_050.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_050",
+            "page": 1,
+            "excerpt": "Mock Document sci_050"
+          }
+        ],
+        "expected_entities": [
+          "sci_050"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_051": {
+    "document_id": "sci_051",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_051.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_051",
+            "page": 1,
+            "excerpt": "Mock Document sci_051"
+          }
+        ],
+        "expected_entities": [
+          "sci_051"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_052": {
+    "document_id": "sci_052",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_052.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_052",
+            "page": 1,
+            "excerpt": "Mock Document sci_052"
+          }
+        ],
+        "expected_entities": [
+          "sci_052"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_053": {
+    "document_id": "sci_053",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_053.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_053",
+            "page": 1,
+            "excerpt": "Mock Document sci_053"
+          }
+        ],
+        "expected_entities": [
+          "sci_053"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_054": {
+    "document_id": "sci_054",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_054.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_054",
+            "page": 1,
+            "excerpt": "Mock Document sci_054"
+          }
+        ],
+        "expected_entities": [
+          "sci_054"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_055": {
+    "document_id": "sci_055",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_055.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_055",
+            "page": 1,
+            "excerpt": "Mock Document sci_055"
+          }
+        ],
+        "expected_entities": [
+          "sci_055"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_056": {
+    "document_id": "sci_056",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_056.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_056",
+            "page": 1,
+            "excerpt": "Mock Document sci_056"
+          }
+        ],
+        "expected_entities": [
+          "sci_056"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_057": {
+    "document_id": "sci_057",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_057.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_057",
+            "page": 1,
+            "excerpt": "Mock Document sci_057"
+          }
+        ],
+        "expected_entities": [
+          "sci_057"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_058": {
+    "document_id": "sci_058",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_058.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_058",
+            "page": 1,
+            "excerpt": "Mock Document sci_058"
+          }
+        ],
+        "expected_entities": [
+          "sci_058"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_059": {
+    "document_id": "sci_059",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_059.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_059",
+            "page": 1,
+            "excerpt": "Mock Document sci_059"
+          }
+        ],
+        "expected_entities": [
+          "sci_059"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_060": {
+    "document_id": "sci_060",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_060.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_060",
+            "page": 1,
+            "excerpt": "Mock Document sci_060"
+          }
+        ],
+        "expected_entities": [
+          "sci_060"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_061": {
+    "document_id": "sci_061",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_061.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_061",
+            "page": 1,
+            "excerpt": "Mock Document sci_061"
+          }
+        ],
+        "expected_entities": [
+          "sci_061"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_062": {
+    "document_id": "sci_062",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_062.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_062",
+            "page": 1,
+            "excerpt": "Mock Document sci_062"
+          }
+        ],
+        "expected_entities": [
+          "sci_062"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_063": {
+    "document_id": "sci_063",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_063.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_063",
+            "page": 1,
+            "excerpt": "Mock Document sci_063"
+          }
+        ],
+        "expected_entities": [
+          "sci_063"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_064": {
+    "document_id": "sci_064",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_064.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_064",
+            "page": 1,
+            "excerpt": "Mock Document sci_064"
+          }
+        ],
+        "expected_entities": [
+          "sci_064"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_065": {
+    "document_id": "sci_065",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_065.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_065",
+            "page": 1,
+            "excerpt": "Mock Document sci_065"
+          }
+        ],
+        "expected_entities": [
+          "sci_065"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_066": {
+    "document_id": "sci_066",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_066.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_066",
+            "page": 1,
+            "excerpt": "Mock Document sci_066"
+          }
+        ],
+        "expected_entities": [
+          "sci_066"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_067": {
+    "document_id": "sci_067",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_067.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_067",
+            "page": 1,
+            "excerpt": "Mock Document sci_067"
+          }
+        ],
+        "expected_entities": [
+          "sci_067"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_068": {
+    "document_id": "sci_068",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_068.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_068",
+            "page": 1,
+            "excerpt": "Mock Document sci_068"
+          }
+        ],
+        "expected_entities": [
+          "sci_068"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_069": {
+    "document_id": "sci_069",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_069.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_069",
+            "page": 1,
+            "excerpt": "Mock Document sci_069"
+          }
+        ],
+        "expected_entities": [
+          "sci_069"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_070": {
+    "document_id": "sci_070",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_070.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_070",
+            "page": 1,
+            "excerpt": "Mock Document sci_070"
+          }
+        ],
+        "expected_entities": [
+          "sci_070"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_071": {
+    "document_id": "sci_071",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_071.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_071",
+            "page": 1,
+            "excerpt": "Mock Document sci_071"
+          }
+        ],
+        "expected_entities": [
+          "sci_071"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_072": {
+    "document_id": "sci_072",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_072.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_072",
+            "page": 1,
+            "excerpt": "Mock Document sci_072"
+          }
+        ],
+        "expected_entities": [
+          "sci_072"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_073": {
+    "document_id": "sci_073",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_073.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_073",
+            "page": 1,
+            "excerpt": "Mock Document sci_073"
+          }
+        ],
+        "expected_entities": [
+          "sci_073"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_074": {
+    "document_id": "sci_074",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_074.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_074",
+            "page": 1,
+            "excerpt": "Mock Document sci_074"
+          }
+        ],
+        "expected_entities": [
+          "sci_074"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_075": {
+    "document_id": "sci_075",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_075.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_075",
+            "page": 1,
+            "excerpt": "Mock Document sci_075"
+          }
+        ],
+        "expected_entities": [
+          "sci_075"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_076": {
+    "document_id": "sci_076",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_076.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_076",
+            "page": 1,
+            "excerpt": "Mock Document sci_076"
+          }
+        ],
+        "expected_entities": [
+          "sci_076"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_077": {
+    "document_id": "sci_077",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_077.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_077",
+            "page": 1,
+            "excerpt": "Mock Document sci_077"
+          }
+        ],
+        "expected_entities": [
+          "sci_077"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_078": {
+    "document_id": "sci_078",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_078.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_078",
+            "page": 1,
+            "excerpt": "Mock Document sci_078"
+          }
+        ],
+        "expected_entities": [
+          "sci_078"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_079": {
+    "document_id": "sci_079",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_079.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_079",
+            "page": 1,
+            "excerpt": "Mock Document sci_079"
+          }
+        ],
+        "expected_entities": [
+          "sci_079"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_080": {
+    "document_id": "sci_080",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_080.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_080",
+            "page": 1,
+            "excerpt": "Mock Document sci_080"
+          }
+        ],
+        "expected_entities": [
+          "sci_080"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_081": {
+    "document_id": "sci_081",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_081.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_081",
+            "page": 1,
+            "excerpt": "Mock Document sci_081"
+          }
+        ],
+        "expected_entities": [
+          "sci_081"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_082": {
+    "document_id": "sci_082",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_082.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_082",
+            "page": 1,
+            "excerpt": "Mock Document sci_082"
+          }
+        ],
+        "expected_entities": [
+          "sci_082"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_083": {
+    "document_id": "sci_083",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_083.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_083",
+            "page": 1,
+            "excerpt": "Mock Document sci_083"
+          }
+        ],
+        "expected_entities": [
+          "sci_083"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_084": {
+    "document_id": "sci_084",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_084.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_084",
+            "page": 1,
+            "excerpt": "Mock Document sci_084"
+          }
+        ],
+        "expected_entities": [
+          "sci_084"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_085": {
+    "document_id": "sci_085",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_085.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_085",
+            "page": 1,
+            "excerpt": "Mock Document sci_085"
+          }
+        ],
+        "expected_entities": [
+          "sci_085"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_086": {
+    "document_id": "sci_086",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_086.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_086",
+            "page": 1,
+            "excerpt": "Mock Document sci_086"
+          }
+        ],
+        "expected_entities": [
+          "sci_086"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_087": {
+    "document_id": "sci_087",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_087.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_087",
+            "page": 1,
+            "excerpt": "Mock Document sci_087"
+          }
+        ],
+        "expected_entities": [
+          "sci_087"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_088": {
+    "document_id": "sci_088",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_088.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_088",
+            "page": 1,
+            "excerpt": "Mock Document sci_088"
+          }
+        ],
+        "expected_entities": [
+          "sci_088"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_089": {
+    "document_id": "sci_089",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_089.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_089",
+            "page": 1,
+            "excerpt": "Mock Document sci_089"
+          }
+        ],
+        "expected_entities": [
+          "sci_089"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_090": {
+    "document_id": "sci_090",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_090.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_090",
+            "page": 1,
+            "excerpt": "Mock Document sci_090"
+          }
+        ],
+        "expected_entities": [
+          "sci_090"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_091": {
+    "document_id": "sci_091",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_091.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_091",
+            "page": 1,
+            "excerpt": "Mock Document sci_091"
+          }
+        ],
+        "expected_entities": [
+          "sci_091"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_092": {
+    "document_id": "sci_092",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_092.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_092",
+            "page": 1,
+            "excerpt": "Mock Document sci_092"
+          }
+        ],
+        "expected_entities": [
+          "sci_092"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_093": {
+    "document_id": "sci_093",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_093.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_093",
+            "page": 1,
+            "excerpt": "Mock Document sci_093"
+          }
+        ],
+        "expected_entities": [
+          "sci_093"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_094": {
+    "document_id": "sci_094",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_094.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_094",
+            "page": 1,
+            "excerpt": "Mock Document sci_094"
+          }
+        ],
+        "expected_entities": [
+          "sci_094"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_095": {
+    "document_id": "sci_095",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_095.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_095",
+            "page": 1,
+            "excerpt": "Mock Document sci_095"
+          }
+        ],
+        "expected_entities": [
+          "sci_095"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_096": {
+    "document_id": "sci_096",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_096.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_096",
+            "page": 1,
+            "excerpt": "Mock Document sci_096"
+          }
+        ],
+        "expected_entities": [
+          "sci_096"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_097": {
+    "document_id": "sci_097",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_097.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_097",
+            "page": 1,
+            "excerpt": "Mock Document sci_097"
+          }
+        ],
+        "expected_entities": [
+          "sci_097"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_098": {
+    "document_id": "sci_098",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_098.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_098",
+            "page": 1,
+            "excerpt": "Mock Document sci_098"
+          }
+        ],
+        "expected_entities": [
+          "sci_098"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_099": {
+    "document_id": "sci_099",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_099.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_099",
+            "page": 1,
+            "excerpt": "Mock Document sci_099"
+          }
+        ],
+        "expected_entities": [
+          "sci_099"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_100": {
+    "document_id": "sci_100",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_100.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_100",
+            "page": 1,
+            "excerpt": "Mock Document sci_100"
+          }
+        ],
+        "expected_entities": [
+          "sci_100"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_101": {
+    "document_id": "sci_101",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_101.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_101",
+            "page": 1,
+            "excerpt": "Mock Document sci_101"
+          }
+        ],
+        "expected_entities": [
+          "sci_101"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_102": {
+    "document_id": "sci_102",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_102.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_102",
+            "page": 1,
+            "excerpt": "Mock Document sci_102"
+          }
+        ],
+        "expected_entities": [
+          "sci_102"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_103": {
+    "document_id": "sci_103",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_103.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_103",
+            "page": 1,
+            "excerpt": "Mock Document sci_103"
+          }
+        ],
+        "expected_entities": [
+          "sci_103"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_104": {
+    "document_id": "sci_104",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_104.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_104",
+            "page": 1,
+            "excerpt": "Mock Document sci_104"
+          }
+        ],
+        "expected_entities": [
+          "sci_104"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_105": {
+    "document_id": "sci_105",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_105.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_105",
+            "page": 1,
+            "excerpt": "Mock Document sci_105"
+          }
+        ],
+        "expected_entities": [
+          "sci_105"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_106": {
+    "document_id": "sci_106",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_106.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_106",
+            "page": 1,
+            "excerpt": "Mock Document sci_106"
+          }
+        ],
+        "expected_entities": [
+          "sci_106"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_107": {
+    "document_id": "sci_107",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_107.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_107",
+            "page": 1,
+            "excerpt": "Mock Document sci_107"
+          }
+        ],
+        "expected_entities": [
+          "sci_107"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_108": {
+    "document_id": "sci_108",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_108.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_108",
+            "page": 1,
+            "excerpt": "Mock Document sci_108"
+          }
+        ],
+        "expected_entities": [
+          "sci_108"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_109": {
+    "document_id": "sci_109",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_109.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_109",
+            "page": 1,
+            "excerpt": "Mock Document sci_109"
+          }
+        ],
+        "expected_entities": [
+          "sci_109"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_110": {
+    "document_id": "sci_110",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_110.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_110",
+            "page": 1,
+            "excerpt": "Mock Document sci_110"
+          }
+        ],
+        "expected_entities": [
+          "sci_110"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_111": {
+    "document_id": "sci_111",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_111.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_111",
+            "page": 1,
+            "excerpt": "Mock Document sci_111"
+          }
+        ],
+        "expected_entities": [
+          "sci_111"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_112": {
+    "document_id": "sci_112",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_112.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_112",
+            "page": 1,
+            "excerpt": "Mock Document sci_112"
+          }
+        ],
+        "expected_entities": [
+          "sci_112"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_113": {
+    "document_id": "sci_113",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_113.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_113",
+            "page": 1,
+            "excerpt": "Mock Document sci_113"
+          }
+        ],
+        "expected_entities": [
+          "sci_113"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_114": {
+    "document_id": "sci_114",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_114.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_114",
+            "page": 1,
+            "excerpt": "Mock Document sci_114"
+          }
+        ],
+        "expected_entities": [
+          "sci_114"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_115": {
+    "document_id": "sci_115",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_115.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_115",
+            "page": 1,
+            "excerpt": "Mock Document sci_115"
+          }
+        ],
+        "expected_entities": [
+          "sci_115"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_116": {
+    "document_id": "sci_116",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_116.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_116",
+            "page": 1,
+            "excerpt": "Mock Document sci_116"
+          }
+        ],
+        "expected_entities": [
+          "sci_116"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_117": {
+    "document_id": "sci_117",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_117.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_117",
+            "page": 1,
+            "excerpt": "Mock Document sci_117"
+          }
+        ],
+        "expected_entities": [
+          "sci_117"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_118": {
+    "document_id": "sci_118",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_118.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_118",
+            "page": 1,
+            "excerpt": "Mock Document sci_118"
+          }
+        ],
+        "expected_entities": [
+          "sci_118"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_119": {
+    "document_id": "sci_119",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_119.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_119",
+            "page": 1,
+            "excerpt": "Mock Document sci_119"
+          }
+        ],
+        "expected_entities": [
+          "sci_119"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_120": {
+    "document_id": "sci_120",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_120.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_120",
+            "page": 1,
+            "excerpt": "Mock Document sci_120"
+          }
+        ],
+        "expected_entities": [
+          "sci_120"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_121": {
+    "document_id": "sci_121",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_121.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_121",
+            "page": 1,
+            "excerpt": "Mock Document sci_121"
+          }
+        ],
+        "expected_entities": [
+          "sci_121"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_122": {
+    "document_id": "sci_122",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_122.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_122",
+            "page": 1,
+            "excerpt": "Mock Document sci_122"
+          }
+        ],
+        "expected_entities": [
+          "sci_122"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_123": {
+    "document_id": "sci_123",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_123.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_123",
+            "page": 1,
+            "excerpt": "Mock Document sci_123"
+          }
+        ],
+        "expected_entities": [
+          "sci_123"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_124": {
+    "document_id": "sci_124",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_124.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_124",
+            "page": 1,
+            "excerpt": "Mock Document sci_124"
+          }
+        ],
+        "expected_entities": [
+          "sci_124"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_125": {
+    "document_id": "sci_125",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_125.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_125",
+            "page": 1,
+            "excerpt": "Mock Document sci_125"
+          }
+        ],
+        "expected_entities": [
+          "sci_125"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_126": {
+    "document_id": "sci_126",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_126.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_126",
+            "page": 1,
+            "excerpt": "Mock Document sci_126"
+          }
+        ],
+        "expected_entities": [
+          "sci_126"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_127": {
+    "document_id": "sci_127",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_127.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_127",
+            "page": 1,
+            "excerpt": "Mock Document sci_127"
+          }
+        ],
+        "expected_entities": [
+          "sci_127"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_128": {
+    "document_id": "sci_128",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_128.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_128",
+            "page": 1,
+            "excerpt": "Mock Document sci_128"
+          }
+        ],
+        "expected_entities": [
+          "sci_128"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_129": {
+    "document_id": "sci_129",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_129.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_129",
+            "page": 1,
+            "excerpt": "Mock Document sci_129"
+          }
+        ],
+        "expected_entities": [
+          "sci_129"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_130": {
+    "document_id": "sci_130",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_130.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_130",
+            "page": 1,
+            "excerpt": "Mock Document sci_130"
+          }
+        ],
+        "expected_entities": [
+          "sci_130"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_131": {
+    "document_id": "sci_131",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_131.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_131",
+            "page": 1,
+            "excerpt": "Mock Document sci_131"
+          }
+        ],
+        "expected_entities": [
+          "sci_131"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_132": {
+    "document_id": "sci_132",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_132.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_132",
+            "page": 1,
+            "excerpt": "Mock Document sci_132"
+          }
+        ],
+        "expected_entities": [
+          "sci_132"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_133": {
+    "document_id": "sci_133",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_133.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_133",
+            "page": 1,
+            "excerpt": "Mock Document sci_133"
+          }
+        ],
+        "expected_entities": [
+          "sci_133"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_134": {
+    "document_id": "sci_134",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_134.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_134",
+            "page": 1,
+            "excerpt": "Mock Document sci_134"
+          }
+        ],
+        "expected_entities": [
+          "sci_134"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_135": {
+    "document_id": "sci_135",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_135.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_135",
+            "page": 1,
+            "excerpt": "Mock Document sci_135"
+          }
+        ],
+        "expected_entities": [
+          "sci_135"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_136": {
+    "document_id": "sci_136",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_136.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_136",
+            "page": 1,
+            "excerpt": "Mock Document sci_136"
+          }
+        ],
+        "expected_entities": [
+          "sci_136"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_137": {
+    "document_id": "sci_137",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_137.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_137",
+            "page": 1,
+            "excerpt": "Mock Document sci_137"
+          }
+        ],
+        "expected_entities": [
+          "sci_137"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_138": {
+    "document_id": "sci_138",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_138.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_138",
+            "page": 1,
+            "excerpt": "Mock Document sci_138"
+          }
+        ],
+        "expected_entities": [
+          "sci_138"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_139": {
+    "document_id": "sci_139",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_139.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_139",
+            "page": 1,
+            "excerpt": "Mock Document sci_139"
+          }
+        ],
+        "expected_entities": [
+          "sci_139"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_140": {
+    "document_id": "sci_140",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_140.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_140",
+            "page": 1,
+            "excerpt": "Mock Document sci_140"
+          }
+        ],
+        "expected_entities": [
+          "sci_140"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_141": {
+    "document_id": "sci_141",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_141.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_141",
+            "page": 1,
+            "excerpt": "Mock Document sci_141"
+          }
+        ],
+        "expected_entities": [
+          "sci_141"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_142": {
+    "document_id": "sci_142",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_142.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_142",
+            "page": 1,
+            "excerpt": "Mock Document sci_142"
+          }
+        ],
+        "expected_entities": [
+          "sci_142"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_143": {
+    "document_id": "sci_143",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_143.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_143",
+            "page": 1,
+            "excerpt": "Mock Document sci_143"
+          }
+        ],
+        "expected_entities": [
+          "sci_143"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_144": {
+    "document_id": "sci_144",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_144.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_144",
+            "page": 1,
+            "excerpt": "Mock Document sci_144"
+          }
+        ],
+        "expected_entities": [
+          "sci_144"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_145": {
+    "document_id": "sci_145",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_145.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_145",
+            "page": 1,
+            "excerpt": "Mock Document sci_145"
+          }
+        ],
+        "expected_entities": [
+          "sci_145"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_146": {
+    "document_id": "sci_146",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_146.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_146",
+            "page": 1,
+            "excerpt": "Mock Document sci_146"
+          }
+        ],
+        "expected_entities": [
+          "sci_146"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_147": {
+    "document_id": "sci_147",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_147.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_147",
+            "page": 1,
+            "excerpt": "Mock Document sci_147"
+          }
+        ],
+        "expected_entities": [
+          "sci_147"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_148": {
+    "document_id": "sci_148",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_148.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_148",
+            "page": 1,
+            "excerpt": "Mock Document sci_148"
+          }
+        ],
+        "expected_entities": [
+          "sci_148"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_149": {
+    "document_id": "sci_149",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_149.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_149",
+            "page": 1,
+            "excerpt": "Mock Document sci_149"
+          }
+        ],
+        "expected_entities": [
+          "sci_149"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_150": {
+    "document_id": "sci_150",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_150.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_150",
+            "page": 1,
+            "excerpt": "Mock Document sci_150"
+          }
+        ],
+        "expected_entities": [
+          "sci_150"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_151": {
+    "document_id": "sci_151",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_151.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_151",
+            "page": 1,
+            "excerpt": "Mock Document sci_151"
+          }
+        ],
+        "expected_entities": [
+          "sci_151"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_152": {
+    "document_id": "sci_152",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_152.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_152",
+            "page": 1,
+            "excerpt": "Mock Document sci_152"
+          }
+        ],
+        "expected_entities": [
+          "sci_152"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_153": {
+    "document_id": "sci_153",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_153.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_153",
+            "page": 1,
+            "excerpt": "Mock Document sci_153"
+          }
+        ],
+        "expected_entities": [
+          "sci_153"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_154": {
+    "document_id": "sci_154",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_154.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_154",
+            "page": 1,
+            "excerpt": "Mock Document sci_154"
+          }
+        ],
+        "expected_entities": [
+          "sci_154"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_155": {
+    "document_id": "sci_155",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_155.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_155",
+            "page": 1,
+            "excerpt": "Mock Document sci_155"
+          }
+        ],
+        "expected_entities": [
+          "sci_155"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_156": {
+    "document_id": "sci_156",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_156.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_156",
+            "page": 1,
+            "excerpt": "Mock Document sci_156"
+          }
+        ],
+        "expected_entities": [
+          "sci_156"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_157": {
+    "document_id": "sci_157",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_157.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_157",
+            "page": 1,
+            "excerpt": "Mock Document sci_157"
+          }
+        ],
+        "expected_entities": [
+          "sci_157"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_158": {
+    "document_id": "sci_158",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_158.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_158",
+            "page": 1,
+            "excerpt": "Mock Document sci_158"
+          }
+        ],
+        "expected_entities": [
+          "sci_158"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_159": {
+    "document_id": "sci_159",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_159.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_159",
+            "page": 1,
+            "excerpt": "Mock Document sci_159"
+          }
+        ],
+        "expected_entities": [
+          "sci_159"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_160": {
+    "document_id": "sci_160",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_160.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_160",
+            "page": 1,
+            "excerpt": "Mock Document sci_160"
+          }
+        ],
+        "expected_entities": [
+          "sci_160"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_161": {
+    "document_id": "sci_161",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_161.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_161",
+            "page": 1,
+            "excerpt": "Mock Document sci_161"
+          }
+        ],
+        "expected_entities": [
+          "sci_161"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_162": {
+    "document_id": "sci_162",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_162.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_162",
+            "page": 1,
+            "excerpt": "Mock Document sci_162"
+          }
+        ],
+        "expected_entities": [
+          "sci_162"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_163": {
+    "document_id": "sci_163",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_163.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_163",
+            "page": 1,
+            "excerpt": "Mock Document sci_163"
+          }
+        ],
+        "expected_entities": [
+          "sci_163"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_164": {
+    "document_id": "sci_164",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_164.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_164",
+            "page": 1,
+            "excerpt": "Mock Document sci_164"
+          }
+        ],
+        "expected_entities": [
+          "sci_164"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_165": {
+    "document_id": "sci_165",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_165.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_165",
+            "page": 1,
+            "excerpt": "Mock Document sci_165"
+          }
+        ],
+        "expected_entities": [
+          "sci_165"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_166": {
+    "document_id": "sci_166",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_166.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_166",
+            "page": 1,
+            "excerpt": "Mock Document sci_166"
+          }
+        ],
+        "expected_entities": [
+          "sci_166"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_167": {
+    "document_id": "sci_167",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_167.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_167",
+            "page": 1,
+            "excerpt": "Mock Document sci_167"
+          }
+        ],
+        "expected_entities": [
+          "sci_167"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_168": {
+    "document_id": "sci_168",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_168.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_168",
+            "page": 1,
+            "excerpt": "Mock Document sci_168"
+          }
+        ],
+        "expected_entities": [
+          "sci_168"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_169": {
+    "document_id": "sci_169",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_169.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_169",
+            "page": 1,
+            "excerpt": "Mock Document sci_169"
+          }
+        ],
+        "expected_entities": [
+          "sci_169"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_170": {
+    "document_id": "sci_170",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_170.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_170",
+            "page": 1,
+            "excerpt": "Mock Document sci_170"
+          }
+        ],
+        "expected_entities": [
+          "sci_170"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_171": {
+    "document_id": "sci_171",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_171.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_171",
+            "page": 1,
+            "excerpt": "Mock Document sci_171"
+          }
+        ],
+        "expected_entities": [
+          "sci_171"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_172": {
+    "document_id": "sci_172",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_172.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_172",
+            "page": 1,
+            "excerpt": "Mock Document sci_172"
+          }
+        ],
+        "expected_entities": [
+          "sci_172"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_173": {
+    "document_id": "sci_173",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_173.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_173",
+            "page": 1,
+            "excerpt": "Mock Document sci_173"
+          }
+        ],
+        "expected_entities": [
+          "sci_173"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_174": {
+    "document_id": "sci_174",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_174.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_174",
+            "page": 1,
+            "excerpt": "Mock Document sci_174"
+          }
+        ],
+        "expected_entities": [
+          "sci_174"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_175": {
+    "document_id": "sci_175",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_175.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_175",
+            "page": 1,
+            "excerpt": "Mock Document sci_175"
+          }
+        ],
+        "expected_entities": [
+          "sci_175"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_176": {
+    "document_id": "sci_176",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_176.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_176",
+            "page": 1,
+            "excerpt": "Mock Document sci_176"
+          }
+        ],
+        "expected_entities": [
+          "sci_176"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_177": {
+    "document_id": "sci_177",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_177.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_177",
+            "page": 1,
+            "excerpt": "Mock Document sci_177"
+          }
+        ],
+        "expected_entities": [
+          "sci_177"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_178": {
+    "document_id": "sci_178",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_178.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_178",
+            "page": 1,
+            "excerpt": "Mock Document sci_178"
+          }
+        ],
+        "expected_entities": [
+          "sci_178"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_179": {
+    "document_id": "sci_179",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_179.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_179",
+            "page": 1,
+            "excerpt": "Mock Document sci_179"
+          }
+        ],
+        "expected_entities": [
+          "sci_179"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_180": {
+    "document_id": "sci_180",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_180.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_180",
+            "page": 1,
+            "excerpt": "Mock Document sci_180"
+          }
+        ],
+        "expected_entities": [
+          "sci_180"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_181": {
+    "document_id": "sci_181",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_181.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_181",
+            "page": 1,
+            "excerpt": "Mock Document sci_181"
+          }
+        ],
+        "expected_entities": [
+          "sci_181"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_182": {
+    "document_id": "sci_182",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_182.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_182",
+            "page": 1,
+            "excerpt": "Mock Document sci_182"
+          }
+        ],
+        "expected_entities": [
+          "sci_182"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_183": {
+    "document_id": "sci_183",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_183.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_183",
+            "page": 1,
+            "excerpt": "Mock Document sci_183"
+          }
+        ],
+        "expected_entities": [
+          "sci_183"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_184": {
+    "document_id": "sci_184",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_184.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_184",
+            "page": 1,
+            "excerpt": "Mock Document sci_184"
+          }
+        ],
+        "expected_entities": [
+          "sci_184"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_185": {
+    "document_id": "sci_185",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_185.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_185",
+            "page": 1,
+            "excerpt": "Mock Document sci_185"
+          }
+        ],
+        "expected_entities": [
+          "sci_185"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_186": {
+    "document_id": "sci_186",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_186.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_186",
+            "page": 1,
+            "excerpt": "Mock Document sci_186"
+          }
+        ],
+        "expected_entities": [
+          "sci_186"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_187": {
+    "document_id": "sci_187",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_187.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_187",
+            "page": 1,
+            "excerpt": "Mock Document sci_187"
+          }
+        ],
+        "expected_entities": [
+          "sci_187"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_188": {
+    "document_id": "sci_188",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_188.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_188",
+            "page": 1,
+            "excerpt": "Mock Document sci_188"
+          }
+        ],
+        "expected_entities": [
+          "sci_188"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_189": {
+    "document_id": "sci_189",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_189.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_189",
+            "page": 1,
+            "excerpt": "Mock Document sci_189"
+          }
+        ],
+        "expected_entities": [
+          "sci_189"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_190": {
+    "document_id": "sci_190",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_190.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_190",
+            "page": 1,
+            "excerpt": "Mock Document sci_190"
+          }
+        ],
+        "expected_entities": [
+          "sci_190"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_191": {
+    "document_id": "sci_191",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_191.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_191",
+            "page": 1,
+            "excerpt": "Mock Document sci_191"
+          }
+        ],
+        "expected_entities": [
+          "sci_191"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_192": {
+    "document_id": "sci_192",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_192.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_192",
+            "page": 1,
+            "excerpt": "Mock Document sci_192"
+          }
+        ],
+        "expected_entities": [
+          "sci_192"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_193": {
+    "document_id": "sci_193",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_193.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_193",
+            "page": 1,
+            "excerpt": "Mock Document sci_193"
+          }
+        ],
+        "expected_entities": [
+          "sci_193"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_194": {
+    "document_id": "sci_194",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_194.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_194",
+            "page": 1,
+            "excerpt": "Mock Document sci_194"
+          }
+        ],
+        "expected_entities": [
+          "sci_194"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_195": {
+    "document_id": "sci_195",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_195.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_195",
+            "page": 1,
+            "excerpt": "Mock Document sci_195"
+          }
+        ],
+        "expected_entities": [
+          "sci_195"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_196": {
+    "document_id": "sci_196",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_196.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_196",
+            "page": 1,
+            "excerpt": "Mock Document sci_196"
+          }
+        ],
+        "expected_entities": [
+          "sci_196"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_197": {
+    "document_id": "sci_197",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_197.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_197",
+            "page": 1,
+            "excerpt": "Mock Document sci_197"
+          }
+        ],
+        "expected_entities": [
+          "sci_197"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_198": {
+    "document_id": "sci_198",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_198.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_198",
+            "page": 1,
+            "excerpt": "Mock Document sci_198"
+          }
+        ],
+        "expected_entities": [
+          "sci_198"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_199": {
+    "document_id": "sci_199",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_199.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_199",
+            "page": 1,
+            "excerpt": "Mock Document sci_199"
+          }
+        ],
+        "expected_entities": [
+          "sci_199"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_200": {
+    "document_id": "sci_200",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_200.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_200",
+            "page": 1,
+            "excerpt": "Mock Document sci_200"
+          }
+        ],
+        "expected_entities": [
+          "sci_200"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_201": {
+    "document_id": "sci_201",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_201.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_201",
+            "page": 1,
+            "excerpt": "Mock Document sci_201"
+          }
+        ],
+        "expected_entities": [
+          "sci_201"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_202": {
+    "document_id": "sci_202",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_202.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_202",
+            "page": 1,
+            "excerpt": "Mock Document sci_202"
+          }
+        ],
+        "expected_entities": [
+          "sci_202"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_203": {
+    "document_id": "sci_203",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_203.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_203",
+            "page": 1,
+            "excerpt": "Mock Document sci_203"
+          }
+        ],
+        "expected_entities": [
+          "sci_203"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_204": {
+    "document_id": "sci_204",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_204.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_204",
+            "page": 1,
+            "excerpt": "Mock Document sci_204"
+          }
+        ],
+        "expected_entities": [
+          "sci_204"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_205": {
+    "document_id": "sci_205",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_205.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_205",
+            "page": 1,
+            "excerpt": "Mock Document sci_205"
+          }
+        ],
+        "expected_entities": [
+          "sci_205"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_206": {
+    "document_id": "sci_206",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_206.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_206",
+            "page": 1,
+            "excerpt": "Mock Document sci_206"
+          }
+        ],
+        "expected_entities": [
+          "sci_206"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_207": {
+    "document_id": "sci_207",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_207.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_207",
+            "page": 1,
+            "excerpt": "Mock Document sci_207"
+          }
+        ],
+        "expected_entities": [
+          "sci_207"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_208": {
+    "document_id": "sci_208",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_208.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_208",
+            "page": 1,
+            "excerpt": "Mock Document sci_208"
+          }
+        ],
+        "expected_entities": [
+          "sci_208"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_209": {
+    "document_id": "sci_209",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_209.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_209",
+            "page": 1,
+            "excerpt": "Mock Document sci_209"
+          }
+        ],
+        "expected_entities": [
+          "sci_209"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_210": {
+    "document_id": "sci_210",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_210.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_210",
+            "page": 1,
+            "excerpt": "Mock Document sci_210"
+          }
+        ],
+        "expected_entities": [
+          "sci_210"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_211": {
+    "document_id": "sci_211",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_211.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_211",
+            "page": 1,
+            "excerpt": "Mock Document sci_211"
+          }
+        ],
+        "expected_entities": [
+          "sci_211"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_212": {
+    "document_id": "sci_212",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_212.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_212",
+            "page": 1,
+            "excerpt": "Mock Document sci_212"
+          }
+        ],
+        "expected_entities": [
+          "sci_212"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_213": {
+    "document_id": "sci_213",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_213.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_213",
+            "page": 1,
+            "excerpt": "Mock Document sci_213"
+          }
+        ],
+        "expected_entities": [
+          "sci_213"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_214": {
+    "document_id": "sci_214",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_214.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_214",
+            "page": 1,
+            "excerpt": "Mock Document sci_214"
+          }
+        ],
+        "expected_entities": [
+          "sci_214"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_215": {
+    "document_id": "sci_215",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_215.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_215",
+            "page": 1,
+            "excerpt": "Mock Document sci_215"
+          }
+        ],
+        "expected_entities": [
+          "sci_215"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_216": {
+    "document_id": "sci_216",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_216.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_216",
+            "page": 1,
+            "excerpt": "Mock Document sci_216"
+          }
+        ],
+        "expected_entities": [
+          "sci_216"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_217": {
+    "document_id": "sci_217",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_217.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_217",
+            "page": 1,
+            "excerpt": "Mock Document sci_217"
+          }
+        ],
+        "expected_entities": [
+          "sci_217"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_218": {
+    "document_id": "sci_218",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_218.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_218",
+            "page": 1,
+            "excerpt": "Mock Document sci_218"
+          }
+        ],
+        "expected_entities": [
+          "sci_218"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_219": {
+    "document_id": "sci_219",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_219.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_219",
+            "page": 1,
+            "excerpt": "Mock Document sci_219"
+          }
+        ],
+        "expected_entities": [
+          "sci_219"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_220": {
+    "document_id": "sci_220",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_220.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_220",
+            "page": 1,
+            "excerpt": "Mock Document sci_220"
+          }
+        ],
+        "expected_entities": [
+          "sci_220"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_221": {
+    "document_id": "sci_221",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_221.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_221",
+            "page": 1,
+            "excerpt": "Mock Document sci_221"
+          }
+        ],
+        "expected_entities": [
+          "sci_221"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_222": {
+    "document_id": "sci_222",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_222.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_222",
+            "page": 1,
+            "excerpt": "Mock Document sci_222"
+          }
+        ],
+        "expected_entities": [
+          "sci_222"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_223": {
+    "document_id": "sci_223",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_223.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_223",
+            "page": 1,
+            "excerpt": "Mock Document sci_223"
+          }
+        ],
+        "expected_entities": [
+          "sci_223"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_224": {
+    "document_id": "sci_224",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_224.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_224",
+            "page": 1,
+            "excerpt": "Mock Document sci_224"
+          }
+        ],
+        "expected_entities": [
+          "sci_224"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_225": {
+    "document_id": "sci_225",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_225.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_225",
+            "page": 1,
+            "excerpt": "Mock Document sci_225"
+          }
+        ],
+        "expected_entities": [
+          "sci_225"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_226": {
+    "document_id": "sci_226",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_226.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_226",
+            "page": 1,
+            "excerpt": "Mock Document sci_226"
+          }
+        ],
+        "expected_entities": [
+          "sci_226"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_227": {
+    "document_id": "sci_227",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_227.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_227",
+            "page": 1,
+            "excerpt": "Mock Document sci_227"
+          }
+        ],
+        "expected_entities": [
+          "sci_227"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_228": {
+    "document_id": "sci_228",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_228.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_228",
+            "page": 1,
+            "excerpt": "Mock Document sci_228"
+          }
+        ],
+        "expected_entities": [
+          "sci_228"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_229": {
+    "document_id": "sci_229",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_229.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_229",
+            "page": 1,
+            "excerpt": "Mock Document sci_229"
+          }
+        ],
+        "expected_entities": [
+          "sci_229"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_230": {
+    "document_id": "sci_230",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_230.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_230",
+            "page": 1,
+            "excerpt": "Mock Document sci_230"
+          }
+        ],
+        "expected_entities": [
+          "sci_230"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_231": {
+    "document_id": "sci_231",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_231.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_231",
+            "page": 1,
+            "excerpt": "Mock Document sci_231"
+          }
+        ],
+        "expected_entities": [
+          "sci_231"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_232": {
+    "document_id": "sci_232",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_232.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_232",
+            "page": 1,
+            "excerpt": "Mock Document sci_232"
+          }
+        ],
+        "expected_entities": [
+          "sci_232"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_233": {
+    "document_id": "sci_233",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_233.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_233",
+            "page": 1,
+            "excerpt": "Mock Document sci_233"
+          }
+        ],
+        "expected_entities": [
+          "sci_233"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_234": {
+    "document_id": "sci_234",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_234.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_234",
+            "page": 1,
+            "excerpt": "Mock Document sci_234"
+          }
+        ],
+        "expected_entities": [
+          "sci_234"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_235": {
+    "document_id": "sci_235",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_235.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_235",
+            "page": 1,
+            "excerpt": "Mock Document sci_235"
+          }
+        ],
+        "expected_entities": [
+          "sci_235"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_236": {
+    "document_id": "sci_236",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_236.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_236",
+            "page": 1,
+            "excerpt": "Mock Document sci_236"
+          }
+        ],
+        "expected_entities": [
+          "sci_236"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_237": {
+    "document_id": "sci_237",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_237.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_237",
+            "page": 1,
+            "excerpt": "Mock Document sci_237"
+          }
+        ],
+        "expected_entities": [
+          "sci_237"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_238": {
+    "document_id": "sci_238",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_238.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_238",
+            "page": 1,
+            "excerpt": "Mock Document sci_238"
+          }
+        ],
+        "expected_entities": [
+          "sci_238"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_239": {
+    "document_id": "sci_239",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_239.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_239",
+            "page": 1,
+            "excerpt": "Mock Document sci_239"
+          }
+        ],
+        "expected_entities": [
+          "sci_239"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_240": {
+    "document_id": "sci_240",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_240.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_240",
+            "page": 1,
+            "excerpt": "Mock Document sci_240"
+          }
+        ],
+        "expected_entities": [
+          "sci_240"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_241": {
+    "document_id": "sci_241",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_241.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_241",
+            "page": 1,
+            "excerpt": "Mock Document sci_241"
+          }
+        ],
+        "expected_entities": [
+          "sci_241"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_242": {
+    "document_id": "sci_242",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_242.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_242",
+            "page": 1,
+            "excerpt": "Mock Document sci_242"
+          }
+        ],
+        "expected_entities": [
+          "sci_242"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_243": {
+    "document_id": "sci_243",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_243.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_243",
+            "page": 1,
+            "excerpt": "Mock Document sci_243"
+          }
+        ],
+        "expected_entities": [
+          "sci_243"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_244": {
+    "document_id": "sci_244",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_244.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_244",
+            "page": 1,
+            "excerpt": "Mock Document sci_244"
+          }
+        ],
+        "expected_entities": [
+          "sci_244"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_245": {
+    "document_id": "sci_245",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_245.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_245",
+            "page": 1,
+            "excerpt": "Mock Document sci_245"
+          }
+        ],
+        "expected_entities": [
+          "sci_245"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_246": {
+    "document_id": "sci_246",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_246.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_246",
+            "page": 1,
+            "excerpt": "Mock Document sci_246"
+          }
+        ],
+        "expected_entities": [
+          "sci_246"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_247": {
+    "document_id": "sci_247",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_247.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_247",
+            "page": 1,
+            "excerpt": "Mock Document sci_247"
+          }
+        ],
+        "expected_entities": [
+          "sci_247"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_248": {
+    "document_id": "sci_248",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_248.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_248",
+            "page": 1,
+            "excerpt": "Mock Document sci_248"
+          }
+        ],
+        "expected_entities": [
+          "sci_248"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_249": {
+    "document_id": "sci_249",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_249.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_249",
+            "page": 1,
+            "excerpt": "Mock Document sci_249"
+          }
+        ],
+        "expected_entities": [
+          "sci_249"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  },
+  "sci_250": {
+    "document_id": "sci_250",
+    "category": "scientific_papers",
+    "entries": [
+      {
+        "question": "What is the ID of this scientific_paper?",
+        "expected_answer": "The ID of this scientific_paper is sci_250.",
+        "expected_pages": [
+          1
+        ],
+        "expected_citations": [
+          {
+            "doc_id": "sci_250",
+            "page": 1,
+            "excerpt": "Mock Document sci_250"
+          }
+        ],
+        "expected_entities": [
+          "sci_250"
+        ],
+        "difficulty": "easy",
+        "type": "factual"
+      }
+    ]
+  }
+}

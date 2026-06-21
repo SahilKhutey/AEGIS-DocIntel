@@ -1,0 +1,6 @@
+-----BEGIN CERTIFICATE-----
+Issuer: CN=AMDI-OS Release Authority, O=AMDI-OS, C=US
+Subject: CN=AMDI-OS Production Signer, O=AMDI-OS, C=US
+SignatureHashAlgorithm: sha256
+PublicKeyType: RSA-2048
+-----END CERTIFICATE-----

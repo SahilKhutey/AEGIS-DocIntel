@@ -1,0 +1,25 @@
+{
+  "document_id": "rep_100",
+  "category": "reports",
+  "entries": [
+    {
+      "question": "What is the ID of this report?",
+      "expected_answer": "The ID of this report is rep_100.",
+      "expected_pages": [
+        1
+      ],
+      "expected_citations": [
+        {
+          "doc_id": "rep_100",
+          "page": 1,
+          "excerpt": "Mock Document rep_100"
+        }
+      ],
+      "expected_entities": [
+        "rep_100"
+      ],
+      "difficulty": "easy",
+      "type": "factual"
+    }
+  ]
+}
