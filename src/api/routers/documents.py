@@ -223,3 +223,33 @@ async def batch_upload(
         documents=body.documents, tenant_id=tenant.tenant_id
     )
     return job
+
+
+@router.get(
+    "/{doc_id}/elements",
+    summary="Get document elements",
+)
+async def get_elements(
+    doc_id: uuid.UUID,
+    request: Request,
+    tenant: TenantContext = Depends(get_current_tenant),
+):
+    """Return all geometric elements belonging to a specific document (for 3D layout visualization)."""
+    container = request.app.state.container
+    orchestrator = container.rag_engine
+    if not orchestrator:
+        raise HTTPException(503, "Orchestrator not initialized")
+    elements = orchestrator.get_document_elements(str(doc_id))
+    return [
+        {
+            "element_id": e.element_id,
+            "doc_id": e.doc_id,
+            "page": e.page,
+            "type": e.type.value if hasattr(e.type, "value") else str(e.type),
+            "content": e.content,
+            "bbox": [e.bbox.x0, e.bbox.y0, e.bbox.x1, e.bbox.y1] if e.bbox else None,
+            "importance_weight": getattr(e, "importance_weight", 1.0),
+            "section": e.section,
+        }
+        for e in elements
+    ]

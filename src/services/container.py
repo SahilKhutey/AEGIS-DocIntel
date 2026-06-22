@@ -3,114 +3,80 @@ AEGIS-DocIntel — Service Container (Dependency Injection)
 ==========================================================
 Bootstraps and wires all system components together.
 Central access point for all services.
-
-Environment flags:
-  AEGIS_USE_MOCK_EMBEDDER=1  → skip model download (for testing/CI)
 """
 from __future__ import annotations
 
 import asyncio
 import logging
 import os
+import uuid
+from datetime import datetime, timezone
+from typing import Any
 
 import structlog
 
 from src.config import Settings
+from src.core.document_object import DocumentObject, DocumentFormat
+from src.core.orchestrator import AMDIOrchestrator
 from src.llm_service.llm_client import LLMService
 from src.services.query_service import QueryService
 
 log = structlog.get_logger("aegis.container")
 
 
-class MockEmbeddingModel:
-    """Development stub when sentence-transformers not installed."""
+class RealDocumentService:
+    """Document service that delegates to AMDIOrchestrator."""
 
-    def encode(self, texts: list[str]) -> list:
-        import numpy as np
-        return np.random.randn(len(texts), 1024).astype("float32")
+    def __init__(self, orchestrator: AMDIOrchestrator):
+        self.orchestrator = orchestrator
+        self._docs: dict = {}
 
-
-class MockRAGEngine:
-    """Development stub for RAG engine."""
-
-    def __init__(self, embedding_model):
-        self.embedder = embedding_model
-
-        # Minimal context_builder stub
-        class _ContextBuilder:
-            def build(self, chunks, query, system_prompt, history):
-                context = "\n\n".join(f"[Source-{i+1}]: {c.text[:200]}" for i, c in enumerate(chunks))
-                return context, chunks, 500
-
-            def build_prompt(self, context, query, system_prompt, history, included_chunks):
-                return [
-                    {"role": "system", "content": system_prompt},
-                    {"role": "user", "content": f"Context:\n{context}\n\nQuestion: {query}"}
-                ]
-
-        self.context_builder = _ContextBuilder()
-
-    async def retrieve_and_build(self, query, tenant_id, doc_ids=None, history=None, top_k=None):
-        """Return empty RAG result — no vector DB available in dev mode."""
-
-        class _RAGResult:
-            chunks = []
-            context = "No documents indexed yet. Upload documents via POST /v1/documents/upload"
-            retrieval_latency_ms = 0.0
-            confidence = 0.0
-            query_transformations = [query]
-            total_candidates = 0
-            token_count = 0
-
-        return _RAGResult()
-
-
-class MockDocumentService:
-    """Development document service stub."""
-
-    _docs: dict = {}
-
-    async def ingest(self, file_bytes, filename, content_type, tenant_id):
-        import uuid
-        from datetime import datetime, timezone
-        doc_id = uuid.uuid4()
-        self._docs[str(doc_id)] = {
-            "doc_id": doc_id,
-            "tenant_id": str(tenant_id),   # always string
+    async def ingest(self, file_bytes: bytes, filename: str, content_type: str, tenant_id: str):
+        doc_id = str(uuid.uuid4())
+        doc = DocumentObject(
+            doc_id=doc_id,
+            filename=filename,
+            raw_bytes=file_bytes,
+            tenant_id=str(tenant_id),
+        )
+        
+        # Ingest using orchestrator
+        stats = await self.orchestrator.ingest(doc)
+        
+        doc_info = {
+            "doc_id": stats.get("doc_id", doc_id),
+            "tenant_id": str(tenant_id),
             "filename": filename,
             "status": "ready",
-            "page_count": 1,
-            "chunk_count": 0,
+            "page_count": stats.get("pages", 1),
+            "chunk_count": stats.get("elements", 0),
             "is_scanned": False,
             "language": "en",
             "created_at": datetime.now(timezone.utc),
         }
-        log.info("Mock ingest complete", doc_id=str(doc_id), filename=filename)
-
+        
+        self._docs[stats.get("doc_id", doc_id)] = doc_info
+        
         class _DocResp:
             def __init__(self, d):
                 for k, v in d.items():
                     setattr(self, k, v)
+        return _DocResp(doc_info)
 
-        return _DocResp(self._docs[str(doc_id)])
-
-    async def get(self, doc_id, tenant_id):
+    async def get(self, doc_id: str, tenant_id: str):
         doc = self._docs.get(str(doc_id))
         if not doc:
             return None
-
         class _DocResp:
             def __init__(self, d):
                 for k, v in d.items():
                     setattr(self, k, v)
-
         return _DocResp(doc)
 
-    async def get_status(self, doc_id, tenant_id):
+    async def get_status(self, doc_id: str, tenant_id: str):
         doc = self._docs.get(str(doc_id))
         if not doc:
             return None
-
         class _Status:
             def __init__(self, d):
                 self.doc_id = d["doc_id"]
@@ -119,55 +85,60 @@ class MockDocumentService:
                 self.stage = "complete"
                 self.error = None
                 self.chunks_indexed = d["chunk_count"]
-
         return _Status(doc)
 
-    async def list_documents(self, tenant_id, page=1, page_size=20, status=None):
+    async def list_documents(self, tenant_id: str, page: int = 1, page_size: int = 20, status: str | None = None):
         items = [v for v in self._docs.values() if str(v.get("tenant_id", "")) == str(tenant_id)]
-
         class _Doc:
             def __init__(self, d):
                 for k, v in d.items():
                     setattr(self, k, v)
-
         class _List:
             def __init__(self, items, total, page, page_size):
                 self.items = [_Doc(i) for i in items]
                 self.total = total
                 self.page = page
                 self.page_size = page_size
-
         return _List(items, len(items), page, page_size)
 
-    async def delete(self, doc_id, tenant_id):
-        return self._docs.pop(str(doc_id), None) is not None
+    async def delete(self, doc_id: str, tenant_id: str):
+        if str(doc_id) in self._docs:
+            self._docs.pop(str(doc_id), None)
+            return True
+        return False
 
-    async def reindex(self, doc_id, tenant_id):
+    async def reindex(self, doc_id: str, tenant_id: str):
         return await self.get_status(doc_id, tenant_id)
 
-    async def list_chunks(self, doc_id, tenant_id, page=1, page_size=50):
+    async def list_chunks(self, doc_id: str, tenant_id: str, page: int = 1, page_size: int = 50):
+        elements = self.orchestrator.get_document_elements(str(doc_id))
+        class _Chunk:
+            def __init__(self, e):
+                self.chunk_id = e.element_id
+                self.doc_id = e.doc_id
+                self.page_start = e.page
+                self.page_end = e.page
+                self.section = e.section
+                self.block_type = e.type.value if hasattr(e.type, "value") else str(e.type)
+                self.text = e.content
+                self.token_count = e.token_count if hasattr(e, "token_count") else max(1, len(e.content.split()))
         class _ChunkList:
-            items = []
-            total = 0
-
+            items = [_Chunk(e) for e in elements]
+            total = len(elements)
         return _ChunkList()
 
-    async def batch_ingest(self, documents, tenant_id):
-        import uuid
-
+    async def batch_ingest(self, documents: list, tenant_id: str):
         class _Job:
             job_id = uuid.uuid4()
             doc_count = len(documents)
             status = "queued"
-
         return _Job()
 
 
 class ServiceContainer:
     """
     Dependency injection container.
-    In development mode: uses lightweight stubs.
-    In production mode: connects to real infrastructure.
+    Connects API gateway endpoints to real AMDI-OS orchestrator.
     """
 
     def __init__(self, settings: Settings):
@@ -186,33 +157,39 @@ class ServiceContainer:
         """Initialize all services."""
         log.info("Initializing service container")
 
+        # Config mapping for AMDIOrchestrator
+        amdi_config = {
+            "embedding_dim": self.settings.embeddings.dimension,
+            "redis_url": self.settings.redis.url,
+            "llm_provider": self.settings.llm.provider,
+            "llm_model": self.settings.llm.model,
+            "openai_api_key": self.settings.llm.api_key or os.environ.get("OPENAI_API_KEY", ""),
+            "max_context_tokens": self.settings.llm.max_input_tokens,
+        }
+
         # ── Embedding Model ──────────────────────────────────────────────
-        if os.environ.get("AEGIS_USE_MOCK_EMBEDDER", "").strip() == "1":
-            log.info("Using mock embedding model (AEGIS_USE_MOCK_EMBEDDER=1)")
-            self.embedding_model = MockEmbeddingModel()
-        else:
-            try:
-                from sentence_transformers import SentenceTransformer
-                self.embedding_model = SentenceTransformer(
-                    self.settings.embeddings.text_model,
-                    device=self.settings.embeddings.device,
-                )
-                log.info("Embedding model loaded", model=self.settings.embeddings.text_model)
-            except Exception as e:
-                log.warning("SentenceTransformer unavailable, using mock", error=str(e))
-                self.embedding_model = MockEmbeddingModel()
+        try:
+            from sentence_transformers import SentenceTransformer
+            self.embedding_model = SentenceTransformer(
+                self.settings.embeddings.text_model,
+                device=self.settings.embeddings.device,
+            )
+            log.info("Embedding model loaded", model=self.settings.embeddings.text_model)
+        except Exception as e:
+            log.warning("SentenceTransformer unavailable, fallback in orchestrator", error=str(e))
+            self.embedding_model = None
 
         # ── LLM Service ─────────────────────────────────────────
         self.llm_service = LLMService()
 
-        # ── Memory Engine ────────────────────────────────────────
+        # ── Real AMDIOrchestrator ───────────────────────────────
+        self.rag_engine = AMDIOrchestrator(config=amdi_config)
+
+        # ── Memory Engine (Redis-backed Cache) ─────────────────
         self.memory_engine = await self._init_memory()
 
-        # ── RAG Engine ───────────────────────────────────────────
-        self.rag_engine = await self._init_rag()
-
         # ── Document Service ─────────────────────────────────────
-        self.document_service = await self._init_document_service()
+        self.document_service = RealDocumentService(self.rag_engine)
 
         # ── Query Service ────────────────────────────────────────
         self.query_service = QueryService(
@@ -228,7 +205,8 @@ class ServiceContainer:
     async def shutdown(self):
         """Graceful shutdown of all services."""
         log.info("Shutting down service container")
-        # Close DB connections, flush metrics, etc.
+        if self.rag_engine:
+            await self.rag_engine.close()
 
     async def health_check(self) -> dict[str, str]:
         """Check health of all dependent services."""
@@ -246,9 +224,8 @@ class ServiceContainer:
         except Exception:
             checks["redis"] = "unavailable"
 
-        # Check Milvus
-        checks["milvus"] = "mock" if isinstance(self.rag_engine, MockRAGEngine) else "ok"
-        checks["elasticsearch"] = "mock" if isinstance(self.rag_engine, MockRAGEngine) else "ok"
+        checks["milvus"] = "ok" if self.rag_engine and self.rag_engine._vector_store else "mock"
+        checks["elasticsearch"] = "ok" if self.rag_engine and self.rag_engine._frequency else "mock"
 
         return checks
 
@@ -265,16 +242,5 @@ class ServiceContainer:
             from src.memory_engine.semantic_cache import SemanticCache
             return SemanticCache(redis_client=self._redis)
         except Exception as e:
-            log.warning("Redis unavailable, memory disabled", error=str(e))
+            log.warning("Redis unavailable, memory cache disabled", error=str(e))
             return None
-
-    async def _init_rag(self):
-        """Initialize RAG engine (Milvus + Elasticsearch)."""
-        # In development without vector DB: use mock
-        log.warning("Using MockRAGEngine — configure Milvus + Elasticsearch for production")
-        return MockRAGEngine(self.embedding_model)
-
-    async def _init_document_service(self):
-        """Initialize document service."""
-        log.warning("Using MockDocumentService — configure full pipeline for production")
-        return MockDocumentService()

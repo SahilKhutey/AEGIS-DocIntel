@@ -57,6 +57,8 @@ async def lifespan(app: FastAPI) -> AsyncGenerator:
     container = ServiceContainer(settings)
     await container.startup()
     app.state.container = container
+    app.state.orchestrator = container.rag_engine
+    app.state.doc_registry = {}
 
     # Start observability (Prometheus metrics endpoint)
     if settings.observability.enable_metrics:
@@ -124,6 +126,57 @@ def create_app() -> FastAPI:
     app.include_router(queries.router, prefix="/v1/query", tags=["Query"])
     app.include_router(admin.router, prefix="/v1/admin", tags=["Admin"])
     app.include_router(webhooks.router, prefix="/v1/webhooks", tags=["Webhooks"])
+
+    from src.api.routers import annotations
+    app.include_router(annotations.router, prefix="/v1")
+    app.include_router(annotations.router)
+
+    from src.api.routes import router as ael_router
+    app.include_router(ael_router)
+    app.include_router(ael_router, prefix="/v1")
+
+    # ── Stats endpoint ──────────────────────────────────────────
+    @app.get("/v1/stats", tags=["System"])
+    @app.get("/stats", tags=["System"])
+    async def get_stats(request: Request):
+        container = request.app.state.container
+        orchestrator = container.rag_engine
+        doc_service = container.document_service
+        if not doc_service or not doc_service._docs:
+            return {}
+        # Get last ingested doc info
+        try:
+            doc_info = max(doc_service._docs.values(), key=lambda d: d.get('created_at', 0))
+        except ValueError:
+            return {}
+            
+        doc_id = doc_info['doc_id']
+        
+        elements = orchestrator.get_document_elements(doc_id) if orchestrator else []
+        tables = orchestrator.get_document_tables(doc_id) if orchestrator else []
+        templates = orchestrator.get_document_templates(doc_id) if orchestrator else []
+        graph = orchestrator.get_document_graph() if orchestrator else None
+        
+        n_nodes = 0
+        n_edges = 0
+        if graph is not None:
+            if hasattr(graph, 'graph'):
+                nx_g = graph.graph
+                n_nodes = len(nx_g.nodes) if hasattr(nx_g, 'nodes') else 0
+                n_edges = len(nx_g.edges) if hasattr(nx_g, 'edges') else 0
+            elif hasattr(graph, 'nodes'):
+                n_nodes = len(graph.nodes)
+                n_edges = len(graph.edges)
+
+        return {
+            'filename': doc_info.get('filename', '?'),
+            'doc_id': doc_id,
+            'n_elements': len(elements),
+            'n_tables': len(tables),
+            'n_templates': len(templates),
+            'graph_nodes': n_nodes,
+            'graph_edges': n_edges,
+        }
 
     # ── Health endpoints ────────────────────────────────────────
     @app.get("/health", response_model=HealthResponse, tags=["System"])
