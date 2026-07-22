@@ -9,10 +9,13 @@ import logging
 from pathlib import Path
 from typing import Any
 
-import fitz  # PyMuPDF
+try:
+    import fitz  # PyMuPDF
+except ImportError:
+    fitz = None
 
 from src.core.document_object import DocumentFormat, DocumentObject
-from src.ingestion.base import BaseLoader, FormatError, SizeLimitError
+from src.ingestion.base import BaseLoader, FormatError, LoaderError, SizeLimitError
 from src.ingestion.ocr_engine import OCREngine
 
 logger = logging.getLogger(__name__)
@@ -53,9 +56,12 @@ class PDFLoader(BaseLoader):
         if not name:
             name = "document.pdf"
 
-        # Validate
+        # Validate format
         if not self.validate(raw_bytes):
-            raise FormatError("Not a valid PDF file")
+            raise FormatError(f"Invalid PDF file format: {name}")
+
+        if fitz is None:
+            raise LoaderError("PyMuPDF (fitz) is not installed")
 
         # Size check
         size_mb = len(raw_bytes) / (1024 * 1024)

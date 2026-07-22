@@ -285,18 +285,17 @@ class MemoryOptimizer:
             results.append(c_result)
         except Exception:
             compressed = quantized
-        total_original = sum(r.original_bytes for r in results)
-        total_optimized = max(
-            (r.optimized_bytes for r in results),
-            default=0,
-        )
+        total_original = data.nbytes
+        total_optimized = getattr(compressed, "nbytes", total_original)
+        bytes_saved = total_original - total_optimized
+        reduction_pct = bytes_saved / max(total_original, 1)
         # aggregate
         agg = MemoryOptimizationResult(
             strategy="combined",
             original_bytes=total_original,
             optimized_bytes=total_optimized,
-            bytes_saved=total_original - total_optimized,
-            reduction_pct=(total_original - total_optimized) / max(total_original, 1),
+            bytes_saved=bytes_saved,
+            reduction_pct=reduction_pct,
             metadata={"steps": [r.strategy for r in results]},
         )
         return compressed, agg

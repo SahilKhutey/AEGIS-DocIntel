@@ -5,10 +5,25 @@ import io
 import pytest
 from pathlib import Path
 from PIL import Image
-from docx import Document as DocxDocument
-from pptx import Presentation
-from openpyxl import Workbook
-import fitz
+try:
+    from docx import Document as DocxDocument
+except ImportError:
+    DocxDocument = None
+
+try:
+    from pptx import Presentation
+except ImportError:
+    Presentation = None
+
+try:
+    from openpyxl import Workbook
+except ImportError:
+    Workbook = None
+
+try:
+    import fitz
+except ImportError:
+    fitz = None
 
 # Add amdi-os to sys.path
 sys.path.insert(0, str(Path(__file__).parent.parent / "amdi-os"))
@@ -24,6 +39,8 @@ from src.ingestion import (
 
 @pytest.fixture
 def minimal_pdf_bytes():
+    if fitz is None:
+        pytest.skip("PyMuPDF (fitz) is not installed")
     pdf = fitz.open()
     page = pdf.new_page()
     page.insert_text((100, 100), "Hello PDF World")
@@ -33,6 +50,8 @@ def minimal_pdf_bytes():
 
 @pytest.fixture
 def minimal_docx_bytes():
+    if DocxDocument is None:
+        pytest.skip("python-docx is not installed")
     doc = DocxDocument()
     doc.add_paragraph("Hello DOCX Paragraph")
     buf = io.BytesIO()
@@ -41,6 +60,8 @@ def minimal_docx_bytes():
 
 @pytest.fixture
 def minimal_pptx_bytes():
+    if Presentation is None:
+        pytest.skip("python-pptx is not installed")
     pres = Presentation()
     slide = pres.slides.add_slide(pres.slide_layouts[0])
     slide.shapes.title.text = "Hello PPTX Title"
@@ -50,6 +71,8 @@ def minimal_pptx_bytes():
 
 @pytest.fixture
 def minimal_xlsx_bytes():
+    if Workbook is None:
+        pytest.skip("openpyxl is not installed")
     wb = Workbook()
     ws = wb.active
     ws["A1"] = "Hello XLSX Cell"

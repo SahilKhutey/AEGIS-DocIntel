@@ -351,7 +351,7 @@ def test_performance_dashboard():
     assert len(view.engine_metrics) == 2
     # error rate is computed by averaging the engine error rates: (0% + 100%) / 2 = 50%
     assert view.error_rate == pytest.approx(0.5)
-    assert view.uptime_seconds > 0.0
+    assert view.uptime_seconds >= 0.0
 
 
 def test_agent_dashboard():

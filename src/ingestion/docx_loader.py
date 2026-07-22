@@ -7,13 +7,15 @@ from __future__ import annotations
 
 import io
 import logging
-from typing import Any
-
-from docx import Document as DocxDocument
-from docx.oxml.ns import qn
+try:
+    from docx import Document as DocxDocument
+    from docx.oxml.ns import qn
+except ImportError:
+    DocxDocument = None
+    qn = None
 
 from src.core.document_object import DocumentFormat, DocumentObject
-from src.ingestion.base import BaseLoader, FormatError
+from src.ingestion.base import BaseLoader, FormatError, LoaderError
 
 logger = logging.getLogger(__name__)
 

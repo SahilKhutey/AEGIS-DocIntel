@@ -122,3 +122,42 @@ def test_format_exporters():
     
     yaml_str = YAMLExporter.export(ueo)
     assert 'ueo_id' in yaml_str
+
+
+def test_elastic_chunker():
+    from src.ael.elastic_chunker import ElasticChunker, ChunkingConfig
+
+    chunker = ElasticChunker(ChunkingConfig(soft_token_budget=100))
+
+    # 1. Protected type rule test
+    nodes_protected = [
+        {'text': 'Intro text', 'type': 'text', 'font_size': 10},
+        {'text': 'Table row 1 | Table row 2', 'type': 'table', 'font_size': 10},
+        {'text': 'Outro text', 'type': 'text', 'font_size': 10},
+    ]
+    chunks_p = chunker.chunk_nodes(nodes_protected)
+    assert len(chunks_p) == 3  # Protected table isolated into standalone chunk
+
+    # 2. Font delta rule test
+    nodes_font = [
+        {'text': 'Heading 1', 'type': 'text', 'font_size': 16},
+        {'text': 'Body paragraph 1', 'type': 'text', 'font_size': 10},
+    ]
+    chunks_f = chunker.chunk_nodes(nodes_font)
+    assert len(chunks_f) == 2  # Font delta >= 2.0 pt forces chunk boundary
+
+    # 3. Vertical gap rule test
+    nodes_gap = [
+        {'text': 'Paragraph 1', 'type': 'text', 'font_size': 10, 'y': 0.1, 'h': 0.05},
+        {'text': 'Paragraph 2', 'type': 'text', 'font_size': 10, 'y': 0.3, 'h': 0.05},  # Gap 0.15 >= 1.5 * 0.05
+    ]
+    chunks_g = chunker.chunk_nodes(nodes_gap)
+    assert len(chunks_g) == 2
+
+    # 4. Soft budget rule test
+    nodes_budget = [
+        {'text': 'Word ' * 60, 'type': 'text', 'font_size': 10},  # ~60 tokens
+        {'text': 'Word ' * 60, 'type': 'text', 'font_size': 10},  # ~60 tokens (> soft 100)
+    ]
+    chunks_b = chunker.chunk_nodes(nodes_budget)
+    assert len(chunks_b) == 2

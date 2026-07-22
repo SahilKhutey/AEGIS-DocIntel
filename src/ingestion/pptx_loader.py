@@ -7,13 +7,15 @@ from __future__ import annotations
 
 import io
 import logging
-from typing import Any
-
-from pptx import Presentation
-from pptx.enum.shapes import MSO_SHAPE_TYPE
+try:
+    from pptx import Presentation
+    from pptx.enum.shapes import MSO_SHAPE_TYPE
+except ImportError:
+    Presentation = None
+    MSO_SHAPE_TYPE = None
 
 from src.core.document_object import DocumentFormat, DocumentObject
-from src.ingestion.base import BaseLoader, FormatError, SizeLimitError
+from src.ingestion.base import BaseLoader, FormatError, LoaderError, SizeLimitError
 
 logger = logging.getLogger(__name__)
 

@@ -923,3 +923,32 @@ class GraphEngine:
             ],
             "statistics": self.statistics(),
         }
+
+
+def calculate_hitting_time(P: np.ndarray, src: int, dst: int) -> float:
+    '''
+    Section 12.5 & Appendix D Case 17:
+    Calculates expected first-passage (hitting) time from state `src` to `dst`
+    on a Markov chain with transition probability matrix P.
+    Solves (I - Q) h = 1 where Q is P with row/col dst removed.
+    '''
+    n = P.shape[0]
+    if src == dst:
+        return 0.0
+
+    transient_states = [i for i in range(n) if i != dst]
+    src_idx = transient_states.index(src)
+
+    Q = P[np.ix_(transient_states, transient_states)]
+    I = np.eye(len(transient_states))
+    one = np.ones((len(transient_states), 1))
+
+    try:
+        # fundamental matrix N = (I - Q)^-1
+        N = np.linalg.inv(I - Q)
+        h = N @ one
+        return float(h[src_idx, 0])
+    except np.linalg.LinAlgError:
+        # Fallback to shortest graph path distance
+        return float(abs(dst - src))
+

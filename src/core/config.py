@@ -9,13 +9,26 @@ from functools import lru_cache
 from typing import List, Optional
 
 try:
-    from pydantic_settings import BaseSettings
-    from pydantic import Field
+    from pydantic_settings import BaseSettings, SettingsConfigDict
+    HAS_SETTINGS_CONFIG = True
 except ImportError:
     from pydantic import BaseSettings, Field  # type: ignore
+    HAS_SETTINGS_CONFIG = False
 
 
 class AMDISettings(BaseSettings):
+    if HAS_SETTINGS_CONFIG:
+        model_config = SettingsConfigDict(
+            env_prefix="AMDI_",
+            env_file=".env",
+            case_sensitive=False,
+            extra="ignore",
+        )
+    else:
+        class Config:
+            env_prefix = "AMDI_"
+            env_file = ".env"
+            case_sensitive = False
     # App
     env: str = "development"
     log_level: str = "INFO"
@@ -58,11 +71,6 @@ class AMDISettings(BaseSettings):
 
     # Upload
     max_file_size_mb: int = 100
-
-    class Config:
-        env_prefix = "AMDI_"
-        env_file = ".env"
-        case_sensitive = False
 
 
 @lru_cache

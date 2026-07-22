@@ -217,6 +217,24 @@ class EmbeddingService:
                 logger.warning(f"Failed to load {self.model_name}: {e}")
         return False
 
+    @property
+    def is_using_real_embeddings(self) -> bool:
+        """
+        Audit note (Repository Audit, Finding 3 — corrected root cause): encode()
+        never raises when the underlying model fails to load; it silently
+        substitutes deterministic hash-based pseudo-embeddings instead (see
+        encode() below). That means a caller relying on a try/except around
+        encode() to detect degraded mode will never see an exception in this
+        specific failure case. This property gives callers (e.g.
+        SemanticEngine.summarize_extractive) a direct, proactive way to check
+        whether real model embeddings are actually in use before trusting a
+        result that depends on their semantic quality (cosine similarity,
+        TextRank, clustering), rather than relying on exception propagation
+        that this failure mode does not produce.
+        """
+        self._ensure_loaded()
+        return self._model is not None
+
     def encode(self, texts: list[str], normalize: bool = True) -> np.ndarray:
         """
         Encode list of texts to embeddings.
@@ -327,6 +345,13 @@ class SemanticEngine:
         # IDF table built by fit()
         self._idf_table: dict[str, float] = {}
         self._corpus_size: int = 0
+
+        # Audit note (Repository Audit, Finding 3): records which code path
+        # the most recent summarize_extractive() call actually used
+        # ("textrank", "tfidf_fallback", or "tfidf_long_document"), so a
+        # caller or observability hook can detect degraded-mode operation
+        # instead of it being silently invisible.
+        self._last_summary_method: str | None = None
 
     # ============================================================
     # 1. EMBEDDINGS
@@ -648,14 +673,49 @@ class SemanticEngine:
         if len(sentences) <= n_sentences:
             return " ".join(sentences)
         if len(sentences) > 50:
+            self._last_summary_method = "tfidf_long_document"
             return self._summarize_tfidf(text, n_sentences)
+
+        # Audit note (Repository Audit, Finding 3 — corrected root cause):
+        # the original code relied on a try/except around embedder.encode()
+        # to detect embedding failure, but EmbeddingService.encode() never
+        # raises when its underlying model fails to load — it silently
+        # substitutes deterministic hash-based pseudo-embeddings, so the
+        # except clause was dead code for this specific, real failure mode
+        # (confirmed directly: the originally-failing test's captured log
+        # shows the model-load warning firing, with no exception reaching
+        # this method). Checking is_using_real_embeddings proactively,
+        # before scoring, catches the actual failure instead.
+        if not self.embedder.is_using_real_embeddings:
+            logger.warning(
+                "summarize_extractive: embedding model is not loaded (using "
+                "hash-based fallback embeddings); TextRank over hash "
+                "embeddings would be semantically meaningless, so falling "
+                "back to TF-IDF summarization instead. Summary quality may "
+                "be reduced versus the embedding-based method."
+            )
+            self._last_summary_method = "tfidf_fallback"
+            return self._summarize_tfidf(text, n_sentences)
+
         try:
             embeddings = self.embedder.encode(sentences)
             sim_matrix = self.cosine_similarity_matrix(embeddings)
             scores = self._textrank_scores(sim_matrix)
             top_indices = sorted(np.argsort(scores)[::-1][:n_sentences])
+            self._last_summary_method = "textrank"
             return " ".join(sentences[i] for i in top_indices)
-        except Exception:
+        except (OSError, ConnectionError, RuntimeError, ValueError) as e:
+            # Retained as a defensive second layer for failures that do
+            # raise (e.g. a genuine numerical error in _textrank_scores on
+            # malformed input) — narrowed from a bare `except Exception` so
+            # an unrelated bug is no longer silently misattributed to
+            # "the embedder failed" and swallowed.
+            logger.warning(
+                "summarize_extractive: embedding/textrank path failed (%s); "
+                "falling back to TF-IDF summarization. Summary quality may be "
+                "reduced versus the embedding-based method.", e,
+            )
+            self._last_summary_method = "tfidf_fallback"
             return self._summarize_tfidf(text, n_sentences)
 
     def _textrank_scores(self, sim_matrix: np.ndarray, damping: float = 0.85, n_iter: int = 50) -> np.ndarray:
@@ -678,7 +738,19 @@ class SemanticEngine:
         vocab, tfidf = self._build_tfidf(sentences)
         if tfidf.size == 0:
             return " ".join(sentences[:n_sentences])
-        scores = tfidf.sum(axis=1)
+        # Audit note (Repository Audit, Finding 3, Defect 3b): the previous
+        # unnormalized `tfidf.sum(axis=1)` score systematically favors longer
+        # sentences, which accumulate more total TF-IDF weight regardless of
+        # actual keyword density — the confirmed cause of a real test failure
+        # (test_summarize_extracts_key_sentences) where none of four short,
+        # keyword-dense sentences were selected. Normalizing by each
+        # sentence's token count (word count, matching _tokenize's units)
+        # scores keyword density rather than raw sentence length.
+        word_counts = np.array(
+            [max(len(self._tokenize(s)), 1) for s in sentences], dtype=np.float32
+        )
+        raw_scores = tfidf.sum(axis=1)
+        scores = raw_scores / word_counts
         top_indices = sorted(np.argsort(scores)[::-1][:n_sentences])
         return " ".join(sentences[i] for i in top_indices)
 

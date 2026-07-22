@@ -7,12 +7,13 @@ from __future__ import annotations
 
 import io
 import logging
-from typing import Any
-
-from openpyxl import load_workbook
+try:
+    from openpyxl import load_workbook
+except ImportError:
+    load_workbook = None
 
 from src.core.document_object import DocumentFormat, DocumentObject
-from src.ingestion.base import BaseLoader, FormatError, SizeLimitError
+from src.ingestion.base import BaseLoader, FormatError, LoaderError, SizeLimitError
 
 logger = logging.getLogger(__name__)
 

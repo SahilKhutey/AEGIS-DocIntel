@@ -2,17 +2,137 @@
 AEGIS-AEL — Token Budget Manager
 ==================================
 TB = B - U
+
+Audit note (Repository Audit, Finding 2): the previous module-level
+`tiktoken.get_encoding('cl100k_base')` call performed a network fetch with no
+try/except and no offline fallback, so importing this module crashed the
+entire application in any network-restricted environment (air-gapped or
+VPC-egress-restricted deployments, which are common for AEGIS's stated
+regulated-industry target market). `_load_encoding()` below fixes this with a
+three-tier fallback: a locally vendored BPE file, then the normal network
+fetch, then a character-count-based approximate encoder that keeps the
+application running (with reduced token-count precision) rather than crashing.
 '''
 from __future__ import annotations
 
 import logging
+import os
 from dataclasses import dataclass, field
 from typing import Iterable
 
-import tiktoken
-
 logger = logging.getLogger('amdi.ael.token_budget')
-_ENC = tiktoken.get_encoding('cl100k_base')
+
+# Default location for a pre-vendored cl100k_base.tiktoken BPE file. Populate
+# this at Docker-image build time (a one-time network fetch during CI/build,
+# not at application runtime) so production containers never need runtime
+# network access for tokenization. See docs/deployment/vendoring-tiktoken.md.
+_DEFAULT_VENDOR_PATH = os.path.join(
+    os.path.dirname(__file__), '_vendor', 'cl100k_base.tiktoken'
+)
+
+
+class _ApproximateEncoding:
+    '''
+    Degraded-mode stand-in for a tiktoken Encoding, used only when neither a
+    vendored BPE file nor network access is available. Approximates token
+    count at ~4 characters per token (a widely-used rough heuristic for
+    English text) and supports the same encode()/decode() shape the rest of
+    this module relies on, so callers do not need to branch on which
+    encoding backend is active.
+    '''
+
+    name = 'approximate-char4'
+    CHARS_PER_TOKEN = 4
+
+    def encode(self, text: str, disallowed_special: tuple = ()) -> list[str]:
+        # Represent each pseudo-token as a fixed-width character slice so
+        # decode() can reconstruct the original text exactly for any prefix
+        # (needed by truncate_to_fit's tokens[:max_t] slicing).
+        return [
+            text[i:i + self.CHARS_PER_TOKEN]
+            for i in range(0, len(text), self.CHARS_PER_TOKEN)
+        ]
+
+    def decode(self, tokens: list[str]) -> str:
+        return ''.join(tokens)
+
+
+# Static cl100k_base metadata, copied directly from tiktoken_ext.openai_public
+# (tiktoken's own installed source, not a network fetch) so the vendored-file
+# path below never needs `tiktoken.get_encoding('cl100k_base')` to succeed —
+# that call is exactly the network-dependent operation vendoring exists to
+# avoid. Only `mergeable_ranks` (the actual BPE data, hashes/proprietary
+# content) needs to come from the vendored file; the pattern string and
+# special-token IDs are small, public, static constants safe to inline here.
+_CL100K_PAT_STR = (
+    r"'(?i:[sdmt]|ll|ve|re)|[^\r\n\p{L}\p{N}]?+\p{L}++|\p{N}{1,3}+| "
+    r"?[^\s\p{L}\p{N}]++[\r\n]*+|\s++$|\s*[\r\n]|\s+(?!\S)|\s"
+)
+_CL100K_SPECIAL_TOKENS = {
+    '<|endoftext|>': 100257,
+    '<|fim_prefix|>': 100258,
+    '<|fim_middle|>': 100259,
+    '<|fim_suffix|>': 100260,
+    '<|endofprompt|>': 100276,
+}
+
+
+def _load_encoding(vendor_path: str | None = None):
+    '''
+    Loads the cl100k_base encoding via a three-tier fallback:
+      1. A locally vendored BPE file (no network access required at all —
+         uses the static _CL100K_PAT_STR/_CL100K_SPECIAL_TOKENS constants
+         above rather than fetching them from tiktoken.get_encoding()).
+      2. The normal tiktoken network fetch (unchanged behavior when network
+         access is available and no vendored file has been provisioned).
+      3. A character-count-based approximate encoder, so the application
+         starts and remains usable — with a logged warning and reduced
+         token-count precision — rather than crashing outright.
+    '''
+    try:
+        import tiktoken
+        import tiktoken.load  # noqa: F401
+    except ImportError:
+        logger.warning(
+            'tiktoken module is not installed. Falling back to approximate '
+            'character-count-based token estimator.'
+        )
+        return _ApproximateEncoding()
+
+    path = vendor_path or os.environ.get('AEGIS_TIKTOKEN_VENDOR_PATH', _DEFAULT_VENDOR_PATH)
+
+    if os.path.exists(path):
+        try:
+            mergeable_ranks = tiktoken.load.load_tiktoken_bpe(path)
+            enc = tiktoken.Encoding(
+                name='cl100k_base_vendored',
+                pat_str=_CL100K_PAT_STR,
+                mergeable_ranks=mergeable_ranks,
+                special_tokens=_CL100K_SPECIAL_TOKENS,
+            )
+            logger.info('Loaded tiktoken cl100k_base encoding from vendored file '
+                         '(fully offline, no network call made): %s', path)
+            return enc
+        except Exception as e:
+            logger.warning('Vendored tiktoken file at %s failed to load (%s); '
+                            'falling back to network fetch.', path, e)
+
+    try:
+        enc = tiktoken.get_encoding('cl100k_base')
+        logger.info('Loaded tiktoken cl100k_base encoding via network fetch.')
+        return enc
+    except Exception as e:
+        logger.error(
+            'Failed to load tiktoken cl100k_base encoding: no vendored file at '
+            '%s and network fetch failed (%s). Falling back to an approximate '
+            'character-count-based token estimator. Token budgets will be less '
+            'precise until a vendored encoding file is provisioned — see '
+            'docs/deployment/vendoring-tiktoken.md.', path, e,
+        )
+        return _ApproximateEncoding()
+
+
+_ENC = _load_encoding()
 
 
 @dataclass

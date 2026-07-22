@@ -8,6 +8,8 @@ __pycache__/
 .pytest_cache/
 .benchmarks/
 .cache/
+pytest_log.txt
+*.db
 
 # Environments
 .env

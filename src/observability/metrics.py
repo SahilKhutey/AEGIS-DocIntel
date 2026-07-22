@@ -10,9 +10,31 @@ import sys
 from typing import Any
 
 import structlog
-from opentelemetry.sdk.metrics import MeterProvider
-from opentelemetry.sdk.metrics.export import PeriodicExportingMetricReader
-from prometheus_client import Counter, Gauge, Histogram, start_http_server
+
+try:
+    from opentelemetry.sdk.metrics import MeterProvider
+    from opentelemetry.sdk.metrics.export import PeriodicExportingMetricReader
+    HAS_OPENTELEMETRY = True
+except ImportError:
+    MeterProvider = None  # type: ignore
+    PeriodicExportingMetricReader = None  # type: ignore
+    HAS_OPENTELEMETRY = False
+
+try:
+    from prometheus_client import Counter, Gauge, Histogram, start_http_server
+except ImportError:
+    # Minimal fallback mock for prometheus metrics
+    class _MockMetric:
+        def __init__(self, *args, **kwargs): pass
+        def labels(self, *args, **kwargs): return self
+        def inc(self, *args, **kwargs): pass
+        def set(self, *args, **kwargs): pass
+        def observe(self, *args, **kwargs): pass
+        def time(self): return self
+        def __enter__(self): return self
+        def __exit__(self, *args): pass
+    Counter = Gauge = Histogram = _MockMetric  # type: ignore
+    start_http_server = lambda *args, **kwargs: None  # type: ignore
 
 from src.config import settings
 
