@@ -135,6 +135,9 @@ def create_app() -> FastAPI:
     app.include_router(ael_router)
     app.include_router(ael_router, prefix="/v1")
 
+    from src.api.routers import advanced_features
+    app.include_router(advanced_features.router)
+
     # ── Stats endpoint ──────────────────────────────────────────
     @app.get("/v1/stats", tags=["System"])
     @app.get("/stats", tags=["System"])
