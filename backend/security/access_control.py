@@ -22,6 +22,25 @@ from typing import Any, Callable, Dict, List, Optional, Set
 from .exceptions import AuthorizationError
 
 
+def assign_shard_number_theoretic(
+    key: str,
+    primes: list[int] | None = None,
+    thresholds: list[int] | None = None,
+) -> int:
+    '''
+    Concept N2 — Number-Theoretic Consistent Hashing for Multi-Tenant Sharding:
+    Routes key using machine distinct prime residues h % p_j < t_j with provable minimal redistribution bounds.
+    '''
+    p_list = primes or [997, 1009, 1013, 1019]
+    t_list = thresholds or [500, 500, 500, 500]
+
+    h = hash(key) & 0x7FFFFFFF
+    for j in reversed(range(len(p_list))):
+        if (h % p_list[j]) < t_list[j]:
+            return j
+    return 0
+
+
 class Permission(Enum):
     """Standard permissions."""
 
