@@ -40,6 +40,7 @@ from .export_engine import ExportEngine, ExportReport
 from .json_exporter import JSONExporter, JSONConfig
 from .markdown_exporter import MarkdownExporter, MarkdownConfig
 from .yaml_exporter import YAMLExporter, YAMLConfig
+from .llm_optimized_exporter import LLMTokenOptimizedExporter, LLMExportConfig
 from .universal_exporter import (
     UniversalExporter,
     UniversalExportObject,
@@ -68,6 +69,8 @@ __all__ = [
     "MarkdownConfig",
     "YAMLExporter",
     "YAMLConfig",
+    "LLMTokenOptimizedExporter",
+    "LLMExportConfig",
     "UniversalExporter",
     "UniversalExportObject",
     "AgentFormatter",

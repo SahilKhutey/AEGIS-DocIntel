@@ -266,3 +266,48 @@ async def parse_image_layout(req: ImageLayoutParseRequest) -> Dict[str, Any]:
     parser = AdvancedImageParser(blur_threshold=req.blur_threshold)
     analysis = parser.parse_image(buf.getvalue())
     return analysis.to_dict()
+
+
+# ============================================================
+# LLM TOKEN-OPTIMIZED EXPORT ENDPOINT
+# ============================================================
+
+class LLMExportRequest(BaseModel):
+    system_prompt: Optional[str] = "You are a financial analysis AI assistant."
+    context_text: str
+    summary_text: Optional[str] = None
+    max_tokens: int = 4000
+    format_type: str = "markdown"  # 'markdown' | 'json'
+    compact_keys: bool = True
+
+
+@router.post("/export/llm-optimized")
+async def export_llm_optimized(req: LLMExportRequest) -> Dict[str, Any]:
+    from src.export.universal_exporter import UniversalExportObject
+    from src.export.llm_optimized_exporter import LLMTokenOptimizedExporter, LLMExportConfig
+    from src.ael.token_budget import count_tokens
+
+    ueo = UniversalExportObject(
+        system=req.system_prompt or "",
+        context=req.context_text,
+        summary=req.summary_text or "",
+        citations=[{"doc_id": "Doc1", "page": 1}],
+        metadata={"export_type": "llm_optimized"},
+    )
+
+    cfg = LLMExportConfig(
+        max_tokens=req.max_tokens,
+        format_type=req.format_type,
+        compact_keys=req.compact_keys,
+    )
+    exporter = LLMTokenOptimizedExporter(config=cfg)
+    output_content = exporter.export(ueo)
+    tokens_used = count_tokens(output_content)
+
+    return {
+        "format_type": req.format_type,
+        "max_tokens_budget": req.max_tokens,
+        "tokens_used": tokens_used,
+        "compression_ratio": round(tokens_used / max(1, count_tokens(req.context_text)), 4),
+        "exported_content": output_content,
+    }
