@@ -247,8 +247,30 @@ class AMDIOrchestrator:
         self._closed = False
 
         # ---- Mutable document state ------------------------------------
-        self._elements: List[GeometricElement] = []
-        self._tables: List[GeometricElement] = []
+        #
+        # Tenant-isolation fix (Repository Audit, Workstream R follow-up):
+        # these were previously flat lists, *overwritten* wholesale
+        # (self._elements = elements) on every single ingest() call. That
+        # had two compounding effects: (1) a correctness bug — only the
+        # most-recently-ingested document, application-wide, was ever
+        # queryable, since ingesting document N+1 silently discarded
+        # document N's elements; and (2) a data-confidentiality bug —
+        # nothing in the query path filtered by tenant, so a query with no
+        # doc_id searched whichever document happened to be most recent
+        # across the *entire application*, regardless of which tenant
+        # ingested it, and a query that supplied a doc_id belonging to a
+        # different tenant was honored with no ownership check at all.
+        #
+        # Fixed by keying storage per-document (so ingesting document N+1
+        # no longer evicts document N) and recording each document's
+        # owning tenant_id, so query()/stream_query() below can enforce
+        # that a caller only ever retrieves documents belonging to their
+        # own tenant. self._elements/self._tables below remain as
+        # read-only properties for backward compatibility with any other
+        # code still expecting the old flat-list shape.
+        self._doc_elements: Dict[str, List[GeometricElement]] = {}
+        self._doc_tables: Dict[str, List[GeometricElement]] = {}
+        self._doc_tenant: Dict[str, str] = {}
         self._graph: Any = None
         self._hypergraph: Any = None
         self._templates: List[Any] = []
@@ -330,6 +352,32 @@ class AMDIOrchestrator:
             _MIOS_AVAILABLE,
         )
 
+    @property
+    def _elements(self) -> List[GeometricElement]:
+        """Flattened, read-only view across all ingested documents.
+
+        Backward-compatible accessor for any code still expecting the old
+        single flat list. Unlike the pre-fix flat list, this aggregates
+        across *all* ingested documents rather than only the most recently
+        ingested one, and carries no tenant filtering of its own — callers
+        that need tenant-scoped access should use query()/stream_query()'s
+        tenant_id parameter, or get_document_elements(doc_id, tenant_id=...)
+        below, rather than this unscoped view directly.
+        """
+        out: List[GeometricElement] = []
+        for els in self._doc_elements.values():
+            out.extend(els)
+        return out
+
+    @property
+    def _tables(self) -> List[GeometricElement]:
+        """Flattened, read-only table view across all ingested documents.
+        See _elements docstring above for the same tenant-filtering caveat."""
+        out: List[GeometricElement] = []
+        for tbls in self._doc_tables.values():
+            out.extend(tbls)
+        return out
+
     # ------------------------------------------------------------------
     # Public async API
     # ------------------------------------------------------------------
@@ -378,17 +426,23 @@ class AMDIOrchestrator:
         nd = await self._layout(nd, doc)
 
         # --- Stage 4: Convert to GeometricElements --------------------
-        elements = self._to_elements(nd)
-        self._elements = elements
-        self._tables = [
+        elements = self._to_elements(nd, tenant_id=getattr(doc, "tenant_id", "default") or "default")
+        tables = [
             e for e in elements
             if getattr(e, "type", None) == ElementType.TABLE
         ]
+        # Store keyed by doc_id (does not evict any other already-ingested
+        # document) and record which tenant owns this document, so query()/
+        # stream_query() can enforce tenant-scoped access below.
+        self._doc_elements[doc.doc_id] = elements
+        self._doc_tables[doc.doc_id] = tables
+        self._doc_tenant[doc.doc_id] = getattr(doc, "tenant_id", "default") or "default"
         log.info(
             "ingest: %d elements (%d tables) after conversion",
             len(elements),
-            len(self._tables),
+            len(tables),
         )
+
 
         # --- Stage 5: Engine pipeline ---------------------------------
         await self._run_engines(elements)
@@ -476,6 +530,7 @@ class AMDIOrchestrator:
         question: str,
         doc_id: Optional[str] = None,
         top_k: int = 12,
+        tenant_id: Optional[str] = None,
     ) -> Dict[str, Any]:
         """Retrieve relevant content and reason over it to answer *question*.
 
@@ -493,8 +548,19 @@ class AMDIOrchestrator:
             Natural-language question to answer.
         doc_id:
             Optional filter to restrict retrieval to a specific document.
+            If *tenant_id* is also given and the document belongs to a
+            different tenant, this raises ``PermissionError`` rather than
+            silently returning another tenant's content.
         top_k:
             Maximum number of source elements to retrieve.
+        tenant_id:
+            Caller's tenant. When given, retrieval is scoped to documents
+            owned by this tenant only — both when *doc_id* is supplied
+            (ownership is checked) and when it is not (the search space is
+            every document owned by this tenant, not every document in the
+            application). When omitted, behavior is unscoped (matches the
+            pre-fix behavior) for backward compatibility with any existing
+            single-tenant caller; new callers should always pass tenant_id.
 
         Returns
         -------
@@ -506,10 +572,19 @@ class AMDIOrchestrator:
         """
         self._check_open()
         t0 = time.perf_counter()
-        log.info("query: question='%s' doc_id=%s top_k=%d", question, doc_id, top_k)
+        log.info("query: question='%s' doc_id=%s tenant_id=%s top_k=%d",
+                  question, doc_id, tenant_id, top_k)
+
+        if doc_id and tenant_id is not None:
+            owner = self._doc_tenant.get(doc_id)
+            if owner is not None and owner != tenant_id:
+                raise PermissionError(
+                    f"doc_id={doc_id!r} belongs to a different tenant; "
+                    f"refusing cross-tenant access."
+                )
 
         # --- Stage 1: Cache check -------------------------------------
-        cache_key = f"{doc_id}::{question}"
+        cache_key = f"{tenant_id}::{doc_id}::{question}"
         if self._memory is not None:
             try:
                 cached = await self._call_maybe_async(
@@ -528,11 +603,24 @@ class AMDIOrchestrator:
         retrieved = None
         if self._retriever is not None:
             try:
-                elements = self._elements
-                tables = self._tables
                 if doc_id:
-                    elements = [e for e in elements if getattr(e, "doc_id", "") == doc_id]
-                    tables = [t for t in tables if getattr(t, "doc_id", "") == doc_id]
+                    elements = self._doc_elements.get(doc_id, [])
+                    tables = self._doc_tables.get(doc_id, [])
+                elif tenant_id is not None:
+                    allowed_docs = {
+                        d for d, t in self._doc_tenant.items() if t == tenant_id
+                    }
+                    elements = [
+                        e for d in allowed_docs for e in self._doc_elements.get(d, [])
+                    ]
+                    tables = [
+                        t for d in allowed_docs for t in self._doc_tables.get(d, [])
+                    ]
+                else:
+                    # No tenant_id given: unscoped, pre-fix-compatible
+                    # behavior for backward compatibility only.
+                    elements = self._elements
+                    tables = self._tables
 
                 retrieved = await self._call_maybe_async(
                     self._retriever.retrieve,
@@ -812,7 +900,9 @@ class AMDIOrchestrator:
             metadata=doc.metadata,
         )
 
-    def _to_elements(self, nd: NormalizedDocument) -> List[GeometricElement]:
+    def _to_elements(
+        self, nd: NormalizedDocument, tenant_id: str = "default"
+    ) -> List[GeometricElement]:
         """Convert a ``NormalizedDocument`` to a list of ``GeometricElement``.
 
         Each ``NormalizedBlock`` is mapped to a ``GeometricElement`` using
@@ -823,6 +913,16 @@ class AMDIOrchestrator:
         ----------
         nd:
             The normalised document to convert.
+        tenant_id:
+            Stamped onto every constructed element's ``tenant_id`` field.
+            This is a defense-in-depth measure, independent of and
+            redundant with the orchestrator's own document-level
+            ``self._doc_tenant`` tracking (see ``ingest()``): if elements
+            are ever consumed by downstream code that indexes or caches
+            them outside this orchestrator's own storage (e.g. a future
+            cross-document retrieval index), that code has a tenant tag
+            to enforce against even if it does not go through this
+            orchestrator's own query()/get_document_elements() checks.
 
         Returns
         -------
@@ -862,6 +962,7 @@ class AMDIOrchestrator:
             el = GeometricElement(
                 element_id=getattr(blk, "block_id", str(uuid.uuid4())),
                 doc_id=getattr(nd, "doc_id", ""),
+                tenant_id=tenant_id,
                 type=etype,
                 content=getattr(blk, "text", ""),
                 page=getattr(blk, "page", 1),
@@ -1118,19 +1219,44 @@ class AMDIOrchestrator:
         if self._closed:
             raise RuntimeError("AMDIOrchestrator has been closed")
 
-    def get_document_elements(self, doc_id: str) -> list[GeometricElement]:
-        '''Return all elements belonging to a specific document.'''
-        return [e for e in self._elements if getattr(e, 'doc_id', '') == doc_id]
+    def get_document_elements(
+        self, doc_id: str, tenant_id: Optional[str] = None
+    ) -> list[GeometricElement]:
+        '''Return all elements belonging to a specific document.
 
-    def get_document_tables(self, doc_id: str) -> list[GeometricElement]:
-        '''Return all table elements belonging to a specific document.'''
-        return [e for e in self._tables if getattr(e, 'doc_id', '') == doc_id]
+        Raises ``PermissionError`` if *tenant_id* is given and does not
+        match the document's owning tenant.
+        '''
+        if tenant_id is not None:
+            owner = self._doc_tenant.get(doc_id)
+            if owner is not None and owner != tenant_id:
+                raise PermissionError(
+                    f"doc_id={doc_id!r} belongs to a different tenant."
+                )
+        return list(self._doc_elements.get(doc_id, []))
+
+    def get_document_tables(
+        self, doc_id: str, tenant_id: Optional[str] = None
+    ) -> list[GeometricElement]:
+        '''Return all table elements belonging to a specific document.
+
+        Raises ``PermissionError`` if *tenant_id* is given and does not
+        match the document's owning tenant.
+        '''
+        if tenant_id is not None:
+            owner = self._doc_tenant.get(doc_id)
+            if owner is not None and owner != tenant_id:
+                raise PermissionError(
+                    f"doc_id={doc_id!r} belongs to a different tenant."
+                )
+        return list(self._doc_tables.get(doc_id, []))
 
     def get_document_templates(self, doc_id: str) -> list[Any]:
         '''Return templates representing the document layout.'''
         if self._template is not None:
             return list(self._template.templates.values())
         return self._templates
+
 
     def get_document_graph(self) -> Any:
         '''Return the global document relation graph.'''

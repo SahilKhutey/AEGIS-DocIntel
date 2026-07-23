@@ -152,6 +152,10 @@ class NormalizedDocument:
     def all_blocks(self) -> list[NormalizedBlock]:
         return [b for p in self.pages for b in p.blocks]
 
+    @property
+    def blocks(self) -> list[NormalizedBlock]:
+        return self.all_blocks()
+
     def tables(self) -> list[NormalizedBlock]:
         return [b for p in self.pages for b in p.blocks if b.type == BlockType.TABLE]
 
