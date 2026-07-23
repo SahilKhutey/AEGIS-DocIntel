@@ -65,6 +65,7 @@ class GeometricElement:
     """
     element_id:        str           = field(default_factory=lambda: str(uuid.uuid4()))
     doc_id:            str           = ""
+    tenant_id:         str           = ""
     page:              int           = 0
     type:              ElementType   = ElementType.PARAGRAPH
     content:           str           = ""

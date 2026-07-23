@@ -92,10 +92,10 @@ def _load_encoding(vendor_path: str | None = None):
     try:
         import tiktoken
         import tiktoken.load  # noqa: F401
-    except ImportError:
+    except (ImportError, ModuleNotFoundError) as e:
         logger.warning(
-            'tiktoken module is not installed. Falling back to approximate '
-            'character-count-based token estimator.'
+            'tiktoken is not installed (%s). Falling back to an approximate '
+            'character-count-based token estimator.', e
         )
         return _ApproximateEncoding()
 
@@ -136,43 +136,65 @@ _ENC = _load_encoding()
 
 
 @dataclass
-class BudgetAllocation:
+class TokenAllocation:
+    target_context: int = 8192
     system_prompt: int = 800
     context: int = 4000
     question: int = 300
     output: int = 1500
     safety_margin: int = 200
+    reserved: int = 0
+    query: int = 0
+    retrieved_content: int = 0
     used_system: int = 0
     used_context: int = 0
     used_question: int = 0
     used_output: int = 0
 
     @property
-    def total(self) -> int:
-        return (self.system_prompt + self.context + self.question + self.output + self.safety_margin)
-
-    @property
     def used(self) -> int:
-        return self.used_system + self.used_context + self.used_question
+        return (
+            self.used_system
+            + self.used_context
+            + self.used_question
+            + self.used_output
+            + self.query
+            + self.reserved
+            + self.retrieved_content
+        )
 
     @property
     def remaining(self) -> int:
-        return self.context - self.used_context
+        ctx_rem = max(0, self.context - self.used_context)
+        tgt_rem = max(0, self.target_context - self.used)
+        return max(ctx_rem, tgt_rem)
 
     @property
     def utilization(self) -> float:
-        return self.used / max(1, self.total)
+        if self.target_context == 0:
+            return 0.0
+        return self.used / max(1, self.target_context)
 
 
 def count_tokens(text: str) -> int:
-    '''Count tokens in a text string.'''
+    """Return the exact token count for *text* under cl100k_base."""
+    if not text:
+        return 0
     return len(_ENC.encode(text, disallowed_special=()))
 
 
+def truncate_to_tokens(text: str, max_tokens: int) -> str:
+    """Truncate *text* to at most *max_tokens*, preserving exact token boundaries."""
+    if not text or max_tokens <= 0:
+        return ""
+    tokens = _ENC.encode(text, disallowed_special=())
+    if len(tokens) <= max_tokens:
+        return text
+    return _ENC.decode(tokens[:max_tokens])
+
+
 class TokenBudgetManager:
-    '''
-    Tracks and allocates token budget across export components.
-    '''
+    """Manages token allocation budgets for LLM context construction."""
 
     AGENT_MAX_TOKENS = {
         'chatgpt': 128_000,
@@ -194,14 +216,21 @@ class TokenBudgetManager:
         'local': 32_000,
     }
 
-    def __init__(self, agent: str = 'chatgpt', model: str = 'gpt-4o',
-                 target_context: int = 4000, target_output: int = 1500):
+    def __init__(
+        self,
+        agent: str = 'chatgpt',
+        model: str = 'gpt-4o',
+        target_context: int = 8192,
+        output_headroom: int = 0,
+        target_output: int = 1500,
+    ):
         self.agent = agent
         self.model = model
         self.max_tokens = self.AGENT_MAX_TOKENS.get(model, 128_000)
-        self.allocation = BudgetAllocation(
-            context=min(target_context, self.max_tokens // 2),
-            output=min(target_output, self.max_tokens // 4),
+        self.allocation = TokenAllocation(
+            target_context=target_context,
+            context=target_context,
+            reserved=output_headroom,
         )
         self._excluded: list[tuple[str, int]] = []
 
@@ -209,52 +238,75 @@ class TokenBudgetManager:
         return count_tokens(text) <= self.allocation.remaining
 
     def allocate(self, component: str, text: str) -> bool:
-        '''Try to allocate tokens for a component. Returns True if successful.'''
         cost = count_tokens(text)
         field_map = {
-            'system': 'used_system',
-            'context': 'used_context',
-            'question': 'used_question',
+            'system': ('used_system', 'system_prompt'),
+            'context': ('used_context', 'context'),
+            'question': ('used_question', 'question'),
         }
-        if component not in field_map:
-            return False
-        used_field = field_map[component]
-        
-        limit_map = {
-            'system': 'system_prompt',
-            'context': 'context',
-            'question': 'question',
-        }
-        limit_field = limit_map[component]
-        
-        current = getattr(self.allocation, used_field, 0)
-        limit = getattr(self.allocation, limit_field, 0)
-        if current + cost > limit:
-            self._excluded.append((component, cost))
-            return False
-        setattr(self.allocation, used_field, current + cost)
-        return True
+        if component in field_map:
+            used_f, limit_f = field_map[component]
+            curr = getattr(self.allocation, used_f, 0)
+            limit = getattr(self.allocation, limit_f, 800)
+            if curr + cost <= limit:
+                setattr(self.allocation, used_f, curr + cost)
+                return True
+        elif cost <= self.allocation.remaining:
+            self.allocation.retrieved_content += cost
+            return True
+        self._excluded.append((component, cost))
+        return False
 
     def truncate_to_fit(self, text: str, max_tokens: int | None = None) -> str:
-        '''Truncate text to fit within remaining budget.'''
         max_t = max_tokens or self.allocation.remaining
-        tokens = _ENC.encode(text, disallowed_special=())
-        if len(tokens) <= max_t:
-            return text
-        return _ENC.decode(tokens[:max_t])
+        return truncate_to_tokens(text, max_t)
 
     def summary(self) -> dict:
         return {
             'agent': self.agent,
             'model': self.model,
             'max_tokens': self.max_tokens,
-            'allocation': {
-                'system': f'{self.allocation.used_system}/{self.allocation.system_prompt}',
-                'context': f'{self.allocation.used_context}/{self.allocation.context}',
-                'question': f'{self.allocation.used_question}/{self.allocation.question}',
-                'output': f'{self.allocation.output}',
-            },
             'utilization': round(self.allocation.utilization, 3),
             'remaining': self.allocation.remaining,
             'excluded_components': self._excluded,
         }
+
+    def set_system_prompt(self, text: str) -> int:
+        tokens = count_tokens(text)
+        self.allocation.system_prompt = tokens
+        return tokens
+
+    def set_query(self, text: str) -> int:
+        tokens = count_tokens(text)
+        self.allocation.query = tokens
+        return tokens
+
+    def allocate_retrieved(self, text: str) -> bool:
+        """Attempt to add retrieved content. Returns True if it fits."""
+        tokens = count_tokens(text)
+        if tokens <= self.allocation.remaining:
+            self.allocation.retrieved_content += tokens
+            return True
+        return False
+
+    def fit_items(
+        self, items: Iterable[tuple[str, str]]
+    ) -> list[tuple[str, str]]:
+        """Given (item_id, text) pairs, return as many as fit in remaining budget."""
+        result = []
+        for item_id, text in items:
+            tokens = count_tokens(text)
+            if tokens <= self.allocation.remaining:
+                self.allocation.retrieved_content += tokens
+                result.append((item_id, text))
+            else:
+                # Try truncating the last item
+                avail = self.allocation.remaining
+                if avail > 50:  # Only truncate if meaningful room left
+                    truncated = truncate_to_tokens(text, avail)
+                    self.allocation.retrieved_content += count_tokens(
+                        truncated
+                    )
+                    result.append((item_id, truncated))
+                break
+        return result

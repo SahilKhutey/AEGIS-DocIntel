@@ -1,7 +1,12 @@
 """Examples of using the template engine."""
 import sys
 from pathlib import Path
-sys.path.insert(0, str(Path(__file__).parent.parent / "amdi-os"))
+# Repository Audit follow-up: this previously pointed at the now-archived
+# amdi-os/ directory, which no import in this file actually used (every
+# import below is from src.*) -- the repo root is what these standalone
+# scripts actually need on sys.path to resolve src.* imports when run
+# directly (e.g. `python examples/matrix_usage.py`) from any working dir.
+sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from src.engines.template import TemplateEngine
 from src.core.geometric_element import GeometricElement, ElementType

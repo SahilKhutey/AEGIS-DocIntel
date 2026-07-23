@@ -41,3 +41,4 @@ target/
 
 # Antigravity artifacts (ignore the local brain folder and private gemini app data)
 .gemini/
+*.zip

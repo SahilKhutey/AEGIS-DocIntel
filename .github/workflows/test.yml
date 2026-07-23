@@ -9,10 +9,6 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-    env:
-      AEGIS_ENV: test
-      PYTHONPATH: .
-      DISABLE_EXTERNAL_NETWORK: "1"
     steps:
       - uses: actions/checkout@v4
 
@@ -20,14 +16,14 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Install dependencies
+      - name: Install dependencies (pinned lock file for reproducibility)
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements.txt
-          pip install pytest pytest-asyncio httpx
+          pip install -r requirements.lock.txt
+          pip install pytest
 
       - name: Run full test suite
-        run: pytest tests/ -v --tb=short
+        run: pytest tests/ -q
 
       - name: Upload test results on failure
         if: failure()
@@ -36,10 +32,12 @@ jobs:
           name: pytest-log
           path: pytest_log.txt
 
-  # Runs weekly or on manual dispatch to catch dependency drift
+  # Runs weekly to catch drift between requirements.txt's loose specifiers
+  # and the pinned lock file, and to catch upstream breakage early
+  # (e.g. a new library release breaking an existing test).
   scheduled-dependency-check:
     runs-on: ubuntu-latest
-    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    if: github.event_name == 'schedule'
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -49,5 +47,5 @@ jobs:
         run: pip install pip-tools
       - name: Regenerate lock file and diff
         run: |
-          pip-compile requirements.txt -o requirements.lock.new.txt || true
-          diff requirements.txt requirements.lock.txt || true
+          pip-compile requirements.txt -o requirements.lock.new.txt
+          diff requirements.lock.txt requirements.lock.new.txt || true
