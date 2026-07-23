@@ -52,3 +52,26 @@ def test_master_unified_math_engine_api_endpoint():
     assert "topology_betti" in data
     assert "condition_number" in data
     assert len(data["domain_scores"]) == 16
+
+
+def test_spatial_reading_dag_construction():
+    from src.math_concepts.graph_theory import build_spatial_reading_dag
+    import networkx as nx
+
+    elements = [
+        {'id': 'e1', 'x': 0.1, 'y': 0.1, 'w': 0.8, 'h': 0.05},
+        {'id': 'e2', 'x': 0.1, 'y': 0.2, 'w': 0.8, 'h': 0.05},
+    ]
+    dag = build_spatial_reading_dag(elements)
+    assert nx.is_directed_acyclic_graph(dag)
+    assert dag.has_edge(0, 1)
+
+
+def test_hypergraph_spectral_clustering():
+    from src.math_concepts.graph_theory import Hypergraph
+
+    hg = Hypergraph(n_nodes=4, hyperedges=[[0, 1], [2, 3]])
+    labels = hg.hypergraph_spectral_clustering(k=2)
+    assert len(labels) == 4
+    assert labels[0] == labels[1]
+    assert labels[2] == labels[3]

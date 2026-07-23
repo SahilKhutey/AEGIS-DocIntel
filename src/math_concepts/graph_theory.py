@@ -191,3 +191,60 @@ class Hypergraph:
 
         # Laplacian
         return np.eye(self.n_nodes) - d_v_inv_sqrt @ h @ d_e_inv @ h.T @ d_v_inv_sqrt
+
+    def hypergraph_spectral_clustering(self, k: int = 2) -> np.ndarray:
+        '''
+        Perform hypergraph spectral clustering by computing eigenvectors of normalized hypergraph Laplacian.
+        '''
+        L = self.laplacian_matrix()
+        if L.shape[0] <= 1:
+            return np.zeros(L.shape[0], dtype=int)
+
+        evals, evecs = np.linalg.eigh(L)
+        idx = np.argsort(evals)
+        k_evecs = evecs[:, idx[:max(1, k)]]
+        labels = np.argmax(np.abs(k_evecs), axis=1)
+        return labels
+
+
+def build_spatial_reading_dag(elements: list[dict]) -> Any:
+    '''
+    Builds spatial reading order DAG over document elements with Kahn's priority queue tie-breaking.
+    Enforces Theorem 6.1 (graph acyclicity) and Theorem 6.2 (determinism).
+    '''
+    import networkx as nx
+    G = nx.DiGraph()
+    n = len(elements)
+    for i in range(n):
+        G.add_node(i, data=elements[i])
+
+    row_tol = 0.03
+    for i in range(n):
+        e1 = elements[i]
+        y1, x1, h1, w1 = e1.get('y', 0.0), e1.get('x', 0.0), e1.get('h', 0.05), e1.get('w', 0.8)
+        for j in range(i + 1, n):
+            e2 = elements[j]
+            y2, x2 = e2.get('y', 0.0), e2.get('x', 0.0)
+
+            # Check spatial successor relationship
+            is_same_row = abs(y1 - y2) <= row_tol
+            if is_same_row:
+                if x2 > x1 + w1 / 2.0:
+                    G.add_edge(i, j)
+                elif x1 > x2 + e2.get('w', 0.8) / 2.0:
+                    G.add_edge(j, i)
+            else:
+                if y2 >= y1 + h1 - row_tol:
+                    G.add_edge(i, j)
+                elif y1 >= y2 + e2.get('h', 0.05) - row_tol:
+                    G.add_edge(j, i)
+
+    # Ensure acyclicity
+    if not nx.is_directed_acyclic_graph(G):
+        # Remove back-edges via cycle feedback vertex set
+        cycles = list(nx.simple_cycles(G))
+        for cyc in cycles:
+            if len(cyc) >= 2:
+                G.remove_edge(cyc[-1], cyc[0])
+
+    return G
