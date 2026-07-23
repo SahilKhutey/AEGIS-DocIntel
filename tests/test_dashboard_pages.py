@@ -399,3 +399,35 @@ def test_settings_dashboard():
     assert agent_info.temperature == 0.5
     assert agent_info.api_key_configured is True
     assert agent_info.api_key_masked == "*1234"
+
+
+def test_math_advanced_dashboard():
+    """Test MathAdvancedDashboard controller and view operations."""
+    from ui.src.pages.math_advanced_dashboard import (
+        MathAdvancedDashboard,
+        PIIRedactionViewData,
+        EntityResolutionViewData,
+        StructuralDiffViewData,
+        AnomalyGateViewData,
+        MathDomainViewData,
+    )
+
+    db = MathAdvancedDashboard()
+    doc_id = "doc_math_100"
+
+    db.add_pii_scan(doc_id, PIIRedactionViewData("e1", "SSN: 123", "[REDACTED]", ["SSN"], 1))
+    db.add_entity(doc_id, EntityResolutionViewData("c1", "Acme Corp", 5, 0.95))
+    db.add_structural_diff(doc_id, StructuralDiffViewData("v1", "v2", 3, 2, 1, 0))
+    db.set_anomaly_status(doc_id, AnomalyGateViewData(doc_id, "allow", 0.05, 0))
+    db.add_math_domain(doc_id, MathDomainViewData("topology", 1.0, "active", {"betti_0": 1}))
+
+    rendered = db.render_dashboard(doc_id)
+    assert rendered["document_id"] == doc_id
+    assert len(rendered["pii_scans"]) == 1
+    assert rendered["pii_scans"][0]["redactions_applied"] == 1
+    assert len(rendered["entities"]) == 1
+    assert rendered["entities"][0]["canonical_name"] == "Acme Corp"
+    assert rendered["diffs"][0]["edit_distance"] == 3
+    assert rendered["anomaly_status"]["action"] == "allow"
+    assert len(rendered["math_domains"]) == 1
+    assert rendered["math_domains"][0]["domain_name"] == "topology"

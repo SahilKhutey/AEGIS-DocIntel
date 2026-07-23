@@ -35,6 +35,7 @@ from .analytics_dashboard import AnalyticsDashboard, AnalyticsViewData
 from .performance_dashboard import PerformanceDashboard, PerformanceViewData
 from .agent_dashboard import AgentDashboard, AgentViewData
 from .settings_dashboard import SettingsDashboard, SettingsData
+from .math_advanced_dashboard import MathAdvancedDashboard, AdvancedMathDashboardData
 
 __all__ = [
     "UploadDashboard",
@@ -59,6 +60,8 @@ __all__ = [
     "AgentViewData",
     "SettingsDashboard",
     "SettingsData",
+    "MathAdvancedDashboard",
+    "AdvancedMathDashboardData",
 ]
 
 __version__ = "1.0.0"
