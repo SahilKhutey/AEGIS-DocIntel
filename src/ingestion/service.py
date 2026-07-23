@@ -18,6 +18,8 @@ from src.ingestion.pdf_loader import PDFLoader
 from src.ingestion.pptx_loader import PPTXLoader
 from src.ingestion.xlsx_loader import XLSXLoader
 
+from src.ingestion.speech_loader import SpeechLoader
+
 logger = logging.getLogger(__name__)
 
 PathLike = Union[str, Path, bytes]
@@ -54,6 +56,12 @@ class IngestionService:
         ".bmp": DocumentFormat.IMAGE,
         ".webp": DocumentFormat.IMAGE,
         ".gif": DocumentFormat.IMAGE,
+        ".wav": DocumentFormat.SPEECH,
+        ".mp3": DocumentFormat.SPEECH,
+        ".m4a": DocumentFormat.SPEECH,
+        ".flac": DocumentFormat.SPEECH,
+        ".ogg": DocumentFormat.SPEECH,
+        ".aac": DocumentFormat.SPEECH,
         ".html": DocumentFormat.HTML,
         ".htm": DocumentFormat.HTML,
         ".md": DocumentFormat.MARKDOWN,
@@ -64,12 +72,15 @@ class IngestionService:
     def __init__(self, ocr_engine: OCREngine | None = None, **loader_options):
         self.ocr = ocr_engine or OCREngine()
         self.options = loader_options
+        speech_loader = SpeechLoader(**loader_options)
         self.loaders: dict[DocumentFormat, BaseLoader] = {
             DocumentFormat.PDF: PDFLoader(ocr=self.ocr, **loader_options),
             DocumentFormat.DOCX: DOCXLoader(**loader_options),
             DocumentFormat.PPTX: PPTXLoader(**loader_options),
             DocumentFormat.XLSX: XLSXLoader(**loader_options),
             DocumentFormat.IMAGE: ImageLoader(ocr=self.ocr, **loader_options),
+            DocumentFormat.SPEECH: speech_loader,
+            DocumentFormat.AUDIO: speech_loader,
         }
         logger.info(f"IngestionService initialized with {len(self.loaders)} loaders")
 

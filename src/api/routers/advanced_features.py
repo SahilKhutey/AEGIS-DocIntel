@@ -216,3 +216,53 @@ async def evaluate_unified_math(req: UnifiedMathRequest) -> Dict[str, Any]:
     engine = MasterUnifiedMathEngine()
     res = engine.evaluate_document_state(req.document)
     return res.__dict__
+
+
+# ============================================================
+# SPEECH & IMAGE LAYOUT PARSING ENDPOINTS
+# ============================================================
+
+class SpeechParseRequest(BaseModel):
+    filename: str = "audio_sample.wav"
+    audio_base64: Optional[str] = None
+
+
+@router.post("/ingestion/parse-speech")
+async def parse_speech_audio(req: SpeechParseRequest) -> Dict[str, Any]:
+    import base64
+    from src.ingestion.speech_loader import SpeechLoader
+
+    loader = SpeechLoader()
+    raw_bytes = base64.b64decode(req.audio_base64) if req.audio_base64 else b"RIFF____WAVEfmt \x10\x00\x00\x00\x01\x00\x01\x00\x80>\x00\x00\x00}\x00\x00\x02\x00\x10\x00data____"
+    doc_obj = await loader.load(raw_bytes, filename=req.filename)
+    return {
+        "filename": doc_obj.filename,
+        "format": doc_obj.format.value,
+        "page_count": doc_obj.page_count,
+        "word_count": doc_obj.word_count,
+        "transcript": doc_obj.text_content,
+        "metadata": doc_obj.metadata,
+    }
+
+
+class ImageLayoutParseRequest(BaseModel):
+    filename: str = "document_page.png"
+    blur_threshold: float = 100.0
+
+
+@router.post("/ingestion/parse-image-layout")
+async def parse_image_layout(req: ImageLayoutParseRequest) -> Dict[str, Any]:
+    import io
+    from PIL import Image, ImageDraw
+    from src.ingestion.image_parser import AdvancedImageParser
+
+    # Generate test page image
+    img = Image.new("RGB", (800, 1000), color=(255, 255, 255))
+    draw = ImageDraw.Draw(img)
+    draw.rectangle([40, 40, 760, 100], fill=(230, 230, 250))
+    buf = io.BytesIO()
+    img.save(buf, format="PNG")
+
+    parser = AdvancedImageParser(blur_threshold=req.blur_threshold)
+    analysis = parser.parse_image(buf.getvalue())
+    return analysis.to_dict()

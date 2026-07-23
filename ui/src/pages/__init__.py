@@ -36,6 +36,7 @@ from .performance_dashboard import PerformanceDashboard, PerformanceViewData
 from .agent_dashboard import AgentDashboard, AgentViewData
 from .settings_dashboard import SettingsDashboard, SettingsData
 from .math_advanced_dashboard import MathAdvancedDashboard, AdvancedMathDashboardData
+from .speech_image_dashboard import SpeechImageDashboard, SpeechImageData
 
 __all__ = [
     "UploadDashboard",
@@ -62,6 +63,8 @@ __all__ = [
     "SettingsData",
     "MathAdvancedDashboard",
     "AdvancedMathDashboardData",
+    "SpeechImageDashboard",
+    "SpeechImageData",
 ]
 
 __version__ = "1.0.0"

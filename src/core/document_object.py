@@ -23,6 +23,8 @@ class DocumentFormat(str, Enum):
     MARKDOWN = "markdown"
     TEXT = "text"
     SCANNED_PDF = "scanned_pdf"
+    SPEECH = "speech"
+    AUDIO = "audio"
     UNKNOWN = "unknown"
 
 
@@ -31,6 +33,10 @@ MAGIC = {
     b"\x89PNG": DocumentFormat.IMAGE,
     b"\xff\xd8\xff": DocumentFormat.IMAGE,
     b"GIF8": DocumentFormat.IMAGE,
+    b"RIFF": DocumentFormat.SPEECH,
+    b"ID3": DocumentFormat.SPEECH,
+    b"OggS": DocumentFormat.SPEECH,
+    b"fLaC": DocumentFormat.SPEECH,
 }
 
 EXT_MAP = {
@@ -40,6 +46,9 @@ EXT_MAP = {
     ".htm": DocumentFormat.HTML, ".txt": DocumentFormat.TEXT,
     ".png": DocumentFormat.IMAGE, ".jpg": DocumentFormat.IMAGE,
     ".jpeg": DocumentFormat.IMAGE, ".gif": DocumentFormat.IMAGE,
+    ".wav": DocumentFormat.SPEECH, ".mp3": DocumentFormat.SPEECH,
+    ".m4a": DocumentFormat.SPEECH, ".flac": DocumentFormat.SPEECH,
+    ".ogg": DocumentFormat.SPEECH, ".aac": DocumentFormat.SPEECH,
 }
 
 

@@ -10,11 +10,14 @@ from src.ingestion.docx_loader import DOCXLoader
 from src.ingestion.pptx_loader import PPTXLoader
 from src.ingestion.xlsx_loader import XLSXLoader
 from src.ingestion.image_loader import ImageLoader
+from src.ingestion.speech_loader import SpeechLoader
+from src.ingestion.image_parser import AdvancedImageParser
 from src.ingestion.service import IngestionService
 
 __all__ = [
     "BaseLoader", "LoaderError", "FormatError", "SizeLimitError",
     "OCREngine",
     "PDFLoader", "DOCXLoader", "PPTXLoader", "XLSXLoader", "ImageLoader",
+    "SpeechLoader", "AdvancedImageParser",
     "IngestionService",
 ]
