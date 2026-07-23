@@ -200,3 +200,19 @@ async def anneal_master_objective(req: IsingAnnealRequest) -> Dict[str, Any]:
         "energy": res["energy"],
         "weights": list(res["weights"]),
     }
+
+
+# ============================================================
+# MASTER UNIFIED MATHEMATICAL EVALUATION (ALL 16 DOMAINS)
+# ============================================================
+
+class UnifiedMathRequest(BaseModel):
+    document: Dict[str, Any]
+
+
+@router.post("/math/unified-evaluation")
+async def evaluate_unified_math(req: UnifiedMathRequest) -> Dict[str, Any]:
+    from src.math_concepts.master_math_engine import MasterUnifiedMathEngine
+    engine = MasterUnifiedMathEngine()
+    res = engine.evaluate_document_state(req.document)
+    return res.__dict__
