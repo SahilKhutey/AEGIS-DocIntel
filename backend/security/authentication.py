@@ -21,7 +21,7 @@ import os
 import secrets
 import time
 from dataclasses import dataclass, field
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from enum import Enum
 from typing import Any, Dict, List, Optional
 
@@ -48,7 +48,7 @@ class User:
     mfa_enabled: bool = False
     mfa_secret: Optional[str] = None
     api_keys: List[str] = field(default_factory=list)
-    created_at: str = field(default_factory=lambda: datetime.utcnow().isoformat())
+    created_at: str = field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
     last_login: Optional[str] = None
     is_active: bool = True
     is_locked: bool = False
@@ -77,7 +77,7 @@ class APIKey:
     user_id: str
     name: str
     scopes: List[str] = field(default_factory=list)
-    created_at: str = field(default_factory=lambda: datetime.utcnow().isoformat())
+    created_at: str = field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
     expires_at: Optional[str] = None
     last_used: Optional[str] = None
     is_revoked: bool = False
@@ -204,7 +204,7 @@ class AuthenticationManager:
                 raise AuthenticationError("Invalid MFA code")
         # success
         user.failed_login_attempts = 0
-        user.last_login = datetime.utcnow().isoformat()
+        user.last_login = datetime.now(timezone.utc).isoformat()
         return self.create_token(user)
 
     def _verify_mfa(self, user: User, code: str) -> bool:
@@ -355,7 +355,7 @@ class AuthenticationManager:
         expires_at = None
         if expires_in_days:
             expires_at = (
-                datetime.utcnow() + timedelta(days=expires_in_days)
+                datetime.now(timezone.utc) + timedelta(days=expires_in_days)
             ).isoformat()
         api_key = APIKey(
             key_id=key_id,
@@ -381,9 +381,12 @@ class AuthenticationManager:
         if api_key.is_revoked:
             raise AuthenticationError("API key revoked")
         if api_key.expires_at:
-            if datetime.fromisoformat(api_key.expires_at) < datetime.utcnow():
+            exp_dt = datetime.fromisoformat(api_key.expires_at)
+            if exp_dt.tzinfo is None:
+                exp_dt = exp_dt.replace(tzinfo=timezone.utc)
+            if exp_dt < datetime.now(timezone.utc):
                 raise AuthenticationError("API key expired")
-        api_key.last_used = datetime.utcnow().isoformat()
+        api_key.last_used = datetime.now(timezone.utc).isoformat()
         user = self.users[api_key.user_id]
         return AuthToken(
             token=raw_key,

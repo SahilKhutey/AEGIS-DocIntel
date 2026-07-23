@@ -8,7 +8,7 @@ Generates benchmark reports in Markdown and JSON.
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Any, Dict, Optional
 
 from .baseline import BaselineResult
@@ -85,7 +85,7 @@ class ReportGenerator:
     ) -> BenchmarkReport:
         return BenchmarkReport(
             suite_name=suite_name,
-            timestamp=datetime.utcnow().isoformat(),
+            timestamp=datetime.now(timezone.utc).isoformat(),
             aggregated=aggregated,
             significance=significance or {},
             baselines=baselines or {},

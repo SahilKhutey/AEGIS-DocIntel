@@ -9,7 +9,7 @@ Backend contract for upload tracking, queueing, validation.
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from datetime import datetime
+from datetime import datetime, timezone
 from enum import Enum
 from typing import Any, Dict, List, Optional
 
@@ -100,7 +100,7 @@ class UploadDashboard:
             file_size=file_size,
             file_type=file_type,
             status=UploadStatus.PENDING,
-            uploaded_at=datetime.utcnow().isoformat(),
+            uploaded_at=datetime.now(timezone.utc).isoformat(),
         )
         self.uploads[upload_id] = item
         return item
@@ -130,7 +130,7 @@ class UploadDashboard:
         item.status = UploadStatus.COMPLETED
         item.progress = 1.0
         item.document_id = document_id
-        item.processed_at = datetime.utcnow().isoformat()
+        item.processed_at = datetime.now(timezone.utc).isoformat()
         return item
 
     def fail_upload(
@@ -143,7 +143,7 @@ class UploadDashboard:
         item = self.uploads[upload_id]
         item.status = UploadStatus.FAILED
         item.error_message = error
-        item.processed_at = datetime.utcnow().isoformat()
+        item.processed_at = datetime.now(timezone.utc).isoformat()
         return item
 
     def list_uploads(self, limit: int = 50) -> List[UploadItem]:

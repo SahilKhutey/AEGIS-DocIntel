@@ -9,7 +9,7 @@ from __future__ import annotations
 
 import json
 from dataclasses import dataclass, field
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Any, Dict, List, Optional
 
 from .token_optimizer import TokenOptimizationResult
@@ -45,7 +45,7 @@ class OptimizationReport:
 
     def __init__(self, suite_name: str) -> None:
         self.suite_name = suite_name
-        self.timestamp = datetime.utcnow().isoformat() + "Z"
+        self.timestamp = datetime.now(timezone.utc).isoformat()
         self.token_results: List[TokenOptimizationResult] = []
         self.memory_results: List[MemoryOptimizationResult] = []
         self.latency_results: List[LatencyOptimizationResult] = []

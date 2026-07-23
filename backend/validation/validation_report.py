@@ -9,7 +9,7 @@ from __future__ import annotations
 
 import json
 from dataclasses import dataclass, field
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Any, Dict, List, Optional
 
 from .unit_test_runner import UnitTestResult
@@ -53,7 +53,7 @@ class ValidationReport:
 
     def __init__(self, suite_name: str) -> None:
         self.suite_name = suite_name
-        self.timestamp = datetime.utcnow().isoformat() + "Z"
+        self.timestamp = datetime.now(timezone.utc).isoformat()
         self.unit_results: List[UnitTestResult] = []
         self.integration_results: List[IntegrationTestResult] = []
         self.e2e_results: List[E2ETestResult] = []

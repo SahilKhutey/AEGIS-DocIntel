@@ -57,14 +57,14 @@ class DocumentExplorer:
         tags: Optional[List[str]] = None,
         metadata: Optional[Dict[str, Any]] = None,
     ) -> DocumentSummary:
-        from datetime import datetime
+        from datetime import datetime, timezone
         summary = DocumentSummary(
             document_id=document_id,
             name=name,
             file_type=file_type,
             size_bytes=size_bytes,
             page_count=page_count,
-            uploaded_at=datetime.utcnow().isoformat(),
+            uploaded_at=datetime.now(timezone.utc).isoformat(),
             processed=False,
             tags=tags or [],
             metadata=metadata or {},
