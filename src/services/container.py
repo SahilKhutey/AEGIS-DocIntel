@@ -153,6 +153,15 @@ class ServiceContainer:
         self.query_service: QueryService | None = None
         self.document_service = None
 
+        # Pre-LLM, Compliance, Versioning, Entity & Math Services
+        self.compliance_service = None
+        self.entity_service = None
+        self.versioning_service = None
+        self.anomaly_service = None
+        self.normalizer_service = None
+        self.decomposer_service = None
+        self.math_engine = None
+
     async def startup(self):
         """Initialize all services."""
         log.info("Initializing service container")
@@ -198,6 +207,23 @@ class ServiceContainer:
             llm_service=self.llm_service,
             embedding_model=self.embedding_model,
         )
+
+        # ── Advanced Submodules Wire-Up ─────────────────────────
+        from src.compliance.redaction_engine import RedactionPolicy
+        from src.entity.canonicalizer import cluster_into_canonical_entities
+        from src.versioning.diff_engine import compute_structural_diff
+        from src.ingestion.anomaly_gate import run_ingestion_gate
+        from src.engines.matrix.unit_normalizer import parse_quantity
+        from src.query.decomposer import build_query_dag
+        from src.math_concepts.master_math_engine import MasterUnifiedMathEngine
+
+        self.compliance_service = RedactionPolicy
+        self.entity_service = cluster_into_canonical_entities
+        self.versioning_service = compute_structural_diff
+        self.anomaly_service = run_ingestion_gate
+        self.normalizer_service = parse_quantity
+        self.decomposer_service = build_query_dag
+        self.math_engine = MasterUnifiedMathEngine()
 
         self._started = True
         log.info("Service container ready")
