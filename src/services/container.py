@@ -67,6 +67,15 @@ class RealDocumentService:
         doc = self._docs.get(str(doc_id))
         if not doc:
             return None
+        # Tenant-isolation fix (found during Repository Audit follow-up):
+        # tenant_id was accepted as a parameter here but never actually
+        # checked, so any authenticated tenant could fetch any other
+        # tenant's document metadata by doc_id alone. Returning None (the
+        # same "not found" result an unknown doc_id produces) rather than
+        # raising is deliberate: a 403 would confirm the document exists
+        # for some other tenant, leaking its existence; 404 does not.
+        if str(doc.get("tenant_id", "")) != str(tenant_id):
+            return None
         class _DocResp:
             def __init__(self, d):
                 for k, v in d.items():
@@ -76,6 +85,8 @@ class RealDocumentService:
     async def get_status(self, doc_id: str, tenant_id: str):
         doc = self._docs.get(str(doc_id))
         if not doc:
+            return None
+        if str(doc.get("tenant_id", "")) != str(tenant_id):
             return None
         class _Status:
             def __init__(self, d):
@@ -102,16 +113,35 @@ class RealDocumentService:
         return _List(items, len(items), page, page_size)
 
     async def delete(self, doc_id: str, tenant_id: str):
-        if str(doc_id) in self._docs:
-            self._docs.pop(str(doc_id), None)
-            return True
-        return False
+        doc = self._docs.get(str(doc_id))
+        if not doc:
+            return False
+        if str(doc.get("tenant_id", "")) != str(tenant_id):
+            # Same not-found-shaped response as a genuinely missing
+            # document, for the same existence-leak reason as get() above.
+            return False
+        self._docs.pop(str(doc_id), None)
+        return True
 
     async def reindex(self, doc_id: str, tenant_id: str):
         return await self.get_status(doc_id, tenant_id)
 
     async def list_chunks(self, doc_id: str, tenant_id: str, page: int = 1, page_size: int = 50):
-        elements = self.orchestrator.get_document_elements(str(doc_id))
+        # Tenant-isolation fix: this previously called
+        # self.orchestrator.get_document_elements(str(doc_id)) with NO
+        # tenant_id at all, completely bypassing the orchestrator's own
+        # tenant check (see src/core/orchestrator.py) even though that
+        # check exists and works correctly when actually invoked with a
+        # tenant_id. This is the same class of bug as get()/get_status()/
+        # delete() above, but more severe: a document-level PermissionError
+        # is a deliberate, positive protection; a call site that simply
+        # never passes the parameter needed to trigger it bypasses that
+        # protection entirely rather than merely leaving it unenforced by
+        # this method's own logic.
+        try:
+            elements = self.orchestrator.get_document_elements(str(doc_id), tenant_id=str(tenant_id))
+        except PermissionError:
+            elements = []
         class _Chunk:
             def __init__(self, e):
                 self.chunk_id = e.element_id

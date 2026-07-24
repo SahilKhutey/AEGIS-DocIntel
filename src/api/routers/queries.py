@@ -15,7 +15,7 @@ import structlog
 from fastapi import APIRouter, Depends, HTTPException, Request, WebSocket, WebSocketDisconnect
 from fastapi.responses import StreamingResponse
 
-from src.api.auth import TenantContext, get_current_tenant
+from src.api.auth import TenantContext, get_current_tenant, get_current_tenant_ws
 from src.api.models import (
     QueryRequest, QueryResponse, StreamChunk,
     CitationModel, ConfidenceLevel,
@@ -151,21 +151,34 @@ async def _stream_query(
 async def query_websocket(
     websocket: WebSocket,
     session_id: uuid.UUID,
-    request: Request,
+    tenant: TenantContext = Depends(get_current_tenant_ws),
 ):
     """
     WebSocket endpoint for real-time interactive query sessions.
     Supports multi-turn conversation with streaming responses.
+
+    Tenant-isolation fix (Repository Audit follow-up): this endpoint
+    previously had NO authentication dependency at all -- it accepted any
+    WebSocket connection unconditionally, then read tenant_id directly out
+    of each client-supplied message body with no verification whatsoever.
+    That meant any client could query or stream any other tenant's
+    documents simply by putting that tenant's id in their message JSON;
+    it did not matter whether query_service.stream_query() itself enforced
+    tenant_id correctly downstream, because the value being enforced was
+    never actually authenticated in the first place. Fixed by requiring
+    the same Depends(get_current_tenant) dependency every other route in
+    this project uses, and deriving tenant_id from that verified identity
+    rather than from the message body -- the client-supplied tenant_id (if
+    any) is now ignored entirely, not merely double-checked.
     """
     await websocket.accept()
-    container = request.app.state.container
-    log.info("WebSocket connected", session=str(session_id))
+    container = websocket.app.state.container
+    log.info("WebSocket connected", session=str(session_id), tenant=tenant.tenant_id)
 
     try:
         while True:
             data = await websocket.receive_json()
             question = data.get("question", "").strip()
-            tenant_id = data.get("tenant_id", "")
             doc_ids = data.get("doc_ids")
 
             if not question:
@@ -176,7 +189,7 @@ async def query_websocket(
 
             async for chunk in container.query_service.stream_query(
                 question=question,
-                tenant_id=tenant_id,
+                tenant_id=tenant.tenant_id,
                 doc_ids=doc_ids,
                 session_id=str(session_id),
             ):
@@ -190,3 +203,4 @@ async def query_websocket(
             await websocket.send_json({"type": "error", "error": str(e)})
         except Exception:
             pass
+

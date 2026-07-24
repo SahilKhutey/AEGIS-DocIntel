@@ -10,7 +10,7 @@ import time
 from dataclasses import dataclass
 from typing import Optional
 
-from fastapi import Depends, HTTPException, Security, status
+from fastapi import Depends, HTTPException, Security, status, WebSocket
 from fastapi.security import APIKeyHeader, HTTPAuthorizationCredentials, HTTPBearer
 
 BEARER = HTTPBearer(auto_error=False)
@@ -103,3 +103,44 @@ def require_role(*roles: str):
             )
         return tenant
     return check
+
+
+async def get_current_tenant_ws(websocket: WebSocket) -> TenantContext:
+    """WebSocket-native equivalent of get_current_tenant().
+
+    get_current_tenant() depends on fastapi.security.HTTPBearer and
+    APIKeyHeader, both of which — in the FastAPI version this project
+    currently pins — require an http.Request specifically and raise
+    ``TypeError: HTTPBearer.__call__() missing 1 required positional
+    argument: 'request'`` when FastAPI's dependency-injection system tries
+    to resolve them for a ``@router.websocket`` route instead (confirmed
+    directly: this was the actual failure mode of the first attempt at
+    wiring authentication onto queries.py's WebSocket endpoint, discovered
+    only by writing an authenticated-connection test and watching it fail
+    rather than by code inspection alone). A Starlette ``WebSocket``
+    object exposes the same ``.headers`` mapping an HTTP ``Request``
+    does, so this helper reads the Authorization/X-API-Key headers
+    directly and reuses the same ``_validate_jwt``/``_validate_api_key``
+    functions ``get_current_tenant`` itself calls, rather than duplicating
+    their logic.
+
+    Raises ``HTTPException`` (401) on missing or invalid credentials, the
+    same as ``get_current_tenant`` — callers on a WebSocket route should
+    catch this before calling ``websocket.accept()`` and close the
+    connection with an appropriate code rather than letting the exception
+    propagate raw, since a raised HTTPException has no meaning to a
+    WebSocket client the way it does to an HTTP one.
+    """
+    auth_header = websocket.headers.get("authorization")
+    if auth_header and auth_header.lower().startswith("bearer "):
+        return _validate_jwt(auth_header[7:])
+
+    api_key = websocket.headers.get("x-api-key")
+    if api_key:
+        return _validate_api_key(api_key)
+
+    raise HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="Missing authentication. Provide Bearer token or X-API-Key header.",
+    )
+

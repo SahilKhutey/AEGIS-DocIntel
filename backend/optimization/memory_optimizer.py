@@ -285,17 +285,38 @@ class MemoryOptimizer:
             results.append(c_result)
         except Exception:
             compressed = quantized
-        total_original = data.nbytes
-        total_optimized = getattr(compressed, "nbytes", total_original)
-        bytes_saved = total_original - total_optimized
-        reduction_pct = bytes_saved / max(total_original, 1)
+        # NOTE: force_gc()'s original_bytes/optimized_bytes are real OS-level
+        # process RSS (typically hundreds of millions of bytes, and subject
+        # to noise from whatever else is resident in the process -- e.g. a
+        # large test suite's accumulated state). quantize_array's and
+        # compress_array's are logical array byte sizes (typically hundreds
+        # to thousands of bytes). Summing these together, as a prior version
+        # of this method did, meant the aggregate reduction_pct was almost
+        # entirely determined by RSS noise rather than by the actual
+        # quantization/compression savings this method exists to report --
+        # confirmed as the root cause of an intermittent test failure
+        # (test_memory_optimizer::test_apply_all, flaky under full-suite
+        # conditions, reliably passing in isolation). Data-size-based steps
+        # only are aggregated below; the GC step's real-memory effect is
+        # reported separately in metadata rather than folded into the same
+        # sum.
+        data_size_results = [r for r in results if r.strategy != "gc"]
+        total_original = sum(r.original_bytes for r in data_size_results)
+        total_optimized = max(
+            (r.optimized_bytes for r in data_size_results),
+            default=0,
+        )
         # aggregate
         agg = MemoryOptimizationResult(
             strategy="combined",
             original_bytes=total_original,
             optimized_bytes=total_optimized,
-            bytes_saved=bytes_saved,
-            reduction_pct=reduction_pct,
-            metadata={"steps": [r.strategy for r in results]},
+            bytes_saved=total_original - total_optimized,
+            reduction_pct=(total_original - total_optimized) / max(total_original, 1),
+            metadata={
+                "steps": [r.strategy for r in results],
+                "gc_objects_collected": gc_result.metadata.get("objects_collected", 0),
+                "gc_reduction_pct": gc_result.reduction_pct,
+            },
         )
         return compressed, agg
