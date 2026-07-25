@@ -124,6 +124,74 @@ async def scan_ingestion_anomalies(req: AnomalyScanRequest) -> Dict[str, Any]:
 
 
 # ============================================================
+# COMPLIANCE & PII REDACTION
+# ============================================================
+
+class PIIScanRequest(BaseModel):
+    element_id: Optional[str] = "e1"
+    text: Optional[str] = None
+    redact_ssn: Optional[bool] = True
+    redact_credit_card: Optional[bool] = True
+    redact_phone: Optional[bool] = True
+    redact_person: Optional[bool] = True
+    elements: Optional[List[Dict[str, Any]]] = None
+
+
+class PIIRedactRequest(BaseModel):
+    elements: List[Dict[str, Any]]
+    policy_actions: Optional[Dict[str, str]] = None
+
+
+@router.post("/compliance/pii-scan")
+async def scan_pii_entities(req: PIIScanRequest) -> Dict[str, Any]:
+    from src.compliance.redaction_engine import detect_pii, apply_redaction_policy, RedactionPolicy
+    if req.text is not None:
+        elem_dict = {"id": req.element_id, "text": req.text}
+        entities = detect_pii(elem_dict)
+        redact_dict, rep = apply_redaction_policy(
+            elem_dict, entities, [RedactionPolicy("US_SSN", "redact")]
+        )
+        return {
+            "redacted_text": redact_dict.get("text", req.text),
+            "redactions_applied": rep.redactions_applied,
+            "entities_found_count": len(entities),
+            "entities": [{"entity_type": e.entity_type, "text": e.text} for e in entities],
+        }
+
+    all_found = []
+    elems = req.elements or []
+    for elem in elems:
+        entities = detect_pii(elem)
+        for e in entities:
+            all_found.append({
+                "entity_type": e.entity_type,
+                "element_id": e.element_id,
+                "text": e.text,
+                "score": e.score,
+                "start": e.start,
+                "end": e.end,
+            })
+    return {
+        "entities": all_found,
+        "total_detected": len(all_found),
+    }
+
+
+@router.post("/compliance/redact")
+async def redact_pii_entities(req: PIIRedactRequest) -> Dict[str, Any]:
+    from src.compliance.redaction_engine import redact_elements, RedactionPolicy
+    policies = None
+    if req.policy_actions:
+        policies = [RedactionPolicy(k, v) for k, v in req.policy_actions.items()]
+    redact_elems, report = redact_elements(req.elements, policies=policies)
+    return {
+        "redacted_elements": redact_elems,
+        "redactions_applied": report.redactions_applied,
+        "entities_found_count": len(report.entities_found),
+    }
+
+
+# ============================================================
 # MATRIX UNIT & CURRENCY NORMALIZATION
 # ============================================================
 

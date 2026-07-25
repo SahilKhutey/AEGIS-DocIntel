@@ -443,6 +443,17 @@ class AMDIOrchestrator:
             len(tables),
         )
 
+        # --- Stage 4.5: PII & Compliance Redaction (if enabled) --------
+        pii_entities_count = 0
+        redactions_applied = 0
+        if getattr(doc, "enable_redaction", False) or getattr(doc, "redact_pii", False):
+            from src.compliance.redaction_engine import redact_elements
+            elements, compliance_report = redact_elements(elements)
+            pii_entities_count = len(compliance_report.entities_found)
+            redactions_applied = compliance_report.redactions_applied
+            tables = [e for e in elements if getattr(e, "type", None) == ElementType.TABLE]
+            self._doc_elements[doc.doc_id] = elements
+            self._doc_tables[doc.doc_id] = tables
 
         # --- Stage 5: Engine pipeline ---------------------------------
         await self._run_engines(elements)
@@ -471,6 +482,8 @@ class AMDIOrchestrator:
             "templates": len(self._templates),
             "ingestion_ms": elapsed_ms,
             "compression_pct": compression_pct,
+            "pii_entities_found": pii_entities_count,
+            "redactions_applied": redactions_applied,
         }
 
         # --- Stage 8: MIOS Ingestion Space (optional) -----------------

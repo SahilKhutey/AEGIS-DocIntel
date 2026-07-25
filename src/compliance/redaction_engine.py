@@ -140,3 +140,58 @@ def apply_redaction_policy(
         redactions_applied=redaction_count,
     )
     return elem_copy, report
+
+
+def redact_elements(
+    elements: List[Any],
+    policies: Optional[List[RedactionPolicy]] = None,
+) -> Tuple[List[Any], ComplianceReport]:
+    '''
+    Scans and redacts a list of GeometricElement objects (or dicts).
+    Returns (redacted_elements, aggregate_compliance_report).
+    '''
+    default_policies = policies or [
+        RedactionPolicy('US_SSN', 'redact'),
+        RedactionPolicy('CREDIT_CARD', 'redact'),
+        RedactionPolicy('PHONE_NUMBER', 'redact'),
+    ]
+    all_entities: List[PIIEntity] = []
+    total_redactions = 0
+    doc_id = 'doc_0'
+
+    redacted_elements = []
+    for elem in elements:
+        if hasattr(elem, 'content'):
+            doc_id = getattr(elem, 'doc_id', doc_id)
+            elem_dict = {
+                'id': getattr(elem, 'element_id', 'elem'),
+                'text': getattr(elem, 'content', ''),
+                'doc_id': doc_id,
+            }
+            entities = detect_pii(elem_dict)
+            if entities:
+                redacted_dict, rep = apply_redaction_policy(elem_dict, entities, default_policies)
+                elem.content = redacted_dict.get('text', elem.content)
+                all_entities.extend(entities)
+                total_redactions += rep.redactions_applied
+            redacted_elements.append(elem)
+        elif isinstance(elem, dict):
+            doc_id = elem.get('doc_id', doc_id)
+            entities = detect_pii(elem)
+            if entities:
+                redacted_dict, rep = apply_redaction_policy(elem, entities, default_policies)
+                all_entities.extend(entities)
+                total_redactions += rep.redactions_applied
+                redacted_elements.append(redacted_dict)
+            else:
+                redacted_elements.append(elem)
+        else:
+            redacted_elements.append(elem)
+
+    report = ComplianceReport(
+        document_id=doc_id,
+        entities_found=all_entities,
+        redactions_applied=total_redactions,
+    )
+    return redacted_elements, report
+
