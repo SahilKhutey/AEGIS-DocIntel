@@ -72,6 +72,31 @@ def test_matrix_search() -> None:
     svd_res = search.search_semantic_svd(np.array([1.0, 3.0]), n_components=1)
     assert len(svd_res) > 0
 
+
+def test_matrix_search_rectangular() -> None:
+    """Test matrix search on non-square rectangular matrices (rows != cols)."""
+    search = MatrixSearch()
+    # 4 rows x 2 cols
+    rect_table = np.array([
+        [1.0, 0.0],
+        [2.0, 0.0],
+        [3.0, 0.0],
+        [4.0, 1.0],
+    ])
+    search.add("rect1", rect_table)
+
+    # Query vector matches column length (4 rows)
+    query = np.array([1.0, 2.0, 3.0, 4.0])
+    cols = search.search_column(query)
+    assert len(cols) == 2
+    assert cols[0].item_id == "rect1::col_0"
+
+    # SVD search on non-square matrix
+    svd_res = search.search_semantic_svd(query, n_components=1)
+    assert len(svd_res) == 2
+    assert svd_res[0].item_id == "rect1::svd_col_0"
+
+
 def test_geometry_search() -> None:
     search = GeometrySearch(metric="euclidean")
     search.add("p1", np.array([0.0, 0.0]))
@@ -92,6 +117,7 @@ def test_geometry_search() -> None:
     assert len(bbox_res) == 1
     assert bbox_res[0].item_id == "p1"
 
+
 def test_graph_search() -> None:
     search = GraphSearch(damping=0.85)
     search.add_node("A")
@@ -108,6 +134,8 @@ def test_graph_search() -> None:
     ppr_res = search.personalized_pagerank(["A"], top_k=2)
     assert len(ppr_res) == 2
     assert ppr_res[0].node_id == "A"
+    scores = {r.node_id: r.score for r in ppr_res}
+    assert scores["B"] > 0.1
 
 def test_template_search() -> None:
     search = TemplateSearch(fingerprint_type="set")

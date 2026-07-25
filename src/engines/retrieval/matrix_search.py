@@ -158,7 +158,7 @@ class MatrixSearch:
 
         for tid, M in self.tables.items():
 
-            if M.shape[1] != q.shape[0]:
+            if M.shape[0] != q.shape[0]:
 
                 continue
 
@@ -344,29 +344,15 @@ class MatrixSearch:
 
             Vtk = Vt[:k, :]
 
-            # project query onto column space
+            # project query and columns into k-dimensional SVD latent space
 
-            try:
-
-                proj = Vtk.T @ np.linalg.pinv(np.diag(Sk)) @ Uk.T @ q[: M.shape[0]]
-
-            except Exception:
-
-                continue
-
-            # compare projected query to each column
+            q_latent = Uk.T @ q[: M.shape[0]]
 
             for j in range(M.shape[1]):
 
-                col = M[:, j]
+                c_latent = Sk * Vtk[:, j]
 
-                if col.shape[0] != proj.shape[0]:
-
-                    score = self._cosine(proj[: col.shape[0]], col)
-
-                else:
-
-                    score = self._cosine(proj, col)
+                score = self._cosine(q_latent, c_latent)
 
                 results.append(
 

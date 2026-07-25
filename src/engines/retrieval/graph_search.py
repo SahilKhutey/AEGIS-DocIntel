@@ -370,7 +370,7 @@ class GraphSearch:
 
         for it in range(self.max_iter):
 
-            p_new = (1 - self.damping) * (M @ p) + self.damping * s
+            p_new = self.damping * (M @ p) + (1.0 - self.damping) * s
 
             if np.linalg.norm(p_new - p, 1) < self.tol:
 
