@@ -153,12 +153,28 @@ class CacheManager:
             return None
         entry = self.cache[key]
         entry.frequency += 1
+        # Bug fix (found by construction: two entries reaching an equal
+        # frequency via get() calls, where the more-recently-read entry
+        # was evicted instead of the less-recently-read one): _lfu_put's
+        # eviction tie-break sorts by (frequency, last_access_order) and
+        # evicts the minimum -- but last_access_order was previously only
+        # ever set at insertion time (in _lfu_put), never updated here on
+        # a read. So a frequency tie between two entries was broken using
+        # their *insertion* order regardless of which had actually been
+        # read more recently, which is backwards for a recency-aware
+        # tie-break: the entry touched most recently would be evicted
+        # ahead of one that hadn't been read in longer, purely because it
+        # happened to be inserted earlier.
+        self._access_counter += 1
+        entry.last_access_order = self._access_counter
         return entry.value
 
     def _lfu_put(self, key: str, value: Any) -> None:
         if key in self.cache:
             self.cache[key].value = value
             self.cache[key].frequency += 1
+            self._access_counter += 1
+            self.cache[key].last_access_order = self._access_counter
             return
         if len(self.cache) >= self.capacity:
             # evict least frequent (ties broken by insertion order)

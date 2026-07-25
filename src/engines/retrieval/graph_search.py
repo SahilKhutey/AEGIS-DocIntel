@@ -364,18 +364,16 @@ class GraphSearch:
 
             s[idx[seed]] = 1.0 / len(seed_nodes)
 
-        # power iteration
-
+        # power iteration with dangling (sink) node mass redistribution to seeds
+        dangling_mask = (M.sum(axis=0) == 0)
         p = s.copy()
 
         for it in range(self.max_iter):
-
-            p_new = self.damping * (M @ p) + (1.0 - self.damping) * s
+            dangling_sum = p[dangling_mask].sum()
+            p_new = self.damping * (M @ p + dangling_sum * s) + (1.0 - self.damping) * s
 
             if np.linalg.norm(p_new - p, 1) < self.tol:
-
                 p = p_new
-
                 break
 
             p = p_new

@@ -327,6 +327,8 @@ class MatrixSearch:
         results: List[MatrixResult] = []
 
         for tid, M in self.tables.items():
+            if M.shape[0] != q.shape[0]:
+                continue
 
             k = min(n_components, min(M.shape))
 

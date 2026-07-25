@@ -283,21 +283,14 @@ class FrequencySearch:
 
 
     def _tfidf_score(self, doc_id: Any, query_tokens: List[str]) -> float:
-
         score = 0.0
-
         for term in query_tokens:
-
             tf = self.inverted_index.get(term, {}).get(doc_id, 0)
-
             if tf == 0:
-
                 continue
-
-            idf = math.log(self.doc_count / max(len(self.inverted_index.get(term, {})), 1))
-
+            df = len(self.inverted_index.get(term, {}))
+            idf = math.log((self.doc_count + 1.0) / (df + 1.0)) + 1.0
             score += tf * idf
-
         return score
 
 
