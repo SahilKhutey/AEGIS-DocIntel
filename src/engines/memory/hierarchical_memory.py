@@ -280,6 +280,47 @@ class HierarchicalMemory:
     # Control operations
     # =========================================================================
 
+    def run_maintenance_pass(self) -> Dict[str, Any]:
+        """Run an automated maintenance pass across all memory levels.
+        Evaluates promotion candidates from lower to higher tiers and evicts
+        overflowing items from tiers exceeding capacity limits.
+        """
+        promotions: List[Dict[str, Any]] = []
+        evictions: List[Dict[str, Any]] = []
+
+        # 1. Evaluate promotions
+        for level in MemoryLevel:
+            for item in self.storage.items_at_level(level):
+                decision = self.promoter.should_promote(item.item_id, level, self.storage, self.tracker)
+                if decision is not None:
+                    if self.storage.move(decision.item_id, level, decision.to_level):
+                        promotions.append({
+                            "item_id": decision.item_id,
+                            "from_level": level.name_long,
+                            "to_level": decision.to_level.name_long,
+                            "reason": decision.reason,
+                        })
+
+        # 2. Evaluate capacity-driven evictions
+        for level in MemoryLevel:
+            cap = self.storage.capacity(level).capacity_items
+            current = self.storage.item_count(level)
+            if current > cap:
+                overflow = current - cap
+                evicted_ids = self.evictor.evict(level, self.storage, self.tracker, n=overflow)
+                for eid in evicted_ids:
+                    evictions.append({
+                        "item_id": eid,
+                        "level": level.name_long,
+                    })
+
+        return {
+            "promotions": promotions,
+            "evictions": evictions,
+            "promoted_count": len(promotions),
+            "evicted_count": len(evictions),
+        }
+
     def clear_all(self) -> None:
         """Clear all storage and caches."""
         self.storage.clear_all()
