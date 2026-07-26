@@ -85,139 +85,85 @@ class FrequencySearch:
 
 
     def __init__(
-
         self,
-
         method: str = "bm25",
-
         k1: float = 1.5,
-
         b: float = 0.75,
-
     ) -> None:
-
         if method not in {"tfidf", "bm25"}:
-
             raise ValueError(f"Unknown method: {method}")
-
         self.method = method
-
         self.k1 = k1
-
         self.b = b
-
         # inverted index: term → {doc_id: tf}
-
         self.inverted_index: Dict[str, Dict[Any, int]] = {}
-
         # document statistics
-
         self.doc_lens: Dict[Any, int] = {}
-
         self.doc_count: int = 0
-
         self.avg_dl: float = 0.0
-
         self.metadata: Dict[Any, Dict[str, Any]] = {}
-
-
+        self.item_tenants: Dict[Any, Optional[str]] = {}
 
     def add(
-
         self,
-
         doc_id: Any,
-
         tokens: List[str],
-
         metadata: Optional[Dict[str, Any]] = None,
-
+        tenant_id: Optional[str] = None,
     ) -> None:
-
         """Add a tokenized document."""
-
         tf = Counter(tokens)
-
         self.doc_lens[doc_id] = len(tokens)
-
         for term, count in tf.items():
-
             if term not in self.inverted_index:
-
                 self.inverted_index[term] = {}
-
             self.inverted_index[term][doc_id] = count
-
         if metadata is not None:
-
             self.metadata[doc_id] = metadata
-
+            if tenant_id is None:
+                tenant_id = metadata.get("tenant_id")
+        self.item_tenants[doc_id] = tenant_id
         self._recompute_stats()
 
-
-
     def add_batch(
-
         self,
-
         docs: List[Tuple[Any, List[str]]],
-
+        tenant_ids: Optional[List[Optional[str]]] = None,
     ) -> None:
-
-        for did, toks in docs:
-
-            self.add(did, toks)
-
-
+        for i, (did, toks) in enumerate(docs):
+            tid = tenant_ids[i] if tenant_ids else None
+            self.add(did, toks, tenant_id=tid)
 
     def _recompute_stats(self) -> None:
-
         self.doc_count = len(self.doc_lens)
-
         if self.doc_count > 0:
-
             self.avg_dl = sum(self.doc_lens.values()) / self.doc_count
-
         else:
-
             self.avg_dl = 0.0
 
-
-
     def search(
-
         self,
-
         query_tokens: List[str],
-
         top_k: int = 10,
-
+        tenant_id: Optional[str] = None,
     ) -> List[FrequencyResult]:
-
-        """Search documents matching query tokens."""
-
+        """Search documents matching query tokens with optional tenant filtering."""
         if self.doc_count == 0:
-
             raise EmptyIndexError("Frequency index is empty.")
-
         if not query_tokens:
-
             raise InvalidQueryError("query_tokens is empty.")
 
         # candidate docs (any that contain at least one query term)
-
         candidates: Dict[Any, List[str]] = {}
-
         for term in set(query_tokens):
-
             if term in self.inverted_index:
-
                 for did in self.inverted_index[term]:
-
+                    if tenant_id is not None:
+                        item_tenant = self.item_tenants.get(did)
+                        if item_tenant is not None and item_tenant != tenant_id:
+                            continue
                     if did not in candidates:
-
                         candidates[did] = []
-
                     candidates[did].append(term)
 
         if not candidates:

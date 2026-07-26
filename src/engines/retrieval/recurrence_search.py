@@ -196,6 +196,8 @@ class RecurrenceSearch:
 
         self.metadata: Dict[Any, Dict[str, Any]] = {}
 
+        self.item_tenants: Dict[Any, Optional[str]] = {}
+
 
 
     def add(
@@ -207,6 +209,8 @@ class RecurrenceSearch:
         items: Set[int],
 
         metadata: Optional[Dict[str, Any]] = None,
+
+        tenant_id: Optional[str] = None,
 
     ) -> None:
 
@@ -230,6 +234,12 @@ class RecurrenceSearch:
 
             self.metadata[item_id] = metadata
 
+            if tenant_id is None:
+
+                tenant_id = metadata.get("tenant_id")
+
+        self.item_tenants[item_id] = tenant_id
+
 
 
     def query(
@@ -242,9 +252,11 @@ class RecurrenceSearch:
 
         min_similarity: float = 0.0,
 
+        tenant_id: Optional[str] = None,
+
     ) -> List[RecurrenceResult]:
 
-        """Find near-duplicates of `items`."""
+        """Find near-duplicates of `items` with optional tenant filtering."""
 
         if not self.signatures:
 
@@ -265,6 +277,14 @@ class RecurrenceSearch:
             band_hash = int(hashlib.md5(sig[start:end].tobytes()).hexdigest(), 16)
 
             for cand_id in self.buckets[band_idx].get(band_hash, []):
+
+                if tenant_id is not None:
+
+                    ct = self.item_tenants.get(cand_id)
+
+                    if ct is not None and ct != tenant_id:
+
+                        continue
 
                 candidates[cand_id].add(band_idx)
 

@@ -109,149 +109,98 @@ class GraphSearch:
         self.tol = tol
 
         self.adjacency: Dict[Any, List[Tuple[Any, float]]] = {}
-
         self.metadata: Dict[Any, Dict[str, Any]] = {}
+        self.node_tenants: Dict[Any, Optional[str]] = {}
 
-
-
-    def add_node(self, node_id: Any, metadata: Optional[Dict[str, Any]] = None) -> None:
-
+    def add_node(
+        self,
+        node_id: Any,
+        metadata: Optional[Dict[str, Any]] = None,
+        tenant_id: Optional[str] = None,
+    ) -> None:
         if node_id not in self.adjacency:
-
             self.adjacency[node_id] = []
-
         if metadata is not None:
-
             self.metadata[node_id] = metadata
-
-
+            if tenant_id is None:
+                tenant_id = metadata.get("tenant_id")
+        if tenant_id is not None or node_id not in self.node_tenants:
+            self.node_tenants[node_id] = tenant_id
 
     def add_edge(
-
         self,
-
         source: Any,
-
         target: Any,
-
         weight: float = 1.0,
-
         directed: bool = True,
-
     ) -> None:
-
         """Add an edge (undirected by default if directed=False)."""
-
         self.add_node(source)
-
         self.add_node(target)
-
         self.adjacency[source].append((target, weight))
-
         if not directed:
-
             self.adjacency[target].append((source, weight))
 
-
-
     def add_edges(
-
         self,
-
         edges: List[Tuple[Any, Any, float]],
-
         directed: bool = True,
-
     ) -> None:
-
         for s, t, w in edges:
-
             self.add_edge(s, t, w, directed=directed)
 
-
-
     def bfs(
-
         self,
-
         start: Any,
-
         max_depth: int = 3,
-
+        tenant_id: Optional[str] = None,
     ) -> List[GraphResult]:
-
-        """Breadth-first traversal from `start`."""
-
+        """Breadth-first traversal from `start` with optional tenant filtering."""
         if start not in self.adjacency:
-
             raise InvalidQueryError(f"Start node '{start}' not in graph.")
+        if tenant_id is not None:
+            start_tenant = self.node_tenants.get(start)
+            if start_tenant is not None and start_tenant != tenant_id:
+                raise InvalidQueryError(f"Start node '{start}' belongs to a different tenant.")
 
         visited: Set[Any] = {start}
-
         queue: deque = deque([(start, 0, [start])])
-
         results: List[GraphResult] = [
-
             GraphResult(
-
                 node_id=start,
-
                 score=1.0,
-
                 rank=1,
-
                 path=[start],
-
                 distance=0,
-
+                metadata=self.metadata.get(start, {}),
             )
-
         ]
-
         rank = 2
-
         while queue:
-
             node, depth, path = queue.popleft()
-
             if depth >= max_depth:
-
                 continue
-
             for neighbor, _ in self.adjacency.get(node, []):
-
+                if tenant_id is not None:
+                    nt = self.node_tenants.get(neighbor)
+                    if nt is not None and nt != tenant_id:
+                        continue
                 if neighbor not in visited:
-
                     visited.add(neighbor)
-
                     new_path = path + [neighbor]
-
                     score = 1.0 / (1.0 + depth + 1)
-
                     results.append(
-
                         GraphResult(
-
                             node_id=neighbor,
-
                             score=float(score),
-
                             rank=rank,
-
                             path=new_path,
-
                             distance=depth + 1,
-
                             metadata=self.metadata.get(neighbor, {}),
-
                         )
-
                     )
-
                     rank += 1
-
                     queue.append((neighbor, depth + 1, new_path))
-
         return results
 
 

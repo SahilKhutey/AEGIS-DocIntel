@@ -89,75 +89,50 @@ class TemplateSearch:
             raise ValueError(f"Unknown fingerprint type: {fingerprint_type}")
 
         self.fingerprint_type = fingerprint_type
-
         self.fingerprints: Dict[Any, Union[np.ndarray, Set, List[float]]] = {}
-
         self.metadata: Dict[Any, Dict[str, Any]] = {}
-
-
+        self.template_tenants: Dict[Any, Optional[str]] = {}
 
     def add(
-
         self,
-
         template_id: Any,
-
         fingerprint: Union[np.ndarray, Set, List[float]],
-
         metadata: Optional[Dict[str, Any]] = None,
-
+        tenant_id: Optional[str] = None,
     ) -> None:
-
         """Add a template fingerprint."""
-
         if self.fingerprint_type == "binary":
-
             fp = np.asarray(fingerprint, dtype=np.int8)
-
         elif self.fingerprint_type == "set":
-
             fp = set(fingerprint) if not isinstance(fingerprint, set) else fingerprint
-
         else:
-
             fp = np.asarray(fingerprint, dtype=np.float64)
-
         self.fingerprints[template_id] = fp
-
         if metadata is not None:
-
             self.metadata[template_id] = metadata
-
-
+            if tenant_id is None:
+                tenant_id = metadata.get("tenant_id")
+        self.template_tenants[template_id] = tenant_id
 
     def search(
-
         self,
-
         query_fingerprint: Union[np.ndarray, Set, List[float]],
-
         top_k: int = 10,
-
         max_distance: Optional[float] = None,
-
+        tenant_id: Optional[str] = None,
     ) -> List[TemplateResult]:
-
-        """Find templates most similar to query fingerprint."""
-
+        """Find templates most similar to query fingerprint with optional tenant filtering."""
         if not self.fingerprints:
-
             raise EmptyIndexError("Template index is empty.")
-
         scored: List[Tuple[Any, float, float]] = []
-
         for tid, fp in self.fingerprints.items():
-
+            if tenant_id is not None:
+                tt = self.template_tenants.get(tid)
+                if tt is not None and tt != tenant_id:
+                    continue
             sim, dist = self._compare(query_fingerprint, fp)
-
             if max_distance is not None and dist > max_distance:
-
                 continue
-
             scored.append((tid, sim, dist))
 
         scored.sort(key=lambda x: x[1], reverse=True)

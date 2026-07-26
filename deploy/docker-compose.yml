@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  aegis-api:
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    container_name: aegis-docintel-api
+    ports:
+      - "8000:8000"
+      - "9090:9090"
+    environment:
+      - APP_ENV=production
+      - LOG_LEVEL=INFO
+      - METRICS_ENABLED=true
+      - METRICS_PORT=9090
+      - TIKTOKEN_CACHE_DIR=/app/config/tiktoken
+    volumes:
+      - aegis-data:/app/data
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/healthz"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    restart: unless-stopped
+
+volumes:
+  aegis-data:
+    driver: local

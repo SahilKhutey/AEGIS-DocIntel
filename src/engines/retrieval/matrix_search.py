@@ -96,6 +96,8 @@ class MatrixSearch:
 
         self._svd_cache: Dict[Any, Tuple[np.ndarray, np.ndarray, np.ndarray]] = {}
 
+        self.table_tenants: Dict[Any, Optional[str]] = {}
+
 
 
     def add(
@@ -109,6 +111,8 @@ class MatrixSearch:
         row_metadata: Optional[Dict[int, Dict[str, Any]]] = None,
 
         col_metadata: Optional[Dict[int, Dict[str, Any]]] = None,
+
+        tenant_id: Optional[str] = None,
 
     ) -> None:
 
@@ -130,6 +134,8 @@ class MatrixSearch:
 
             self.col_metadata[table_id] = col_metadata
 
+        self.table_tenants[table_id] = tenant_id
+
 
 
     def search_column(
@@ -139,6 +145,8 @@ class MatrixSearch:
         query: np.ndarray,
 
         top_k: int = 10,
+
+        tenant_id: Optional[str] = None,
 
     ) -> List[MatrixResult]:
 
@@ -157,6 +165,14 @@ class MatrixSearch:
         results: List[MatrixResult] = []
 
         for tid, M in self.tables.items():
+
+            if tenant_id is not None:
+
+                tt = self.table_tenants.get(tid)
+
+                if tt is not None and tt != tenant_id:
+
+                    continue
 
             if M.shape[0] != q.shape[0]:
 
@@ -200,6 +216,8 @@ class MatrixSearch:
 
         top_k: int = 10,
 
+        tenant_id: Optional[str] = None,
+
     ) -> List[MatrixResult]:
 
         """Find rows most similar to query vector."""
@@ -213,6 +231,14 @@ class MatrixSearch:
         results: List[MatrixResult] = []
 
         for tid, M in self.tables.items():
+
+            if tenant_id is not None:
+
+                tt = self.table_tenants.get(tid)
+
+                if tt is not None and tt != tenant_id:
+
+                    continue
 
             if M.shape[1] != q.shape[0]:
 
@@ -258,6 +284,8 @@ class MatrixSearch:
 
         top_k: int = 10,
 
+        tenant_id: Optional[str] = None,
+
     ) -> List[MatrixResult]:
 
         """Find cells matching a target value."""
@@ -269,6 +297,14 @@ class MatrixSearch:
         results: List[MatrixResult] = []
 
         for tid, M in self.tables.items():
+
+            if tenant_id is not None:
+
+                tt = self.table_tenants.get(tid)
+
+                if tt is not None and tt != tenant_id:
+
+                    continue
 
             mask = np.abs(M - value) <= tolerance
 
@@ -314,6 +350,8 @@ class MatrixSearch:
 
         n_components: int = 10,
 
+        tenant_id: Optional[str] = None,
+
     ) -> List[MatrixResult]:
 
         """Search using truncated SVD for semantic column/row matching."""
@@ -327,7 +365,17 @@ class MatrixSearch:
         results: List[MatrixResult] = []
 
         for tid, M in self.tables.items():
+
+            if tenant_id is not None:
+
+                tt = self.table_tenants.get(tid)
+
+                if tt is not None and tt != tenant_id:
+
+                    continue
+
             if M.shape[0] != q.shape[0]:
+
                 continue
 
             k = min(n_components, min(M.shape))
