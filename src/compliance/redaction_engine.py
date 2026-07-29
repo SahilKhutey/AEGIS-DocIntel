@@ -6,6 +6,7 @@ Applies redaction, tokenization, or flagging policies before downstream engines 
 '''
 from __future__ import annotations
 
+import hashlib
 import re
 from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional, Tuple
@@ -40,7 +41,43 @@ class ComplianceReport:
 SSN_REGEX = re.compile(r'\b\d{3}-\d{2}-\d{4}\b')
 CREDIT_CARD_REGEX = re.compile(r'\b(?:\d{4}[-\s]?){3}\d{4}\b')
 PHONE_REGEX = re.compile(r'\b(?:\+?1[-\s]?)?\(?\d{3}\)?[-\s]?\d{3}[-\s]?\d{4}\b')
-NAME_REGEX = re.compile(r'\b(?:John|Jane|Alice|Bob|Sahil)\s+[A-Z][a-z]+\b')
+
+NON_NAME_WORDS = {
+    "Contact", "Visited", "Invoice", "Ref", "Document", "Section", "Table", "Figure",
+    "Report", "Annual", "Executive", "Summary", "Total", "Net", "Gross", "Revenue",
+    "Margin", "Operating", "Financial", "System", "Service", "Engine", "Member", "Card",
+    "Order", "ID", "Number", "Date", "Status", "Type", "Format", "Page", "Block", "Pay",
+}
+
+# Exclusion lists for Title Case pairs that are locations
+GEO_EXCLUSIONS = {
+    "New York", "Hong Kong", "United States", "San Francisco", "Los Angeles",
+    "North America", "South America", "Great Britain", "New Zealand", "Puerto Rico",
+    "Saudi Arabia", "South Africa", "Sri Lanka", "Costa Rica", "El Salvador",
+}
+
+# Build regex for PERSON matching that excludes non-name words at the match boundary
+NAME_REGEX = re.compile(
+    r'\b(?!(?:' + "|".join(re.escape(w) for w in NON_NAME_WORDS) + r')\b)[A-Z][a-z]{1,20}\s+[A-Z][a-z]{1,20}\b'
+)
+
+
+
+
+def _luhn_check(card_num: str) -> bool:
+    """Verifies Luhn mod-10 checksum for credit card numbers."""
+    digits = [int(c) for c in card_num if c.isdigit()]
+    if len(digits) < 13 or len(digits) > 19:
+        return False
+    checksum = 0
+    reverse_digits = digits[::-1]
+    for i, digit in enumerate(reverse_digits):
+        if i % 2 == 1:
+            double = digit * 2
+            checksum += double - 9 if double > 9 else double
+        else:
+            checksum += digit
+    return checksum % 10 == 0
 
 
 def detect_pii(element: Dict[str, Any]) -> List[PIIEntity]:
@@ -64,14 +101,16 @@ def detect_pii(element: Dict[str, Any]) -> List[PIIEntity]:
         )
 
     for match in CREDIT_CARD_REGEX.finditer(text):
+        match_text = match.group(0)
+        score = 0.95 if _luhn_check(match_text) else 0.55
         entities.append(
             PIIEntity(
                 entity_type='CREDIT_CARD',
                 element_id=elem_id,
                 start=match.start(),
                 end=match.end(),
-                score=0.95,
-                text=match.group(0),
+                score=score,
+                text=match_text,
             )
         )
 
@@ -88,18 +127,25 @@ def detect_pii(element: Dict[str, Any]) -> List[PIIEntity]:
         )
 
     for match in NAME_REGEX.finditer(text):
-        entities.append(
-            PIIEntity(
-                entity_type='PERSON',
-                element_id=elem_id,
-                start=match.start(),
-                end=match.end(),
-                score=0.85,
-                text=match.group(0),
+        match_text = match.group(0)
+        words = match_text.split()
+        if (
+            match_text not in GEO_EXCLUSIONS
+            and not any(w in NON_NAME_WORDS for w in words)
+        ):
+            entities.append(
+                PIIEntity(
+                    entity_type='PERSON',
+                    element_id=elem_id,
+                    start=match.start(),
+                    end=match.end(),
+                    score=0.85,
+                    text=match_text,
+                )
             )
-        )
 
     return entities
+
 
 
 def apply_redaction_policy(
@@ -112,7 +158,10 @@ def apply_redaction_policy(
     '''
     policy_map = {p.entity_type: p for p in policies}
     elem_copy = dict(element)
-    text = str(elem_copy.get('text', ''))
+    
+    # Correctly identify whether 'text' or 'content' key holds the source text
+    text_key = 'text' if 'text' in elem_copy else ('content' if 'content' in elem_copy else 'text')
+    text = str(elem_copy.get(text_key, ''))
     doc_id = str(element.get('doc_id', 'doc_0'))
 
     redaction_count = 0
@@ -127,19 +176,25 @@ def apply_redaction_policy(
             text = text[: ent.start] + rep + text[ent.end :]
             redaction_count += 1
         elif pol.action == 'tokenize':
-            rep = pol.replacement or f"<TOK_{hash(ent.text) & 0xFFFF}>"
+            # Deterministic, process-stable token hash instead of random hash()
+            token_hash = hashlib.sha256(ent.text.encode('utf-8')).hexdigest()[:4].upper()
+            rep = pol.replacement or f"<TOK_{token_hash}>"
             text = text[: ent.start] + rep + text[ent.end :]
             redaction_count += 1
         elif pol.action == 'flag_only':
             elem_copy['has_pii_flag'] = True
 
     elem_copy['text'] = text
+    if 'content' in elem_copy:
+        elem_copy['content'] = text
     report = ComplianceReport(
         document_id=doc_id,
         entities_found=entities,
         redactions_applied=redaction_count,
     )
     return elem_copy, report
+
+
 
 
 def redact_elements(
