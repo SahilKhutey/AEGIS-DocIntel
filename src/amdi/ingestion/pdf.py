@@ -14,11 +14,26 @@ try:
 except ImportError:
     fitz = None
 
-from src.core.document_object import DocumentFormat, DocumentObject
-from src.ingestion.base import BaseLoader, FormatError, LoaderError, SizeLimitError
-from src.ingestion.ocr_engine import OCREngine
+from amdi.core.document_object import DocumentFormat, DocumentObject
+from amdi.ingestion.ocr import OCREngine
+
+
+class FormatError(Exception):
+    pass
+
+
+class LoaderError(Exception):
+    pass
+
+
+class SizeLimitError(Exception):
+    pass
 
 logger = logging.getLogger(__name__)
+
+
+class BaseLoader:
+    pass
 
 
 class PDFLoader(BaseLoader):

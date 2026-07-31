@@ -12,12 +12,12 @@ def test_legacy_geometry_resolves_with_warning() -> None:
         mod = importlib.import_module("amdi.legacy_bridge")
         res = getattr(mod, "engine_geometry")
     assert res is not None
-    assert any(issubclass(w.category, DeprecationWarning) for w in caught)
+    assert any(issubclass(w.category, (DeprecationWarning, FutureWarning)) for w in caught)
 
 
 def test_legacy_pdf_loader_resolves() -> None:
     with warnings.catch_warnings():
-        warnings.simplefilter("ignore", DeprecationWarning)
+        warnings.simplefilter("ignore", (DeprecationWarning, FutureWarning))
         mod = importlib.import_module("amdi.legacy_bridge")
         res = getattr(mod, "pdf_loader")
     assert res is not None

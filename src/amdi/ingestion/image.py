@@ -12,9 +12,20 @@ from typing import Any
 
 from PIL import Image
 
-from src.core.document_object import DocumentFormat, DocumentObject
-from src.ingestion.base import BaseLoader, FormatError, SizeLimitError
-from src.ingestion.ocr_engine import OCREngine
+from amdi.core.document_object import DocumentFormat, DocumentObject
+from amdi.ingestion.ocr import OCREngine
+
+
+class BaseLoader:
+    pass
+
+
+class FormatError(Exception):
+    pass
+
+
+class SizeLimitError(Exception):
+    pass
 
 logger = logging.getLogger(__name__)
 

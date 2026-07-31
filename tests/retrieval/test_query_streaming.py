@@ -17,7 +17,10 @@ async def test_query_sse_emits_evidence_and_done(monkeypatch, tmp_path) -> None:
     monkeypatch.setenv("AMDI_STORAGE_BACKEND", "memory")
     monkeypatch.setenv("AMDI_QUEUE_BACKEND", "memory")
     monkeypatch.setenv("AMDI_ENABLE_RERANKER", "0")
+    monkeypatch.setenv("AMDI_RATE_LIMIT_RPS", "1000")
     get_settings.cache_clear()  # type: ignore[attr-defined]
+    import amdi.api.middleware.rate_limit as rl_mw
+    rl_mw._LIMITER = None
 
     app = create_app()
 

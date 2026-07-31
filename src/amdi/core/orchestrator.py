@@ -447,7 +447,7 @@ class AMDIOrchestrator:
         pii_entities_count = 0
         redactions_applied = 0
         if getattr(doc, "enable_redaction", False) or getattr(doc, "redact_pii", False):
-            from src.compliance.redaction_engine import redact_elements
+            from amdi.compliance.redaction import redact_elements
             elements, compliance_report = redact_elements(elements)
             pii_entities_count = len(compliance_report.entities_found)
             redactions_applied = compliance_report.redactions_applied
