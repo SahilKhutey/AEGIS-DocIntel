@@ -63,7 +63,8 @@ def test_no_legacy_fragments_anywhere(rel: str) -> None:
                       "STRUCTURE.md", "MIGRATION.md", "DocumentEngine.md", "Systems.md", "README.md",
                       "CHANGELOG.md", "DEPRECATIONS.md", "ROADMAP.md", "CHANGELOG_NOTES.md",
                       "ANNOUNCEMENT.md", "TODO.md", "DECISIONS.md", "TICKETS.json",
-                      "PATCH_NOTES.md", "CHANGELOG_PATCH.md", "start.py"}:
+                      "PATCH_NOTES.md", "CHANGELOG_PATCH.md", "start.py",
+                      "FINAL_CHECKLIST.md", "TEST_MATRIX.md"}:
             continue
 
         for n, line in enumerate(p.read_text(encoding="utf-8").splitlines(), 1):

@@ -24,8 +24,12 @@ def test_rotation_keeps_old_ciphertext_decryptable(monkeypatch) -> None:
     import importlib
     import amdi.security.crypto as c
     importlib.reload(c)
-    old = c.encrypt(b"previous text", key_id="k1")
-    c.rotate(base64.b64encode(os.urandom(32)).decode(), new_key_id="k2")
-    new = c.encrypt(b"new text", key_id="k2")
-    assert c.decrypt(old) == b"previous text"
-    assert c.decrypt(new) == b"new text"
+    try:
+        old = c.encrypt(b"previous text", key_id="k1")
+        c.rotate(base64.b64encode(os.urandom(32)).decode(), new_key_id="k2")
+        new = c.encrypt(b"new text", key_id="k2")
+        assert c.decrypt(old) == b"previous text"
+        assert c.decrypt(new) == b"new text"
+    finally:
+        monkeypatch.delenv("AMDI_DATA_KEYS_JSON", raising=False)
+        importlib.reload(c)

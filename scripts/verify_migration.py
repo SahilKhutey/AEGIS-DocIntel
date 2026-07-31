@@ -16,7 +16,8 @@ from pathlib import Path
 ALLOWED_TOP_LEVEL_PACKAGES = {"amdi", "src"}
 FORBIDDEN_LEGACY_FRAGMENTS = (
     "amdi.src",   # dead prefix
-    "amdi.",     # already migrated target — should NEVER appear in imports anymore
+    "src.amdi",   # legacy path
+    "from backend", # legacy path
 )
 
 
