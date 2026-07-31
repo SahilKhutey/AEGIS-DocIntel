@@ -1,1 +1,0 @@
-"""AEGIS-DocIntel — Services Package"""
