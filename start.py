@@ -61,7 +61,7 @@ def main():
     print("=" * 60 + "\n")
 
     run(
-        f"{sys.executable} -m uvicorn src.main:app --host 0.0.0.0 --port 8000 --reload",
+        f"{sys.executable} -m uvicorn amdi.api.app:app --host 0.0.0.0 --port 8000 --reload",
         cwd=os.path.dirname(os.path.abspath(__file__))
     )
 

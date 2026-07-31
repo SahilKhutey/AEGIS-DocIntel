@@ -11,7 +11,7 @@ from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional
 
 try:
-    from backend.src.connectors import AGENT_SPECS
+    from amdi.connectors import AGENT_SPECS
 except ImportError:
     try:
         from src.connectors import AGENT_SPECS

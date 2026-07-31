@@ -11,7 +11,7 @@ from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional
 
 try:
-    from backend.src.connectors import (
+    from amdi.connectors import (
         AGENT_SPECS,
         BaseConnector,
         ConnectorFactory,
@@ -156,7 +156,7 @@ class AgentDashboard:
     ) -> ConnectorResponse:
         """Send a test query to an agent."""
         try:
-            from backend.src.connectors import ConnectorConfig
+            from amdi.connectors import ConnectorConfig
         except ImportError:
             try:
                 from src.connectors import ConnectorConfig

@@ -13,7 +13,7 @@ from typing import Any, Dict, List
 import numpy as np
 
 try:
-    from backend.src.memory import MemoryEngine, MemoryLevel, MemoryStats
+    from amdi.memory import MemoryEngine, MemoryLevel, MemoryStats
 except ImportError:
     try:
         from src.engines.memory import MemoryEngine, MemoryLevel, MemoryStats
