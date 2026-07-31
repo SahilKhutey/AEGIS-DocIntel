@@ -1,0 +1,25 @@
+{
+  "candidate": "v0.3.0-rc.3",
+  "generated_at": "2026-09-29T12:00:00Z",
+  "freeze_sha": "deadbeef00000000000000000000000000000000",
+  "sweeps": {
+    "drift": {"exit": 0, "summary": "No drift detected."},
+    "openapi_sync": {"exit": 0, "summary": "OpenAPI <-> gRPC in sync."},
+    "audit_integrity": {"exit": 0, "summary": "No audit logs yet."},
+    "deps_cve": {"exit": 0, "summary": "no HIGH/CRITICAL CVEs."}
+  },
+  "vote": {
+    "round": 3,
+    "voters": ["alice", "bob", "carol"],
+    "decisions": [
+      {"voter": "alice", "vote": "yes", "ts": "2026-09-29T12:00Z", "note": ""},
+      {"voter": "bob",   "vote": "yes", "ts": "2026-09-29T12:01Z", "note": ""},
+      {"voter": "carol", "vote": "yes", "ts": "2026-09-29T12:02Z", "note": ""}
+    ],
+    "result": "ACCEPT"
+  },
+  "links": {
+    "charter": "release/v0.3.0-rc/CHARTER.md",
+    "checklist": "release/v0.3.0-rc/CHECKLIST.md"
+  }
+}

@@ -1,0 +1,8 @@
+- [ ] `python scripts/release_preflight.py` -> all gates ✓
+- [ ] `python scripts/release_postflight.py` -> all green
+- [ ] `pytest tests/release tests/demo tests/migration tests/security tests/observability tests/api tests/export tests/retrieval tests/ops`
+- [ ] All four sweeps green at HEAD
+- [ ] Three maintainer votes recorded in `manifest.json#vote`
+- [ ] `.github/workflows/release.yml` passes on `v0.3.0-rc.3`
+- [ ] Manifest regenerated at `release/v0.3.0-rc/manifest.json`
+- [ ] Final SHA committed

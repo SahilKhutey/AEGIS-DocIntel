@@ -1,0 +1,23 @@
+﻿[
+  {"id": "#1042", "severity": "sev-3", "component": "compliance",
+   "labels": ["K-perf", "K-policy"], "fixed_in": "0.3.1",
+   "summary": "PII redaction misses non-Latin phone formats."},
+  {"id": "#1043", "severity": "sev-3", "component": "helm",
+   "labels": ["K-bot"], "fixed_in": "0.3.1",
+   "summary": "Helm chart silently installs when jwtSecret is unset."},
+  {"id": "#1044", "severity": "sev-3", "component": "sdk-python",
+   "labels": ["K-sdk"], "fixed_in": "0.3.1",
+   "summary": "Add async generator example to SDK README."},
+  {"id": "#1045", "severity": "sev-3", "component": "ci",
+   "labels": ["K-bot"], "fixed_in": "0.4.0",
+   "summary": "Drift sweeper regex catches a string literal as a false positive."},
+  {"id": "#1047", "severity": "sev-2", "component": "packaging",
+   "labels": ["K-bot"], "fixed_in": "0.3.1",
+   "summary": "Python 3.13 breaks import due to tomllib + legacy typing imports."},
+  {"id": "#1048", "severity": "sev-3", "component": "docs",
+   "labels": ["K-policy"], "fixed_in": "0.3.1",
+   "summary": "SLA.md wording on partial outages is ambiguous."},
+  {"id": "#1051", "severity": "security", "component": "ingestion",
+   "labels": ["K-policy", "K-perf"], "fixed_in": "0.3.1",
+   "summary": "pytesseract invocation does not validate input args."}
+]

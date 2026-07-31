@@ -1,0 +1,34 @@
+﻿# Issue triage — v0.3.0 week
+
+Source of truth: `release/v0.3.0-week1/TICKETS.json`.
+
+## By severity
+
+| Severity | Count | Status |
+| -------- | ----- | ------ |
+| Sev-1 | 0 | — |
+| Sev-2 | 1 | Fixed in v0.3.1 |
+| Sev-3 | 5 | 3 fixed in v0.3.1, 2 deferred to v0.4.0 |
+| Security | 1 | GHSA-XXXX-Y, fixed in v0.3.1 |
+
+## By component
+
+| Component | Issues |
+| --------- | ------ |
+| ingestion | 1 |
+| retrieval | 2 |
+| export | 1 |
+| frontend (React) | 1 |
+| frontend (Streamlit) | 0 |
+| helm | 1 |
+| docs | 1 |
+
+## Notable items
+
+* **#1042** — PII redact misses non-Latin phone formats (Sev-3 -> fixed in 0.3.1)
+* **#1043** — Helm chart tolerates invalid `jwtSecret` silently (Sev-3 -> fixed in 0.3.1)
+* **#1044** — Python SDK example improvement (community PR, merged)
+* **#1045** — Drift sweeper false positive on `domain = 'src.amdi.dev'` string literal (deferred -> v0.4.0)
+* **#1047** — `pip install amdi-os==0.3.0` fails in Python 3.13 (Sev-2 -> fixed)
+* **#1048** — Documentation ambiguity in `docs/SLA.md` (Sev-3 -> fixed)
+* **#1051** — Security advisory (low): `pytesseract` calls Tesseract binary directly without sanitizing args (Sev-3 -> fixed)

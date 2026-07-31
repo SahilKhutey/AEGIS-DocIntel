@@ -1,0 +1,22 @@
+{
+  "version": "0.3.0",
+  "tag": "v0.3.0",
+  "released_at": "2026-09-30T14:00:00Z",
+  "description": "Deprecation Cleanup + Sweep Bots",
+  "deliverables": ["K", "L", "M"],
+  "vote": {
+    "round": 3,
+    "voters": ["alice", "bob", "carol"],
+    "decisions": [
+      {"voter": "alice", "vote": "yes", "ts": "2026-09-29T12:00Z", "note": ""},
+      {"voter": "bob",   "vote": "yes", "ts": "2026-09-29T12:01Z", "note": ""},
+      {"voter": "carol", "vote": "yes", "ts": "2026-09-29T12:02Z", "note": ""}
+    ],
+    "result": "ACCEPT"
+  },
+  "links": {
+    "changelog": "CHANGELOG.md",
+    "announcement": "release/v0.3.0/ANNOUNCEMENT.md",
+    "charter": "release/v0.3.0-rc/CHARTER.md"
+  }
+}
