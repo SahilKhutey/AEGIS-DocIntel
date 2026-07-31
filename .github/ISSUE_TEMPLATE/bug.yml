@@ -1,0 +1,29 @@
+name: Bug
+about: Something is broken or behaves wrong
+labels: [bug]
+body:
+- type: textarea
+  attributes:
+    label: Reproduction
+    placeholder: |
+      steps:
+      - ...
+- type: textarea
+  attributes:
+    label: Expected
+- type: textarea
+  attributes:
+    label: Actual
+- type: dropdown
+  attributes:
+    label: Component
+    options:
+      - api
+      - ingestion
+      - retrieval
+      - export
+      - frontend (Streamlit)
+      - frontend (React)
+      - sdk (python | ts | java | cpp)
+      - helm
+      - other

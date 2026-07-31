@@ -1,0 +1,35 @@
+version: 2
+updates:
+  - package-ecosystem: "pip"
+    directory: "/"
+    schedule:
+      interval: "daily"
+      time: "06:00"
+      timezone: "UTC"
+    open-pull-requests-limit: 5
+    labels: ["K-bot", "K-perf"]
+    commit-message:
+      prefix: "deps"
+    target-branch: master
+    groups:
+      python-deps:
+        patterns: ["*"]
+        update-strategy: "increase"
+
+  - package-ecosystem: "docker"
+    directories: ["/docker"]
+    schedule: { interval: "weekly" }
+    labels: ["K-bot", "K-perf"]
+    commit-message: { prefix: "docker(deps)" }
+
+  - package-ecosystem: "github-actions"
+    directories: ["/.github/workflows"]
+    schedule: { interval: "weekly" }
+    labels: ["K-bot", "K-perf"]
+    commit-message: { prefix: "ci(deps)" }
+
+  - package-ecosystem: "npm"
+    directories: ["/ui/react"]
+    schedule: { interval: "weekly" }
+    labels: ["K-bot", "K-perf"]
+    commit-message: { prefix: "ui(deps)" }

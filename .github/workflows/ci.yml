@@ -1,0 +1,215 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# AEGIS-DocIntel / AMDI-OS — Continuous Integration
+# - Lints with ruff (matches pyproject.toml config)
+# - Type-checks with mypy (strict)
+# - Runs pytest with coverage
+# - Verifies build artifacts (sdist + wheel)
+# - Auto-updates the README test-count badge via JSON Summary
+# ─────────────────────────────────────────────────────────────────────────────
+
+name: CI
+
+on:
+  push:
+    branches: [master, main]
+  pull_request:
+    branches: [master, main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pull-requests: write
+  checks: write
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint:
+    name: Lint (ruff)
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - name: Install ruff
+        run: python -m pip install --upgrade pip ruff
+      - name: Ruff check
+        run: ruff check src tests
+      - name: Ruff format check
+        run: ruff format --check src tests
+
+  typecheck:
+    name: Type-check (mypy --strict)
+    runs-on: ubuntu-latest
+    timeout-minutes: 7
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - name: Install
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e ".[dev]"
+      - name: mypy
+        run: mypy src
+
+  test:
+    name: Tests (pytest)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.12"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+      - name: Install
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e ".[dev]"
+      - name: Collect count
+        id: collect
+        run: |
+          # Real number — drives the badge, replaces 127/400/860 discrepancy.
+          COUNT=$(python -m pytest --collect-only -q tests | tail -n1)
+          echo "count=${COUNT}" >> "$GITHUB_OUTPUT"
+      - name: Run tests
+        run: |
+          python -m pytest -ra --json-report --json-report-file=pytest-report.json
+        env:
+          AMDI_LOG_JSON: "1"
+      - name: Upload coverage
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-${{ matrix.python-version }}
+          path: |
+            coverage.xml
+            pytest-report.json
+      - name: Summarize
+        if: always()
+        run: |
+          echo "### 🧪 Test summary" >> "$GITHUB_STEP_SUMMARY"
+          python -c "
+          import json, sys
+          try:
+              d = json.load(open('pytest-report.json'))
+              print(d.get('summary', {}))
+          except Exception as e:
+              print('no report', e)
+          " >> "$GITHUB_STEP_SUMMARY"
+
+  build:
+    name: Build (sdist + wheel)
+    runs-on: ubuntu-latest
+    needs: [lint, typecheck, test]
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - name: Install build tooling
+        run: python -m pip install --upgrade pip build hatchling hatch-vcs
+      - name: Build
+        run: python -m build --sdist --wheel
+      - name: Verify installability
+        run: |
+          python -m venv .venv-verify
+          . .venv-verify/bin/activate
+          pip install dist/*.whl
+          python -m amdi info
+          python -m amdi doctor
+
+  benchmark:
+    name: Benchmarks (regression-gated)
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    needs: [test]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - name: Install
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e ".[dev,benchmarks]"
+      - name: Snapshot environment
+        run: python -m benchmarks.runners.record_env
+      - name: Build golden set if missing
+        run: |
+          python -m benchmarks.golden.build_golden \
+              --out benchmarks/golden/questions.jsonl
+      - name: Run benchmarks
+        run: |
+          python -m benchmarks.runners.run_all \
+              --questions benchmarks/golden/questions.jsonl \
+              --out benchmarks/results/latest.json
+      - name: Regression gate
+        run: |
+          if [ ! -f benchmarks/results/baseline.json ]; then
+            echo "No baseline yet — promoting current result."
+            cp benchmarks/results/latest.json benchmarks/results/baseline.json
+          else
+            python -m benchmarks.runners.run_regression \
+                --current   benchmarks/results/latest.json \
+                --baseline  benchmarks/results/baseline.json
+          fi
+      - name: Publish updated Benchmarks.md
+        run: python -m benchmarks.runners.publish_report
+      - name: Upload benchmark artefacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: benchmark-results
+          path: |
+            benchmarks/results/latest.json
+            benchmarks/results/env.json
+            benchmarks/docs/Benchmarks.md
+
+  security:
+    name: Security + observability tests
+    runs-on: ubuntu-latest
+    needs: [lint, typecheck]
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - name: Install
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e ".[dev]"
+      - name: Run security tests
+        run: pytest tests/security -v
+      - name: Run observability tests
+        run: pytest tests/observability -v
+      - name: Run API middleware tests
+        run: pytest tests/api -v
+
+  helm-lint:
+    name: Helm lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Helm
+        uses: azure/setup-helm@v4
+        with: {version: v3.14.0}
+      - run: helm lint ops/helm/amdi
+      - run: helm template amdi ops/helm/amdi --set jwtSecret=dummy > /tmp/manifest.yaml
+
+

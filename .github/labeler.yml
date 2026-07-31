@@ -1,0 +1,42 @@
+"K-deprecation":
+  - changed-files:
+    - any-glob-to-any-file:
+      - "src/amdi/legacy_bridge.py"
+      - "tools/deprecation_matrix.json"
+"K-perf":
+  - changed-files:
+    - any-glob-to-any-file:
+      - "src/amdi/export/budget.py"
+      - "src/amdi/retrieval/**"
+"K-sdk":
+  - changed-files:
+    - any-glob-to-any-file:
+      - "proto/**"
+      - "sdks/**"
+"K-ui":
+  - changed-files:
+    - any-glob-to-any-file:
+      - "ui/**"
+"K-obs":
+  - changed-files:
+    - any-glob-to-any-file:
+      - "src/amdi/observability/**"
+      - "ops/prometheus/**"
+      - "ops/grafana/**"
+"K-stable":
+  - changed-files:
+    - any-glob-to-any-file:
+      - "src/amdi/**/schemas.py"
+      - "proto/**"
+"K-policy":
+  - changed-files:
+    - any-glob-to-any-file:
+      - "docs/SECURITY.md"
+      - "docs/RELEASE_CADENCE.md"
+"K-research":
+  - changed-files:
+    - any-glob-to-any-file:
+      - "src/amdi/math_concepts/**"
+"K-bot":
+  - author:
+    - "github-actions[bot]"

@@ -1,0 +1,21 @@
+name: Publish v*.*.* press release
+on:
+  push:
+    tags: ["v*.*.*"]
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Copy ANNOUNCEMENT to press site
+        run: |
+          mkdir -p site/press
+          cp release/${GITHUB_REF_NAME}/ANNOUNCEMENT.md \
+             site/press/$(date -u +%Y-%m-%d)-${GITHUB_REF_NAME}.md
+          git config user.name bot
+          git config user.email bot@users.noreply.github.com
+          git checkout -b bot/announce-${GITHUB_REF_NAME}
+          git add site/press
+          git commit -m "docs(press): ${GITHUB_REF_NAME} announcement"
+          git push origin bot/announce-${GITHUB_REF_NAME}

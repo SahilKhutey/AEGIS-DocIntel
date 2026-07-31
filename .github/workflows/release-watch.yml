@@ -1,0 +1,15 @@
+name: Release watch
+on:
+  release:
+    types: [published]
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Record release event
+        run: |
+          echo "Release ${{ github.event.release.tag_name }} published at ${{ github.event.release.published_at }}" \
+            >> release/release-log.txt
+          echo "Summary: ${{ github.event.release.name }}"
