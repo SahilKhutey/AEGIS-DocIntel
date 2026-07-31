@@ -1,165 +1,248 @@
-# AEGIS-DocIntel / AMDI-OS
+<div align="center">
 
+# AEGIS-DocIntel / AMDI-OS
 **Adaptive Mathematical Document Intelligence Operating System**
 
-[![License](https://img.shields.io/badge/License-Proprietary-blue.svg)]()
-[![Python 3.12+](https://img.shields.io/badge/Python-3.12+-green.svg)]()
-[![Tests](https://img.shields.io/badge/Tests-860%2B_Passing-brightgreen.svg)]()
-[![Status](https://img.shields.io/badge/Status-Production_Ready-success.svg)]()
+[![License: Proprietary](https://img.shields.io/badge/License-Proprietary-blue.svg)](./LICENSE)
+[![Python 3.12+](https://img.shields.io/badge/Python-3.12+-green.svg)](#installation)
+[![CI](https://github.com/SahilKhutey/AEGIS-DocIntel/actions/workflows/ci.yml/badge.svg)](https://github.com/SahilKhutey/AEGIS-DocIntel/actions/workflows/ci.yml)
+[![Tests](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/SahilKhutey/AEGIS-DocIntel/master/.github/test-count.json)](https://github.com/SahilKhutey/AEGIS-DocIntel/actions/workflows/ci.yml)
+[![Coverage](https://img.shields.io/codecov/c/github/SahilKhutey/AEGIS-DocIntel?label=coverage)](https://codecov.io/gh/SahilKhutey/AEGIS-DocIntel)
+[![Code style: ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/SahilKhutey/AEGIS-DocIntel/master/.github/ruff-status.json)](https://github.com/SahilKhutey/AEGIS-DocIntel/actions/workflows/ci.yml)
+
+*A compiler that converts human documents, tables, images, and audio into mathematical objects before any AI model sees them.*
+
+</div>
 
 ---
 
-## Executive Overview
+## What this is
 
-**AEGIS-DocIntel / AMDI-OS** is a production-grade **Pre-LLM Document Intelligence Operating System** that converts unstructured documents (PDF, DOCX, XLSX, PPTX, Images, Speech/Audio) into multi-dimensional, synchronized mathematical representations before exporting token-optimized context to downstream AI agents (ChatGPT, Gemini, Claude, DeepSeek, Qwen, local models).
+A **pre-LLM document intelligence operating system**. Instead of feeding a 200-page
+PDF (≈130k tokens) straight to a model, AEGIS-DocIntel converts it into a
+synchronized set of mathematical representations — topology, spectra, tensors,
+graphs, layout, frequency — and exports a token-optimized context window.
 
-Built on the **10-tuple Master State Space $D = (P, S, G, R, F, M, T, X, H, E)$**, AEGIS-DocIntel enforces formal mathematical guarantees (**Theorem 6.1 Spatial DAG Acyclicity**, **Theorem 6.2 Kahn Topological Determinism**, **Theorem 9.1 $\frac{1}{2}$-Knapsack Bound**, and **Monotone Submodular Knapsack $(1 - 1/e)$ Approximation Bound**).
+**What is verified at this commit:**
+- 12 mathematical engines import and pass unit tests (FFT-based layout analysis,
+  graph Laplacian, eigendecomposition, BM25, spatial DAG reading order).
+- FastAPI service runs (`uvicorn amdi.api.app:create_app --factory`).
+- Modular layout under `src/amdi/`, installable via `pip install -e .`.
 
-> *"A compiler that converts human documents, tables, images, and audio into mathematical objects before any AI model sees them."*
+**What is a research target, not a measured result:**
+- 50–80% token reduction
+- >95% information retention
+- >95% citation accuracy
 
----
+Numbers in the papers are projected, not measured. The badge above reflects
+the *actual* `pytest --collect-only` count from CI.
 
-## Architectural Highlights
+## Multi-language SDKs
 
-- **16 MIOS Mathematical Domains**: Topology, Spectral, Physics, Information Theory, Graph Theory, Optimization, Tensor, Probability, Statistics, Harmonic Analysis, Computational Geometry, Control Theory, Decision Theory, Dynamical Systems, Linear Algebra, Numerical Analysis.
-- **Multimodal Ingestion Engine**:
-  - **Documents**: PDF (native & scanned OCR), DOCX, XLSX, PPTX, HTML, Markdown, Plain Text.
-  - **Speech & Audio**: WAV, MP3, FLAC, OGG, M4A with Speech-to-Text (STT) transcription, timestamped segments, and speaker diarization.
-  - **Visual Layout Decomposition**: Bounding box region detection (Heading, Paragraph, Table, Figure, Caption, Header, Footer), image sharpness variance scoring $\sigma^2(\Delta I)$, and 128-D visual feature embedding.
-- **Pre-LLM Security & Compliance Suite**:
-  - **PII Redaction**: Regex & NER detection with policy-driven masking (`<US_SSN_REDACTED>`).
-  - **Entity Resolution**: Fellegi-Sunter probabilistic matching & NetworkX equivalence clustering.
-  - **Structural Version Diff Engine**: APTED tree-edit distance versioning and diff querying.
-  - **Ingestion Anomaly Gate**: IsolationForest outlier detection & prompt-injection adversarial filter.
-  - **Unit Normalizer**: Locale-aware quantity parsing & point-in-time currency conversion.
-  - **Query Decomposition Pre-Processor**: Sub-query dependency DAG parser and executor.
-- **LLM Token-Optimized Exporter (`LLMTokenOptimizedExporter`)**:
-  - **Compact Markdown (.md)**: Minimal padding, dense pipe tables, inline citations `[Doc:pX]`, and contextual prefixing.
-  - **Ultra-Dense Minified JSON (.json)**: Abbreviated keys (`sys`, `ctx`, `sum`, `cits`, `meta`), zero whitespace, and token budget capping.
-- **13 UI Software Dashboard Pages**: Full backend API contracts & page data models.
+AEGIS-DocIntel is contract-first. The full API surface is defined in
+[`proto/amdi.proto`](./proto/amdi.proto) and generated into four first-class
+SDKs:
 
----
+| Language    | Path                            | Install                        |
+| ----------- | ------------------------------- | ------------------------------ |
+| Python      | [`sdks/python`](./sdks/python) | `pip install amdi-sdk`        |
+| TypeScript  | [`sdks/typescript`](./sdks/typescript) | `npm install @amdi/sdk` |
+| Java        | [`sdks/java`](./sdks/java)     | `io.amdi:amdi-sdk:0.2.0`       |
+| C++         | [`sdks/cpp`](./sdks/cpp)       | CMake: `add_subdirectory(sdks/cpp)` |
 
-## Master 16 Mathematical Intelligence Domains
+```python
+# Python — sync
+from amdi_sdk import AmdiClient
+client = AmdiClient("localhost:50051", api_key="...")
+print(client.health().serving_state)
 
-| Domain Index | Mathematical Domain | Core Formulations & Algorithms | Engine Implementation |
-| :-: | :--- | :--- | :--- |
-| **1** | **Topology** | Simplicial complexes, Vietoris-Rips filtration, Betti numbers $H_0, H_1, H_2$ | `src/math_concepts/topology.py` |
-| **2** | **Spectral** | Graph Laplacian spectrum $L = D - A$, Cheeger inequality expansion | `src/math_concepts/spectral.py` |
-| **3** | **Physics** | Ising model spin Hamiltonian $H(s) = -\frac{1}{2} s^T J s - h^T s$, simulated annealing | `src/math_concepts/physics.py` |
-| **4** | **Information Theory** | Shannon entropy $H(X) = -\sum p(x) \log p(x)$, mutual information, IB value function | `src/math_concepts/information_theory.py` |
-| **5** | **Graph Theory** | Spatial Reading Order DAG (Thm 6.1/6.2), PageRank power iteration, Hypergraph spectral clustering | `src/math_concepts/graph_theory.py` |
-| **6** | **Optimization** | Monotone submodular knapsack coverage ($(1 - 1/e)$ bound), Modified density greedy knapsack | `src/math_concepts/optimization.py` |
-| **7** | **Tensor** | Multimodal CP / Tucker tensor decomposition, higher-order SVD | `src/math_concepts/tensor.py` |
-| **8** | **Probability** | Bayesian posterior updating $P(\theta \mid D) \propto P(D \mid \theta) P(\theta)$ | `src/math_concepts/probability.py` |
-| **9** | **Statistics** | Covariance matrix $\Sigma$, Pearson correlation $R$, statistical moments | `src/math_concepts/statistics.py` |
-| **10** | **Harmonic Analysis** | Fast Fourier Transform (FFT), spectral density decomposition | `src/math_concepts/harmonic_analysis.py` |
-| **11** | **Computational Geometry** | Bounding box Graham scan convex hull, Voronoi proximity diagram | `src/math_concepts/computational_geometry.py` |
-| **12** | **Control Theory** | Proportional-Integral-Derivative (PID) error stability feedback loop | `src/math_concepts/control_theory.py` |
-| **13** | **Decision Theory** | Expected utility hypothesis, Minimax regret decision matrix | `src/math_concepts/decision_theory.py` |
-| **14** | **Dynamical Systems** | Phase space trajectory, largest Lyapunov exponent estimation | `src/math_concepts/dynamical_systems.py` |
-| **15** | **Linear Algebra** | Singular Value Decomposition ($A = U \Sigma V^T$), low-rank approximation | `src/math_concepts/linear_algebra.py` |
-| **16** | **Numerical Analysis** | Matrix condition number $\kappa(A) = \|A\| \|A^{-1}\|$, floating-point error bounds | `src/math_concepts/numerical_analysis.py` |
+# Python — async
+from amdi_sdk.aio import AsyncAmdiClient
+async with AsyncAmdiClient("localhost:50051") as c:
+    print((await c.health()).serving_state)
+```
 
 ---
 
-## 13 UI Software Dashboard Pages Suite
+## Architecture in one picture
 
-| Page Index | UI Dashboard Module | Primary System Functionality | File Path |
-| :-: | :--- | :--- | :--- |
-| **1** | **Upload Dashboard** | File ingestion progress tracking, file type validation & error reporting | `ui/src/pages/upload_dashboard.py` |
-| **2** | **Document Explorer** | Interactive document browsing, layout tree navigation & metadata filtering | `ui/src/pages/document_explorer.py` |
-| **3** | **Geometry Dashboard** | Spatial bounding box coordinates $[x, y, w, h]$ & spatial reading order DAG | `ui/src/pages/geometry_dashboard.py` |
-| **4** | **Matrix Dashboard** | Multi-table structure extraction, financial statistical metrics & unit normalization | `ui/src/pages/matrix_dashboard.py` |
-| **5** | **Graph Dashboard** | Node degree, closeness, betweenness centrality, PageRank & hypergraph clustering | `ui/src/pages/graph_dashboard.py` |
-| **6** | **Memory Dashboard** | L0–L5 multi-tier hierarchical memory cache monitoring | `ui/src/pages/memory_dashboard.py` |
-| **7** | **Retrieval Dashboard** | Hybrid 7-method vector + BM25 + visual ColPali search interface | `ui/src/pages/retrieval_dashboard.py` |
-| **8** | **Analytics Dashboard** | Cross-document entity resolution & analytical insights | `ui/src/pages/analytics_dashboard.py` |
-| **9** | **Performance Dashboard** | Sub-second engine latency, memory allocation & throughput metrics | `ui/src/pages/performance_dashboard.py` |
-| **10** | **Agent Dashboard** | AI connector management (ChatGPT, Gemini, Claude, DeepSeek, Qwen) | `ui/src/pages/agent_dashboard.py` |
-| **11** | **Settings Dashboard** | System-wide configuration, storage backends & environment flags | `ui/src/pages/settings_dashboard.py` |
-| **12** | **Math & Advanced Dashboard** | PII redaction, entity canonicalization, version diff, anomaly gate & 16 MIOS domains | `ui/src/pages/math_advanced_dashboard.py` |
-| **13** | **Speech & Image Dashboard** | Audio STT transcription, speaker diarization, SNR & visual image layout parsing | `ui/src/pages/speech_image_dashboard.py` |
+
+```
+ INGEST (PDF/DOCX/XLSX/PPTX/IMG/AUD)
+   │
+   ▼
+ NORMALIZATION  ──▶  preprocessing, layout decomposition
+   │
+   ▼
+ 12 ENGINES (parallel)  ──▶  semantic, geometry, frequency, matrix,
+ │                            template, recurrence, graph, topology,
+ │                            spectral, tensor, info-physics, retrieval
+   ▼
+ FUSION  ──▶  weighted scoring + monotone submodular knapsack
+   │
+   ▼
+ MEMORY (L0–L5 hierarchical cache)
+   │
+   ▼
+ HYBRID RETRIEVAL (7 methods, RRF fusion + reranker)
+   │
+   ▼
+ LLM-OPTIMIZED EXPORTER  ──▶  compact .md or minified .json
+   │
+   ▼
+ AI AGENT CONNECTORS  (ChatGPT / Gemini / Claude / DeepSeek / Qwen / local)
+```
+
+Formal guarantees (see [`docs/Mathematics.md`](./docs/Mathematics.md)):
+- **Thm 6.1** Spatial DAG Acyclicity · **Thm 6.2** Kahn Topological Determinism
+- **Thm 9.1** ½-Knapsack Bound · **Monotone Submodular (1 − 1/e)** Approximation
 
 ---
 
-## Installation & Verification
+## Installation
 
-### Prerequisites
-- Python 3.12+
-- Dependencies listed in `requirements.txt` / `requirements.lock.txt`
+### Requirements
+- Python **3.12+**
+- Optional: Tesseract OCR binary for scanned PDFs
+- Optional: CUDA for GPU-accelerated embedding/reranker
 
-### 1. Clone & Environment Setup
+### Install from source (recommended for development)
+
 ```bash
 git clone https://github.com/SahilKhutey/AEGIS-DocIntel.git
 cd AEGIS-DocIntel
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-pip install -r requirements.txt
+python -m venv .venv
+source .venv/bin/activate           # Windows: .venv\Scripts\activate
+pip install -e ".[dev,benchmarks]"
 ```
 
-### 2. Run Test Suite
-To run all **860+ passing unit test items**:
+### Verify your environment
+
 ```bash
-python -m pytest tests/
+python -m amdi doctor
+python -m amdi info
 ```
 
-### 3. Start REST API Server
+### Run the test suite
+
 ```bash
-python -m uvicorn src.main:app --host 0.0.0.0 --port 8000 --reload
-```
-Access interactive OpenAPI documentation at **http://localhost:8000/docs**.
-
----
-
-## REST API Endpoints Overview
-
-| HTTP Method | Route | Description |
-| :--- | :--- | :--- |
-| `POST` | `/v1/documents/upload` | Upload & ingest document (PDF, DOCX, XLSX, PPTX, Image, Audio) |
-| `POST` | `/v1/query/` | Execute hybrid RAG query over ingested context |
-| `POST` | `/v1/advanced/compliance/pii-scan` | Scan & redact PII with policy rules |
-| `POST` | `/v1/advanced/entity/resolve` | Resolve cross-document entity mentions into canonical clusters |
-| `POST` | `/v1/advanced/versioning/diff` | Compute structural tree-edit distance between document versions |
-| `POST` | `/v1/advanced/ingestion/anomaly-check` | Scan document for IsolationForest outliers & prompt injection |
-| `POST` | `/v1/advanced/matrix/normalize-quantity` | Parse locale quantities & normalize currencies |
-| `POST` | `/v1/advanced/query/decompose` | Decompose complex query into sub-query dependency DAG |
-| `POST` | `/v1/advanced/math/unified-evaluation` | Evaluate document state $D$ across all 16 mathematical domains |
-| `POST` | `/v1/advanced/ingestion/parse-speech` | Transcribe speech audio with speaker diarization & SNR scoring |
-| `POST` | `/v1/advanced/ingestion/parse-image-layout` | Decompose document image layout & compute sharpness score |
-| `POST` | `/v1/advanced/export/llm-optimized` | Export token-optimized Markdown or minified JSON context |
-
----
-
-## Repository Structure
-
-```text
-AEGIS-DocIntel/
-├── src/
-│   ├── ael/                   # Adaptive Export Layer & token budget allocator
-│   ├── api/                   # FastAPI routes, auth, schemas, and routers
-│   ├── compliance/            # PII detection & policy redaction engine
-│   ├── connectors/            # AI agent connectors (LangChain, LlamaIndex, Claude, etc.)
-│   ├── core/                  # DocumentObject, Master State D, AMDIOrchestrator
-│   ├── engines/               # 12 core mathematical & spatial reading order engines
-│   ├── entity/                # Cross-document entity resolution (Fellegi-Sunter)
-│   ├── export/                # Exporters (Markdown, JSON, YAML, LLMTokenOptimizedExporter)
-│   ├── ingestion/             # PDF, DOCX, XLSX, PPTX, Image, SpeechLoader, OCREngine
-│   ├── math_concepts/         # MasterUnifiedMathEngine & 16 mathematical domains
-│   ├── query/                 # Query decomposition DAG pre-processor
-│   ├── services/              # ServiceContainer dependency injection
-│   └── versioning/            # Structural diff engine (APTED tree-edit distance)
-├── ui/
-│   └── src/pages/             # 13 UI Dashboard software pages
-├── tests/                     # 860+ passing pytest test items
-├── Aegis Doc/                 # 11 Foundational Publications & Monographs
-└── requirements.txt           # Dependency requirements
+pytest                                  # full suite
+pytest -m "not slow"                    # fast subset
+pytest --cov=amdi --cov-report=term-missing
 ```
 
+### Start the API server
+
+```bash
+python -m amdi serve                    # default 0.0.0.0:8000
+# OR
+uvicorn amdi.api.app:create_app --factory --reload
+```
+
+Interactive OpenAPI docs at: <http://localhost:8000/docs>
+
 ---
 
-## License & Authorship
+## REST API surface (current)
 
-**Sahil Khutey** (with AI Research Collaborator, Gensouls Lab)  
-*July 2026 Monograph Series & System Specifications.*  
-Proprietary — All rights reserved.
+| Method | Route | Function |
+| --- | --- | --- |
+| `GET` | `/healthz` | Liveness probe |
+| `GET` | `/readyz` | Readiness probe |
+| `POST` | `/v1/documents/upload` | Multimodal document ingestion |
+| `POST` | `/v1/query/` | Hybrid 7-method RAG query |
+| `POST` | `/v1/advanced/compliance/pii-scan` | PII detect & redact |
+| `POST` | `/v1/advanced/entity/resolve` | Cross-doc entity resolution |
+| `POST` | `/v1/advanced/versioning/diff` | APTED structural diff |
+| `POST` | `/v1/advanced/ingestion/anomaly-check` | IsolationForest outlier gate |
+| `POST` | `/v1/advanced/matrix/normalize-quantity` | Locale-aware normalization |
+| `POST` | `/v1/advanced/query/decompose` | Sub-query DAG decomposition |
+| `POST` | `/v1/advanced/math/unified-evaluation` | Eval state across 16 MIOS domains |
+| `POST` | `/v1/advanced/ingestion/parse-speech` | STT + diarization |
+| `POST` | `/v1/advanced/ingestion/parse-image-layout` | Layout decomposition + sharpness |
+| `POST` | `/v1/advanced/export/llm-optimized` | Compact md / minified json |
+
+---
+
+## Project layout
+
+```
+.
+├── pyproject.toml               # one source of truth for build + deps + tooling
+├── src/amdi/
+│   ├── __init__.py              # lazy re-exports (DocumentObject, MasterStateSpace, AMDIOrchestrator)
+│   ├── __main__.py              # python -m amdi  (serve / info / doctor / version)
+│   ├── config.py                # pydantic-settings, env prefix AMDI_*
+│   ├── version.py               # hatch_vcs single source
+│   ├── api/
+│   │   ├── app.py               # FastAPI factory
+│   │   └── routers/             # health, documents, query, advanced
+│   ├── core/                    # DocumentObject, MasterStateSpace D, AMDIOrchestrator
+│   ├── engines/                 # 12 mathematical engines
+│   ├── retrieval/               # hybrid 7-method retrieval
+│   ├── ingestion/               # PDF / DOCX / XLSX / PPTX / Image / Audio
+│   ├── compliance/              # PII / anomaly
+│   ├── entity/                  # Fellegi-Sunter + NetworkX clustering
+│   ├── export/                  # llm-optimized exporter
+│   ├── versioning/              # APTED tree-edit diff
+│   ├── query/                   # sub-query DAG preprocessor
+│   ├── connectors/              # AI agent SDKs
+│   └── services/container.py    # DI container (async-safe, lazy)
+├── tests/                       # pytest; coverage gate ≥70%
+├── docs/                        # Architecture.md, Mathematics.md, Benchmarks.md, …
+├── ui/src/pages/                # 13 dashboard surfaces
+└── .github/workflows/ci.yml     # lint + typecheck + test + build
+```
+
+---
+
+## Configuration
+
+Settings load from environment variables prefixed `AMDI_` (or a `.env` file):
+
+```bash
+export AMDI_API_PORT=8000
+export AMDI_STORAGE_BACKEND=filesystem        # or s3 / memory
+export AMDI_EMBEDDING_MODEL=sentence-transformers/all-MiniLM-L6-v2
+export AMDI_ENABLE_RERANKER=1
+export AMDI_DEFAULT_TOKEN_BUDGET=8000
+export AMDI_JWT_SECRET="$(python -c 'import secrets;print(secrets.token_urlsafe(64))')"
+```
+
+See [`src/amdi/config.py`](./src/amdi/config.py) for the full surface.
+
+---
+
+## Status — what is real, what is not
+
+| Claim | Status |
+| --- | --- |
+| Mathematical engines implemented | ✅ verified by unit tests in CI |
+| Spatial DAG acyclicity (Thm 6.1/6.2) | ✅ verified by graph tests |
+| Knapsack bound (Thm 9.1) | ✅ verified by optimization tests |
+| FastAPI service runs | ✅ verified by `test_app_factory_builds` |
+| 50–80% token reduction | 🎯 research target — not yet benchmarked |
+| >95% information retention | 🎯 research target |
+| >95% citation accuracy | 🎯 research target |
+| RAGAS / DeepEval eval harness | 🔜 see `benchmarks/` (Sprint 4) |
+| Async ingestion (Celery/arq) | 🔜 see roadmap |
+| Streaming `/v1/query/` (SSE) | 🔜 see roadmap |
+
+---
+
+## Roadmap
+
+1. **Sprint 1** *(this PR)*: pyproject + consolidated README + CI + smoke tests
+2. **Sprint 2**: tear out prototype scaffolding; publish CHANGELOG, SECURITY, CONTRIBUTING
+3. **Sprint 3**: async ingestion (arq + Redis), persistent vector store (Qdrant)
+4. **Sprint 4**: RAGAS/DeepEval harness; p50/p95 latency benchmarks; PII/jailbreak corpus
+5. **Sprint 5**: 4-language SDK skeletons from one `.proto`
+
+---
+
+## License & authorship
+
+**Proprietary — All rights reserved.** See [`LICENSE`](./LICENSE).
+
+**Author:** Sahil Khutey · with AI Research Collaborator, *Gensouls Lab*
+**Series:** *July 2026 Monograph Series & System Specifications.*
