@@ -1,44 +1,69 @@
-# Byte-compiled / optimized / DLL files
+# ── Python ──────────────────────────────────────────────────────────────────
 __pycache__/
-*.pyc
-*.pyo
-*.pyd
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+dist/
+*.egg-info/
+*.egg
+.eggs/
 
-# Testing / Benchmarking
+# ── Hatch-VCS version file ──────────────────────────────────────────────────
+src/amdi/_version.py
+
+# ── Test / coverage artifacts ───────────────────────────────────────────────
 .pytest_cache/
-.benchmarks/
-.cache/
-pytest_log.txt
-*.db
+.coverage
+.coverage.*
+htmlcov/
+coverage.xml
+pytest-report.json
+.tox/
 
-# Environments
-.env
-.venv
-env/
+# ── Type-checker / linter caches ────────────────────────────────────────────
+.ruff_cache/
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# ── Virtual envs ────────────────────────────────────────────────────────────
+.venv/
 venv/
 ENV/
+env/
 
-# OS metadata
+# ── AEGIS runtime data ─────────────────────────────────────────────────────
+.amdi_data/
+.amdi_logs/
+
+# ── Secrets / local config ──────────────────────────────────────────────────
+.env
+.env.local
+.env.*.local
+
+# ── IDE / OS ────────────────────────────────────────────────────────────────
+.idea/
+.vscode/
 .DS_Store
 Thumbs.db
+*.swp
+*.swo
 
-# TypeScript / Node
-node_modules/
-dist/
+# ── Benchmark outputs ────────────────────────────────────────────────────────
+benchmarks/results/latest.json
+benchmarks/results/history.csv
+benchmarks/results/diff/
+benchmarks/results/env.json
+!benchmarks/results/.gitkeep
 
-# C++ Build outputs
-build/
-bin/
-lib/
-CMakeCache.txt
-CMakeFiles/
-Makefile
-cmake_install.cmake
+# ── Migration artefacts ──────────────────────────────────────────────────────
+.migration_backup/
 
-# Java Build outputs
-target/
-*.class
-
-# Antigravity artifacts (ignore the local brain folder and private gemini app data)
-.gemini/
+# ── Temporary archives
 *.zip
+node_modules/
+
+# ── Migrated-away trees ──────────────────────────────────────────────────────
+backend/
