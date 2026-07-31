@@ -1,37 +1,19 @@
-import os
+"""Root conftest for pytest: adds project root to sys.path."""
+
+from __future__ import annotations
+
 import sys
 from pathlib import Path
 
-# Custom list subclass to block "amdi-os" from being added to sys.path
-class ProtectedPathList(list):
-    def insert(self, index, item):
-        if "amdi-os" in str(item):
-            return
-        super().insert(index, item)
+root = str(Path(__file__).parents[1])
+if root not in sys.path:
+    sys.path.insert(0, root)
 
-    def append(self, item):
-        if "amdi-os" in str(item):
-            return
-        super().append(item)
+gen = Path(root) / "sdks" / "python" / "src" / "amdi_sdk" / "proto"
+if gen.exists() and str(gen) not in sys.path:
+    sys.path.insert(0, str(gen))
 
-    def extend(self, items):
-        filtered = [i for i in items if "amdi-os" not in str(i)]
-        super().extend(filtered)
+sdk_src = Path(root) / "sdks" / "python" / "src"
+if sdk_src.exists() and str(sdk_src) not in sys.path:
+    sys.path.insert(0, str(sdk_src))
 
-    def __add__(self, other):
-        filtered = [i for i in other if "amdi-os" not in str(i)]
-        return ProtectedPathList(super().__add__(filtered))
-
-    def __iadd__(self, other):
-        filtered = [i for i in other if "amdi-os" not in str(i)]
-        return super().__iadd__(filtered)
-
-# Replace sys.path with our protected list
-sys.path = ProtectedPathList(p for p in sys.path if "amdi-os" not in p)
-
-# Resolve absolute paths
-root_dir = str(Path(__file__).parent.parent.resolve())
-
-# Prioritize the root directory to import from the unified 'src' folder
-if root_dir not in sys.path:
-    sys.path.insert(0, root_dir)

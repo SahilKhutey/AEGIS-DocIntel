@@ -11,7 +11,7 @@ import httpx
 root_dir = Path(__file__).parent.parent
 sys.path.insert(0, str(root_dir))
 
-from backend.src.webhooks import (
+from amdi.webhooks import (
     Event,
     EventTopic,
     match_topic,

@@ -9,7 +9,7 @@ import pytest
 root_dir = Path(__file__).parent.parent
 sys.path.insert(0, str(root_dir))
 
-from backend.src.optimization.meta_learning import (
+from amdi.optimization.meta_learning import (
     MetaLearner,
     MetaLearningConfig,
     OnlineLearner,

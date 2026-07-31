@@ -6,14 +6,14 @@ import numpy as np
 import pytest
 from unittest.mock import MagicMock
 
-# Configure Python path to find backend.benchmarks
+# Configure Python path to find amdi.benchmarks
 root_dir = Path(__file__).parent.parent
 sys.path.insert(0, str(root_dir))
 
 
 def test_benchmarks_imports():
-    """Verify that all components can be imported from backend.benchmarks."""
-    from backend.benchmarks import (
+    """Verify that all components can be imported from amdi.benchmarks."""
+    from amdi.benchmarks import (
         BenchmarkEngine,
         BenchmarkResult,
         BenchmarkSuite,
@@ -53,7 +53,7 @@ def test_benchmarks_imports():
 
 def test_exceptions():
     """Verify exceptions raise and catch properly."""
-    from backend.benchmarks.exceptions import (
+    from amdi.benchmarks.exceptions import (
         BenchmarkError,
         DatasetMissingError,
         MetricComputationError,
@@ -70,7 +70,7 @@ def test_exceptions():
 
 def test_ground_truth():
     """Verify GroundTruthEntry serialization and file operations."""
-    from backend.benchmarks.ground_truth import GroundTruth, GroundTruthEntry
+    from amdi.benchmarks.ground_truth import GroundTruth, GroundTruthEntry
 
     entry = GroundTruthEntry(
         question="What is gravity?",
@@ -105,7 +105,7 @@ def test_ground_truth():
 
 def test_dataset_loader():
     """Verify DatasetLoader Synthetic generation."""
-    from backend.benchmarks.dataset_loader import DatasetLoader
+    from amdi.benchmarks.dataset_loader import DatasetLoader
 
     loader = DatasetLoader()
     # Test synthetic load
@@ -118,8 +118,8 @@ def test_dataset_loader():
 
 def test_accuracy_metrics():
     """Verify AccuracyBenchmark calculations for exact, token, and cosine similarities."""
-    from backend.benchmarks.accuracy import AccuracyBenchmark, AccuracyResult
-    from backend.benchmarks.ground_truth import GroundTruthEntry
+    from amdi.benchmarks.accuracy import AccuracyBenchmark, AccuracyResult
+    from amdi.benchmarks.ground_truth import GroundTruthEntry
 
     gt = [
         GroundTruthEntry("Q1", "The quick brown fox", category="test", difficulty="easy"),
@@ -152,7 +152,7 @@ def test_accuracy_metrics():
 
 def test_precision_recall_metrics():
     """Verify PrecisionRecallBenchmark metrics."""
-    from backend.benchmarks.precision_recall import PrecisionRecallBenchmark
+    from amdi.benchmarks.precision_recall import PrecisionRecallBenchmark
 
     bench = PrecisionRecallBenchmark()
     
@@ -174,7 +174,7 @@ def test_precision_recall_metrics():
 
 def test_latency_metrics():
     """Verify LatencyBenchmark measurement and distribution statistics."""
-    from backend.benchmarks.latency import LatencyBenchmark
+    from amdi.benchmarks.latency import LatencyBenchmark
 
     bench = LatencyBenchmark(num_runs=5, warmup_runs=1)
     
@@ -194,7 +194,7 @@ def test_latency_metrics():
 
 def test_memory_tracker():
     """Verify MemoryTracker snapshots and function profiling."""
-    from backend.benchmarks.memory_tracker import MemoryTracker
+    from amdi.benchmarks.memory_tracker import MemoryTracker
 
     tracker = MemoryTracker()
     
@@ -212,7 +212,7 @@ def test_memory_tracker():
 
 def test_token_usage_metrics():
     """Verify TokenUsageBenchmark usage recording and pricing calculations."""
-    from backend.benchmarks.token_usage import TokenUsageBenchmark
+    from amdi.benchmarks.token_usage import TokenUsageBenchmark
 
     tracker = TokenUsageBenchmark()
     tracker.record(500, 100, engine="semantic", section="retrieval")
@@ -235,7 +235,7 @@ def test_token_usage_metrics():
 
 def test_cost_metrics():
     """Verify CostBenchmark compute, storage and total cost summaries."""
-    from backend.benchmarks.cost import CostBenchmark, CostModel
+    from amdi.benchmarks.cost import CostBenchmark, CostModel
 
     model = CostModel(
         input_price_per_1k=0.010,
@@ -261,7 +261,7 @@ def test_cost_metrics():
 
 def test_baseline_comparator():
     """Verify BaselineComparator calculations."""
-    from backend.benchmarks.baseline import BaselineComparator
+    from amdi.benchmarks.baseline import BaselineComparator
 
     comp = BaselineComparator()
     baseline = {"accuracy": 0.60, "latency_ms": 1500.0, "tokens": 5000, "cost_usd": 0.05}
@@ -278,7 +278,7 @@ def test_baseline_comparator():
 
 def test_statistical_tests():
     """Verify StatisticalTests paired t-test and Wilcoxon rankings."""
-    from backend.benchmarks.statistical_tests import StatisticalTests
+    from amdi.benchmarks.statistical_tests import StatisticalTests
 
     a = [0.8, 0.9, 0.85, 0.95, 0.9, 0.8, 0.9, 0.85, 0.95, 0.9]
     b = [0.6, 0.7, 0.65, 0.75, 0.7, 0.6, 0.7, 0.65, 0.75, 0.7]
@@ -296,8 +296,8 @@ def test_statistical_tests():
 
 def test_metrics_aggregator_and_reports():
     """Verify MetricsAggregator combines results and ReportGenerator produces MD."""
-    from backend.benchmarks.metrics_aggregator import MetricsAggregator
-    from backend.benchmarks.report_generator import ReportGenerator
+    from amdi.benchmarks.metrics_aggregator import MetricsAggregator
+    from amdi.benchmarks.report_generator import ReportGenerator
     
     # Mock some single document result structures
     mock_res = MagicMock()
@@ -331,8 +331,8 @@ def test_metrics_aggregator_and_reports():
 
 def test_benchmark_engine():
     """Verify BenchmarkEngine runner orchestrator execution."""
-    from backend.benchmarks.benchmark_engine import BenchmarkEngine, BenchmarkSuite
-    from backend.benchmarks.dataset_loader import DatasetLoader
+    from amdi.benchmarks.benchmark_engine import BenchmarkEngine, BenchmarkSuite
+    from amdi.benchmarks.dataset_loader import DatasetLoader
 
     loader = DatasetLoader()
     ds = loader.load_synthetic("scientific_papers", n_documents=1, questions_per_doc=2)

@@ -26,7 +26,7 @@ os.environ["AEGIS_USE_MOCK_EMBEDDER"] = "1"   # skip model download in tests
 @pytest.fixture(scope="session")
 def app():
     """Import the FastAPI app for testing."""
-    from src.main import app
+    from amdi.api.app import app
     return app
 
 

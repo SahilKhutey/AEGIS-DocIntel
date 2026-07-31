@@ -23,7 +23,7 @@ from ui.src.pages.speech_image_dashboard import (
     ImageQualityViewData,
     ImageLayoutRegionViewData,
 )
-from src.main import app
+from amdi.api.app import app
 
 client = TestClient(app)
 

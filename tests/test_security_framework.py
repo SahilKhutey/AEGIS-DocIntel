@@ -9,14 +9,14 @@ from starlette.responses import Response
 from starlette.testclient import TestClient
 from fastapi import FastAPI
 
-# Configure Python path to find backend.security
+# Configure Python path to find amdi.security
 root_dir = Path(__file__).parent.parent
 sys.path.insert(0, str(root_dir))
 
 
 def test_security_imports():
-    """Verify that all components can be imported from backend.security."""
-    from backend.security import (
+    """Verify that all components can be imported from amdi.security."""
+    from amdi.security import (
         SecurityEngine,
         SecurityReport,
         EncryptionManager,
@@ -60,7 +60,7 @@ def test_security_imports():
 
 def test_exceptions():
     """Verify custom exceptions can be raised and caught."""
-    from backend.security.exceptions import (
+    from amdi.security.exceptions import (
         SecurityError,
         AuthenticationError,
         AuthorizationError,
@@ -91,7 +91,7 @@ def test_exceptions():
 
 def test_hash_compat():
     """Verify password hashing and verification."""
-    from backend.security.hash_compat import hash_password, verify_password
+    from amdi.security.hash_compat import hash_password, verify_password
 
     pw = "SecretSecurePassword123!"
     hashed = hash_password(pw)
@@ -103,7 +103,7 @@ def test_hash_compat():
 
 def test_symmetric_encryption():
     """Verify AES symmetric encryption and decryption."""
-    from backend.security.encryption import AESEncryptor, EncryptionError
+    from amdi.security.encryption import AESEncryptor, EncryptionError
 
     encryptor = AESEncryptor()
     plaintext = "Sensitive data to encrypt"
@@ -130,7 +130,7 @@ def test_symmetric_encryption():
 
 def test_asymmetric_encryption():
     """Verify RSA asymmetric encryption, decryption, signing, and verification."""
-    from backend.security.encryption import RSAEncryptor
+    from amdi.security.encryption import RSAEncryptor
 
     encryptor = RSAEncryptor()
     plaintext = "asymmetric secret payload"
@@ -149,7 +149,7 @@ def test_asymmetric_encryption():
 
 def test_encryption_manager():
     """Verify key registration, retrieval, and rotation in EncryptionManager."""
-    from backend.security.encryption import EncryptionManager, EncryptionError
+    from amdi.security.encryption import EncryptionManager, EncryptionError
 
     mgr = EncryptionManager()
     mgr.create_aes_key("key1")
@@ -173,7 +173,7 @@ def test_encryption_manager():
 
 def test_access_control_rbac():
     """Verify RBAC roles, assignments, hierarchies, and permission queries."""
-    from backend.security.access_control import AccessController, Role, Permission, Resource
+    from amdi.security.access_control import AccessController, Role, Permission, Resource
 
     controller = AccessController()
     controller.create_default_roles()
@@ -210,7 +210,7 @@ def test_access_control_rbac():
 
 def test_access_control_abac():
     """Verify ABAC policy evaluation."""
-    from backend.security.access_control import AccessController, Permission, Resource, Policy
+    from amdi.security.access_control import AccessController, Permission, Resource, Policy
 
     controller = AccessController()
     
@@ -242,7 +242,7 @@ def test_access_control_abac():
 
 def test_authentication_jwt():
     """Verify authentication managerJWT issuance, verification, and revocation."""
-    from backend.security.authentication import AuthenticationManager, AuthenticationError
+    from amdi.security.authentication import AuthenticationManager, AuthenticationError
 
     mgr = AuthenticationManager()
     
@@ -274,7 +274,7 @@ def test_authentication_jwt():
 
 def test_authentication_api_keys():
     """Verify API Key creation, verification, and revocation."""
-    from backend.security.authentication import AuthenticationManager, AuthenticationError
+    from amdi.security.authentication import AuthenticationManager, AuthenticationError
 
     mgr = AuthenticationManager()
     user = mgr.create_user("app_server", "app@example.com", "serverpassword")
@@ -297,7 +297,7 @@ def test_authentication_api_keys():
 
 def test_audit_logging():
     """Verify tamper-evident audit logging functionality."""
-    from backend.security.audit_log import AuditLogger, AuditEventType, AuditSeverity
+    from amdi.security.audit_log import AuditLogger, AuditEventType, AuditSeverity
 
     logger = AuditLogger()
     
@@ -334,8 +334,8 @@ def test_audit_logging():
 
 def test_secret_manager():
     """Verify Vault-like secret manager versioning, permissions, and rotation."""
-    from backend.security import SecurityEngine
-    from backend.security.exceptions import SecretAccessError
+    from amdi.security import SecurityEngine
+    from amdi.security.exceptions import SecretAccessError
 
     engine = SecurityEngine()
     
@@ -372,8 +372,8 @@ def test_secret_manager():
 
 def test_rate_limiter():
     """Verify sliding window rate limiting."""
-    from backend.security.rate_limiter import RateLimiter, RateLimitRule
-    from backend.security.exceptions import RateLimitExceededError
+    from amdi.security.rate_limiter import RateLimiter, RateLimitRule
+    from amdi.security.exceptions import RateLimitExceededError
 
     limiter = RateLimiter()
     rule = RateLimitRule(key="api", limit=3, window_seconds=2)
@@ -397,8 +397,8 @@ def test_rate_limiter():
 
 def test_threat_detector():
     """Verify SQLi, XSS, and Path Traversal detection."""
-    from backend.security.threat_detector import ThreatDetector, ThreatLevel
-    from backend.security.exceptions import ThreatDetectedError
+    from amdi.security.threat_detector import ThreatDetector, ThreatLevel
+    from amdi.security.exceptions import ThreatDetectedError
 
     detector = ThreatDetector()
 
@@ -432,7 +432,7 @@ def test_threat_detector():
 
 def test_security_middleware():
     """Verify security middleware controls on a mock FastAPI application."""
-    from backend.security import SecurityEngine, RateLimitRule, SecurityMiddleware
+    from amdi.security import SecurityEngine, RateLimitRule, SecurityMiddleware
     
     engine = SecurityEngine()
     
@@ -491,7 +491,7 @@ def test_security_middleware():
 
 def test_security_engine_and_reporting():
     """Verify the SecurityEngine orchestrator and report compilation."""
-    from backend.security import SecurityEngine, SecurityReport, AuditEventType
+    from amdi.security import SecurityEngine, SecurityReport, AuditEventType
 
     engine = SecurityEngine()
     

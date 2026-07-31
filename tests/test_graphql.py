@@ -8,13 +8,13 @@ import asyncio
 root_dir = Path(__file__).parent.parent
 sys.path.insert(0, str(root_dir))
 
-from backend.src.graphql import (
+from amdi.graphql import (
     DataLoader,
     GraphQLEngine,
     get_playground_html,
 )
-from backend.src.multitenancy import TenantManager, TenantBilling
-from backend.src.analytics import AnalyticsEngine
+from amdi.multitenancy import TenantManager, TenantBilling
+from amdi.analytics import AnalyticsEngine
 
 
 @pytest.mark.asyncio

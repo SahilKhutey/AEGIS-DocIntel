@@ -6,14 +6,14 @@ import numpy as np
 import pytest
 from unittest.mock import MagicMock
 
-# Configure Python path to find backend.validation
+# Configure Python path to find amdi.validation
 root_dir = Path(__file__).parent.parent
 sys.path.insert(0, str(root_dir))
 
 
 def test_validation_imports():
-    """Verify that all components can be imported from backend.validation."""
-    from backend.validation import (
+    """Verify that all components can be imported from amdi.validation."""
+    from amdi.validation import (
         ValidationEngine,
         ValidationSuite,
         ValidationResult,
@@ -49,7 +49,7 @@ def test_validation_imports():
 
 def test_exceptions():
     """Verify custom exceptions can be raised and caught."""
-    from backend.validation.exceptions import (
+    from amdi.validation.exceptions import (
         ValidationError,
         TestFailureError,
         CoverageThresholdError,
@@ -70,7 +70,7 @@ def test_exceptions():
 
 def test_assertions():
     """Verify AMDIAssertions validation logic."""
-    from backend.validation.assertions import AMDIAssertions
+    from amdi.validation.assertions import AMDIAssertions
     
     # Valid output structure
     AMDIAssertions.assert_valid_output({"a": 1, "b": 2}, ["a", "b"])
@@ -113,7 +113,7 @@ def test_assertions():
 
 def test_unit_test_runner():
     """Verify UnitTestRunner behavior."""
-    from backend.validation.unit_test_runner import UnitTestRunner
+    from amdi.validation.unit_test_runner import UnitTestRunner
     
     def dummy_pass():
         return {"metric": 0.99}
@@ -154,7 +154,7 @@ def test_unit_test_runner():
 
 def test_integration_test_runner():
     """Verify IntegrationTestRunner functionality."""
-    from backend.validation.integration_test_runner import IntegrationTestRunner
+    from amdi.validation.integration_test_runner import IntegrationTestRunner
     
     def mock_flow():
         return {"status": "ok", "value": 42}
@@ -210,7 +210,7 @@ def test_integration_test_runner():
 
 def test_e2e_test_runner():
     """Verify E2ETestRunner correctness."""
-    from backend.validation.e2e_test_runner import E2ETestRunner
+    from amdi.validation.e2e_test_runner import E2ETestRunner
     
     def mock_pipeline(doc, query, ablated_components=None):
         return {
@@ -254,7 +254,7 @@ def test_e2e_test_runner():
 
 def test_stress_test_runner():
     """Verify StressTestRunner behavior under mock load."""
-    from backend.validation.stress_test_runner import StressTestRunner, LoadProfile
+    from amdi.validation.stress_test_runner import StressTestRunner, LoadProfile
     
     call_count = 0
     def mock_load_fn():
@@ -296,7 +296,7 @@ def test_stress_test_runner():
 
 def test_robustness_test_runner():
     """Verify RobustnessTestRunner perturbation modifications."""
-    from backend.validation.robustness_test_runner import RobustnessTestRunner, Perturbation
+    from amdi.validation.robustness_test_runner import RobustnessTestRunner, Perturbation
     
     def dummy_accuracy(predicted, expected):
         return 1.0 if predicted == expected else 0.5
@@ -327,7 +327,7 @@ def test_robustness_test_runner():
     assert res_empty.success_rate == 0.0
 
     # Test perturbation functions directly
-    from backend.validation.robustness_test_runner import RobustnessTestRunner
+    from amdi.validation.robustness_test_runner import RobustnessTestRunner
     
     assert len(RobustnessTestRunner._add_special_chars("abc")) > 3
     assert len(RobustnessTestRunner._duplicate("abc", 2)) == 6
@@ -337,7 +337,7 @@ def test_robustness_test_runner():
 
 def test_ablation_runner():
     """Verify AblationRunner metrics comparisons."""
-    from backend.validation.ablation_runner import AblationRunner, AblationStudy
+    from amdi.validation.ablation_runner import AblationRunner, AblationStudy
     
     def mock_pipeline(doc, disabled_components=None):
         disabled = disabled_components or []
@@ -380,9 +380,9 @@ def test_ablation_runner():
 
 def test_validation_report_generation():
     """Verify ValidationReport serialization and metrics calculations."""
-    from backend.validation.validation_report import ValidationReport
-    from backend.validation.unit_test_runner import UnitTestResult
-    from backend.validation.e2e_test_runner import E2ETestResult
+    from amdi.validation.validation_report import ValidationReport
+    from amdi.validation.unit_test_runner import UnitTestResult
+    from amdi.validation.e2e_test_runner import E2ETestResult
     
     report = ValidationReport("Checkup")
     
@@ -412,7 +412,7 @@ def test_validation_report_generation():
 
 def test_validation_engine():
     """Verify ValidationEngine run_suite coordinating all elements."""
-    from backend.validation import ValidationEngine, ValidationSuite, LoadProfile, Perturbation, AblationStudy
+    from amdi.validation import ValidationEngine, ValidationSuite, LoadProfile, Perturbation, AblationStudy
     
     suite = ValidationSuite("Whole System")
     

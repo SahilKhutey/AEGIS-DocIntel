@@ -12,7 +12,7 @@ import pytest
 from fastapi.testclient import TestClient
 
 from src.math_concepts.master_math_engine import MasterUnifiedMathEngine
-from src.main import app
+from amdi.api.app import app
 
 client = TestClient(app)
 

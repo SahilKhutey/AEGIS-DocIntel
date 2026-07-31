@@ -21,7 +21,7 @@ from src.engines.spectral import SpectralClusterer, AdjacencyMatrix
 from src.engines.graph import calculate_hitting_time
 from src.engines.meta.meta_engine import MetaLearningEngine
 from src.engines.rl.rl_engine import RLEngine
-from backend.security.access_control import AccessController, Role, Permission, Resource, Policy
+from amdi.security.access_control import AccessController, Role, Permission, Resource, Policy
 from src.engines.retrieval.hybrid_retrieval import HybridRetriever
 
 

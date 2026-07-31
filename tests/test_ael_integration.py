@@ -14,7 +14,7 @@ try:
 except ImportError:
     HAS_TEST_CLIENT = False
 
-from src.main import app
+from amdi.api.app import app
 
 
 @pytest.mark.skipif(not HAS_TEST_CLIENT, reason='FastAPI TestClient not available')

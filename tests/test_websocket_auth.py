@@ -24,7 +24,7 @@ try:
 except ImportError:
     HAS_TEST_CLIENT = False
 
-from src.main import app
+from amdi.api.app import app
 
 TENANT_A = {"Authorization": "Bearer dev-tenant-a"}
 

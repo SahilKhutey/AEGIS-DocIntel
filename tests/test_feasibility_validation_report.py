@@ -20,7 +20,7 @@ from src.engines.spectral import SpectralClusterer, AdjacencyMatrix
 from src.engines.graph import calculate_hitting_time
 from src.ael.elastic_chunker import ElasticChunker
 from src.engines.graph_reading_order import SpatialReadingGraph
-from backend.security.access_control import AccessController, Role, Permission, Resource, Policy
+from amdi.security.access_control import AccessController, Role, Permission, Resource, Policy
 from src.engines.retrieval.hybrid_retrieval import HybridRetriever, HybridConfig
 from src.engines.meta.meta_engine import MetaLearningEngine
 from src.engines.rl.rl_engine import RLEngine

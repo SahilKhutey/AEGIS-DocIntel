@@ -8,7 +8,7 @@ import numpy as np
 root_dir = Path(__file__).parent.parent
 sys.path.insert(0, str(root_dir))
 
-from backend.src.analytics import (
+from amdi.analytics import (
     AnalyticsEngine,
     cosine_similarity,
     compute_centroid,

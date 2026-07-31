@@ -10,7 +10,7 @@ import pytest
 root_dir = Path(__file__).parent.parent
 sys.path.insert(0, str(root_dir))
 
-from backend.src.streaming import (
+from amdi.streaming import (
     StreamingEngine,
     StreamEvent,
     StreamEventType,
@@ -20,7 +20,7 @@ from backend.src.streaming import (
     ProgressEvent,
     StreamBuffer,
 )
-from backend.src.streaming.stream_buffer import FlushStrategy
+from amdi.streaming.stream_buffer import FlushStrategy
 
 
 @pytest.mark.asyncio

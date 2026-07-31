@@ -17,7 +17,7 @@ import networkx as nx
 import numpy as np
 import pytest
 
-from backend.security.access_control import AccessController, Role, Permission, Resource, assign_shard_number_theoretic
+from amdi.security.access_control import AccessController, Role, Permission, Resource, assign_shard_number_theoretic
 from src.engines.graph_reading_order import (
     SpatialReadingGraph,
     compute_opw_distance,

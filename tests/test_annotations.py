@@ -264,7 +264,7 @@ def test_ai_assistance(test_ai):
 
 def test_api_endpoints():
     """Test FastAPI endpoint handlers using TestClient."""
-    from src.main import app
+    from amdi.api.app import app
     client = TestClient(app)
 
     # 1. Create note

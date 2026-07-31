@@ -20,7 +20,7 @@ from src.engines.optimization.optimization_engine import OptimizationEngine
 from src.ael.elastic_chunker import ElasticChunker
 from src.engines.graph_reading_order import ollivier_ricci_curvature, flag_fragile_edges
 from src.engines.matrix.matrix_engine import ntt_convolution
-from backend.security.access_control import assign_shard_number_theoretic
+from amdi.security.access_control import assign_shard_number_theoretic
 from src.engines.topology.topology_engine import TopologyEngine
 
 

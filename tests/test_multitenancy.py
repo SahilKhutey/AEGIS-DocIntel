@@ -12,7 +12,7 @@ from fastapi.testclient import TestClient
 root_dir = Path(__file__).parent.parent
 sys.path.insert(0, str(root_dir))
 
-from backend.src.multitenancy import (
+from amdi.multitenancy import (
     TenantManager,
     Tenant,
     TenantStatus,
@@ -25,9 +25,9 @@ from backend.src.multitenancy import (
     UsageRecord,
     Invoice,
 )
-from backend.src.multitenancy.tenant_router import RoutingStrategy, RegionEndpoint
-from backend.src.multitenancy.tenant_billing import UsageMetric
-from backend.src.multitenancy.tenant_admin import router as admin_router
+from amdi.multitenancy.tenant_router import RoutingStrategy, RegionEndpoint
+from amdi.multitenancy.tenant_billing import UsageMetric
+from amdi.multitenancy.tenant_admin import router as admin_router
 
 
 def test_tenant_manager():

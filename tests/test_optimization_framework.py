@@ -6,14 +6,14 @@ import numpy as np
 import pytest
 from unittest.mock import MagicMock
 
-# Configure Python path to find backend.optimization
+# Configure Python path to find amdi.optimization
 root_dir = Path(__file__).parent.parent
 sys.path.insert(0, str(root_dir))
 
 
 def test_optimization_imports():
-    """Verify that all components can be imported from backend.optimization."""
-    from backend.optimization import (
+    """Verify that all components can be imported from amdi.optimization."""
+    from amdi.optimization import (
         OptimizationEngine,
         OptimizationResult,
         OptimizationSuite,
@@ -46,7 +46,7 @@ def test_optimization_imports():
 
 def test_exceptions():
     """Verify custom exceptions can be raised and caught."""
-    from backend.optimization.exceptions import (
+    from amdi.optimization.exceptions import (
         OptimizationError,
         OptimizationTargetError,
         TokenBudgetExceededError,
@@ -65,7 +65,7 @@ def test_exceptions():
 
 def test_profiling():
     """Verify Profiler tracks timings and memory usage."""
-    from backend.optimization.profiling import Profiler, profile
+    from amdi.optimization.profiling import Profiler, profile
     
     profiler = Profiler()
     
@@ -93,7 +93,7 @@ def test_profiling():
 
 def test_token_optimizer():
     """Verify TokenOptimizer strategies."""
-    from backend.optimization.token_optimizer import TokenOptimizer, TokenStrategy
+    from amdi.optimization.token_optimizer import TokenOptimizer, TokenStrategy
     
     opt = TokenOptimizer(target_reduction_pct=0.2)
     text = "This is sentence one. This is sentence two. This is sentence three. This is sentence four. This is sentence five."
@@ -140,7 +140,7 @@ def test_token_optimizer():
 
 def test_memory_optimizer():
     """Verify MemoryOptimizer strategies."""
-    from backend.optimization.memory_optimizer import MemoryOptimizer, MemoryStrategy
+    from amdi.optimization.memory_optimizer import MemoryOptimizer, MemoryStrategy
     
     opt = MemoryOptimizer(target_reduction_pct=0.2)
     
@@ -190,7 +190,7 @@ def test_memory_optimizer():
 
 def test_latency_optimizer():
     """Verify LatencyOptimizer parallelization and caching."""
-    from backend.optimization.latency_optimizer import LatencyOptimizer, memoize
+    from amdi.optimization.latency_optimizer import LatencyOptimizer, memoize
     
     opt = LatencyOptimizer()
     
@@ -251,7 +251,7 @@ def test_latency_optimizer():
 
 def test_cache_optimizer():
     """Verify CacheOptimizer profiling and capacity selection."""
-    from backend.optimization.cache_optimizer import CacheOptimizer, OptimizedLRUCache
+    from amdi.optimization.cache_optimizer import CacheOptimizer, OptimizedLRUCache
     
     # OptimizedLRUCache test
     cache = OptimizedLRUCache(capacity=3)
@@ -288,7 +288,7 @@ def test_cache_optimizer():
 
 def test_batching_optimizer():
     """Verify BatchingOptimizer batch sizes selection."""
-    from backend.optimization.batching_optimizer import BatchingOptimizer
+    from amdi.optimization.batching_optimizer import BatchingOptimizer
     
     optimizer = BatchingOptimizer(min_batch=2, max_batch=16)
     
@@ -313,7 +313,7 @@ def test_batching_optimizer():
 
 def test_retrieval_optimizer():
     """Verify RetrievalOptimizer search speedups."""
-    from backend.optimization.retrieval_optimizer import RetrievalOptimizer, RetrievalStrategy
+    from amdi.optimization.retrieval_optimizer import RetrievalOptimizer, RetrievalStrategy
     
     optimizer = RetrievalOptimizer()
     
@@ -358,9 +358,9 @@ def test_retrieval_optimizer():
 
 def test_optimization_report():
     """Verify OptimizationReport metric compilation."""
-    from backend.optimization.optimization_report import OptimizationReport
-    from backend.optimization.token_optimizer import TokenOptimizationResult
-    from backend.optimization.latency_optimizer import LatencyOptimizationResult
+    from amdi.optimization.optimization_report import OptimizationReport
+    from amdi.optimization.token_optimizer import TokenOptimizationResult
+    from amdi.optimization.latency_optimizer import LatencyOptimizationResult
     
     report = OptimizationReport("Tuning")
     
@@ -383,7 +383,7 @@ def test_optimization_report():
 
 def test_optimization_engine():
     """Verify OptimizationEngine execution coordinating optimizers."""
-    from backend.optimization import (
+    from amdi.optimization import (
         OptimizationEngine,
         OptimizationSuite,
         TokenStrategy,

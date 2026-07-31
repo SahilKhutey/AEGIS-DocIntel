@@ -12,7 +12,7 @@ from fastapi.testclient import TestClient
 from src.export.universal_exporter import UniversalExportObject
 from src.export.llm_optimized_exporter import LLMTokenOptimizedExporter, LLMExportConfig
 from src.ael.token_budget import count_tokens
-from src.main import app
+from amdi.api.app import app
 
 client = TestClient(app)
 
