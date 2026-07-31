@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "required": ["replicaCount", "image"],
+  "properties": {
+    "replicaCount": {"type": "object"},
+    "image": {
+      "type": "object",
+      "required": ["repository", "tag"],
+      "properties": {
+        "repository": {"type": "string"},
+        "tag": {"type": "string"}
+      }
+    }
+  }
+}

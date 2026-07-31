@@ -1,0 +1,7 @@
+apiVersion: v2
+name: amdi
+description: AEGIS-DocIntel / AMDI-OS
+type: application
+version: 0.2.0
+appVersion: "0.2.0"
+keywords: [rag, document-intelligence, llm, retrieval]

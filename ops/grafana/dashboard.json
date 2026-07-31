@@ -1,0 +1,15 @@
+{
+  "title": "AEGIS-DocIntel",
+  "panels": [
+    {"type": "graph", "title": "Request rate by route",
+     "targets": [{"expr": "sum by (route)(rate(amdi_http_requests_total[1m]))"}]},
+    {"type": "graph", "title": "p95 latency by route",
+     "targets": [{"expr": "histogram_quantile(0.95, sum by (le, route)(rate(amdi_http_request_duration_seconds_bucket[1m])))"}]},
+    {"type": "graph", "title": "In-flight jobs",
+     "targets": [{"expr": "amdi_jobs_running"}]},
+    {"type": "graph", "title": "Rate-limit denials",
+     "targets": [{"expr": "sum(rate(amdi_http_requests_total{status=\"429\"}[1m]))"}]},
+    {"type": "graph", "title": "Recalls (RAGAS)",
+     "targets": [{"expr": "amdi_retrieval_recall_at_k_bucket"}]}
+  ]
+}

@@ -1,0 +1,23 @@
+groups:
+- name: amdi.sre
+  rules:
+  - alert: AmdiHighErrorRate
+    expr: |
+      sum by (route) (rate(amdi_http_requests_total{status=~"5.."}[5m])) > 0.05
+    for: 5m
+    labels: {severity: page, team: amdi}
+    annotations:
+      summary: "AEGIS route {{ $labels.route }} >5% 5xx for 5m"
+
+  - alert: AmdiHighLatency
+    expr: |
+      histogram_quantile(0.95, sum by (le, route) (rate(amdi_http_request_duration_seconds_bucket[5m]))) > 1.5
+    for: 10m
+    labels: {severity: warn, team: amdi}
+    annotations:
+      summary: "AEGIS p95 > 1.5s on {{ $labels.route }}"
+
+  - alert: AmdiJobBacklog
+    expr: amdi_jobs_running > 100
+    for: 10m
+    labels: {severity: warn, team: amdi}

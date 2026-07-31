@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-api
+  labels: {{- include "amdi.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount.api }}
+  selector:
+    matchLabels: {app: amdi, role: api}
+  template:
+    metadata:
+      labels: {app: amdi, role: api}
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "9090"
+        prometheus.io/path: "/metrics"
+    spec:
+      serviceAccountName: {{ .Release.Name }}-sa
+      containers:
+        - name: api
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          command: ["python", "-m", "amdi", "serve"]
+          ports:
+            - {containerPort: 8000, name: http}
+            - {containerPort: 9090, name: metrics}
+          envFrom:
+            - configMapRef: {name: {{ include "amdi.labels" . }}}
+            - secretRef:   {name: {{ .Release.Name }}-jwt}
+          readinessProbe:
+            httpGet:  {path: /readyz, port: 8000}
+            periodSeconds: 5
+          livenessProbe:
+            httpGet:  {path: /healthz, port: 8000}
+            periodSeconds: 10
+          volumeMounts:
+            - {name: data, mountPath: /var/lib/amdi}
+      volumes:
+        - name: data
+          persistentVolumeClaim: {claimName: {{ .Release.Name }}-data}

@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-worker
+  labels: {{- include "amdi.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount.worker }}
+  selector:
+    matchLabels: {app: amdi, role: worker}
+  template:
+    metadata:
+      labels: {app: amdi, role: worker}
+    spec:
+      serviceAccountName: {{ .Release.Name }}-sa
+      containers:
+        - name: worker
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          command: ["arq", "amdi.jobs.worker.WorkerSettings"]
+          envFrom:
+            - configMapRef: {name: {{ include "amdi.labels" . }}}
+          volumeMounts:
+            - {name: data, mountPath: /var/lib/amdi}
+      volumes:
+        - name: data
+          persistentVolumeClaim: {claimName: {{ .Release.Name }}-data}

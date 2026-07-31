@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "amdi.labels" . }}
+  labels: {{- include "amdi.labels" . | nindent 4 }}
+data:
+  AMDI_API_HOST: "0.0.0.0"
+  AMDI_API_PORT: "8000"
+  AMDI_LOG_JSON: "1"
+  AMDI_STORAGE_BACKEND: "filesystem"
+  AMDI_STORAGE_ROOT: "/var/lib/amdi"
+  AMDI_QUEUE_BACKEND: "arq"
+  AMDI_REDIS_URL: "redis://:{{ .Values.redis.auth.key | default "redis" }}@{{ .Release.Name }}-redis:6379/0"
+  AMDI_RATE_LIMIT_PER_MINUTE: "{{ .Values.api.rateLimitPerMinute }}"
+  AMDI_SERVICE_NAME: "amdi"
+  {{- if .Values.observability.otel.enabled }}
+  OTEL_EXPORTER_OTLP_ENDPOINT: "{{ .Values.observability.otel.endpoint }}"
+  {{- end }}

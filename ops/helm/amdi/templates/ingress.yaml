@@ -1,0 +1,29 @@
+{{- if .Values.ingress.enabled }}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ .Release.Name }}-ingress
+  labels: {{- include "amdi.labels" . | nindent 4 }}
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-body-size: "100m"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "600"
+spec:
+  ingressClassName: {{ .Values.ingress.className }}
+  tls:
+    {{- range .Values.ingress.tls }}
+    - hosts: {{ .hosts | toYaml | nindent 6 }}
+      secretName: {{ .secretName }}
+    {{- end }}
+  rules:
+    {{- range .Values.ingress.hosts }}
+    - host: {{ .host | quote }}
+      http:
+        paths:
+          {{- range .paths }}
+          - path: {{ .path }}
+            pathType: {{ .pathType }}
+            backend:
+              service: {name: {{ $.Release.Name }}-api, port: {number: 8000}}
+          {{- end }}
+    {{- end }}
+{{- end }}

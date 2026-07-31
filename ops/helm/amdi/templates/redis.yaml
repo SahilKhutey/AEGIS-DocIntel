@@ -1,0 +1,31 @@
+{{- if .Values.redis.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-redis
+  labels: {{- include "amdi.labels" . | nindent 4 }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels: {app: amdi, role: redis}
+  template:
+    metadata:
+      labels: {app: amdi, role: redis}
+    spec:
+      containers:
+        - name: redis
+          image: redis:7-alpine
+          args: ["redis-server", "--requirepass", "$(REDIS_PASSWORD)"]
+          ports: [{containerPort: 6379}]
+          env:
+            - {name: REDIS_PASSWORD, valueFrom: {secretKeyRef: {name: {{ .Values.redis.auth.existingSecret }}, key: {{ .Values.redis.auth.key }}}}}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Release.Name }}-redis
+  labels: {{- include "amdi.labels" . | nindent 4 }}
+spec:
+  selector: {app: amdi, role: redis}
+  ports: [{port: 6379, targetPort: 6379}]
+{{- end }}

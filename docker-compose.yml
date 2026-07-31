@@ -1,0 +1,73 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# AEGIS-DocIntel / AMDI-OS — local dev stack
+# ─────────────────────────────────────────────────────────────────────────────
+name: amdi-dev
+
+services:
+  redis:
+    build:
+      context: .
+      dockerfile: docker/redis.Dockerfile
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  api:
+    build:
+      context: .
+      dockerfile: docker/api.Dockerfile
+    depends_on:
+      redis:
+        condition: service_healthy
+    environment:
+      AMDI_QUEUE_BACKEND: arq
+      AMDI_REDIS_URL: redis://redis:6379/0
+      AMDI_STORAGE_BACKEND: filesystem
+      AMDI_STORAGE_ROOT: /var/lib/amdi
+      AMDI_JWT_SECRET: ${AMDI_JWT_SECRET:-INSECURE-DEV-SECRET-CHANGE-ME}
+    volumes:
+      - amdi-data:/var/lib/amdi
+    ports:
+      - "8000:8000"
+      - "9090:9090"
+    command: ["python", "-m", "amdi", "serve"]
+
+  worker:
+    build:
+      context: .
+      dockerfile: docker/api.Dockerfile
+    depends_on:
+      redis:
+        condition: service_healthy
+    environment:
+      AMDI_QUEUE_BACKEND: arq
+      AMDI_REDIS_URL: redis://redis:6379/0
+      AMDI_STORAGE_BACKEND: filesystem
+      AMDI_STORAGE_ROOT: /var/lib/amdi
+    volumes:
+      - amdi-data:/var/lib/amdi
+    # arq worker:
+    command: ["arq", "amdi.jobs.worker.WorkerSettings"]
+    deploy:
+      replicas: 2  # horizontal scaling from one knob
+    healthcheck:
+      test: ["CMD", "python", "-c", "import socket,arq; s=socket.create_connection(('redis',6379)).close()"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+  prometheus:
+    image: prom/prometheus:v2.53.0
+    ports: ["9091:9090"]
+    volumes:
+      - ./ops/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+
+volumes:
+  redis-data:
+  amdi-data:

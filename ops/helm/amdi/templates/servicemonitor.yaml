@@ -1,0 +1,12 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ .Release.Name }}-sm
+  labels: {{- include "amdi.labels" . | nindent 4 }}
+spec:
+  selector:
+    matchLabels: {app: amdi, role: api}
+  endpoints:
+    - port: metrics
+      path: /metrics
+      interval: 15s

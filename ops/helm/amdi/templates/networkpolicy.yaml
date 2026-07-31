@@ -1,0 +1,18 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ .Release.Name }}-np
+  labels: {{- include "amdi.labels" . | nindent 4 }}
+spec:
+  podSelector: {matchLabels: {app: amdi}}
+  policyTypes: [Ingress, Egress]
+  ingress:
+    - from:
+        - podSelector: {matchLabels: {app: amdi, role: api}}
+        - podSelector: {matchLabels: {app: amdi, role: worker}}
+      ports:
+        - {port: 8000, protocol: TCP}
+        - {port: 9090, protocol: TCP}
+        - {port: 6379, protocol: TCP}
+  egress:
+    - {}

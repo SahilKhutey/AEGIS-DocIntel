@@ -1,0 +1,296 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// AEGIS-DocIntel / AMDI-OS — Canonical Wire Contract
+// One file, four languages, zero drift.
+//
+// Generated stubs:
+//   Python     -> python -m grpc_tools.protoc ...
+//   TypeScript -> protoc-gen-ts ...
+//   Java       -> protoc-gen-grpc-java ...
+//   C++        -> grpc_cpp_plugin ...
+// ─────────────────────────────────────────────────────────────────────────────
+syntax = "proto3";
+
+package amdi.v1;
+
+option go_package          = "github.com/SahilKhutey/AEGIS-DocIntel/sdk/go/amdi/v1;amdiv1";
+option java_multiple_files = true;
+option java_package        = "io.amdi.sdk.v1";
+option java_outer_classname = "AmdiProto";
+option cc_enable_arenas    = true;
+
+import "google/api/annotations.proto";
+
+// =============================================================================
+// ============================== DOMAIN TYPES ================================
+// =============================================================================
+
+message Document {
+  string document_id            = 1;
+  string filename               = 2;
+  string mime_type              = 3;
+  uint64 size_bytes             = 4;
+  int32  page_count             = 5;
+  string language               = 6;
+  string checksum_sha256        = 7;
+  repeated Citation citations   = 8;
+}
+
+message Citation {
+  string document_id            = 1;
+  int32  page                   = 2;
+  BBox   bbox                   = 3;   // normalized 0..1
+  CharSpan char_span            = 4;
+  string section                = 5;
+  repeated string method_votes  = 6;
+}
+
+message BBox {
+  double x = 1; double y = 2; double w = 3; double h = 4;
+}
+
+message CharSpan {
+  int32 start = 1; int32 end = 2;
+}
+
+message Chunk {
+  string chunk_id               = 1;
+  string document_id            = 2;
+  int32  page                   = 3;
+  BBox   bbox                   = 4;
+  string section                = 5;
+  string text                   = 6;
+  repeated float embedding      = 7;   // optional; padded by model
+  map<string, double> features  = 8;
+}
+
+enum JobState {
+  JOB_STATE_UNSPECIFIED = 0;
+  JOB_STATE_PENDING     = 1;
+  JOB_STATE_RUNNING     = 2;
+  JOB_STATE_SUCCEEDED   = 3;
+  JOB_STATE_FAILED      = 4;
+  JOB_STATE_CANCELLED   = 5;
+  JOB_STATE_RETRYING    = 6;
+}
+
+message Job {
+  string job_id                 = 1;
+  string document_id            = 2;
+  JobState state                = 3;
+  double submitted_at           = 4;
+  double started_at             = 5;
+  double finished_at            = 6;
+  uint32 attempts               = 7;
+  float  progress_pct           = 8;
+  string progress_message       = 9;
+  string error_code             = 10;
+  string error_detail           = 11;
+}
+
+message JobEvent {
+  string job_id                 = 1;
+  double ts                     = 2;
+  string kind                   = 3;   // progress | log | milestone | heartbeat | warning
+  float  pct                    = 4;
+  string message                = 5;
+  map<string, string> data      = 6;
+}
+
+message Query {
+  string raw                    = 1;
+  uint32 top_k                  = 2;
+  uint32 token_budget           = 3;
+  repeated string filters       = 4;
+  string user_id                = 5;
+  string session_id             = 6;
+  QueryExpansion expansion      = 7;
+}
+
+message QueryExpansion {
+  string original               = 1;
+  repeated string paraphrases   = 2;
+  repeated string subqueries    = 3;
+  repeated string entities      = 4;
+}
+
+message Evidence {
+  string evidence_id            = 1;
+  string text                   = 2;
+  double score_dense            = 3;
+  double score_bm25             = 4;
+  double score_frequency        = 5;
+  double score_geometry         = 6;
+  double score_graph            = 7;
+  double score_matrix           = 8;
+  double score_template         = 9;
+  double score_fused            = 10;
+  optional double score_rerank  = 11;
+  repeated Citation citations   = 12;
+  map<string, string> metadata  = 13;
+}
+
+message RetrievalResult {
+  Query query                   = 1;
+  repeated Evidence evidence    = 2;
+  map<string, double> timings_ms = 3;
+  map<string, uint32> counters  = 4;
+  double generated_at           = 5;
+}
+
+message TokenOptimizedExport {
+  string format                 = 1;   // "markdown" | "json"
+  string body                   = 2;
+  uint32 token_count            = 3;
+  repeated Citation citations   = 4;
+  map<string, string> meta      = 5;
+}
+
+// =============================================================================
+// ============================== REQUESTS =====================================
+// =============================================================================
+
+message UploadRequest {
+  oneof payload {
+    UploadMetadata metadata   = 1;
+    bytes           chunk     = 2;
+  }
+}
+
+message UploadMetadata {
+  string filename              = 1;
+  string mime_type             = 2;
+  string user_id               = 3;
+  string idempotency_key       = 4;
+  uint64 expected_size_bytes   = 5;
+}
+
+message UploadResponse {
+  Job job                      = 1;
+}
+
+message GetJobRequest  { string job_id = 1; }
+message CancelJobRequest { string job_id = 1; }
+
+message ListJobsRequest {
+  string user_id               = 1;
+  JobState state_filter        = 2;
+  uint32 limit                 = 3;
+  string page_token            = 4;
+}
+
+message ListJobsResponse {
+  repeated Job jobs            = 1;
+  string next_page_token       = 2;
+}
+
+message QueryRequest {
+  Query query                  = 1;
+  bool   enable_reranker       = 2;
+  string fusion                = 3;   // "rrf" | "weighted" | "calibrated"
+}
+
+message ExportRequest {
+  RetrievalResult result       = 1;
+  string format                = 2;   // "markdown" | "json"
+  uint32 token_budget          = 3;
+}
+
+message PiiScanRequest {
+  repeated Document documents  = 1;
+  PiiPolicy policy             = 2;
+}
+
+message PiiPolicy {
+  bool redact_ssn              = 1;
+  bool redact_email            = 2;
+  bool redact_phone            = 3;
+  bool redact_credit_card      = 4;
+  bool redact_address          = 5;
+  bool redact_name             = 6;
+}
+
+message PiiScanResponse {
+  repeated Document redacted   = 1;
+  repeated PiiFinding findings = 2;
+}
+
+message PiiFinding {
+  string document_id           = 1;
+  int32  page                  = 2;
+  CharSpan char_span           = 3;
+  string category              = 4;   // "SSN" | "EMAIL" | ...
+  string original              = 5;
+  string replacement           = 6;
+}
+
+message HealthRequest  {}
+message HealthResponse {
+  enum ServingState { UNKNOWN = 0; SERVING = 1; NOT_SERVING = 2; }
+  ServingState serving_state   = 1;
+  string version               = 2;
+  bool queue_ready             = 3;
+  bool ledger_ready            = 4;
+}
+
+// =============================================================================
+// ============================== SERVICES =====================================
+// =============================================================================
+
+service DocumentIntelligence {
+  // ---- Documents ----
+  rpc Upload(stream UploadRequest)        returns (UploadResponse) {
+    option (google.api.http) = {
+      post: "/v1/documents/upload"
+      body: "*"
+    };
+  }
+
+  // ---- Jobs ----
+  rpc GetJob(GetJobRequest)               returns (Job) {
+    option (google.api.http) = {
+      get: "/v1/jobs/{job_id}"
+    };
+  }
+  rpc CancelJob(CancelJobRequest)         returns (Job) {
+    option (google.api.http) = {
+      delete: "/v1/jobs/{job_id}"
+    };
+  }
+  rpc ListJobs(ListJobsRequest)           returns (ListJobsResponse) {
+    option (google.api.http) = {
+      get: "/v1/jobs"
+    };
+  }
+  rpc StreamJobEvents(GetJobRequest)      returns (stream JobEvent);
+
+  // ---- Retrieval ----
+  rpc Query(QueryRequest)                 returns (RetrievalResult) {
+    option (google.api.http) = {
+      post: "/v1/query"
+      body: "*"
+    };
+  }
+
+  // ---- Export ----
+  rpc ExportTokenOptimized(ExportRequest) returns (TokenOptimizedExport) {
+    option (google.api.http) = {
+      post: "/v1/export/llm-optimized"
+      body: "*"
+    };
+  }
+
+  // ---- Compliance ----
+  rpc PiiScan(PiiScanRequest)             returns (PiiScanResponse) {
+    option (google.api.http) = {
+      post: "/v1/compliance/pii-scan"
+      body: "*"
+    };
+  }
+
+  // ---- Health ----
+  rpc Health(HealthRequest)               returns (HealthResponse) {
+    option (google.api.http) = {
+      get: "/healthz"
+    };
+  }
+}

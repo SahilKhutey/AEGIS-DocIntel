@@ -1,0 +1,27 @@
+version: v1
+plugins:
+  # Python
+  - name: python
+    out: ../sdks/python/src/amdi_sdk/proto
+    opt: grpc
+  - name: grpc_python
+    out: ../sdks/python/src/amdi_sdk/proto
+    opt: grpc
+  # TypeScript
+  - name: ts
+    out: ../sdks/typescript/src/proto
+    opt: grpc-js,client_grpc,client_generics,output_legacy,use_optionals_mappings
+  - name: grpc_js
+    out: ../sdks/typescript/src/proto
+  # Java
+  - name: java
+    out: ../sdks/java/src/main/java/io/amdi/sdk/proto
+    opt: grpc
+  - name: grpc_java
+    out: ../sdks/java/src/main/java/io/amdi/sdk/proto
+  # C++
+  - name: cpp
+    out: ../sdks/cpp/include/amdi_sdk/proto
+    opt: grpc
+  - name: grpc_cpp
+    out: ../sdks/cpp/include/amdi_sdk/proto

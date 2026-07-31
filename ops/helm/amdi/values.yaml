@@ -1,0 +1,50 @@
+replicaCount:
+  api: 2
+  worker: 3
+
+image:
+  repository: ghcr.io/sahilkhutey/amdi
+  pullPolicy: IfNotPresent
+  tag: "0.2.0"
+
+jwtSecret: "INSECURE-DEV-SECRET-CHANGE-ME"
+
+api:
+  port: 8000
+  metricsPort: 9090
+  workers: 1
+  rateLimitPerMinute: 600
+
+worker:
+  concurrency: 4
+  jobMaxRetries: 3
+
+redis:
+  enabled: true
+  auth:
+    existingSecret: amdi-redis
+    key: password
+
+ingress:
+  enabled: true
+  className: nginx
+  hosts: [{host: amdi.example.com, paths: [{path: /, pathType: Prefix}]}]
+  tls: [{hosts: [amdi.example.com], secretName: amdi-tls}]
+
+observability:
+  prometheus:
+    enabled: true
+  grafana:
+    enabled: true
+  otel:
+    enabled: false
+    endpoint: ""
+
+persistence:
+  storageClass: gp3
+  size: 50Gi
+
+resources:
+  api:    {requests: {cpu: "500m", memory: "1Gi"}, limits: {cpu: "2", memory: "4Gi"}}
+  worker: {requests: {cpu: "1",    memory: "2Gi"}, limits: {cpu: "4", memory: "8Gi"}}
+  redis:  {requests: {cpu: "200m", memory: "512Mi"}, limits: {cpu: "1", memory: "2Gi"}}
