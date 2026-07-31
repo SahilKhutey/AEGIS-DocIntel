@@ -1,0 +1,38 @@
+{
+  "backend_src_imports": {
+    "regex": "from\\s+backend\\.src\\.",
+    "severity": "error",
+    "replaced_by": "amdi.*",
+    "removed_in": "0.3.0"
+  },
+  "src_amdi_imports": {
+    "regex": "from\\s+src\\.amdi\\.",
+    "severity": "warn",
+    "replaced_by": "amdi.*",
+    "removed_in": "0.4.0"
+  },
+  "legacy_engine_names": {
+    "regex": "amdi\\.legacy_bridge\\.engine_[a-z_]+",
+    "severity": "warn",
+    "replaced_by": "amdi.engines.<lowercase>",
+    "removed_in": "0.4.0"
+  },
+  "legacy_ingestion_renames": {
+    "regex": "amdi\\.legacy_bridge\\.(pdf|docx|xlsx|pptx|image|text|html|audio|speech)_loader",
+    "severity": "warn",
+    "replaced_by": "amdi.ingestion.<name>",
+    "removed_in": "0.4.0"
+  },
+  "legacy_hybrid_retriever": {
+    "regex": "amdi\\.legacy_bridge\\.hybrid_retriever",
+    "severity": "warn",
+    "replaced_by": "amdi.retrieval.hybrid",
+    "removed_in": "0.4.0"
+  },
+  "legacy_pii_engine": {
+    "regex": "amdi\\.legacy_bridge\\.pii_engine",
+    "severity": "warn",
+    "replaced_by": "amdi.compliance.pii",
+    "removed_in": "0.4.0"
+  }
+}
