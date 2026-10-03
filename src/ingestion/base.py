@@ -66,16 +66,30 @@ class BaseLoader(abc.ABC):
         raise TypeError(f"Unsupported source type: {type(source)}")
 
 
-class LoaderError(Exception):
-    """Base exception for loader errors."""
-    pass
 
+from src.ingestion.exceptions import (
+    DocumentCorruptError,
+    EncryptedDocumentError,
+    ExtractionError,
+    FormatError,
+    IngestionError,
+    LoaderError,
+    ProcessingTimeoutError,
+    SizeLimitError,
+    UnsupportedFormatError,
+)
 
-class FormatError(LoaderError):
-    """Invalid format / corrupt file."""
-    pass
+__all__ = [
+    "BaseLoader",
+    "PathLike",
+    "IngestionError",
+    "DocumentCorruptError",
+    "EncryptedDocumentError",
+    "UnsupportedFormatError",
+    "ProcessingTimeoutError",
+    "ExtractionError",
+    "SizeLimitError",
+    "LoaderError",
+    "FormatError",
+]
 
-
-class SizeLimitError(LoaderError):
-    """File exceeds size limit."""
-    pass

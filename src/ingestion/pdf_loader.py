@@ -15,8 +15,16 @@ except ImportError:
     fitz = None
 
 from src.core.document_object import DocumentFormat, DocumentObject
-from src.ingestion.base import BaseLoader, FormatError, LoaderError, SizeLimitError
+from src.ingestion.base import BaseLoader
+from src.ingestion.exceptions import (
+    DocumentCorruptError,
+    EncryptedDocumentError,
+    FormatError,
+    LoaderError,
+    SizeLimitError,
+)
 from src.ingestion.ocr_engine import OCREngine
+
 
 logger = logging.getLogger(__name__)
 
@@ -58,20 +66,36 @@ class PDFLoader(BaseLoader):
 
         # Validate format
         if not self.validate(raw_bytes):
-            raise FormatError(f"Invalid PDF file format: {name}")
+            raise FormatError(f"Invalid PDF file format: {name}", filename=name)
 
         if fitz is None:
-            raise LoaderError("PyMuPDF (fitz) is not installed")
+            raise LoaderError("PyMuPDF (fitz) is not installed", filename=name)
 
         # Size check
         size_mb = len(raw_bytes) / (1024 * 1024)
         if size_mb > self.max_size_mb:
-            raise SizeLimitError(f"PDF too large: {size_mb:.1f}MB > {self.max_size_mb}MB")
+            raise SizeLimitError(f"PDF too large: {size_mb:.1f}MB > {self.max_size_mb}MB", filename=name)
 
-        # Extract metadata and content
-        metadata = self._extract_metadata(raw_bytes)
-        page_count = metadata.get("page_count", 0)
-        is_scanned = metadata.get("is_scanned", False)
+        # Open and inspect
+        try:
+            pdf = fitz.open(stream=raw_bytes, filetype="pdf")
+        except Exception as exc:
+            err_msg = str(exc).lower()
+            if "password" in err_msg or "encrypted" in err_msg:
+                raise EncryptedDocumentError(f"PDF is encrypted: {exc}", filename=name) from exc
+            raise DocumentCorruptError(f"Malformed PDF file: {exc}", filename=name) from exc
+
+        try:
+            if getattr(pdf, "is_encrypted", False):
+                # Try authenticate with empty password just in case
+                if not pdf.authenticate(""):
+                    raise EncryptedDocumentError(f"PDF is password-protected: {name}", filename=name)
+
+            metadata = self._extract_metadata(pdf)
+            page_count = len(pdf)
+            is_scanned = metadata.get("is_scanned", False)
+        finally:
+            pdf.close()
 
         # Build DocumentObject
         doc = DocumentObject(
@@ -87,51 +111,48 @@ class PDFLoader(BaseLoader):
         doc.metadata["scanned"] = is_scanned
         return doc
 
-    def _extract_metadata(self, raw_bytes: bytes) -> dict[str, Any]:
-        """Extract PDF metadata and detect scanned pages."""
+    def _extract_metadata(self, pdf: Any) -> dict[str, Any]:
+        """Extract PDF metadata and detect scanned pages from open pdf."""
         metadata: dict[str, Any] = {}
         try:
-            pdf = fitz.open(stream=raw_bytes, filetype="pdf")
+            # Standard metadata
+            meta = pdf.metadata or {}
+            metadata["title"] = meta.get("title")
+            metadata["author"] = meta.get("author")
+            metadata["subject"] = meta.get("subject")
+            metadata["keywords"] = meta.get("keywords")
+            metadata["creator"] = meta.get("creator")
+            metadata["producer"] = meta.get("producer")
+            metadata["creation_date"] = str(meta.get("creationDate", ""))
+            metadata["page_count"] = len(pdf)
+
+            # Detect if scanned (sample first 5 pages)
+            text_chars = 0
+            image_count = 0
+            for i in range(min(5, len(pdf))):
+                page = pdf[i]
+                text_chars += len(page.get_text().strip())
+                image_count += len(page.get_images(full=True))
+            metadata["is_scanned"] = text_chars < 50 and image_count > 0
+            metadata["text_chars_sample"] = text_chars
+            metadata["image_count_sample"] = image_count
+
+            # Extract outline (table of contents)
             try:
-                # Standard metadata
-                meta = pdf.metadata or {}
-                metadata["title"] = meta.get("title")
-                metadata["author"] = meta.get("author")
-                metadata["subject"] = meta.get("subject")
-                metadata["keywords"] = meta.get("keywords")
-                metadata["creator"] = meta.get("creator")
-                metadata["producer"] = meta.get("producer")
-                metadata["creation_date"] = str(meta.get("creationDate", ""))
-                metadata["page_count"] = len(pdf)
-
-                # Detect if scanned (sample first 5 pages)
-                text_chars = 0
-                image_count = 0
-                for i in range(min(5, len(pdf))):
-                    page = pdf[i]
-                    text_chars += len(page.get_text().strip())
-                    image_count += len(page.get_images(full=True))
-                metadata["is_scanned"] = text_chars < 50 and image_count > 0
-                metadata["text_chars_sample"] = text_chars
-                metadata["image_count_sample"] = image_count
-
-                # Extract outline (table of contents)
-                try:
-                    toc = pdf.get_toc()
-                    if toc:
-                        metadata["toc"] = [
-                            {"level": lvl, "title": title, "page": page}
-                            for lvl, title, page in toc[:50]
-                        ]
-                except Exception:
-                    pass
-            finally:
-                pdf.close()
+                toc = pdf.get_toc()
+                if toc:
+                    metadata["toc"] = [
+                        {"level": lvl, "title": title, "page": page}
+                        for lvl, title, page in toc[:50]
+                    ]
+            except Exception:
+                pass
         except Exception as e:
             logger.warning(f"PDF metadata extraction failed: {e}")
-            metadata["page_count"] = 0
+            metadata["page_count"] = len(pdf) if pdf else 0
             metadata["is_scanned"] = False
         return metadata
+
 
     def extract_pages_for_ocr(self, raw_bytes: bytes, dpi: int = 150, max_pages: int = 20) -> list[bytes]:
         """

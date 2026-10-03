@@ -1,20 +1,29 @@
 """
 AEGIS-AMDI-OS — XLSX Loader
 =============================
-Microsoft Excel spreadsheet loader using openpyxl.
+Microsoft Excel spreadsheet loader using openpyxl with strict error handling.
 """
 from __future__ import annotations
 
 import io
 import logging
 from typing import Any
+import zipfile
+
 try:
     from openpyxl import load_workbook
 except ImportError:
     load_workbook = None
 
 from src.core.document_object import DocumentFormat, DocumentObject
-from src.ingestion.base import BaseLoader, FormatError, LoaderError, SizeLimitError
+from src.ingestion.base import BaseLoader
+from src.ingestion.exceptions import (
+    DocumentCorruptError,
+    EncryptedDocumentError,
+    FormatError,
+    LoaderError,
+    SizeLimitError,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -31,25 +40,63 @@ class XLSXLoader(BaseLoader):
         self.max_size_mb = max_size_mb
 
     def validate(self, raw_bytes: bytes) -> bool:
+        """Check if bytes represent a valid XLSX file."""
         if not raw_bytes or len(raw_bytes) < 4:
             return False
-        return raw_bytes[:4] == self.XLSX_MAGIC
+        if raw_bytes[:4] != self.XLSX_MAGIC:
+            return False
+        try:
+            with zipfile.ZipFile(io.BytesIO(raw_bytes)) as z:
+                names = z.namelist()
+                return any(n.startswith("xl/") for n in names) or "[Content_Types].xml" in names
+        except Exception:
+            return False
 
     async def load(self, source, filename: str = "") -> DocumentObject:
+        """Load an XLSX spreadsheet with zero silent failures."""
         raw_bytes, name = self.read_source(source)
         if filename:
             name = filename
         if not name:
             name = "spreadsheet.xlsx"
 
-        if not self.validate(raw_bytes):
-            raise FormatError("Not a valid XLSX file")
+        if not raw_bytes or len(raw_bytes) < 4 or raw_bytes[:4] != self.XLSX_MAGIC:
+            raise FormatError(f"Not a valid XLSX file (missing ZIP header): {name}", filename=name)
+
+        if load_workbook is None:
+            raise LoaderError("openpyxl is not installed", filename=name)
 
         size_mb = len(raw_bytes) / (1024 * 1024)
         if size_mb > self.max_size_mb:
-            raise SizeLimitError(f"XLSX too large: {size_mb:.1f}MB")
+            raise SizeLimitError(f"XLSX too large: {size_mb:.1f}MB", filename=name)
 
-        metadata, text_parts, sheet_count = self._extract(raw_bytes)
+        # Inspect zip structure for encryption or corruption
+        try:
+            with zipfile.ZipFile(io.BytesIO(raw_bytes)) as z:
+                names = z.namelist()
+                if "EncryptedPackage" in names or any("encrypted" in n.lower() for n in names):
+                    raise EncryptedDocumentError(f"XLSX spreadsheet is password protected: {name}", filename=name)
+                if not any(n.startswith("xl/") for n in names) and "[Content_Types].xml" not in names:
+                    raise DocumentCorruptError(f"XLSX package is missing required spreadsheetml components: {name}", filename=name)
+        except zipfile.BadZipFile as exc:
+            raise DocumentCorruptError(f"Corrupt or truncated XLSX zip archive: {exc}", filename=name) from exc
+        except EncryptedDocumentError:
+            raise
+        except DocumentCorruptError:
+            raise
+        except Exception as exc:
+            raise DocumentCorruptError(f"Failed to inspect XLSX package: {exc}", filename=name) from exc
+
+        # Open workbook
+        try:
+            wb = load_workbook(io.BytesIO(raw_bytes), data_only=True)
+        except Exception as exc:
+            err_msg = str(exc).lower()
+            if "password" in err_msg or "encrypted" in err_msg:
+                raise EncryptedDocumentError(f"XLSX workbook is encrypted: {exc}", filename=name) from exc
+            raise DocumentCorruptError(f"Malformed XLSX workbook: {exc}", filename=name) from exc
+
+        metadata, text_parts, sheet_count = self._extract(wb)
         return DocumentObject(
             filename=name,
             format=DocumentFormat.XLSX,
@@ -59,22 +106,23 @@ class XLSXLoader(BaseLoader):
             text_content="\n\n".join(text_parts),
         )
 
-    def _extract(self, raw_bytes: bytes) -> tuple[dict[str, Any], list[str], int]:
+    def _extract(self, wb: Any) -> tuple[dict[str, Any], list[str], int]:
+        """Extract metadata and text parts from loaded openpyxl workbook."""
         metadata: dict[str, Any] = {}
         text_parts: list[str] = []
-        sheet_count = 0
-        try:
-            wb = load_workbook(io.BytesIO(raw_bytes), data_only=True)
-            metadata["sheet_count"] = len(wb.sheetnames)
-            metadata["sheet_names"] = wb.sheetnames
-            metadata["creator"] = wb.properties.creator
-            metadata["title"] = wb.properties.title
-            metadata["subject"] = wb.properties.subject
-            metadata["keywords"] = wb.properties.keywords
-            metadata["created"] = str(wb.properties.created) if wb.properties.created else None
-            metadata["modified"] = str(wb.properties.modified) if wb.properties.modified else None
+        sheet_count = len(wb.sheetnames)
 
-            sheet_count = len(wb.sheetnames)
+        try:
+            metadata["sheet_count"] = sheet_count
+            metadata["sheet_names"] = wb.sheetnames
+            if hasattr(wb, "properties") and wb.properties:
+                metadata["creator"] = wb.properties.creator
+                metadata["title"] = wb.properties.title
+                metadata["subject"] = wb.properties.subject
+                metadata["keywords"] = wb.properties.keywords
+                metadata["created"] = str(wb.properties.created) if wb.properties.created else None
+                metadata["modified"] = str(wb.properties.modified) if wb.properties.modified else None
+
             for sheet_name in wb.sheetnames:
                 ws = wb[sheet_name]
                 text_parts.append(f"--- Sheet: {sheet_name} ---")
@@ -89,5 +137,5 @@ class XLSXLoader(BaseLoader):
                 metadata[f"sheet_{sheet_name}_rows"] = row_count
                 metadata[f"sheet_{sheet_name}_cols"] = col_count
         except Exception as e:
-            logger.warning(f"XLSX extraction failed: {e}")
+            logger.warning(f"XLSX extraction warning: {e}")
         return metadata, text_parts, sheet_count

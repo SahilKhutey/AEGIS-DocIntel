@@ -1,24 +1,39 @@
 """
 AEGIS-AMDI-OS — Universal Ingestion Service
 ============================================
-Routes documents to the correct loader based on format detection.
+Routes documents to the correct loader based on deep format detection.
+Provides strict error handling and universal fallback recovery.
 """
 from __future__ import annotations
 
+import asyncio
 import logging
 from pathlib import Path
 from typing import Any, Optional, Union
 
 from src.core.document_object import DocumentFormat, DocumentObject
-from src.ingestion.base import BaseLoader, LoaderError
+from src.ingestion.base import BaseLoader
 from src.ingestion.docx_loader import DOCXLoader
+from src.ingestion.exceptions import (
+    DocumentCorruptError,
+    EncryptedDocumentError,
+    ExtractionError,
+    FormatError,
+    IngestionError,
+    LoaderError,
+    ProcessingTimeoutError,
+    SizeLimitError,
+    UnsupportedFormatError,
+)
+from src.ingestion.fallback_parser import FallbackParser
 from src.ingestion.image_loader import ImageLoader
 from src.ingestion.ocr_engine import OCREngine
 from src.ingestion.pdf_loader import PDFLoader
 from src.ingestion.pptx_loader import PPTXLoader
-from src.ingestion.xlsx_loader import XLSXLoader
-
+from src.ingestion.sniff import sniff_format
 from src.ingestion.speech_loader import SpeechLoader
+from src.ingestion.text_loader import TextLoader
+from src.ingestion.xlsx_loader import XLSXLoader
 
 logger = logging.getLogger(__name__)
 
@@ -29,50 +44,17 @@ class IngestionService:
     """
     Universal document ingestion service.
 
-    Auto-detects format and routes to the appropriate loader.
+    Auto-detects format via byte-level sniffing and routes to the appropriate loader.
+    Supports timeout budgeting, strict typed exceptions, and zero-crash emergency fallback.
     """
-
-    # Magic byte signatures
-    PDF_MAGIC = b"%PDF"
-    ZIP_MAGIC = b"PK\x03\x04"
-    IMAGE_MAGICS = {
-        b"\x89PNG": DocumentFormat.IMAGE,
-        b"\xff\xd8\xff": DocumentFormat.IMAGE,
-        b"GIF8": DocumentFormat.IMAGE,
-        b"BM": DocumentFormat.IMAGE,
-    }
-
-    # Extension mapping
-    EXT_MAP = {
-        ".pdf": DocumentFormat.PDF,
-        ".docx": DocumentFormat.DOCX,
-        ".pptx": DocumentFormat.PPTX,
-        ".xlsx": DocumentFormat.XLSX,
-        ".png": DocumentFormat.IMAGE,
-        ".jpg": DocumentFormat.IMAGE,
-        ".jpeg": DocumentFormat.IMAGE,
-        ".tiff": DocumentFormat.IMAGE,
-        ".tif": DocumentFormat.IMAGE,
-        ".bmp": DocumentFormat.IMAGE,
-        ".webp": DocumentFormat.IMAGE,
-        ".gif": DocumentFormat.IMAGE,
-        ".wav": DocumentFormat.SPEECH,
-        ".mp3": DocumentFormat.SPEECH,
-        ".m4a": DocumentFormat.SPEECH,
-        ".flac": DocumentFormat.SPEECH,
-        ".ogg": DocumentFormat.SPEECH,
-        ".aac": DocumentFormat.SPEECH,
-        ".html": DocumentFormat.HTML,
-        ".htm": DocumentFormat.HTML,
-        ".md": DocumentFormat.MARKDOWN,
-        ".markdown": DocumentFormat.MARKDOWN,
-        ".txt": DocumentFormat.TEXT,
-    }
 
     def __init__(self, ocr_engine: OCREngine | None = None, **loader_options):
         self.ocr = ocr_engine or OCREngine()
         self.options = loader_options
         speech_loader = SpeechLoader(**loader_options)
+        text_loader = TextLoader(**loader_options)
+        self.fallback_parser = FallbackParser()
+
         self.loaders: dict[DocumentFormat, BaseLoader] = {
             DocumentFormat.PDF: PDFLoader(ocr=self.ocr, **loader_options),
             DocumentFormat.DOCX: DOCXLoader(**loader_options),
@@ -81,6 +63,9 @@ class IngestionService:
             DocumentFormat.IMAGE: ImageLoader(ocr=self.ocr, **loader_options),
             DocumentFormat.SPEECH: speech_loader,
             DocumentFormat.AUDIO: speech_loader,
+            DocumentFormat.TEXT: text_loader,
+            DocumentFormat.MARKDOWN: text_loader,
+            DocumentFormat.HTML: text_loader,
         }
         logger.info(f"IngestionService initialized with {len(self.loaders)} loaders")
 
@@ -89,6 +74,8 @@ class IngestionService:
         source: PathLike,
         filename: str = "",
         format: DocumentFormat | None = None,
+        fallback: bool = False,
+        timeout: float | None = None,
     ) -> DocumentObject:
         """
         Ingest a document from file path, Path object, or bytes.
@@ -97,6 +84,8 @@ class IngestionService:
             source: File path, Path, or bytes
             filename: Optional filename
             format: Optional explicit format (auto-detected if None)
+            fallback: If True, uses FallbackParser on errors instead of raising
+            timeout: Optional processing timeout in seconds
 
         Returns:
             DocumentObject with content and metadata
@@ -108,99 +97,98 @@ class IngestionService:
                 filename = "document"
         else:
             path = Path(source)
-            raw_bytes = path.read_bytes()
+            try:
+                raw_bytes = path.read_bytes()
+            except Exception as exc:
+                if fallback:
+                    return self.fallback_parser.parse(b"", filename=path.name, error_context=str(exc))
+                raise DocumentCorruptError(f"Failed to read file from disk: {exc}", filename=path.name) from exc
             if not filename:
                 filename = path.name
 
-        # Detect format
+        # Detect format if not explicitly provided
+        detected_res = None
         if format is None:
-            format = self.detect_format(raw_bytes, filename)
+            detected_res = self.sniff_format_result(raw_bytes, filename)
+            format = detected_res.format
 
         # Get loader
         loader = self.loaders.get(format)
         if loader is None:
-            raise LoaderError(f"No loader for format: {format}")
+            err = UnsupportedFormatError(f"No loader for format: {format}", filename=filename)
+            if fallback:
+                return self.fallback_parser.parse(
+                    raw_bytes,
+                    filename=filename,
+                    error_context=str(err),
+                    original_format=format or DocumentFormat.UNKNOWN,
+                )
+            raise err
 
-        # Load
+        # Load with timeout and error handling
+        async def _load_coro() -> DocumentObject:
+            return await loader.load(raw_bytes, filename)
+
         try:
-            doc = await loader.load(raw_bytes, filename)
+            if timeout is not None and timeout > 0:
+                doc = await asyncio.wait_for(_load_coro(), timeout=timeout)
+            else:
+                doc = await _load_coro()
+
+            if detected_res and "sniff_confidence" not in doc.metadata:
+                doc.metadata["sniff_confidence"] = detected_res.confidence
+                doc.metadata["mime_type"] = detected_res.mime_type
+
             logger.info(
                 f"Loaded {filename}: {format.value}, "
                 f"{doc.page_count} pages, {doc.size_bytes} bytes"
             )
             return doc
-        except Exception as e:
-            logger.exception(f"Failed to load {filename}")
+
+        except asyncio.TimeoutError as exc:
+            err = ProcessingTimeoutError(
+                f"Ingestion timed out after {timeout} seconds: {filename}",
+                filename=filename,
+            )
+            if fallback:
+                return self.fallback_parser.parse(
+                    raw_bytes,
+                    filename=filename,
+                    error_context=str(err),
+                    original_format=format,
+                )
+            raise err from exc
+
+        except (IngestionError, FormatError, LoaderError) as exc:
+            if fallback:
+                logger.warning(f"Ingestion failed for {filename} ({type(exc).__name__}: {exc}), applying fallback")
+                return self.fallback_parser.parse(
+                    raw_bytes,
+                    filename=filename,
+                    error_context=str(exc),
+                    original_format=format,
+                )
             raise
 
+        except Exception as exc:
+            wrapped_err = ExtractionError(f"Unexpected error parsing {filename}: {exc}", filename=filename)
+            if fallback:
+                logger.warning(f"Unexpected parsing error for {filename}, applying fallback: {exc}")
+                return self.fallback_parser.parse(
+                    raw_bytes,
+                    filename=filename,
+                    error_context=str(wrapped_err),
+                    original_format=format,
+                )
+            raise wrapped_err from exc
+
     def detect_format(self, raw_bytes: bytes, filename: str = "") -> DocumentFormat:
-        """
-        Auto-detect document format from magic bytes and extension.
+        """Auto-detect document format via byte-level sniffing."""
+        return sniff_format(raw_bytes, filename).format
 
-        Args:
-            raw_bytes: First bytes of the document
-            filename: Optional filename for extension hints
-
-        Returns:
-            Detected DocumentFormat
-        """
-        if not raw_bytes:
-            return DocumentFormat.UNKNOWN
-
-        # Check PDF magic
-        if raw_bytes[:5] == self.PDF_MAGIC:
-            return DocumentFormat.PDF
-
-        # Check ZIP magic (Office formats)
-        if raw_bytes[:4] == self.ZIP_MAGIC:
-            ext = Path(filename).suffix.lower() if filename else ""
-            zip_map = {
-                ".docx": DocumentFormat.DOCX,
-                ".pptx": DocumentFormat.PPTX,
-                ".xlsx": DocumentFormat.XLSX,
-            }
-            if ext in zip_map:
-                return zip_map[ext]
-            # Try to detect from ZIP contents
-            fmt = self._detect_office_format_from_zip(raw_bytes)
-            if fmt:
-                return fmt
-            return DocumentFormat.UNKNOWN
-
-        # Check image magics
-        for magic, fmt in self.IMAGE_MAGICS.items():
-            if raw_bytes.startswith(magic):
-                return DocumentFormat.IMAGE
-        # TIFF
-        if raw_bytes[:4] in (b"II*\x00", b"MM\x00*"):
-            return DocumentFormat.IMAGE
-
-        # Fallback to extension
-        if filename:
-            ext = Path(filename).suffix.lower()
-            if ext in self.EXT_MAP:
-                return self.EXT_MAP[ext]
-
-        return DocumentFormat.UNKNOWN
-
-    def _detect_office_format_from_zip(self, raw_bytes: bytes) -> DocumentFormat | None:
-        """Detect Office format by inspecting ZIP contents."""
-        try:
-            import zipfile
-            import io
-            with zipfile.ZipFile(io.BytesIO(raw_bytes)) as z:
-                names = z.namelist()
-                if "[Content_Types].xml" in names:
-                    content_types = z.read("[Content_Types].xml").decode("utf-8", errors="ignore")
-                    if "wordprocessingml" in content_types:
-                        return DocumentFormat.DOCX
-                    if "presentationml" in content_types:
-                        return DocumentFormat.PPTX
-                    if "spreadsheetml" in content_types:
-                        return DocumentFormat.XLSX
-        except Exception:
-            pass
-        return None
+    def sniff_format_result(self, raw_bytes: bytes, filename: str = ""):
+        """Return deep sniffing result with confidence and MIME type."""
+        return sniff_format(raw_bytes, filename)
 
     def get_supported_formats(self) -> list[DocumentFormat]:
         """Return list of supported formats."""
@@ -208,8 +196,7 @@ class IngestionService:
 
     async def ingest_batch(self, sources: list[PathLike]) -> list[DocumentObject]:
         """Ingest multiple documents in parallel."""
-        import asyncio
-        tasks = [self.ingest(src) for src in sources]
+        tasks = [self.ingest(src, fallback=True) for src in sources]
         results = await asyncio.gather(*tasks, return_exceptions=True)
         docs = []
         for r in results:
@@ -218,3 +205,41 @@ class IngestionService:
             elif isinstance(r, Exception):
                 logger.error(f"Batch ingest error: {r}")
         return docs
+
+
+# Module-level convenience function
+_DEFAULT_SERVICE: IngestionService | None = None
+
+
+def get_default_service() -> IngestionService:
+    """Get or create singleton IngestionService."""
+    global _DEFAULT_SERVICE
+    if _DEFAULT_SERVICE is None:
+        _DEFAULT_SERVICE = IngestionService()
+    return _DEFAULT_SERVICE
+
+
+async def parse_document(
+    source: PathLike,
+    filename: str = "",
+    format: DocumentFormat | None = None,
+    fallback: bool = True,
+    timeout: float | None = None,
+) -> DocumentObject:
+    """
+    Universal entry point to parse any document.
+
+    Guarantees:
+    - With fallback=True (default): NEVER raises an unhandled exception on malformed,
+      fuzzed, corrupted, or encrypted documents. Returns a valid DocumentObject.
+    - With fallback=False: raises strict typed exceptions (DocumentCorruptError,
+      EncryptedDocumentError, UnsupportedFormatError, ProcessingTimeoutError, SizeLimitError).
+    """
+    service = get_default_service()
+    return await service.ingest(
+        source=source,
+        filename=filename,
+        format=format,
+        fallback=fallback,
+        timeout=timeout,
+    )

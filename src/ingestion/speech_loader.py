@@ -20,9 +20,16 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
 from src.core.document_object import DocumentFormat, DocumentObject
-from src.ingestion.base import BaseLoader, FormatError, SizeLimitError
+from src.ingestion.base import BaseLoader
+from src.ingestion.exceptions import (
+    DocumentCorruptError,
+    FormatError,
+    LoaderError,
+    SizeLimitError,
+)
 
 logger = logging.getLogger(__name__)
+
 
 
 @dataclass
@@ -87,9 +94,17 @@ class SpeechLoader(BaseLoader):
         if not name:
             name = "audio.wav"
 
+        if not raw_bytes or len(raw_bytes) < 4:
+            raise FormatError(f"Audio file is empty or too short: {name}", filename=name)
+
+        if raw_bytes.startswith(b"RIFF") and (len(raw_bytes) < 12 or (raw_bytes[8:12] == b"WAVE" and len(raw_bytes) < 44)):
+            raise DocumentCorruptError(f"Corrupt or truncated WAV audio header: {name}", filename=name)
+
+
         size_mb = len(raw_bytes) / (1024 * 1024)
         if size_mb > self.max_size_mb:
-            raise SizeLimitError(f"Audio file too large: {size_mb:.1f}MB")
+            raise SizeLimitError(f"Audio file too large: {size_mb:.1f}MB", filename=name)
+
 
         metadata = self._extract_audio_metadata(raw_bytes, name)
         transcription = await self.transcribe_audio(raw_bytes, metadata)
