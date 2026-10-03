@@ -14,18 +14,20 @@ actually completed.
   Real implementations across topology, spectral graph theory, information
   theory, optimization, tensor decomposition, and more. Independently
   confirmed by reading the source and running the test suite.
-- **Test suite**: 944 tests passing, 11 skipped, once dependencies are
-  correctly installed (see known issue below). Run it yourself:
-  `pip install -r requirements.txt && pytest tests/`
+- **Build & Dependency Tiers (Phase 2 Verified)**:
+  Dependencies cleanly tiered into `requirements-core.txt`, `requirements-ml.txt`,
+  `requirements-infra.txt`, and `requirements-dev.txt`, with `requirements.txt`
+  serving as a compatibility shim. Missing runtime packages (`networkx`, `scipy`,
+  `scikit-learn`, `loguru`) and dev tooling (`pytest`, `pytest-asyncio`) are now
+  formally declared and locked in `requirements-core.lock.txt`.
+- **Test suite**: 944 tests passing, 11 skipped, verified against clean install:
+  `pip install -r requirements-core.txt -r requirements-dev.txt && pytest tests/ --ignore=tests/test_multimodal.py`
 - **LLM connector layer**: Makes real API calls to OpenAI, Anthropic, and
   other providers (not mocked).
 
 ## Known Issues (Being Fixed)
 
-- `requirements.txt` is currently incomplete. A clean `pip install` will fail
-  on missing packages (`scikit-learn`, `structlog`, `bcrypt`,
-  `prometheus-client`, `pytest-asyncio`). Fix tracked in Phase 2.
-- No CI pipeline currently runs these tests automatically. Tracked in Phase 3.
+- No CI pipeline currently runs these tests automatically in production. Tracked in Phase 3.
 - Two parallel, overlapping LLM connector implementations exist
   (`src/connectors/` and `src/ael/connectors/`). Tracked in Phase 4.
 

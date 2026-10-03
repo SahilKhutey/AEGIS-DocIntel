@@ -91,39 +91,40 @@ The framework structures document analysis across formal mathematical formulatio
 
 ---
 
-## Installation & Environment Setup
+## Installation
 
 ### Prerequisites
-- Python 3.10, 3.11, or 3.12
-- Git
+- Python 3.12 or 3.13 (tested in CI — see badge above)
 
-### 1. Clone & Set Up Virtual Environment
+### Option 1 — Core install (recommended to start)
+Runs the API, ingestion pipeline, and all 16 math/graph engines. No semantic search / embeddings.
 ```bash
 git clone https://github.com/SahilKhutey/AEGIS-DocIntel.git
 cd AEGIS-DocIntel
-
-# Create and activate virtual environment
 python -m venv venv
-# On Linux/macOS:
-source venv/bin/activate
-# On Windows:
-venv\Scripts\activate
+source venv/bin/activate  # Windows: venv\Scripts\activate
+pip install -r requirements-core.txt
 ```
 
-### 2. Install Dependencies
+### Option 2 — Full install (adds semantic search / embeddings)
+Note: this pulls in `torch` via `sentence-transformers` — a multi-GB download.
 ```bash
-# Recommended: Install reproducible locked dependencies
-pip install -r requirements.lock.txt
-
-# Or install core dependencies directly:
-pip install -r requirements.txt
+pip install -r requirements-core.txt -r requirements-ml.txt
 ```
 
-### 3. Run the Verified Test Suite
+### Option 3 — Exact reproducible install (pinned lock file)
 ```bash
-# Run the 940+ unit tests
-pytest tests/ -q
+pip install -r requirements-core.lock.txt
 ```
+
+### Development setup (running tests)
+```bash
+pip install -r requirements-core.txt -r requirements-dev.txt
+pytest tests/ --ignore=tests/test_multimodal.py
+```
+
+## Compatibility
+Tested and verified on: Python 3.12, 3.13 (Linux, via CI; Windows local). macOS support is expected to work but is not yet covered by automated tests.
 
 ---
 
