@@ -20,6 +20,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Lock Files:** Added [`requirements-core.lock.txt`](requirements-core.lock.txt) and [`requirements-ml.lock.txt`](requirements-ml.lock.txt) from clean installs.
 - **Infrastructure Requirements:** Added [`requirements-infra.txt`](requirements-infra.txt) isolating optional caching/tracing deps.
 - **Architectural History:** Added [`docs/history.md`](docs/history.md) detailing codebase lineage from legacy iterations to unified canonical architecture.
+- **Canonical Document Schema:** Added [`src/core/document_state.py`](src/core/document_state.py) implementing Pydantic v2 mathematical schema $D = (P, S, G, R, F, M, T, X, H, E)$ with topological invariants, transition validation, and UEO bridging.
+- **Schema Test Suite:** Added [`tests/test_document_state.py`](tests/test_document_state.py) validating invariants, serialization, and transitions.
 
 ### Changed
 - **Connectors Reconciliation:** Reconciled `src/connectors/` as the single canonical agent integration layer; unified sync and async execution paths (`send`, `stream`, `send_ueo`, `query`), and redirected AEL exporter and export workflows to `src/connectors`.

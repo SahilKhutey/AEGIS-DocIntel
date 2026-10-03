@@ -134,10 +134,44 @@ All changes have been committed across discrete, atomic Git commits and synchron
 
 ---
 
-## 6. Complete Git Commit History
+## 6. Phase 5 Task Breakdown — Core Schema Unification
+
+### Task 5.1 — Canonical DocumentState Model ($D = (P, S, G, R, F, M, T, X, H, E)$)
+- **Problem:** Data models across `DocumentObject`, `GeometricElement`, `NormalizedDocument`, and mathematical engines had semantic drift and inconsistent types across stages.
+- **Remediation Action:**
+  - Implemented [`src/core/document_state.py`](../src/core/document_state.py) using Pydantic v2 (`BaseModel`, `Field`, `model_validator`, `field_validator`).
+  - Implemented 10 mathematical layers:
+    1. $P$: Physical Layout (`PhysicalLayer`, `BoundingBox`, `PageInfo`, `LayoutElement`, `ReadingOrderDAG`)
+    2. $S$: Semantic Layer (`SemanticLayer`, `TopicDistribution`, `Keyphrase`, `Entity`)
+    3. $G$: Graph Structure (`GraphLayer`, `GraphNode`, `GraphEdge`)
+    4. $R$: Recurrence & Repetition (`RecurrenceLayer`, `RepeatedPattern`)
+    5. $F$: Frequency & Spectral (`SpectralLayer`, `SpectralCluster`)
+    6. $M$: Matrix & Tabular (`MatrixLayer`, `TableData`)
+    7. $T$: Topology & Simplicial Complexes (`TopologyLayer`, `PersistenceInterval`)
+    8. $X$: Information Physics (`InfoPhysicsLayer`)
+    9. $H$: Hypergraph Relations (`HypergraphLayer`, `HyperEdge`)
+    10. $E$: Provenance & Telemetry (`TelemetryLayer`, `PipelineStageRecord`)
+  - Added mathematical property aliases (`state.P`, `state.S`, `state.G`, `state.R`, `state.F`, `state.M`, `state.T`, `state.X`, `state.H`, `state.E`).
+  - Added invariants:
+    - Euler-Poincaré characteristic: $\chi = \sum (-1)^k \beta_k$ dynamically verified.
+    - Persistent homology: death $\ge$ birth validation.
+    - Monotonic pipeline transition validation (`validate_transition` asserting `doc_id`, `tenant_id`, and non-decreasing latency/stage progression).
+  - Built UEO conversion bridge (`to_ueo()`) enabling direct export to external AI agents.
+  - Re-exported core models in `src/core/__init__.py`.
+
+### Task 5.2 — Schema Validation Test Suite
+- Implemented [`tests/test_document_state.py`](../tests/test_document_state.py) with 8 targeted tests covering default initialization, mathematical aliases, topological invariants, persistence constraints, telemetry tracking, state transition validation, UEO bridging, and JSON serialization roundtrips.
+- **Linter Check:** `ruff check src tests` passes cleanly (**0 errors**).
+- **Test Results:** 8 passed in 15.46s.
+
+---
+
+## 7. Complete Git Commit History
 
 ```text
-* f6f7564 (HEAD -> main, origin/main, origin/master, master) docs: complete Phase 3 dev log and changelog entries
+* fff726a (HEAD -> main, origin/main, origin/master, master) docs: document Phase 4 completion, lineage in history.md, and update audit suite
+* 18ce08e refactor(connectors): reconcile canonical connectors, add async send/stream, and prune src/ael/connectors
+* f6f7564 docs: complete Phase 3 dev log and changelog entries
 * ab9d0b4 docs: document branch protection, live CI badges, and coverage baseline
 * 16fd3ad build: add ruff/mypy/pytest/coverage configuration and fix undefined typing names
 * 0d94bb8 ci: add working pipeline (lint, matrix test, coverage gate, security scan)

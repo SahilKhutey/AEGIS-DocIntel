@@ -31,6 +31,11 @@ actually completed.
   response parsing, and unified sync/async execution paths (`send`, `stream`, `send_ueo`, `query`).
   Redundant `src/ael/connectors/` and duplicate `Aegis Doc/` trees removed; dead legacy trees
   consolidated in [`docs/history.md`](docs/history.md) and archived to Git history.
+- **Canonical Document Schema (Phase 5 Verified)**: Single, immutable-ready, typed Pydantic v2
+  `DocumentState` model ($D = (P, S, G, R, F, M, T, X, H, E)$) in `src/core/document_state.py`
+  unifying physical layout, semantic vectors, knowledge graphs, recurrence patterns, spectral
+  Laplacians, tabular matrices, simplicial complexes, information physics, hypergraphs, and
+  telemetry across pipeline stages. Verified via `tests/test_document_state.py`.
 
 ## Known Issues (Being Fixed)
 
