@@ -16,13 +16,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Tiered Requirements:** Added [`requirements-core.txt`](requirements-core.txt), [`requirements-ml.txt`](requirements-ml.txt), and [`requirements-dev.txt`](requirements-dev.txt).
 - **Automated CI Workflow:** Added [`.github/workflows/ci.yml`](.github/workflows/ci.yml) with Ruff linting, Bandit security scanning, Pip-Audit vulnerability checking, and multi-version Python test matrix.
 
+- **Contributing Guidelines:** Added [`CONTRIBUTING.md`](CONTRIBUTING.md) documenting branch protection rules and CI verification requirements.
+- **Lock Files:** Added [`requirements-core.lock.txt`](requirements-core.lock.txt) and [`requirements-ml.lock.txt`](requirements-ml.lock.txt) from clean installs.
+- **Infrastructure Requirements:** Added [`requirements-infra.txt`](requirements-infra.txt) isolating optional caching/tracing deps.
+
 ### Changed
-- **Dependency Repair:** Updated [`requirements.txt`](requirements.txt) to include missing runtime packages (`scikit-learn`, `structlog`, `bcrypt`, `passlib`, `python-jose`, `prometheus-client`, `pytest-asyncio`).
-- **README Restructuring:** Rewrote [`README.md`](README.md) to replace unverified marketing claims with honest badges (`Status: Alpha / Experimental`, `Tests: 944_passing_(local)`), an alert disclaimer, and clear positioning as a Pre-LLM Context Compiler.
+- **Dependency Repair:** Updated [`requirements.txt`](requirements.txt) to include missing runtime packages (`networkx`, `scipy`, `scikit-learn`, `loguru`) and split dependencies into modular tiers.
+- **README Restructuring:** Rewrote [`README.md`](README.md) with live CI badge, measured coverage badge (76%), and tiered install instructions.
+- **Defensive CLI Logging:** Updated `src/cli.py` with safe logging fallback.
+- **Typing Fixes:** Fixed 18 `F821` undefined typing names in `src/` to ensure clean linter passes.
 - **Release Documentation:** Annotated [`production/PRODUCTION_RELEASE_CHECKLIST.md`](production/PRODUCTION_RELEASE_CHECKLIST.md) and [`production/release/RELEASE_NOTES_v1.0.0.md`](production/release/RELEASE_NOTES_v1.0.0.md) to indicate development prototype status.
 - **License Annotation:** Annotated [`LICENSE`](LICENSE) template noting no commercial licenses have yet been issued.
 
 ### Quarantined / Removed
+- **Broken CI Workflow:** Removed unbuildable `.github/workflows/test.yml` and contaminated `requirements.lock.txt`.
 - **Unverified Audits:** Moved self-generated penetration tests and compliance scorecards to `_unverified_archive/security-audit/`.
 - **Synthetic Benchmarks:** Moved mock dataset and synthetic accuracy reports to `_unverified_archive/benchmark-dataset-mock/` and `_unverified_archive/performance-report/`.
 - **Placeholder Signatures:** Moved mock PGP signatures and certificates to `_unverified_archive/release-signatures/`.
