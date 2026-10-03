@@ -1,6 +1,7 @@
-# AEGIS-DocIntel — Primary Python Dependencies
-# ============================================
-# Core Runtime + Standard Integrations
+# AEGIS-DocIntel — Core Lightweight Dependencies
+# ================================================
+# Minimal set required for document parsing, spatial DAG,
+# mathematical compilation, and REST API routing.
 
 # Core Schema & Runtime
 pydantic>=2.6.0,<3.0.0
@@ -29,23 +30,11 @@ pillow>=10.2.0
 structlog>=24.1.0
 loguru>=0.7.2
 prometheus-client>=0.20.0
-opentelemetry-api>=1.24.0
-opentelemetry-sdk>=1.24.0
 
 # Security, Hashing & Cryptography
 python-jose[cryptography]>=3.3.0
 passlib[bcrypt]>=1.7.4
 bcrypt>=4.1.0
 
-# Token Computation & LLM Connectors
+# Token Computation
 tiktoken>=0.6.0
-openai>=1.30.0
-anthropic>=0.25.0
-
-# Cache & Vector
-redis>=5.0.0
-faiss-cpu>=1.7.4
-
-# Testing (Included for standard verification)
-pytest>=8.0.0
-pytest-asyncio>=0.23.0
