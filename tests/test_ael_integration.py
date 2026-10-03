@@ -59,9 +59,7 @@ def test_ael_query_integration():
             'input_tokens': 100,
             'output_tokens': 50,
         })
-        with patch('src.ael.connectors.chatgpt.HAS_OPENAI', True), \
-             patch('src.ael.connectors.chatgpt.AsyncOpenAI', MagicMock(), create=True), \
-             patch('src.ael.connectors.chatgpt.ChatGPTConnector.send', mock_send):
+        with patch('src.connectors.chatgpt_connector.ChatGPTConnector.send', mock_send):
             q_resp = client.post('/query', json=query_payload)
             assert q_resp.status_code == 200
             res_data = q_resp.json()

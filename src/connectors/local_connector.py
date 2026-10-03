@@ -32,7 +32,19 @@ class LocalConnector(BaseConnector):
     OLLAMA_DEFAULT = "http://localhost:11434"
     OPENAI_COMPAT_DEFAULT = "http://localhost:1234/v1"
 
-    def __init__(self, config: ConnectorConfig) -> None:
+    def __init__(self, config: Optional[ConnectorConfig] = None, **kwargs: Any) -> None:
+        if config is None:
+            config = ConnectorConfig(
+                api_key=kwargs.get("api_key"),
+                model=kwargs.get("model", "meta-llama/Llama-3.3-70B-Instruct"),
+                endpoint=kwargs.get("endpoint"),
+                timeout=kwargs.get("timeout", 60.0),
+                max_retries=kwargs.get("max_retries", 3),
+                temperature=kwargs.get("temperature", 0.7),
+                max_tokens=kwargs.get("max_tokens", 1024),
+                top_p=kwargs.get("top_p", 1.0),
+                extra=kwargs.get("extra", {}),
+            )
         self.base_url = config.endpoint or self.OPENAI_COMPAT_DEFAULT
         self.server_type = self._detect_server_type()
         super().__init__(config)

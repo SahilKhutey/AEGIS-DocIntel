@@ -1,1 +1,0 @@
-"""AEGIS-AMDI-OS v1.0.0"""

@@ -1,1 +1,0 @@
-﻿# AEGIS-MDIE — benchmarks package

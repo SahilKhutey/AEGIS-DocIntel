@@ -1,1 +1,0 @@
-﻿# AEGIS-MDIE — geometry package

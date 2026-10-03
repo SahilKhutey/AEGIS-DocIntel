@@ -29,7 +29,7 @@ from .connector_base import (
     ConnectorResponse,
     ConnectionStatus,
 )
-from .connector_factory import ConnectorFactory, get_connector
+from .connector_factory import ConnectorFactory, get_connector, CONNECTOR_REGISTRY
 from .chatgpt_connector import ChatGPTConnector
 from .gemini_connector import GeminiConnector
 from .claude_connector import ClaudeConnector
@@ -53,6 +53,7 @@ __all__ = [
     "ConnectorResponse",
     "ConnectionStatus",
     "ConnectorFactory",
+    "CONNECTOR_REGISTRY",
     "get_connector",
     "ChatGPTConnector",
     "GeminiConnector",

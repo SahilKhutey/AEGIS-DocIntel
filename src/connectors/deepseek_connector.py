@@ -13,7 +13,7 @@ Supports:
 from __future__ import annotations
 
 import time
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional
 
 from .connector_base import (
     BaseConnector,
@@ -29,7 +29,19 @@ class DeepSeekConnector(BaseConnector):
     AGENT_NAME = "deepseek"
     DEFAULT_BASE_URL = "https://api.deepseek.com/v1"
 
-    def __init__(self, config: ConnectorConfig) -> None:
+    def __init__(self, config: Optional[ConnectorConfig] = None, **kwargs: Any) -> None:
+        if config is None:
+            config = ConnectorConfig(
+                api_key=kwargs.get("api_key"),
+                model=kwargs.get("model", "deepseek-chat"),
+                endpoint=kwargs.get("endpoint"),
+                timeout=kwargs.get("timeout", 60.0),
+                max_retries=kwargs.get("max_retries", 3),
+                temperature=kwargs.get("temperature", 0.7),
+                max_tokens=kwargs.get("max_tokens", 1024),
+                top_p=kwargs.get("top_p", 1.0),
+                extra=kwargs.get("extra", {}),
+            )
         self.base_url = config.endpoint or self.DEFAULT_BASE_URL
         super().__init__(config)
 

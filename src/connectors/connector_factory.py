@@ -40,6 +40,9 @@ class ConnectorFactory:
         return connector_class(config)
 
 
+CONNECTOR_REGISTRY = ConnectorFactory.REGISTRY
+
+
 def get_connector(
     agent_type: str,
     config: Optional[ConnectorConfig] = None,

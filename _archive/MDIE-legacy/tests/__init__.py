@@ -1,1 +1,0 @@
-﻿# AEGIS-MDIE — tests package

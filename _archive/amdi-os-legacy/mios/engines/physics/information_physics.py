@@ -1,1 +1,0 @@
-from src.engines.physics.information_physics import InformationPhysicsEngine, ParticleState

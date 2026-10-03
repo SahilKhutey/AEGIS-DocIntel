@@ -132,7 +132,19 @@ class BaseConnector(abc.ABC):
 
     AGENT_NAME: str = "base"
 
-    def __init__(self, config: ConnectorConfig) -> None:
+    def __init__(self, config: Optional[ConnectorConfig] = None, **kwargs: Any) -> None:
+        if config is None:
+            config = ConnectorConfig(
+                api_key=kwargs.get("api_key"),
+                model=kwargs.get("model", "default"),
+                endpoint=kwargs.get("endpoint"),
+                timeout=kwargs.get("timeout", 60.0),
+                max_retries=kwargs.get("max_retries", 3),
+                temperature=kwargs.get("temperature", 0.7),
+                max_tokens=kwargs.get("max_tokens", 1024),
+                top_p=kwargs.get("top_p", 1.0),
+                extra=kwargs.get("extra", {}),
+            )
         self.config = config
         self.status = ConnectionStatus.DISCONNECTED
         self.budget = AgentTokenBudget.from_config(config)
@@ -158,6 +170,41 @@ class BaseConnector(abc.ABC):
 
     def get_status(self) -> ConnectionStatus:
         return self.status
+
+    def get_native_format(self) -> Dict[str, Any]:
+        """Convert connector configuration to native agent format representation."""
+        return {
+            "type": f"{self.AGENT_NAME}_messages",
+            "model": self.config.model,
+            "endpoint": self.config.endpoint,
+        }
+
+    def build_system_prompt(self, ueo: Any) -> str:
+        """Construct a system prompt from UEO if available."""
+        if hasattr(ueo, "metadata"):
+            pages = getattr(ueo.metadata, "pages", 1)
+            doc_type = getattr(ueo.metadata, "document_type", "Unknown")
+            n_tables = getattr(getattr(ueo, "matrix", None), "n_tables", 0)
+            citations = getattr(ueo, "citations", [])
+            conf_obj = getattr(ueo, "confidence", None)
+            conf = getattr(conf_obj, "overall", 1.0) if conf_obj else 1.0
+            query_str = getattr(ueo, "query", "")
+            return (
+                f"You are a precise document intelligence assistant. The user has asked:\n\n"
+                f"QUERY: {query_str}\n\n"
+                f"You have been provided a structured Context Object (UEO) extracted by AEGIS-AMDI-OS containing:\n"
+                f"- Document summary ({pages} pages, {doc_type})\n"
+                f"- {n_tables} pre-processed tables with computed metrics\n"
+                f"- {len(citations)} citations with confidence scores\n"
+                f"- Overall confidence: {conf:.3f}\n\n"
+                f"RULES:\n"
+                f"1. Answer ONLY using the provided context.\n"
+                f"2. For numerical questions, use the table's pre-computed metrics.\n"
+                f"3. Reference sources using [page, section] notation.\n"
+                f"4. If unsure, say \"I don't know\" rather than fabricate.\n"
+                f"5. Match the user's language."
+            )
+        return "You are a precise document intelligence assistant."
 
     def _build_messages(
         self,
@@ -214,28 +261,87 @@ class BaseConnector(abc.ABC):
             Optional user question; defaults to "Summarize the context."
         """
         # build system + user from UEO
-        system_prompt = ueo.system
+        if hasattr(ueo, "system"):
+            system_prompt = ueo.system
+        else:
+            system_prompt = self.build_system_prompt(ueo)
+
         user_parts: List[str] = []
-        if ueo.summary:
+        if getattr(ueo, "summary", None):
             user_parts.append(f"Summary:\n{ueo.summary}")
-        if ueo.context:
+        elif getattr(ueo, "document_summary", None):
+            doc_summary = ueo.document_summary
+            abstract = getattr(doc_summary, "abstract", "")
+            title = getattr(doc_summary, "title", "")
+            if title or abstract:
+                user_parts.append(f"Summary: {title}\n{abstract}")
+
+        if getattr(ueo, "context", None):
             user_parts.append(f"Context:\n{ueo.context}")
-        if ueo.citations:
-            cit_str = "\n".join(
-                f"- {c.get('excerpt', c.get('raw', str(c)))}"
-                if isinstance(c, dict)
-                else f"- {c}"
-                for c in ueo.citations[:20]
-            )
-            user_parts.append(f"Citations:\n{cit_str}")
-        if ueo.metadata:
-            meta_str = "\n".join(f"- {k}: {v}" for k, v in ueo.metadata.items())
-            user_parts.append(f"Metadata:\n{meta_str}")
+        else:
+            try:
+                from src.ael.formats.markdown_exporter import MarkdownExporter
+                md_context = MarkdownExporter.export(ueo)
+                if md_context:
+                    user_parts.append(f"Context:\n{md_context}")
+            except Exception:
+                pass
+
+        if getattr(ueo, "citations", None):
+            cit_items = []
+            for c in ueo.citations[:20]:
+                if isinstance(c, dict):
+                    cit_items.append(f"- {c.get('excerpt', c.get('snippet', str(c)))}")
+                elif hasattr(c, "snippet"):
+                    cit_items.append(f"- [p.{getattr(c, 'page', '?')}] {c.snippet}")
+                else:
+                    cit_items.append(f"- {c}")
+            if cit_items:
+                user_parts.append("Citations:\n" + "\n".join(cit_items))
+
+        if getattr(ueo, "metadata", None):
+            if isinstance(ueo.metadata, dict):
+                meta_str = "\n".join(f"- {k}: {v}" for k, v in ueo.metadata.items())
+                user_parts.append(f"Metadata:\n{meta_str}")
+            elif hasattr(ueo.metadata, "__dict__"):
+                meta_str = "\n".join(f"- {k}: {v}" for k, v in ueo.metadata.__dict__.items() if not k.startswith("_"))
+                user_parts.append(f"Metadata:\n{meta_str}")
+
         if question is None:
-            question = "Please analyze the provided context and provide a thorough response with citations."
+            question = getattr(ueo, "query", None) or "Please analyze the provided context and provide a thorough response with citations."
         user_parts.append(f"\nQuestion: {question}")
         user_prompt = "\n\n".join(user_parts)
         return self.query(user_prompt, system_prompt=system_prompt, **kwargs)
+
+    async def send(self, ueo: Any, **kwargs: Any) -> Dict[str, Any]:
+        """
+        Async send method for UEO integration (used by AEL and workflows).
+        """
+        question = getattr(ueo, "query", None) or kwargs.get("question")
+        try:
+            resp = self.send_ueo(ueo, question=question, **kwargs)
+            res_dict: Dict[str, Any] = {
+                "agent": resp.agent,
+                "model": resp.model,
+                "answer": resp.text,
+                "input_tokens": resp.usage.get("prompt_tokens", 0) if resp.usage else 0,
+                "output_tokens": resp.usage.get("completion_tokens", 0) if resp.usage else 0,
+                "finish_reason": resp.finish_reason,
+            }
+            if not resp.success and resp.error:
+                res_dict["error"] = resp.error
+            return res_dict
+        except Exception as exc:
+            return {
+                "agent": getattr(self, "AGENT_NAME", "unknown"),
+                "model": getattr(self.config, "model", ""),
+                "error": str(exc),
+            }
+
+    async def stream(self, ueo: Any, **kwargs: Any):
+        """Stream response chunks (yields full answer in default implementation)."""
+        res = await self.send(ueo, **kwargs)
+        yield res.get("answer", "")
 
     def _check_token_budget(self, total_tokens: int) -> None:
         """Raise if total tokens exceed budget."""

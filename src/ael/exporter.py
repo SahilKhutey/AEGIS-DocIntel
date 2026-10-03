@@ -17,7 +17,8 @@ from src.ael.ueo import (
 )
 from src.ael.priority_queue import ExportPriorityQueue
 from src.ael.token_budget import TokenBudgetManager, count_tokens
-from src.ael.connectors import (
+from src.connectors import (
+    get_connector as get_canonical_connector,
     ChatGPTConnector, GeminiConnector, ClaudeConnector,
     DeepSeekConnector, QwenConnector, LocalConnector
 )
@@ -167,21 +168,7 @@ class AgentExporter:
         )
 
     def get_connector(self, agent: str, api_key: str, model: str | None = None, **kwargs) -> Any:
-        agent_lower = agent.lower()
-        if agent_lower == 'chatgpt':
-            return ChatGPTConnector(api_key=api_key, model=model or 'gpt-4o', **kwargs)
-        elif agent_lower == 'gemini':
-            return GeminiConnector(api_key=api_key, model=model or 'gemini-2.0-flash', **kwargs)
-        elif agent_lower == 'claude':
-            return ClaudeConnector(api_key=api_key, model=model or 'claude-3-5-sonnet-20241022', **kwargs)
-        elif agent_lower == 'deepseek':
-            return DeepSeekConnector(api_key=api_key, model=model or 'deepseek-chat', **kwargs)
-        elif agent_lower == 'qwen':
-            return QwenConnector(api_key=api_key, model=model or 'qwen-max', **kwargs)
-        elif agent_lower in ('local', 'vllm'):
-            return LocalConnector(endpoint=kwargs.get('endpoint', 'http://localhost:8001/v1'), model=model or 'meta-llama/Llama-3.3-70B-Instruct', api_key=api_key, **kwargs)
-        else:
-            raise ValueError(f'Unknown agent connector: {agent}')
+        return get_canonical_connector(agent, api_key=api_key, model=model or "default", **kwargs)
 
     async def export_and_verify(
         self,
