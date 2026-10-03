@@ -1,5 +1,9 @@
 # AMDI-OS v1.0.0 — Release Notes
 
+> **Note added October 2026:** This release was never independently verified for
+> production use. Treat as a development snapshot, not a certified release.
+> See /STATUS.md. Only this markdown file is canonical going forward.
+
 **Release Date:** January 15, 2026
 **License:** Proprietary
 
