@@ -26,16 +26,17 @@ actually completed.
   the full test suite (matrix: Python 3.12/3.13), coverage enforcement (≥70%, measured
   baseline 76%), and dependency/secret scanning (`pip-audit`, `bandit`, `gitleaks`).
   See the live CI badge in `README.md`.
-- **LLM connector layer**: Makes real API calls to OpenAI, Anthropic, and
-  other providers (not mocked).
+- **Unified LLM connector layer (Phase 4 Verified)**: Canonical `src/connectors/` supports
+  ChatGPT, Claude, Gemini, DeepSeek, Qwen, and local models (Ollama/vLLM) with token budgeting,
+  response parsing, and unified sync/async execution paths (`send`, `stream`, `send_ueo`, `query`).
+  Redundant `src/ael/connectors/` and duplicate `Aegis Doc/` trees removed; dead legacy trees
+  consolidated in [`docs/history.md`](docs/history.md) and archived to Git history.
 
 ## Known Issues (Being Fixed)
 
 - Coverage is currently 76% overall, but `src/workflows/batch_workflow.py`,
   `export_workflow.py`, `ingest_workflow.py`, and `query_workflow.py` have
   0% dedicated test coverage. Tracked for Phase 6.
-- Two parallel, overlapping LLM connector implementations exist
-  (`src/connectors/` and `src/ael/connectors/`). Tracked in Phase 4.
 
 ## Not Real (Previously Presented as Fact — Now Corrected)
 

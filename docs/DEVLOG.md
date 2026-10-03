@@ -99,24 +99,51 @@ All changes have been committed across discrete, atomic Git commits and synchron
 - Replaced static test badge in [`README.md`](../README.md) with live GitHub Actions status badge and 76% coverage badge.
 - Updated [`STATUS.md`](../STATUS.md) to mark CI as Verified/Real and document coverage gaps in `src/workflows/`.
 
-Executed full test suite against verified clean dependencies:
-- **Command:** `pytest tests/ --ignore=tests/test_multimodal.py`
-- **Result:** **944 passed, 11 skipped, 2 warnings** in 46.16s.
-- **Full Run:** **960 passed, 0 failed, 2 warnings** across all suites.
-- **Verified Primitives:**
-  - Modified density greedy submodular knapsack solver with $(1 - 1/e)$ approximation bound.
-  - Kahn's algorithm topological sorting on 2D spatial bounding box DAGs.
-  - Policy-based PII masking and tokenization.
-  - Fellegi-Sunter probabilistic entity linkage.
-  - APTED hierarchical tree-edit distance version diffing.
-  - Async LLM client connectors (OpenAI, Anthropic, Gemini, Ollama/vLLM).
+---
+
+## 5. Phase 4 Task Breakdown — Architectural Deduplication & Legacy Pruning
+
+### Task 4.1 — AI Agent Connectors Reconciliation
+- **Problem:** Two parallel connector trees existed: `src/ael/connectors/` (used by AEL) and `src/connectors/` (rich, typed connector hierarchy with token budgeting and response parsing).
+- **Remediation Action:**
+  - Designated `src/connectors/` as canonical.
+  - Extended `BaseConnector` in `src/connectors/connector_base.py` with `async def send()` and `async def stream()`, bridging synchronous UEO/query execution with async AEL workflows.
+  - Added support for both `ConnectorConfig` dataclass and flexible keyword arguments across `BaseConnector`, `ChatGPTConnector`, `ClaudeConnector`, `GeminiConnector`, `DeepSeekConnector`, `QwenConnector`, and `LocalConnector`.
+  - Added `CONNECTOR_REGISTRY = ConnectorFactory.REGISTRY` export in `src/connectors/__init__.py`.
+  - Redirected `src/ael/exporter.py` and `src/workflows/export_workflow.py` to `src.connectors`.
+  - Updated mock patches in `tests/test_ael_integration.py` to test canonical `ChatGPTConnector`.
+  - Deleted obsolete `src/ael/connectors/` directory (8 files).
+
+### Task 4.2 — Documentation Deduplication
+- **Problem:** `Aegis Doc/` was an exact duplicate of `Aegis/`, containing 12 redundant `.docx` files consuming 4.47 MB.
+- **Remediation Action:**
+  - Removed `Aegis Doc/` directory from working tree.
+  - Preserved single canonical monograph and report repository in `Aegis/` and markdown documentation in `docs/`.
+
+### Task 4.3 — Legacy Trees Consolidation & Archival
+- **Problem:** Dead legacy trees (`_archive/AMDI-legacy`, `_archive/MDIE-legacy`, `_archive/amdi-os-legacy`) contained 420 abandoned files (~2.5 MB) causing confusion for IDE indexers and code search tools.
+- **Remediation Action:**
+  - Authored comprehensive architectural provenance and history monograph in [`docs/history.md`](history.md).
+  - Archived legacy trees to Git history, deleting them from the working tree.
+  - Updated `_archive/README.md` with instructions on inspecting or restoring historical trees via Git history.
+
+### Task 4.4 — Full Test Suite Verification
+- Resolved tiered requirements parsing check in `tests/test_repository_audit_suite.py:test_audit_tc_10_requirements_manifest_validity`.
+- **Linter Check:** `ruff check src tests` passes cleanly (**0 errors**).
+- **Test Suite Result:** **955 passed, 0 failed, 1 warning** across all suites in 383s.
 
 ---
 
-## 5. Complete Git Commit History
+## 6. Complete Git Commit History
 
 ```text
-* 15e721d (HEAD -> main, origin/main, origin/master, master) docs: rewrite installation instructions with tiered options and honest compatibility notes
+* f6f7564 (HEAD -> main, origin/main, origin/master, master) docs: complete Phase 3 dev log and changelog entries
+* ab9d0b4 docs: document branch protection, live CI badges, and coverage baseline
+* 16fd3ad build: add ruff/mypy/pytest/coverage configuration and fix undefined typing names
+* 0d94bb8 ci: add working pipeline (lint, matrix test, coverage gate, security scan)
+* 37579bb ci: remove broken workflow and contaminated lock file
+* 0146eca docs: finalize task log and dev log for Phase 2 completion
+* 15e721d docs: rewrite installation instructions with tiered options and honest compatibility notes
 * 9e6a068 fix: make loguru import defensive in cli.py, matching orchestrator.py pattern
 * 958d400 build: keep requirements.txt as core+ml compatibility shim
 * e77be4c build: add pinned lock files generated from verified clean installs

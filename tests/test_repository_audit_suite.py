@@ -103,6 +103,11 @@ def test_audit_tc_10_requirements_manifest_validity():
     req_file = os.path.join(repo_root, 'requirements.txt')
     with open(req_file, 'r', encoding='utf-8') as f:
         content = f.read()
+    if '-r ' in content:
+        core_file = os.path.join(repo_root, 'requirements-core.txt')
+        if os.path.exists(core_file):
+            with open(core_file, 'r', encoding='utf-8') as cf:
+                content += "\n" + cf.read()
     assert 'pytest' in content or 'numpy' in content
 
 

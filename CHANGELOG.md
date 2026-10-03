@@ -19,8 +19,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Contributing Guidelines:** Added [`CONTRIBUTING.md`](CONTRIBUTING.md) documenting branch protection rules and CI verification requirements.
 - **Lock Files:** Added [`requirements-core.lock.txt`](requirements-core.lock.txt) and [`requirements-ml.lock.txt`](requirements-ml.lock.txt) from clean installs.
 - **Infrastructure Requirements:** Added [`requirements-infra.txt`](requirements-infra.txt) isolating optional caching/tracing deps.
+- **Architectural History:** Added [`docs/history.md`](docs/history.md) detailing codebase lineage from legacy iterations to unified canonical architecture.
 
 ### Changed
+- **Connectors Reconciliation:** Reconciled `src/connectors/` as the single canonical agent integration layer; unified sync and async execution paths (`send`, `stream`, `send_ueo`, `query`), and redirected AEL exporter and export workflows to `src/connectors`.
 - **Dependency Repair:** Updated [`requirements.txt`](requirements.txt) to include missing runtime packages (`networkx`, `scipy`, `scikit-learn`, `loguru`) and split dependencies into modular tiers.
 - **README Restructuring:** Rewrote [`README.md`](README.md) with live CI badge, measured coverage badge (76%), and tiered install instructions.
 - **Defensive CLI Logging:** Updated `src/cli.py` with safe logging fallback.
@@ -29,6 +31,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **License Annotation:** Annotated [`LICENSE`](LICENSE) template noting no commercial licenses have yet been issued.
 
 ### Quarantined / Removed
+- **Duplicate Connectors:** Deleted obsolete `src/ael/connectors/` tree (8 files).
+- **Duplicate Documentation:** Deleted redundant `Aegis Doc/` directory (12 `.docx` files, 4.47 MB), preserving canonical documentation in `Aegis/` and `docs/`.
+- **Archived Legacy Trees:** Removed abandoned legacy trees `_archive/AMDI-legacy`, `_archive/MDIE-legacy`, `_archive/amdi-os-legacy` (420 files, ~2.5 MB) from the working tree to eliminate indexer noise; archived permanently in Git history.
 - **Broken CI Workflow:** Removed unbuildable `.github/workflows/test.yml` and contaminated `requirements.lock.txt`.
 - **Unverified Audits:** Moved self-generated penetration tests and compliance scorecards to `_unverified_archive/security-audit/`.
 - **Synthetic Benchmarks:** Moved mock dataset and synthetic accuracy reports to `_unverified_archive/benchmark-dataset-mock/` and `_unverified_archive/performance-report/`.
