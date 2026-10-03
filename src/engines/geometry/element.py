@@ -31,30 +31,7 @@ class ElementType(str, Enum):
     OTHER     = "other"
 
 
-@dataclass(frozen=True)
-class BoundingBox:
-    x0: float; y0: float; x1: float; y1: float
-
-    @property
-    def width(self) -> float: return self.x1 - self.x0
-    @property
-    def height(self) -> float: return self.y1 - self.y0
-    @property
-    def area(self) -> float: return max(0., self.width) * max(0., self.height)
-    @property
-    def center(self) -> tuple[float, float]:
-        return ((self.x0 + self.x1) / 2, (self.y0 + self.y1) / 2)
-
-    def iou(self, other: "BoundingBox") -> float:
-        ix0, iy0 = max(self.x0, other.x0), max(self.y0, other.y0)
-        ix1, iy1 = min(self.x1, other.x1), min(self.y1, other.y1)
-        inter = max(0., ix1 - ix0) * max(0., iy1 - iy0)
-        union = self.area + other.area - inter
-        return inter / union if union > 0 else 0.0
-
-    def to_tuple(self) -> tuple: return (self.x0, self.y0, self.x1, self.y1)
-    def to_normalized(self, pw: float, ph: float) -> "BoundingBox":
-        return BoundingBox(self.x0 / pw, self.y0 / ph, self.x1 / pw, self.y1 / ph)
+from src.models.geometry_object import BoundingBox
 
 
 @dataclass

@@ -38,13 +38,24 @@ class ElementType(str, Enum):
 
 class BoundingBox(BaseModel):
     """
-    Normalized bounding box.
-    All coordinates in [0, 1].
+    Universal bounding box model supporting both page-point and normalized coordinates.
     """
-    x0: float = Field(0.0, ge=0, le=1)
-    y0: float = Field(0.0, ge=0, le=1)
-    x1: float = Field(1.0, ge=0, le=1)
-    y1: float = Field(1.0, ge=0, le=1)
+    x0: float = 0.0
+    y0: float = 0.0
+    x1: float = 1.0
+    y1: float = 1.0
+    rotation: float = 0.0
+
+    def __init__(
+        self,
+        x0: float = 0.0,
+        y0: float = 0.0,
+        x1: float = 1.0,
+        y1: float = 1.0,
+        rotation: float = 0.0,
+        **data: Any,
+    ) -> None:
+        super().__init__(x0=x0, y0=y0, x1=x1, y1=y1, rotation=rotation, **data)
 
     @computed_field
     @property
@@ -65,6 +76,25 @@ class BoundingBox(BaseModel):
     @property
     def center(self) -> tuple[float, float]:
         return ((self.x0 + self.x1) / 2, (self.y0 + self.y1) / 2)
+
+    def to_tuple(self) -> tuple[float, float, float, float]:
+        """Return 4-tuple (x0, y0, x1, y1)."""
+        return (self.x0, self.y0, self.x1, self.y1)
+
+    def to_normalized(self, pw: float, ph: float) -> "BoundingBox":
+        """Normalize coordinates by page dimensions (width pw, height ph)."""
+        return BoundingBox(
+            self.x0 / pw if pw > 0 else 0.0,
+            self.y0 / ph if ph > 0 else 0.0,
+            self.x1 / pw if pw > 0 else 1.0,
+            self.y1 / ph if ph > 0 else 1.0,
+        )
+
+    def __iter__(self):
+        return iter((self.x0, self.y0, self.x1, self.y1))
+
+    def __getitem__(self, index: int) -> float:
+        return (self.x0, self.y0, self.x1, self.y1)[index]
 
     def iou(self, other: "BoundingBox") -> float:
         """Intersection over Union."""

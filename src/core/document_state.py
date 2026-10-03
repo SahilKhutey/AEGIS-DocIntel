@@ -31,27 +31,7 @@ from pydantic import BaseModel, ConfigDict, Field, field_validator, model_valida
 # 1. P — Physical Layout
 # ─────────────────────────────────────────────────────────────────
 
-class BoundingBox(BaseModel):
-    """Normalized bounding box coordinates [0.0, 1.0] or physical point units."""
-    model_config = ConfigDict(frozen=True)
-
-    x0: float = Field(..., description="Left coordinate")
-    y0: float = Field(..., description="Top coordinate")
-    x1: float = Field(..., description="Right coordinate")
-    y1: float = Field(..., description="Bottom coordinate")
-    rotation: float = Field(default=0.0, description="Rotation angle in degrees")
-
-    @property
-    def width(self) -> float:
-        return max(0.0, self.x1 - self.x0)
-
-    @property
-    def height(self) -> float:
-        return max(0.0, self.y1 - self.y0)
-
-    @property
-    def area(self) -> float:
-        return self.width * self.height
+from src.models.geometry_object import BoundingBox
 
 
 class PageInfo(BaseModel):
