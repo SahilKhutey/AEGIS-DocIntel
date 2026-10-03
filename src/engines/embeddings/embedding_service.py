@@ -7,7 +7,9 @@ Uses sentence-transformers if available, otherwise falls back to deterministic m
 from __future__ import annotations
 import hashlib
 import logging
-from typing import List, Optional
+from typing import Any, List, Optional, TYPE_CHECKING
+if TYPE_CHECKING:
+    from sentence_transformers import SentenceTransformer
 import numpy as np
 
 import os

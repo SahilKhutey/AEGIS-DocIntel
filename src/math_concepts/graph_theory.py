@@ -8,6 +8,7 @@ Modular implementation of graph and hypergraph formulations:
 '''
 
 from __future__ import annotations
+from typing import Any
 
 import numpy as np
 

@@ -7,6 +7,7 @@ from __future__ import annotations
 
 import io
 import logging
+from typing import Any
 try:
     from pptx import Presentation
     from pptx.enum.shapes import MSO_SHAPE_TYPE

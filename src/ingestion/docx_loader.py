@@ -7,6 +7,7 @@ from __future__ import annotations
 
 import io
 import logging
+from typing import Any
 try:
     from docx import Document as DocxDocument
     from docx.oxml.ns import qn
