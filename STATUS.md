@@ -22,12 +22,18 @@ actually completed.
   formally declared and locked in `requirements-core.lock.txt`.
 - **Test suite**: 944 tests passing, 11 skipped, verified against clean install:
   `pip install -r requirements-core.txt -r requirements-dev.txt && pytest tests/ --ignore=tests/test_multimodal.py`
+- **CI pipeline (Phase 3 Verified)**: Every push/PR runs lint (`ruff`), type-check (`mypy`),
+  the full test suite (matrix: Python 3.12/3.13), coverage enforcement (≥70%, measured
+  baseline 76%), and dependency/secret scanning (`pip-audit`, `bandit`, `gitleaks`).
+  See the live CI badge in `README.md`.
 - **LLM connector layer**: Makes real API calls to OpenAI, Anthropic, and
   other providers (not mocked).
 
 ## Known Issues (Being Fixed)
 
-- No CI pipeline currently runs these tests automatically in production. Tracked in Phase 3.
+- Coverage is currently 76% overall, but `src/workflows/batch_workflow.py`,
+  `export_workflow.py`, `ingest_workflow.py`, and `query_workflow.py` have
+  0% dedicated test coverage. Tracked for Phase 6.
 - Two parallel, overlapping LLM connector implementations exist
   (`src/connectors/` and `src/ael/connectors/`). Tracked in Phase 4.
 
