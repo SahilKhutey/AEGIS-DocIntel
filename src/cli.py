@@ -14,7 +14,11 @@ import sys
 from pathlib import Path
 from typing import Any
 
-from loguru import logger
+try:
+    from loguru import logger
+except ImportError:  # pragma: no cover
+    import logging
+    logger = logging.getLogger("aegis.cli")
 
 from src.core.document_object import DocumentObject, DocumentFormat
 from src.core.orchestrator import AMDIOrchestrator
