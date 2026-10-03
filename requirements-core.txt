@@ -1,40 +1,42 @@
-# AEGIS-DocIntel — Core Lightweight Dependencies
-# ================================================
-# Minimal set required for document parsing, spatial DAG,
-# mathematical compilation, and REST API routing.
+# AEGIS-DocIntel — Core Runtime Dependencies
+# Everything needed for API + ingestion + all math/graph engines.
+# Does NOT include embedding/vector-search (see requirements-ml.txt).
 
-# Core Schema & Runtime
-pydantic>=2.6.0,<3.0.0
-pydantic-settings>=2.2.0,<3.0.0
+# Core
+pydantic>=2.6.0
+pydantic-settings>=2.2.0
 pyyaml>=6.0.1
 
-# REST API & Web Server
-fastapi>=0.110.0,<1.0.0
+# API
+fastapi>=0.110.0
 uvicorn[standard]>=0.27.0
 python-multipart>=0.0.9
 httpx>=0.27.0
-starlette>=0.36.0
 
-# Mathematical Foundations & Data Structures
-numpy>=1.26.0,<2.1.0
-scipy>=1.12.0,<1.14.0
-networkx>=3.2.0,<4.0.0
-scikit-learn>=1.4.0,<1.6.0
-
-# Document Ingestion & Image Processing
+# Document Processing
 pymupdf>=1.24.0
 pdfplumber>=0.10.0
 pillow>=10.2.0
 
-# Observability & Structured Logging
-structlog>=24.1.0
-loguru>=0.7.2
-prometheus-client>=0.20.0
+# LLM Providers
+openai>=1.30.0
+anthropic>=0.25.0
 
-# Security, Hashing & Cryptography
+# Math / Graph / ML core (NOT the same as embeddings — these are classical
+# algorithms: clustering, spectral graph theory, statistics)
+scikit-learn>=1.4.0
+scipy>=1.12.0
+networkx>=3.2
+
+# Observability
+prometheus-client>=0.20.0
+structlog>=24.1.0
+
+# Logging (hard dependency of src/cli.py)
+loguru>=0.7.2
+
+# Utilities
 python-jose[cryptography]>=3.3.0
 passlib[bcrypt]>=1.7.4
-bcrypt>=4.1.0
-
-# Token Computation
 tiktoken>=0.6.0
+numpy>=1.26.0

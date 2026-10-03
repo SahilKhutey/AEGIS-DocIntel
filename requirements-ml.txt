@@ -1,19 +1,7 @@
-# AEGIS-DocIntel — Machine Learning & Heavy Vector Dependencies
-# ==============================================================
-# Optional extensions for local neural embeddings, vector indexing,
-# telemetry tracing, and distributed caching.
+# AEGIS-DocIntel — Optional ML/Embeddings Dependencies
+# Install ONLY if you need semantic search / vector retrieval.
+# WARNING: sentence-transformers pulls in torch (multi-GB download).
+-r requirements-core.txt
 
-# Neural Embeddings & Vector Search
 sentence-transformers>=2.7.0
 faiss-cpu>=1.7.4
-
-# Cloud LLM Provider SDKs
-openai>=1.30.0
-anthropic>=0.25.0
-
-# Distributed Caching & Queues
-redis>=5.0.0
-
-# Distributed Tracing
-opentelemetry-api>=1.24.0
-opentelemetry-sdk>=1.24.0

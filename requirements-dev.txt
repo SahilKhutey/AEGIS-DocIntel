@@ -1,17 +1,8 @@
-# AEGIS-DocIntel — Development, Testing & Quality Assurance
-# ==========================================================
+# AEGIS-DocIntel — Development & Testing Dependencies
+-r requirements-core.txt
 
-# Test Framework & Extensions
 pytest>=8.0.0
-pytest-asyncio>=0.23.0
-pytest-cov>=4.1.0
-hypothesis>=6.98.0
-
-# Code Quality & Static Analysis
-ruff>=0.3.0
-mypy>=1.9.0
-
-# Security Auditing & CVE Scanners
-bandit>=1.7.8
-pip-audit>=2.7.0
-safety>=3.1.0
+pytest-asyncio>=0.24.0
+pytest-cov>=5.0.0
+ruff>=0.6.0
+mypy>=1.11.0
