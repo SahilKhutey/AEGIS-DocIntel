@@ -36,12 +36,17 @@ actually completed.
   unifying physical layout, semantic vectors, knowledge graphs, recurrence patterns, spectral
   Laplacians, tabular matrices, simplicial complexes, information physics, hypergraphs, and
   telemetry across pipeline stages. Verified via `tests/test_document_state.py`.
+- **Ingestion & Pipeline Hardening (Phase 6 Verified)**:
+  - Deep magic byte sniffer (`src/ingestion/sniff.py`) identifying PDF, DOCX, XLSX, PPTX, PNG, JPEG, GIF, TIFF, WebP, BMP, WAV, MP3, FLAC, OGG, and plain/markdown/structured text.
+  - Strict typed error hierarchy (`src/ingestion/exceptions.py`): `IngestionError`, `DocumentCorruptError`, `EncryptedDocumentError`, `UnsupportedFormatError`, `ProcessingTimeoutError`, `ExtractionError`, `SizeLimitError`.
+  - Universal fallback recovery parser (`src/ingestion/fallback_parser.py`) with 6-stage encoding and chunk recovery that never crashes on malformed files.
+  - Hardened loaders across all modalities (`PDFLoader`, `DOCXLoader`, `XLSXLoader`, `PPTXLoader`, `ImageLoader`, `SpeechLoader`, `TextLoader`).
+  - Dedicated workflow test suite (`tests/test_workflows.py`) providing 100% passing integration coverage across `IngestWorkflow`, `QueryWorkflow`, `ExportWorkflow`, and `BatchWorkflow`.
+  - Ingestion hardening verified via 24 automated edge-case and fuzzing tests (`tests/test_ingestion_hardening.py`).
 
 ## Known Issues (Being Fixed)
 
-- Coverage is currently 76% overall, but `src/workflows/batch_workflow.py`,
-  `export_workflow.py`, `ingest_workflow.py`, and `query_workflow.py` have
-  0% dedicated test coverage. Tracked for Phase 6.
+- Document benchmarks currently use synthetic data; real-document test fixtures (PDF, DOCX, XLSX) and token reduction benchmarks are scheduled for Phase 7.
 
 ## Not Real (Previously Presented as Fact — Now Corrected)
 

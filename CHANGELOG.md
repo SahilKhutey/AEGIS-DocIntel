@@ -22,8 +22,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Architectural History:** Added [`docs/history.md`](docs/history.md) detailing codebase lineage from legacy iterations to unified canonical architecture.
 - **Canonical Document Schema:** Added [`src/core/document_state.py`](src/core/document_state.py) implementing Pydantic v2 mathematical schema $D = (P, S, G, R, F, M, T, X, H, E)$ with topological invariants, transition validation, and UEO bridging.
 - **Schema Test Suite:** Added [`tests/test_document_state.py`](tests/test_document_state.py) validating invariants, serialization, and transitions.
+- **Ingestion Error Hierarchy:** Added typed exception hierarchy in [`src/ingestion/exceptions.py`](src/ingestion/exceptions.py).
+- **Magic Byte Sniffer:** Added deep signature sniffing in [`src/ingestion/sniff.py`](src/ingestion/sniff.py) across PDF, Office, audio, and images.
+- **Fallback Recovery Parser:** Added non-crashing multi-tier fallback parser in [`src/ingestion/fallback_parser.py`](src/ingestion/fallback_parser.py).
+- **Text Loader:** Added dedicated [`src/ingestion/text_loader.py`](src/ingestion/text_loader.py) with structured metadata.
+- **Hardening & Workflow Test Suites:** Added [`tests/test_ingestion_hardening.py`](tests/test_ingestion_hardening.py) (24 tests) and [`tests/test_workflows.py`](tests/test_workflows.py) (8 tests).
 
 ### Changed
+- **Pipeline & Loader Hardening:** Hardened `PDFLoader`, `DOCXLoader`, `XLSXLoader`, `PPTXLoader`, `ImageLoader`, `SpeechLoader`, and `IngestionService.ingest` with timeout support and fallback recovery.
+- **Workflow & Engine Defensiveness:** Added PageRank centrality scoring in `DocumentGraph` and `GraphEngine`, dynamic `compute_weights` in `AdaptiveFusionEngine` and `FusionEngine`, array dimension flattening in `SemanticEngine`, and safe graph metric handling in `ExportWorkflow`.
 - **Connectors Reconciliation:** Reconciled `src/connectors/` as the single canonical agent integration layer; unified sync and async execution paths (`send`, `stream`, `send_ueo`, `query`), and redirected AEL exporter and export workflows to `src/connectors`.
 - **Dependency Repair:** Updated [`requirements.txt`](requirements.txt) to include missing runtime packages (`networkx`, `scipy`, `scikit-learn`, `loguru`) and split dependencies into modular tiers.
 - **README Restructuring:** Rewrote [`README.md`](README.md) with live CI badge, measured coverage badge (76%), and tiered install instructions.

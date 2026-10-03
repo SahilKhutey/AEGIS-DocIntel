@@ -166,10 +166,51 @@ All changes have been committed across discrete, atomic Git commits and synchron
 
 ---
 
-## 7. Complete Git Commit History
+## 7. Phase 6 Task Breakdown — Ingestion & Pipeline Hardening
+
+### Task 6.1 — Typed Exception Hierarchy & Deep Sniffing
+- **Exception Hierarchy ([`src/ingestion/exceptions.py`](../src/ingestion/exceptions.py)):**
+  - Created root `IngestionError` inheriting from `AMDIException`.
+  - Subclassed typed errors: `DocumentCorruptError`, `EncryptedDocumentError`, `UnsupportedFormatError`, `ProcessingTimeoutError`, `ExtractionError`, `SizeLimitError`, `LoaderError`, and `FormatError`.
+- **Magic Byte Sniffer ([`src/ingestion/sniff.py`](../src/ingestion/sniff.py)):**
+  - Deep header/signature inspection detecting PDF (`%PDF-`), OpenXML containers (DOCX, XLSX, PPTX via ZIP inspection), raster images (PNG, JPEG, GIF, TIFF, WebP, BMP), audio (WAV, MP3, FLAC, OGG), and UTF/text heuristics.
+  - Integrated into all loader validation paths.
+
+### Task 6.2 — Resilient Loaders & Fallback Recovery
+- **Universal Fallback Parser ([`src/ingestion/fallback_parser.py`](../src/ingestion/fallback_parser.py)):**
+  - Multi-tier encoding recovery (UTF-8, UTF-8-sig, UTF-16 with BOM/null-byte heuristics, Latin-1, CP1252, ASCII printable chunking) guaranteed never to crash on arbitrary corrupted or malformed payloads.
+- **Loader Hardening:**
+  - Hardened `PDFLoader`, `DOCXLoader`, `XLSXLoader`, `PPTXLoader`, `ImageLoader`, and `SpeechLoader` against corrupt files, zero-byte inputs, and encrypted streams.
+  - Implemented dedicated [`TextLoader`](../src/ingestion/text_loader.py) for structured/plain text files.
+  - Hardened `IngestionService.ingest` and `parse_document()` with timeout parameters and fallback recovery options.
+
+### Task 6.3 — Workflow Integration & Latent Bug Remediation
+- **Workflow Coverage ([`tests/test_workflows.py`](../tests/test_workflows.py)):**
+  - Closed the 0% workflow test coverage gap identified in `STATUS.md` across `IngestWorkflow`, `QueryWorkflow`, `ExportWorkflow`, and `BatchWorkflow`.
+- **Engine Bug Fixes:**
+  - Resolved `GraphMetrics` vs dict attribute mismatch in `ExportWorkflow`.
+  - Implemented `score(query, elements)` on `DocumentGraph` and `GraphEngine` using normalized PageRank centrality.
+  - Added `compute_weights(query)` to `AdaptiveFusionEngine` and `FusionEngine` for dynamic query classification.
+  - Squeezed multi-dimensional embedding arrays in `SemanticEngine.cosine_similarity` to fix scalar conversion errors.
+  - Added `HEADING = "heading"` to `BlockType` enum in `src/core/normalized_document.py`.
+  - Fixed FAISS numpy array boolean evaluation in `src/engines/vector_db/faiss_store.py`.
+
+### Task 6.4 — Test Verification & Code Quality
+- **Ingestion Hardening Tests:** `pytest tests/test_ingestion_hardening.py` (**24 passed in 17.78s**).
+- **Core Ingestion Tests:** `pytest tests/test_ingestion.py` (**23 passed in 18.49s**).
+- **Workflow Integration Tests:** `pytest tests/test_workflows.py` (**8 passed in 26.95s**).
+- **Total Combined Ingestion Suite:** 55 passed, 0 failures.
+- **Linter Check:** `ruff check src tests` passed with **0 errors**.
+
+---
+
+## 8. Complete Git Commit History
 
 ```text
-* fff726a (HEAD -> main, origin/main, origin/master, master) docs: document Phase 4 completion, lineage in history.md, and update audit suite
+* ffe591d feat(workflows): close workflow coverage gap and fix engine integration interfaces
+* a3d614a feat(ingestion): harden ingestion pipeline with typed error hierarchy, sniffing, and fallback parser
+* 2bea499 feat(core): implement canonical DocumentState schema with topological invariants, transition validation, and UEO bridge
+* fff726a docs: document Phase 4 completion, lineage in history.md, and update audit suite
 * 18ce08e refactor(connectors): reconcile canonical connectors, add async send/stream, and prune src/ael/connectors
 * f6f7564 docs: complete Phase 3 dev log and changelog entries
 * ab9d0b4 docs: document branch protection, live CI badges, and coverage baseline
