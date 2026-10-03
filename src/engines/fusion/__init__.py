@@ -51,8 +51,9 @@ Version: 1.0.0
 
 
 from .fusion_engine import FusionEngine, FusionReport
-
+from .adaptive_fusion import AdaptiveFusionEngine, QueryType
 from .dynamic_weighting import DynamicWeightLearner, WeightState
+
 
 from .ranking import Ranker, RankingResult, RankedItem
 
@@ -81,8 +82,10 @@ from .exceptions import (
 
 
 __all__ = [
-
+    "AdaptiveFusionEngine",
+    "QueryType",
     "FusionEngine",
+
 
     "FusionReport",
 

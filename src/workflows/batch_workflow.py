@@ -8,7 +8,12 @@ import logging
 from pathlib import Path
 from typing import Any
 
-from loguru import logger
+try:
+    from loguru import logger
+except ImportError:
+    import logging
+    logger = logging.getLogger(__name__)  # type: ignore[assignment]
+
 
 from src.core.document_object import DocumentFormat, DocumentObject
 from src.workflows.ingest_workflow import IngestWorkflow

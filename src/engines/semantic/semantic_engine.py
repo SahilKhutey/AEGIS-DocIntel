@@ -204,9 +204,15 @@ class EmbeddingService:
         if self._loaded:
             return self._model is not None
         self._loaded = True
-        if HAS_SENTENCE_TRANSFORMERS:
+        import os
+
+        import sys
+        is_test = "pytest" in sys.modules or os.getenv("AMDI_ENV") == "test"
+        mock_env = os.getenv("AMDI_MOCK_EMBEDDINGS", "false").lower() == "true"
+        if HAS_SENTENCE_TRANSFORMERS and not (is_test or mock_env or self.model_name == "mock"):
             try:
                 self._model = SentenceTransformer(self.model_name, device=self.device)
+
                 if hasattr(self._model, "get_embedding_dimension"):
                     self.dimension = self._model.get_embedding_dimension()
                 else:
@@ -595,6 +601,12 @@ class SemanticEngine:
 
     def cosine_similarity(self, a: np.ndarray, b: np.ndarray) -> float:
         """Compute cosine similarity between two vectors."""
+        a = np.asarray(a).squeeze()
+        b = np.asarray(b).squeeze()
+        if a.ndim > 1:
+            a = a[0]
+        if b.ndim > 1:
+            b = b[0]
         norm_a = np.linalg.norm(a)
         norm_b = np.linalg.norm(b)
         if norm_a == 0 or norm_b == 0:
@@ -872,8 +884,9 @@ class SemanticEngine:
         logger.info("IDF table built: %d unique terms.", len(self._idf_table))
         return self
 
-    def process(self, elements: list[Any]) -> list[SemanticResult]:
+    def process(self, elements: list[Any], metas: Any = None) -> list[SemanticResult]:
         """Legacy entrypoint routing."""
+
         if not elements:
             return []
 

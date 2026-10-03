@@ -88,6 +88,11 @@ class FusionEngine:
             use_position_prior=use_position_prior,
         )
 
+    def compute_weights(self, query: str) -> Tuple[Any, Any, float]:
+        """Compute optimal representation layer weights for a query."""
+        from .adaptive_fusion import QueryClassifier
+        return QueryClassifier().route(query)
+
     def fuse(
         self,
         engine_signals: Dict[str, np.ndarray],

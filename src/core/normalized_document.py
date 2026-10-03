@@ -22,7 +22,9 @@ class BlockType(str, Enum):
     LIST     = "list"
     TITLE    = "title"
     SUBTITLE = "subtitle"
+    HEADING  = "heading"
     CODE     = "code"
+
 
 
 @dataclass(frozen=True)

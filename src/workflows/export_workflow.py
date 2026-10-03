@@ -6,7 +6,12 @@ import json
 import time
 from typing import Any
 
-from loguru import logger
+try:
+    from loguru import logger
+except ImportError:
+    import logging
+    logger = logging.getLogger(__name__)  # type: ignore[assignment]
+
 
 from src.ael.ueo import (
     UniversalExportObject, Metadata, DocumentSummary,
@@ -97,8 +102,8 @@ class ExportWorkflow:
             matrix=MatrixLayer(tables=table_dicts, n_tables=len(tables)),
             graph=GraphLayer(
                 nodes=[], edges=[],
-                n_nodes=graph_data.get('nodes', 0),
-                n_edges=graph_data.get('edges', 0),
+                n_nodes=getattr(graph_data, 'n_nodes', 0) if hasattr(graph_data, 'n_nodes') else graph_data.get('nodes', 0),
+                n_edges=getattr(graph_data, 'n_edges', 0) if hasattr(graph_data, 'n_edges') else graph_data.get('edges', 0),
             ),
             template=TemplateLayer(
                 templates=[t.to_dict() for t in templates],

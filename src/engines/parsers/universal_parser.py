@@ -248,49 +248,28 @@ class UniversalParser:
         str
             Lower-cased format token, e.g. ``"pdf"``, ``"docx"``.
         """
-        raw: Optional[bytes] = getattr(doc, "content", None)
+        raw: Optional[bytes] = self._get_raw(doc)
+        path_str = str(getattr(doc, "path", getattr(doc, "raw_path", getattr(doc, "filename", ""))) or "")
 
-        # --- magic-bytes detection ---
         if raw:
-            header = raw[:8]
-            for sig, fmt in _MAGIC_BYTES.items():
-                if header.startswith(sig):
-                    if fmt == "zip":
-                        # Disambiguate DOCX / PPTX / XLSX by filename
-                        ext = Path(getattr(doc, "path", "") or "").suffix.lower()
-                        return _EXTENSION_MAP.get(ext, "docx")
-                    return fmt
+            try:
+                from src.ingestion.sniff import sniff_format
+                sniff_res = sniff_format(raw, filename=path_str)
+                if sniff_res and sniff_res.format.value != "unknown":
+                    return sniff_res.format.value
+            except Exception as exc:
+                log.debug("sniff_format failed: %s", exc)
 
-            # Try python-magic for deeper inspection
-            if _MAGIC_AVAILABLE:
-                try:
-                    mime = magic.from_buffer(raw[:2048], mime=True)
-                    _MIME_MAP = {
-                        "application/pdf": "pdf",
-                        "image/png": "image",
-                        "image/jpeg": "image",
-                        "image/tiff": "image",
-                        "image/gif": "image",
-                        "image/bmp": "image",
-                        "text/plain": "text",
-                        "text/html": "html",
-                        "text/markdown": "markdown",
-                    }
-                    if mime in _MIME_MAP:
-                        return _MIME_MAP[mime]
-                except Exception as exc:  # pragma: no cover
-                    log.debug("python-magic detection failed: %s", exc)
-
-        # --- extension fallback ---
-        path = Path(getattr(doc, "path", "") or "")
-        ext = path.suffix.lower()
-        fmt = _EXTENSION_MAP.get(ext)
-        if fmt:
-            return fmt
+        # --- fallback to extension mapping ---
+        if path_str:
+            ext = Path(path_str).suffix.lower()
+            fmt = _EXTENSION_MAP.get(ext)
+            if fmt:
+                return fmt
 
         log.warning(
             "Could not detect format for document '%s'; defaulting to 'text'.",
-            getattr(doc, "path", "unknown"),
+            path_str or "unknown",
         )
         return "text"
 

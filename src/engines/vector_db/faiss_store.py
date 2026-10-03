@@ -132,8 +132,9 @@ class FAISSStore:
                 f"({len(metadatas)}) must have the same length"
             )
 
-        if not embeddings:
+        if len(embeddings) == 0:
             return
+
 
         # Validate and normalise
         normed: List[np.ndarray] = []

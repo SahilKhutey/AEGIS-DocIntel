@@ -192,6 +192,10 @@ class AdaptiveFusionEngine:
         weights, q_type, conf = self.classifier.route(query)
         return q_type, weights
 
+    def compute_weights(self, query: str) -> Tuple[FusionWeights, QueryType, float]:
+        """Compute optimal representation layer weights for a query."""
+        return self.classifier.route(query)
+
     async def fuse(
         self,
         query: str,

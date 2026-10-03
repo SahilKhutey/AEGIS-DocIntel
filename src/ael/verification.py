@@ -155,3 +155,8 @@ class ResponseVerificationLayer:
         # Split by sentence boundaries
         sentences = re.split(r'(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?)\s', text)
         return [s.strip() for s in sentences if s.strip()]
+
+
+# Alias for backwards compatibility
+ResponseVerifier = ResponseVerificationLayer
+

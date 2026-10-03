@@ -404,7 +404,7 @@ class AMDIRetriever:
             self._run_engine("frequency",   self._frequency.score,   query, elements),
             self._run_engine("matrix",      self._matrix.score,      query, elements),
             self._run_engine("template",    self._template.score,    query, elements),
-            self._run_engine("graph",       self._graph.score if self._graph else None,
+            self._run_engine("graph",       getattr(self._graph, "score", None),
                              query, elements),
         ]
         results = await asyncio.gather(*tasks, return_exceptions=True)

@@ -9,7 +9,12 @@ import uuid
 from pathlib import Path
 from typing import Any
 
-from loguru import logger
+try:
+    from loguru import logger
+except ImportError:
+    import logging
+    logger = logging.getLogger(__name__)  # type: ignore[assignment]
+
 
 from src.core.document_object import DocumentObject, DocumentFormat
 from src.core.geometric_element import ElementType, GeometricElement, make_element
@@ -21,8 +26,9 @@ from src.engines.recurrence.recurrence_engine import RecurrenceEngine
 from src.engines.frequency.frequency_engine import FrequencyEngine
 from src.engines.matrix.matrix_engine import MatrixEngine, TableMatrix
 from src.engines.template.template_engine import TemplateEngine
-from src.engines.graph.graph_engine import GraphEngine, GraphBuilder
+from src.engines.graph import GraphEngine, GraphBuilder
 from src.engines.semantic.semantic_engine import EmbeddingService, SemanticEngine
+
 from src.engines.memory.hierarchical_memory import HierarchicalMemory
 from src.engines.vector_db.faiss_store import FAISSStore as FaissStore
 from src.ingestion.service import IngestionService
@@ -156,8 +162,9 @@ class IngestWorkflow:
         metas = [{'element_id': e.element_id, 'page': e.page, 'section': e.section}
                  for e in elements if e.content]
         if texts:
-            await self.semantic.process(texts, metas)
+            self.semantic.process(elements)
             embeddings = self.embedder.encode(texts)
+
             v_metas = [
                 {'chunk_id': e.element_id, 'text': e.content, 'page': e.page,
                  'section': e.section, 'type': e.type.value, 'doc_id': e.doc_id}

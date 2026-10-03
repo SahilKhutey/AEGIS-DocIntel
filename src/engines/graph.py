@@ -234,6 +234,25 @@ class DocumentGraph:
             is_connected=(components == 1),
         )
 
+    def score(self, query: str = "", elements: list[Any] | None = None) -> dict[str, float]:
+        """Compute structural graph relevance scores using PageRank centrality."""
+        if not self.graph.number_of_nodes():
+            return {}
+        try:
+            pr = nx.pagerank(self.graph, alpha=0.85)
+        except Exception:
+            pr = {n: 1.0 / max(1, self.graph.number_of_nodes()) for n in self.graph.nodes()}
+
+        max_pr = max(pr.values()) if pr else 1.0
+        normalized_pr = {k: v / max_pr for k, v in pr.items()} if max_pr > 0 else pr
+
+        if elements:
+            return {
+                getattr(e, "element_id", str(e)): float(normalized_pr.get(getattr(e, "element_id", str(e)), 0.0))
+                for e in elements
+            }
+        return {str(k): float(v) for k, v in normalized_pr.items()}
+
 
 # ============================================================
 # GRAPH ENGINE
@@ -924,6 +943,10 @@ class GraphEngine:
             "statistics": self.statistics(),
         }
 
+    def score(self, query: str = "", elements: list[Any] | None = None) -> dict[str, float]:
+        """Compute structural graph relevance scores via PageRank on current document graph."""
+        return self.graph.score(query, elements)
+
 
 def calculate_hitting_time(P: np.ndarray, src: int, dst: int) -> float:
     '''
@@ -951,4 +974,18 @@ def calculate_hitting_time(P: np.ndarray, src: int, dst: int) -> float:
     except np.linalg.LinAlgError:
         # Fallback to shortest graph path distance
         return float(abs(dst - src))
+
+
+class GraphBuilder:
+    """Helper to build a complete DocumentGraph from geometric elements."""
+
+    def __init__(self, damping: float = 0.85):
+        self.engine = GraphEngine(damping=damping)
+
+    def build(self, elements: list[GeometricElement]) -> DocumentGraph:
+        """Construct nodes and edges for elements and return populated DocumentGraph."""
+        self.engine.build_nodes(elements)
+        self.engine.build_edges(elements)
+        return self.engine.graph
+
 
