@@ -19,14 +19,7 @@ from src.llm_service.llm_client import LLMService
 log = structlog.get_logger("aegis.query_service")
 
 
-@dataclass
-class Citation:
-    source_num: int
-    chunk_id: str
-    doc_id: str
-    page: int
-    section: str
-    snippet: str
+from src.models.context_object import Citation
 
 
 @dataclass

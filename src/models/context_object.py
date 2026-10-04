@@ -75,13 +75,36 @@ class ContextBudget(BaseModel):
 
 
 class Citation(BaseModel):
-    """A citation reference."""
-    element_id: str
-    page: int
+    """A canonical citation reference."""
+    element_id: str = ""
+    page: int = 0
     section: str | None = None
     snippet: str = ""
     confidence: float = 0.0
     bbox: list[float] | None = None
+    source_num: int = 0
+    chunk_id: str = ""
+    doc_id: str = ""
+
+    def __init__(
+        self,
+        element_id: str = "",
+        page: int = 0,
+        section: str | None = None,
+        snippet: str = "",
+        confidence: float = 0.0,
+        bbox: list[float] | None = None,
+        **data: Any,
+    ) -> None:
+        super().__init__(
+            element_id=element_id,
+            page=page,
+            section=section,
+            snippet=snippet,
+            confidence=confidence,
+            bbox=bbox,
+            **data,
+        )
 
 
 class ContextObject(BaseModel):

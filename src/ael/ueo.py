@@ -111,14 +111,7 @@ class TemplateLayer:
     dominant_template_id: str = ''
 
 
-@dataclass
-class Citation:
-    element_id: str
-    page: int
-    section: str | None
-    snippet: str
-    confidence: float
-    bbox: list | None = None
+from src.models.context_object import Citation
 
 
 @dataclass
