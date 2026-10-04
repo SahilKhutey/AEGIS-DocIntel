@@ -1,14 +1,17 @@
 # Archived Legacy Trees
 
-The historical development trees previously located in this folder (`AMDI-legacy`, `MDIE-legacy`, and `amdi-os-legacy`) have been consolidated into the canonical `src/` codebase and archived to Git history as part of Phase 4 (Architectural Deduplication).
+The pre-rename historical code (`AMDI-legacy`, `MDIE-legacy`, and `amdi-os-legacy`) has been moved to the dedicated `archive/legacy-history` branch to keep the main working tree focused on the current canonical codebase.
 
 - **Architectural Lineage & History:** See [`docs/history.md`](../docs/history.md) for full narrative, migration details, and provenance mapping.
-- **Git History Access:** All historical trees, commit histories, and diffs remain permanently accessible via Git:
+- **Dedicated Archive Branch:** Access the complete pre-rename snapshot at any time:
+  ```bash
+  git checkout archive/legacy-history
+  ```
+- **Historical Git Commit Access:**
+  ```bash
+  # View archive history commits
+  git log -- _archive/
 
-```bash
-# View archive commits
-git log -- _archive/
-
-# Inspect or restore historical tree from a specific commit
-git checkout 0146eca -- _archive/
-```
+  # Inspect or restore historical tree from commit 0146eca
+  git checkout 0146eca -- _archive/
+  ```
