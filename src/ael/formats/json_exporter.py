@@ -1,15 +1,10 @@
-'''JSON exporter — universal machine-readable format.'''
+"""
+AEGIS-AEL — JSON Exporter
+============================
+Re-exports canonical JSONExporter from src.export.json_exporter.
+"""
 from __future__ import annotations
 
-import json
-from src.ael.ueo import UniversalExportObject
+from src.export.json_exporter import JSONConfig, JSONExporter
 
-
-class JSONExporter:
-    @staticmethod
-    def export(ueo: UniversalExportObject) -> str:
-        return json.dumps(ueo.to_dict(), indent=2, default=str, ensure_ascii=False)
-
-    @staticmethod
-    def export_compact(ueo: UniversalExportObject) -> str:
-        return json.dumps(ueo.to_dict(), separators=(',', ':'), default=str)
+__all__ = ["JSONExporter", "JSONConfig"]

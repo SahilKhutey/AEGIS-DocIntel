@@ -39,23 +39,30 @@ class JSONExporter:
     def __init__(self, config: Optional[JSONConfig] = None) -> None:
         self.config = config or JSONConfig()
 
-    def export(self, ueo: UniversalExportObject) -> str:
-        """Export UEO as JSON string."""
-        data = self._to_dict(ueo)
+    @classmethod
+    def export(cls_or_self, ueo: UniversalExportObject) -> str:
+        """Export UEO as JSON string (supports static and instance calls)."""
+        instance = cls_or_self if not isinstance(cls_or_self, type) else cls_or_self()
+        data = instance._to_dict(ueo)
         try:
-            if self.config.pretty:
+            if instance.config.pretty:
                 return json.dumps(
                     data,
-                    indent=self.config.indent,
-                    sort_keys=self.config.sort_keys,
-                    ensure_ascii=self.config.ensure_ascii,
+                    indent=instance.config.indent,
+                    sort_keys=instance.config.sort_keys,
+                    ensure_ascii=instance.config.ensure_ascii,
                     default=str,
                 )
             return json.dumps(
-                data, ensure_ascii=self.config.ensure_ascii, default=str
+                data, ensure_ascii=instance.config.ensure_ascii, default=str
             )
         except (TypeError, ValueError) as exc:
             raise FormatError(f"JSON serialization failed: {exc}") from exc
+
+    @staticmethod
+    def export_compact(ueo: UniversalExportObject) -> str:
+        """Export compact single-line JSON."""
+        return json.dumps(ueo.to_dict(), separators=(',', ':'), default=str)
 
     def export_dict(self, ueo: UniversalExportObject) -> Dict[str, Any]:
         """Export UEO as Python dict."""
@@ -68,6 +75,7 @@ class JSONExporter:
 
     def _to_dict(self, ueo: UniversalExportObject) -> Dict[str, Any]:
         data: Dict[str, Any] = {
+            "ueo_id": getattr(ueo, "ueo_id", ""),
             "system": ueo.system,
             "context": ueo.context,
             "summary": ueo.summary,

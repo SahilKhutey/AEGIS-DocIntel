@@ -1,11 +1,10 @@
-'''YAML exporter.'''
+"""
+AEGIS-AEL — YAML Exporter
+============================
+Re-exports canonical YAMLExporter from src.export.yaml_exporter.
+"""
 from __future__ import annotations
 
-import yaml
-from src.ael.ueo import UniversalExportObject
+from src.export.yaml_exporter import YAMLConfig, YAMLExporter
 
-
-class YAMLExporter:
-    @staticmethod
-    def export(ueo: UniversalExportObject) -> str:
-        return yaml.dump(ueo.to_dict(), default_flow_style=False, sort_keys=False, allow_unicode=True)
+__all__ = ["YAMLExporter", "YAMLConfig"]

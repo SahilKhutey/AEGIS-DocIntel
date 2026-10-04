@@ -38,22 +38,24 @@ class YAMLExporter:
         except ImportError:
             self._yaml = None
 
-    def export(self, ueo: UniversalExportObject) -> str:
-        """Export UEO as YAML string."""
-        data = self._to_dict(ueo)
-        if self._yaml is not None:
+    @classmethod
+    def export(cls_or_self, ueo: UniversalExportObject) -> str:
+        """Export UEO as YAML string (supports static and instance calls)."""
+        instance = cls_or_self if not isinstance(cls_or_self, type) else cls_or_self()
+        data = instance._to_dict(ueo)
+        if instance._yaml is not None:
             try:
-                return self._yaml.dump(
+                return instance._yaml.dump(
                     data,
-                    default_flow_style=self.config.default_flow_style,
-                    allow_unicode=self.config.allow_unicode,
-                    sort_keys=self.config.sort_keys,
-                    indent=self.config.indent,
+                    default_flow_style=instance.config.default_flow_style,
+                    allow_unicode=instance.config.allow_unicode,
+                    sort_keys=instance.config.sort_keys,
+                    indent=instance.config.indent,
                 )
             except Exception as exc:
                 raise FormatError(f"YAML serialization failed: {exc}") from exc
         # fallback: manual YAML-like serialization
-        return self._manual_yaml(data)
+        return instance._manual_yaml(data)
 
     def export_to_file(self, ueo: UniversalExportObject, filepath: str) -> None:
         with open(filepath, "w", encoding="utf-8") as f:
@@ -61,6 +63,7 @@ class YAMLExporter:
 
     def _to_dict(self, ueo: UniversalExportObject) -> Dict[str, Any]:
         data: Dict[str, Any] = {
+            "ueo_id": getattr(ueo, "ueo_id", ""),
             "system": ueo.system,
             "context": ueo.context,
             "summary": ueo.summary,

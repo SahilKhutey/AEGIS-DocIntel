@@ -22,71 +22,82 @@ from typing import Any, Dict, List, Optional
 from .exceptions import FormatError, InvalidContextError
 
 
+import uuid
+
 @dataclass
 class UniversalExportObject:
     """
     Canonical export container, agent-agnostic.
-
-    Attributes
-    ----------
-    system : str
-        System prompt.
-    context : str
-        Main content.
-    summary : str
-        Compressed summary.
-    citations : List[Dict[str, Any]]
-        Citations.
-    metadata : Dict[str, Any]
-        Document / session metadata.
-    tables : List[Any]
-        Tabular data.
-    images : List[Any]
-        Image references (paths or base64).
-    graphs : List[Any]
-        Graph data.
-    confidence : float
-        Aggregate confidence in [0, 1].
-    total_tokens : int
-        Token count.
-    agent_specific : Dict[str, Any]
-        Agent-specific extras.
-    engine_reports : Dict[str, Any]
-        Per-engine reports (optional, for debugging).
-    version : str
-        AMDI-OS version.
+    Bridges pipeline mathematical layers and external AI agent formats.
     """
 
-    system: str
-    context: str
+    system: str = ""
+    context: str = ""
     summary: str = ""
-    citations: List[Dict[str, Any]] = field(default_factory=list)
-    metadata: Dict[str, Any] = field(default_factory=dict)
+    query: str = ""
+    citations: List[Any] = field(default_factory=list)
+    metadata: Any = field(default_factory=dict)
     tables: List[Any] = field(default_factory=list)
     images: List[Any] = field(default_factory=list)
     graphs: List[Any] = field(default_factory=list)
-    confidence: float = 0.0
+    confidence: Any = 0.0
     total_tokens: int = 0
     agent_specific: Dict[str, Any] = field(default_factory=dict)
     engine_reports: Dict[str, Any] = field(default_factory=dict)
     version: str = "1.0.0"
 
+    # Layer representations (bridges pipeline state & workflows)
+    document_summary: Any = None
+    semantic: Any = None
+    geometry: Any = None
+    matrix: Any = None
+    graph: Any = None
+    template: Any = None
+    key_points: List[Any] = field(default_factory=list)
+    ueo_id: str = field(default_factory=lambda: str(uuid.uuid4()))
+    export_format: Any = "json"
+    tokens_used: int = 0
+    priority_log: List[dict] = field(default_factory=list)
+
     def to_dict(self) -> Dict[str, Any]:
-        return {
+        meta_dict = self.metadata if isinstance(self.metadata, dict) else (
+            self.metadata.__dict__ if hasattr(self.metadata, "__dict__") else {}
+        )
+        conf_val = self.confidence if isinstance(self.confidence, (int, float)) else (
+            getattr(self.confidence, "overall", 1.0)
+        )
+        res = {
+            "ueo_id": self.ueo_id,
+            "version": self.version,
             "system": self.system,
             "context": self.context,
             "summary": self.summary,
-            "citations": self.citations,
-            "metadata": self.metadata,
+            "query": self.query,
+            "citations": [
+                c if isinstance(c, dict) else (c.__dict__ if hasattr(c, "__dict__") else str(c))
+                for c in self.citations
+            ],
+            "metadata": meta_dict,
             "tables": self.tables,
             "images": self.images,
             "graphs": self.graphs,
-            "confidence": self.confidence,
-            "total_tokens": self.total_tokens,
+            "confidence": conf_val,
+            "total_tokens": self.total_tokens or self.tokens_used,
+            "tokens_used": self.tokens_used or self.total_tokens,
             "agent_specific": self.agent_specific,
             "engine_reports": self.engine_reports,
-            "version": self.version,
         }
+        if self.document_summary is not None:
+            res["document_summary"] = (
+                self.document_summary if isinstance(self.document_summary, dict)
+                else getattr(self.document_summary, "__dict__", str(self.document_summary))
+            )
+        if self.key_points:
+            res["key_points"] = [
+                kp if isinstance(kp, dict) else getattr(kp, "__dict__", str(kp))
+                for kp in self.key_points
+            ]
+        return res
 
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> "UniversalExportObject":
@@ -94,16 +105,19 @@ class UniversalExportObject:
             system=data.get("system", ""),
             context=data.get("context", ""),
             summary=data.get("summary", ""),
+            query=data.get("query", ""),
             citations=data.get("citations", []),
             metadata=data.get("metadata", {}),
             tables=data.get("tables", []),
             images=data.get("images", []),
             graphs=data.get("graphs", []),
-            confidence=float(data.get("confidence", 0.0)),
-            total_tokens=int(data.get("total_tokens", 0)),
+            confidence=data.get("confidence", 0.0),
+            total_tokens=int(data.get("total_tokens", data.get("tokens_used", 0))),
+            tokens_used=int(data.get("tokens_used", data.get("total_tokens", 0))),
             agent_specific=data.get("agent_specific", {}),
             engine_reports=data.get("engine_reports", {}),
             version=data.get("version", "1.0.0"),
+            ueo_id=data.get("ueo_id", str(uuid.uuid4())),
         )
 
 
