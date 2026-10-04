@@ -26,11 +26,13 @@ actually completed.
   the full test suite (matrix: Python 3.12/3.13), coverage enforcement (≥70%, measured
   baseline 76%), and dependency/secret scanning (`pip-audit`, `bandit`, `gitleaks`).
   See the live CI badge in `README.md`.
-- **Unified LLM connector layer (Phase 4 Verified)**: Canonical `src/connectors/` supports
-  ChatGPT, Claude, Gemini, DeepSeek, Qwen, and local models (Ollama/vLLM) with token budgeting,
-  response parsing, and unified sync/async execution paths (`send`, `stream`, `send_ueo`, `query`).
-  Redundant `src/ael/connectors/` and duplicate `Aegis Doc/` trees removed; dead legacy trees
-  consolidated in [`docs/history.md`](docs/history.md) and archived to Git history.
+- **Architectural Deduplication (Phase 4 Verified)**:
+  - Canonical `src/connectors/` supports ChatGPT, Claude, Gemini, DeepSeek, Qwen, and local models (Ollama/vLLM) with token budgeting, response parsing, and unified sync/async execution paths (`send`, `stream`, `send_ueo`, `query`). Redundant `src/ael/connectors/` pruned.
+  - Consolidated data models: `BoundingBox` (`src/models/geometry_object.py`), `Citation` (`src/models/context_object.py`), and `DocumentObject` (`src/models/document_object.py`) unified into canonical Pydantic v2 schemas; 32 importing modules migrated and legacy duplicates removed.
+  - Consolidated `UniversalExportObject`, `MarkdownExporter`, `JSONExporter`, and `YAMLExporter` into `src/export/` with backwards-compatible re-exports in `src/ael/`.
+  - Documentation consolidated into canonical `Aegis Doc/` (14 complete monographs), eliminating duplicate `Aegis/`.
+  - Pre-rename legacy codebase permanently preserved in dedicated `archive/legacy-history` orphan branch.
+  - Tracked remaining lower-risk duplicate classes documented in [`docs/known-duplication.md`](docs/known-duplication.md).
 - **Canonical Document Schema (Phase 5 Verified)**: Single, immutable-ready, typed Pydantic v2
   `DocumentState` model ($D = (P, S, G, R, F, M, T, X, H, E)$) in `src/core/document_state.py`
   unifying physical layout, semantic vectors, knowledge graphs, recurrence patterns, spectral

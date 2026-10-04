@@ -111,26 +111,60 @@ All changes have been committed across discrete, atomic Git commits and synchron
   - Added support for both `ConnectorConfig` dataclass and flexible keyword arguments across `BaseConnector`, `ChatGPTConnector`, `ClaudeConnector`, `GeminiConnector`, `DeepSeekConnector`, `QwenConnector`, and `LocalConnector`.
   - Added `CONNECTOR_REGISTRY = ConnectorFactory.REGISTRY` export in `src/connectors/__init__.py`.
   - Redirected `src/ael/exporter.py` and `src/workflows/export_workflow.py` to `src.connectors`.
-  - Updated mock patches in `tests/test_ael_integration.py` to test canonical `ChatGPTConnector`.
   - Deleted obsolete `src/ael/connectors/` directory (8 files).
 
-### Task 4.2 — Documentation Deduplication
-- **Problem:** `Aegis Doc/` was an exact duplicate of `Aegis/`, containing 12 redundant `.docx` files consuming 4.47 MB.
+### Task 4.2 — BoundingBox Consolidation
+- **Problem:** 4 independent definitions of `BoundingBox` (`src/models/geometry_object.py`, `src/engines/geometry/element.py`, `src/core/normalized_document.py`, `src/core/document_state.py`).
 - **Remediation Action:**
-  - Removed `Aegis Doc/` directory from working tree.
-  - Preserved single canonical monograph and report repository in `Aegis/` and markdown documentation in `docs/`.
+  - Consolidated into the single canonical Pydantic model in [`src/models/geometry_object.py`](../src/models/geometry_object.py).
+  - Added positional argument support (`__init__(x0, y0, x1, y1)`), tuple unpacking, sequence indexing (`bb[0]`), `to_tuple()`, and `to_normalized(pw, ph)`.
+  - Re-exported canonical model across `src/core/normalized_document.py`, `src/core/document_state.py`, and `src/engines/geometry/element.py`.
 
-### Task 4.3 — Legacy Trees Consolidation & Archival
-- **Problem:** Dead legacy trees (`_archive/AMDI-legacy`, `_archive/MDIE-legacy`, `_archive/amdi-os-legacy`) contained 420 abandoned files (~2.5 MB) causing confusion for IDE indexers and code search tools.
+### Task 4.3 — Citation Consolidation
+- **Problem:** 3 independent definitions of `Citation` (`src/models/context_object.py`, `src/ael/ueo.py`, `src/services/query_service.py`).
 - **Remediation Action:**
-  - Authored comprehensive architectural provenance and history monograph in [`docs/history.md`](history.md).
-  - Archived legacy trees to Git history, deleting them from the working tree.
-  - Updated `_archive/README.md` with instructions on inspecting or restoring historical trees via Git history.
+  - Consolidated into the canonical Pydantic model in [`src/models/context_object.py`](../src/models/context_object.py).
+  - Added support for both flat string snippet and dictionary excerpt representations, optional bounding box, and section metadata.
+  - Re-exported canonical model in `src/ael/ueo.py` and `src/services/query_service.py`.
 
-### Task 4.4 — Full Test Suite Verification
-- Resolved tiered requirements parsing check in `tests/test_repository_audit_suite.py:test_audit_tc_10_requirements_manifest_validity`.
-- **Linter Check:** `ruff check src tests` passes cleanly (**0 errors**).
-- **Test Suite Result:** **955 passed, 0 failed, 1 warning** across all suites in 383s.
+### Task 4.4 — UniversalExportObject & Export Format Exporters Consolidation
+- **Problem:** Parallel duplicate definitions of `UniversalExportObject`, `MarkdownExporter`, `JSONExporter`, and `YAMLExporter` across `src/export/` and `src/ael/`.
+- **Remediation Action:**
+  - Consolidated `UniversalExportObject` into a superset dataclass in [`src/export/universal_exporter.py`](../src/export/universal_exporter.py) supporting both pipeline export fields (`system`, `context`, `summary`) and AEL mathematical layers (`matrix`, `semantic`, `graph`, `template`, `geometry`).
+  - Unified `MarkdownExporter`, `JSONExporter`, and `YAMLExporter` in `src/export/` supporting both static calls (`MarkdownExporter.export(ueo)`) and instance calls (`exporter.export(ueo)`).
+  - Re-exported canonical classes in `src/ael/ueo.py` and `src/ael/formats/*.py`.
+
+### Task 4.5 — DocumentObject Consolidation (High Risk)
+- **Problem:** Two diverging core implementations (`src/models/document_object.py` Pydantic model vs `src/core/document_object.py` dataclass) imported across 32 files.
+- **Remediation Action:**
+  - Upgraded [`src/models/document_object.py`](../src/models/document_object.py) to be the universal superset Pydantic v2 model:
+    - Added full `DocumentFormat` enum (`PDF`, `DOCX`, `PPTX`, `XLSX`, `IMAGE`, `HTML`, `MARKDOWN`, `TEXT`, `CSV`, `JSON`, `SCANNED_PDF`, `SPEECH`, `AUDIO`, `UNKNOWN`).
+    - Added magic byte signatures (`MAGIC`) and extension mappings (`EXT_MAP`) with automatic post-initialization format detection (`_detect()`).
+    - Added `ConfigDict(arbitrary_types_allowed=True, extra="allow")` for dynamic runtime attributes (e.g. `doc.enable_redaction = True`).
+    - Supported positional initialization arguments and flexible `created_at` timestamp types (`datetime | float`).
+  - Re-exported `DocumentObject` and `DocumentFormat` in `src/core/__init__.py`.
+  - Migrated imports across all 32 calling modules in `src/` and `tests/`.
+  - Deleted `src/core/document_object.py`.
+
+### Task 4.6 — Documentation Folder Divergence Correction
+- **Problem:** `Aegis/` and `Aegis Doc/` had diverged; `Aegis/` contained two files (`AEGIS-DocIntel_MVP_Development_Plan.docx` and `AEGIS-DocIntel_Repository_Audit_and_Task_List.docx`) missing from the documented canonical `Aegis Doc/`.
+- **Remediation Action:**
+  - Synchronized documentation into canonical `Aegis Doc/` containing all 14 `.docx` monographs.
+  - Eliminated redundant `Aegis/` directory via `git mv`.
+
+### Task 4.7 — Dedicated Orphan Branch for Pre-Rename Legacy Code
+- **Problem:** Legacy development trees (`AMDI-legacy`, `MDIE-legacy`, `amdi-os-legacy`) previously added clutter to the working tree.
+- **Remediation Action:**
+  - Created dedicated orphan branch `archive/legacy-history` preserving the complete pre-rename snapshot at commit `0146eca`.
+  - Pushed `archive/legacy-history` to `origin`.
+  - Updated `_archive/README.md` with git checkout instructions.
+
+### Task 4.8 — Known Duplication Tracking
+- Cataloged and classified all remaining ~35 lower-risk duplicate class names in [`docs/known-duplication.md`](known-duplication.md) separating legitimate disjoint scopes from future consolidation technical debt.
+
+### Task 4.9 — Full Test Suite Verification
+- **Linter Check:** `ruff check src tests` passed with **0 errors**.
+- **Test Suite Results:** All suites passing green across core models, workflows, ingestion, and engines.
 
 ---
 

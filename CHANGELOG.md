@@ -28,7 +28,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Text Loader:** Added dedicated [`src/ingestion/text_loader.py`](src/ingestion/text_loader.py) with structured metadata.
 - **Hardening & Workflow Test Suites:** Added [`tests/test_ingestion_hardening.py`](tests/test_ingestion_hardening.py) (24 tests) and [`tests/test_workflows.py`](tests/test_workflows.py) (8 tests).
 
-### Changed
+- **Architectural Deduplication (Phase 4):**
+  - Consolidated `BoundingBox` into canonical Pydantic model in [`src/models/geometry_object.py`](src/models/geometry_object.py) with positional argument support, tuple conversion, and page normalization.
+  - Consolidated `Citation` into canonical Pydantic model in [`src/models/context_object.py`](src/models/context_object.py) with bounding box support and confidence calculation.
+  - Consolidated `UniversalExportObject`, `MarkdownExporter`, `JSONExporter`, and `YAMLExporter` into [`src/export/`](src/export/) with static and instance execution methods, UEO layer serialization, and backward-compatible re-exports in `src/ael/`.
+  - Consolidated `DocumentObject` into canonical superset Pydantic model in [`src/models/document_object.py`](src/models/document_object.py) with magic byte sniffing, full `DocumentFormat` enum support, dynamic attributes (`extra="allow"`), and migrated all 32 calling modules across `src/` and `tests/`.
+  - Synchronized documentation into canonical `Aegis Doc/` directory containing all 14 `.docx` monographs, removing redundant `Aegis/`.
+  - Archived pre-rename legacy codebases (`AMDI-legacy`, `MDIE-legacy`, `amdi-os-legacy`) into dedicated orphan branch `archive/legacy-history`.
+  - Cataloged remaining lower-risk class duplications in [`docs/known-duplication.md`](docs/known-duplication.md).
 - **Pipeline & Loader Hardening:** Hardened `PDFLoader`, `DOCXLoader`, `XLSXLoader`, `PPTXLoader`, `ImageLoader`, `SpeechLoader`, and `IngestionService.ingest` with timeout support and fallback recovery.
 - **Workflow & Engine Defensiveness:** Added PageRank centrality scoring in `DocumentGraph` and `GraphEngine`, dynamic `compute_weights` in `AdaptiveFusionEngine` and `FusionEngine`, array dimension flattening in `SemanticEngine`, and safe graph metric handling in `ExportWorkflow`.
 - **Connectors Reconciliation:** Reconciled `src/connectors/` as the single canonical agent integration layer; unified sync and async execution paths (`send`, `stream`, `send_ueo`, `query`), and redirected AEL exporter and export workflows to `src/connectors`.
