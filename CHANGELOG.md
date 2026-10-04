@@ -28,6 +28,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Text Loader:** Added dedicated [`src/ingestion/text_loader.py`](src/ingestion/text_loader.py) with structured metadata.
 - **Hardening & Workflow Test Suites:** Added [`tests/test_ingestion_hardening.py`](tests/test_ingestion_hardening.py) (24 tests) and [`tests/test_workflows.py`](tests/test_workflows.py) (8 tests).
 
+- **Core Schema Unification (Phase 5 — AMDI-OS Monograph Section 5.1 & 5.2):**
+  - Implemented [`src/core/master_state.py`](src/core/master_state.py) establishing the canonical 10-tuple $D = (P, S, G, R, F, M, T, X, H, E)$ per Section 5.1 of the AMDI-OS Extended Monograph, with explicit `LayerStatus` honesty flags (`is_hardened`, `is_mock`, `is_proposed`) per Appendix E.
+  - Implemented `Element` ($E_i = (x_i, y_i, w_i, h_i, p_i, \theta_i, t_i, c_i)$) with modulo angle wrapping into $[0, 2\pi)$ and `PageRepresentation` ($P_i$) with aggregate bounding box computation.
+  - Added property-based tests in [`tests/test_master_state_theorems.py`](tests/test_master_state_theorems.py) mathematically verifying Theorem 5.1 (Scale Invariance) and Theorem 5.2 (Metric Validity of Euclidean distance).
+  - Migrated [`src/core/orchestrator.py`](src/core/orchestrator.py) to populate and synchronize one canonical `MasterState` per document (`self._doc_state`), maintaining backward compatibility through dynamic property accessors and dual dict/attr access wrappers (`IngestionStats`, `QueryResult`).
+  - Added permanent multi-tenant data isolation regression suite in [`tests/test_multitenancy_isolation.py`](tests/test_multitenancy_isolation.py) validating strict isolation across queries, element access, and state retrieval.
+  - Added schema versioning and migration framework in [`src/core/schema_migrations.py`](src/core/schema_migrations.py) with test coverage in [`tests/test_schema_migrations.py`](tests/test_schema_migrations.py).
+  - Surfaced the monograph's Appendix E layer status honesty matrix in [`STATUS.md`](STATUS.md).
 - **Architectural Deduplication (Phase 4):**
   - Consolidated `BoundingBox` into canonical Pydantic model in [`src/models/geometry_object.py`](src/models/geometry_object.py) with positional argument support, tuple conversion, and page normalization.
   - Consolidated `Citation` into canonical Pydantic model in [`src/models/context_object.py`](src/models/context_object.py) with bounding box support and confidence calculation.

@@ -238,9 +238,72 @@ All changes have been committed across discrete, atomic Git commits and synchron
 
 ---
 
-## 8. Complete Git Commit History
+## 8. Phase 5 Implementation — Core Schema Unification: Implementing the Master State $D$
+
+### Task 5.1 — MasterState Tuple $D = (P, S, G, R, F, M, T, X, H, E)$ & Element 8-Tuple
+- **Context:** Section 5.1 and 5.2 of `Aegis Doc/AEGIS-DocIntel_AMDI-OS_Extended_Monograph.docx` formally specified the Master Document Tuple $D = (P, S, G, R, F, M, T, X, H, E)$ and element 8-tuple $E_i = (x_i, y_i, w_i, h_i, p_i, \theta_i, t_i, c_i)$, but this unifying structure had never been implemented in code.
+- **Remediation Action:**
+  - Implemented [`src/core/master_state.py`](../src/core/master_state.py) establishing:
+    - `Element`: Pydantic model with normalized coordinates $(x, y, w, h \in [0, 1])$, page number $p \ge 1$, rotation angle $\theta \in [0, 2\pi)$ with modulo wrapping `v % (2.0 * math.pi)`, element type $t$, and content string $c$.
+    - `PageRepresentation`: $P_i = (i, \text{elements})$ with aggregate bounding-box union calculation and element lookup.
+    - `LayerStatus`: Honesty metadata tracking `is_hardened`, `is_mock`, `is_proposed`, computation time, error status, and implementation notes per Appendix E of the monograph.
+    - `MasterState`: Unifying 10-tuple $D = (P, S, G, R, F, M, T, X, H, E)$ synchronizing all ten representation layers with layer status flags, schema versioning, and JSON serialization.
+
+### Task 5.2 — Mathematical Theorems Property-Based Verification (Theorems 5.1 & 5.2)
+- **Monograph Guarantees Verified:**
+  - **Theorem 5.1 (Scale Invariance):** Normalized coordinate distances are invariant under uniform page rescaling $(w, h) \to (\alpha w, \alpha h)$.
+  - **Theorem 5.2 (Metric Validity):** The normalized Euclidean distance function $d(e_1, e_2)$ satisfies all metric axioms (non-negativity, identity of indiscernibles, symmetry, triangle inequality).
+- **Remediation Action:**
+  - Implemented [`tests/test_master_state_theorems.py`](../tests/test_master_state_theorems.py) using Hypothesis property-based testing to verify Theorems 5.1 and 5.2 across 100+ generated test cases each, converting theoretical paper proofs into machine-verified continuous integration guarantees.
+
+### Task 5.3 — Orchestrator Migration to MasterState
+- **Problem:** `DocumentOrchestrator` held fragmented, scattered state across independent instance attributes (`self._doc_elements`, `self._doc_tables`, `self.elements`, `self.tables`), creating tenant isolation risks and lack of document-level synchronization.
+- **Remediation Action:**
+  - Refactored [`src/core/orchestrator.py`](../src/core/orchestrator.py) to manage a single synchronized dictionary `self._doc_state: Dict[str, MasterState]`.
+  - Added backward-compatible dynamic property accessors (`_doc_elements`, `_doc_tables`, `_elements`, `_tables`) that extract elements and tables directly from `self._doc_state`.
+  - Updated `ingest()` to instantiate a canonical `MasterState` and pass it through `_run_engines(elements, state=state)`.
+  - Hardened analytical engines (`geometry`, `recurrence`, `frequency`, `matrix`, `template`, `graph`, `spectral`) write directly to the state's layers with `is_hardened=True`; `semantic` reflects mock status; `hierarchy` ($H$) remains flagged `is_proposed=True` referencing Appendix E.
+  - Wrapped `ingest()` and `query()` outputs in `IngestionStats(dict)` and `QueryResult(dict)` classes supporting both dictionary key access and attribute access.
+
+### Task 5.4 — Multi-Tenant Data Isolation Regression Test
+- **Remediation Action:**
+  - Implemented [`tests/test_multitenancy_isolation.py`](../tests/test_multitenancy_isolation.py) establishing permanent regression guards against cross-tenant data leakage.
+  - Verified that queries referencing mismatched `doc_id` and `tenant_id` are rejected, elements and tables from Tenant A are invisible to Tenant B, and `get_master_state()` enforces tenant ownership.
+
+### Task 5.5 — Schema Versioning and Migration Framework
+- **Remediation Action:**
+  - Implemented [`src/core/schema_migrations.py`](../src/core/schema_migrations.py) and [`tests/test_schema_migrations.py`](../tests/test_schema_migrations.py).
+  - Defined migration registry supporting schema version tracking (`schema_version = "1.0.0"`) and forward transformations between schema versions.
+
+### Task 5.6 — Monograph Appendix E Honesty Matrix in STATUS.md
+- **Remediation Action:**
+  - Updated [`STATUS.md`](../STATUS.md) embedding the AMDI-OS Extended Monograph's Appendix E implementation-status matrix.
+  - Publicly documented the status of all 10 layers: 7 hardened mathematical engines, 2 mock/hybrid implementations, and 1 proposed theoretical layer ($H$).
+
+### Task 5.7 — Full Test Suite & Quality Verification
+- **Linter Check:** `ruff check src tests` passed with **0 errors**.
+- **Full Test Suite:** **1,001 passed, 2 warnings in 804.32s** across all unit, integration, property, and workflow tests.
+
+---
+
+## 9. Complete Git Commit History
 
 ```text
+* 1b3d7aa docs: surface the monograph's Appendix E implementation-status matrix in STATUS.md — this was already the most honest assessment in the repo, just never connected to the public-facing status page
+* e43f77f feat: add schema versioning/migration scaffold for MasterState
+* cad8cbc test: add permanent regression test for the cross-tenant data isolation fix noted in orchestrator.py
+* 056b86d refactor: migrate orchestrator to populate one MasterState per document instead of scattered per-engine attributes
+* e148317 test: add property-based tests for Theorem 5.1 (scale invariance) and Theorem 5.2 (metric validity), converting proven-on-paper claims into machine-verified guarantees
+* 232de00 feat: implement MasterState — the 10-tuple D=(P,S,G,R,F,M,T,X,H,E) specified in Section 5.1 of the AMDI-OS Extended Monograph, previously never implemented in code
+* 7e73dba docs: document Phase 4 Architectural Deduplication in STATUS.md, CHANGELOG.md, and DEVLOG.md
+* e55b32a docs: document tracked lower-risk class duplication in docs/known-duplication.md
+* 7ed3152 chore: move pre-rename legacy code (AMDI/MDIE/amdi-os) to archive/legacy-history branch
+* 0da7e21 docs: fix Aegis Doc/ folder to include previously-missing files, remove redundant Aegis/ folder
+* 01db961 refactor: consolidate DocumentObject — migrate all src/core/document_object.py usages to the Pydantic model in src/models/document_object.py
+* dba3cd8 refactor: consolidate UniversalExportObject and export format classes into single canonical definitions
+* 90fbb2c refactor: consolidate Citation into single Pydantic model in src/models/context_object.py
+* ac22b14 refactor: consolidate BoundingBox into src/models/geometry_object.py
+* 1dd2965 docs: document Phase 6 completion in STATUS.md, CHANGELOG.md, and DEVLOG.md
 * ffe591d feat(workflows): close workflow coverage gap and fix engine integration interfaces
 * a3d614a feat(ingestion): harden ingestion pipeline with typed error hierarchy, sniffing, and fallback parser
 * 2bea499 feat(core): implement canonical DocumentState schema with topological invariants, transition validation, and UEO bridge
