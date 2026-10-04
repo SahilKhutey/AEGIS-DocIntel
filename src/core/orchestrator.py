@@ -25,6 +25,7 @@ Typical usage
 from __future__ import annotations
 
 import asyncio
+from collections import defaultdict
 import time
 import traceback
 import uuid
@@ -193,6 +194,12 @@ except ImportError:
 # Core document data model imports
 # ---------------------------------------------------------------------------
 from src.models.document_object import DocumentObject
+from src.core.master_state import (
+    Element,
+    LayerStatus,
+    MasterState,
+    PageRepresentation,
+)
 from src.core.normalized_document import (
     NormalizedBlock,
     NormalizedPage,
@@ -222,6 +229,36 @@ _TYPE_MAP: Dict[str, ElementType] = {
 
 
 # ---------------------------------------------------------------------------
+# Response Wrapper Types (Dual dict and attribute access)
+# ---------------------------------------------------------------------------
+
+class IngestionStats(dict):
+    """Ingestion statistics dict supporting both dict key and attribute access."""
+
+    def __getattr__(self, name: str) -> Any:
+        try:
+            return self[name]
+        except KeyError:
+            raise AttributeError(f"'IngestionStats' object has no attribute '{name}'")
+
+    def __setattr__(self, name: str, value: Any) -> None:
+        self[name] = value
+
+
+class QueryResult(dict):
+    """Query response dict supporting both dict key and attribute access."""
+
+    def __getattr__(self, name: str) -> Any:
+        try:
+            return self[name]
+        except KeyError:
+            raise AttributeError(f"'QueryResult' object has no attribute '{name}'")
+
+    def __setattr__(self, name: str, value: Any) -> None:
+        self[name] = value
+
+
+# ---------------------------------------------------------------------------
 # Orchestrator
 # ---------------------------------------------------------------------------
 
@@ -246,30 +283,13 @@ class AMDIOrchestrator:
         self._config = config or {}
         self._closed = False
 
-        # ---- Mutable document state ------------------------------------
+        # ---- Master document state -------------------------------------
         #
-        # Tenant-isolation fix (Repository Audit, Workstream R follow-up):
-        # these were previously flat lists, *overwritten* wholesale
-        # (self._elements = elements) on every single ingest() call. That
-        # had two compounding effects: (1) a correctness bug — only the
-        # most-recently-ingested document, application-wide, was ever
-        # queryable, since ingesting document N+1 silently discarded
-        # document N's elements; and (2) a data-confidentiality bug —
-        # nothing in the query path filtered by tenant, so a query with no
-        # doc_id searched whichever document happened to be most recent
-        # across the *entire application*, regardless of which tenant
-        # ingested it, and a query that supplied a doc_id belonging to a
-        # different tenant was honored with no ownership check at all.
-        #
-        # Fixed by keying storage per-document (so ingesting document N+1
-        # no longer evicts document N) and recording each document's
-        # owning tenant_id, so query()/stream_query() below can enforce
-        # that a caller only ever retrieves documents belonging to their
-        # own tenant. self._elements/self._tables below remain as
-        # read-only properties for backward compatibility with any other
-        # code still expecting the old flat-list shape.
-        self._doc_elements: Dict[str, List[GeometricElement]] = {}
-        self._doc_tables: Dict[str, List[GeometricElement]] = {}
+        # Phase 5: Core Schema Unification (Master State D)
+        # Synchronizes all 10 representation layers (P, S, G, R, F, M, T, X, H, E)
+        # into a single MasterState object per document, while preserving tenant
+        # tracking (Repository Audit, Workstream R follow-up).
+        self._doc_state: Dict[str, MasterState] = {}
         self._doc_tenant: Dict[str, str] = {}
         self._graph: Any = None
         self._hypergraph: Any = None
@@ -353,6 +373,24 @@ class AMDIOrchestrator:
         )
 
     @property
+    def _doc_elements(self) -> Dict[str, List[GeometricElement]]:
+        """Dynamic backward-compatible mapping of doc_id to GeometricElements,
+        backed by self._doc_state."""
+        return {
+            doc_id: state.get_geometric_elements()
+            for doc_id, state in self._doc_state.items()
+        }
+
+    @property
+    def _doc_tables(self) -> Dict[str, List[GeometricElement]]:
+        """Dynamic backward-compatible mapping of doc_id to table GeometricElements,
+        backed by self._doc_state."""
+        return {
+            doc_id: state.get_geometric_tables()
+            for doc_id, state in self._doc_state.items()
+        }
+
+    @property
     def _elements(self) -> List[GeometricElement]:
         """Flattened, read-only view across all ingested documents.
 
@@ -365,8 +403,8 @@ class AMDIOrchestrator:
         below, rather than this unscoped view directly.
         """
         out: List[GeometricElement] = []
-        for els in self._doc_elements.values():
-            out.extend(els)
+        for state in self._doc_state.values():
+            out.extend(state.get_geometric_elements())
         return out
 
     @property
@@ -374,8 +412,8 @@ class AMDIOrchestrator:
         """Flattened, read-only table view across all ingested documents.
         See _elements docstring above for the same tenant-filtering caveat."""
         out: List[GeometricElement] = []
-        for tbls in self._doc_tables.values():
-            out.extend(tbls)
+        for state in self._doc_state.values():
+            out.extend(state.get_geometric_tables())
         return out
 
     # ------------------------------------------------------------------
@@ -431,17 +469,6 @@ class AMDIOrchestrator:
             e for e in elements
             if getattr(e, "type", None) == ElementType.TABLE
         ]
-        # Store keyed by doc_id (does not evict any other already-ingested
-        # document) and record which tenant owns this document, so query()/
-        # stream_query() can enforce tenant-scoped access below.
-        self._doc_elements[doc.doc_id] = elements
-        self._doc_tables[doc.doc_id] = tables
-        self._doc_tenant[doc.doc_id] = getattr(doc, "tenant_id", "default") or "default"
-        log.info(
-            "ingest: %d elements (%d tables) after conversion",
-            len(elements),
-            len(tables),
-        )
 
         # --- Stage 4.5: PII & Compliance Redaction (if enabled) --------
         pii_entities_count = 0
@@ -452,11 +479,57 @@ class AMDIOrchestrator:
             pii_entities_count = len(compliance_report.entities_found)
             redactions_applied = compliance_report.redactions_applied
             tables = [e for e in elements if getattr(e, "type", None) == ElementType.TABLE]
-            self._doc_elements[doc.doc_id] = elements
-            self._doc_tables[doc.doc_id] = tables
+
+        # --- Master State D Construction ------------------------------
+        state = MasterState(doc_id=doc.doc_id)
+        pages_dict: Dict[int, List[Element]] = defaultdict(list)
+        for e in elements:
+            p_num = max(1, getattr(e, "page", 1))
+            bx = getattr(e, "bbox", None)
+            x0 = max(0.0, min(1.0, float(bx.x0))) if bx else 0.0
+            y0 = max(0.0, min(1.0, float(bx.y0))) if bx else 0.0
+            w = max(0.0, min(1.0, float(bx.width))) if bx else 1.0
+            h = max(0.0, min(1.0, float(bx.height))) if bx else 1.0
+            etype = e.type.value if hasattr(e.type, "value") else str(e.type)
+            pages_dict[p_num].append(
+                Element(
+                    x=x0,
+                    y=y0,
+                    w=w,
+                    h=h,
+                    page=p_num,
+                    theta=getattr(e, "theta", 0.0),
+                    element_type=etype,
+                    content=e.content or "",
+                    element_id=e.element_id,
+                    tenant_id=getattr(e, "tenant_id", "default"),
+                )
+            )
+
+        state.pages = [
+            PageRepresentation(
+                page_number=p_num,
+                elements=p_els,
+                physical_width=612.0,
+                physical_height=792.0,
+            )
+            for p_num, p_els in sorted(pages_dict.items())
+        ] if pages_dict else [PageRepresentation(page_number=1, elements=[], physical_width=612.0, physical_height=792.0)]
+        state.pages_status = LayerStatus(is_hardened=True)
+        state.set_geometric_elements(elements)
+
+        # Store keyed by doc_id (does not evict any other already-ingested
+        # document) and record which tenant owns this document
+        self._doc_state[doc.doc_id] = state
+        self._doc_tenant[doc.doc_id] = getattr(doc, "tenant_id", "default") or "default"
+        log.info(
+            "ingest: %d elements (%d tables) after conversion",
+            len(elements),
+            len(tables),
+        )
 
         # --- Stage 5: Engine pipeline ---------------------------------
-        await self._run_engines(elements)
+        await self._run_engines(elements, state=state)
 
         # --- Stage 6: Embed + store -----------------------------------
         await self._embed_and_store(elements, doc.doc_id)
@@ -473,18 +546,19 @@ class AMDIOrchestrator:
             else 0.0
         )
 
-        stats = {
-            "doc_id": doc.doc_id,
-            "filename": doc.filename,
-            "pages": len({getattr(e, "page", 1) for e in elements}),
-            "elements": len(elements),
-            "tables": len(self._tables),
-            "templates": len(self._templates),
-            "ingestion_ms": elapsed_ms,
-            "compression_pct": compression_pct,
-            "pii_entities_found": pii_entities_count,
-            "redactions_applied": redactions_applied,
-        }
+        stats = IngestionStats(
+            doc_id=doc.doc_id,
+            filename=doc.filename,
+            pages=len({getattr(e, "page", 1) for e in elements}) or 1,
+            elements=len(elements),
+            tables=len(self._tables),
+            templates=len(self._templates),
+            ingestion_ms=elapsed_ms,
+            compression_pct=compression_pct,
+            pii_entities_found=pii_entities_count,
+            redactions_applied=redactions_applied,
+            master_state=state,
+        )
 
         # --- Stage 8: MIOS Ingestion Space (optional) -----------------
         if _MIOS_AVAILABLE and self.physics is not None:
@@ -617,17 +691,24 @@ class AMDIOrchestrator:
         if self._retriever is not None:
             try:
                 if doc_id:
-                    elements = self._doc_elements.get(doc_id, [])
-                    tables = self._doc_tables.get(doc_id, [])
+                    state = self._doc_state.get(doc_id)
+                    elements = state.get_geometric_elements() if state else []
+                    tables = state.get_geometric_tables() if state else []
                 elif tenant_id is not None:
                     allowed_docs = {
                         d for d, t in self._doc_tenant.items() if t == tenant_id
                     }
                     elements = [
-                        e for d in allowed_docs for e in self._doc_elements.get(d, [])
+                        e
+                        for d in allowed_docs
+                        if d in self._doc_state
+                        for e in self._doc_state[d].get_geometric_elements()
                     ]
                     tables = [
-                        t for d in allowed_docs for t in self._doc_tables.get(d, [])
+                        t
+                        for d in allowed_docs
+                        if d in self._doc_state
+                        for t in self._doc_state[d].get_geometric_tables()
                     ]
                 else:
                     # No tenant_id given: unscoped, pre-fix-compatible
@@ -702,12 +783,19 @@ class AMDIOrchestrator:
 
         # Assemble response
         results_list = getattr(retrieved, "results", []) if retrieved is not None else []
+        retrieved_doc_id = doc_id
+        if not retrieved_doc_id and results_list:
+            first_el = getattr(results_list[0], "element", None)
+            if first_el and getattr(first_el, "doc_id", None):
+                retrieved_doc_id = first_el.doc_id
+
         has_table = any(
             getattr(getattr(r, "element", None), "type", None) == ElementType.TABLE
             for r in results_list
         )
 
-        response: Dict[str, Any] = {
+        response = QueryResult({
+            "doc_id": retrieved_doc_id,
             "answer": llm_dict.get("answer", ""),
             "citations": llm_dict.get("citations") if llm_dict.get("citations") is not None else [r for r in results_list[:5]],
             "confidence": llm_dict.get("confidence", 0.0),
@@ -719,7 +807,7 @@ class AMDIOrchestrator:
             "tokens_used": llm_dict.get("tokens_used", 0),
             "grounded": llm_dict.get("grounded", bool(results_list)),
             "model": llm_dict.get("model", "mock"),
-        }
+        })
         # --- Stage 5: MIOS Optimization & Economics (optional) --------
         if _MIOS_AVAILABLE and self.optimizer is not None:
             try:
@@ -1036,24 +1124,40 @@ class AMDIOrchestrator:
             log.debug("_layout: skipped (%s)", exc)
             return nd
 
-    async def _run_engines(self, elements: List[GeometricElement]) -> None:
+    async def _run_engines(
+        self, elements: List[GeometricElement], state: Optional[MasterState] = None
+    ) -> None:
         """Stage 5: run all analytical engines sequentially.
 
         Engines are run in a fixed order to avoid race conditions on shared
         state.  Each engine call is wrapped in a broad exception handler so
         that a failure in one engine does not abort the entire pipeline.
+        Results are recorded directly into the document's MasterState object.
         """
         # --- GeometryEngine -------------------------------------------
         if self._geometry is not None:
             try:
                 await self._call_maybe_async(self._geometry.analyze, elements)
+                if state is not None:
+                    state.geometric_adjacency = {
+                        "n_elements": len(elements),
+                        "n_pages": len(state.pages),
+                    }
+                    state.geometric_status = LayerStatus(is_hardened=True)
             except Exception as exc:
                 log.warning("GeometryEngine.analyze failed: %s", exc)
 
         # --- RecurrenceEngine -----------------------------------------
         if self._recurrence is not None:
             try:
-                await self._call_maybe_async(self._recurrence.detect, elements)
+                rec_res = await self._call_maybe_async(self._recurrence.detect, elements)
+                if state is not None:
+                    groups = getattr(rec_res, "groups", [])
+                    state.recurrence_patterns = [
+                        g.to_dict() if hasattr(g, "to_dict") else dict(g)
+                        for g in groups
+                    ] if groups else []
+                    state.recurrence_status = LayerStatus(is_hardened=True)
             except Exception as exc:
                 log.warning("RecurrenceEngine.detect failed: %s", exc)
 
@@ -1061,13 +1165,29 @@ class AMDIOrchestrator:
         if self._frequency is not None:
             try:
                 await self._call_maybe_async(self._frequency.analyze, elements)
+                if state is not None:
+                    if hasattr(self._frequency, "_tf"):
+                        state.frequency_weights = {
+                            k: float(v) for k, v in self._frequency._tf.most_common(50)
+                        }
+                    state.frequency_status = LayerStatus(is_hardened=True)
             except Exception as exc:
                 log.warning("FrequencyEngine.analyze failed: %s", exc)
 
         # --- MatrixEngine ---------------------------------------------
         if self._matrix is not None:
             try:
-                await self._call_maybe_async(self._matrix.build, elements)
+                mat_res = await self._call_maybe_async(self._matrix.build, elements)
+                if state is not None:
+                    tables_data = [
+                        t.to_dict() if hasattr(t, "to_dict") else {
+                            "rows": getattr(t, "n_rows", 0),
+                            "cols": getattr(t, "n_cols", 0),
+                        }
+                        for t in (mat_res or [])
+                    ]
+                    state.tables = tables_data
+                    state.matrix_status = LayerStatus(is_hardened=True)
             except Exception as exc:
                 log.warning("MatrixEngine.build failed: %s", exc)
 
@@ -1077,6 +1197,13 @@ class AMDIOrchestrator:
                 self._templates = await self._call_maybe_async(
                     self._template.detect, elements
                 ) or []
+                if state is not None:
+                    state.template_fingerprint = (
+                        str(self._templates[0].template_id)
+                        if self._templates and hasattr(self._templates[0], "template_id")
+                        else None
+                    )
+                    state.template_status = LayerStatus(is_hardened=True)
             except Exception as exc:
                 log.warning("TemplateEngine.detect failed: %s", exc)
 
@@ -1086,6 +1213,12 @@ class AMDIOrchestrator:
                 self._graph = await self._call_maybe_async(
                     self._graph_eng.build, elements
                 )
+                if state is not None:
+                    state.linkage_graph = {
+                        "n_nodes": len(self._graph.nodes),
+                        "n_edges": len(self._graph.edges),
+                    } if self._graph and hasattr(self._graph, "nodes") else None
+                    state.linkage_status = LayerStatus(is_hardened=True)
             except Exception as exc:
                 log.warning("GraphEngine.build failed: %s", exc)
 
@@ -1105,6 +1238,12 @@ class AMDIOrchestrator:
             try:
                 self._spectral.fit_idf(elements)
                 self._spectral.profile_elements(elements)
+                if state is not None:
+                    entropies = [getattr(e, "entropy", 0.0) for e in elements]
+                    state.entropy_profile = {
+                        "mean_entropy": float(np.mean(entropies)) if entropies else 0.0,
+                    }
+                    state.entropy_status = LayerStatus(is_hardened=True)
             except Exception as exc:
                 log.warning("SpectralEngine profiling failed: %s", exc)
 
@@ -1114,6 +1253,28 @@ class AMDIOrchestrator:
                 await self._call_maybe_async(self._semantic.analyze, elements)
             except Exception as exc:
                 log.warning("SemanticEngine.analyze failed: %s", exc)
+
+        # --- Semantic Embeddings (Master State S Layer) ----------------
+        if state is not None and self._embedding is not None:
+            try:
+                texts = [e.content or "" for e in elements]
+                embeddings = await self._call_maybe_async(
+                    self._embedding.encode_text, texts
+                )
+                if embeddings is not None:
+                    state.semantic_embeddings = [
+                        v.tolist() if hasattr(v, "tolist") else list(v)
+                        for v in embeddings
+                    ]
+                is_mock = getattr(self._embedding, "is_mock", True)
+                state.semantic_status.is_mock = is_mock
+                state.semantic_status.note = (
+                    "Using sentence-transformers (real encoder)."
+                    if not is_mock
+                    else "sentence-transformers unavailable — deterministic mock vectors in use."
+                )
+            except Exception as exc:
+                log.warning("MasterState S embedding failed: %s", exc)
 
     async def _embed_and_store(
         self, elements: List[GeometricElement], doc_id: str
@@ -1235,34 +1396,51 @@ class AMDIOrchestrator:
     def get_document_elements(
         self, doc_id: str, tenant_id: Optional[str] = None
     ) -> list[GeometricElement]:
-        '''Return all elements belonging to a specific document.
+        """Return all elements belonging to a specific document.
 
         Raises ``PermissionError`` if *tenant_id* is given and does not
         match the document's owning tenant.
-        '''
+        """
         if tenant_id is not None:
             owner = self._doc_tenant.get(doc_id)
             if owner is not None and owner != tenant_id:
                 raise PermissionError(
                     f"doc_id={doc_id!r} belongs to a different tenant."
                 )
-        return list(self._doc_elements.get(doc_id, []))
+        state = self._doc_state.get(doc_id)
+        return list(state.get_geometric_elements()) if state else []
 
     def get_document_tables(
         self, doc_id: str, tenant_id: Optional[str] = None
     ) -> list[GeometricElement]:
-        '''Return all table elements belonging to a specific document.
+        """Return all table elements belonging to a specific document.
 
         Raises ``PermissionError`` if *tenant_id* is given and does not
         match the document's owning tenant.
-        '''
+        """
         if tenant_id is not None:
             owner = self._doc_tenant.get(doc_id)
             if owner is not None and owner != tenant_id:
                 raise PermissionError(
                     f"doc_id={doc_id!r} belongs to a different tenant."
                 )
-        return list(self._doc_tables.get(doc_id, []))
+        state = self._doc_state.get(doc_id)
+        return list(state.get_geometric_tables()) if state else []
+
+    def get_master_state(
+        self, doc_id: str, tenant_id: Optional[str] = None
+    ) -> Optional[MasterState]:
+        """Return the MasterState for a given document.
+
+        Raises ``PermissionError`` if *tenant_id* is given and does not match.
+        """
+        if tenant_id is not None:
+            owner = self._doc_tenant.get(doc_id)
+            if owner is not None and owner != tenant_id:
+                raise PermissionError(
+                    f"doc_id={doc_id!r} belongs to a different tenant."
+                )
+        return self._doc_state.get(doc_id)
 
     def get_document_templates(self, doc_id: str) -> list[Any]:
         '''Return templates representing the document layout.'''
