@@ -20,7 +20,7 @@ except ImportError:
 
 import numpy as np
 
-from src.core.document_object import DocumentObject
+from src.models.document_object import DocumentObject
 from src.engines.geometry.element import ElementType, GeometricElement
 from src.ael.exporter import AgentExporter
 from src.core.config import settings

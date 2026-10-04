@@ -16,7 +16,7 @@ except ImportError:
     logger = logging.getLogger(__name__)  # type: ignore[assignment]
 
 
-from src.core.document_object import DocumentObject, DocumentFormat
+from src.models.document_object import DocumentObject, DocumentFormat
 from src.core.geometric_element import ElementType, GeometricElement, make_element
 from src.core.normalized_document import (
     BlockType, BoundingBox, NormalizedBlock, NormalizedDocument, NormalizedPage,

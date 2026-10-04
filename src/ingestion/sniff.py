@@ -14,7 +14,7 @@ from pathlib import Path
 from typing import Optional
 import zipfile
 
-from src.core.document_object import DocumentFormat
+from src.models.document_object import DocumentFormat
 
 logger = logging.getLogger(__name__)
 

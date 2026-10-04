@@ -10,7 +10,7 @@ from __future__ import annotations
 import asyncio
 from typing import Any, Dict, List, Optional
 from src.core.orchestrator import AMDIOrchestrator
-from src.core.document_object import DocumentObject, DocumentFormat
+from src.models.document_object import DocumentObject, DocumentFormat
 
 
 class AegisLlamaIndexReader:

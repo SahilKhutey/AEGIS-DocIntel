@@ -8,7 +8,7 @@ from __future__ import annotations
 import logging
 from typing import Any
 
-from src.core.document_object import DocumentFormat, DocumentObject
+from src.models.document_object import DocumentFormat, DocumentObject
 from src.ingestion.base import BaseLoader
 from src.ingestion.exceptions import FormatError, SizeLimitError
 

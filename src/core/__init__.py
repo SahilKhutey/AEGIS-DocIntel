@@ -2,7 +2,7 @@
 AEGIS-DocIntel / AMDI-OS — Core System Module
 """
 
-from src.core.document_object import DocumentObject, DocumentFormat
+from src.models.document_object import DocumentObject, DocumentFormat, MAGIC, EXT_MAP
 from src.core.normalized_document import (
     NormalizedDocument,
     NormalizedPage,

@@ -11,7 +11,7 @@ from typing import Any
 
 from PIL import Image
 
-from src.core.document_object import DocumentFormat, DocumentObject
+from src.models.document_object import DocumentFormat, DocumentObject
 from src.ingestion.base import BaseLoader
 from src.ingestion.exceptions import (
     DocumentCorruptError,

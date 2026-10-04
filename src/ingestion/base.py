@@ -10,7 +10,7 @@ import logging
 from pathlib import Path
 from typing import Any, Union
 
-from src.core.document_object import DocumentObject
+from src.models.document_object import DocumentObject
 
 logger = logging.getLogger(__name__)
 

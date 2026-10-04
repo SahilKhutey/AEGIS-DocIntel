@@ -4,7 +4,7 @@ AEGIS-AMDI-OS — Data Models
 All schemas for the system.
 """
 from src.models.document_object import (
-    DocumentObject, DocumentFormat, DocumentStatus, DocumentSource,
+    DocumentObject, DocumentFormat, DocumentStatus, DocumentSource, MAGIC, EXT_MAP,
 )
 from src.models.page_object import PageObject, PageLayout, PageOrientation
 from src.models.geometry_object import (

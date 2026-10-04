@@ -33,7 +33,7 @@ from __future__ import annotations
 
 import pytest
 
-from src.core.document_object import DocumentObject, DocumentFormat
+from src.models.document_object import DocumentObject, DocumentFormat
 from src.core.orchestrator import AMDIOrchestrator
 
 

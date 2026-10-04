@@ -3,7 +3,7 @@ Unit tests for LlamaIndex Framework Adapter (Task H-2).
 """
 
 import pytest
-from src.core.document_object import DocumentObject, DocumentFormat
+from src.models.document_object import DocumentObject, DocumentFormat
 from src.core.orchestrator import AMDIOrchestrator
 from src.connectors.llamaindex_adapter import AegisLlamaIndexReader, AegisLlamaIndexRetriever
 

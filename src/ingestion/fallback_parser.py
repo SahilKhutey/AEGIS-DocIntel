@@ -10,7 +10,7 @@ import logging
 import re
 from typing import Any, Tuple
 
-from src.core.document_object import DocumentFormat, DocumentObject
+from src.models.document_object import DocumentFormat, DocumentObject
 
 logger = logging.getLogger(__name__)
 

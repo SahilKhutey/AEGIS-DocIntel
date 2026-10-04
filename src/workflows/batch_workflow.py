@@ -15,7 +15,7 @@ except ImportError:
     logger = logging.getLogger(__name__)  # type: ignore[assignment]
 
 
-from src.core.document_object import DocumentFormat, DocumentObject
+from src.models.document_object import DocumentFormat, DocumentObject
 from src.workflows.ingest_workflow import IngestWorkflow
 from src.workflows.query_workflow import QueryWorkflow
 

@@ -11,7 +11,7 @@ import logging
 from pathlib import Path
 from typing import Any, Optional, Union
 
-from src.core.document_object import DocumentFormat, DocumentObject
+from src.models.document_object import DocumentFormat, DocumentObject
 from src.ingestion.base import BaseLoader
 from src.ingestion.docx_loader import DOCXLoader
 from src.ingestion.exceptions import (

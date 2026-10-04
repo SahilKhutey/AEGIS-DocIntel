@@ -28,7 +28,7 @@ except ImportError:
 # Add amdi-os to sys.path
 sys.path.insert(0, str(Path(__file__).parent.parent / "amdi-os"))
 
-from src.core.document_object import DocumentObject, DocumentFormat
+from src.models.document_object import DocumentObject, DocumentFormat
 from src.ingestion import (
     IngestionService, OCREngine,
     PDFLoader, DOCXLoader, PPTXLoader, XLSXLoader, ImageLoader,

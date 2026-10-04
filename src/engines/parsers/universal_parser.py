@@ -4,7 +4,7 @@ universal_parser.py
 AEGIS-AMDI-OS  |  Engine Layer  |  Document Parsing
 
 Provides :class:`UniversalParser`, a format-agnostic document parser that
-routes each :class:`~src.core.document_object.DocumentObject` to the
+routes each :class:`~src.models.document_object.DocumentObject` to the
 appropriate format-specific sub-parser and produces a
 :class:`~src.core.normalized_document.NormalizedDocument`.
 
@@ -80,7 +80,7 @@ except ImportError:
 # ---------------------------------------------------------------------------
 # Internal imports
 # ---------------------------------------------------------------------------
-from src.core.document_object import DocumentObject
+from src.models.document_object import DocumentObject
 from src.core.normalized_document import (
     NormalizedBlock,
     NormalizedDocument,

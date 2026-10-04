@@ -192,7 +192,7 @@ except ImportError:
 # ---------------------------------------------------------------------------
 # Core document data model imports
 # ---------------------------------------------------------------------------
-from src.core.document_object import DocumentObject
+from src.models.document_object import DocumentObject
 from src.core.normalized_document import (
     NormalizedBlock,
     NormalizedPage,

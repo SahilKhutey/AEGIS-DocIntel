@@ -12,7 +12,7 @@ import pytest
 from PIL import Image, ImageDraw
 from fastapi.testclient import TestClient
 
-from src.core.document_object import DocumentFormat
+from src.models.document_object import DocumentFormat
 from src.ingestion.speech_loader import SpeechLoader
 from src.ingestion.image_parser import AdvancedImageParser
 from src.ingestion.service import IngestionService

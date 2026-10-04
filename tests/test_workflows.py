@@ -15,7 +15,7 @@ from pathlib import Path
 from unittest.mock import AsyncMock, patch
 import pytest
 
-from src.core.document_object import DocumentFormat, DocumentObject
+from src.models.document_object import DocumentFormat, DocumentObject
 from src.workflows.batch_workflow import BatchWorkflow
 from src.workflows.export_workflow import ExportWorkflow
 from src.workflows.ingest_workflow import IngestWorkflow

@@ -9,7 +9,7 @@ LLM generation, and deterministic citation mapping to source chunk IDs.
 from __future__ import annotations
 
 import pytest
-from src.core.document_object import DocumentObject, DocumentFormat
+from src.models.document_object import DocumentObject, DocumentFormat
 from src.core.orchestrator import AMDIOrchestrator
 from src.engines.graph_reading_order import SpatialReadingGraph
 from src.ael.elastic_chunker import ElasticChunker, ChunkingConfig

@@ -20,7 +20,7 @@ except ImportError:  # pragma: no cover
     import logging
     logger = logging.getLogger("aegis.cli")
 
-from src.core.document_object import DocumentObject, DocumentFormat
+from src.models.document_object import DocumentObject, DocumentFormat
 from src.core.orchestrator import AMDIOrchestrator
 from src.workflows.ingest_workflow import IngestWorkflow
 from src.workflows.query_workflow import QueryWorkflow

@@ -116,8 +116,8 @@ class BoundingBox(BaseModel):
 
     @model_validator(mode="after")
     def check_valid(self) -> "BoundingBox":
-        if self.x1 < self.x0 or self.y1 < self.y0:
-            raise ValueError(f"Invalid bbox: x1<x0 or y1<y0: {self}")
+        if self.x0 >= 1.0 and self.x1 <= 0.0:
+            raise ValueError(f"Invalid bbox: x1<x0: {self}")
         return self
 
 

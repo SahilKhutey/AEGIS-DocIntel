@@ -12,7 +12,7 @@ from src.compliance.redaction_engine import (
     RedactionPolicy,
 )
 from src.core.geometric_element import GeometricElement, ElementType
-from src.core.document_object import DocumentObject, DocumentFormat
+from src.models.document_object import DocumentObject, DocumentFormat
 from src.core.orchestrator import AMDIOrchestrator
 
 

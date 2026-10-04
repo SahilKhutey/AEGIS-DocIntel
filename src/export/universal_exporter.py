@@ -63,10 +63,21 @@ class UniversalExportObject:
         meta_dict = self.metadata if isinstance(self.metadata, dict) else (
             self.metadata.__dict__ if hasattr(self.metadata, "__dict__") else {}
         )
-        conf_val = self.confidence if isinstance(self.confidence, (int, float)) else (
-            getattr(self.confidence, "overall", 1.0)
-        )
-        res = {
+        if hasattr(self.confidence, "overall"):
+            conf_val = {
+                "overall": self.confidence.overall,
+                "semantic": getattr(self.confidence, "semantic", 0.0),
+                "numerical": getattr(self.confidence, "numerical", 0.0),
+                "structural": getattr(self.confidence, "structural", 0.0),
+                "retrieval": getattr(self.confidence, "retrieval", 0.0),
+                "calibration_method": getattr(self.confidence, "calibration_method", "bayesian"),
+            }
+        elif isinstance(self.confidence, (int, float)):
+            conf_val = self.confidence
+        else:
+            conf_val = 1.0
+
+        res: Dict[str, Any] = {
             "ueo_id": self.ueo_id,
             "version": self.version,
             "system": self.system,
@@ -97,6 +108,50 @@ class UniversalExportObject:
                 kp if isinstance(kp, dict) else getattr(kp, "__dict__", str(kp))
                 for kp in self.key_points
             ]
+        if self.semantic is not None:
+            res["semantic"] = {
+                "topics": getattr(self.semantic, "topics", []),
+                "keywords": getattr(self.semantic, "keywords", []),
+                "entities": getattr(self.semantic, "entities", []),
+                "sentiment": getattr(self.semantic, "sentiment", {}),
+            } if hasattr(self.semantic, "topics") else (
+                self.semantic if isinstance(self.semantic, dict) else getattr(self.semantic, "__dict__", str(self.semantic))
+            )
+        if self.geometry is not None:
+            res["geometry"] = {
+                "important_regions": getattr(self.geometry, "important_regions", []),
+                "section_locations": getattr(self.geometry, "section_locations", []),
+            } if hasattr(self.geometry, "important_regions") else (
+                self.geometry if isinstance(self.geometry, dict) else getattr(self.geometry, "__dict__", str(self.geometry))
+            )
+        if self.matrix is not None:
+            raw_tables = getattr(self.matrix, "tables", [])
+            res["matrix"] = {
+                "tables": [t.to_dict() if hasattr(t, "to_dict") else (t if isinstance(t, dict) else getattr(t, "__dict__", {})) for t in raw_tables],
+                "n_tables": getattr(self.matrix, "n_tables", len(raw_tables)),
+            } if hasattr(self.matrix, "tables") else (
+                self.matrix if isinstance(self.matrix, dict) else getattr(self.matrix, "__dict__", str(self.matrix))
+            )
+        if self.graph is not None:
+            nodes = getattr(self.graph, "nodes", [])
+            edges = getattr(self.graph, "edges", [])
+            res["graph"] = {
+                "nodes": nodes[:50],
+                "edges": edges[:100],
+                "n_nodes": getattr(self.graph, "n_nodes", len(nodes)),
+                "n_edges": getattr(self.graph, "n_edges", len(edges)),
+                "key_relationships": getattr(self.graph, "key_relationships", []),
+            } if hasattr(self.graph, "nodes") else (
+                self.graph if isinstance(self.graph, dict) else getattr(self.graph, "__dict__", str(self.graph))
+            )
+        if self.template is not None:
+            res["template"] = {
+                "templates": getattr(self.template, "templates", []),
+                "n_templates": getattr(self.template, "n_templates", 0),
+                "dominant_template_id": getattr(self.template, "dominant_template_id", ""),
+            } if hasattr(self.template, "templates") else (
+                self.template if isinstance(self.template, dict) else getattr(self.template, "__dict__", str(self.template))
+            )
         return res
 
     @classmethod

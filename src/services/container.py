@@ -16,7 +16,7 @@ from typing import Any
 import structlog
 
 from src.config import Settings
-from src.core.document_object import DocumentObject, DocumentFormat
+from src.models.document_object import DocumentObject, DocumentFormat
 from src.core.orchestrator import AMDIOrchestrator
 from src.llm_service.llm_client import LLMService
 from src.services.query_service import QueryService

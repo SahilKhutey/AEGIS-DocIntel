@@ -22,7 +22,7 @@ except ImportError:
 
 from PIL import Image
 
-from src.core.document_object import DocumentFormat, DocumentObject
+from src.models.document_object import DocumentFormat, DocumentObject
 from src.ingestion import (
     DocumentCorruptError,
     EncryptedDocumentError,
