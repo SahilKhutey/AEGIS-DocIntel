@@ -1,0 +1,116 @@
+version: "3.9"
+
+x-common: &common
+  restart: unless-stopped
+
+services:
+  # ── Core API ──────────────────────────────────────────────────
+  api:
+    <<: *common
+    build: .
+    image: amdi-os:latest
+    container_name: amdi-api
+    ports:
+      - "8000:8000"
+    volumes:
+      - amdi-data:/data
+      - ./config:/app/config:ro
+    environment:
+      AMDI_ENV: production
+      AMDI_LOG_LEVEL: INFO
+      AMDI_REDIS_URL: redis://redis:6379/0
+      AMDI_QDRANT_URL: http://qdrant:6333
+      AMDI_DUCKDB_PATH: /data/amdi.duckdb
+      AMDI_SQLITE_PATH: /data/amdi.db
+      AMDI_LLM_PROVIDER: ${AMDI_LLM_PROVIDER:-mock}
+      AMDI_OPENAI_API_KEY: ${AMDI_OPENAI_API_KEY:-}
+      AMDI_ANTHROPIC_API_KEY: ${AMDI_ANTHROPIC_API_KEY:-}
+    depends_on:
+      redis:
+        condition: service_healthy
+      qdrant:
+        condition: service_started
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # ── Dashboard ──────────────────────────────────────────────────
+  dashboard:
+    <<: *common
+    image: node:20-alpine
+    container_name: amdi-dashboard
+    working_dir: /app
+    command: sh -c "npm install && npm run dev -- --host"
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./dashboard:/app
+    environment:
+      VITE_API_URL: http://localhost:8000
+
+  # ── Redis (Hot Memory) ─────────────────────────────────────────
+  redis:
+    <<: *common
+    image: redis:7-alpine
+    container_name: amdi-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    command: redis-server --appendonly yes --maxmemory 256mb --maxmemory-policy allkeys-lru
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ── Qdrant (Vector Search) ─────────────────────────────────────
+  qdrant:
+    <<: *common
+    image: qdrant/qdrant:v1.9.0
+    container_name: amdi-qdrant
+    ports:
+      - "6333:6333"
+      - "6334:6334"
+    volumes:
+      - qdrant-data:/qdrant/storage
+    environment:
+      QDRANT__SERVICE__GRPC_PORT: 6334
+
+  # ── Prometheus ────────────────────────────────────────────────
+  prometheus:
+    <<: *common
+    image: prom/prometheus:latest
+    container_name: amdi-prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./deploy/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus-data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.retention.time=7d'
+
+  # ── Grafana ────────────────────────────────────────────────────
+  grafana:
+    <<: *common
+    image: grafana/grafana:latest
+    container_name: amdi-grafana
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana-data:/var/lib/grafana
+    environment:
+      GF_SECURITY_ADMIN_PASSWORD: admin
+      GF_USERS_ALLOW_SIGN_UP: "false"
+    depends_on:
+      - prometheus
+
+volumes:
+  amdi-data:
+  redis-data:
+  qdrant-data:
+  prometheus-data:
+  grafana-data:
