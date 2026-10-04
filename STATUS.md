@@ -33,18 +33,40 @@ actually completed.
   - Documentation consolidated into canonical `Aegis Doc/` (14 complete monographs), eliminating duplicate `Aegis/`.
   - Pre-rename legacy codebase permanently preserved in dedicated `archive/legacy-history` orphan branch.
   - Tracked remaining lower-risk duplicate classes documented in [`docs/known-duplication.md`](docs/known-duplication.md).
-- **Canonical Document Schema (Phase 5 Verified)**: Single, immutable-ready, typed Pydantic v2
-  `DocumentState` model ($D = (P, S, G, R, F, M, T, X, H, E)$) in `src/core/document_state.py`
-  unifying physical layout, semantic vectors, knowledge graphs, recurrence patterns, spectral
-  Laplacians, tabular matrices, simplicial complexes, information physics, hypergraphs, and
-  telemetry across pipeline stages. Verified via `tests/test_document_state.py`.
-- **Ingestion & Pipeline Hardening (Phase 6 Verified)**:
+- **Core Schema Unification: Master State D (Phase 5 Verified)**: Single, synchronized Pydantic v2
+  `MasterState` model ($D = (P, S, G, R, F, M, T, X, H, E)$) in `src/core/master_state.py` matching Section 5.1 & 5.2 of the AMDI-OS Extended Monograph. Every engine in `AMDIOrchestrator` reads from and writes to this unified structure per document instead of scattered instance attributes. Theorem 5.1 (Scale Invariance) and Theorem 5.2 (Metric Validity) are machine-verified via property-based tests in `tests/test_master_state_theorems.py`. Tenant-isolation is permanently verified via `tests/test_multitenancy_isolation.py`. Schema evolution is governed by `src/core/schema_migrations.py`.
+- **Ingestion & Pipeline Hardening (Phase 6 Target)**:
   - Deep magic byte sniffer (`src/ingestion/sniff.py`) identifying PDF, DOCX, XLSX, PPTX, PNG, JPEG, GIF, TIFF, WebP, BMP, WAV, MP3, FLAC, OGG, and plain/markdown/structured text.
   - Strict typed error hierarchy (`src/ingestion/exceptions.py`): `IngestionError`, `DocumentCorruptError`, `EncryptedDocumentError`, `UnsupportedFormatError`, `ProcessingTimeoutError`, `ExtractionError`, `SizeLimitError`.
   - Universal fallback recovery parser (`src/ingestion/fallback_parser.py`) with 6-stage encoding and chunk recovery that never crashes on malformed files.
   - Hardened loaders across all modalities (`PDFLoader`, `DOCXLoader`, `XLSXLoader`, `PPTXLoader`, `ImageLoader`, `SpeechLoader`, `TextLoader`).
   - Dedicated workflow test suite (`tests/test_workflows.py`) providing 100% passing integration coverage across `IngestWorkflow`, `QueryWorkflow`, `ExportWorkflow`, and `BatchWorkflow`.
   - Ingestion hardening verified via 24 automated edge-case and fuzzing tests (`tests/test_ingestion_hardening.py`).
+
+## Layer-by-Layer Implementation Status (Master State D)
+
+Per Section 5.1 of the AMDI-OS Extended Monograph and its Appendix E
+status matrix — the most detailed and honest implementation-status
+assessment that exists anywhere in this project:
+
+| Layer | Meaning | Status |
+|---|---|---|
+| P | Page/element representation | Hardened |
+| G | Geometric coordinate layer | Hardened |
+| R | Structural recurrence | Hardened |
+| F | Token frequency/weight | Hardened |
+| M | Table-matrix relational | Hardened |
+| T | Template fingerprint | Hardened |
+| X | Structural linkage graph | Hardened |
+| S | Semantic embedding | Mock fallback unless `sentence-transformers` installed — real path exists and works, but is optional and clearly flagged (`is_mock` on `MasterState.semantic_status`) |
+| H | Hierarchical coordinate (persistent homology) | Proposed, not yet evaluated |
+| E | Shannon-entropy | Hardened |
+
+This table is enforced in code, not just documentation: `MasterState`
+(added in this phase) carries a `LayerStatus` alongside every layer, so
+`state.semantic_status.is_mock` or `state.hierarchy_status.is_proposed`
+can be checked at runtime rather than only in a document no pipeline
+consumer ever reads.
 
 ## Known Issues (Being Fixed)
 
