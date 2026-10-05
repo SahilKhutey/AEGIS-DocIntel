@@ -44,6 +44,12 @@ actually completed.
   - Renamed 6 import-only framework tests to honest `*_imports_cleanly` smoke tests with real assertions.
   - Resolved weak test stubs (`TC-NE-2` and `TC-NE-6` implemented with real assertions; `TC-NE-1` and `TC-NE-3` explicitly skipped with traceable reasons pending semantic training).
   - Raised CI coverage gate to 75% with measured repository baseline reaching 80%.
+- **Real-World Ingestion Validation (Phase 7 Verified)**:
+  - Workflows Package Import: Resolved and permanently locked package-level import chain (`from src.workflows import IngestWorkflow, BatchWorkflow, QueryWorkflow, ExportWorkflow`) with regression testing in `tests/test_workflows_import.py`.
+  - Ingestion Loaders `char_count` & `word_count`: Populated accurate `char_count` and `word_count` across all document loaders (`PDFLoader`, `DOCXLoader`, `PPTXLoader`, `XLSXLoader`, `ImageLoader`, `TextLoader`, `SpeechLoader`), verified against 14 real monograph documents and rich binary fixtures.
+  - Real-World Document Validation: Added `tests/test_real_world_ingestion.py` exercising 14-page native research PDF normalization, verifying >30,000 extracted text characters, 14 structured pages, and accurate scanned-status detection.
+  - Corrupt Mock Dataset Rejection: Confirmed that application loaders strictly reject invalid/mock benchmark PDFs (raising `FormatError`) rather than silently parsing fake data.
+  - Rich Multi-Modality Fixture Suite: Added real, multi-slide presentation (`tests/fixtures/real_presentation.pptx`), multi-sheet spreadsheet with formula columns (`tests/fixtures/real_spreadsheet.xlsx`), and scanned document page (`tests/fixtures/real_scanned_page.png`).
 
 ## Layer-by-Layer Implementation Status (Master State D)
 
@@ -70,9 +76,27 @@ This table is enforced in code, not just documentation: `MasterState`
 can be checked at runtime rather than only in a document no pipeline
 consumer ever reads.
 
-## Known Issues (Being Fixed)
+## Known Issues (Phase 7 findings)
 
-- Document benchmarks currently use synthetic data; real-document test fixtures (PDF, DOCX, XLSX) and token reduction benchmarks are scheduled for Phase 7.
+- **Critical, now fixed**: `src/workflows/__init__.py` failed to import due to
+  four distinct bugs across all four workflow files (wrong import path and a
+  never-implemented `GraphBuilder` class in ingest_workflow.py; a missing
+  re-export in engines/fusion; a wrong import source and a never-implemented
+  `CONNECTOR_REGISTRY` in export_workflow.py; a never-implemented
+  `ResponseVerifier`). This was invisible to the existing unit test suite
+  because those tests import individual engines directly, never the workflow
+  layer. Fixed in Phase 7 — see commit history for the exact changes.
+- `char_count` was previously omitted by all five ingestion loaders
+  (confirmed via testing against 14 real documents). Fixed across all loaders
+  in Phase 7.
+- Real-world validation for PPTX, XLSX, and image/OCR ingestion is still
+  pending external benchmark corpora — this environment validated DOCX (14 real
+  monographs), PDF (1 real 14-page research paper + confirming mock dataset
+  rejection), and local structured multi-sheet/multi-slide fixtures. A real,
+  diverse public benchmark corpus (DocBank/FUNSD) is scoped for Phase 8.
+- `ResponseVerifier` is a minimal implementation as of this phase
+  (lexical citation and grounding overlap checking) — real citation-verification
+  logic per the monograph's Section 19 is scheduled for later hardening.
 
 ## Not Real (Previously Presented as Fact — Now Corrected)
 

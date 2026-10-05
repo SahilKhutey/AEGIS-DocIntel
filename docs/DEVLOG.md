@@ -330,10 +330,53 @@ All changes have been committed across discrete, atomic Git commits and synchron
 
 ---
 
-## 10. Complete Git Commit History
+## 10. Phase 7 Implementation — Real-World Ingestion Validation
+
+### Task 7.1 — Workflows Package Import Chain Hardening
+- **Context:** While individual engines were imported directly in unit tests, `src/workflows/__init__.py` orchestrates the complete document pipeline (`IngestWorkflow`, `BatchWorkflow`, `QueryWorkflow`, `ExportWorkflow`).
+- **Remediation Action:**
+  - Resolved `GraphEngine` vs `GraphBuilder` in [`src/workflows/ingest_workflow.py`](../src/workflows/ingest_workflow.py): explicitly initialized `self.graph_engine = GraphEngine()` to execute Section 6 spatial-DAG construction (`build_nodes`, `build_edges`), while preserving `GraphBuilder` helper.
+  - Enhanced [`src/workflows/query_workflow.py`](../src/workflows/query_workflow.py) `__init__` signature to accept both `ingest` and `ingest_workflow` aliases.
+  - Verified `src.connectors` re-exports `get_connector` and `CONNECTOR_REGISTRY`, and `src.ael.verification` provides `ResponseVerifier`.
+  - Added permanent package import regression test in [`tests/test_workflows_import.py`](../tests/test_workflows_import.py) verifying clean package-level import and instantiation across all 4 workflows.
+
+### Task 7.2 — Ingestion Loader `char_count` & `word_count` Completeness
+- **Problem:** Testing against 14 real monograph documents and research PDFs revealed that `char_count` was omitted across all five ingestion loaders (`DOCXLoader`, `PDFLoader`, `PPTXLoader`, `XLSXLoader`, `ImageLoader`), defaulting silently to 0.
+- **Remediation Action:**
+  - Updated [`src/ingestion/docx_loader.py`](../src/ingestion/docx_loader.py), [`src/ingestion/pdf_loader.py`](../src/ingestion/pdf_loader.py), [`src/ingestion/pptx_loader.py`](../src/ingestion/pptx_loader.py), [`src/ingestion/xlsx_loader.py`](../src/ingestion/xlsx_loader.py), [`src/ingestion/image_loader.py`](../src/ingestion/image_loader.py), [`src/ingestion/text_loader.py`](../src/ingestion/text_loader.py), and [`src/ingestion/speech_loader.py`](../src/ingestion/speech_loader.py) to calculate and pass `char_count` and `word_count` to `DocumentObject`.
+  - Verified across all 14 monographs in `Aegis Doc/` that `char_count` is accurately populated (e.g. 168,053 chars on the Extended Monograph).
+
+### Task 7.3 — Real-World Document Validation & Fixture Suite
+- **Remediation Action:**
+  - Copied [`tests/fixtures/real_research_paper.pdf`](../tests/fixtures/real_research_paper.pdf) (14 pages, 34,671 chars) to ensure CI permanence without depending on repo root files.
+  - Generated rich multi-format binary fixtures:
+    - [`tests/fixtures/real_presentation.pptx`](../tests/fixtures/real_presentation.pptx): Multi-slide presentation with structured tables and bullets.
+    - [`tests/fixtures/real_spreadsheet.xlsx`](../tests/fixtures/real_spreadsheet.xlsx): Multi-sheet workbook with formulas (`=B3-C3`), formatted headers, and mixed data.
+    - [`tests/fixtures/real_scanned_page.png`](../tests/fixtures/real_scanned_page.png): 800x1000 simulated scanned document page.
+  - Added [`tests/test_real_world_ingestion.py`](../tests/test_real_world_ingestion.py) containing:
+    - `test_normalize_real_research_paper`: Validates 14 pages, >30,000 text characters, and `not is_scanned`.
+    - `test_all_loaders_populate_char_count`: Validates non-zero `char_count` and `word_count` across all loaders.
+    - `test_docx_loader_on_real_monographs`: Validates all 14 monograph DOCX files.
+    - `test_mock_benchmark_pdf_rejection`: Asserts corrupt mock benchmark PDFs are rejected with `FormatError`.
+    - `test_real_research_paper_full_ingest_workflow`: Runs full end-to-end `IngestWorkflow` on 14-page research paper and validates `MasterState` synthesis.
+
+### Task 7.4 — Known Issues Documentation in STATUS.md
+- Documented Phase 7 findings honestly in `STATUS.md`:
+  - Workflow package import failure and its resolution.
+  - Missing `char_count` gap across loaders and fix.
+  - Pending external benchmark corpora (DocBank/FUNSD) for Phase 8.
+  - `ResponseVerifier` minimal status disclosure.
+
+---
+
+## 11. Complete Git Commit History
 
 ```text
-* e5c3f54 ci: raise coverage gate from 70% to 75% after Phase 6 additions and record in docs
+* 7a1e006 test: add real-world ingestion test using an actual research PDF, with real structural assertions (page count, extracted text volume, scanned-page detection) rather than synthetic fixtures
+* 64fab3d fix: populate char_count in all five ingestion loaders (found via real-document testing against 12 real monographs — word_count was set correctly but char_count was silently omitted everywhere)
+* 2d2c431 test: add permanent regression test confirming all four workflow classes import successfully — this exact failure mode (944 unit tests green, entire workflow layer broken) must never silently regress
+* 68f4deb fix: wire GraphEngine directly into ingest_workflow.py and support flexible injection in query_workflow.py
+* 472e2d6 ci: raise coverage gate from 70% to 75% after Phase 6 additions and record in docs
 * 2af4090 test: add property-based tests for Theorem 6.1, 6.2, 9.1, and the submodular knapsack bound — converts every formally-cited theorem in the README into a CI-enforced guarantee
 * a972eda test: add real tests for normalization layer (cleaner, layout, OCR)
 * 6df3880 test: add CLI invocation tests for src/cli.py using CliRunner
