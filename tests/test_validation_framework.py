@@ -11,8 +11,8 @@ root_dir = Path(__file__).parent.parent
 sys.path.insert(0, str(root_dir))
 
 
-def test_validation_imports():
-    """Verify that all components can be imported from backend.validation."""
+def test_validation_framework_imports_cleanly():
+    """Verify that all components can be imported from backend.validation cleanly."""
     from backend.validation import (
         ValidationEngine,
         ValidationSuite,
@@ -44,7 +44,9 @@ def test_validation_imports():
         TestFailureError,
         CoverageThresholdError,
     )
-    assert True
+    assert issubclass(ValidationError, Exception)
+    assert issubclass(TestFailureError, ValidationError)
+    assert ValidationEngine is not None
 
 
 def test_exceptions():

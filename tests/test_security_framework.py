@@ -14,8 +14,8 @@ root_dir = Path(__file__).parent.parent
 sys.path.insert(0, str(root_dir))
 
 
-def test_security_imports():
-    """Verify that all components can be imported from backend.security."""
+def test_security_framework_imports_cleanly():
+    """Verify that all components can be imported from backend.security cleanly."""
     from backend.security import (
         SecurityEngine,
         SecurityReport,
@@ -55,7 +55,9 @@ def test_security_imports():
         EncryptionError,
         SecretAccessError,
     )
-    assert True
+    assert issubclass(SecurityError, Exception)
+    assert issubclass(AuthenticationError, SecurityError)
+    assert SecurityEngine is not None
 
 
 def test_exceptions():

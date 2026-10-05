@@ -9,8 +9,8 @@ sys.path.insert(0, str(root_dir))
 sys.path.insert(0, str(root_dir / "amdi-os"))
 
 
-def test_dashboard_package_imports():
-    """Verify that the ui.src.pages package and all its models can be imported."""
+def test_dashboard_package_imports_cleanly():
+    """Verify that the ui.src.pages package and all its models can be imported cleanly."""
     from ui.src.pages import (
         UploadDashboard,
         UploadPageData,
@@ -35,7 +35,9 @@ def test_dashboard_package_imports():
         SettingsDashboard,
         SettingsData,
     )
-    assert True
+    assert UploadDashboard is not None
+    assert SettingsDashboard is not None
+    assert GeometryDashboard is not None
 
 
 def test_upload_dashboard():

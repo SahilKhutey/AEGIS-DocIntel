@@ -11,8 +11,8 @@ root_dir = Path(__file__).parent.parent
 sys.path.insert(0, str(root_dir))
 
 
-def test_benchmarks_imports():
-    """Verify that all components can be imported from backend.benchmarks."""
+def test_benchmarks_framework_imports_cleanly():
+    """Verify that all components can be imported from backend.benchmarks cleanly."""
     from backend.benchmarks import (
         BenchmarkEngine,
         BenchmarkResult,
@@ -48,7 +48,9 @@ def test_benchmarks_imports():
         DatasetMissingError,
         MetricComputationError,
     )
-    assert True
+    assert issubclass(BenchmarkError, Exception)
+    assert issubclass(DatasetMissingError, BenchmarkError)
+    assert BenchmarkEngine is not None
 
 
 def test_exceptions():

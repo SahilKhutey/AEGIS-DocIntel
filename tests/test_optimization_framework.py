@@ -11,8 +11,8 @@ root_dir = Path(__file__).parent.parent
 sys.path.insert(0, str(root_dir))
 
 
-def test_optimization_imports():
-    """Verify that all components can be imported from backend.optimization."""
+def test_optimization_framework_imports_cleanly():
+    """Verify that all components can be imported from backend.optimization cleanly."""
     from backend.optimization import (
         OptimizationEngine,
         OptimizationResult,
@@ -41,7 +41,9 @@ def test_optimization_imports():
         OptimizationError,
         OptimizationTargetError,
     )
-    assert True
+    assert issubclass(OptimizationError, Exception)
+    assert issubclass(OptimizationTargetError, OptimizationError)
+    assert OptimizationEngine is not None
 
 
 def test_exceptions():

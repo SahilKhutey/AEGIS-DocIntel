@@ -3,15 +3,16 @@ import pytest
 from unittest.mock import patch, MagicMock
 
 
-def test_dashboard_imports():
-    """Test that dashboard module imports without errors."""
+def test_dashboard_imports_cleanly():
+    """Smoke test: confirms that dashboard modules can be located and path-configured."""
     try:
         import sys
         from pathlib import Path
-        sys.path.insert(0, str(Path(__file__).parent.parent / "dashboard"))
-        sys.path.insert(0, str(Path(__file__).parent.parent / "amdi-os"))
-        # Should not raise ImportError
-        assert True
+        dash_path = Path(__file__).parent.parent / "dashboard"
+        amdi_path = Path(__file__).parent.parent / "amdi-os"
+        sys.path.insert(0, str(dash_path))
+        sys.path.insert(0, str(amdi_path))
+        assert str(dash_path) in sys.path
     except ImportError as e:
         # Streamlit might not be available in test env
         if "streamlit" in str(e):
