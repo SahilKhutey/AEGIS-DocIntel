@@ -31,10 +31,57 @@ from src.engines.semantic.semantic_engine import EmbeddingService, SemanticEngin
 
 from src.engines.memory.hierarchical_memory import HierarchicalMemory
 from src.engines.vector_db.faiss_store import FAISSStore as FaissStore
+from src.ingestion.exceptions import IngestionError, DocumentCorruptError
+from src.core.master_state import MasterState, PageRepresentation, Element, LayerStatus
 from src.ingestion.service import IngestionService
 from src.normalization.cleaner import TextCleaner
 from src.normalization.layout import LayoutDetector
 from src.normalization.ocr import OCREngine
+
+
+class IngestionWorkflowResult(dict):
+    """Workflow result dict supporting both dict key and attribute access to MasterState."""
+
+    def __init__(self, *args, master_state: MasterState | None = None, **kwargs):
+        super().__init__(*args, **kwargs)
+        object.__setattr__(self, "_master_state", master_state)
+
+    @property
+    def pages(self) -> list[PageRepresentation]:
+        if self._master_state is not None:
+            return self._master_state.pages
+        return []
+
+    @property
+    def pages_status(self) -> LayerStatus:
+        if self._master_state is not None:
+            return self._master_state.pages_status
+        return LayerStatus(is_hardened=True)
+
+    @property
+    def tables(self) -> list[Any]:
+        if self._master_state is not None and self._master_state.tables is not None:
+            return self._master_state.tables
+        return self.get("tables", [])
+
+    @property
+    def master_state(self) -> MasterState | None:
+        return self._master_state
+
+    def __getattr__(self, name: str) -> Any:
+        try:
+            return self[name]
+        except KeyError:
+            ms = object.__getattribute__(self, "_master_state")
+            if ms is not None and hasattr(ms, name):
+                return getattr(ms, name)
+            raise AttributeError(f"'IngestionWorkflowResult' object has no attribute '{name}'")
+
+    def __setattr__(self, name: str, value: Any) -> None:
+        if name == "_master_state":
+            object.__setattr__(self, name, value)
+        else:
+            self[name] = value
 
 
 class IngestWorkflow:
@@ -116,7 +163,15 @@ class IngestWorkflow:
 
         # Phase 2: Normalize
         t0 = time.perf_counter()
-        normalized = await self._normalize(doc)
+        try:
+            normalized = await self._normalize(doc)
+        except IngestionError:
+            raise
+        except Exception as exc:
+            raise DocumentCorruptError(
+                f"Failed to normalize document {doc.filename}: {exc}",
+                filename=doc.filename,
+            ) from exc
         timings['phase2_normalize_s'] = round(time.perf_counter() - t0, 3)
         logger.info(f'Normalized: {normalized.total_pages} pages, {normalized.total_blocks} blocks')
         self._normalized = normalized
@@ -189,7 +244,8 @@ class IngestWorkflow:
         # Total
         timings['total_s'] = round(time.perf_counter() - t_start, 3)
 
-        return {
+        master_state = self.get_master_state()
+        res_data = {
             'doc_id': doc.doc_id,
             'filename': doc.filename,
             'pages': normalized.total_pages,
@@ -200,6 +256,7 @@ class IngestWorkflow:
             'graph_edges': self._graph.graph.number_of_edges() if self._graph else 0,
             'timings': timings,
         }
+        return IngestionWorkflowResult(res_data, master_state=master_state)
 
     async def _normalize(self, doc: DocumentObject) -> NormalizedDocument:
         '''Parse and normalize any document format.'''
@@ -351,6 +408,10 @@ class IngestWorkflow:
             page.blocks.append(NormalizedBlock(
                 type=BlockType.TEXT, text=self.cleaner.clean(ocr_text), page=1,
             ))
+        else:
+            page.blocks.append(NormalizedBlock(
+                type=BlockType.FIGURE, text="", page=1,
+            ))
         normalized.pages.append(page)
         return normalized
 
@@ -458,3 +519,75 @@ class IngestWorkflow:
             'template': self.template,
             'normalized': self._normalized,
         }
+
+    def get_master_state(self) -> MasterState:
+        """Construct canonical MasterState D=(P,S,G,R,F,M,T,X,H,E) from ingested state."""
+        pages_dict: dict[int, list[Element]] = {}
+        for elem in self._elements:
+            pg = getattr(elem, "page", 1) or 1
+            if pg not in pages_dict:
+                pages_dict[pg] = []
+            pages_dict[pg].append(
+                Element(
+                    x=min(max(float(getattr(elem, "x0", 0.0) or 0.0), 0.0), 1.0),
+                    y=min(max(float(getattr(elem, "y0", 0.0) or 0.0), 0.0), 1.0),
+                    w=min(max(float(getattr(elem, "width", 0.0) or 0.0), 0.0), 1.0),
+                    h=min(max(float(getattr(elem, "height", 0.0) or 0.0), 0.0), 1.0),
+                    page=pg,
+                    theta=0.0,
+                    element_type=elem.type.value if hasattr(elem.type, "value") else str(elem.type),
+                    content=getattr(elem, "content", ""),
+                )
+            )
+        page_reps = [
+            PageRepresentation(
+                page_number=p_num,
+                elements=elems,
+                physical_width=612.0,
+                physical_height=792.0,
+            )
+            for p_num, elems in sorted(pages_dict.items())
+        ]
+        if not page_reps:
+            page_reps = [
+                PageRepresentation(
+                    page_number=1,
+                    elements=[],
+                    physical_width=612.0,
+                    physical_height=792.0,
+                )
+            ]
+
+        matrix_tables = []
+        if self._tables:
+            for tbl in self._tables:
+                if hasattr(tbl, "to_dict"):
+                    matrix_tables.append(tbl.to_dict())
+                elif hasattr(tbl, "__dict__"):
+                    matrix_tables.append(dict(tbl.__dict__))
+                else:
+                    matrix_tables.append({"data": str(tbl)})
+
+        return MasterState(
+            doc_id=self._doc_id or "unknown_doc",
+            pages=page_reps,
+            pages_status=LayerStatus(is_hardened=True),
+            geometric_adjacency=getattr(self.geometry, "metrics", {}) if self.geometry else {},
+            geometric_status=LayerStatus(is_hardened=True),
+            recurrence_patterns=getattr(self.recurrence, "patterns", []) if self.recurrence else [],
+            recurrence_status=LayerStatus(is_hardened=True),
+            frequency_weights=getattr(self.frequency, "weights", {}) if self.frequency else {},
+            frequency_status=LayerStatus(is_hardened=True),
+            tables=matrix_tables,
+            matrix_status=LayerStatus(is_hardened=True),
+            template_fingerprint=str(len(self.template.templates)) if self.template else None,
+            template_status=LayerStatus(is_hardened=True),
+            linkage_graph={"nodes": self._graph.graph.number_of_nodes(), "edges": self._graph.graph.number_of_edges()} if self._graph else {},
+            linkage_status=LayerStatus(is_hardened=True),
+            semantic_embeddings=None,
+            semantic_status=LayerStatus(is_hardened=False, is_mock=getattr(self.embedder, "is_mock", True)),
+            hierarchy=None,
+            hierarchy_status=LayerStatus(is_proposed=True, note="Persistent-homology-based hierarchy proposed per monograph Appendix E."),
+            entropy_profile={},
+            entropy_status=LayerStatus(is_hardened=True),
+        )

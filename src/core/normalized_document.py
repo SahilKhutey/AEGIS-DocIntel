@@ -78,9 +78,10 @@ class NormalizedPage:
     blocks:      list[NormalizedBlock]
     is_scanned:  bool
     language:    str
+    metadata:    dict
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
-        names = ["page_number", "width", "height", "blocks", "is_scanned", "language"]
+        names = ["page_number", "width", "height", "blocks", "is_scanned", "language", "metadata"]
         for i, val in enumerate(args):
             kwargs[names[i]] = val
             
@@ -90,6 +91,7 @@ class NormalizedPage:
         self.blocks = kwargs.get("blocks", [])
         self.is_scanned = kwargs.get("is_scanned", False)
         self.language = kwargs.get("language", "en")
+        self.metadata = kwargs.get("metadata", {})
 
     @property
     def page_index(self) -> int:

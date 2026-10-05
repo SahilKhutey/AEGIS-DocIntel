@@ -96,6 +96,9 @@ class BoundingBox(BaseModel):
     def __getitem__(self, index: int) -> float:
         return (self.x0, self.y0, self.x1, self.y1)[index]
 
+    def __len__(self) -> int:
+        return 4
+
     def iou(self, other: "BoundingBox") -> float:
         """Intersection over Union."""
         ix0 = max(self.x0, other.x0)
