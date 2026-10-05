@@ -123,6 +123,7 @@ class SpeechLoader(BaseLoader):
             raw_bytes=raw_bytes,
             metadata=metadata,
             page_count=max(1, math.ceil(transcription.duration_seconds / 60.0)),
+            char_count=len(full_text),
             word_count=len(full_text.split()),
             text_content=full_text,
         )

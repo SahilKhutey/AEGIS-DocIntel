@@ -115,13 +115,16 @@ class DOCXLoader(BaseLoader):
         except Exception as exc:
             logger.warning(f"DOCX partial text extraction warning: {exc}")
 
+        text_content = "\n\n".join(text_parts)
+        char_count = sum(len(t) for t in text_parts) if text_parts else len(text_content or "")
         return DocumentObject(
             filename=name,
             format=DocumentFormat.DOCX,
             raw_bytes=raw_bytes,
             metadata=metadata,
+            char_count=char_count,
             word_count=sum(len(t.split()) for t in text_parts),
-            text_content="\n\n".join(text_parts),
+            text_content=text_content,
         )
 
     def _extract_metadata(self, doc: Any) -> dict[str, Any]:

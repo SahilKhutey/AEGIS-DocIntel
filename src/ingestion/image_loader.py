@@ -99,6 +99,7 @@ class ImageLoader(BaseLoader):
             raw_bytes=raw_bytes,
             metadata=metadata,
             page_count=1,
+            char_count=len(text_content) if text_content else 0,
             word_count=len(text_content.split()) if text_content else 0,
             text_content=text_content,
         )

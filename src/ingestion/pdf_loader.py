@@ -94,6 +94,10 @@ class PDFLoader(BaseLoader):
             metadata = self._extract_metadata(pdf)
             page_count = len(pdf)
             is_scanned = metadata.get("is_scanned", False)
+            text_parts = [page.get_text() for page in pdf]
+            text_content = "\n\n".join(t for t in text_parts if t.strip())
+            char_count = sum(len(t) for t in text_parts) if text_parts else len(text_content or "")
+            word_count = sum(len(t.split()) for t in text_parts) if text_parts else 0
         finally:
             pdf.close()
 
@@ -104,6 +108,9 @@ class PDFLoader(BaseLoader):
             raw_bytes=raw_bytes,
             metadata=metadata,
             page_count=page_count,
+            char_count=char_count,
+            word_count=word_count,
+            text_content=text_content,
             title=metadata.get("title"),
             author=metadata.get("author"),
             subject=metadata.get("subject"),

@@ -99,13 +99,18 @@ class PPTXLoader(BaseLoader):
             raise DocumentCorruptError(f"Malformed PPTX presentation: {exc}", filename=name) from exc
 
         metadata, text_parts = self._extract(pres)
+        text_content = "\n\n".join(text_parts)
+        char_count = sum(len(t) for t in text_parts) if text_parts else len(text_content or "")
+        word_count = sum(len(t.split()) for t in text_parts) if text_parts else 0
         return DocumentObject(
             filename=name,
             format=DocumentFormat.PPTX,
             raw_bytes=raw_bytes,
             metadata=metadata,
             page_count=metadata.get("slide_count", 0),
-            text_content="\n\n".join(text_parts),
+            char_count=char_count,
+            word_count=word_count,
+            text_content=text_content,
         )
 
     def _extract(self, pres: Any) -> tuple[dict[str, Any], list[str]]:

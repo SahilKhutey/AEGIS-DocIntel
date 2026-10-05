@@ -81,6 +81,7 @@ class TextLoader(BaseLoader):
             raw_bytes=raw_bytes,
             metadata=metadata,
             page_count=max(1, (word_count // 400) + (1 if word_count % 400 else 0)) if word_count > 0 else 1,
+            char_count=len(text),
             word_count=word_count,
             text_content=text,
         )

@@ -97,13 +97,18 @@ class XLSXLoader(BaseLoader):
             raise DocumentCorruptError(f"Malformed XLSX workbook: {exc}", filename=name) from exc
 
         metadata, text_parts, sheet_count = self._extract(wb)
+        text_content = "\n\n".join(text_parts)
+        char_count = sum(len(t) for t in text_parts) if text_parts else len(text_content or "")
+        word_count = sum(len(t.split()) for t in text_parts) if text_parts else 0
         return DocumentObject(
             filename=name,
             format=DocumentFormat.XLSX,
             raw_bytes=raw_bytes,
             metadata=metadata,
             page_count=sheet_count,
-            text_content="\n\n".join(text_parts),
+            char_count=char_count,
+            word_count=word_count,
+            text_content=text_content,
         )
 
     def _extract(self, wb: Any) -> tuple[dict[str, Any], list[str], int]:
