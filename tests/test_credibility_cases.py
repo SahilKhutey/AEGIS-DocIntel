@@ -364,20 +364,47 @@ def test_tc19_full_pipeline_trace_synthetic_document():
 # 7. Test Suite: Specified but Not Yet Executed (TC-NE-1 to TC-NE-7)
 # ===================================================================
 
+@pytest.mark.skip(
+    reason="Blocked on real semantic encoder — see MasterState.semantic_status (Phase 5) and monograph Appendix E: 'Proposed / mock in place'"
+)
 def test_tc_ne1_trained_semantic_encoder_ab_benchmark():
     '''TC-NE-1: Trained Semantic Encoder A/B Benchmark.'''
-    # Mock semantic encoder validation
-    assert True
+    pass
 
 
 def test_tc_ne2_spectral_clustering_real_graphs():
     '''TC-NE-2: Spectral Clustering on Real Document Structural Graphs.'''
-    assert True
+    from src.engines.spectral import AdjacencyMatrix, SpectralClusterer
+
+    n_per_cluster = 8
+    n = n_per_cluster * 2
+    edges = []
+    for i in range(n_per_cluster):
+        for j in range(i + 1, n_per_cluster):
+            edges.append((i, j, 1.0))
+    for i in range(n_per_cluster, n):
+        for j in range(i + 1, n):
+            edges.append((i, j, 1.0))
+    edges.append((0, n_per_cluster, 0.05))
+
+    adj = AdjacencyMatrix.from_edges(n, edges)
+    clusterer = SpectralClusterer(n_clusters=2)
+    res = clusterer.cluster(adj)
+
+    assert res.n_clusters == 2
+    assert len(res.clusters) == 2
+    assert res.labels[0] == res.labels[1]
+    assert res.labels[n_per_cluster] == res.labels[n_per_cluster + 1]
+    assert res.labels[0] != res.labels[n_per_cluster]
+    assert res.silhouette > 0.4
 
 
+@pytest.mark.skip(
+    reason="Blocked on multimodal encoder semantic training — see monograph Appendix E: 'Proposed / mock in place'"
+)
 def test_tc_ne3_multimodal_encoder_semantic_quality():
     '''TC-NE-3: Multimodal Encoder Semantic Quality.'''
-    assert True
+    pass
 
 
 def test_tc_ne4_end_to_end_failure_injection():
@@ -405,9 +432,37 @@ def test_tc_ne5_tenant_isolation_adversarial_audit():
     assert not denied.granted
 
 
-def test_tc_ne6_corpus_scale_load_test():
+@pytest.mark.asyncio
+async def test_tc_ne6_corpus_scale_load_test():
     '''TC-NE-6: Corpus-Scale Load Test.'''
-    assert True
+    import time
+    from src.models.document_object import DocumentObject, DocumentFormat
+    from src.core.orchestrator import AMDIOrchestrator
+
+    orchestrator = AMDIOrchestrator()
+    try:
+        docs = [
+            DocumentObject(
+                doc_id=f"doc_load_{i}",
+                filename=f"doc_{i}.txt",
+                format=DocumentFormat.TEXT,
+                text_content=f"Document {i} contains experimental findings and metrics for cluster {i % 5}.",
+                raw_bytes=f"Document {i} contains experimental findings and metrics for cluster {i % 5}.".encode("utf-8"),
+            )
+            for i in range(20)
+        ]
+        start = time.monotonic()
+        results = []
+        for d in docs:
+            res = await orchestrator.ingest(d)
+            results.append(res)
+        elapsed = time.monotonic() - start
+
+        assert len(results) == 20
+        assert all(r.get("doc_id") for r in results)
+        assert elapsed < 30.0
+    finally:
+        await orchestrator.close()
 
 
 def test_tc_ne7_measured_cost_reduction_at_accuracy_parity():
