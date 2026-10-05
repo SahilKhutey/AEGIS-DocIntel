@@ -118,6 +118,7 @@ class IngestWorkflow:
         self.frequency = None
         self.matrix = None
         self.template = None
+        self.graph_engine = GraphEngine()
         self.graph_builder = GraphBuilder()
         self.vector_store = FaissStore(dim=1024)
         # State
@@ -207,8 +208,10 @@ class IngestWorkflow:
         self.template = TemplateEngine()
         self.template.build(elements)
 
-        # Graph
-        self._graph = self.graph_builder.build(elements)
+        # Graph — Spatial-DAG construction per Monograph Section 6
+        self.graph_engine.build_nodes(elements)
+        self.graph_engine.build_edges(elements)
+        self._graph = self.graph_engine.graph
         timings['phase4_9_engines_s'] = round(time.perf_counter() - t0, 3)
 
         # Phase 9: Semantic indexing

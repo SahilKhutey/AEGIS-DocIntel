@@ -29,13 +29,14 @@ class QueryWorkflow:
 
     def __init__(
         self,
-        ingest: IngestWorkflow,
+        ingest: IngestWorkflow | None = None,
+        ingest_workflow: IngestWorkflow | None = None,
         llm_provider: str = 'openai',
         llm_model: str = 'gpt-4o-mini',
         llm_api_key: str = '',
         max_context_tokens: int = 6000,
     ):
-        self.ingest = ingest
+        self.ingest = ingest or ingest_workflow
         self.llm = LLMInterface(
             llm_provider=llm_provider, model=llm_model, api_key=llm_api_key,
         )
