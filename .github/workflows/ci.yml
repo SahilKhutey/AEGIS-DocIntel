@@ -49,10 +49,11 @@ jobs:
 
       - name: Run test suite with coverage
         run: |
+          # Coverage gate history: 70% (Phase 3 baseline: 76%) -> 75% (Phase 6 measured: 80%)
           pytest tests/ --ignore=tests/test_multimodal.py \
             --junitxml=pytest-results.xml \
             --cov=src --cov-report=xml --cov-report=term-missing \
-            --cov-fail-under=70
+            --cov-fail-under=75
 
       - name: Upload test results
         if: always()

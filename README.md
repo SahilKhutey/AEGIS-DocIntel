@@ -3,7 +3,7 @@
 **Pre-LLM Mathematical Context Compiler & Document Intelligence Toolkit**
 
 [![CI](https://github.com/SahilKhutey/AEGIS-DocIntel/actions/workflows/ci.yml/badge.svg)](https://github.com/SahilKhutey/AEGIS-DocIntel/actions/workflows/ci.yml)
-[![Coverage](https://img.shields.io/badge/coverage-76%25-yellow.svg)]()
+[![Coverage](https://img.shields.io/badge/coverage-80%25-green.svg)]()
 [![Python 3.12+](https://img.shields.io/badge/Python-3.12%20%7C%203.13-green.svg)]()
 [![Status](https://img.shields.io/badge/Status-Alpha_/_Experimental-orange.svg)]()
 
