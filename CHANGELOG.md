@@ -9,6 +9,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.1.0-alpha.1] - October 2026
 
 ### Added
+- **Real Security Hardening & Vulnerability Remediation (Phase 10):**
+  - **Auth Bypass Gating:** Fixed critical vulnerability in `src/api/auth.py` where `dev-*` JWTs and `aegis-dev-key` API keys unconditionally granted admin/editor access to any tenant. Gated credentials strictly behind `AEGIS_ENVIRONMENT=development` (fail-safe default: `production`). Added security regression tests in `tests/test_auth.py`.
+  - **Real Bandit Static Analysis:** Executed Bandit static scan across 42,761 LOC in `src/`. Published `production/security-audit/bandit_report.md` and `bandit_results.json` with comprehensive exploitability tracing (triaging SQL construction, local LLM URLs, 0.0.0.0 container bindings, and non-cryptographic hashes).
+  - **Non-Cryptographic MD5 Annotation:** Explicitly annotated `hashlib.md5(..., usedforsecurity=False)` across `src/engines/recurrence/recurrence_engine.py` and `src/engines/retrieval/recurrence_search.py` for MinHash and LSH document fingerprinting.
+  - **PyJWT Migration:** Migrated from `python-jose` to `PyJWT[crypto]>=2.9.0` across `src/api/auth.py`, `requirements-core.txt`, and `pyproject.toml`, eliminating transitive dependency on `ecdsa` (PYSEC-2026-1325 Minerva timing vulnerability).
+  - **Real Pip-Audit Dependency Scan:** Conducted supply-chain vulnerability audit using `pip-audit` against all 62 resolved dependencies in `requirements-core.txt`; verified 0 known vulnerabilities and published `production/security-audit/pip_audit_report.md` and `pip_audit_results.json`.
+  - **Redis Optionality Correction:** Corrected earlier Phase 2 claim in `STATUS.md` regarding `redis`: confirmed as a real, actively used optional dependency lazily imported in `hierarchical_memory.py` and `semantic_cache.py`.
+  - **Systemic Bare `except Exception: pass` Remediation:** Completed Phase 9 exception audit across `src/engines/semantic/semantic_engine.py`, `src/memory_engine/semantic_cache.py`, `src/engines/context/context_builder.py`, `src/engines/llm/llm_interface.py`, and `src/engines/memory/retriever.py`, replacing silent swallowing with structured warning and debug logging.
 - **Production Hardening & Performance Baselines (Phase 9):**
   - Instrumented `PDFLoader.load()` and all core engines with `time.perf_counter` timing; recorded Phase 9 baseline throughput on real corpus: 14-page / 1.3MB PDF loads in **~71–119ms**, normalization in **~246ms**, all engines combined in **~91ms**, total loader memory **0.14MB** (tracemalloc).
   - Fixed double text-extraction in `src/ingestion/pdf_loader.py`: `_extract_metadata()` previously called `page.get_text()` on the first 5 pages independently, then `load()` called it again on all pages — identified via instrumentation. Fixed by passing pre-extracted `text_parts` into `_extract_metadata()`, eliminating the redundant fitz pass.

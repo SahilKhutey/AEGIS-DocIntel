@@ -53,6 +53,13 @@ actually completed.
   - Real-World Document Validation: Added `tests/test_real_world_ingestion.py` exercising 14-page native research PDF normalization, verifying >30,000 extracted text characters, 14 structured pages, and accurate scanned-status detection.
   - Corrupt Mock Dataset Rejection: Confirmed that application loaders strictly reject invalid/mock benchmark PDFs (raising `FormatError`) rather than silently parsing fake data.
   - Rich Multi-Modality Fixture Suite: Added real, multi-slide presentation (`tests/fixtures/real_presentation.pptx`), multi-sheet spreadsheet with formula columns (`tests/fixtures/real_spreadsheet.xlsx`), and scanned document page (`tests/fixtures/real_scanned_page.png`).
+- **Security Hardening & Real Vulnerability Auditing (Phase 10 Verified)**:
+  - Auth bypass token environment gating (`src/api/auth.py`): `dev-*` JWT bypass and `aegis-dev-key` API key gated strictly behind `AEGIS_ENVIRONMENT=development` (defaulting fail-safe to `production` when unset); regression tests in `tests/test_auth.py`.
+  - Static security analysis: Full scan of 42,761 LOC with Bandit v1.9.4 published in `production/security-audit/bandit_report.md` and `bandit_results.json` with rigorous exploitability tracing.
+  - Non-cryptographic hashing: Explicit `usedforsecurity=False` annotation on all MD5 MinHash/LSH calls in `src/engines/recurrence/recurrence_engine.py` and `src/engines/retrieval/recurrence_search.py`.
+  - Supply-chain dependency audit: `pip-audit` scan of 62 resolved packages in `requirements-core.txt` verified clean (0 CVEs) in `production/security-audit/pip_audit_report.md` and `pip_audit_results.json`.
+  - Transitive vulnerability removal: Migrated from `python-jose` to `PyJWT[crypto]>=2.9.0`, eliminating unfixable upstream `ecdsa` Minerva timing vulnerability (PYSEC-2026-1325).
+  - Exception suppression completion: All bare `except Exception: pass` instances replaced with structured warnings/counters across `src/engines/semantic/semantic_engine.py`, `src/memory_engine/semantic_cache.py`, `src/engines/context/context_builder.py`, `src/engines/llm/llm_interface.py`, and `src/engines/memory/retriever.py`.
 
 ## Layer-by-Layer Implementation Status (Master State D)
 
@@ -151,7 +158,8 @@ derived from MIT-licensed `jsvine/pdfplumber` test fixtures + native research pa
   production deployment.
 - **Penetration test report, threat model, vulnerability scan** — these were
   self-authored narrative documents, not real security testing output. Moved
-  to `_unverified_archive/`. A real security review has not yet happened.
+  to `_unverified_archive/`. Replaced in Phase 10 with authentic `bandit` static
+  analysis and `pip-audit` dependency scanning reports in `production/security-audit/`.
 - **GDPR / SOC 2 / ISO 27001 "COMPLIANT" status** — self-declared, not
   certified by any accredited third party. No organization holds any formal
   compliance certification for this software.
@@ -168,7 +176,7 @@ derived from MIT-licensed `jsvine/pdfplumber` test fixtures + native research pa
 See the [16-phase development roadmap](docs/ROADMAP.md) for the full plan. In short: Phase 7
 builds real ingestion validation, Phase 8 builds a real benchmark dataset,
 Phase 9 publishes real, reproducible performance numbers, and Phase 10
-pursues real security testing.
+implements real security hardening and verified audit publication (completed).
 
 ## What You Can Trust Today
 

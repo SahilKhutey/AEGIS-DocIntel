@@ -466,9 +466,59 @@ All changes have been committed across discrete, atomic Git commits and synchron
 
 ---
 
-## 12. Complete Git Commit History
+## 12. Phase 10 Task Breakdown — Security Hardening (Real)
+
+### Task 10.1 — Auth Bypass Credentials Environment Gating
+- **Vulnerability Identified:** `src/api/auth.py` unconditionally granted `admin` to any `dev-*` JWT and `editor` to `aegis-dev-key` API key without checking execution environment.
+- **Remediation Action:**
+  - Gated development bypass credentials strictly behind `AEGIS_ENVIRONMENT=development`.
+  - Configured fail-safe default: unset or unknown environments default strictly to `"production"`, rejecting all bypass credentials with `401 Unauthorized`.
+  - Added startup warning log when development mode bypass is active.
+  - Added 3 regression tests in `tests/test_auth.py` asserting rejection in production, rejection when unset, and acceptance only when `AEGIS_ENVIRONMENT=development`.
+
+### Task 10.2 — Static Security Analysis & Exploitability Tracing (Bandit)
+- **Execution & Scope:** Scanned all 42,761 LOC in `src/` using Bandit v1.9.4.
+- **Findings Triage & Analysis:**
+  - `src/annotations/store.py:224` (B608): Verified False Positive. Query uses parameterized `?` bindings for user criteria; interpolated `columns` are strictly internal constants.
+  - `src/connectors/local_connector.py:103,189` (B310): Latent configuration risk; endpoint URLs are server-configured only, never exposed to user input.
+  - `src/cli.py`, `src/config.py`, `src/core/config.py` (B104): Binding `0.0.0.0` is an intentional container deployment pattern.
+  - `src/engines/recurrence/` and `src/engines/retrieval/` (B324): MD5 used strictly for MinHash/LSH near-duplicate fingerprinting (non-cryptographic).
+- **Published Artifacts:** [`production/security-audit/bandit_report.md`](../production/security-audit/bandit_report.md) and [`production/security-audit/bandit_results.json`](../production/security-audit/bandit_results.json).
+
+### Task 10.3 — Non-Cryptographic MD5 Annotation (`usedforsecurity=False`)
+- **Remediation:** Marked all `hashlib.md5(..., usedforsecurity=False)` invocations across `src/engines/recurrence/recurrence_engine.py` and `src/engines/retrieval/recurrence_search.py` to formally declare non-security usage and silence scanner heuristics.
+
+### Task 10.4 — Supply-Chain Hardening: PyJWT Migration & Transitive `ecdsa` CVE Removal
+- **Vulnerability Identified:** `python-jose` transitively imported `ecdsa` 0.19.2 containing Minerva timing vulnerability (PYSEC-2026-1325 / CVE-2024-23342) with no upstream fix.
+- **Remediation Action:**
+  - Migrated authentication validation in `src/api/auth.py` to `PyJWT[crypto]>=2.9.0`.
+  - Updated `requirements-core.txt` and `pyproject.toml` to swap `python-jose[cryptography]` for `PyJWT[crypto]>=2.9.0`.
+  - Completely removed the vulnerable transitive `ecdsa` package.
+
+### Task 10.5 — Correction of Phase 2 Claim on `redis`
+- **Correction:** Corrected earlier Phase 2 claim in `STATUS.md` regarding `redis`: confirmed as a real, actively used optional dependency lazily imported in `src/engines/memory/hierarchical_memory.py` and `src/memory_engine/semantic_cache.py`.
+
+### Task 10.6 — Systemic Bare `except Exception: pass` Remediation Completion
+- **Remediation Action:** Completed the Phase 9 exception audit across `src/engines/semantic/semantic_engine.py` (embedding query encoding), `src/memory_engine/semantic_cache.py` (Redis history reading), `src/engines/context/context_builder.py` (tiktoken encoding), `src/engines/llm/llm_interface.py` (token usage extraction), and `src/engines/memory/retriever.py` (embedding similarity calculation), replacing silent swallowing with structured warnings and debug logs.
+
+### Task 10.7 — Real Dependency Vulnerability Audit Publication (pip-audit)
+- **Audit Execution:** Executed `pip-audit` against all 62 resolved dependencies in `requirements-core.txt` using the Python Advisory Database (OSV).
+- **Result:** 0 known vulnerabilities found.
+- **Published Artifacts:** [`production/security-audit/pip_audit_report.md`](../production/security-audit/pip_audit_report.md) and [`production/security-audit/pip_audit_results.json`](../production/security-audit/pip_audit_results.json).
+
+---
+
+## 13. Complete Git Commit History
 
 ```text
+* 4ce9412 docs: publish real pip-audit dependency scan results in production/security-audit/ replacing the fabricated Phase 1 report
+* 58aa8bd fix: replace remaining 'except Exception: pass' instances with logged warnings across src/ — completes the Phase 9 audit; two instances (semantic_engine.py embedding generation, semantic_cache.py Redis reads) flagged for follow-up monitoring given the same risk shape as the Phase 9 table-extraction bug
+* ecf3f91 docs: correct Phase 2 claim — redis is a real, used, optional dependency (lazy-imported in hierarchical_memory.py and semantic_cache.py), not dead weight; earlier anchored grep search missed the indented import
+* 1f4914e security: migrate from python-jose to PyJWT to remove the transitive ecdsa dependency (PYSEC-2026-1325, no fix version available upstream) — not currently exploitable given this project's RS256-only usage, removed as unnecessary supply-chain risk
+* 758d476 chore: mark MD5 usage as usedforsecurity=False in recurrence_engine.py and recurrence_search.py — cosmetic fix for legitimate non-cryptographic MinHash/LSH fingerprinting use
+* b6cbefe docs: publish real bandit static-analysis results with full exploitability tracing — SQL-injection and SSRF findings verified as false-positive/not-currently-reachable, MD5 usage confirmed non-cryptographic (content fingerprinting), 0.0.0.0 binding documented as an intentional containerized-deployment default
+* c396768 fix: CRITICAL — gate development auth-bypass tokens behind an explicit environment check
+* 00687bf fix(test): use asyncio.run in _async helper in test_performance.py for Python 3.12 compatibility
 * fca5792 test: add regression test for table extraction using table-curves-example.pdf — this exact silent-failure mode must never regress unnoticed again
 * 6193cdf feat: publish real PDF pipeline benchmark (60/61 success rate, real latency stats, real naive-baseline comparison) replacing the fabricated Phase 1 performance report
 * 4d04e6d fix: raise a typed EncryptedPDFError for password-protected PDFs instead of letting a generic ValueError bubble up from PyMuPDF internals
