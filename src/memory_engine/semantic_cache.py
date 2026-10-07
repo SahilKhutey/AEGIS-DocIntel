@@ -7,12 +7,15 @@ from __future__ import annotations
 
 import asyncio
 import json
+import logging
 import time
 from typing import Optional
 
 import numpy as np
 
 from src.config import settings
+
+logger = logging.getLogger(__name__)
 
 try:
     import faiss
@@ -186,12 +189,14 @@ class SemanticCache:
 
     async def get_history(self, session_id: str) -> list:
         """Retrieve conversation history (from Redis)."""
+        if self.redis is None:
+            return []
         try:
             key = f"session:{session_id}"
             data = await self.redis.get(key)
             if data:
                 raw = json.loads(data)
                 return [type("Msg", (), m)() for m in raw]
-        except Exception:
-            pass
+        except Exception as e:
+            logger.warning("Failed to retrieve conversation history from Redis for session %s: %s", session_id, e)
         return []

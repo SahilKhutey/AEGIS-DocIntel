@@ -330,8 +330,8 @@ class ContextBuilder:
         if _TIKTOKEN_AVAILABLE and _TIKTOKEN_ENC is not None:
             try:
                 return len(_TIKTOKEN_ENC.encode(text))
-            except Exception:  # pylint: disable=broad-except
-                pass
+            except Exception as e:
+                logger.debug("tiktoken encoding failed: %s; using heuristic fallback", e)
         # Heuristic fallback
         return max(1, int(len(text.split()) * 1.33))
 

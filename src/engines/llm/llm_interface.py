@@ -410,8 +410,8 @@ class LLMInterface:
             if usage:
                 input_tokens = getattr(usage, "prompt_tokens", 0) or 0
                 output_tokens = getattr(usage, "completion_tokens", 0) or 0
-        except Exception:  # pylint: disable=broad-except
-            pass
+        except Exception as e:
+            logger.debug("Failed to extract token usage from response: %s", e)
 
         citations = self._parse_citations(answer)
         grounded = bool(citations) and len(answer) > 20

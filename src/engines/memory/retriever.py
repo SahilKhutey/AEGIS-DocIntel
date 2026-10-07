@@ -11,12 +11,16 @@ Supports:
 - Hybrid retrieval (across multiple levels)
 """
 
-from __future__ import annotations
+from __future__ import annotations
+
+import logging
 
 from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional
 
-import numpy as np
+import numpy as np
+
+logger = logging.getLogger(__name__)
 
 from .access_tracker import AccessTracker
 from .cache import CacheManager
@@ -197,8 +201,8 @@ class MemoryRetriever:
                 if item_emb is not None:
                     sim = embedding_scorer(np.asarray(item_emb), query.embedding)
                     score += 0.5 * float(sim)
-            except Exception:
-                pass
+            except Exception as e:
+                logger.debug("Embedding similarity scoring failed: %s", e)
         # metadata filter boost
         if query.metadata_filter and isinstance(item.data, dict):
             if all(item.data.get(k) == v for k, v in query.metadata_filter.items()):

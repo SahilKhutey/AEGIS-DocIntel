@@ -277,8 +277,8 @@ class EmbeddingService:
                     )[0],
                     dtype=np.float32,
                 )
-            except Exception:
-                pass
+            except Exception as e:
+                logger.warning("BGE query encoding failed: %s. Using hash fallback.", e)
         return self._hash_embed_batch([query])[0]
 
     def _hash_embed_batch(self, texts: list[str]) -> np.ndarray:
