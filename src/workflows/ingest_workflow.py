@@ -145,10 +145,15 @@ class IngestWorkflow:
         source: str | Path | bytes | DocumentObject,
         filename: str = '',
         format: DocumentFormat | None = None,
+        profile_memory: bool = False,
     ) -> dict:
         '''Run full ingestion pipeline.'''
         timings = {}
         t_start = time.perf_counter()
+
+        import tracemalloc
+        if profile_memory:
+            tracemalloc.start()
 
         # Phase 1: Load
         t0 = time.perf_counter()
@@ -246,6 +251,14 @@ class IngestWorkflow:
 
         # Total
         timings['total_s'] = round(time.perf_counter() - t_start, 3)
+
+        if profile_memory:
+            snapshot = tracemalloc.take_snapshot()
+            tracemalloc.stop()
+            top_stats = snapshot.statistics('lineno')
+            timings['memory_peak_bytes'] = sum(stat.size for stat in top_stats)
+            timings['memory_peak_mb'] = round(timings['memory_peak_bytes'] / (1024 * 1024), 2)
+            timings['top_allocators'] = [f"{s.size/1024:.1f}KB {s.traceback[0]}" for s in top_stats[:5]]
 
         master_state = self.get_master_state()
         res_data = {
