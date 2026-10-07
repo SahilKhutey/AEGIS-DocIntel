@@ -36,7 +36,7 @@ structlog>=24.1.0
 loguru>=0.7.2
 
 # Utilities
-python-jose[cryptography]>=3.3.0
+PyJWT[crypto]>=2.9.0
 passlib[bcrypt]>=1.7.4
 tiktoken>=0.6.0
 numpy>=1.26.0
