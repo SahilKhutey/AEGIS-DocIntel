@@ -9,6 +9,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.1.0-alpha.1] - October 2026
 
 ### Added
+- **Production Hardening & Performance Baselines (Phase 9):**
+  - Instrumented `PDFLoader.load()` and all core engines with `time.perf_counter` timing; recorded Phase 9 baseline throughput on real corpus: 14-page / 1.3MB PDF loads in **~71–119ms**, normalization in **~246ms**, all engines combined in **~91ms**, total loader memory **0.14MB** (tracemalloc).
+  - Fixed double text-extraction in `src/ingestion/pdf_loader.py`: `_extract_metadata()` previously called `page.get_text()` on the first 5 pages independently, then `load()` called it again on all pages — identified via instrumentation. Fixed by passing pre-extracted `text_parts` into `_extract_metadata()`, eliminating the redundant fitz pass.
+  - Fixed `PDFLoader.validate()` to scan the first 1024 bytes instead of `startswith()`, so Ghostscript-style PDFs that prepend a version comment before the `%PDF-` marker are correctly accepted.
+  - Added `tests/test_performance.py` with 5 `@pytest.mark.slow` regression tests: time budget (10s ceiling), double-extraction fix verification, Ghostscript-header validate() fix, 500MB memory budget, and char_count accuracy guard. All 5 pass in 2.58s.
+  - Added `performance` CI job to [`.github/workflows/ci.yml`](.github/workflows/ci.yml): runs only on `main` branch pushes after the test job passes; executes `pytest tests/test_performance.py -m slow` and uploads `timing_results.csv` as a build artifact.
+  - Added `scripts/run_benchmark.py`: evaluation harness that runs all loaders against `production/benchmark-dataset-real/{pdf-corpus,docx-corpus}` and writes real timing data to `production/benchmark-dataset-real/timing_results.csv`.
+  - Seeded `production/benchmark-dataset-real/pdf-corpus/` with `real_research_paper.pdf` (14 pages, 1.3MB, 34,671 chars); benchmark harness confirmed: 118.7ms load, 0 errors, correct structured output.
+  - Registered `slow` pytest marker in `[tool.pytest.ini_options]` in `pyproject.toml` to prevent `PytestUnknownMarkWarning`.
+
 - **Formal Verification Baseline:** Added [`STATUS.md`](STATUS.md) detailing verified capabilities, known issues, and quarantined items.
 - **16-Phase Roadmap:** Added [`docs/ROADMAP.md`](docs/ROADMAP.md) detailing the step-by-step path to production readiness.
 - **Development Log:** Added [`docs/DEVLOG.md`](docs/DEVLOG.md) tracking tasks, findings, and test verification results.
