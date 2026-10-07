@@ -14,12 +14,15 @@ actually completed.
   Real implementations across topology, spectral graph theory, information
   theory, optimization, tensor decomposition, and more. Independently
   confirmed by reading the source and running the test suite.
-- **Build & Dependency Tiers (Phase 2 Verified)**:
+- **Build & Dependency Tiers (Phase 2 Verified & Phase 10 Corrected)**:
   Dependencies cleanly tiered into `requirements-core.txt`, `requirements-ml.txt`,
   `requirements-infra.txt`, and `requirements-dev.txt`, with `requirements.txt`
   serving as a compatibility shim. Missing runtime packages (`networkx`, `scipy`,
   `scikit-learn`, `loguru`) and dev tooling (`pytest`, `pytest-asyncio`) are now
   formally declared and locked in `requirements-core.lock.txt`.
+  *(Phase 10 Correction)*: `redis` is a real, used, optional dependency (lazy-imported
+  in `src/engines/memory/hierarchical_memory.py` and `src/memory_engine/semantic_cache.py`),
+  not dead weight; earlier anchored grep search missed the indented runtime import.
 - **Test suite**: 1,030 tests passing, 2 skipped, 1 warning, verified against clean install:
   `pip install -r requirements-core.txt -r requirements-dev.txt && pytest tests/ --ignore=tests/test_multimodal.py`
 - **CI pipeline (Phase 3 & 6 Verified)**: Every push/PR runs lint (`ruff`), type-check (`mypy`),
