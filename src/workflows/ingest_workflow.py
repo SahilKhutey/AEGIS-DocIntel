@@ -490,8 +490,8 @@ class IngestWorkflow:
     @staticmethod
     def _extract_tables(page_obj, page: NormalizedPage):
         try:
-            import pdfplumber
-            with pdfplumber.open(stream=page_obj.parent.to_bytes()) as pdf:
+            import pdfplumber, io
+            with pdfplumber.open(io.BytesIO(page_obj.parent.tobytes())) as pdf:
                 pl_page = pdf.pages[page_obj.number]
                 for table in pl_page.find_tables():
                     rows = table.extract()
@@ -503,8 +503,8 @@ class IngestWorkflow:
                         bbox=BoundingBox(*table.bbox),
                         page=page.page_number,
                     ))
-        except Exception:
-            pass
+        except Exception as e:
+            logger.warning(f"Table extraction failed for page {page.page_number} of {getattr(page_obj.parent, 'name', 'document')}: {e}")
 
     @staticmethod
     def _rows_to_md(rows: list[list[str]]) -> str:
