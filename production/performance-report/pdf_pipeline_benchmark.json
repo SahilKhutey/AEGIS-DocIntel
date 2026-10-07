@@ -1,0 +1,29 @@
+{
+  "run_date": "2026-10-07 04:10:45 UTC",
+  "corpus": "production/benchmark-dataset-real/pdf-corpus",
+  "documents_tested": 62,
+  "documents_excluded": [
+    "empty.pdf (deliberate invalid-input edge case)"
+  ],
+  "pipeline_success_rate": "61/62 (98.4%)",
+  "known_failure": "password-example.pdf \u2014 encrypted PDF, handled via typed EncryptedPDFError",
+  "latency_seconds": {
+    "mean": 1.222,
+    "median": 0.243,
+    "p95": 4.339,
+    "max": 23.584
+  },
+  "naive_baseline_latency_seconds": {
+    "mean": 0.018,
+    "median": 0.006
+  },
+  "pipeline_slowdown_vs_naive": "67.9x",
+  "table_extraction": {
+    "status_before_fix": "0/61 documents \u2014 silent 100% failure due to PyMuPDF to_bytes() and pdfplumber open(stream=...) swallowed by bare except",
+    "status_after_fix": "220 total tables detected across 29 documents (spot-checked: table-curves-example.pdf=1, federal-register-2020-17221.pdf=1, issue-982-example.pdf=0)",
+    "total_tables_detected": 220,
+    "documents_with_tables": 29
+  },
+  "methodology": "Full IngestWorkflow._normalize_pdf executed against every valid corpus document; naive baseline is fitz's raw get_text(). Raw per-document metrics saved in pdf_pipeline_benchmark_raw.json.",
+  "reproduce": "python scripts/run_benchmark.py --corpus production/benchmark-dataset-real/pdf-corpus"
+}
