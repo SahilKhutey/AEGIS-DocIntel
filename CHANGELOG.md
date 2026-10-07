@@ -16,8 +16,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Added `tests/test_performance.py` with 5 `@pytest.mark.slow` regression tests: time budget (10s ceiling), double-extraction fix verification, Ghostscript-header validate() fix, 500MB memory budget, and char_count accuracy guard. All 5 pass in 2.58s.
   - Added `performance` CI job to [`.github/workflows/ci.yml`](.github/workflows/ci.yml): runs only on `main` branch pushes after the test job passes; executes `pytest tests/test_performance.py -m slow` and uploads `timing_results.csv` as a build artifact.
   - Added `scripts/run_benchmark.py`: evaluation harness that runs all loaders against `production/benchmark-dataset-real/{pdf-corpus,docx-corpus}` and writes real timing data to `production/benchmark-dataset-real/timing_results.csv`.
-  - Seeded `production/benchmark-dataset-real/pdf-corpus/` with `real_research_paper.pdf` (14 pages, 1.3MB, 34,671 chars); benchmark harness confirmed: 118.7ms load, 0 errors, correct structured output.
-  - Registered `slow` pytest marker in `[tool.pytest.ini_options]` in `pyproject.toml` to prevent `PytestUnknownMarkWarning`.
+  - Fixed critical table extraction bug in `src/workflows/ingest_workflow.py`: `_extract_tables()` called non-existent `page_obj.parent.to_bytes()` and `pdfplumber.open(stream=...)` (no such parameter), silently swallowed by bare `except Exception: pass`. Fixed to `pdfplumber.open(io.BytesIO(page_obj.parent.tobytes()))` and added logged warnings, turning 0 detected tables into 220 tables detected across 29 documents.
+  - Sourced real 62-document test corpus from MIT-licensed `jsvine/pdfplumber` test suite, populated `production/benchmark-dataset-real/pdf-corpus/`, and added `PROVENANCE.md` and `LICENSE.txt`.
+  - Added regression test suite [`tests/test_table_extraction_regression.py`](tests/test_table_extraction_regression.py) asserting table extraction on `table-curves-example.pdf` and `federal-register-2020-17221.pdf`.
+  - Audited and eliminated bare `except Exception: pass` pattern across `src/`, replacing silent swallowing with structured warnings or debug logs.
+  - Added typed `EncryptedPDFError` in `src/ingestion/exceptions.py` to handle encrypted PDFs with clear actionable errors instead of raw PyMuPDF `ValueError`.
+  - Published real benchmark reports in `production/performance-report/pdf_pipeline_benchmark.json` and `pdf_pipeline_benchmark_raw.json` with 61/62 (98.4%) success rate, replacing quarantined Phase 1 synthetic reports.
+  - Corrected Phase 7 import diagnosis: aliased `ResponseVerificationLayer` as `ResponseVerifier` and exposed `CONNECTOR_REGISTRY = ConnectorFactory.REGISTRY`.
 
 - **Formal Verification Baseline:** Added [`STATUS.md`](STATUS.md) detailing verified capabilities, known issues, and quarantined items.
 - **16-Phase Roadmap:** Added [`docs/ROADMAP.md`](docs/ROADMAP.md) detailing the step-by-step path to production readiness.

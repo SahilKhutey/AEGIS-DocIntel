@@ -442,11 +442,40 @@ All changes have been committed across discrete, atomic Git commits and synchron
 
 **Seeded:** `production/benchmark-dataset-real/pdf-corpus/real_research_paper.pdf` (14 pages, 1.3MB, 34,671 chars). Benchmark run confirmed: **118.7ms load, 0 errors**, correctly structured output.
 
+### Task 9.7 — Table-Extraction Silent Failure Remediation & Verification
+
+**Problem:** Full corpus benchmarking revealed 0 tables detected across all 61 PDFs, despite dedicated test documents (`table-curves-example.pdf`). Tracing revealed `page_obj.parent.to_bytes()` (`AttributeError`) and `pdfplumber.open(stream=...)` (`TypeError`), both silently swallowed by `except Exception: pass`.
+**Remediation:** Fixed to `pdfplumber.open(io.BytesIO(page_obj.parent.tobytes()))` and added `logger.warning`.
+**Verification:** Re-ran against full 62-document corpus: 220 tables detected across 29 documents (`table-curves-example.pdf`=1, `federal-register-2020-17221.pdf`=1, `issue-982-example.pdf`=0).
+
+### Task 9.8 — Bare `except Exception: pass` Systemic Audit
+
+**Remediation:** Audited full `src/` codebase for silent exception-swallowing anti-patterns. Replaced silent `pass` blocks with logged warnings or debug logs across `ingest_workflow.py`, `pdf_loader.py`, `fallback_parser.py`, `sniff.py`, `batch_workflow.py`, `connector_base.py`, and `orchestrator.py`.
+
+### Task 9.9 — Typed `EncryptedPDFError` Exception Hierarchy
+
+**Remediation:** Replaced PyMuPDF internal `ValueError: document closed or encrypted` on `password-example.pdf` with strictly typed `EncryptedPDFError` inheriting from `EncryptedDocumentError` and `IngestionError`.
+
+### Task 9.10 — Real 62-Document Corpus Benchmark Publication
+
+**Published Artifacts:**
+- [`production/performance-report/pdf_pipeline_benchmark.json`](../production/performance-report/pdf_pipeline_benchmark.json)
+- [`production/performance-report/pdf_pipeline_benchmark_raw.json`](../production/performance-report/pdf_pipeline_benchmark_raw.json)
+- [`production/benchmark-dataset-real/PROVENANCE.md`](../production/benchmark-dataset-real/PROVENANCE.md)
+- [`tests/test_table_extraction_regression.py`](../tests/test_table_extraction_regression.py)
+
 ---
 
 ## 12. Complete Git Commit History
 
 ```text
+* fca5792 test: add regression test for table extraction using table-curves-example.pdf — this exact silent-failure mode must never regress unnoticed again
+* 6193cdf feat: publish real PDF pipeline benchmark (60/61 success rate, real latency stats, real naive-baseline comparison) replacing the fabricated Phase 1 performance report
+* 4d04e6d fix: raise a typed EncryptedPDFError for password-protected PDFs instead of letting a generic ValueError bubble up from PyMuPDF internals
+* 8c4f52b fix: replace bare 'except Exception: pass' with logged warnings across src/ — this exact pattern hid the table-extraction bug above; audited for other instances of the same anti-pattern
+* bc0285a fix: table extraction was silently 100% broken — _extract_tables called PyMuPDF's to_bytes() (does not exist; real method is tobytes()) and pdfplumber.open(stream=...) (no such parameter), both hidden by a bare except Exception: pass
+* 3edc59e docs: correct Phase 7 diagnosis — ResponseVerifier and CONNECTOR_REGISTRY were misnamed/unexposed, not missing; real minimal fixes applied (see this commit)
+* 7afccf0 docs: update STATUS.md, CHANGELOG.md, docs/DEVLOG.md with Phase 9 real production metrics — throughput, memory, P95 latency, error rate
 * 2b0c3fd test: add tests/test_performance.py with time and memory regression guards marked @pytest.mark.slow; add performance CI job to .github/workflows/ci.yml
 * 42351ca perf: add tracemalloc memory profiling to IngestWorkflow; record top-5 allocators; fix largest wasteful allocation (raw_bytes stored twice in pdf_loader)
 * 75d25a7 fix: eliminate double text-extraction in PDFLoader.load() (fitz was called once per page and once for full document) — reduces per-document CPU time by ~40% on 15-page documents
