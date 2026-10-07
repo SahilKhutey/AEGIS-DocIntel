@@ -35,3 +35,6 @@ root_dir = str(Path(__file__).parent.parent.resolve())
 # Prioritize the root directory to import from the unified 'src' folder
 if root_dir not in sys.path:
     sys.path.insert(0, root_dir)
+
+# Default to development mode in pytest test sessions so test stubs function
+os.environ.setdefault("AEGIS_ENVIRONMENT", "development")

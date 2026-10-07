@@ -75,3 +75,45 @@ async def test_require_role():
     with pytest.raises(HTTPException) as exc_info:
         await check_admin(tenant=tenant_viewer)
     assert exc_info.value.status_code == 403
+
+
+def test_auth_bypass_rejected_in_production(monkeypatch):
+    """CRITICAL SECURITY: In production mode, dev auth bypass tokens MUST be rejected."""
+    monkeypatch.setenv("AEGIS_ENVIRONMENT", "production")
+
+    with pytest.raises(HTTPException) as jwt_exc:
+        _validate_jwt("dev-tenant-123")
+    assert jwt_exc.value.status_code == 401
+    assert "JWT validation not configured" in jwt_exc.value.detail
+
+    with pytest.raises(HTTPException) as key_exc:
+        _validate_api_key("aegis-dev-key")
+    assert key_exc.value.status_code == 401
+    assert "Invalid API key" in key_exc.value.detail
+
+
+def test_auth_bypass_rejected_when_environment_unset(monkeypatch):
+    """CRITICAL SECURITY: When AEGIS_ENVIRONMENT is unset, fail-safe default is production."""
+    monkeypatch.delenv("AEGIS_ENVIRONMENT", raising=False)
+
+    with pytest.raises(HTTPException) as jwt_exc:
+        _validate_jwt("dev-tenant-123")
+    assert jwt_exc.value.status_code == 401
+
+    with pytest.raises(HTTPException) as key_exc:
+        _validate_api_key("aegis-dev-key")
+    assert key_exc.value.status_code == 401
+
+
+def test_auth_bypass_allowed_in_development(monkeypatch):
+    """In explicit development mode, dev auth bypass tokens are accepted."""
+    monkeypatch.setenv("AEGIS_ENVIRONMENT", "development")
+
+    jwt_ctx = _validate_jwt("dev-tenant-xyz")
+    assert jwt_ctx.tenant_id == "tenant-xyz"
+    assert jwt_ctx.role == "admin"
+
+    key_ctx = _validate_api_key("aegis-dev-key")
+    assert key_ctx.tenant_id == "default-tenant"
+    assert key_ctx.role == "editor"
+

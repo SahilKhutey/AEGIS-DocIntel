@@ -46,13 +46,25 @@ async def get_current_tenant(
     )
 
 
+import logging
+import os
+
+logger = logging.getLogger("aegis.api.auth")
+if os.environ.get("AEGIS_ENVIRONMENT", "production").lower() == "development":
+    logger.warning(
+        "SECURITY WARNING: AEGIS_ENVIRONMENT=development active. "
+        "Development auth-bypass credentials ('dev-*', 'aegis-dev-key') are ENABLED."
+    )
+
+
 def _validate_jwt(token: str) -> TenantContext:
     """
     Validate RS256 JWT token.
-    In production: use python-jose with RS256 public key from Keycloak/Auth0.
+    In development: accept 'dev-{tenant_id}' tokens when explicitly enabled.
+    In production: validate RS256 JWT via PyJWT with public key.
     """
-    # DEVELOPMENT STUB: accept any "dev-{tenant_id}" token
-    if token.startswith("dev-"):
+    env = os.environ.get("AEGIS_ENVIRONMENT", "production").lower()
+    if env == "development" and token.startswith("dev-"):
         tenant_id = token[4:] or "default-tenant"
         return TenantContext(
             tenant_id=tenant_id,
@@ -60,25 +72,29 @@ def _validate_jwt(token: str) -> TenantContext:
             role="admin",
         )
 
-    # Production: decode and verify JWT
+    # Production / non-dev: decode and verify JWT using PyJWT
     try:
-        from jose import jwt, JWTError
-        # payload = jwt.decode(token, PUBLIC_KEY, algorithms=["RS256"])
-        # return TenantContext(tenant_id=payload["tenant_id"], ...)
-        raise HTTPException(status_code=401, detail="JWT validation not configured")
+        import jwt
+        # TODO: real RS256 validation against a configured public key
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="JWT validation not configured",
+        )
     except ImportError:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="python-jose not installed. Cannot validate JWT.",
+            detail="PyJWT not installed. Cannot validate JWT.",
         )
 
 
 def _validate_api_key(api_key: str) -> TenantContext:
     """
-    Validate API key (hash lookup in Postgres).
-    Development: accept "aegis-dev-key" for testing.
+    Validate API key.
+    In development: accept 'aegis-dev-key' when explicitly enabled.
+    In production: hash lookup against secure store.
     """
-    if api_key == "aegis-dev-key":
+    env = os.environ.get("AEGIS_ENVIRONMENT", "production").lower()
+    if env == "development" and api_key == "aegis-dev-key":
         return TenantContext(
             tenant_id="default-tenant",
             user_id="api-user",
