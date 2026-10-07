@@ -34,7 +34,7 @@ REAL_DOCX = Path("tests/fixtures/real_presentation.pptx")  # used as DOCX surrog
 
 def _async(coro):
     """Run a coroutine synchronously (for use in non-async test functions)."""
-    return asyncio.get_event_loop().run_until_complete(coro)
+    return asyncio.run(coro)
 
 
 # ---------------------------------------------------------------------------
