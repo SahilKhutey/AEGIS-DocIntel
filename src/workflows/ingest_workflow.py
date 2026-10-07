@@ -31,7 +31,7 @@ from src.engines.semantic.semantic_engine import EmbeddingService, SemanticEngin
 
 from src.engines.memory.hierarchical_memory import HierarchicalMemory
 from src.engines.vector_db.faiss_store import FAISSStore as FaissStore
-from src.ingestion.exceptions import IngestionError, DocumentCorruptError
+from src.ingestion.exceptions import IngestionError, DocumentCorruptError, EncryptedPDFError
 from src.core.master_state import MasterState, PageRepresentation, Element, LayerStatus
 from src.ingestion.service import IngestionService
 from src.normalization.cleaner import TextCleaner
@@ -293,56 +293,76 @@ class IngestWorkflow:
     async def _normalize_pdf(self, doc: DocumentObject) -> NormalizedDocument:
         import fitz
         normalized = NormalizedDocument(doc_id=doc.doc_id, filename=doc.filename)
-        pdf = fitz.open(stream=doc.raw_bytes, filetype='pdf')
-        for page_index in range(len(pdf)):
-            page_obj = pdf[page_index]
-            page = NormalizedPage(
-                page_number=page_index + 1,
-                width=page_obj.rect.width,
-                height=page_obj.rect.height,
-            )
-            text_dict = page_obj.get_text('dict')
-            for block in text_dict.get('blocks', []):
-                if block.get('type') == 0:
-                    text = self._reconstruct_text(block)
-                    if not text.strip():
-                        continue
-                    bbox = block.get('bbox', (0, 0, 0, 0))
-                    btype = self._classify_block(text, bbox, page.height)
-                    page.blocks.append(NormalizedBlock(
-                        type=btype,
-                        text=self.cleaner.clean(text),
-                        bbox=BoundingBox(*bbox[:4]),
-                        page=page.page_number,
-                    ))
-                elif block.get('type') == 1:
-                    bbox = block.get('bbox', (0, 0, 0, 0))
-                    page.blocks.append(NormalizedBlock(
-                        type=BlockType.FIGURE, text='',
-                        bbox=BoundingBox(*bbox[:4]),
-                        page=page.page_number,
-                    ))
-            # Tables
-            self._extract_tables(page_obj, page)
-            # OCR fallback
-            if len(page.text.strip()) < 50:
-                try:
-                    pix = page_obj.get_pixmap(dpi=150)
-                    page.page_image = pix.tobytes('png')
-                    page.is_scanned = True
-                    ocr_text = await self.ocr.recognize(page.page_image)
-                    if ocr_text:
-                        page.blocks.insert(0, NormalizedBlock(
-                            type=BlockType.TEXT,
-                            text=self.cleaner.clean(ocr_text),
+        try:
+            pdf = fitz.open(stream=doc.raw_bytes, filetype='pdf')
+            if getattr(pdf, 'is_encrypted', False) or getattr(pdf, 'needs_pass', False):
+                if not getattr(pdf, 'authenticate', lambda x: False)(''):
+                    raise EncryptedPDFError(
+                        f"{doc.filename} is password-protected and cannot be processed",
+                        filename=doc.filename,
+                    )
+        except Exception as exc:
+            if not isinstance(exc, EncryptedPDFError):
+                err_msg = str(exc).lower()
+                if "password" in err_msg or "encrypted" in err_msg:
+                    raise EncryptedPDFError(
+                        f"{doc.filename} is password-protected and cannot be processed: {exc}",
+                        filename=doc.filename,
+                    ) from exc
+                raise IngestionError(f"Failed to open PDF {doc.filename}: {exc}", filename=doc.filename) from exc
+            raise
+
+        try:
+            for page_index in range(len(pdf)):
+                page_obj = pdf[page_index]
+                page = NormalizedPage(
+                    page_number=page_index + 1,
+                    width=page_obj.rect.width,
+                    height=page_obj.rect.height,
+                )
+                text_dict = page_obj.get_text('dict')
+                for block in text_dict.get('blocks', []):
+                    if block.get('type') == 0:
+                        text = self._reconstruct_text(block)
+                        if not text.strip():
+                            continue
+                        bbox = block.get('bbox', (0, 0, 0, 0))
+                        btype = self._classify_block(text, bbox, page.height)
+                        page.blocks.append(NormalizedBlock(
+                            type=btype,
+                            text=self.cleaner.clean(text),
+                            bbox=BoundingBox(*bbox[:4]),
                             page=page.page_number,
                         ))
-                except Exception:
-                    pass
-            # Layout analysis
-            page = self.layout_detector.analyze(page)
-            normalized.pages.append(page)
-        pdf.close()
+                    elif block.get('type') == 1:
+                        bbox = block.get('bbox', (0, 0, 0, 0))
+                        page.blocks.append(NormalizedBlock(
+                            type=BlockType.FIGURE, text='',
+                            bbox=BoundingBox(*bbox[:4]),
+                            page=page.page_number,
+                        ))
+                # Tables
+                self._extract_tables(page_obj, page)
+                # OCR fallback
+                if len(page.text.strip()) < 50:
+                    try:
+                        pix = page_obj.get_pixmap(dpi=150)
+                        page.page_image = pix.tobytes('png')
+                        page.is_scanned = True
+                        ocr_text = await self.ocr.recognize(page.page_image)
+                        if ocr_text:
+                            page.blocks.insert(0, NormalizedBlock(
+                                type=BlockType.TEXT,
+                                text=self.cleaner.clean(ocr_text),
+                                page=page.page_number,
+                            ))
+                    except Exception as ocr_err:
+                        logger.warning(f"OCR fallback failed on page {page.page_number} of {doc.filename}: {ocr_err}")
+                # Layout analysis
+                page = self.layout_detector.analyze(page)
+                normalized.pages.append(page)
+        finally:
+            pdf.close()
         return normalized
 
     async def _normalize_docx(self, doc: DocumentObject) -> NormalizedDocument:

@@ -37,6 +37,11 @@ class EncryptedDocumentError(LoaderError):
     pass
 
 
+class EncryptedPDFError(EncryptedDocumentError):
+    """Raised when a PDF document requires password authentication or is encrypted."""
+    pass
+
+
 class UnsupportedFormatError(LoaderError):
     """Raised when the document format is unrecognized or not supported by any loader."""
     pass
