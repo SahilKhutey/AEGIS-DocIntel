@@ -18,8 +18,8 @@ from src.ael.ueo import (
     SemanticLayer, GeometryLayer, MatrixLayer, GraphLayer,
     TemplateLayer, KeyPoint, Citation, Confidence,
 )
-from src.connectors import get_connector, CONNECTOR_REGISTRY
-from src.ael.verification import ResponseVerifier
+from src.connectors.connector_factory import get_connector, CONNECTOR_REGISTRY
+from src.ael.verification import ResponseVerificationLayer as ResponseVerifier
 from src.workflows.ingest_workflow import IngestWorkflow
 from src.workflows.query_workflow import QueryWorkflow
 
