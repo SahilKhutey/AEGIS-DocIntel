@@ -226,7 +226,7 @@ class RecurrenceSearch:
 
             end = start + self.rows_per_band
 
-            band_hash = int(hashlib.md5(sig[start:end].tobytes()).hexdigest(), 16)
+            band_hash = int(hashlib.md5(sig[start:end].tobytes(), usedforsecurity=False).hexdigest(), 16)
 
             self.buckets[band_idx][band_hash].add(item_id)
 
@@ -274,7 +274,7 @@ class RecurrenceSearch:
 
             end = start + self.rows_per_band
 
-            band_hash = int(hashlib.md5(sig[start:end].tobytes()).hexdigest(), 16)
+            band_hash = int(hashlib.md5(sig[start:end].tobytes(), usedforsecurity=False).hexdigest(), 16)
 
             for cand_id in self.buckets[band_idx].get(band_hash, []):
 

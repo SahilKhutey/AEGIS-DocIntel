@@ -49,7 +49,7 @@ class MinHasher:
     def signature(self, tokens: set[str]) -> np.ndarray:
         sig = np.full(self.n_perm, np.iinfo(np.int64).max, dtype=np.int64)
         for tok in tokens:
-            h = int(hashlib.md5(tok.encode()).hexdigest(), 16) & 0x7FFFFFFF
+            h = int(hashlib.md5(tok.encode(), usedforsecurity=False).hexdigest(), 16) & 0x7FFFFFFF
             vals = (self._a * h + self._b) % self._p
             sig = np.minimum(sig, vals)
         return sig
@@ -369,7 +369,7 @@ class RecurrenceEngine:
         col_count = max(line.count("|") for line in lines)
         # Use first row as signature
         first_row = lines[0] if lines else ""
-        return f"{col_count}_{hashlib.md5(first_row.encode()).hexdigest()[:8]}"
+        return f"{col_count}_{hashlib.md5(first_row.encode(), usedforsecurity=False).hexdigest()[:8]}"
 
     # ============================================================
     # 5. DUPLICATE DETECTION
