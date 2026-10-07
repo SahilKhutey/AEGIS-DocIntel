@@ -98,6 +98,10 @@ filterwarnings = [
     "ignore::DeprecationWarning",
     "ignore::PendingDeprecationWarning",
 ]
+# Register custom marks — run slow tests explicitly: pytest tests/test_performance.py -m slow
+markers = [
+    "slow: marks tests as slow performance regression guards (deselect with '-m not slow')",
+]
 
 [tool.ruff]
 line-length = 100
