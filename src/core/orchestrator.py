@@ -878,8 +878,8 @@ class AMDIOrchestrator:
         if self._memory is not None:
             try:
                 await self._call_maybe_async(self._memory.set, cache_key, response)
-            except Exception:
-                pass
+            except Exception as mem_err:
+                log.warning("Memory caching of query result failed: %s", mem_err)
 
         log.info(
             "query: completed latency_ms=%d grounded=%s",
@@ -931,8 +931,8 @@ class AMDIOrchestrator:
         if self._vector_store is not None:
             try:
                 await self._vector_store.close()
-            except Exception:
-                pass
+            except Exception as vs_err:
+                log.warning("Vector store close failed: %s", vs_err)
 
         for attr in (
             "_geometry", "_recurrence", "_frequency", "_matrix", "_template",
@@ -944,8 +944,8 @@ class AMDIOrchestrator:
             if engine is not None and hasattr(engine, "close"):
                 try:
                     await self._call_maybe_async(engine.close)
-                except Exception:
-                    pass
+                except Exception as close_err:
+                    log.warning("Engine close failed for %s: %s", attr, close_err)
 
         log.info("AMDIOrchestrator: closed")
 

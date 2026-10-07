@@ -112,8 +112,9 @@ class HierarchicalMemory:
         if self.redis is not None:
             try:
                 await self.redis.close()
-            except Exception:
-                pass
+            except Exception as redis_err:
+                import logging
+                logging.getLogger(__name__).warning(f"Redis close failed: {redis_err}")
             self.redis = None
 
     async def put(self, key: str, value: Any, level: int | MemoryLevel = MemoryLevel.L5_SUMMARIES, importance: float = 0.5) -> None:

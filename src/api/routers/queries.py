@@ -201,6 +201,6 @@ async def query_websocket(
         log.error("WebSocket error", error=str(e), session=str(session_id))
         try:
             await websocket.send_json({"type": "error", "error": str(e)})
-        except Exception:
-            pass
+        except Exception as ws_err:
+            log.warning("Failed to send error payload over WebSocket: %s", ws_err)
 

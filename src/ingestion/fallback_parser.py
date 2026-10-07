@@ -111,8 +111,8 @@ class FallbackParser:
                 clean = self._clean_text(latin_text)
                 if clean:
                     return clean, "latin-1"
-        except Exception:
-            pass
+        except Exception as exc:
+            logger.debug(f"Tier 4 latin-1 decode failed: {exc}")
 
 
         # Tier 5: Windows-1252 with replace
@@ -123,8 +123,8 @@ class FallbackParser:
                 clean = self._clean_text(text)
                 if clean:
                     return clean, "cp1252"
-        except Exception:
-            pass
+        except Exception as exc:
+            logger.debug(f"Tier 5 cp1252 decode failed: {exc}")
 
         # Tier 6: Binary strings extraction (regex match on ASCII printable blocks)
         try:

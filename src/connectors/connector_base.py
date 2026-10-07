@@ -284,8 +284,8 @@ class BaseConnector(abc.ABC):
                 md_context = MarkdownExporter.export(ueo)
                 if md_context:
                     user_parts.append(f"Context:\n{md_context}")
-            except Exception:
-                pass
+            except Exception as exp_err:
+                logger.warning(f"Markdown fallback export failed: {exp_err}")
 
         if getattr(ueo, "citations", None):
             cit_items = []

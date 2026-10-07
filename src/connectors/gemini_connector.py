@@ -171,6 +171,6 @@ class GeminiConnector(BaseConnector):
             if self._genai is not None and self.config.api_key:
                 model = self._genai.GenerativeModel(self.config.model)
                 return int(model.count_tokens(text).total_tokens)
-        except Exception:
-            pass
+        except Exception as exc:
+            logger.debug("Gemini count_tokens remote call failed: %s", exc)
         return max(1, int(len(text) / 4))

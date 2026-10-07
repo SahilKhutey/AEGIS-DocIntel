@@ -159,6 +159,6 @@ class BatchWorkflow:
         for wf in self._workflows.values():
             try:
                 await wf.shutdown()
-            except Exception:
-                pass
+            except Exception as exc:
+                logger.warning(f"Workflow shutdown failed during close_all: {exc}")
         self._workflows.clear()

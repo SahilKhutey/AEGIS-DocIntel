@@ -415,8 +415,8 @@ def _clone_block_with(block: NormalizedBlock, **overrides) -> NormalizedBlock:
         import dataclasses
         if dataclasses.is_dataclass(block):
             return dataclasses.replace(block, **overrides)
-    except Exception:
-        pass
+    except Exception as rep_err:
+        log.debug("dataclasses.replace failed, falling back to manual copy: %s", rep_err)
 
     # Manual copy path
     init_fields = {

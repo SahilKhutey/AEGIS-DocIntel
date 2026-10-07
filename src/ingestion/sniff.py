@@ -290,8 +290,8 @@ def _sniff_zip_structure(raw_bytes: bytes, filename: str) -> Optional[SniffResul
                             is_binary=True,
                             details="[Content_Types].xml specifies presentationml",
                         )
-                except Exception:
-                    pass
+                except Exception as ct_err:
+                    logger.debug(f"Failed to inspect [Content_Types].xml in zip: {ct_err}")
 
     except zipfile.BadZipFile:
         # Broken or truncated zip file
@@ -377,8 +377,8 @@ def _sniff_text_format(raw_bytes: bytes, filename: str) -> Optional[SniffResult]
                 is_binary=False,
                 details="Valid JSON text",
             )
-        except Exception:
-            pass
+        except Exception as json_err:
+            logger.debug(f"Sniffer text is not valid JSON: {json_err}")
 
     # Markdown
     ext = Path(filename).suffix.lower() if filename else ""

@@ -178,8 +178,8 @@ class PDFLoader(BaseLoader):
                         {"level": lvl, "title": title, "page": page}
                         for lvl, title, page in toc[:50]
                     ]
-            except Exception:
-                pass
+            except Exception as toc_err:
+                logger.debug(f"PDF outline/TOC extraction failed: {toc_err}")
         except Exception as e:
             logger.warning(f"PDF metadata extraction failed: {e}")
             metadata["page_count"] = len(pdf) if pdf else 0

@@ -792,8 +792,8 @@ class UniversalParser:
             img = PILImage.open(io.BytesIO(raw)) if raw else None
             if img:
                 width, height = float(img.width), float(img.height)
-        except Exception:
-            pass
+        except Exception as img_err:
+            log.warning("Failed to inspect PIL image dimensions: %s", img_err)
 
         log.debug("IMAGE stub parser: returning single FIGURE page.")
         return [

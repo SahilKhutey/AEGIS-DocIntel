@@ -129,8 +129,8 @@ def start_observability() -> None:
             unit="ms",
             description="HTTP request latency in milliseconds",
         )
-    except Exception:
-        pass  # Keep the NoOp stub if OTel not fully configured
+    except Exception as otel_err:
+        structlog.get_logger().debug("OpenTelemetry meter initialization skipped", error=str(otel_err))
 
 
 # ─────────────────────────────────────────────────────────────────
