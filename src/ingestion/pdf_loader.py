@@ -49,12 +49,15 @@ class PDFLoader(BaseLoader):
         self.max_size_mb = max_size_mb
 
     def validate(self, raw_bytes: bytes) -> bool:
-        """Check if bytes are a valid PDF."""
-        if not raw_bytes:
+        """Check if bytes are a valid PDF.
+
+        Scans the first 1024 bytes rather than requiring the magic bytes at
+        position 0, so that Ghostscript-generated PDFs (which prepend a
+        version comment before the ``%PDF-`` marker) are accepted.
+        """
+        if not raw_bytes or len(raw_bytes) < 4:
             return False
-        if len(raw_bytes) < 4:
-            return False
-        return raw_bytes.startswith(self.PDF_MAGIC)
+        return self.PDF_MAGIC in raw_bytes[:1024]
 
     async def load(self, source, filename: str = "") -> DocumentObject:
         """Load a PDF document."""
@@ -91,13 +94,18 @@ class PDFLoader(BaseLoader):
                 if not pdf.authenticate(""):
                     raise EncryptedDocumentError(f"PDF is password-protected: {name}", filename=name)
 
-            metadata = self._extract_metadata(pdf)
+            # Extract text from all pages in a single pass — used both for
+            # content and for scanned-page detection in _extract_metadata.
+            # This avoids a redundant fitz pass over the first 5 pages that
+            # previously occurred when _extract_metadata called get_text()
+            # independently before load() collected text_parts.
             page_count = len(pdf)
-            is_scanned = metadata.get("is_scanned", False)
             text_parts = [page.get_text() for page in pdf]
+            metadata = self._extract_metadata(pdf, text_parts=text_parts)
+            is_scanned = metadata.get("is_scanned", False)
             text_content = "\n\n".join(t for t in text_parts if t.strip())
-            char_count = sum(len(t) for t in text_parts) if text_parts else len(text_content or "")
-            word_count = sum(len(t.split()) for t in text_parts) if text_parts else 0
+            char_count = sum(len(t) for t in text_parts)
+            word_count = sum(len(t.split()) for t in text_parts)
         finally:
             pdf.close()
 
@@ -118,8 +126,20 @@ class PDFLoader(BaseLoader):
         doc.metadata["scanned"] = is_scanned
         return doc
 
-    def _extract_metadata(self, pdf: Any) -> dict[str, Any]:
-        """Extract PDF metadata and detect scanned pages from open pdf."""
+    def _extract_metadata(self, pdf: Any, text_parts: list[str] | None = None) -> dict[str, Any]:
+        """Extract PDF metadata and detect scanned pages from open pdf.
+
+        Parameters
+        ----------
+        pdf:
+            An open ``fitz.Document`` object.
+        text_parts:
+            Optional pre-extracted per-page text (list indexed by page number).
+            When supplied, scanned-page detection reuses these strings instead
+            of calling ``page.get_text()`` a second time.  Pass this whenever
+            ``load()`` has already extracted the full text to avoid a redundant
+            fitz pass over the first five pages.
+        """
         metadata: dict[str, Any] = {}
         try:
             # Standard metadata
@@ -133,12 +153,18 @@ class PDFLoader(BaseLoader):
             metadata["creation_date"] = str(meta.get("creationDate", ""))
             metadata["page_count"] = len(pdf)
 
-            # Detect if scanned (sample first 5 pages)
+            # Detect if scanned (sample first 5 pages).
+            # Reuse pre-extracted text_parts when provided to avoid a
+            # second fitz get_text() pass over already-read pages.
             text_chars = 0
             image_count = 0
             for i in range(min(5, len(pdf))):
                 page = pdf[i]
-                text_chars += len(page.get_text().strip())
+                if text_parts is not None and i < len(text_parts):
+                    page_text = text_parts[i]
+                else:
+                    page_text = page.get_text()
+                text_chars += len(page_text.strip())
                 image_count += len(page.get_images(full=True))
             metadata["is_scanned"] = text_chars < 50 and image_count > 0
             metadata["text_chars_sample"] = text_chars
