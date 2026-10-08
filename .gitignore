@@ -3,6 +3,8 @@ __pycache__/
 *.pyc
 *.pyo
 *.pyd
+*.egg-info/
+*.egg
 
 # Testing / Benchmarking
 .pytest_cache/

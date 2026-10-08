@@ -56,3 +56,19 @@ async def main():
 
 asyncio.run(main())
 ```
+
+## Building & Publishing to TestPyPI
+
+To package distribution archives and publish to TestPyPI:
+
+```bash
+cd sdk/python
+python -m build
+twine upload --repository testpypi dist/*
+```
+
+To install the pre-release from TestPyPI:
+
+```bash
+pip install --index-url https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple/ amdi-os
+```
