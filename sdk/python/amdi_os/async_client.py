@@ -191,8 +191,11 @@ class AsyncDocumentsAPI:
         wait: bool,
         timeout: int,
     ) -> DocumentSummary:
+        import mimetypes
+        content_type, _ = mimetypes.guess_type(filename)
+        content_type = content_type or "application/pdf"
         data = aiohttp.FormData()
-        data.add_field("file", file_handle, filename=filename)
+        data.add_field("file", file_handle, filename=filename, content_type=content_type)
         if tags:
             data.add_field("tags", json.dumps(tags))
         if metadata:

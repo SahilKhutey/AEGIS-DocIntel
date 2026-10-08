@@ -193,8 +193,12 @@ class DocumentsAPI:
         else:
             file_handle = file
             should_close = False
+        filename = file_path.name if isinstance(file, (str, Path)) else getattr(file, "name", "upload.pdf")
+        import mimetypes
+        content_type, _ = mimetypes.guess_type(filename)
+        content_type = content_type or "application/pdf"
         try:
-            files = {"file": (getattr(file, "name", "upload"), file_handle)}
+            files = {"file": (filename, file_handle, content_type)}
             data = {}
             if tags:
                 data["tags"] = json.dumps(tags)
