@@ -508,9 +508,58 @@ All changes have been committed across discrete, atomic Git commits and synchron
 
 ---
 
-## 13. Complete Git Commit History
+## 13. Phase 11 Task Breakdown — Compliance Documentation Rebuild
+
+### Task 11.1 — Real Compliance Gap Analysis (`compliance_gap_analysis.json`)
+- **Action:** Replaced Phase 1's self-graded, fabricated `compliance_check.json` (which asserted 100% compliance across GDPR/SOC2/ISO27001) with a rigorous, evidence-backed gap analysis in `production/security-audit/compliance_gap_analysis.json`.
+- **Methodology:** Every control is evaluated against actual code rather than aspirational assertions.
+- **Statuses Defined:**
+  - `IMPLEMENTED (real, verified)`: Controls with working code, unit tests, and verified behavior (e.g., PII regex & Luhn detection in `src/compliance/redaction_engine.py`, fail-safe environment auth gating in `src/api/auth.py`, tenant ID isolation).
+  - `PARTIAL`: Controls partially implemented in memory or API contract but missing database persistence or lifecycle automation (e.g., cascading deletion across stores, RBAC enforcement, access logging).
+  - `NOT IMPLEMENTED`: Controls absent from codebase (e.g., database-at-rest encryption, consent management, automated log archival, disaster recovery).
+- **Core Findings:**
+  1. Working PII detection in `src/compliance/redaction_engine.py` (SSN, Luhn credit cards, phone numbers, names).
+  2. Disconnected deletion: API docstring claimed complete cascading deletion of document vectors and cache, but code only removed the item from an in-memory dictionary.
+  3. Foundational gap: No durable database exists for document storage (`RealDocumentService._docs` is an in-memory dictionary); all documents are lost on restart.
+
+### Task 11.2 — Real Cascading Document Deletion Across All Three Stores
+- **Defect Identified:** `RealDocumentService.delete()` in `src/services/container.py` previously executed only `self._docs.pop(doc_id, None)`, leaving embeddings in `FAISSStore`, cached queries in `SemanticCache`, and orchestrator state intact.
+- **Remediation Action:**
+  - Extended `RealDocumentService.delete()` to cascade deletion across:
+    1. Primary index `self._docs`.
+    2. Vector database `FAISSStore.delete(doc_id=doc_id)` via `orchestrator.vector_store`.
+    3. Semantic cache `SemanticCache.invalidate(doc_id=doc_id, tenant_id=tenant_id)`.
+    4. Mathematical orchestrator state `orchestrator.delete_document(doc_id, tenant_id=tenant_id)`.
+  - Added `delete()` with `doc_id` support to `FAISSStore` (`src/engines/vector_db/faiss_store.py`) to purge all vectors associated with the document from internal index metadata.
+  - Added `invalidate(doc_id=..., tenant_id=...)` method to `SemanticCache` (`src/memory_engine/semantic_cache.py`).
+  - Wired orchestrator references safely in `ServiceContainer.startup()` with tenant isolation checks.
+
+### Task 11.3 — Cascading Deletion Regression Test Suite
+- **Verification:** Created `tests/test_document_deletion.py` containing unit and integration tests:
+  - `test_document_deletion_cascades_to_all_stores`: Directly exercises `RealDocumentService.delete()` with pre-populated `_docs`, `vector_store`, and `semantic_cache`, asserting all three are cleared while unrelated documents remain untouched.
+  - `test_container_service_cascading_deletion`: Exercises deletion through the complete dependency-injected `ServiceContainer` lifecycle.
+- **Result:** Tests pass 100% cleanly in `pytest`.
+
+### Task 11.4 — Deployment Security Assumptions Documentation
+- **Action:** Created `docs/deployment/security-assumptions.md` defining the explicit security boundary and division of responsibilities:
+  - What the application codebase enforces: Tenant-isolated memory and search structures, fail-safe environment authentication gating, opt-in PII redaction engine, safe error logging without credential leakage.
+  - What the deployment environment must provide: TLS termination (HTTPS reverse proxy), storage volume / database encryption at rest (AES-256), secure secret management (KMS/Vault), network egress isolation, and multi-tenant process isolation.
+
+### Task 11.5 — In-Memory Document Persistence Limitation Disclosure
+- **Action:** Updated `STATUS.md` under `## Known Issues` to explicitly disclose that `RealDocumentService._docs: dict = {}` is the entire document metadata store and that persistence is lost on restart. Document persistence is mapped to Step 11.2 PostgreSQL migration.
+- **Roadmap & Certification Status Updated:** Corrected compliance certification claims in `STATUS.md` and `CHANGELOG.md` to reference `compliance_gap_analysis.json`.
+
+---
+
+## 14. Complete Git Commit History
 
 ```text
+* 14cc4e7 docs: update STATUS.md — document persistence is in-memory only; this is a bigger, more foundational gap than a checklist item, and affects reliability as well as compliance posture
+* 088580c docs: add docs/deployment/security-assumptions.md stating explicitly what this codebase enforces versus what the deployment environment must provide
+* b00d990 test: add regression test asserting document deletion clears all three stores, not just the primary index
+* fe2fee3 fix: implement real cascading document deletion (vector store + semantic cache), previously only removed the in-memory index entry despite the API docstring's claim
+* 5794246 docs: replace fabricated compliance_check.json with a real gap analysis
+* dfc9a5c docs: record Phase 10 Security Hardening and audit publication in STATUS.md, CHANGELOG.md, and DEVLOG.md
 * 4ce9412 docs: publish real pip-audit dependency scan results in production/security-audit/ replacing the fabricated Phase 1 report
 * 58aa8bd fix: replace remaining 'except Exception: pass' instances with logged warnings across src/ — completes the Phase 9 audit; two instances (semantic_engine.py embedding generation, semantic_cache.py Redis reads) flagged for follow-up monitoring given the same risk shape as the Phase 9 table-extraction bug
 * ecf3f91 docs: correct Phase 2 claim — redis is a real, used, optional dependency (lazy-imported in hierarchical_memory.py and semantic_cache.py), not dead weight; earlier anchored grep search missed the indented import
