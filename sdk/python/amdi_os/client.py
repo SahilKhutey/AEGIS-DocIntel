@@ -105,6 +105,8 @@ class AmdiClient:
         """Make an HTTP request."""
         url = f"{self.base_url}{endpoint}"
         request_headers = dict(self.session.headers)
+        if files:
+            request_headers.pop("Content-Type", None)
         if headers:
             request_headers.update(headers)
         try:
@@ -200,7 +202,7 @@ class DocumentsAPI:
                 data["metadata"] = json.dumps(metadata)
             response = self._client.request(
                 "POST",
-                "/api/v1/documents",
+                "/v1/documents/upload",
                 data=data,
                 files=files,
                 timeout=timeout,
@@ -215,7 +217,7 @@ class DocumentsAPI:
 
     def get(self, document_id: str) -> Document:
         """Get a document by ID."""
-        response = self._client.request("GET", f"/api/v1/documents/{document_id}")
+        response = self._client.request("GET", f"/v1/documents/{document_id}")
         return Document.from_dict(response)
 
     def list(
@@ -226,32 +228,37 @@ class DocumentsAPI:
         offset: int = 0,
     ) -> List[DocumentSummary]:
         """List documents."""
-        params: Dict[str, Any] = {"limit": limit, "offset": offset}
+        params: Dict[str, Any] = {"page_size": limit, "page": (offset // max(1, limit)) + 1}
         if tag:
             params["tag"] = tag
         if file_type:
             params["file_type"] = file_type
-        response = self._client.request("GET", "/api/v1/documents", params=params)
-        return [DocumentSummary.from_dict(d) for d in response]
+        response = self._client.request("GET", "/v1/documents", params=params)
+        items = response.get("items", response) if isinstance(response, dict) else response
+        return [DocumentSummary.from_dict(d) for d in items]
 
     def delete(self, document_id: str) -> None:
         """Delete a document."""
-        self._client.request("DELETE", f"/api/v1/documents/{document_id}")
+        self._client.request("DELETE", f"/v1/documents/{document_id}")
 
-    def process(self, document_id: str, engines: Optional[List[str]] = None) -> Dict[str, EngineOutput]:
-        """Run processing engines on a document."""
+    def process(self, document_id: str, engines: Optional[List[str]] = None) -> Dict[str, Any]:
+        """Run reindex/processing on a document."""
         payload = {"document_id": document_id}
         if engines:
             payload["engines"] = engines
-        response = self._client.request("POST", f"/api/v1/documents/{document_id}/process", json_data=payload)
-        return {name: EngineOutput.from_dict(out) for name, out in response.get("outputs", {}).items()}
+        response = self._client.request("POST", f"/v1/documents/{document_id}/reindex", json_data=payload)
+        return response
+
+    def reindex(self, document_id: str) -> Dict[str, Any]:
+        """Trigger document re-indexing (canonical API alias for process)."""
+        return self.process(document_id)
 
     def wait_for_ready(self, document_id: str, timeout: int = 300, poll_interval: float = 2.0) -> Document:
         """Wait for document to be processed."""
         start = time.time()
         while time.time() - start < timeout:
             doc = self.get(document_id)
-            if doc.engine_reports:
+            if doc and (doc.engine_reports or getattr(doc, "processed", False)):
                 return doc
             time.sleep(poll_interval)
         raise AmdiTimeoutError(f"Document {document_id} not ready within {timeout}s")
@@ -273,6 +280,7 @@ class RetrievalAPI:
     ) -> RetrievalResult:
         """Execute a hybrid retrieval query."""
         payload = {
+            "question": query,
             "query": query,
             "top_k": top_k,
             "include_snippets": include_snippets,
@@ -281,7 +289,7 @@ class RetrievalAPI:
             payload["weights"] = weights
         if target_levels:
             payload["target_levels"] = target_levels
-        response = self._client.request("POST", "/api/v1/search", json_data=payload)
+        response = self._client.request("POST", "/v1/query", json_data=payload)
         return RetrievalResult.from_dict(response)
 
     def semantic(self, embedding: List[float], top_k: int = 10) -> RetrievalResult:
@@ -315,7 +323,7 @@ class ContextAPI:
             payload["citations"] = citations
         if metadata:
             payload["metadata"] = metadata
-        response = self._client.request("POST", "/api/v1/context", json_data=payload)
+        response = self._client.request("POST", "/v1/context", json_data=payload)
         return UniversalExportObject.from_dict(response.get("ueo", {}))
 
     def build_from_retrieval(
@@ -349,14 +357,14 @@ class ExportAPI:
     def to_markdown(self, ueo: UniversalExportObject) -> str:
         """Export UEO to Markdown."""
         return self._client.request(
-            "POST", "/api/v1/export/markdown",
+            "POST", "/v1/export/markdown",
             json_data=ueo.to_dict(),
         )
 
     def to_yaml(self, ueo: UniversalExportObject) -> str:
         """Export UEO to YAML."""
         return self._client.request(
-            "POST", "/api/v1/export/yaml",
+            "POST", "/v1/export/yaml",
             json_data=ueo.to_dict(),
         )
 
@@ -369,7 +377,7 @@ class ExportAPI:
     ) -> Dict[str, str]:
         """Save UEO to files."""
         return self._client.request(
-            "POST", "/api/v1/export/files",
+            "POST", "/v1/export/files",
             json_data={
                 "ueo": ueo.to_dict(),
                 "output_dir": output_dir,
@@ -394,7 +402,7 @@ class AgentsAPI:
 
     def list_agents(self) -> List[Dict[str, Any]]:
         """List available agents."""
-        return self._client.request("GET", "/api/v1/agents")
+        return self._client.request("GET", "/v1/agents")
 
     def send(
         self,
@@ -409,7 +417,7 @@ class AgentsAPI:
             payload["question"] = question
         payload.update(kwargs)
         response = self._client.request(
-            "POST", f"/api/v1/agents/{agent}/send",
+            "POST", f"/v1/agents/{agent}/send",
             json_data=payload,
         )
         return ConnectorResponse.from_dict(response)
@@ -541,7 +549,7 @@ class VerificationAPI:
             payload["source_documents"] = source_documents
         if knowledge_base:
             payload["knowledge_base"] = knowledge_base
-        response = self._client.request("POST", "/api/v1/verify", json_data=payload)
+        response = self._client.request("POST", "/v1/verify", json_data=payload)
         return VerificationReport.from_dict(response)
 
 
@@ -553,7 +561,7 @@ class EnginesAPI:
 
     def list(self) -> List[str]:
         """List available engines."""
-        response = self._client.request("GET", "/api/v1/engines")
+        response = self._client.request("GET", "/v1/engines")
         return response.get("engines", [])
 
     def run(
@@ -565,7 +573,7 @@ class EnginesAPI:
         """Run a specific engine on a document."""
         payload = {"document_id": document_id, **params}
         response = self._client.request(
-            "POST", f"/api/v1/engines/{engine}/run",
+            "POST", f"/v1/engines/{engine}/run",
             json_data=payload,
         )
         return EngineOutput.from_dict(response)
@@ -579,25 +587,25 @@ class MemoryAPI:
 
     def get_stats(self) -> Dict[str, Any]:
         """Get memory statistics."""
-        return self._client.request("GET", "/api/v1/memory/stats")
+        return self._client.request("GET", "/v1/memory/stats")
 
     def promote(self, level: int, max_items: int = 100) -> Dict[str, Any]:
         """Promote items to higher levels."""
         return self._client.request(
-            "POST", "/api/v1/memory/promote",
+            "POST", "/v1/memory/promote",
             json_data={"level": level, "max_items": max_items},
         )
 
     def evict(self, level: int, n: int = 10) -> Dict[str, Any]:
         """Evict items from a level."""
         return self._client.request(
-            "POST", "/api/v1/memory/evict",
+            "POST", "/v1/memory/evict",
             json_data={"level": level, "n": n},
         )
 
     def maintenance(self) -> Dict[str, int]:
         """Run memory maintenance."""
-        return self._client.request("POST", "/api/v1/memory/maintenance")
+        return self._client.request("POST", "/v1/memory/maintenance")
 
 
 class DashboardsAPI:
@@ -608,7 +616,7 @@ class DashboardsAPI:
 
     def get(self, dashboard: str) -> Dict[str, Any]:
         """Get dashboard data."""
-        return self._client.request("GET", f"/api/v1/dashboards/{dashboard}")
+        return self._client.request("GET", f"/v1/dashboards/{dashboard}")
 
     def upload_dashboard(self) -> Dict[str, Any]:
         return self.get("upload")

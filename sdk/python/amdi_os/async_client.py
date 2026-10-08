@@ -198,7 +198,7 @@ class AsyncDocumentsAPI:
         if metadata:
             data.add_field("metadata", json.dumps(metadata))
         response = await self._client.request(
-            "POST", "/api/v1/documents", data=data, timeout=timeout,
+            "POST", "/v1/documents/upload", data=data, timeout=timeout,
         )
         doc = DocumentSummary.from_dict(response)
         if wait:
@@ -206,7 +206,7 @@ class AsyncDocumentsAPI:
         return doc
 
     async def get(self, document_id: str) -> Document:
-        response = await self._client.request("GET", f"/api/v1/documents/{document_id}")
+        response = await self._client.request("GET", f"/v1/documents/{document_id}")
         return Document.from_dict(response)
 
     async def list(
@@ -216,32 +216,37 @@ class AsyncDocumentsAPI:
         limit: int = 100,
         offset: int = 0,
     ) -> List[DocumentSummary]:
-        params: Dict[str, Any] = {"limit": limit, "offset": offset}
+        params: Dict[str, Any] = {"page_size": limit, "page": (offset // max(1, limit)) + 1}
         if tag:
             params["tag"] = tag
         if file_type:
             params["file_type"] = file_type
-        response = await self._client.request("GET", "/api/v1/documents", params=params)
-        return [DocumentSummary.from_dict(d) for d in response]
+        response = await self._client.request("GET", "/v1/documents", params=params)
+        items = response.get("items", response) if isinstance(response, dict) else response
+        return [DocumentSummary.from_dict(d) for d in items]
 
     async def delete(self, document_id: str) -> None:
-        await self._client.request("DELETE", f"/api/v1/documents/{document_id}")
+        await self._client.request("DELETE", f"/v1/documents/{document_id}")
 
-    async def process(self, document_id: str, engines: Optional[List[str]] = None) -> Dict[str, EngineOutput]:
+    async def process(self, document_id: str, engines: Optional[List[str]] = None) -> Dict[str, Any]:
         payload = {"document_id": document_id}
         if engines:
             payload["engines"] = engines
         response = await self._client.request(
-            "POST", f"/api/v1/documents/{document_id}/process", json_data=payload
+            "POST", f"/v1/documents/{document_id}/reindex", json_data=payload
         )
-        return {name: EngineOutput.from_dict(out) for name, out in response.get("outputs", {}).items()}
+        return response
+
+    async def reindex(self, document_id: str) -> Dict[str, Any]:
+        """Trigger document re-indexing (canonical API alias for process)."""
+        return await self.process(document_id)
 
     async def wait_for_ready(self, document_id: str, timeout: int = 300, poll_interval: float = 2.0) -> Document:
         import asyncio
         start = asyncio.get_event_loop().time()
         while asyncio.get_event_loop().time() - start < timeout:
             doc = await self.get(document_id)
-            if doc.engine_reports:
+            if doc and (doc.engine_reports or getattr(doc, "processed", False)):
                 return doc
             await asyncio.sleep(poll_interval)
         raise AmdiTimeoutError(f"Document {document_id} not ready within {timeout}s")
@@ -260,6 +265,7 @@ class AsyncRetrievalAPI:
         include_snippets: bool = True,
     ) -> RetrievalResult:
         payload = {
+            "question": query,
             "query": query,
             "top_k": top_k,
             "include_snippets": include_snippets,
@@ -268,7 +274,7 @@ class AsyncRetrievalAPI:
             payload["weights"] = weights
         if target_levels:
             payload["target_levels"] = target_levels
-        response = await self._client.request("POST", "/api/v1/search", json_data=payload)
+        response = await self._client.request("POST", "/v1/query", json_data=payload)
         return RetrievalResult.from_dict(response)
 
 
@@ -288,7 +294,7 @@ class AsyncContextAPI:
             payload["citations"] = citations
         if metadata:
             payload["metadata"] = metadata
-        response = await self._client.request("POST", "/api/v1/context", json_data=payload)
+        response = await self._client.request("POST", "/v1/context", json_data=payload)
         return UniversalExportObject.from_dict(response.get("ueo", {}))
 
     async def build_from_retrieval(
@@ -317,13 +323,13 @@ class AsyncExportAPI:
 
     async def to_markdown(self, ueo: UniversalExportObject) -> str:
         return await self._client.request(
-            "POST", "/api/v1/export/markdown",
+            "POST", "/v1/export/markdown",
             json_data=ueo.to_dict(),
         )
 
     async def to_yaml(self, ueo: UniversalExportObject) -> str:
         return await self._client.request(
-            "POST", "/api/v1/export/yaml",
+            "POST", "/v1/export/yaml",
             json_data=ueo.to_dict(),
         )
 
@@ -339,7 +345,7 @@ class AsyncAgentsAPI:
         self.local = AsyncLocalAPI(client)
 
     async def list_agents(self) -> List[Dict[str, Any]]:
-        return await self._client.request("GET", "/api/v1/agents")
+        return await self._client.request("GET", "/v1/agents")
 
     async def send(
         self,
@@ -353,7 +359,7 @@ class AsyncAgentsAPI:
             payload["question"] = question
         payload.update(kwargs)
         response = await self._client.request(
-            "POST", f"/api/v1/agents/{agent}/send", json_data=payload,
+            "POST", f"/v1/agents/{agent}/send", json_data=payload,
         )
         return ConnectorResponse.from_dict(response)
 
@@ -421,7 +427,7 @@ class AsyncVerificationAPI:
             payload["source_documents"] = source_documents
         if knowledge_base:
             payload["knowledge_base"] = knowledge_base
-        response = await self._client.request("POST", "/api/v1/verify", json_data=payload)
+        response = await self._client.request("POST", "/v1/verify", json_data=payload)
         return VerificationReport.from_dict(response)
 
 
@@ -430,13 +436,13 @@ class AsyncEnginesAPI:
         self._client = client
 
     async def list(self) -> List[str]:
-        response = await self._client.request("GET", "/api/v1/engines")
+        response = await self._client.request("GET", "/v1/engines")
         return response.get("engines", [])
 
     async def run(self, engine: str, document_id: str, **params) -> EngineOutput:
         payload = {"document_id": document_id, **params}
         response = await self._client.request(
-            "POST", f"/api/v1/engines/{engine}/run", json_data=payload,
+            "POST", f"/v1/engines/{engine}/run", json_data=payload,
         )
         return EngineOutput.from_dict(response)
 
@@ -446,22 +452,22 @@ class AsyncMemoryAPI:
         self._client = client
 
     async def get_stats(self) -> Dict[str, Any]:
-        return await self._client.request("GET", "/api/v1/memory/stats")
+        return await self._client.request("GET", "/v1/memory/stats")
 
     async def promote(self, level: int, max_items: int = 100) -> Dict[str, Any]:
         return await self._client.request(
-            "POST", "/api/v1/memory/promote",
+            "POST", "/v1/memory/promote",
             json_data={"level": level, "max_items": max_items},
         )
 
     async def evict(self, level: int, n: int = 10) -> Dict[str, Any]:
         return await self._client.request(
-            "POST", "/api/v1/memory/evict",
+            "POST", "/v1/memory/evict",
             json_data={"level": level, "n": n},
         )
 
     async def maintenance(self) -> Dict[str, int]:
-        return await self._client.request("POST", "/api/v1/memory/maintenance")
+        return await self._client.request("POST", "/v1/memory/maintenance")
 
 
 class AsyncDashboardsAPI:
@@ -469,7 +475,7 @@ class AsyncDashboardsAPI:
         self._client = client
 
     async def get(self, dashboard: str) -> Dict[str, Any]:
-        return await self._client.request("GET", f"/api/v1/dashboards/{dashboard}")
+        return await self._client.request("GET", f"/v1/dashboards/{dashboard}")
 
     async def upload_dashboard(self) -> Dict[str, Any]:
         return await self.get("upload")

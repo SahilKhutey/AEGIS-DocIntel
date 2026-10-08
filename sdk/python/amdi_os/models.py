@@ -25,14 +25,22 @@ class DocumentSummary:
 
     @classmethod
     def from_dict(cls, data: dict) -> "DocumentSummary":
+        doc_id = str(data.get("document_id") or data.get("doc_id", ""))
+        name = str(data.get("name") or data.get("filename", ""))
+        file_type = str(data.get("file_type") or data.get("language") or "pdf")
+        size_bytes = int(data.get("size_bytes", 0) or 0)
+        page_count = int(data.get("page_count", 0) or 0)
+        uploaded_at = str(data.get("uploaded_at") or data.get("created_at", ""))
+        status = data.get("status")
+        processed = bool(data.get("processed", status in ("ready", "indexing", "pending")))
         return cls(
-            document_id=data["document_id"],
-            name=data["name"],
-            file_type=data["file_type"],
-            size_bytes=data["size_bytes"],
-            page_count=data.get("page_count", 0),
-            uploaded_at=data.get("uploaded_at"),
-            processed=data.get("processed", False),
+            document_id=doc_id,
+            name=name,
+            file_type=file_type,
+            size_bytes=size_bytes,
+            page_count=page_count,
+            uploaded_at=uploaded_at,
+            processed=processed,
             tags=data.get("tags", []),
             metadata=data.get("metadata", {}),
         )
@@ -45,21 +53,27 @@ class Document:
     document_id: str
     name: str
     file_type: str
-    size_bytes: int
-    page_count: int
+    size_bytes: int = 0
+    page_count: int = 0
     text: str = ""
     metadata: Dict[str, Any] = field(default_factory=dict)
     engine_reports: Dict[str, Any] = field(default_factory=dict)
 
     @classmethod
     def from_dict(cls, data: dict) -> "Document":
+        doc_id = str(data.get("document_id") or data.get("doc_id", ""))
+        name = str(data.get("name") or data.get("filename", ""))
+        file_type = str(data.get("file_type") or data.get("language") or "pdf")
+        size_bytes = int(data.get("size_bytes", 0) or 0)
+        page_count = int(data.get("page_count", 0) or 0)
+        text = str(data.get("text", ""))
         return cls(
-            document_id=data["document_id"],
-            name=data["name"],
-            file_type=data["file_type"],
-            size_bytes=data["size_bytes"],
-            page_count=data.get("page_count", 0),
-            text=data.get("text", ""),
+            document_id=doc_id,
+            name=name,
+            file_type=file_type,
+            size_bytes=size_bytes,
+            page_count=page_count,
+            text=text,
             metadata=data.get("metadata", {}),
             engine_reports=data.get("engine_reports", {}),
         )
@@ -78,11 +92,11 @@ class RetrievalHit:
     @classmethod
     def from_dict(cls, data: dict) -> "RetrievalHit":
         return cls(
-            doc_id=data["doc_id"],
-            fused_score=data["fused_score"],
+            doc_id=str(data.get("doc_id", "")),
+            fused_score=float(data.get("fused_score", data.get("confidence", 0.0)) or 0.0),
             methods_found=data.get("methods_found", []),
             per_method_score=data.get("per_method_score", {}),
-            snippet=data.get("snippet", ""),
+            snippet=str(data.get("snippet", "")),
         )
 
 
@@ -98,12 +112,25 @@ class RetrievalResult:
 
     @classmethod
     def from_dict(cls, data: dict) -> "RetrievalResult":
+        query_text = str(data.get("query") or data.get("question", ""))
+        hits: List[RetrievalHit] = []
+        if "hits" in data and isinstance(data["hits"], list):
+            hits = [RetrievalHit.from_dict(h) for h in data["hits"]]
+        elif "citations" in data and isinstance(data["citations"], list):
+            for c in data["citations"]:
+                hits.append(RetrievalHit(
+                    doc_id=str(c.get("doc_id", "")),
+                    fused_score=float(c.get("confidence", 1.0) or 1.0),
+                    methods_found=["hybrid"],
+                    per_method_score={},
+                    snippet=str(c.get("snippet", "")),
+                ))
         return cls(
-            query=data.get("query", ""),
-            hits=[RetrievalHit.from_dict(h) for h in data.get("hits", [])],
+            query=query_text,
+            hits=hits,
             per_method_counts=data.get("per_method_counts", {}),
-            latency_ms=data.get("latency_ms", 0.0),
-            total_candidates=data.get("total_candidates", 0),
+            latency_ms=float(data.get("latency_ms", data.get("total_latency_ms", 0.0))),
+            total_candidates=int(data.get("total_candidates", len(hits))),
         )
 
 
