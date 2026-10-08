@@ -15,6 +15,8 @@
 > included fabricated security audit and benchmark documents; these have been
 > moved to `_unverified_archive/` and should not be relied upon. See
 > [STATUS.md](STATUS.md) for exactly what is and isn't currently verified.
+>
+> **Looking for a lightweight, focused library?** Check out [`aegis-docprep`](aegis-docprep/) (`pip install aegis-docprep`), our standalone, minimal-dependency package (only `numpy` required) extracting the three most verified primitives: PII redaction, submodular context packing, and spatial reading-order extraction. Integrates directly with LangChain and LlamaIndex.
 
 ---
 

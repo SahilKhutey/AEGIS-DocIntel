@@ -76,6 +76,13 @@ actually completed.
   - Route cleanliness & duplicate elimination: Removed redundant unversioned router mounts for `annotations` and `ael_router` in `src/main.py`, consolidating canonical routing under `/v1/` and eliminating duplicate OpenAPI Operation IDs.
   - Real in-process integration test suite: Replaced import-only SDK smoke tests with real FastAPI in-process integration tests (`sdk/python/tests/test_integration.py`) verifying file upload (with automatic MIME detection), hybrid search, document retrieval, cascading deletion, and reindexing.
   - Python SDK packaging & TestPyPI release: Standardized package build with `setuptools.build_meta`, validated `.tar.gz` and `.whl` distributions, tested direct pip installation into site-packages, and added TestPyPI distribution instructions to `sdk/python/README.md`. SDK path correctness moves from "never verified" to "verified against real routes via CI on every push."
+- **Scope Narrowing & Standalone Core Product Packaging (`aegis-docprep`, Phase 14 Verified)**:
+  - Focused primitive extraction: Extracted the three most validated, self-contained components from the 16-domain research monorepo into the standalone [`aegis-docprep`](aegis-docprep/) package: (1) PII Redaction & Compliance Filter (`aegis_docprep.pii_redaction`), (2) Submodular Knapsack Context Packer (`aegis_docprep.context_packer`), and (3) Spatial Reading-Order Parser (`aegis_docprep.reading_order`).
+  - Zero internal `src/` dependencies & minimal footprint: Audited and proved that all three modules require zero internal imports from `src/`, and depend externally solely on `numpy>=1.26.0`. Verified by installing the wheel and importing from site-packages with the repository root excluded from `sys.path`.
+  - API ergonomics & example-driven documentation: Addressed API discoverability friction by introducing convenience aliases (`packer.pack()` alongside `packer.pack_context()`, `token_count` property mapping to `token_cost`), and providing copy-paste runnable examples in `aegis-docprep/README.md`.
+  - Real framework integrations: Authored and verified real integrations for LangChain (`PIIRedactingTransformer`) and LlamaIndex (`SubmodularPackingPostprocessor`), executed and confirmed against live local installations of `langchain-core` 1.6.7 and `llama-index-core` 0.14.25.
+  - Permanent test suite: Ported and extended test suite in `aegis-docprep/tests/` (17/17 passing) including property-based tests for Theorems 6.1, 6.2, and 9.1. Published packaging and TestPyPI distribution instructions.
+  - Recommended entry point: Positioned `aegis-docprep` as the low-risk, production-ready starting point for external pilot users in Phase 15.
 
 ## Layer-by-Layer Implementation Status (Master State D)
 
@@ -199,9 +206,10 @@ Phase 9 publishes real, reproducible performance numbers, Phase 10
 implements real security hardening and verified audit publication, Phase 11
 rebuilds compliance documentation with an evidence-backed gap analysis and cascading
 deletion, Phase 12 activates real Prometheus and Grafana observability stack with
-real pipeline metric wiring and provisioned dashboards, and Phase 13 stabilizes the
+real pipeline metric wiring and provisioned dashboards, Phase 13 stabilizes the
 REST API and all four SDKs with route reconciliation, automated CI OpenAPI drift
-detection, and real in-process integration testing.
+detection, and real in-process integration testing, and Phase 14 extracts and packages
+`aegis-docprep` as a standalone, minimal-dependency (NumPy-only) product ready for external pilots.
 
 ## What You Can Trust Today
 

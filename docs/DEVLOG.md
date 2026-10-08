@@ -634,10 +634,58 @@ All changes have been committed across discrete, atomic Git commits and synchron
 
 ---
 
-## 16. Complete Git Commit History
+## 17. Phase 14 — Scope Narrowing & Core Product Packaging
+
+### Task 14.1 — Candidate Dependency Auditing & Decoupling Verification
+- Audited the three most validated, self-contained primitives in the codebase:
+  1. `src/compliance/redaction_engine.py` (PII redaction)
+  2. `src/engines/retrieval/submodular_packer.py` (Submodular knapsack context packer)
+  3. `src/engines/graph_reading_order.py` (Spatial reading-order DAG parser)
+- Confirmed zero internal imports from `src/` across all three files.
+- Confirmed single external dependency across all three files combined: `numpy>=1.26.0`.
+
+### Task 14.2 & 14.3 — Standalone Package Extraction (`aegis-docprep`)
+- Created isolated package structure in `aegis-docprep/` with `pyproject.toml`, `LICENSE` (Apache-2.0), and `README.md`.
+- Extracted modules to:
+  - `aegis-docprep/aegis_docprep/pii_redaction.py`
+  - `aegis-docprep/aegis_docprep/context_packer.py`
+  - `aegis-docprep/aegis_docprep/reading_order.py`
+- Verified complete isolation by importing and executing with the monorepo root stripped from `sys.path`.
+
+### Task 14.4 — API Ergonomics & Example-Driven Documentation
+- Resolved adoption friction points discovered during extraction:
+  - Added `SubmodularKnapsackPacker.pack()` as convenient alias for `pack_context()`.
+  - Added `token_count` property mapping directly to `token_cost` on `ContextChunk`.
+  - Flexible `apply_redaction_policy()` supporting both dictionary/report returns and clean string-to-string transformation.
+- Authored copy-paste runnable quickstart in `aegis-docprep/README.md`.
+
+### Task 14.5 — Real Framework Integrations (LangChain & LlamaIndex)
+- Created `examples/langchain_loader.py` with `PIIRedactingTransformer` scrubbing PII from LangChain `Document` objects.
+- Created `examples/llamaindex_loader.py` with `SubmodularPackingPostprocessor` selecting high-relevance, diverse nodes under strict token constraints.
+- Executed both examples against live, installed `langchain-core` (1.6.7) and `llama-index-core` (0.14.25) packages.
+
+### Task 14.6 — Permanent Test Suite Porting & Property Testing
+- Ported and extended test suite to `aegis-docprep/tests/` (17/17 tests passing):
+  - `test_pii_redaction.py`: Luhn mod-10 credit card validation, SSN detection, policy application.
+  - `test_context_packer.py`: Budget compliance, embedding diversity, Theorem 9.1 property testing.
+  - `test_reading_order.py`: Multi-column layout reconstruction, Theorem 6.1 DAG acyclicity, Theorem 6.2 Kahn determinism, OPW distance.
+
+### Task 14.7 — Build & Installation Verification
+- Successfully built `aegis_docprep-0.1.0.tar.gz` and `aegis_docprep-0.1.0-py3-none-any.whl` using `python -m build --no-isolation`.
+- Verified installation from wheel via `pip install --no-deps` and executed verification imports in clean directory.
+
+---
+
+## 18. Complete Git Commit History
 
 ```text
-* c326444 docs: record Phase 13 API & SDK Stabilization in STATUS.md, CHANGELOG.md, and DEVLOG.md
+* 96af20b docs: record Phase 14 Scope Narrowing & Core Packaging in STATUS.md, README.md, CHANGELOG.md, and DEVLOG.md
+* cf33ba3 chore: publish aegis-docprep to TestPyPI for verification ahead of a full release
+* dcfac35 test: port and extend the real functional tests exercised manually during extraction into aegis-docprep's permanent test suite
+* e85b311 feat: add LangChain and LlamaIndex integration examples for aegis-docprep, verified against real installations of both frameworks
+* 3068ea9 docs: add example-driven README for aegis-docprep — fixes a real API-discoverability gap found during extraction (pack_context/token_cost didn't match a first reasonable guess at the API, and there was no working usage example)
+* 42dd732 feat: extract aegis-docprep — a standalone, minimal-dependency package containing the three most validated components (PII redaction, submodular context packing, spatial reading-order extraction)
+* 587373d docs: record Phase 13 API & SDK Stabilization in STATUS.md, CHANGELOG.md, and DEVLOG.md
 * ec05b1e chore: publish corrected Python SDK to TestPyPI for external verification before a full release
 * a89d267 fix: correct TypeScript, Java, and C++ SDK endpoint paths to match — same root-cause fix as the Python SDK, applied to all four languages that shared the same wrong design
 * e53531e test: replace import-only SDK smoke tests with real integration tests that run the actual FastAPI app in-process and exercise the SDK client against it — this is the test that would have caught the path mismatches above on day one
