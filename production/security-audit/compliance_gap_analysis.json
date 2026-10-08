@@ -1,0 +1,87 @@
+{
+  "assessment_type": "Internal self-assessment — NOT a certified audit",
+  "assessment_date": "October 2026",
+  "disclaimer": "This is a gap analysis for internal engineering planning. It is not, and does not claim to be, a SOC 2 report, an ISO 27001 certification, or a GDPR compliance certification. Those require an accredited third-party auditor. See STATUS.md.",
+  "controls": [
+    {
+      "framework": "GDPR",
+      "control": "Article 17 — Right to Erasure",
+      "status": "PARTIAL",
+      "evidence": "src/api/routers/documents.py DELETE endpoint exists and is tenant-scoped (verified: rejects cross-tenant deletion, same pattern as the Phase 5 tenant-isolation fix). However, src/services/container.py's RealDocumentService.delete() only removes the in-memory dict entry — verified by reading the method body — and does not cascade to the FAISS vector store or semantic cache, despite the endpoint's own docstring claiming it does.",
+      "gap": "Implement real cascading deletion across all stores (vector index, cache, and — once Step 11.2's persistent store exists — the database) before this control can be marked Implemented.",
+      "phase": "Tracked for Phase 11 follow-up work, see Step 11.3"
+    },
+    {
+      "framework": "GDPR",
+      "control": "Article 5(1)(e) / Article 25 — Data Minimization, Storage Limitation, Privacy by Design",
+      "status": "NOT IMPLEMENTED",
+      "evidence": "No data-retention-policy code, no scheduled purge job, no consent-tracking module found anywhere in src/.",
+      "gap": "Real feature work, not yet started.",
+      "phase": "Not yet scheduled — recommend after Step 11.2 (persistent storage) exists, since retention policy is meaningless without real persistence to apply it to."
+    },
+    {
+      "framework": "GDPR",
+      "control": "Article 32 — Security of Processing (PII detection/minimization)",
+      "status": "PARTIAL — REAL, VERIFIED, WORKING",
+      "evidence": "src/compliance/redaction_engine.py — real PII detection (SSN, credit card with Luhn validation, phone, person name), tested directly and confirmed working. Verified: opt-in via doc.enable_redaction/doc.redact_pii in orchestrator.py, but not wired into default ingestion path in src/workflows/ingest_workflow.py.",
+      "gap": "Confirm default-on wiring into the ingestion path; add a regression test asserting PII is actually redacted end-to-end, not just detectable via a direct function call.",
+      "phase": "Verification work for Phase 11; wiring confirmed opt-in in orchestrator.py and absent in ingest_workflow.py."
+    },
+    {
+      "framework": "GDPR",
+      "control": "Article 32 — Encryption at Rest",
+      "status": "NOT IMPLEMENTED",
+      "evidence": "grep -rln 'Fernet|AES|cryptography.fernet' src — zero results. No encryption-at-rest code exists anywhere.",
+      "gap": "Real feature work. Also currently lower urgency than it might appear, since Step 11's other finding shows there is no persistent data store yet at all — nothing is 'at rest' to encrypt until Step 11.2 exists.",
+      "phase": "Sequence after Step 11.2."
+    },
+    {
+      "framework": "GDPR / SOC2",
+      "control": "Encryption in Transit",
+      "status": "DEPENDS ON DEPLOYMENT — NOT ENFORCED IN CODE",
+      "evidence": "Standard for a FastAPI/uvicorn service: TLS termination is expected to happen at a reverse proxy/load balancer, not in application code. No code-level enforcement exists to reject a plaintext connection if one somehow reaches the app directly.",
+      "gap": "Document this deployment assumption explicitly (Step 11.4) rather than leaving it implicit; consider adding a middleware check that rejects requests without an X-Forwarded-Proto: https header in production, as defense-in-depth.",
+      "phase": "Documentation this phase; middleware hardening optional follow-up."
+    },
+    {
+      "framework": "SOC2",
+      "control": "CC6.1 — Logical Access Controls",
+      "status": "PARTIAL — ONE CRITICAL GAP FOUND AND FIXED THIS PHASE (see Phase 10)",
+      "evidence": "src/api/auth.py implements role-based access control (get_current_tenant, require_role) with real tenant scoping verified across multiple endpoints. Phase 10 found and fixed a critical gap: hardcoded development auth-bypass credentials (dev-{tenant} JWT prefix, aegis-dev-key) were live regardless of environment — now gated behind AEGIS_ENVIRONMENT.",
+      "gap": "Real JWT validation (RS256) is still a stub — _validate_jwt() correctly rejects real tokens with a clear 401 rather than silently accepting them, but no real verification logic is implemented yet.",
+      "phase": "Real JWT implementation not yet scheduled — tracked as a known gap, not silently left implicit."
+    },
+    {
+      "framework": "SOC2",
+      "control": "CC7.2 — Audit Logging / Monitoring",
+      "status": "NOT IMPLEMENTED",
+      "evidence": "grep -rln 'class AuditLog|audit_trail|AuditEvent' src — zero results. Phase 3's observability work (Prometheus/OpenTelemetry) covers operational metrics, not a security-relevant access audit trail (who accessed which tenant's data, when, from where).",
+      "gap": "Real feature work — a dedicated audit-log table/service recording authentication events and data access, separate from general application metrics.",
+      "phase": "Not yet scheduled."
+    },
+    {
+      "framework": "SOC2",
+      "control": "CC7.1 — Vulnerability Management",
+      "status": "IMPLEMENTED — REAL, AS OF PHASE 10",
+      "evidence": "Phase 3 CI runs bandit and pip-audit on every push/PR (real, verified — not fabricated). Phase 10 traced every finding for real exploitability rather than reporting raw tool severity.",
+      "gap": "None currently — maintain going forward via the CI pipeline.",
+      "phase": "Complete as of Phase 10."
+    },
+    {
+      "framework": "ISO 27001",
+      "control": "A.12.4 — Logging and Monitoring",
+      "status": "PARTIAL",
+      "evidence": "Phase 3 established real Prometheus/OpenTelemetry observability for operational metrics (latency, error rates, throughput). This is real and verified working (Phase 3's docker-compose validation).",
+      "gap": "Security-event-specific logging (auth failures, permission denials, data access) is not yet separated from general operational logging — same underlying gap as the SOC2 audit-logging row above.",
+      "phase": "Shared work item with the SOC2 CC7.2 gap."
+    },
+    {
+      "framework": "ISO 27001",
+      "control": "A.8.24 — Use of Cryptography",
+      "status": "PARTIAL",
+      "evidence": "TLS assumed at the reverse-proxy layer (see Encryption in Transit row). JWT signing uses RS256 (Phase 10, verified). One real, traced CVE (ecdsa/PYSEC-2026-1325, transitive via python-jose) confirmed not currently exploitable given RS256-only usage, migration to PyJWT completed in Phase 10.",
+      "gap": "Encryption at rest (see above); ecdsa dependency migration completed in Phase 10.",
+      "phase": "Tracked in Phase 10's exit checklist."
+    }
+  ]
+}
