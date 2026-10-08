@@ -131,10 +131,8 @@ def create_app() -> FastAPI:
 
     from src.api.routers import annotations
     app.include_router(annotations.router, prefix="/v1")
-    app.include_router(annotations.router)
 
     from src.api.routes import router as ael_router
-    app.include_router(ael_router)
     app.include_router(ael_router, prefix="/v1")
 
     from src.api.routers import advanced_features
