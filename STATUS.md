@@ -60,6 +60,10 @@ actually completed.
   - Supply-chain dependency audit: `pip-audit` scan of 62 resolved packages in `requirements-core.txt` verified clean (0 CVEs) in `production/security-audit/pip_audit_report.md` and `pip_audit_results.json`.
   - Transitive vulnerability removal: Migrated from `python-jose` to `PyJWT[crypto]>=2.9.0`, eliminating unfixable upstream `ecdsa` Minerva timing vulnerability (PYSEC-2026-1325).
   - Exception suppression completion: All bare `except Exception: pass` instances replaced with structured warnings/counters across `src/engines/semantic/semantic_engine.py`, `src/memory_engine/semantic_cache.py`, `src/engines/context/context_builder.py`, `src/engines/llm/llm_interface.py`, and `src/engines/memory/retriever.py`.
+- **Compliance Gap Analysis & Cascading Deletion (Phase 11 Verified)**:
+  - Compliance documentation rebuild: Replaced fabricated `compliance_check.json` (which asserted 100% compliance across GDPR/SOC2/ISO27001) with an evidence-backed gap analysis in `production/security-audit/compliance_gap_analysis.json`. Every control is checked against actual code and assigned an explicit status (`PARTIAL`, `NOT IMPLEMENTED`, `IMPLEMENTED (real, verified)`), with zero unverified claims.
+  - Cascading document deletion: Fixed `RealDocumentService.delete()` to cascade across all three stores: (1) primary index `self._docs`, (2) vector database `FAISSStore.delete(doc_id=...)`, and (3) semantic cache `SemanticCache.invalidate(doc_id=...)`, plus orchestrator deletion. Previously, the deletion endpoint only removed the key from an in-memory dictionary despite claiming full chunk/vector/cache purging in the docstring. Regression tested in `tests/test_document_deletion.py`.
+  - Deployment security boundary: Added `docs/deployment/security-assumptions.md` defining the explicit security contract between what this application codebase enforces (tenant-isolated queries, fail-safe environment auth gating, opt-in PII redaction) versus what the host deployment environment must provide (TLS termination, database encryption-at-rest, secure KMS secret management, network egress isolation).
 
 ## Layer-by-Layer Implementation Status (Master State D)
 
@@ -86,8 +90,10 @@ This table is enforced in code, not just documentation: `MasterState`
 can be checked at runtime rather than only in a document no pipeline
 consumer ever reads.
 
-## Known Issues (Phase 7 findings)
+## Known Issues
 
+- **Foundational Architectural Gap — Document Persistence is In-Memory Only**:
+  `RealDocumentService._docs: dict = {}` in `src/services/container.py` is the entire document metadata store. All ingested document records, metadata, and status tracking reside purely in process memory and are lost on service restart. Document persistence is not yet backed by a durable relational database. This recontextualizes all data-at-rest controls in compliance reviews: a system that does not persist data at rest cannot claim compliance with data-at-rest encryption controls, nor can it provide durability guarantees across restarts. Persistent PostgreSQL metadata storage is scoped for Step 11.2.
 - **Critical, now fixed**: `src/workflows/__init__.py` failed to import due to
   four distinct bugs across all four workflow files (wrong import path and a
   never-implemented `GraphBuilder` class in ingest_workflow.py; a missing
@@ -162,7 +168,9 @@ derived from MIT-licensed `jsvine/pdfplumber` test fixtures + native research pa
   analysis and `pip-audit` dependency scanning reports in `production/security-audit/`.
 - **GDPR / SOC 2 / ISO 27001 "COMPLIANT" status** — self-declared, not
   certified by any accredited third party. No organization holds any formal
-  compliance certification for this software.
+  compliance certification for this software. Replaced in Phase 11 with an
+  honest gap analysis in `production/security-audit/compliance_gap_analysis.json`
+  documenting real control implementations, partial implementations, and explicit gaps.
 - **Signed release artifacts** (`SHA256SUMS.sig`, `.crt` files) — these were
   placeholder text, not real cryptographic signatures.
 - **Benchmark results (94.2% accuracy, etc.)** — generated against a
@@ -175,8 +183,10 @@ derived from MIT-licensed `jsvine/pdfplumber` test fixtures + native research pa
 
 See the [16-phase development roadmap](docs/ROADMAP.md) for the full plan. In short: Phase 7
 builds real ingestion validation, Phase 8 builds a real benchmark dataset,
-Phase 9 publishes real, reproducible performance numbers, and Phase 10
-implements real security hardening and verified audit publication (completed).
+Phase 9 publishes real, reproducible performance numbers, Phase 10
+implements real security hardening and verified audit publication, and Phase 11
+rebuilds compliance documentation with an evidence-backed gap analysis, implements
+cascading document deletion, and formalizes deployment security assumptions.
 
 ## What You Can Trust Today
 
