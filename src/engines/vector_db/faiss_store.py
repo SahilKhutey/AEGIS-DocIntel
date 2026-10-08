@@ -203,8 +203,10 @@ class FAISSStore:
 
         return results[:top_k]
 
-    async def delete(self, ids: List[str]) -> None:
-        """Mark vectors with the given IDs for deletion.
+    async def delete(
+        self, ids: Optional[List[str]] = None, doc_id: Optional[str] = None
+    ) -> None:
+        """Mark vectors with the given IDs or matching doc_id for deletion.
 
         FAISS does not support in-place removal from a flat index.
         Deleted IDs are tracked in an exclusion set; they are excluded
@@ -215,10 +217,12 @@ class FAISSStore:
         ----------
         ids:
             List of metadata ``"id"`` values to remove.
+        doc_id:
+            Document ID to remove all associated chunk vectors for.
         """
         self._check_open()
         loop = asyncio.get_event_loop()
-        await loop.run_in_executor(None, self._delete_sync, ids)
+        await loop.run_in_executor(None, self._delete_sync, ids, doc_id)
 
     async def close(self) -> None:
         """Release resources held by the store.
@@ -371,13 +375,20 @@ class FAISSStore:
             )
         return results
 
-    def _delete_sync(self, ids: List[str]) -> None:
+    def _delete_sync(
+        self, ids: Optional[List[str]] = None, doc_id: Optional[str] = None
+    ) -> None:
         """Synchronous deletion implementation."""
-        for vid in ids:
+        target_ids = list(ids) if ids else []
+        if doc_id is not None:
+            for meta in self._metadatas:
+                if str(meta.get("doc_id", "")) == str(doc_id) and "id" in meta:
+                    target_ids.append(meta["id"])
+        for vid in target_ids:
             pos = self._id_to_pos.pop(vid, None)
             if pos is not None:
                 self._deleted.add(pos)
-        log.debug("FAISSStore[%s]: deleted %d ids", self._collection, len(ids))
+        log.debug("FAISSStore[%s]: deleted %d ids", self._collection, len(target_ids))
 
     def _compact(self) -> None:
         """Rebuild internal state removing all lazy-deleted entries."""

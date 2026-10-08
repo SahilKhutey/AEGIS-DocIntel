@@ -112,7 +112,7 @@ class RealDocumentService:
                 self.page_size = page_size
         return _List(items, len(items), page, page_size)
 
-    async def delete(self, doc_id: str, tenant_id: str):
+    async def delete(self, doc_id: str, tenant_id: str) -> bool:
         doc = self._docs.get(str(doc_id))
         if not doc:
             return False
@@ -120,6 +120,25 @@ class RealDocumentService:
             # Same not-found-shaped response as a genuinely missing
             # document, for the same existence-leak reason as get() above.
             return False
+
+        # Real cascading deletion — was previously only self._docs.pop(),
+        # despite the API endpoint's docstring already claiming this happened.
+        if hasattr(self.orchestrator, "vector_store") and self.orchestrator.vector_store:
+            try:
+                await self.orchestrator.vector_store.delete(doc_id=str(doc_id))
+            except Exception as e:
+                log.warning(f"Vector store deletion failed for {doc_id}: {e}")
+        if hasattr(self.orchestrator, "semantic_cache") and self.orchestrator.semantic_cache:
+            try:
+                await self.orchestrator.semantic_cache.invalidate(doc_id=str(doc_id))
+            except Exception as e:
+                log.warning(f"Cache invalidation failed for {doc_id}: {e}")
+        if hasattr(self.orchestrator, "delete_document"):
+            try:
+                await self.orchestrator.delete_document(str(doc_id), tenant_id=str(tenant_id))
+            except Exception as e:
+                log.warning(f"Orchestrator document deletion failed for {doc_id}: {e}")
+
         self._docs.pop(str(doc_id), None)
         return True
 
@@ -226,6 +245,8 @@ class ServiceContainer:
 
         # ── Memory Engine (Redis-backed Cache) ─────────────────
         self.memory_engine = await self._init_memory()
+        if self.rag_engine and self.memory_engine:
+            self.rag_engine.semantic_cache = self.memory_engine
 
         # ── Document Service ─────────────────────────────────────
         self.document_service = RealDocumentService(self.rag_engine)

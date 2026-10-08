@@ -187,6 +187,21 @@ class SemanticCache:
                 self._indices[tenant_id] = idx
             return before - after
 
+    async def invalidate(self, doc_id: str, tenant_id: Optional[str] = None) -> int:
+        """Invalidate cache entries referencing a document.
+
+        If tenant_id is provided, invalidates for that tenant.
+        Otherwise, invalidates across all active tenants.
+        """
+        if tenant_id:
+            return await self.invalidate_by_doc(doc_id, tenant_id)
+        async with self._lock:
+            tenants = list(self._entries.keys())
+        total = 0
+        for tid in tenants:
+            total += await self.invalidate_by_doc(doc_id, tid)
+        return total
+
     async def get_history(self, session_id: str) -> list:
         """Retrieve conversation history (from Redis)."""
         if self.redis is None:

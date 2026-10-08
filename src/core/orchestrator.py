@@ -416,6 +416,33 @@ class AMDIOrchestrator:
             out.extend(state.get_geometric_tables())
         return out
 
+    @property
+    def vector_store(self):
+        """Vector store instance."""
+        return self._vector_store
+
+    @property
+    def semantic_cache(self):
+        """Semantic cache instance if wired."""
+        return getattr(self, "_semantic_cache", None)
+
+    @semantic_cache.setter
+    def semantic_cache(self, value):
+        self._semantic_cache = value
+
+    async def delete_document(self, doc_id: str, tenant_id: Optional[str] = None) -> bool:
+        """Cascading document deletion: removes state, vector store embeddings, and cache entries."""
+        if doc_id in self._doc_state:
+            state = self._doc_state[doc_id]
+            if tenant_id and getattr(state, "tenant_id", None) and str(state.tenant_id) != str(tenant_id):
+                return False
+            self._doc_state.pop(doc_id, None)
+        if self._vector_store is not None:
+            await self._vector_store.delete(doc_id=doc_id)
+        if getattr(self, "_semantic_cache", None) is not None:
+            await self._semantic_cache.invalidate(doc_id=doc_id, tenant_id=tenant_id)
+        return True
+
     # ------------------------------------------------------------------
     # Public async API
     # ------------------------------------------------------------------
