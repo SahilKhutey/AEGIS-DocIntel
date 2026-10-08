@@ -103,6 +103,24 @@ print([el["id"] for el in ordered_elements])
 
 ---
 
+## Packaging & TestPyPI Distribution
+
+To build and verify the package distribution locally or upload to TestPyPI ahead of full release:
+
+```bash
+cd aegis-docprep
+python -m build --no-isolation
+twine upload --repository testpypi dist/*
+```
+
+Verify the installed distribution in a clean environment:
+```bash
+pip install --index-url https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple/ aegis-docprep
+python -c "from aegis_docprep import detect_pii; print(detect_pii({'id':'t','text':'test SSN 123-45-6789'}))"
+```
+
+---
+
 ## License
 
 Licensed under the [Apache License, Version 2.0](LICENSE).
