@@ -107,15 +107,17 @@ def create_app() -> FastAPI:
     async def request_middleware(request: Request, call_next):
         request_id = str(uuid.uuid4())
         request.state.request_id = request_id
+        structlog.contextvars.bind_contextvars(request_id=request_id)
         start = time.perf_counter()
-
-        response = await call_next(request)
-
-        latency = (time.perf_counter() - start) * 1000
-        response.headers["X-Request-ID"] = request_id
-        response.headers["X-Response-Time-ms"] = f"{latency:.1f}"
-        REQUEST_LATENCY.record(latency)
-        return response
+        try:
+            response = await call_next(request)
+            latency = (time.perf_counter() - start) * 1000
+            response.headers["X-Request-ID"] = request_id
+            response.headers["X-Response-Time-ms"] = f"{latency:.1f}"
+            REQUEST_LATENCY.record(latency)
+            return response
+        finally:
+            structlog.contextvars.clear_contextvars()
 
     # ── Prometheus metrics ──────────────────────────────────────
     metrics_app = make_asgi_app()
