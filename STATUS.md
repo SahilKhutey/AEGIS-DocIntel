@@ -64,6 +64,12 @@ actually completed.
   - Compliance documentation rebuild: Replaced fabricated `compliance_check.json` (which asserted 100% compliance across GDPR/SOC2/ISO27001) with an evidence-backed gap analysis in `production/security-audit/compliance_gap_analysis.json`. Every control is checked against actual code and assigned an explicit status (`PARTIAL`, `NOT IMPLEMENTED`, `IMPLEMENTED (real, verified)`), with zero unverified claims.
   - Cascading document deletion: Fixed `RealDocumentService.delete()` to cascade across all three stores: (1) primary index `self._docs`, (2) vector database `FAISSStore.delete(doc_id=...)`, and (3) semantic cache `SemanticCache.invalidate(doc_id=...)`, plus orchestrator deletion. Previously, the deletion endpoint only removed the key from an in-memory dictionary despite claiming full chunk/vector/cache purging in the docstring. Regression tested in `tests/test_document_deletion.py`.
   - Deployment security boundary: Added `docs/deployment/security-assumptions.md` defining the explicit security contract between what this application codebase enforces (tenant-isolated queries, fail-safe environment auth gating, opt-in PII redaction) versus what the host deployment environment must provide (TLS termination, database encryption-at-rest, secure KMS secret management, network egress isolation).
+- **Observability Activation & Production Monitoring (Phase 12 Verified)**:
+  - Prometheus metrics wiring: Audited all nine Prometheus metrics in `src/observability/metrics.py` (`DOCUMENTS_INGESTED`, `CHUNKS_INDEXED`, `RETRIEVAL_LATENCY`, `LLM_TOKENS`, `CACHE_HITS`, `CACHE_MISSES`, `ACTIVE_DOCUMENTS`, `QUERY_ERRORS`, `INGEST_QUEUE_LAG`). Previously, all nine existed purely as definitions with zero real call sites in application code; wired real instrumentation into `IngestWorkflow`, `RealDocumentService`, `AMDIRetriever`, `HybridRetriever`, `SemanticCache`, `LLMInterface`, `MockLLMClient`, `QueryWorkflow`, and `QueryService`.
+  - Correlation ID propagation: Connected `structlog.contextvars.bind_contextvars(request_id=...)` in `src/main.py` request middleware to match `configure_logging()`'s `merge_contextvars` processor chain, with `clear_contextvars()` in a `finally` block to prevent cross-request leakage across async tasks.
+  - Multi-service deployment stack: Extended `deploy/docker-compose.yml` with real `prometheus` (port 9091:9090) and `grafana` (port 3000:3000) services, `deploy/prometheus.yml` scrape configuration targeting `aegis-api:9090`, and auto-provisioned Prometheus datasource. `GRAFANA_ADMIN_PASSWORD` uses safe environment fallback (`${GRAFANA_ADMIN_PASSWORD:-changeme}`) requiring `.env` configuration.
+  - Provisioned Grafana dashboards: Added version-controlled dashboard provisioning in `deploy/grafana/dashboards/dashboards.yml` and `deploy/grafana/dashboards/aegis_pipeline_overview.json` targeting real metric names: ingestion throughput by tenant and status, chunks indexed rate, active indexed documents gauge, ingest queue lag, P95 retrieval latency by stage (`dense`, `bm25`, `visual`, `rerank`, `total`), semantic cache hit ratio (making Redis outages immediately visible as a drop in hit ratio), query error rate, and LLM token consumption.
+  - Observability regression test suite: Added `tests/test_observability_metrics.py` verifying that real pipeline runs increment `DOCUMENTS_INGESTED`, `CHUNKS_INDEXED`, `ACTIVE_DOCUMENTS`, `INGEST_QUEUE_LAG`, `CACHE_HITS`, `CACHE_MISSES`, `RETRIEVAL_LATENCY`, `LLM_TOKENS`, `QUERY_ERRORS`, and bind/clear request correlation contextvars (7/7 tests passing).
 
 ## Layer-by-Layer Implementation Status (Master State D)
 
@@ -184,9 +190,10 @@ derived from MIT-licensed `jsvine/pdfplumber` test fixtures + native research pa
 See the [16-phase development roadmap](docs/ROADMAP.md) for the full plan. In short: Phase 7
 builds real ingestion validation, Phase 8 builds a real benchmark dataset,
 Phase 9 publishes real, reproducible performance numbers, Phase 10
-implements real security hardening and verified audit publication, and Phase 11
-rebuilds compliance documentation with an evidence-backed gap analysis, implements
-cascading document deletion, and formalizes deployment security assumptions.
+implements real security hardening and verified audit publication, Phase 11
+rebuilds compliance documentation with an evidence-backed gap analysis and cascading
+deletion, and Phase 12 activates real Prometheus and Grafana observability stack with
+real pipeline metric wiring and provisioned dashboards.
 
 ## What You Can Trust Today
 

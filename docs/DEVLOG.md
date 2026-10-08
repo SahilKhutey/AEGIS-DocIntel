@@ -551,9 +551,58 @@ All changes have been committed across discrete, atomic Git commits and synchron
 
 ---
 
-## 14. Complete Git Commit History
+## 14. Phase 12 Task Breakdown — Observability Activation
+
+### Task 12.1 — Metrics Audit & Zero-Call-Site Remediation
+- **Audit Findings:** Audited `src/observability/metrics.py` defining nine Prometheus metrics (`DOCUMENTS_INGESTED`, `CHUNKS_INDEXED`, `RETRIEVAL_LATENCY`, `LLM_TOKENS`, `CACHE_HITS`, `CACHE_MISSES`, `ACTIVE_DOCUMENTS`, `QUERY_ERRORS`, `INGEST_QUEUE_LAG`). Confirmed that every single metric had zero call sites across `src/`.
+- **Instrumentation Wiring:**
+  - `DOCUMENTS_INGESTED`: Wired into `IngestWorkflow.ingest` and `RealDocumentService.ingest` tracking `status="success"` and `status="failed"` per tenant.
+  - `CHUNKS_INDEXED`: Wired into `IngestWorkflow.ingest` and `RealDocumentService.ingest` tracking indexed element counts by block type.
+  - `ACTIVE_DOCUMENTS`: Wired gauge increment on ingestion and decrement on deletion (`RealDocumentService.delete`).
+  - `INGEST_QUEUE_LAG`: Wired gauge into `IngestWorkflow.ingest` finally block recording queue and ingestion duration.
+  - `RETRIEVAL_LATENCY`: Wired histogram stage timing across `AMDIRetriever` and `HybridRetriever` for `dense`, `bm25`, `visual`, `rerank`, and total stage timing in `QueryWorkflow` and `QueryService`.
+  - `CACHE_HITS` & `CACHE_MISSES`: Wired into `SemanticCache.query_cache` and `SemanticCache.get`. Redis lookup failures and cache misses increment `CACHE_MISSES` while hits increment `CACHE_HITS`.
+  - `LLM_TOKENS`: Wired token usage tracking into `ConnectorBase.send`, `LLMInterface._litellm_reason`, and `LLMService` clients (`OpenAIClient`, `AnthropicClient`, `MockLLMClient`) tracking input and output tokens per provider/model.
+  - `QUERY_ERRORS`: Wired into `QueryWorkflow.query` and `QueryService.query` exception handlers tracking error types per tenant.
+
+### Task 12.2 — Correlation ID Propagation (`request_id` Contextvars)
+- **Defect Identified:** `src/main.py` generated `request_id` in HTTP middleware, but never called `structlog.contextvars.bind_contextvars(request_id=request_id)` despite `configure_logging()` already including `merge_contextvars` in its processor chain.
+- **Remediation Action:** Bound `request_id` into contextvars upon request arrival, and added `structlog.contextvars.clear_contextvars()` in a `finally` block to prevent cross-request leakage across async tasks.
+
+### Task 12.3 — Prometheus and Grafana Infrastructure Services
+- **Services Added:** Extended `deploy/docker-compose.yml` with `prometheus` (`prom/prometheus:latest`, port 9091:9090) and `grafana` (`grafana/grafana:latest`, port 3000:3000) services and persistent volumes.
+- **Configurations Added:**
+  - `deploy/prometheus.yml`: Scrape target configured for `aegis-api:9090`.
+  - `deploy/grafana/datasources/prometheus.yml`: Auto-provisioned Prometheus datasource proxying `http://prometheus:9090`.
+  - Environment password fallback: `${GRAFANA_ADMIN_PASSWORD:-changeme}` avoiding hardcoded credentials.
+
+### Task 12.4 — Version-Controlled Grafana Dashboards
+- **Provisioning Added:** Added `deploy/grafana/dashboards/dashboards.yml` and `deploy/grafana/dashboards/aegis_pipeline_overview.json`.
+- **Panels Configured:**
+  - Ingestion throughput by status and tenant: `sum by (tenant_id, status) (rate(aegis_documents_ingested_total[5m]))`
+  - Chunks indexed rate: `sum by (block_type) (rate(aegis_chunks_indexed_total[5m]))`
+  - Active indexed documents gauge: `sum(aegis_active_documents)`
+  - Ingest queue lag gauge: `aegis_ingest_queue_lag`
+  - Semantic cache hit ratio: `sum(rate(aegis_cache_hits_total[5m])) / (sum(rate(aegis_cache_hits_total[5m])) + sum(rate(aegis_cache_misses_total[5m])))`
+  - Query error rate: `sum(rate(aegis_query_errors_total[5m]))`
+  - P95 retrieval latency by stage: `histogram_quantile(0.95, sum by (le, stage) (rate(aegis_retrieval_latency_seconds_bucket[5m])))`
+  - LLM token consumption rate: `sum by (model, direction) (rate(aegis_llm_tokens_total[5m]))`
+
+### Task 12.5 — Observability Regression Test Suite
+- **Verification:** Added `tests/test_observability_metrics.py` covering all nine metrics and correlation ID binding (7/7 tests passing).
+
+---
+
+## 15. Complete Git Commit History
 
 ```text
+* 973f057 docs: record Phase 12 Observability Activation in STATUS.md, CHANGELOG.md, and DEVLOG.md
+* 47113cf test: add regression tests asserting real pipeline runs increment the metrics they're supposed to touch
+* ed8f083 feat: add provisioned Grafana dashboards (ingestion throughput, retrieval latency by stage, cache hit ratio, error rate) as version-controlled JSON, referencing real metric names now emitting real data
+* 4201766 feat: add real Prometheus and Grafana services to deploy/docker-compose.yml — the compose file previously only ran the API itself despite exposing a metrics port with nothing to scrape it
+* cb95166 fix: bind request_id into structlog contextvars — configure_logging()'s processor chain was already set up to include it in every log line (merge_contextvars), but nothing ever called bind_contextvars() to put it there. Real request-ID generation/propagation in main.py's middleware was otherwise already correct.
+* 690d134 feat: wire real Prometheus metric calls into ingest_workflow.py, retrieval stages, and semantic_cache.py
+* f5b4d5f docs: record Phase 11 Compliance Rebuild in CHANGELOG.md and DEVLOG.md
 * 14cc4e7 docs: update STATUS.md — document persistence is in-memory only; this is a bigger, more foundational gap than a checklist item, and affects reliability as well as compliance posture
 * 088580c docs: add docs/deployment/security-assumptions.md stating explicitly what this codebase enforces versus what the deployment environment must provide
 * b00d990 test: add regression test asserting document deletion clears all three stores, not just the primary index
