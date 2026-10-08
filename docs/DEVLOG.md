@@ -593,10 +593,58 @@ All changes have been committed across discrete, atomic Git commits and synchron
 
 ---
 
-## 15. Complete Git Commit History
+## 15. Phase 13 Task Breakdown — API & SDK Stabilization
+
+### Task 13.1 — Outgoing Endpoint Route Auditing & Root-Cause Remediation
+- **Audit Findings:** Audited outgoing request paths across Python, TypeScript, Java, and C++ SDKs. Discovered that all 4 SDKs shared identical, hardcoded invalid routes with the non-existent `/api/v1/` prefix (which returned 404 Not Found against the running API), along with endpoint name mismatches:
+  - Upload: `/api/v1/documents` -> Real: `POST /v1/documents/upload`
+  - Get Document: `/api/v1/documents/{id}` -> Real: `GET /v1/documents/{doc_id}`
+  - List Documents: `/api/v1/documents` -> Real: `GET /v1/documents`
+  - Delete Document: `/api/v1/documents/{id}` -> Real: `DELETE /v1/documents/{doc_id}`
+  - Process/Reindex: `/api/v1/documents/{id}/process` -> Real: `POST /v1/documents/{doc_id}/reindex`
+  - Hybrid Search: `/api/v1/search` -> Real: `POST /v1/query` (mapped query to `question` field in `QueryRequest`)
+  - Sub-APIs: `/api/v1/context`, `/api/v1/export/...`, `/api/v1/agents/...`, `/api/v1/verify`, `/api/v1/engines/...`, `/api/v1/memory/...`, `/api/v1/dashboards/...` -> Consolidated to `/v1/...`.
+- **MIME Detection & Model Deserialization Fixes:**
+  - Added automatic MIME type detection (`mimetypes.guess_type`) in file uploads across SDKs, preventing `415 Unsupported Media Type` rejections.
+  - Updated model dataclasses (`DocumentSummary`, `Document`, `RetrievalResult`) in Python SDK to transparently deserialize real API response fields (`doc_id`/`document_id`, `filename`/`name`, `citations`/`hits`, `total_latency_ms`/`latency_ms`).
+
+### Task 13.2 — Unversioned Router Mount Elimination in `src/main.py`
+- **Defect Identified:** `src/main.py` registered `annotations.router` and `ael_router` twice: once with `/v1` prefix and once unversioned, causing duplicate OpenAPI Operation IDs (`get_elements`, `list_documents`, `delete_document`) and route clutter.
+- **Remediation Action:** Removed unversioned router includes, leaving canonical `/v1/...` mounts. Confirmed all 46 active endpoints are cleanly versioned.
+
+### Task 13.3 — OpenAPI Ground Truth & Automated CI Drift Enforcement
+- **OpenAPI Extraction:** Extracted canonical `openapi.json` (3,732 lines) directly from the live FastAPI application.
+- **CI Workflow Integration:** Added drift verification step in `.github/workflows/ci.yml` (`diff -u openapi.json /tmp/openapi_check.json`), ensuring any pull request or commit that changes API routes without updating `openapi.json` fails CI.
+
+### Task 13.4 — In-Process SDK Integration Testing
+- **Test Harness:** Created `sdk/python/tests/test_integration.py` utilizing FastAPI's `TestClient` in-process with `AEGIS_ENVIRONMENT=development`.
+- **Test Coverage:** Verified live request/response cycles for document upload, hybrid search, metadata retrieval, cascading document deletion, and reindexing (4/4 tests passing).
+
+### Task 13.5 — Cross-Language SDK Harmonization (TS, Java, C++)
+- Corrected all endpoint URLs and method payloads in:
+  - TypeScript SDK: `sdk/typescript/src/client.ts`
+  - Java SDK: `sdk/java/src/main/java/com/amdi/os/AmdiClient.java`
+  - C++ SDK: `sdk/cpp/include/amdi/amdi_client.hpp` & `sdk/cpp/src/amdi_client.cpp`
+
+### Task 13.6 — Packaging & TestPyPI Distribution Readiness
+- Migrated `sdk/python/pyproject.toml` build system to standard `setuptools.build_meta`.
+- Successfully built `.tar.gz` sdist and `.whl` wheel distributions.
+- Tested pip installation into site-packages and verified standalone imports.
+- Added publishing and installation commands to `sdk/python/README.md`.
+
+---
+
+## 16. Complete Git Commit History
 
 ```text
-* 973f057 docs: record Phase 12 Observability Activation in STATUS.md, CHANGELOG.md, and DEVLOG.md
+* c326444 docs: record Phase 13 API & SDK Stabilization in STATUS.md, CHANGELOG.md, and DEVLOG.md
+* ec05b1e chore: publish corrected Python SDK to TestPyPI for external verification before a full release
+* a89d267 fix: correct TypeScript, Java, and C++ SDK endpoint paths to match — same root-cause fix as the Python SDK, applied to all four languages that shared the same wrong design
+* e53531e test: replace import-only SDK smoke tests with real integration tests that run the actual FastAPI app in-process and exercise the SDK client against it — this is the test that would have caught the path mismatches above on day one
+* 84bba89 feat: generate and commit openapi.json from the real FastAPI app; add CI check that fails the build if it drifts from the real routes
+* 284a56a fix: remove duplicate unversioned router registration for annotations and ael_router in src/main.py — routes were reachable at both /x and /v1/x simultaneously
+* 605b224 fix: correct all Python SDK endpoint paths to match the real mounted API routes
+* ccb35f2 docs: record Phase 12 Observability Activation in STATUS.md, CHANGELOG.md, and DEVLOG.md
 * 47113cf test: add regression tests asserting real pipeline runs increment the metrics they're supposed to touch
 * ed8f083 feat: add provisioned Grafana dashboards (ingestion throughput, retrieval latency by stage, cache hit ratio, error rate) as version-controlled JSON, referencing real metric names now emitting real data
 * 4201766 feat: add real Prometheus and Grafana services to deploy/docker-compose.yml — the compose file previously only ran the API itself despite exposing a metrics port with nothing to scrape it

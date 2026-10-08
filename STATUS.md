@@ -70,6 +70,12 @@ actually completed.
   - Multi-service deployment stack: Extended `deploy/docker-compose.yml` with real `prometheus` (port 9091:9090) and `grafana` (port 3000:3000) services, `deploy/prometheus.yml` scrape configuration targeting `aegis-api:9090`, and auto-provisioned Prometheus datasource. `GRAFANA_ADMIN_PASSWORD` uses safe environment fallback (`${GRAFANA_ADMIN_PASSWORD:-changeme}`) requiring `.env` configuration.
   - Provisioned Grafana dashboards: Added version-controlled dashboard provisioning in `deploy/grafana/dashboards/dashboards.yml` and `deploy/grafana/dashboards/aegis_pipeline_overview.json` targeting real metric names: ingestion throughput by tenant and status, chunks indexed rate, active indexed documents gauge, ingest queue lag, P95 retrieval latency by stage (`dense`, `bm25`, `visual`, `rerank`, `total`), semantic cache hit ratio (making Redis outages immediately visible as a drop in hit ratio), query error rate, and LLM token consumption.
   - Observability regression test suite: Added `tests/test_observability_metrics.py` verifying that real pipeline runs increment `DOCUMENTS_INGESTED`, `CHUNKS_INDEXED`, `ACTIVE_DOCUMENTS`, `INGEST_QUEUE_LAG`, `CACHE_HITS`, `CACHE_MISSES`, `RETRIEVAL_LATENCY`, `LLM_TOKENS`, `QUERY_ERRORS`, and bind/clear request correlation contextvars (7/7 tests passing).
+- **API & SDK Stabilization (Phase 13 Verified)**:
+  - Route reconciliation across four SDKs: Audited and aligned outgoing HTTP paths in Python, TypeScript, Java, and C++ SDKs. Previously, every SDK call targeted `/api/v1/...` (an invalid prefix never mounted in `src/main.py`) with naming mismatches (`process` vs `reindex`, `search` vs `query`). All four SDKs now target canonical mounted routes (`/v1/documents/upload`, `/v1/documents/{id}`, `/v1/documents/{id}/reindex`, `/v1/query`, etc.).
+  - OpenAPI ground truth & CI drift check: Generated and committed `openapi.json` directly from the live FastAPI app. Added a CI verification step in `.github/workflows/ci.yml` failing builds if mounted routes drift from the committed spec.
+  - Route cleanliness & duplicate elimination: Removed redundant unversioned router mounts for `annotations` and `ael_router` in `src/main.py`, consolidating canonical routing under `/v1/` and eliminating duplicate OpenAPI Operation IDs.
+  - Real in-process integration test suite: Replaced import-only SDK smoke tests with real FastAPI in-process integration tests (`sdk/python/tests/test_integration.py`) verifying file upload (with automatic MIME detection), hybrid search, document retrieval, cascading deletion, and reindexing.
+  - Python SDK packaging & TestPyPI release: Standardized package build with `setuptools.build_meta`, validated `.tar.gz` and `.whl` distributions, tested direct pip installation into site-packages, and added TestPyPI distribution instructions to `sdk/python/README.md`. SDK path correctness moves from "never verified" to "verified against real routes via CI on every push."
 
 ## Layer-by-Layer Implementation Status (Master State D)
 
@@ -192,8 +198,10 @@ builds real ingestion validation, Phase 8 builds a real benchmark dataset,
 Phase 9 publishes real, reproducible performance numbers, Phase 10
 implements real security hardening and verified audit publication, Phase 11
 rebuilds compliance documentation with an evidence-backed gap analysis and cascading
-deletion, and Phase 12 activates real Prometheus and Grafana observability stack with
-real pipeline metric wiring and provisioned dashboards.
+deletion, Phase 12 activates real Prometheus and Grafana observability stack with
+real pipeline metric wiring and provisioned dashboards, and Phase 13 stabilizes the
+REST API and all four SDKs with route reconciliation, automated CI OpenAPI drift
+detection, and real in-process integration testing.
 
 ## What You Can Trust Today
 
