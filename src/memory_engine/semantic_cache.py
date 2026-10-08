@@ -14,6 +14,7 @@ from typing import Optional
 import numpy as np
 
 from src.config import settings
+from src.observability.metrics import CACHE_HITS, CACHE_MISSES
 
 logger = logging.getLogger(__name__)
 
@@ -88,26 +89,51 @@ class SemanticCache:
         doc_ids: Optional[list] = None,
     ) -> Optional[dict]:
         """Lookup cached response by semantic similarity."""
-        entries = self._entries.get(tenant_id, [])
-        idx = self._indices.get(tenant_id)
-        if not idx or idx.ntotal == 0:
+        try:
+            entries = self._entries.get(tenant_id, [])
+            idx = self._indices.get(tenant_id)
+            if not idx or idx.ntotal == 0:
+                CACHE_MISSES.labels(cache_type="semantic").inc()
+                return None
+
+            q = question_embedding.astype(np.float32).reshape(1, -1)
+            _normalize_L2(q)
+            scores, indices = idx.search(q, k=3)
+
+            for score, eidx in zip(scores[0], indices[0]):
+                if score < self.threshold or eidx < 0 or eidx >= len(entries):
+                    break
+                entry = entries[eidx]
+                if time.time() - entry.get("ts", 0) > self.ttl:
+                    continue
+                if doc_ids and not any(d in entry.get("doc_ids", []) for d in doc_ids):
+                    continue
+                CACHE_HITS.labels(cache_type="semantic").inc()
+                return entry.get("response")
+
+            CACHE_MISSES.labels(cache_type="semantic").inc()
+            return None
+        except Exception as e:
+            logger.warning("Semantic cache lookup failed: %s", e)
+            CACHE_MISSES.labels(cache_type="semantic").inc()
             return None
 
-        q = question_embedding.astype(np.float32).reshape(1, -1)
-        _normalize_L2(q)
-        scores, indices = idx.search(q, k=3)
-
-        for score, eidx in zip(scores[0], indices[0]):
-            if score < self.threshold or eidx < 0 or eidx >= len(entries):
-                break
-            entry = entries[eidx]
-            if time.time() - entry.get("ts", 0) > self.ttl:
-                continue
-            if doc_ids and not any(d in entry.get("doc_ids", []) for d in doc_ids):
-                continue
-            return entry.get("response")
-
-        return None
+    async def get(self, key: str) -> Optional[Any]:
+        """Direct cache lookup by key (e.g. from Redis)."""
+        if self.redis is None:
+            CACHE_MISSES.labels(cache_type="semantic").inc()
+            return None
+        try:
+            data = await self.redis.get(key)
+            if data:
+                CACHE_HITS.labels(cache_type="semantic").inc()
+                return data
+            CACHE_MISSES.labels(cache_type="semantic").inc()
+            return None
+        except Exception as e:
+            logger.warning("Semantic cache read failed: %s", e)
+            CACHE_MISSES.labels(cache_type="semantic").inc()
+            return None
 
     def _purge_expired_locked(self, tenant_id: str) -> int:
         """Remove TTL-expired entries for a tenant and rebuild its FAISS

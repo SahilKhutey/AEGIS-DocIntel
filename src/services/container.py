@@ -20,6 +20,11 @@ from src.models.document_object import DocumentObject, DocumentFormat
 from src.core.orchestrator import AMDIOrchestrator
 from src.llm_service.llm_client import LLMService
 from src.services.query_service import QueryService
+from src.observability.metrics import (
+    DOCUMENTS_INGESTED,
+    CHUNKS_INDEXED,
+    ACTIVE_DOCUMENTS,
+)
 
 log = structlog.get_logger("aegis.container")
 
@@ -40,28 +45,36 @@ class RealDocumentService:
             tenant_id=str(tenant_id),
         )
         
-        # Ingest using orchestrator
-        stats = await self.orchestrator.ingest(doc)
-        
-        doc_info = {
-            "doc_id": stats.get("doc_id", doc_id),
-            "tenant_id": str(tenant_id),
-            "filename": filename,
-            "status": "ready",
-            "page_count": stats.get("pages", 1),
-            "chunk_count": stats.get("elements", 0),
-            "is_scanned": False,
-            "language": "en",
-            "created_at": datetime.now(timezone.utc),
-        }
-        
-        self._docs[stats.get("doc_id", doc_id)] = doc_info
-        
-        class _DocResp:
-            def __init__(self, d):
-                for k, v in d.items():
-                    setattr(self, k, v)
-        return _DocResp(doc_info)
+        try:
+            # Ingest using orchestrator
+            stats = await self.orchestrator.ingest(doc)
+            
+            doc_info = {
+                "doc_id": stats.get("doc_id", doc_id),
+                "tenant_id": str(tenant_id),
+                "filename": filename,
+                "status": "ready",
+                "page_count": stats.get("pages", 1),
+                "chunk_count": stats.get("elements", 0),
+                "is_scanned": False,
+                "language": "en",
+                "created_at": datetime.now(timezone.utc),
+            }
+            
+            self._docs[stats.get("doc_id", doc_id)] = doc_info
+            
+            DOCUMENTS_INGESTED.labels(tenant_id=str(tenant_id), status="success").inc()
+            CHUNKS_INDEXED.labels(tenant_id=str(tenant_id), block_type="mixed").inc(stats.get("elements", 0))
+            ACTIVE_DOCUMENTS.labels(tenant_id=str(tenant_id)).inc()
+
+            class _DocResp:
+                def __init__(self, d):
+                    for k, v in d.items():
+                        setattr(self, k, v)
+            return _DocResp(doc_info)
+        except Exception:
+            DOCUMENTS_INGESTED.labels(tenant_id=str(tenant_id), status="failed").inc()
+            raise
 
     async def get(self, doc_id: str, tenant_id: str):
         doc = self._docs.get(str(doc_id))
@@ -140,6 +153,7 @@ class RealDocumentService:
                 log.warning(f"Orchestrator document deletion failed for {doc_id}: {e}")
 
         self._docs.pop(str(doc_id), None)
+        ACTIVE_DOCUMENTS.labels(tenant_id=str(tenant_id)).dec()
         return True
 
     async def reindex(self, doc_id: str, tenant_id: str):

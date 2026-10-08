@@ -25,6 +25,7 @@ from .exceptions import (
     TokenLimitError,
 )
 from .token_budget import AgentTokenBudget
+from src.observability.metrics import LLM_TOKENS
 
 
 class ConnectionStatus(Enum):
@@ -320,12 +321,21 @@ class BaseConnector(abc.ABC):
         question = getattr(ueo, "query", None) or kwargs.get("question")
         try:
             resp = self.send_ueo(ueo, question=question, **kwargs)
+            in_tok = resp.usage.get("prompt_tokens", 0) if resp.usage else 0
+            out_tok = resp.usage.get("completion_tokens", 0) if resp.usage else 0
+            tid = kwargs.get("tenant_id", "default")
+            model_name = resp.model or getattr(self.config, "model", "default")
+            if in_tok > 0:
+                LLM_TOKENS.labels(tenant_id=str(tid), model=model_name, direction="input").inc(in_tok)
+            if out_tok > 0:
+                LLM_TOKENS.labels(tenant_id=str(tid), model=model_name, direction="output").inc(out_tok)
+
             res_dict: Dict[str, Any] = {
                 "agent": resp.agent,
                 "model": resp.model,
                 "answer": resp.text,
-                "input_tokens": resp.usage.get("prompt_tokens", 0) if resp.usage else 0,
-                "output_tokens": resp.usage.get("completion_tokens", 0) if resp.usage else 0,
+                "input_tokens": in_tok,
+                "output_tokens": out_tok,
                 "finish_reason": resp.finish_reason,
             }
             if not resp.success and resp.error:

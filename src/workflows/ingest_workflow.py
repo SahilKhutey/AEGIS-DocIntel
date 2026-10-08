@@ -37,6 +37,12 @@ from src.ingestion.service import IngestionService
 from src.normalization.cleaner import TextCleaner
 from src.normalization.layout import LayoutDetector
 from src.normalization.ocr import OCREngine
+from src.observability.metrics import (
+    DOCUMENTS_INGESTED,
+    CHUNKS_INDEXED,
+    ACTIVE_DOCUMENTS,
+    INGEST_QUEUE_LAG,
+)
 
 
 class IngestionWorkflowResult(dict):
@@ -146,133 +152,155 @@ class IngestWorkflow:
         filename: str = '',
         format: DocumentFormat | None = None,
         profile_memory: bool = False,
-    ) -> dict:
+    ) -> IngestionWorkflowResult:
         '''Run full ingestion pipeline.'''
         timings = {}
         t_start = time.perf_counter()
+        doc = None
+        normalized = None
+        elements = []
 
         import tracemalloc
         if profile_memory:
             tracemalloc.start()
 
-        # Phase 1: Load
-        t0 = time.perf_counter()
-        if isinstance(source, DocumentObject):
-            doc = source
-        else:
-            doc = await self.ingestion.ingest(source, filename, format)
-        timings['phase1_load_s'] = round(time.perf_counter() - t0, 3)
-        logger.info(f'Loaded: {doc.filename} ({doc.size_bytes} bytes)')
-
-        self._doc_id = doc.doc_id
-        self._filename = doc.filename
-
-        # Phase 2: Normalize
-        t0 = time.perf_counter()
         try:
-            normalized = await self._normalize(doc)
-        except IngestionError:
+            # Phase 1: Load
+            t0 = time.perf_counter()
+            if isinstance(source, DocumentObject):
+                doc = source
+            else:
+                doc = await self.ingestion.ingest(source, filename, format)
+            timings['phase1_load_s'] = round(time.perf_counter() - t0, 3)
+            logger.info(f'Loaded: {doc.filename} ({doc.size_bytes} bytes)')
+
+            self._doc_id = doc.doc_id
+            self._filename = doc.filename
+
+            # Phase 2: Normalize
+            t0 = time.perf_counter()
+            try:
+                normalized = await self._normalize(doc)
+            except IngestionError:
+                raise
+            except Exception as exc:
+                raise DocumentCorruptError(
+                    f"Failed to normalize document {doc.filename}: {exc}",
+                    filename=doc.filename,
+                ) from exc
+            timings['phase2_normalize_s'] = round(time.perf_counter() - t0, 3)
+            logger.info(f'Normalized: {normalized.total_pages} pages, {normalized.total_blocks} blocks')
+            self._normalized = normalized
+
+            # Phase 3: Convert to geometric elements
+            t0 = time.perf_counter()
+            elements = self._to_elements(normalized)
+            timings['phase3_elements_s'] = round(time.perf_counter() - t0, 3)
+            self._elements = elements
+            logger.info(f'Created {len(elements)} geometric elements')
+
+            # Phase 4-9: Build all representations
+            t0 = time.perf_counter()
+            # Geometry
+            self.geometry = GeometryEngine()
+            for page in normalized.pages:
+                self.geometry.normalize_coordinates(page.page_number, page.width, page.height)
+            self.geometry.add_many(elements)
+
+            # Recurrence
+            self.recurrence = RecurrenceEngine()
+            self.recurrence.detect(elements)
+
+            # Frequency weighting
+            self.frequency = FrequencyEngine()
+            self.frequency.assign_weights(elements)
+
+            # Matrix extraction
+            self.matrix = MatrixEngine()
+            self._tables = self.matrix.find_tables(elements)
+
+            # Template detection
+            self.template = TemplateEngine()
+            self.template.build(elements)
+
+            # Graph — Spatial-DAG construction per Monograph Section 6
+            self.graph_engine.build_nodes(elements)
+            self.graph_engine.build_edges(elements)
+            self._graph = self.graph_engine.graph
+            timings['phase4_9_engines_s'] = round(time.perf_counter() - t0, 3)
+
+            # Phase 9: Semantic indexing
+            t0 = time.perf_counter()
+            texts = [e.content for e in elements if e.content]
+            metas = [{'element_id': e.element_id, 'page': e.page, 'section': e.section}
+                     for e in elements if e.content]
+            if texts:
+                self.semantic.process(elements)
+                embeddings = self.embedder.encode(texts)
+
+                v_metas = [
+                    {'chunk_id': e.element_id, 'text': e.content, 'page': e.page,
+                     'section': e.section, 'type': e.type.value, 'doc_id': e.doc_id}
+                    for e in elements if e.content
+                ]
+                await self.vector_store.upsert(embeddings, v_metas)
+            timings['phase9_semantic_s'] = round(time.perf_counter() - t0, 3)
+            logger.info('Semantic indexing complete')
+
+            # Phase 11: Memory storage
+            t0 = time.perf_counter()
+            await self.memory.put(f'doc:{doc.doc_id}', {
+                'filename': doc.filename,
+                'elements': len(elements),
+                'tables': len(self._tables),
+                'templates': len(self.template.templates),
+                'graph_nodes': self._graph.graph.number_of_nodes() if self._graph else 0,
+                'graph_edges': self._graph.graph.number_of_edges() if self._graph else 0,
+            })
+            timings['phase11_memory_s'] = round(time.perf_counter() - t0, 3)
+
+            # Total
+            timings['total_s'] = round(time.perf_counter() - t_start, 3)
+
+            if profile_memory:
+                snapshot = tracemalloc.take_snapshot()
+                tracemalloc.stop()
+                top_stats = snapshot.statistics('lineno')
+                timings['memory_peak_bytes'] = sum(stat.size for stat in top_stats)
+                timings['memory_peak_mb'] = round(timings['memory_peak_bytes'] / (1024 * 1024), 2)
+                timings['top_allocators'] = [f"{s.size/1024:.1f}KB {s.traceback[0]}" for s in top_stats[:5]]
+
+            master_state = self.get_master_state()
+            res_data = {
+                'doc_id': doc.doc_id,
+                'filename': doc.filename,
+                'pages': normalized.total_pages,
+                'blocks': normalized.total_blocks,
+                'tables': len(self._tables),
+                'templates': len(self.template.templates),
+                'graph_nodes': self._graph.graph.number_of_nodes() if self._graph else 0,
+                'graph_edges': self._graph.graph.number_of_edges() if self._graph else 0,
+                'timings': timings,
+            }
+
+            tenant_id = getattr(doc, "tenant_id", "default") or "default"
+            DOCUMENTS_INGESTED.labels(tenant_id=tenant_id, status="success").inc()
+            chunks_count = (
+                sum(len(p.blocks) for p in normalized.pages)
+                if (normalized and hasattr(normalized, "pages") and normalized.pages)
+                else (len(elements) if elements else 1)
+            )
+            CHUNKS_INDEXED.labels(tenant_id=tenant_id, block_type="mixed").inc(chunks_count)
+            ACTIVE_DOCUMENTS.labels(tenant_id=tenant_id).inc()
+
+            return IngestionWorkflowResult(res_data, master_state=master_state)
+        except Exception:
+            tenant_id = getattr(doc, "tenant_id", "default") if doc else "default"
+            tenant_id = tenant_id or "default"
+            DOCUMENTS_INGESTED.labels(tenant_id=tenant_id, status="failed").inc()
             raise
-        except Exception as exc:
-            raise DocumentCorruptError(
-                f"Failed to normalize document {doc.filename}: {exc}",
-                filename=doc.filename,
-            ) from exc
-        timings['phase2_normalize_s'] = round(time.perf_counter() - t0, 3)
-        logger.info(f'Normalized: {normalized.total_pages} pages, {normalized.total_blocks} blocks')
-        self._normalized = normalized
-
-        # Phase 3: Convert to geometric elements
-        t0 = time.perf_counter()
-        elements = self._to_elements(normalized)
-        timings['phase3_elements_s'] = round(time.perf_counter() - t0, 3)
-        self._elements = elements
-        logger.info(f'Created {len(elements)} geometric elements')
-
-        # Phase 4-9: Build all representations
-        t0 = time.perf_counter()
-        # Geometry
-        self.geometry = GeometryEngine()
-        for page in normalized.pages:
-            self.geometry.normalize_coordinates(page.page_number, page.width, page.height)
-        self.geometry.add_many(elements)
-
-        # Recurrence
-        self.recurrence = RecurrenceEngine()
-        self.recurrence.detect(elements)
-
-        # Frequency weighting
-        self.frequency = FrequencyEngine()
-        self.frequency.assign_weights(elements)
-
-        # Matrix extraction
-        self.matrix = MatrixEngine()
-        self._tables = self.matrix.find_tables(elements)
-
-        # Template detection
-        self.template = TemplateEngine()
-        self.template.build(elements)
-
-        # Graph — Spatial-DAG construction per Monograph Section 6
-        self.graph_engine.build_nodes(elements)
-        self.graph_engine.build_edges(elements)
-        self._graph = self.graph_engine.graph
-        timings['phase4_9_engines_s'] = round(time.perf_counter() - t0, 3)
-
-        # Phase 9: Semantic indexing
-        t0 = time.perf_counter()
-        texts = [e.content for e in elements if e.content]
-        metas = [{'element_id': e.element_id, 'page': e.page, 'section': e.section}
-                 for e in elements if e.content]
-        if texts:
-            self.semantic.process(elements)
-            embeddings = self.embedder.encode(texts)
-
-            v_metas = [
-                {'chunk_id': e.element_id, 'text': e.content, 'page': e.page,
-                 'section': e.section, 'type': e.type.value, 'doc_id': e.doc_id}
-                for e in elements if e.content
-            ]
-            await self.vector_store.upsert(embeddings, v_metas)
-        timings['phase9_semantic_s'] = round(time.perf_counter() - t0, 3)
-        logger.info('Semantic indexing complete')
-
-        # Phase 11: Memory storage
-        t0 = time.perf_counter()
-        await self.memory.put(f'doc:{doc.doc_id}', {
-            'filename': doc.filename,
-            'elements': len(elements),
-            'tables': len(self._tables),
-            'templates': len(self.template.templates),
-            'graph_nodes': self._graph.graph.number_of_nodes() if self._graph else 0,
-            'graph_edges': self._graph.graph.number_of_edges() if self._graph else 0,
-        })
-        timings['phase11_memory_s'] = round(time.perf_counter() - t0, 3)
-
-        # Total
-        timings['total_s'] = round(time.perf_counter() - t_start, 3)
-
-        if profile_memory:
-            snapshot = tracemalloc.take_snapshot()
-            tracemalloc.stop()
-            top_stats = snapshot.statistics('lineno')
-            timings['memory_peak_bytes'] = sum(stat.size for stat in top_stats)
-            timings['memory_peak_mb'] = round(timings['memory_peak_bytes'] / (1024 * 1024), 2)
-            timings['top_allocators'] = [f"{s.size/1024:.1f}KB {s.traceback[0]}" for s in top_stats[:5]]
-
-        master_state = self.get_master_state()
-        res_data = {
-            'doc_id': doc.doc_id,
-            'filename': doc.filename,
-            'pages': normalized.total_pages,
-            'blocks': normalized.total_blocks,
-            'tables': len(self._tables),
-            'templates': len(self.template.templates),
-            'graph_nodes': self._graph.graph.number_of_nodes() if self._graph else 0,
-            'graph_edges': self._graph.graph.number_of_edges() if self._graph else 0,
-            'timings': timings,
-        }
-        return IngestionWorkflowResult(res_data, master_state=master_state)
+        finally:
+            INGEST_QUEUE_LAG.set(time.perf_counter() - t_start)
 
     async def _normalize(self, doc: DocumentObject) -> NormalizedDocument:
         '''Parse and normalize any document format.'''

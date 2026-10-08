@@ -15,6 +15,7 @@ import structlog
 
 from src.config import settings
 from src.llm_service.llm_client import LLMService
+from src.observability.metrics import RETRIEVAL_LATENCY, QUERY_ERRORS
 
 log = structlog.get_logger("aegis.query_service")
 
@@ -66,7 +67,12 @@ class QueryService:
         doc_id = doc_ids[0] if doc_ids else None
 
         # Call the orchestrator
-        res = await self.rag.query(question, doc_id=doc_id, top_k=top_k or 12)
+        try:
+            with RETRIEVAL_LATENCY.labels(stage="total").time():
+                res = await self.rag.query(question, doc_id=doc_id, top_k=top_k or 12)
+        except Exception as exc:
+            QUERY_ERRORS.labels(tenant_id=str(tenant_id), error_type=type(exc).__name__).inc()
+            raise
 
         # Map citations
         citations = []

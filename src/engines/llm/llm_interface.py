@@ -27,6 +27,7 @@ import logging
 import re
 from dataclasses import dataclass, field
 from typing import Any, AsyncIterator, Dict, List, Optional
+from src.observability.metrics import LLM_TOKENS
 
 logger = logging.getLogger(__name__)
 
@@ -304,6 +305,12 @@ class LLMInterface:
         confidence = self._compute_confidence(grounded, has_table)
         label = self._confidence_label(confidence)
 
+        mock_in = len(question.split())
+        mock_out = len(answer.split())
+        tid = getattr(self, "_tenant_id", "default")
+        LLM_TOKENS.labels(tenant_id=str(tid), model="mock", direction="input").inc(mock_in)
+        LLM_TOKENS.labels(tenant_id=str(tid), model="mock", direction="output").inc(mock_out)
+
         logger.debug("Mock LLMResponse generated — citations=%d", len(citations))
         return LLMResponse(
             answer=answer,
@@ -312,8 +319,8 @@ class LLMInterface:
             confidence_label=label,
             grounded=grounded,
             model="mock",
-            input_tokens=0,
-            output_tokens=0,
+            input_tokens=mock_in,
+            output_tokens=mock_out,
         )
 
     @staticmethod
@@ -412,6 +419,12 @@ class LLMInterface:
                 output_tokens = getattr(usage, "completion_tokens", 0) or 0
         except Exception as e:
             logger.debug("Failed to extract token usage from response: %s", e)
+
+        tid = kwargs.get("tenant_id", "default")
+        if input_tokens > 0:
+            LLM_TOKENS.labels(tenant_id=str(tid), model=model_id, direction="input").inc(input_tokens)
+        if output_tokens > 0:
+            LLM_TOKENS.labels(tenant_id=str(tid), model=model_id, direction="output").inc(output_tokens)
 
         citations = self._parse_citations(answer)
         grounded = bool(citations) and len(answer) > 20

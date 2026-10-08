@@ -46,6 +46,7 @@ from typing import Any, Dict, List, Optional, Tuple
 
 from src.engines.fusion.adaptive_fusion import AdaptiveFusionEngine, FusionContext
 from src.engines.geometry.element import GeometricElement
+from src.observability.metrics import RETRIEVAL_LATENCY
 
 logger = logging.getLogger(__name__)
 
@@ -288,23 +289,24 @@ class AMDIRetriever:
             "x": x_scores,
         }
 
-        try:
-            fusion_ctx: FusionContext = await self._fusion.fuse(
-                query=query,
-                elements=elements,
-                layer_scores=all_scores,
-                weights=weights,
-                top_k=top_k,
-            )
-            fused_items = fusion_ctx.ranked_items
-        except Exception as exc:  # pylint: disable=broad-except
-            logger.error("AdaptiveFusionEngine.fuse() error: %s", exc)
-            # Graceful degradation: fall back to semantic scores
-            fused_items = sorted(
-                elements,
-                key=lambda e: s_scores.get(e.element_id, 0.0),
-                reverse=True,
-            )[:top_k]
+        with RETRIEVAL_LATENCY.labels(stage="rerank").time():
+            try:
+                fusion_ctx: FusionContext = await self._fusion.fuse(
+                    query=query,
+                    elements=elements,
+                    layer_scores=all_scores,
+                    weights=weights,
+                    top_k=top_k,
+                )
+                fused_items = fusion_ctx.ranked_items
+            except Exception as exc:  # pylint: disable=broad-except
+                logger.error("AdaptiveFusionEngine.fuse() error: %s", exc)
+                # Graceful degradation: fall back to semantic scores
+                fused_items = sorted(
+                    elements,
+                    key=lambda e: s_scores.get(e.element_id, 0.0),
+                    reverse=True,
+                )[:top_k]
 
         # ------------------------------------------------------------------
         # Step 6 — build RetrievalResult list
@@ -338,6 +340,7 @@ class AMDIRetriever:
             )
 
         latency_ms = (time.perf_counter() - t_start) * 1_000
+        RETRIEVAL_LATENCY.labels(stage="total").observe(latency_ms / 1_000.0)
         logger.info(
             "retrieve() complete — results=%d table_answers=%d latency=%.1fms",
             len(results),
@@ -446,13 +449,26 @@ class AMDIRetriever:
         """
         if fn is None:
             return {}
+        stage_map = {
+            "semantic": "dense",
+            "frequency": "bm25",
+            "geometry": "visual",
+        }
+        stage = stage_map.get(name)
+        t_eng = time.perf_counter()
         try:
             result = fn(*args)
             if asyncio.iscoroutine(result):
-                return await result
-            return result or {}
+                res = await result
+            else:
+                res = result
+            if stage:
+                RETRIEVAL_LATENCY.labels(stage=stage).observe(time.perf_counter() - t_eng)
+            return res or {}
         except Exception as exc:  # pylint: disable=broad-except
             logger.warning("Engine '%s' error: %s", name, exc)
+            if stage:
+                RETRIEVAL_LATENCY.labels(stage=stage).observe(time.perf_counter() - t_eng)
             return {}
 
     @staticmethod

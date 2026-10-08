@@ -21,6 +21,7 @@ from .template_search import TemplateSearch
 from .frequency_search import FrequencySearch
 from .recurrence_search import RecurrenceSearch
 from .ranker import HybridRanker, HybridRanking
+from src.observability.metrics import RETRIEVAL_LATENCY
 
 
 @dataclass
@@ -151,7 +152,8 @@ class HybridRetriever:
         # 1. Semantic
         if query_embedding is not None:
             try:
-                res = self.semantic.search(query_embedding, top_k=search_top_k)
+                with RETRIEVAL_LATENCY.labels(stage="dense").time():
+                    res = self.semantic.search(query_embedding, top_k=search_top_k)
                 method_results["semantic"] = [(r.doc_id, r.score) for r in res]
             except Exception:
                 method_results["semantic"] = []
@@ -167,7 +169,8 @@ class HybridRetriever:
         # 3. Geometry
         if query_coords is not None:
             try:
-                res = self.geometry.knn(query_coords, k=search_top_k)
+                with RETRIEVAL_LATENCY.labels(stage="visual").time():
+                    res = self.geometry.knn(query_coords, k=search_top_k)
                 method_results["geometry"] = [(r.item_id, r.similarity) for r in res]
             except Exception:
                 method_results["geometry"] = []
@@ -191,7 +194,8 @@ class HybridRetriever:
         # 6. Frequency
         if query_tokens is not None:
             try:
-                res = self.frequency.search(query_tokens, top_k=search_top_k)
+                with RETRIEVAL_LATENCY.labels(stage="bm25").time():
+                    res = self.frequency.search(query_tokens, top_k=search_top_k)
                 method_results["frequency"] = [(r.doc_id, r.score) for r in res]
             except Exception:
                 method_results["frequency"] = []
@@ -214,8 +218,9 @@ class HybridRetriever:
                 num_sources=0,
             )
 
-        return self.ranker.fuse(
-            active_results,
-            weights=self.config.weights,
-            top_k=search_top_k,
-        )
+        with RETRIEVAL_LATENCY.labels(stage="rerank").time():
+            return self.ranker.fuse(
+                active_results,
+                weights=self.config.weights,
+                top_k=search_top_k,
+            )
