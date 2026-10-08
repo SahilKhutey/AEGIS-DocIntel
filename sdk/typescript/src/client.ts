@@ -115,7 +115,7 @@ export class DocumentsAPI {
 
     return this.client.request<models.DocumentSummary>({
       method: "POST",
-      url: "/api/v1/documents",
+      url: "/v1/documents/upload",
       data: form,
       headers: form.getHeaders
         ? form.getHeaders()
@@ -126,7 +126,7 @@ export class DocumentsAPI {
   public async get(documentId: string): Promise<models.Document> {
     return this.client.request<models.Document>({
       method: "GET",
-      url: `/api/v1/documents/${documentId}`,
+      url: `/v1/documents/${documentId}`,
     });
   }
 
@@ -138,7 +138,7 @@ export class DocumentsAPI {
   }): Promise<models.DocumentSummary[]> {
     return this.client.request<models.DocumentSummary[]>({
       method: "GET",
-      url: "/api/v1/documents",
+      url: "/v1/documents",
       params: params,
     });
   }
@@ -146,7 +146,7 @@ export class DocumentsAPI {
   public async delete(documentId: string): Promise<void> {
     return this.client.request<void>({
       method: "DELETE",
-      url: `/api/v1/documents/${documentId}`,
+      url: `/v1/documents/${documentId}`,
     });
   }
 
@@ -160,7 +160,7 @@ export class DocumentsAPI {
     }
     const response = await this.client.request({
       method: "POST",
-      url: `/api/v1/documents/${documentId}/process`,
+      url: `/v1/documents/${documentId}/reindex`,
       data: payload,
     });
     const outputs = response.outputs || {};
@@ -169,6 +169,13 @@ export class DocumentsAPI {
       result[key] = outputs[key] as models.EngineOutput;
     }
     return result;
+  }
+
+  public async reindex(
+    documentId: string,
+    engines?: string[]
+  ): Promise<Record<string, models.EngineOutput>> {
+    return this.process(documentId, engines);
   }
 }
 
@@ -185,12 +192,13 @@ export class RetrievalAPI {
     }
   ): Promise<models.RetrievalResult> {
     const data = {
+      question: query,
       query: query,
       ...params,
     };
     return this.client.request<models.RetrievalResult>({
       method: "POST",
-      url: "/api/v1/search",
+      url: "/v1/query",
       data: data,
     });
   }
@@ -214,7 +222,7 @@ export class ContextAPI {
     };
     const response = await this.client.request({
       method: "POST",
-      url: "/api/v1/context",
+      url: "/v1/context",
       data: data,
     });
     return response.ueo as models.UniversalExportObject;
@@ -231,7 +239,7 @@ export class ExportAPI {
   public async toMarkdown(ueo: models.UniversalExportObject): Promise<string> {
     return this.client.request<string>({
       method: "POST",
-      url: "/api/v1/export/markdown",
+      url: "/v1/export/markdown",
       data: ueo,
     });
   }
@@ -239,7 +247,7 @@ export class ExportAPI {
   public async toYaml(ueo: models.UniversalExportObject): Promise<string> {
     return this.client.request<string>({
       method: "POST",
-      url: "/api/v1/export/yaml",
+      url: "/v1/export/yaml",
       data: ueo,
     });
   }
@@ -265,7 +273,7 @@ export class AgentsAPI {
   public async listAgents(): Promise<any[]> {
     return this.client.request<any[]>({
       method: "GET",
-      url: "/api/v1/agents",
+      url: "/v1/agents",
     });
   }
 
@@ -282,7 +290,7 @@ export class AgentsAPI {
     };
     return this.client.request<models.ConnectorResponse>({
       method: "POST",
-      url: `/api/v1/agents/${agent}/send`,
+      url: `/v1/agents/${agent}/send`,
       data: data,
     });
   }
@@ -370,7 +378,7 @@ export class VerificationAPI {
     };
     return this.client.request<models.VerificationReport>({
       method: "POST",
-      url: "/api/v1/verify",
+      url: "/v1/verify",
       data: data,
     });
   }
@@ -382,7 +390,7 @@ export class EnginesAPI {
   public async list(): Promise<string[]> {
     const response = await this.client.request({
       method: "GET",
-      url: "/api/v1/engines",
+      url: "/v1/engines",
     });
     return response.engines || [];
   }
@@ -398,7 +406,7 @@ export class EnginesAPI {
     };
     return this.client.request<models.EngineOutput>({
       method: "POST",
-      url: `/api/v1/engines/${engine}/run`,
+      url: `/v1/engines/${engine}/run`,
       data: data,
     });
   }
@@ -410,7 +418,7 @@ export class MemoryAPI {
   public async getStats(): Promise<Record<string, any>> {
     return this.client.request<Record<string, any>>({
       method: "GET",
-      url: "/api/v1/memory/stats",
+      url: "/v1/memory/stats",
     });
   }
 
@@ -420,7 +428,7 @@ export class MemoryAPI {
   ): Promise<Record<string, any>> {
     return this.client.request<Record<string, any>>({
       method: "POST",
-      url: "/api/v1/memory/promote",
+      url: "/v1/memory/promote",
       data: { level, max_items: maxItems },
     });
   }
@@ -431,7 +439,7 @@ export class MemoryAPI {
   ): Promise<Record<string, any>> {
     return this.client.request<Record<string, any>>({
       method: "POST",
-      url: "/api/v1/memory/evict",
+      url: "/v1/memory/evict",
       data: { level, n: n },
     });
   }
@@ -439,7 +447,7 @@ export class MemoryAPI {
   public async maintenance(): Promise<Record<string, number>> {
     return this.client.request<Record<string, number>>({
       method: "POST",
-      url: "/api/v1/memory/maintenance",
+      url: "/v1/memory/maintenance",
     });
   }
 }
@@ -450,7 +458,7 @@ export class DashboardsAPI {
   public async get(dashboard: string): Promise<Record<string, any>> {
     return this.client.request<Record<string, any>>({
       method: "GET",
-      url: `/api/v1/dashboards/${dashboard}`,
+      url: `/v1/dashboards/${dashboard}`,
     });
   }
 

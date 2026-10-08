@@ -76,7 +76,7 @@ DocumentSummary AmdiClient::upload_document(const std::string& file_path, const 
 }
 
 Document AmdiClient::get_document(const std::string& document_id) {
-    std::string response = send_request("GET", "/api/v1/documents/" + document_id);
+    std::string response = send_request("GET", "/v1/documents/" + document_id);
     Document doc;
     doc.document_id = document_id;
     doc.name = "Document";
@@ -85,12 +85,16 @@ Document AmdiClient::get_document(const std::string& document_id) {
 }
 
 void AmdiClient::delete_document(const std::string& document_id) {
-    send_request("DELETE", "/api/v1/documents/" + document_id);
+    send_request("DELETE", "/v1/documents/" + document_id);
+}
+
+void AmdiClient::reindex_document(const std::string& document_id) {
+    send_request("POST", "/v1/documents/" + document_id + "/reindex");
 }
 
 RetrievalResult AmdiClient::search(const std::string& query, int top_k) {
-    std::string payload = "{\"query\":\"" + query + "\",\"top_k\":" + std::to_string(top_k) + "}";
-    std::string response = send_request("POST", "/api/v1/search", payload);
+    std::string payload = "{\"question\":\"" + query + "\",\"query\":\"" + query + "\",\"top_k\":" + std::to_string(top_k) + "}";
+    std::string response = send_request("POST", "/v1/query", payload);
 
     RetrievalResult res;
     res.query = query;
@@ -104,7 +108,7 @@ RetrievalResult AmdiClient::search(const std::string& query, int top_k) {
 
 ConnectorResponse AmdiClient::send_to_agent(const std::string& agent, const std::string& ueo_json, const std::string& question) {
     std::string payload = "{\"ueo\":" + ueo_json + ",\"question\":\"" + question + "\"}";
-    std::string response = send_request("POST", "/api/v1/agents/" + agent + "/send", payload);
+    std::string response = send_request("POST", "/v1/agents/" + agent + "/send", payload);
 
     ConnectorResponse resp;
     resp.text = response;
@@ -114,7 +118,7 @@ ConnectorResponse AmdiClient::send_to_agent(const std::string& agent, const std:
 
 VerificationReport AmdiClient::verify_response(const std::string& response_text) {
     std::string payload = "{\"response_text\":\"" + response_text + "\"}";
-    std::string response = send_request("POST", "/api/v1/verify", payload);
+    std::string response = send_request("POST", "/v1/verify", payload);
 
     VerificationReport report;
     report.passed = true;

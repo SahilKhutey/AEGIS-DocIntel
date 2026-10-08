@@ -66,6 +66,7 @@ public:
     DocumentSummary upload_document(const std::string& file_path, const std::vector<std::string>& tags = {});
     Document get_document(const std::string& document_id);
     void delete_document(const std::string& document_id);
+    void reindex_document(const std::string& document_id);
 
     // Retrieval
     RetrievalResult search(const std::string& query, int top_k = 10);

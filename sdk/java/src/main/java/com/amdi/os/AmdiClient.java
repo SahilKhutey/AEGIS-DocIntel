@@ -87,7 +87,7 @@ public class AmdiClient {
             try {
                 String boundary = "---AMDISDKBoundary" + System.currentTimeMillis();
                 HttpRequest request = HttpRequest.newBuilder()
-                        .uri(URI.create(baseUrl + "/api/v1/documents"))
+                        .uri(URI.create(baseUrl + "/v1/documents/upload"))
                         .header("Authorization", "Bearer " + apiKey)
                         .header("Content-Type", "multipart/form-data; boundary=" + boundary)
                         .POST(HttpRequest.BodyPublishers.ofFile(filePath))
@@ -103,20 +103,25 @@ public class AmdiClient {
         }
 
         public AmdiModels.Document get(String documentId) {
-            return sendRequest("GET", "/api/v1/documents/" + documentId, null, AmdiModels.Document.class);
+            return sendRequest("GET", "/v1/documents/" + documentId, null, AmdiModels.Document.class);
         }
 
         public void delete(String documentId) {
-            sendRequest("DELETE", "/api/v1/documents/" + documentId, null, Void.class);
+            sendRequest("DELETE", "/v1/documents/" + documentId, null, Void.class);
+        }
+
+        public Map<String, Object> reindex(String documentId) {
+            return sendRequest("POST", "/v1/documents/" + documentId + "/reindex", null, Map.class);
         }
     }
 
     public class RetrievalAPI {
         public AmdiModels.RetrievalResult search(String query, int topK) {
             Map<String, Object> body = new HashMap<>();
+            body.put("question", query);
             body.put("query", query);
             body.put("top_k", topK);
-            return sendRequest("POST", "/api/v1/search", body, AmdiModels.RetrievalResult.class);
+            return sendRequest("POST", "/v1/query", body, AmdiModels.RetrievalResult.class);
         }
     }
 
@@ -125,7 +130,7 @@ public class AmdiClient {
             Map<String, Object> body = new HashMap<>();
             body.put("candidates", candidates);
             body.put("total_budget", totalBudget);
-            return sendRequest("POST", "/api/v1/context", body, AmdiModels.UniversalExportObject.class);
+            return sendRequest("POST", "/v1/context", body, AmdiModels.UniversalExportObject.class);
         }
     }
 
@@ -134,7 +139,7 @@ public class AmdiClient {
             Map<String, Object> body = new HashMap<>();
             body.put("ueo", ueo);
             body.put("question", question);
-            return sendRequest("POST", "/api/v1/agents/" + agent + "/send", body, AmdiModels.ConnectorResponse.class);
+            return sendRequest("POST", "/v1/agents/" + agent + "/send", body, AmdiModels.ConnectorResponse.class);
         }
     }
 
@@ -142,7 +147,7 @@ public class AmdiClient {
         public AmdiModels.VerificationReport verify(String responseText) {
             Map<String, Object> body = new HashMap<>();
             body.put("response_text", responseText);
-            return sendRequest("POST", "/api/v1/verify", body, AmdiModels.VerificationReport.class);
+            return sendRequest("POST", "/v1/verify", body, AmdiModels.VerificationReport.class);
         }
     }
 
@@ -150,13 +155,13 @@ public class AmdiClient {
         public AmdiModels.EngineOutput run(String engine, String documentId) {
             Map<String, Object> body = new HashMap<>();
             body.put("document_id", documentId);
-            return sendRequest("POST", "/api/v1/engines/" + engine + "/run", body, AmdiModels.EngineOutput.class);
+            return sendRequest("POST", "/v1/engines/" + engine + "/run", body, AmdiModels.EngineOutput.class);
         }
     }
 
     public class MemoryAPI {
         public Map<String, Object> getStats() {
-            return sendRequest("GET", "/api/v1/memory/stats", null, Map.class);
+            return sendRequest("GET", "/v1/memory/stats", null, Map.class);
         }
     }
 }
