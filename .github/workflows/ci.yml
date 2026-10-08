@@ -47,6 +47,11 @@ jobs:
           pip install -r requirements-core.txt
           pip install -r requirements-dev.txt
 
+      - name: Verify OpenAPI spec is up to date
+        run: |
+          python -c "import os; os.environ['HF_HUB_OFFLINE']='1'; os.environ['TRANSFORMERS_OFFLINE']='1'; from src.main import app; import json; json.dump(app.openapi(), open('/tmp/openapi_check.json','w'), indent=2)"
+          diff -u openapi.json /tmp/openapi_check.json || (echo "openapi.json is stale — regenerate it" && exit 1)
+
       - name: Run test suite with coverage
         run: |
           # Coverage gate history: 70% (Phase 3 baseline: 76%) -> 75% (Phase 6 measured: 80%)

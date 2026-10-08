@@ -1,0 +1,3732 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "AEGIS-DocIntel",
+    "description": "Production-grade Multimodal Document Intelligence Platform. Reverse-engineered architecture of ChatGPT/Gemini/Claude document pipelines.",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/v1/documents/upload": {
+      "post": {
+        "tags": [
+          "Documents"
+        ],
+        "summary": "Upload a document for indexing",
+        "description": "Upload a document for ingestion and indexing.\nReturns immediately with doc_id and status=pending.\nUse GET /documents/{doc_id} to poll indexing status.",
+        "operationId": "upload_document_v1_documents_upload_post",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_upload_document_v1_documents_upload_post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "202": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DocumentResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          },
+          {
+            "APIKeyHeader": []
+          }
+        ]
+      }
+    },
+    "/v1/documents/{doc_id}": {
+      "get": {
+        "tags": [
+          "Documents"
+        ],
+        "summary": "Get document status",
+        "description": "Get document metadata and indexing status.",
+        "operationId": "get_document_v1_documents__doc_id__get",
+        "security": [
+          {
+            "HTTPBearer": []
+          },
+          {
+            "APIKeyHeader": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "doc_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Doc Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DocumentResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete Document",
+        "operationId": "delete_document_v1_documents__doc_id__delete",
+        "parameters": [
+          {
+            "name": "doc_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Doc Id"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/documents/{doc_id}/status": {
+      "get": {
+        "tags": [
+          "Documents"
+        ],
+        "summary": "Get detailed indexing progress",
+        "description": "Get detailed indexing pipeline progress.",
+        "operationId": "get_indexing_status_v1_documents__doc_id__status_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          },
+          {
+            "APIKeyHeader": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "doc_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Doc Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IngestionStatusResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/documents": {
+      "get": {
+        "summary": "List Documents",
+        "operationId": "list_documents_v1_documents_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/DocumentMeta"
+                  },
+                  "type": "array",
+                  "title": "Response List Documents V1 Documents Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/documents/{doc_id}/reindex": {
+      "post": {
+        "tags": [
+          "Documents"
+        ],
+        "summary": "Trigger document re-indexing",
+        "description": "Force re-indexing of a document. Invalidates all caches.",
+        "operationId": "reindex_document_v1_documents__doc_id__reindex_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          },
+          {
+            "APIKeyHeader": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "doc_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Doc Id"
+            }
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IngestionStatusResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/documents/{doc_id}/chunks": {
+      "get": {
+        "tags": [
+          "Documents"
+        ],
+        "summary": "List document chunks",
+        "description": "List all chunks for a document (for debugging and inspection).",
+        "operationId": "list_chunks_v1_documents__doc_id__chunks_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          },
+          {
+            "APIKeyHeader": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "doc_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Doc Id"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 1,
+              "title": "Page"
+            }
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 200,
+              "minimum": 1,
+              "default": 50,
+              "title": "Page Size"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChunkListResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/documents/batch": {
+      "post": {
+        "tags": [
+          "Documents"
+        ],
+        "summary": "Batch upload from S3 manifest",
+        "description": "Queue a batch of S3 documents for indexing.",
+        "operationId": "batch_upload_v1_documents_batch_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BatchUploadRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "202": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BatchUploadResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          },
+          {
+            "APIKeyHeader": []
+          }
+        ]
+      }
+    },
+    "/v1/documents/{doc_id}/elements": {
+      "get": {
+        "summary": "Get Elements",
+        "operationId": "get_elements_v1_documents__doc_id__elements_get",
+        "parameters": [
+          {
+            "name": "doc_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Doc Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/query": {
+      "post": {
+        "summary": "Query",
+        "operationId": "query_v1_query_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/src__api__routes__query__QueryRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/src__api__routes__query__QueryResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/admin/stats": {
+      "get": {
+        "tags": [
+          "Admin"
+        ],
+        "summary": "Get Stats",
+        "operationId": "get_stats_v1_admin_stats_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/admin/token-usage": {
+      "get": {
+        "tags": [
+          "Admin"
+        ],
+        "summary": "Get Token Usage",
+        "operationId": "get_token_usage_v1_admin_token_usage_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/webhooks/ingest-complete": {
+      "post": {
+        "tags": [
+          "Webhooks"
+        ],
+        "summary": "Ingest Complete Webhook",
+        "operationId": "ingest_complete_webhook_v1_webhooks_ingest_complete_post",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/annotations/": {
+      "post": {
+        "tags": [
+          "annotations"
+        ],
+        "summary": "Create Generic Annotation",
+        "description": "Create a generic annotation.",
+        "operationId": "create_generic_annotation_v1_annotations__post",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AnnotationCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "annotations"
+        ],
+        "summary": "List Annotations",
+        "description": "List annotations with filters.",
+        "operationId": "list_annotations_v1_annotations__get",
+        "parameters": [
+          {
+            "name": "doc_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Doc Id"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Page"
+            }
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/AnnotationType"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Type"
+            }
+          },
+          {
+            "name": "user_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "User Id"
+            }
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/AnnotationStatus"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Status"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 10000,
+              "default": 1000,
+              "title": "Limit"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/annotations/highlight": {
+      "post": {
+        "tags": [
+          "annotations"
+        ],
+        "summary": "Create Highlight",
+        "description": "Create a highlight annotation.",
+        "operationId": "create_highlight_v1_annotations_highlight_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/HighlightCreate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/annotations/note": {
+      "post": {
+        "tags": [
+          "annotations"
+        ],
+        "summary": "Create Note",
+        "description": "Create a note annotation.",
+        "operationId": "create_note_v1_annotations_note_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NoteCreate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/annotations/correction": {
+      "post": {
+        "tags": [
+          "annotations"
+        ],
+        "summary": "Create Correction",
+        "description": "Create a correction annotation.",
+        "operationId": "create_correction_v1_annotations_correction_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CorrectionCreate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/annotations/verify": {
+      "post": {
+        "tags": [
+          "annotations"
+        ],
+        "summary": "Create Verification",
+        "description": "Create a verification annotation.",
+        "operationId": "create_verification_v1_annotations_verify_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VerificationCreate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/annotations/{annotation_id}": {
+      "get": {
+        "tags": [
+          "annotations"
+        ],
+        "summary": "Get Annotation",
+        "description": "Get an annotation by ID.",
+        "operationId": "get_annotation_v1_annotations__annotation_id__get",
+        "parameters": [
+          {
+            "name": "annotation_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Annotation Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "annotations"
+        ],
+        "summary": "Update Annotation",
+        "description": "Update an annotation.",
+        "operationId": "update_annotation_v1_annotations__annotation_id__patch",
+        "parameters": [
+          {
+            "name": "annotation_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Annotation Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AnnotationUpdate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "annotations"
+        ],
+        "summary": "Delete Annotation",
+        "description": "Delete an annotation.",
+        "operationId": "delete_annotation_v1_annotations__annotation_id__delete",
+        "parameters": [
+          {
+            "name": "annotation_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Annotation Id"
+            }
+          },
+          {
+            "name": "soft",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": true,
+              "title": "Soft"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/annotations/search/": {
+      "get": {
+        "tags": [
+          "annotations"
+        ],
+        "summary": "Search Annotations",
+        "description": "Search annotations.",
+        "operationId": "search_annotations_v1_annotations_search__get",
+        "parameters": [
+          {
+            "name": "doc_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Doc Id"
+            }
+          },
+          {
+            "name": "q",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Q"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/annotations/{annotation_id}/resolve": {
+      "post": {
+        "tags": [
+          "annotations"
+        ],
+        "summary": "Resolve Annotation",
+        "description": "Mark annotation as resolved.",
+        "operationId": "resolve_annotation_v1_annotations__annotation_id__resolve_post",
+        "parameters": [
+          {
+            "name": "annotation_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Annotation Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/annotations/statistics/{doc_id}": {
+      "get": {
+        "tags": [
+          "annotations"
+        ],
+        "summary": "Get Statistics",
+        "description": "Get annotation statistics for a document.",
+        "operationId": "get_statistics_v1_annotations_statistics__doc_id__get",
+        "parameters": [
+          {
+            "name": "doc_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Doc Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/annotations/auto-annotate": {
+      "post": {
+        "tags": [
+          "annotations"
+        ],
+        "summary": "Auto Annotate",
+        "description": "Automatically generate AI annotations for document elements.",
+        "operationId": "auto_annotate_v1_annotations_auto_annotate_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AutoAnnotateRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/annotations/export/{doc_id}": {
+      "get": {
+        "tags": [
+          "annotations"
+        ],
+        "summary": "Export Annotations",
+        "description": "Export annotations to JSON string.",
+        "operationId": "export_annotations_v1_annotations_export__doc_id__get",
+        "parameters": [
+          {
+            "name": "doc_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Doc Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/annotations/import/{doc_id}": {
+      "post": {
+        "tags": [
+          "annotations"
+        ],
+        "summary": "Import Annotations",
+        "description": "Import annotations from JSON string.",
+        "operationId": "import_annotations_v1_annotations_import__doc_id__post",
+        "parameters": [
+          {
+            "name": "doc_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Doc Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ImportRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/document": {
+      "delete": {
+        "summary": "Clear Document",
+        "operationId": "clear_document_v1_document_delete",
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          }
+        }
+      }
+    },
+    "/v1/ingest": {
+      "post": {
+        "summary": "Ingest",
+        "operationId": "ingest_v1_ingest_post",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_ingest_v1_ingest_post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IngestResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/query/stream": {
+      "get": {
+        "summary": "Query Stream",
+        "operationId": "query_stream_v1_query_stream_get",
+        "parameters": [
+          {
+            "name": "question",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Question"
+            }
+          },
+          {
+            "name": "doc_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Doc Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/documents/{doc_id}/explain": {
+      "get": {
+        "summary": "Explain",
+        "operationId": "explain_v1_documents__doc_id__explain_get",
+        "parameters": [
+          {
+            "name": "doc_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Doc Id"
+            }
+          },
+          {
+            "name": "question",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Question"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/documents/{doc_id}/export": {
+      "get": {
+        "summary": "Export Document",
+        "description": "Compiles and downloads the Universal Export Object (UEO) for a document.",
+        "operationId": "export_document_v1_documents__doc_id__export_get",
+        "parameters": [
+          {
+            "name": "doc_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Doc Id"
+            }
+          },
+          {
+            "name": "format",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "json",
+              "title": "Format"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/advanced/compliance/pii-scan": {
+      "post": {
+        "tags": [
+          "Advanced Systems & Pre-LLM"
+        ],
+        "summary": "Scan Pii Entities",
+        "operationId": "scan_pii_entities_v1_advanced_compliance_pii_scan_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PIIScanRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "type": "object",
+                  "title": "Response Scan Pii Entities V1 Advanced Compliance Pii Scan Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/advanced/entity/resolve": {
+      "post": {
+        "tags": [
+          "Advanced Systems & Pre-LLM"
+        ],
+        "summary": "Resolve Entities",
+        "operationId": "resolve_entities_v1_advanced_entity_resolve_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EntityResolveRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "type": "object",
+                  "title": "Response Resolve Entities V1 Advanced Entity Resolve Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/advanced/versioning/diff": {
+      "post": {
+        "tags": [
+          "Advanced Systems & Pre-LLM"
+        ],
+        "summary": "Diff Document Versions",
+        "operationId": "diff_document_versions_v1_advanced_versioning_diff_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DiffRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "type": "object",
+                  "title": "Response Diff Document Versions V1 Advanced Versioning Diff Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/advanced/ingestion/anomaly-check": {
+      "post": {
+        "tags": [
+          "Advanced Systems & Pre-LLM"
+        ],
+        "summary": "Scan Ingestion Anomalies",
+        "operationId": "scan_ingestion_anomalies_v1_advanced_ingestion_anomaly_check_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AnomalyScanRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "type": "object",
+                  "title": "Response Scan Ingestion Anomalies V1 Advanced Ingestion Anomaly Check Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/advanced/compliance/redact": {
+      "post": {
+        "tags": [
+          "Advanced Systems & Pre-LLM"
+        ],
+        "summary": "Redact Pii Entities",
+        "operationId": "redact_pii_entities_v1_advanced_compliance_redact_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PIIRedactRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "type": "object",
+                  "title": "Response Redact Pii Entities V1 Advanced Compliance Redact Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/advanced/matrix/normalize-quantity": {
+      "post": {
+        "tags": [
+          "Advanced Systems & Pre-LLM"
+        ],
+        "summary": "Normalize Cell Quantity",
+        "operationId": "normalize_cell_quantity_v1_advanced_matrix_normalize_quantity_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/QuantityNormalizeRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "type": "object",
+                  "title": "Response Normalize Cell Quantity V1 Advanced Matrix Normalize Quantity Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/advanced/query/decompose": {
+      "post": {
+        "tags": [
+          "Advanced Systems & Pre-LLM"
+        ],
+        "summary": "Decompose Query",
+        "operationId": "decompose_query_v1_advanced_query_decompose_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/QueryDecomposeRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "type": "object",
+                  "title": "Response Decompose Query V1 Advanced Query Decompose Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/advanced/topology/percolation-check": {
+      "get": {
+        "tags": [
+          "Advanced Systems & Pre-LLM"
+        ],
+        "summary": "Estimate Resilience",
+        "operationId": "estimate_resilience_v1_advanced_topology_percolation_check_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "type": "object",
+                  "title": "Response Estimate Resilience V1 Advanced Topology Percolation Check Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/advanced/optimization/ising-anneal": {
+      "post": {
+        "tags": [
+          "Advanced Systems & Pre-LLM"
+        ],
+        "summary": "Anneal Master Objective",
+        "operationId": "anneal_master_objective_v1_advanced_optimization_ising_anneal_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/IsingAnnealRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "type": "object",
+                  "title": "Response Anneal Master Objective V1 Advanced Optimization Ising Anneal Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/advanced/math/unified-evaluation": {
+      "post": {
+        "tags": [
+          "Advanced Systems & Pre-LLM"
+        ],
+        "summary": "Evaluate Unified Math",
+        "operationId": "evaluate_unified_math_v1_advanced_math_unified_evaluation_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UnifiedMathRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "type": "object",
+                  "title": "Response Evaluate Unified Math V1 Advanced Math Unified Evaluation Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/advanced/ingestion/parse-speech": {
+      "post": {
+        "tags": [
+          "Advanced Systems & Pre-LLM"
+        ],
+        "summary": "Parse Speech Audio",
+        "operationId": "parse_speech_audio_v1_advanced_ingestion_parse_speech_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SpeechParseRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "type": "object",
+                  "title": "Response Parse Speech Audio V1 Advanced Ingestion Parse Speech Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/advanced/ingestion/parse-image-layout": {
+      "post": {
+        "tags": [
+          "Advanced Systems & Pre-LLM"
+        ],
+        "summary": "Parse Image Layout",
+        "operationId": "parse_image_layout_v1_advanced_ingestion_parse_image_layout_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ImageLayoutParseRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "type": "object",
+                  "title": "Response Parse Image Layout V1 Advanced Ingestion Parse Image Layout Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/advanced/export/llm-optimized": {
+      "post": {
+        "tags": [
+          "Advanced Systems & Pre-LLM"
+        ],
+        "summary": "Export Llm Optimized",
+        "operationId": "export_llm_optimized_v1_advanced_export_llm_optimized_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LLMExportRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "type": "object",
+                  "title": "Response Export Llm Optimized V1 Advanced Export Llm Optimized Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/stats": {
+      "get": {
+        "tags": [
+          "System"
+        ],
+        "summary": "Get Stats",
+        "operationId": "get_stats_stats_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/stats": {
+      "get": {
+        "tags": [
+          "System"
+        ],
+        "summary": "Get Stats",
+        "operationId": "get_stats_v1_stats_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/health": {
+      "get": {
+        "tags": [
+          "System"
+        ],
+        "summary": "Health Check",
+        "operationId": "health_check_health_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HealthResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/readiness": {
+      "get": {
+        "tags": [
+          "System"
+        ],
+        "summary": "Readiness",
+        "operationId": "readiness_readiness_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AnnotationCreate": {
+        "properties": {
+          "doc_id": {
+            "type": "string",
+            "title": "Doc Id"
+          },
+          "type": {
+            "$ref": "#/components/schemas/AnnotationType",
+            "default": "note"
+          },
+          "position": {
+            "$ref": "#/components/schemas/PositionSchema"
+          },
+          "content": {
+            "type": "string",
+            "title": "Content"
+          },
+          "color": {
+            "type": "string",
+            "title": "Color",
+            "default": "#fbbf24"
+          },
+          "tags": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Tags"
+          },
+          "metadata": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Metadata"
+          },
+          "user_id": {
+            "type": "string",
+            "title": "User Id",
+            "default": "default"
+          }
+        },
+        "type": "object",
+        "required": [
+          "doc_id",
+          "position",
+          "content"
+        ],
+        "title": "AnnotationCreate"
+      },
+      "AnnotationStatus": {
+        "type": "string",
+        "enum": [
+          "draft",
+          "active",
+          "resolved",
+          "archived",
+          "deleted"
+        ],
+        "title": "AnnotationStatus",
+        "description": "Status of an annotation."
+      },
+      "AnnotationType": {
+        "type": "string",
+        "enum": [
+          "highlight",
+          "note",
+          "correction",
+          "tag",
+          "question",
+          "verification",
+          "rating",
+          "marker",
+          "comment",
+          "bookmark"
+        ],
+        "title": "AnnotationType",
+        "description": "Types of annotations."
+      },
+      "AnnotationUpdate": {
+        "properties": {
+          "content": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Content"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/AnnotationStatus"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "color": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Color"
+          },
+          "tags": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Tags"
+          },
+          "metadata": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Metadata"
+          }
+        },
+        "type": "object",
+        "title": "AnnotationUpdate"
+      },
+      "AnomalyScanRequest": {
+        "properties": {
+          "document": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Document"
+          }
+        },
+        "type": "object",
+        "required": [
+          "document"
+        ],
+        "title": "AnomalyScanRequest"
+      },
+      "AutoAnnotateRequest": {
+        "properties": {
+          "doc_id": {
+            "type": "string",
+            "title": "Doc Id"
+          },
+          "enable_insights": {
+            "type": "boolean",
+            "title": "Enable Insights",
+            "default": false
+          }
+        },
+        "type": "object",
+        "required": [
+          "doc_id"
+        ],
+        "title": "AutoAnnotateRequest"
+      },
+      "BatchUploadRequest": {
+        "properties": {
+          "documents": {
+            "items": {
+              "additionalProperties": {
+                "type": "string"
+              },
+              "type": "object"
+            },
+            "type": "array",
+            "maxItems": 10000,
+            "title": "Documents",
+            "description": "List of {s3_uri, doc_id?, priority} entries"
+          }
+        },
+        "type": "object",
+        "required": [
+          "documents"
+        ],
+        "title": "BatchUploadRequest"
+      },
+      "BatchUploadResponse": {
+        "properties": {
+          "job_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Job Id"
+          },
+          "doc_count": {
+            "type": "integer",
+            "title": "Doc Count"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status",
+            "default": "queued"
+          }
+        },
+        "type": "object",
+        "required": [
+          "job_id",
+          "doc_count"
+        ],
+        "title": "BatchUploadResponse"
+      },
+      "BlockTypeEnum": {
+        "type": "string",
+        "enum": [
+          "text",
+          "table",
+          "figure",
+          "equation",
+          "header",
+          "footer"
+        ],
+        "title": "BlockTypeEnum"
+      },
+      "Body_ingest_v1_ingest_post": {
+        "properties": {
+          "file": {
+            "type": "string",
+            "contentMediaType": "application/octet-stream",
+            "title": "File"
+          }
+        },
+        "type": "object",
+        "required": [
+          "file"
+        ],
+        "title": "Body_ingest_v1_ingest_post"
+      },
+      "Body_upload_document_v1_documents_upload_post": {
+        "properties": {
+          "file": {
+            "type": "string",
+            "contentMediaType": "application/octet-stream",
+            "title": "File",
+            "description": "PDF, DOCX, PPTX, or HTML file"
+          }
+        },
+        "type": "object",
+        "required": [
+          "file"
+        ],
+        "title": "Body_upload_document_v1_documents_upload_post"
+      },
+      "ChunkListResponse": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/ChunkResponse"
+            },
+            "type": "array",
+            "title": "Items"
+          },
+          "total": {
+            "type": "integer",
+            "title": "Total"
+          }
+        },
+        "type": "object",
+        "required": [
+          "items",
+          "total"
+        ],
+        "title": "ChunkListResponse"
+      },
+      "ChunkResponse": {
+        "properties": {
+          "chunk_id": {
+            "type": "string",
+            "title": "Chunk Id"
+          },
+          "doc_id": {
+            "type": "string",
+            "title": "Doc Id"
+          },
+          "page_start": {
+            "type": "integer",
+            "title": "Page Start"
+          },
+          "page_end": {
+            "type": "integer",
+            "title": "Page End"
+          },
+          "section": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Section"
+          },
+          "block_type": {
+            "$ref": "#/components/schemas/BlockTypeEnum"
+          },
+          "text": {
+            "type": "string",
+            "title": "Text"
+          },
+          "token_count": {
+            "type": "integer",
+            "title": "Token Count"
+          }
+        },
+        "type": "object",
+        "required": [
+          "chunk_id",
+          "doc_id",
+          "page_start",
+          "page_end",
+          "block_type",
+          "text",
+          "token_count"
+        ],
+        "title": "ChunkResponse"
+      },
+      "CitationModel": {
+        "properties": {
+          "source_num": {
+            "type": "integer",
+            "title": "Source Num"
+          },
+          "chunk_id": {
+            "type": "string",
+            "title": "Chunk Id"
+          },
+          "doc_id": {
+            "type": "string",
+            "title": "Doc Id"
+          },
+          "filename": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Filename"
+          },
+          "page": {
+            "type": "integer",
+            "title": "Page"
+          },
+          "section": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Section"
+          },
+          "snippet": {
+            "type": "string",
+            "title": "Snippet"
+          },
+          "confidence": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Confidence"
+          }
+        },
+        "type": "object",
+        "required": [
+          "source_num",
+          "chunk_id",
+          "doc_id",
+          "page",
+          "snippet"
+        ],
+        "title": "CitationModel"
+      },
+      "ConfidenceLevel": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ],
+        "title": "ConfidenceLevel"
+      },
+      "CorrectionCreate": {
+        "properties": {
+          "doc_id": {
+            "type": "string",
+            "title": "Doc Id"
+          },
+          "page": {
+            "type": "integer",
+            "title": "Page"
+          },
+          "original_text": {
+            "type": "string",
+            "title": "Original Text"
+          },
+          "corrected_text": {
+            "type": "string",
+            "title": "Corrected Text"
+          },
+          "bbox": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "number"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Bbox"
+          },
+          "user_id": {
+            "type": "string",
+            "title": "User Id",
+            "default": "default"
+          }
+        },
+        "type": "object",
+        "required": [
+          "doc_id",
+          "page",
+          "original_text",
+          "corrected_text"
+        ],
+        "title": "CorrectionCreate"
+      },
+      "DiffRequest": {
+        "properties": {
+          "v1_document": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "V1 Document"
+          },
+          "v2_document": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "V2 Document"
+          }
+        },
+        "type": "object",
+        "required": [
+          "v1_document",
+          "v2_document"
+        ],
+        "title": "DiffRequest"
+      },
+      "DocumentListResponse": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/DocumentResponse"
+            },
+            "type": "array",
+            "title": "Items"
+          },
+          "total": {
+            "type": "integer",
+            "title": "Total"
+          },
+          "page": {
+            "type": "integer",
+            "title": "Page"
+          },
+          "page_size": {
+            "type": "integer",
+            "title": "Page Size"
+          }
+        },
+        "type": "object",
+        "required": [
+          "items",
+          "total",
+          "page",
+          "page_size"
+        ],
+        "title": "DocumentListResponse"
+      },
+      "DocumentMeta": {
+        "properties": {
+          "doc_id": {
+            "type": "string",
+            "title": "Doc Id"
+          },
+          "filename": {
+            "type": "string",
+            "title": "Filename"
+          },
+          "pages": {
+            "type": "integer",
+            "title": "Pages"
+          },
+          "tables": {
+            "type": "integer",
+            "title": "Tables"
+          },
+          "ingested_at": {
+            "type": "number",
+            "title": "Ingested At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "doc_id",
+          "filename",
+          "pages",
+          "tables",
+          "ingested_at"
+        ],
+        "title": "DocumentMeta"
+      },
+      "DocumentResponse": {
+        "properties": {
+          "doc_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Doc Id"
+          },
+          "tenant_id": {
+            "type": "string",
+            "title": "Tenant Id"
+          },
+          "filename": {
+            "type": "string",
+            "title": "Filename"
+          },
+          "status": {
+            "$ref": "#/components/schemas/DocumentStatus"
+          },
+          "page_count": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Page Count"
+          },
+          "chunk_count": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Chunk Count"
+          },
+          "is_scanned": {
+            "type": "boolean",
+            "title": "Is Scanned",
+            "default": false
+          },
+          "language": {
+            "type": "string",
+            "title": "Language",
+            "default": "en"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "indexed_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Indexed At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "doc_id",
+          "tenant_id",
+          "filename",
+          "status",
+          "created_at"
+        ],
+        "title": "DocumentResponse"
+      },
+      "DocumentStatus": {
+        "type": "string",
+        "enum": [
+          "pending",
+          "indexing",
+          "ready",
+          "failed",
+          "reindexing"
+        ],
+        "title": "DocumentStatus"
+      },
+      "EntityResolveRequest": {
+        "properties": {
+          "documents": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "type": "array",
+            "title": "Documents"
+          }
+        },
+        "type": "object",
+        "required": [
+          "documents"
+        ],
+        "title": "EntityResolveRequest"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "HealthResponse": {
+        "properties": {
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "checks": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "title": "Checks"
+          }
+        },
+        "type": "object",
+        "required": [
+          "status",
+          "checks"
+        ],
+        "title": "HealthResponse"
+      },
+      "HighlightCreate": {
+        "properties": {
+          "doc_id": {
+            "type": "string",
+            "title": "Doc Id"
+          },
+          "page": {
+            "type": "integer",
+            "title": "Page"
+          },
+          "bbox": {
+            "items": {
+              "type": "number"
+            },
+            "type": "array",
+            "title": "Bbox"
+          },
+          "text": {
+            "type": "string",
+            "title": "Text",
+            "default": ""
+          },
+          "color": {
+            "type": "string",
+            "title": "Color",
+            "default": "#fde047"
+          },
+          "element_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Element Id"
+          },
+          "user_id": {
+            "type": "string",
+            "title": "User Id",
+            "default": "default"
+          }
+        },
+        "type": "object",
+        "required": [
+          "doc_id",
+          "page",
+          "bbox"
+        ],
+        "title": "HighlightCreate"
+      },
+      "ImageLayoutParseRequest": {
+        "properties": {
+          "filename": {
+            "type": "string",
+            "title": "Filename",
+            "default": "document_page.png"
+          },
+          "blur_threshold": {
+            "type": "number",
+            "title": "Blur Threshold",
+            "default": 100.0
+          }
+        },
+        "type": "object",
+        "title": "ImageLayoutParseRequest"
+      },
+      "ImportRequest": {
+        "properties": {
+          "json_data": {
+            "type": "string",
+            "title": "Json Data"
+          }
+        },
+        "type": "object",
+        "required": [
+          "json_data"
+        ],
+        "title": "ImportRequest"
+      },
+      "IngestResponse": {
+        "properties": {
+          "doc_id": {
+            "type": "string",
+            "title": "Doc Id"
+          },
+          "filename": {
+            "type": "string",
+            "title": "Filename"
+          },
+          "pages": {
+            "type": "integer",
+            "title": "Pages"
+          },
+          "elements": {
+            "type": "integer",
+            "title": "Elements"
+          },
+          "tables": {
+            "type": "integer",
+            "title": "Tables"
+          },
+          "templates": {
+            "type": "integer",
+            "title": "Templates"
+          },
+          "ingestion_ms": {
+            "type": "number",
+            "title": "Ingestion Ms"
+          },
+          "compression_pct": {
+            "type": "number",
+            "title": "Compression Pct"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status",
+            "default": "ok"
+          }
+        },
+        "type": "object",
+        "required": [
+          "doc_id",
+          "filename",
+          "pages",
+          "elements",
+          "tables",
+          "templates",
+          "ingestion_ms",
+          "compression_pct"
+        ],
+        "title": "IngestResponse"
+      },
+      "IngestionStatusResponse": {
+        "properties": {
+          "doc_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Doc Id"
+          },
+          "status": {
+            "$ref": "#/components/schemas/DocumentStatus"
+          },
+          "progress_percent": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Progress Percent"
+          },
+          "stage": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Stage"
+          },
+          "error": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Error"
+          },
+          "chunks_indexed": {
+            "type": "integer",
+            "title": "Chunks Indexed",
+            "default": 0
+          }
+        },
+        "type": "object",
+        "required": [
+          "doc_id",
+          "status"
+        ],
+        "title": "IngestionStatusResponse"
+      },
+      "IsingAnnealRequest": {
+        "properties": {
+          "dimension": {
+            "type": "integer",
+            "title": "Dimension",
+            "default": 4
+          }
+        },
+        "type": "object",
+        "title": "IsingAnnealRequest"
+      },
+      "LLMExportRequest": {
+        "properties": {
+          "system_prompt": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "System Prompt",
+            "default": "You are a financial analysis AI assistant."
+          },
+          "context_text": {
+            "type": "string",
+            "title": "Context Text"
+          },
+          "summary_text": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Summary Text"
+          },
+          "max_tokens": {
+            "type": "integer",
+            "title": "Max Tokens",
+            "default": 4000
+          },
+          "format_type": {
+            "type": "string",
+            "title": "Format Type",
+            "default": "markdown"
+          },
+          "compact_keys": {
+            "type": "boolean",
+            "title": "Compact Keys",
+            "default": true
+          }
+        },
+        "type": "object",
+        "required": [
+          "context_text"
+        ],
+        "title": "LLMExportRequest"
+      },
+      "NoteCreate": {
+        "properties": {
+          "doc_id": {
+            "type": "string",
+            "title": "Doc Id"
+          },
+          "page": {
+            "type": "integer",
+            "title": "Page"
+          },
+          "content": {
+            "type": "string",
+            "title": "Content"
+          },
+          "bbox": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "number"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Bbox"
+          },
+          "color": {
+            "type": "string",
+            "title": "Color",
+            "default": "#fbbf24"
+          },
+          "element_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Element Id"
+          },
+          "tags": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Tags"
+          },
+          "user_id": {
+            "type": "string",
+            "title": "User Id",
+            "default": "default"
+          }
+        },
+        "type": "object",
+        "required": [
+          "doc_id",
+          "page",
+          "content"
+        ],
+        "title": "NoteCreate"
+      },
+      "PIIRedactRequest": {
+        "properties": {
+          "elements": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "type": "array",
+            "title": "Elements"
+          },
+          "policy_actions": {
+            "anyOf": [
+              {
+                "additionalProperties": {
+                  "type": "string"
+                },
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Policy Actions"
+          }
+        },
+        "type": "object",
+        "required": [
+          "elements"
+        ],
+        "title": "PIIRedactRequest"
+      },
+      "PIIScanRequest": {
+        "properties": {
+          "element_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Element Id",
+            "default": "e1"
+          },
+          "text": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Text"
+          },
+          "redact_ssn": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Redact Ssn",
+            "default": true
+          },
+          "redact_credit_card": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Redact Credit Card",
+            "default": true
+          },
+          "redact_phone": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Redact Phone",
+            "default": true
+          },
+          "redact_person": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Redact Person",
+            "default": true
+          },
+          "elements": {
+            "anyOf": [
+              {
+                "items": {
+                  "additionalProperties": true,
+                  "type": "object"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Elements"
+          }
+        },
+        "type": "object",
+        "title": "PIIScanRequest"
+      },
+      "PositionSchema": {
+        "properties": {
+          "page": {
+            "type": "integer",
+            "title": "Page"
+          },
+          "bbox": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "number"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Bbox"
+          },
+          "char_start": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Char Start"
+          },
+          "char_end": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Char End"
+          },
+          "section": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Section"
+          },
+          "element_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Element Id"
+          }
+        },
+        "type": "object",
+        "required": [
+          "page"
+        ],
+        "title": "PositionSchema"
+      },
+      "QuantityNormalizeRequest": {
+        "properties": {
+          "cell_text": {
+            "type": "string",
+            "title": "Cell Text"
+          },
+          "target_currency": {
+            "type": "string",
+            "title": "Target Currency",
+            "default": "USD"
+          },
+          "exchange_rate": {
+            "type": "number",
+            "title": "Exchange Rate",
+            "default": 1.0
+          }
+        },
+        "type": "object",
+        "required": [
+          "cell_text"
+        ],
+        "title": "QuantityNormalizeRequest"
+      },
+      "QueryDecomposeRequest": {
+        "properties": {
+          "query": {
+            "type": "string",
+            "title": "Query"
+          }
+        },
+        "type": "object",
+        "required": [
+          "query"
+        ],
+        "title": "QueryDecomposeRequest"
+      },
+      "SpeechParseRequest": {
+        "properties": {
+          "filename": {
+            "type": "string",
+            "title": "Filename",
+            "default": "audio_sample.wav"
+          },
+          "audio_base64": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Audio Base64"
+          }
+        },
+        "type": "object",
+        "title": "SpeechParseRequest"
+      },
+      "UnifiedMathRequest": {
+        "properties": {
+          "document": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Document"
+          }
+        },
+        "type": "object",
+        "required": [
+          "document"
+        ],
+        "title": "UnifiedMathRequest"
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          },
+          "input": {
+            "title": "Input"
+          },
+          "ctx": {
+            "type": "object",
+            "title": "Context"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      },
+      "VerificationCreate": {
+        "properties": {
+          "doc_id": {
+            "type": "string",
+            "title": "Doc Id"
+          },
+          "page": {
+            "type": "integer",
+            "title": "Page"
+          },
+          "claim": {
+            "type": "string",
+            "title": "Claim"
+          },
+          "is_correct": {
+            "type": "boolean",
+            "title": "Is Correct"
+          },
+          "element_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Element Id"
+          },
+          "user_id": {
+            "type": "string",
+            "title": "User Id",
+            "default": "default"
+          }
+        },
+        "type": "object",
+        "required": [
+          "doc_id",
+          "page",
+          "claim",
+          "is_correct"
+        ],
+        "title": "VerificationCreate"
+      },
+      "src__api__models__QueryRequest": {
+        "properties": {
+          "question": {
+            "type": "string",
+            "maxLength": 4000,
+            "minLength": 1,
+            "title": "Question"
+          },
+          "doc_ids": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Doc Ids",
+            "description": "Filter to specific documents. None = all tenant docs."
+          },
+          "top_k": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "maximum": 50.0,
+                "minimum": 1.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Top K"
+          },
+          "session_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Session Id"
+          },
+          "include_citations": {
+            "type": "boolean",
+            "title": "Include Citations",
+            "default": true
+          },
+          "stream": {
+            "type": "boolean",
+            "title": "Stream",
+            "default": false
+          },
+          "block_types": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/BlockTypeEnum"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Block Types"
+          },
+          "language": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Language"
+          }
+        },
+        "type": "object",
+        "required": [
+          "question"
+        ],
+        "title": "QueryRequest"
+      },
+      "src__api__models__QueryResponse": {
+        "properties": {
+          "answer": {
+            "type": "string",
+            "title": "Answer"
+          },
+          "citations": {
+            "items": {
+              "$ref": "#/components/schemas/CitationModel"
+            },
+            "type": "array",
+            "title": "Citations",
+            "default": []
+          },
+          "confidence": {
+            "$ref": "#/components/schemas/ConfidenceLevel"
+          },
+          "confidence_score": {
+            "type": "number",
+            "title": "Confidence Score"
+          },
+          "session_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Session Id"
+          },
+          "tokens_used": {
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "type": "object",
+            "title": "Tokens Used"
+          },
+          "retrieval_latency_ms": {
+            "type": "number",
+            "title": "Retrieval Latency Ms"
+          },
+          "total_latency_ms": {
+            "type": "number",
+            "title": "Total Latency Ms"
+          },
+          "cached": {
+            "type": "boolean",
+            "title": "Cached",
+            "default": false
+          },
+          "model": {
+            "type": "string",
+            "title": "Model"
+          }
+        },
+        "type": "object",
+        "required": [
+          "answer",
+          "confidence",
+          "confidence_score",
+          "session_id",
+          "tokens_used",
+          "retrieval_latency_ms",
+          "total_latency_ms",
+          "model"
+        ],
+        "title": "QueryResponse"
+      },
+      "src__api__routes__query__QueryRequest": {
+        "properties": {
+          "question": {
+            "type": "string",
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Question"
+          },
+          "doc_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Doc Id"
+          },
+          "top_k": {
+            "type": "integer",
+            "maximum": 50.0,
+            "minimum": 1.0,
+            "title": "Top K",
+            "default": 12
+          },
+          "stream": {
+            "type": "boolean",
+            "title": "Stream",
+            "default": false
+          },
+          "export_agent": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Export Agent"
+          },
+          "export_format": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Export Format",
+            "default": "json"
+          },
+          "api_key": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Api Key"
+          },
+          "model": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Model"
+          }
+        },
+        "type": "object",
+        "required": [
+          "question"
+        ],
+        "title": "QueryRequest"
+      },
+      "src__api__routes__query__QueryResponse": {
+        "properties": {
+          "question": {
+            "type": "string",
+            "title": "Question"
+          },
+          "answer": {
+            "type": "string",
+            "title": "Answer"
+          },
+          "citations": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "type": "array",
+            "title": "Citations",
+            "default": []
+          },
+          "confidence": {
+            "type": "number",
+            "title": "Confidence"
+          },
+          "confidence_label": {
+            "type": "string",
+            "title": "Confidence Label"
+          },
+          "query_type": {
+            "type": "string",
+            "title": "Query Type"
+          },
+          "weights_used": {
+            "additionalProperties": {
+              "type": "number"
+            },
+            "type": "object",
+            "title": "Weights Used"
+          },
+          "table_direct": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Table Direct",
+            "default": []
+          },
+          "grounded": {
+            "type": "boolean",
+            "title": "Grounded"
+          },
+          "latency_ms": {
+            "type": "number",
+            "title": "Latency Ms"
+          },
+          "tokens_used": {
+            "type": "integer",
+            "title": "Tokens Used"
+          },
+          "model": {
+            "type": "string",
+            "title": "Model"
+          }
+        },
+        "type": "object",
+        "required": [
+          "question",
+          "answer",
+          "confidence",
+          "confidence_label",
+          "query_type",
+          "weights_used",
+          "grounded",
+          "latency_ms",
+          "tokens_used",
+          "model"
+        ],
+        "title": "QueryResponse"
+      }
+    },
+    "securitySchemes": {
+      "HTTPBearer": {
+        "type": "http",
+        "scheme": "bearer"
+      },
+      "APIKeyHeader": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "X-API-Key"
+      }
+    }
+  }
+}
