@@ -1,33 +1,45 @@
-<!-- Note: This is a license template for a future commercial offering.
-No paid licenses have been issued as of October 2026. -->
+# AEGIS-DocIntel Software License & Dual-Licensing Architecture
 
-AMDI-OS SOFTWARE LICENSE AGREEMENT
-Version 1.0 - January 2026
+**Current status note (added October 2026):** This software is under active development and is not yet offered under a paid commercial license to any customer. This license text describes the evaluation/research license for the experimental platform and the intended future commercial terms for the full platform. The `aegis-docprep` package (see [/aegis-docprep](aegis-docprep/)) is separately licensed under Apache 2.0 and is available for open use today.
+
+---
+
+## 1. Open-Core Component: aegis-docprep
+The extracted, standalone package located at `/aegis-docprep` (providing spatial reading-order extraction, submodular context packing, and PII redaction) is licensed under the **Apache License, Version 2.0**.
+See [aegis-docprep/LICENSE](aegis-docprep/LICENSE) for the full permissive open-source license terms.
+
+---
+
+## 2. Full Platform Evaluation & Commercial Terms (AMDI-OS)
+
+Version 1.0 - Updated October 2026
 
 IMPORTANT: PLEASE READ THIS SOFTWARE LICENSE AGREEMENT ("AGREEMENT") CAREFULLY. BY DOWNLOADING, INSTALLING, COPYING, OR USING THE SOFTWARE, YOU AGREE TO BE BOUND BY THE TERMS OF THIS AGREEMENT. IF YOU DO NOT AGREE TO THE TERMS OF THIS AGREEMENT, DO NOT USE THE SOFTWARE.
 
 1. DEFINITIONS
-"Software" means the AMDI-OS (Adaptive Mathematical Document Intelligence Operating System) codebase, including any updates, documentation, libraries, and SDKs.
+"Software" means the AMDI-OS (Adaptive Mathematical Document Intelligence Operating System) full-platform codebase, including any updates, documentation, libraries, and SDKs, excluding the standalone `aegis-docprep` distribution.
 "Licensor" means the AMDI-OS Development Team.
 "Licensee" means the individual or entity accessing or using the Software.
 
 2. LICENSE GRANT
-Subject to the terms and conditions of this Agreement and payment of applicable license fees, Licensor grants Licensee a non-exclusive, non-transferable, revocable commercial license to:
-- Install and execute the Software on production servers and cluster environments.
-- Integrate the Software with Licensee's proprietary internal systems.
-- Use the official SDKs (Python, TypeScript, Java, C++) to connect internal applications.
+- Evaluation and Research: Licensor grants Licensee a non-exclusive, non-transferable, revocable license to install, execute, and inspect the Software solely for evaluation, internal testing, and academic research purposes.
+- Commercial Deployment: Subject to future mutual commercial agreement and payment of applicable license fees upon general availability, Licensor intends to grant Licensee a commercial license to:
+  - Install and execute the Software on production servers and cluster environments.
+  - Integrate the Software with Licensee's proprietary internal systems.
+  - Use official SDKs (Python, TypeScript, Java, C++) to connect internal applications.
 
 3. RESTRICTIONS
 Licensee shall not:
 - Reverse engineer, decompile, or disassemble the Software, except to the extent permitted by applicable law.
-- Sublicense, lease, rent, or distribute the Software source code to any third party.
-- Use the Software to build a competing document intelligence framework or cloud service.
+- Sublicense, lease, rent, or distribute the proprietary Software source code to any third party.
+- Use the Software to build a competing document intelligence framework or commercial cloud service directly replicating AMDI-OS architecture.
 
 4. INTELLECTUAL PROPERTY
-All right, title, and interest in and to the Software, including all associated intellectual property rights, remain exclusively with Licensor and its suppliers.
+All right, title, and interest in and to the Software, including all associated intellectual property rights, remain exclusively with Licensor and its contributors.
 
 5. WARRANTY DISCLAIMER
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND NON-INFRINGEMENT.
 
 6. LIMITATION OF LIABILITY
 IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES, OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT, OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
