@@ -95,34 +95,46 @@ The framework structures document analysis across formal mathematical formulatio
 
 ## Installation
 
-### Prerequisites
-- Python 3.12 or 3.13 (tested in CI — see badge above)
+### Recommended: Standalone Lightweight Toolkit (`aegis-docprep`)
+If you only need the validated pre-LLM primitives (PII redaction, submodular context packing, spatial reading order) without the 16-domain platform or infrastructure:
+```bash
+pip install aegis-docprep
+```
+*Single dependency:* `numpy>=1.26.0`. No heavy ML frameworks, no torch, no FastAPI required.
 
-### Option 1 — Core install (recommended to start)
-Runs the API, ingestion pipeline, and all 16 math/graph engines. No semantic search / embeddings.
+---
+
+### Full Monorepo Platform Installation
+
+#### Prerequisites
+- Python 3.12 or 3.13 (verified in CI)
+
+#### Option 1 — Core Platform (recommended to start)
+Runs the API server, document ingestion pipeline, and core mathematical engines.
 ```bash
 git clone https://github.com/SahilKhutey/AEGIS-DocIntel.git
 cd AEGIS-DocIntel
 python -m venv venv
-source venv/bin/activate  # Windows: venv\Scripts\activate
+source venv/bin/activate  # On Windows: venv\Scripts\activate
 pip install -r requirements-core.txt
 ```
 
-### Option 2 — Full install (adds semantic search / embeddings)
-Note: this pulls in `torch` via `sentence-transformers` — a multi-GB download.
+#### Option 2 — Development & Test Setup (Cold-Start Safe)
+To run the full unit test suite (1,060+ tests), install development tooling (`pytest`, `hypothesis`, etc.):
+```bash
+pip install -r requirements-core.txt -r requirements-dev.txt
+pytest tests/
+```
+
+#### Option 3 — Full Platform with Embeddings & Vector Search
+Enables local dense vector search and semantic caching (pulls in `torch` via `sentence-transformers`):
 ```bash
 pip install -r requirements-core.txt -r requirements-ml.txt
 ```
 
-### Option 3 — Exact reproducible install (pinned lock file)
+#### Option 4 — Exact Reproducible Pinned Build
 ```bash
 pip install -r requirements-core.lock.txt
-```
-
-### Development setup (running tests)
-```bash
-pip install -r requirements-core.txt -r requirements-dev.txt
-pytest tests/ --ignore=tests/test_multimodal.py
 ```
 
 ## Compatibility
@@ -207,7 +219,7 @@ AEGIS-DocIntel/
 │   ├── ingestion/             # PDF, DOCX, XLSX, PPTX, image, and audio loaders
 │   ├── math_concepts/         # MasterUnifiedMathEngine & mathematical domains
 │   └── versioning/            # Structural diff engine (APTED tree-edit distance)
-├── tests/                     # 940+ passing pytest unit test suite
+├── tests/                     # 1,060+ passing pytest unit test suite
 ├── docs/                      # Technical specifications, math formulations, and ROADMAP.md
 ├── _unverified_archive/       # Quarantined legacy mock audit/benchmark files (Phase 1)
 ├── STATUS.md                  # Verification and public credibility disclosure
