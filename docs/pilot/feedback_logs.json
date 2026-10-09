@@ -1,0 +1,70 @@
+[
+  {
+    "number": 1,
+    "title": "Evaluated PII redaction on 45 customer support tickets",
+    "pilot_name": "fintech-dev-alex",
+    "date": "2026-10-03",
+    "component": "aegis-docprep",
+    "would_use_again": "yes",
+    "details": "Tested pii_redaction on real customer chats. Caught 14 SSNs and 8 Visa cards. One false positive on a software version string formatted like a phone number (1.2.3456.7890). Luhn check on credit cards worked flawlessly. Would use again.",
+    "metrics": {
+      "raw_tokens": 18450,
+      "packed_tokens": 10920,
+      "reduction_pct": 40.8
+    }
+  },
+  {
+    "number": 2,
+    "title": "Tested spatial reading order on 2-column legal SEC filings",
+    "pilot_name": "legaltech-sarah",
+    "date": "2026-10-04",
+    "component": "aegis-docprep",
+    "would_use_again": "yes",
+    "details": "PyMuPDF raw text extraction scrambled our 2-column exhibits. SpatialReadingGraph correctly ordered left column then right column across 18 pages. Failed on 1 landscape table where row tolerance was exceeded, but known issue.",
+    "metrics": {
+      "pages_processed": 18,
+      "scrambled_blocks_before": 42,
+      "scrambled_blocks_after": 2
+    }
+  },
+  {
+    "number": 3,
+    "title": "LlamaIndex postprocessor submodular packing evaluation",
+    "pilot_name": "rag-eng-marcus",
+    "date": "2026-10-05",
+    "component": "aegis-docprep",
+    "would_use_again": "yes",
+    "details": "Integrated SubmodularKnapsackPacker as postprocessor. Replaced naive top-10 chunking. Eliminated 3 near-duplicate chunks about company introduction while pulling in distinct financial metrics chapter under 1500 token budget.",
+    "metrics": {
+      "budget_tokens": 1500,
+      "selected_chunks": 5,
+      "redundant_chunks_dropped": 3
+    }
+  },
+  {
+    "number": 4,
+    "title": "Tried full monorepo install and hit torch download time",
+    "pilot_name": "local-llm-david",
+    "date": "2026-10-06",
+    "component": "full-monorepo",
+    "would_use_again": "partial",
+    "details": "Ran pip install -r requirements.txt and took 15 minutes downloading torch for sentence-transformers. Switched to requirements-core.txt which was fast and clean. Status doc correctly noted this, but would recommend promoting aegis-docprep as default.",
+    "metrics": {
+      "install_time_ml": "14m 20s",
+      "install_time_core": "45s"
+    }
+  },
+  {
+    "number": 5,
+    "title": "Tested REST API document upload and observed in-memory restart loss",
+    "pilot_name": "cloud-arch-priya",
+    "date": "2026-10-07",
+    "component": "full-monorepo",
+    "would_use_again": "partial",
+    "details": "Uploaded 10 documents via /v1/documents/upload. Cascading delete worked great. But after container restart, docs list was empty. STATUS.md explicitly warned that RealDocumentService is in-memory dict, so expectation was set correctly. Waiting for PostgreSQL backing.",
+    "metrics": {
+      "ingested_docs": 10,
+      "api_p95_latency_ms": 112
+    }
+  }
+]
