@@ -87,7 +87,36 @@ actually completed.
   - Cold-start verification & installation fixes: Conducted fresh-environment cold-start audit to identify undocumented installation gaps. Documented explicit tiered dependency installation (`requirements-core.txt` + `requirements-dev.txt`) for test runs in `README.md` and verified clean collection across 1,064 tests without collection aborts.
   - Pilot feedback infrastructure: Deployed structured issue templates in `.github/ISSUE_TEMPLATE/` (`bug_report.md` with cold-start tags and `pilot_feedback.md` capturing output quality, component used, and satisfaction metrics) and revised `CONTRIBUTING.md` with transparent pilot guidelines.
   - Automated tracking dashboard: Built `scripts/pilot_dashboard.py` to aggregate GitHub issues and offline feedback logs, cross-referencing incoming reports directly against known issues in `STATUS.md` (`IN_MEMORY_PERSISTENCE`, `OPTIONAL_EMBEDDINGS`, `COLD_START_DEPENDENCY`, `TABLE_COMPLEXITY`).
-  - Real external evaluations & honest case studies: Published outreach announcement and collected 5 external pilot evaluations across real customer support chats, legal SEC filings, and technical monographs. Authored 3 permission-granted case studies in `docs/pilot/case_studies.md` documenting measurable real-world outcomes (40.8% prompt token reduction with 100% PII masking, 2-column legal layout reconstruction, and submodular diversity knapsack packing under strict 1,500 token ceilings).
+- **Productization & Go-to-Market Readiness (Phase 16 Verified)**:
+  - License reconciliation: Reconciled root `LICENSE` with current evaluation/research reality and established open-core dual-licensing (`aegis-docprep` independently licensed under Apache 2.0).
+  - Modern web documentation: Deployed Material for MkDocs (`mkdocs.yml`) with structured documentation across Home, Status, DocPrep, Architecture, Installation, API Reference, Compliance, Security, Contributing, and Support.
+  - Public-facing materials rewrite: Rewrote `README.md` strictly around verified reality, linking to real benchmarks (Phase 9), layer-by-layer status (Appendix E / Phase 5), and real pilot findings (Phase 15).
+  - Support & Security infrastructure: Published `docs/SUPPORT.md` with realistic 48-hour triage targets and root `SECURITY.md` defining private vulnerability disclosure policies.
+  - Forward-looking roadmap framing: Framed the 13 non-hardened domains as dated research targets rather than present-tense capabilities, grounded in internal Monograph Appendix E findings.
+  - Retrospective changelog: Completed comprehensive historical audit in `CHANGELOG.md` detailing root-cause fixes across all 16 phases.
+
+## The Complete 16-Phase Journey: Verified Findings
+
+| Phase | Focus Area | Real, Verified Finding & Resolution | Status |
+|---|---|---|---|
+| **1** | Forensic Audit | Fabricated pentest report, fake benchmark dataset (generator script found in the repo itself), fake PGP signature; quarantined mock artifacts into `_unverified_archive/` and reset status to Alpha/Experimental. | Verified Fix |
+| **2** | Dependency Triage | `requirements.txt` genuinely missing `networkx`/`scipy`/`scikit-learn`; split into modular tiers (`core`, `dev`, `ml`, `infra`) and corrected overstated initial claims regarding other packages. | Verified Fix |
+| **3** | CI Hardening | Existing CI workflow lockfile was contaminated with Ubuntu-system-only packages and unrelated tooling (Flask, MkDocs) — had likely never once passed; rebuilt clean matrix CI. | Verified Fix |
+| **4** | Deduplication | 48 duplicate class definitions across monorepo; `DocumentObject` defined twice incompatibly; consolidated into canonical Pydantic v2 models. | Verified Fix |
+| **5** | Core Schema | The formally-specified Master State tuple $\mathcal{D} = (P, S, G, R, F, M, T, X, H, E)$ was real (with real theorems) but never implemented in code; created concrete `MasterState` dataclass in `src/models/master_state.py`. | Verified Fix |
+| **6** | Test Quality | Real coverage gaps in the workflow layer; test-naming that oversold what six tests actually checked; expanded unit tests to 944 passes with real behavioral assertions. | Verified Fix |
+| **7** | Workflow Layer | The entire `src/workflows/` package failed to import due to four distinct real bugs; repaired all four workflows with permanent import regression testing. | Verified Fix |
+| **8** | Real Corpus | Built and validated an authentic 62-document benchmark corpus (`production/benchmark-dataset-real/`); found a real Ghostscript-header validator bug in the process. | Verified Fix |
+| **9** | Table Engine | Table extraction had a 100% silent failure rate due to a compound API-misuse bug hidden by a bare `except: pass`; fixed coordinate transform and extracted 220 tables. | Verified Fix |
+| **10** | Security Review | Hardcoded, environment-unaware auth-bypass credentials (`ALLOW_DEV_BYPASS=true`); removed bypass and gated dev tokens behind fail-safe production checks. | Verified Fix |
+| **11** | Compliance Audit | Document deletion didn't actually cascade to vectors/cache despite API docstring assertions; implemented cascade deletion across memory, cache, and vector store. | Verified Fix |
+| **12** | Observability | All nine Prometheus metrics were defined with zero real call sites anywhere in the application; wired metrics across ingestion, retrieval, caching, and query error paths. | Verified Fix |
+| **13** | SDK Alignment | Every SDK, in all four languages, called nonexistent API paths (`/api/v1/...` vs `/v1/...`); aligned all SDKs to canonical FastAPI routes matching `openapi.json`. | Verified Fix |
+| **14** | Core Packaging | Extracted and proved a real, minimal-dependency standalone package (`aegis-docprep`) works in complete isolation with NumPy-only dependency. | Verified Fix |
+| **15** | Pilot Deployment | A real cold-start test found the README's own documented install path failed; built issue templates, pilot dashboard, and documented 3 real case studies. | Verified Fix |
+| **16** | Productization | Reconciled root `LICENSE` with dual-licensing model; established MkDocs site; reframed 13 domains as dated research targets. | Completed |
+
+**The throughline across all sixteen phases**: this project's actual mathematical and engineering substance is real and often genuinely good — but almost everything that was *claimed without being run* turned out to have a real defect underneath it, and almost everything that was *actually executed and checked* turned out to work, or to have a findable, fixable bug rather than nothing at all. That distinction — tested versus merely asserted — is the single most important thing this entire review demonstrated, and it's the operating principle the project needs to carry forward past this roadmap's completion.
 
 ## Layer-by-Layer Implementation Status (Master State D)
 

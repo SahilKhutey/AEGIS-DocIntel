@@ -699,9 +699,48 @@ All changes have been committed across discrete, atomic Git commits and synchron
 
 ---
 
-## 19. Complete Git Commit History
+## 19. Phase 16 — Productization & Go-to-Market Readiness
+
+### Task 16.1 — License Reconciliation & Dual-Licensing Architecture
+- Audited root `LICENSE` against the actual state of the open GitHub repository.
+- Reconciled the commercial license template with current evaluation/research reality.
+- Added explicit current status note clarifying that the platform is currently under active Alpha/Experimental development and not offered under paid commercial terms.
+- Decoupled `aegis-docprep` as a standalone open-core distribution under the permissive Apache-2.0 license.
+
+### Task 16.2 — MkDocs Web Documentation Infrastructure
+- Deployed Material for MkDocs documentation infrastructure (`mkdocs.yml`).
+- Structured modular documentation across 10 key operational areas: Home (`index.md`), Status & 16-Phase Journey (`status.md`), `aegis-docprep` Guide (`docprep.md`), Architecture & Master State (`architecture.md`), Installation & Cold-Start (`installation.md`), REST API Reference (`api.md`), Compliance Gap Analysis (`compliance.md`), Security Policy (`security.md`), Contributing Guide (`contributing.md`), Support & SLA Policy (`support.md`), and Pilot Case Studies (`pilot_cases.md`).
+- Verified zero broken links and clean documentation builds via `python -m mkdocs build`.
+
+### Task 16.3 — Public-Facing Materials Rewrite
+- Rewrote root `README.md` strictly around verified reality:
+  - Lead with `aegis-docprep` as the immediately usable, low-risk entry point.
+  - Sourced all architectural claims directly from the internal Extended Monograph Appendix E Master State D matrix.
+  - Linked all reported benchmark numbers to the authentic 62-document corpus (`production/benchmark-dataset-real/`).
+  - Integrated real pilot findings from Phase 15.
+
+### Task 16.4 — Support & Security Policy Infrastructure
+- Created root `SECURITY.md` defining private vulnerability reporting channels (`security@aegis-docintel.org`) and triage response expectations.
+- Created `docs/SUPPORT.md` with transparent support channels, issue classification, and honest 48-hour triage targets.
+
+### Task 16.5 — Changelog Retrospective
+- Updated `CHANGELOG.md` with an honest historical retrospective capturing what was quietly broken and systematically repaired across all 16 phases.
+
+### Task 16.6 — Forward-Looking Framing for 13 Research Domains
+- Grounded the 13 non-hardened domains in Monograph Appendix E findings, presenting them as dated research targets rather than present-tense capabilities.
+
+### Task 16.7 — The Complete 16-Phase Journey Verified
+- Published the full 16-phase audit findings table in `STATUS.md`, `docs/status.md`, and `docs/DEVLOG.md`.
+
+---
+
+## 20. Complete Git Commit History
 
 ```text
+* 4ff5a3e docs: rewrite README around verified reality, aegis-docprep, and real benchmarks
+* 0e2189e feat(docs): set up MkDocs documentation infrastructure and modular guides
+* 6bdfa82 docs: reconcile root LICENSE with dual-licensing architecture and evaluation status
+* a864dc8 Merge branch 'main' into master
 * 50cda7f docs: record Phase 15 Pilot Deployment & External Validation in STATUS.md, CHANGELOG.md, and DEVLOG.md
 * 88dc1ed docs: publish an honest pilot-recruitment post/description emphasizing aegis-docprep as the lower-risk entry point, framed accurately as experimental rather than production-ready
 * 68a23aa chore: add scripts/pilot_dashboard.py for tracking real pilot feedback against known issues in STATUS.md

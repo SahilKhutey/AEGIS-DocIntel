@@ -6,10 +6,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-## [0.1.0-alpha.1] - October 2026
+## [Unreleased] - Phase 16 Productization & Go-to-Market Readiness
+
+### Fixed (16-Phase Historical Retrospective)
+- **Phase 10 (Critical Auth Bypass):** Development authentication bypass credentials (`ALLOW_DEV_BYPASS=true`) were active regardless of environment; strictly gated behind development flags with fail-safe production enforcement.
+- **Phase 9 (Table Extraction 100% Silent Failure):** Table extraction failed completely due to compound PDFPlumber bounding-box coordinate misuse hidden under a bare `except: pass`; fixed coordinate transform to extract 220 tables across 29 documents.
+- **Phase 13 (SDK Route Mismatches):** All four client SDKs (Python, TypeScript, Java, C++) made requests to nonexistent `/api/v1/...` routes; aligned all SDKs to canonical FastAPI routes matching `openapi.json`.
+- **Phase 7 (Workflow Import Collapse):** The entire `src/workflows/` package failed to import due to four distinct relative import and dependency bugs; repaired all four workflows with permanent import regression testing.
+- **Phase 11 (Cascading Document Deletion):** Document deletion failed to purge vector indices and semantic cache despite API docstring assertions; implemented complete cascade deletion across memory, cache, and vector store.
+- **Phase 12 (Prometheus Metrics Silence):** All nine defined Prometheus metrics had zero call sites across the codebase; wired metric instrumentation into ingestion, chunking, retrieval latency, and query error paths.
+- **Phase 8 (Ghostscript Header Rejection):** PDF loader rejected valid PDFs with Ghostscript version preambles; updated magic-byte validator to inspect first 1024 bytes.
+- **Phase 4 (Class Duplication):** 48 duplicate class definitions across monorepo consolidated into canonical models (`BoundingBox`, `Citation`, `DocumentObject`).
 
 ### Added
-- **Pilot Deployment & External User Validation (Phase 15):**
+- **Phase 16 (Productization & Go-to-Market Readiness):**
+  - **License Reconciliation & Open-Core Model (Step 16.1):** Reconciled root `LICENSE` with current evaluation/research status, explicitly decoupling standalone open-source `aegis-docprep` (Apache 2.0) from the full platform's commercial evaluation terms.
+  - **MkDocs Web Documentation Infrastructure (Step 16.2):** Created `mkdocs.yml` (Material for MkDocs) and modular web documentation in `docs/` (`index.md`, `status.md`, `docprep.md`, `architecture.md`, `installation.md`, `api.md`, `compliance.md`, `security.md`, `contributing.md`, `support.md`, `pilot_cases.md`, `changelog.md`).
+  - **Public-Facing Materials Realignment (Step 16.3):** Rewrote `README.md` to lead with verified reality, `aegis-docprep`, real Phase 9 benchmarks, Appendix E Master State D status, and Phase 15 pilot case studies.
+  - **Support & Security Infrastructure (Step 16.4):** Created `docs/SUPPORT.md` with realistic triage targets (48h) and root `SECURITY.md` defining private vulnerability disclosure policies.
+  - **Forward-Looking Roadmap Framing (Step 16.6):** Framed the 13 non-hardened domains as dated research targets rather than present-tense capabilities, grounded in internal Monograph Appendix E findings.
+  - **Complete 16-Phase Findings Audit (Step 16.7):** Published the full 16-phase audit findings table in `STATUS.md`, `docs/status.md`, and `docs/DEVLOG.md`.
+- **Phase 15 (Pilot Deployment & External User Validation):**
   - **Cold-Start Verification & Documentation Alignment:** Resolved cold-start installation hurdles for new developers by explicitly documenting tiered dependencies (`requirements-core.txt` + `requirements-dev.txt`) for running the full 1,060+ unit test suite without collection aborts or missing `pytest`.
   - **Structured Pilot Feedback Infrastructure:** Deployed GitHub issue templates in `.github/ISSUE_TEMPLATE/` (`bug_report.md` featuring cold-start checkpoints, `pilot_feedback.md` capturing workload profile, output accuracy, and willingness to reuse). Updated `CONTRIBUTING.md` with transparent pilot participation rules.
   - **Automated Feedback Dashboard:** Created `scripts/pilot_dashboard.py` aggregating incoming GitHub issues and local JSON feedback, automatically categorizing reported issues against known issues in `STATUS.md` (`IN_MEMORY_PERSISTENCE`, `OPTIONAL_EMBEDDINGS`, `COLD_START_DEPENDENCY`, `TABLE_COMPLEXITY`).
