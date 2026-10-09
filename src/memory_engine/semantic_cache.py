@@ -9,7 +9,7 @@ import asyncio
 import json
 import logging
 import time
-from typing import Optional
+from typing import Any, Optional
 
 import numpy as np
 

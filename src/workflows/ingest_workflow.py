@@ -538,7 +538,8 @@ class IngestWorkflow:
     @staticmethod
     def _extract_tables(page_obj, page: NormalizedPage):
         try:
-            import pdfplumber, io
+            import io
+            import pdfplumber
             with pdfplumber.open(io.BytesIO(page_obj.parent.tobytes())) as pdf:
                 pl_page = pdf.pages[page_obj.number]
                 for table in pl_page.find_tables():

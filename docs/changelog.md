@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Phase 12 (Prometheus Metrics Silence):** All nine defined Prometheus metrics had zero call sites across the codebase; wired metric instrumentation into ingestion, chunking, retrieval latency, and query error paths.
 - **Phase 8 (Ghostscript Header Rejection):** PDF loader rejected valid PDFs with Ghostscript version preambles; updated magic-byte validator to inspect first 1024 bytes.
 - **Phase 4 (Class Duplication):** 48 duplicate class definitions across monorepo consolidated into canonical models (`BoundingBox`, `Citation`, `DocumentObject`).
+- **CI Lint Cleanliness:** Fixed undefined `logger` references in `src/connectors/connector_base.py` and `src/connectors/gemini_connector.py`, missing `Any` import in `src/memory_engine/semantic_cache.py`, and split multiple imports in `src/workflows/ingest_workflow.py` to ensure `ruff check src tests` passes cleanly in automated CI.
 
 ### Added
 - **Phase 16 (Productization & Go-to-Market Readiness):**

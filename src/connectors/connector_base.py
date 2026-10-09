@@ -15,7 +15,10 @@ from __future__ import annotations
 import abc
 from dataclasses import dataclass, field
 from enum import Enum
+import logging
 from typing import Any, Dict, List, Optional, Union
+
+logger = logging.getLogger(__name__)
 
 from .exceptions import (
     AuthenticationError,

@@ -737,6 +737,13 @@ All changes have been committed across discrete, atomic Git commits and synchron
 - Created `docs/MASTER_REMEDIATION_CHECKLIST.md` documenting verified completion of all hard blockers (🔴), operational corrections (🟡), and verification milestones (🟢).
 - Cross-referenced the checklist in `mkdocs.yml`, `docs/status.md`, and `STATUS.md`.
 
+### Task 16.9 — CI Lint Cleanliness & Pre-Push Validation
+- Fixed undefined `logger` references in `src/connectors/connector_base.py` and `src/connectors/gemini_connector.py`.
+- Imported `Any` from `typing` in `src/memory_engine/semantic_cache.py`.
+- Split multiple imports on one line (`import io`, `import pdfplumber`) in `src/workflows/ingest_workflow.py`.
+- Added `.ruff_cache/` and `.mypy_cache/` to `.gitignore`.
+- Verified `ruff check src tests` passes cleanly with zero errors.
+
 ---
 
 ## 20. Complete Git Commit History

@@ -10,6 +10,8 @@ __pycache__/
 .pytest_cache/
 .benchmarks/
 .cache/
+.ruff_cache/
+.mypy_cache/
 pytest_log.txt
 *.db
 .coverage
