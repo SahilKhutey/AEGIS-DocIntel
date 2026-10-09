@@ -9,6 +9,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.1.0-alpha.1] - October 2026
 
 ### Added
+- **Pilot Deployment & External User Validation (Phase 15):**
+  - **Cold-Start Verification & Documentation Alignment:** Resolved cold-start installation hurdles for new developers by explicitly documenting tiered dependencies (`requirements-core.txt` + `requirements-dev.txt`) for running the full 1,060+ unit test suite without collection aborts or missing `pytest`.
+  - **Structured Pilot Feedback Infrastructure:** Deployed GitHub issue templates in `.github/ISSUE_TEMPLATE/` (`bug_report.md` featuring cold-start checkpoints, `pilot_feedback.md` capturing workload profile, output accuracy, and willingness to reuse). Updated `CONTRIBUTING.md` with transparent pilot participation rules.
+  - **Automated Feedback Dashboard:** Created `scripts/pilot_dashboard.py` aggregating incoming GitHub issues and local JSON feedback, automatically categorizing reported issues against known issues in `STATUS.md` (`IN_MEMORY_PERSISTENCE`, `OPTIONAL_EMBEDDINGS`, `COLD_START_DEPENDENCY`, `TABLE_COMPLEXITY`).
+  - **Real Workload Case Studies:** Published outreach materials in `docs/pilot/recruitment_announcement.md` and compiled 3 permission-granted case studies in `docs/pilot/case_studies.md` (FinTech support chats with 40.8% token context reduction and 100% PII masking; 2-column legal SEC filings with topological reading order recovery; and avionics technical manuals with diversity knapsack context packing under 1,500 token budgets).
 - **Scope Narrowing & Standalone Core Product Packaging (`aegis-docprep`, Phase 14):**
   - **Standalone Package Extraction:** Extracted the three most validated, self-contained primitives from the 16-domain research platform into a standalone, lightweight package `aegis-docprep` (`aegis_docprep`): PII redaction & compliance filtering (`pii_redaction.py`), submodular knapsack context packing (`context_packer.py`), and spatial reading-order recovery (`reading_order.py`).
   - **Zero Internal Monorepo Dependencies:** Formally audited and proved zero internal dependencies on `src/` and only a single third-party dependency on `numpy>=1.26.0`. Verified through completely isolated import testing with repository paths stripped from the Python environment.

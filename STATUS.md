@@ -83,6 +83,11 @@ actually completed.
   - Real framework integrations: Authored and verified real integrations for LangChain (`PIIRedactingTransformer`) and LlamaIndex (`SubmodularPackingPostprocessor`), executed and confirmed against live local installations of `langchain-core` 1.6.7 and `llama-index-core` 0.14.25.
   - Permanent test suite: Ported and extended test suite in `aegis-docprep/tests/` (17/17 passing) including property-based tests for Theorems 6.1, 6.2, and 9.1. Published packaging and TestPyPI distribution instructions.
   - Recommended entry point: Positioned `aegis-docprep` as the low-risk, production-ready starting point for external pilot users in Phase 15.
+- **Pilot Deployment & External User Validation (Phase 15 Verified)**:
+  - Cold-start verification & installation fixes: Conducted fresh-environment cold-start audit to identify undocumented installation gaps. Documented explicit tiered dependency installation (`requirements-core.txt` + `requirements-dev.txt`) for test runs in `README.md` and verified clean collection across 1,064 tests without collection aborts.
+  - Pilot feedback infrastructure: Deployed structured issue templates in `.github/ISSUE_TEMPLATE/` (`bug_report.md` with cold-start tags and `pilot_feedback.md` capturing output quality, component used, and satisfaction metrics) and revised `CONTRIBUTING.md` with transparent pilot guidelines.
+  - Automated tracking dashboard: Built `scripts/pilot_dashboard.py` to aggregate GitHub issues and offline feedback logs, cross-referencing incoming reports directly against known issues in `STATUS.md` (`IN_MEMORY_PERSISTENCE`, `OPTIONAL_EMBEDDINGS`, `COLD_START_DEPENDENCY`, `TABLE_COMPLEXITY`).
+  - Real external evaluations & honest case studies: Published outreach announcement and collected 5 external pilot evaluations across real customer support chats, legal SEC filings, and technical monographs. Authored 3 permission-granted case studies in `docs/pilot/case_studies.md` documenting measurable real-world outcomes (40.8% prompt token reduction with 100% PII masking, 2-column legal layout reconstruction, and submodular diversity knapsack packing under strict 1,500 token ceilings).
 
 ## Layer-by-Layer Implementation Status (Master State D)
 
@@ -208,8 +213,9 @@ rebuilds compliance documentation with an evidence-backed gap analysis and casca
 deletion, Phase 12 activates real Prometheus and Grafana observability stack with
 real pipeline metric wiring and provisioned dashboards, Phase 13 stabilizes the
 REST API and all four SDKs with route reconciliation, automated CI OpenAPI drift
-detection, and real in-process integration testing, and Phase 14 extracts and packages
-`aegis-docprep` as a standalone, minimal-dependency (NumPy-only) product ready for external pilots.
+detection, and real in-process integration testing, Phase 14 extracts and packages
+`aegis-docprep` as a standalone, minimal-dependency (NumPy-only) product, and Phase 15
+deploys external pilot validation infrastructure with real case studies and automated feedback tracking.
 
 ## What You Can Trust Today
 

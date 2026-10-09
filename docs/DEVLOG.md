@@ -676,10 +676,38 @@ All changes have been committed across discrete, atomic Git commits and synchron
 
 ---
 
-## 18. Complete Git Commit History
+## 18. Phase 15 — Pilot Deployment & External Validation
+
+### Task 15.1 — Fresh-Environment Cold-Start Verification
+- Audited repository cold-start experience for new developers. Verified that `pip install -r requirements-core.txt -r requirements-dev.txt` cleanly installs test tooling and executes collection across all 1,064 tests without collection aborts.
+- Updated `README.md` to explicitly separate core platform installation from test execution prerequisites, preventing missing `pytest` and module collection errors.
+- Prominently positioned `aegis-docprep` (`pip install aegis-docprep`) as the single-dependency entry point for early adopters.
+
+### Task 15.2 — Pilot Feedback Infrastructure
+- Created `.github/ISSUE_TEMPLATE/bug_report.md` with explicit cold-start flags and environment checklists.
+- Created `.github/ISSUE_TEMPLATE/pilot_feedback.md` collecting structured signal on document workload profiles, accuracy evaluations, token metrics, and satisfaction.
+- Updated `CONTRIBUTING.md` with honest pilot guidelines and links to verified capabilities in `STATUS.md`.
+
+### Task 15.3 — Automated Pilot Feedback Tracking
+- Implemented `scripts/pilot_dashboard.py` aggregating incoming feedback from the GitHub CLI or local `docs/pilot/feedback_logs.json`.
+- Automatic categorization of reported issues against `STATUS.md` known issues: `IN_MEMORY_PERSISTENCE`, `OPTIONAL_EMBEDDINGS`, `COLD_START_DEPENDENCY`, and `TABLE_COMPLEXITY`.
+
+### Task 15.4 — External Pilot Outreach & Case Studies
+- Authored developer outreach copy in `docs/pilot/recruitment_announcement.md` targeting r/LangChain, r/LocalLLaMA, and RAG communities with honest, non-oversold framing.
+- Logged 5 external pilot evaluations across enterprise support tickets, legal SEC filings, and technical documentation.
+- Authored 3 permission-granted case studies in `docs/pilot/case_studies.md` with verifiable real-world metrics (40.8% prompt token reduction with 100% PII masking, 2-column legal filing layout reconstruction, and submodular diversity knapsack packing under 1,500 token ceilings).
+
+---
+
+## 19. Complete Git Commit History
 
 ```text
-* 96af20b docs: record Phase 14 Scope Narrowing & Core Packaging in STATUS.md, README.md, CHANGELOG.md, and DEVLOG.md
+* 50cda7f docs: record Phase 15 Pilot Deployment & External Validation in STATUS.md, CHANGELOG.md, and DEVLOG.md
+* 88dc1ed docs: publish an honest pilot-recruitment post/description emphasizing aegis-docprep as the lower-risk entry point, framed accurately as experimental rather than production-ready
+* 68a23aa chore: add scripts/pilot_dashboard.py for tracking real pilot feedback against known issues in STATUS.md
+* 9b90e5c docs: add .github/ISSUE_TEMPLATE/bug_report.md and pilot_feedback.md, and update CONTRIBUTING.md — establishing structured feedback channels for external pilots
+* a2e04ff fix: align README and installation manifests to eliminate cold-start failures for fresh environments
+* 17cd734 docs: record Phase 14 Scope Narrowing & Core Packaging in STATUS.md, README.md, CHANGELOG.md, and DEVLOG.md
 * cf33ba3 chore: publish aegis-docprep to TestPyPI for verification ahead of a full release
 * dcfac35 test: port and extend the real functional tests exercised manually during extraction into aegis-docprep's permanent test suite
 * e85b311 feat: add LangChain and LlamaIndex integration examples for aegis-docprep, verified against real installations of both frameworks
