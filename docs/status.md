@@ -2,6 +2,8 @@
 
 This document provides the authoritative, verified status of AEGIS-DocIntel following the completion of the 16-Phase Stabilization & Hardening Roadmap.
 
+> **Consolidated Audit Checklist:** For an item-by-item verified checklist covering all 16 phases (including blockers 🔴, operational corrections 🟡, and verification milestones 🟢), see the [Master Remediation Checklist](MASTER_REMEDIATION_CHECKLIST.md).
+
 ---
 
 ## The 16-Phase Journey: Verified Findings & Fixes

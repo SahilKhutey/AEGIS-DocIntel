@@ -66,7 +66,9 @@ validation:
 
 nav:
   - Home: index.md
-  - Status & 16-Phase Journey: status.md
+  - Status & 16-Phase Journey:
+      - System Status & Roadmap: status.md
+      - Master Remediation Checklist: MASTER_REMEDIATION_CHECKLIST.md
   - aegis-docprep (Start Here): docprep.md
   - Full Platform:
       - Architecture & Master State: architecture.md

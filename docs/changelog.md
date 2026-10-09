@@ -26,6 +26,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - **Support & Security Infrastructure (Step 16.4):** Created `docs/SUPPORT.md` with realistic triage targets (48h) and root `SECURITY.md` defining private vulnerability disclosure policies.
   - **Forward-Looking Roadmap Framing (Step 16.6):** Framed the 13 non-hardened domains as dated research targets rather than present-tense capabilities, grounded in internal Monograph Appendix E findings.
   - **Complete 16-Phase Findings Audit (Step 16.7):** Published the full 16-phase audit findings table in `STATUS.md`, `docs/status.md`, and `docs/DEVLOG.md`.
+  - **Master Remediation Checklist:** Published consolidated, item-by-item verified audit in `docs/MASTER_REMEDIATION_CHECKLIST.md` auditing all 16 phases, hard blockers, and verification milestones against live code.
 - **Phase 15 (Pilot Deployment & External User Validation):**
   - **Cold-Start Verification & Documentation Alignment:** Resolved cold-start installation hurdles for new developers by explicitly documenting tiered dependencies (`requirements-core.txt` + `requirements-dev.txt`) for running the full 1,060+ unit test suite without collection aborts or missing `pytest`.
   - **Structured Pilot Feedback Infrastructure:** Deployed GitHub issue templates in `.github/ISSUE_TEMPLATE/` (`bug_report.md` featuring cold-start checkpoints, `pilot_feedback.md` capturing workload profile, output accuracy, and willingness to reuse). Updated `CONTRIBUTING.md` with transparent pilot participation rules.

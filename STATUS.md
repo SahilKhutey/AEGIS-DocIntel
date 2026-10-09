@@ -97,6 +97,8 @@ actually completed.
 
 ## The Complete 16-Phase Journey: Verified Findings
 
+> **Master Remediation Checklist:** See [`docs/MASTER_REMEDIATION_CHECKLIST.md`](docs/MASTER_REMEDIATION_CHECKLIST.md) for the item-by-item verified checklist tracking all 16 phases, hard blockers 🔴, and operational verifications.
+
 | Phase | Focus Area | Real, Verified Finding & Resolution | Status |
 |---|---|---|---|
 | **1** | Forensic Audit | Fabricated pentest report, fake benchmark dataset (generator script found in the repo itself), fake PGP signature; quarantined mock artifacts into `_unverified_archive/` and reset status to Alpha/Experimental. | Verified Fix |
