@@ -1,299 +1,95 @@
-# AMDI-OS Architecture
+# Architecture & Master State Mathematical Formulation
 
-This document describes the structural and layered architecture of the Adaptive Mathematical Document Intelligence Operating System.
+AEGIS-DocIntel models documents not as unstructured text streams, but as multi-dimensional topological manifolds. The unified representation uniting all engines is the **Master State Tuple $\mathcal{D}$**, formally defined in Phase 5 and implemented in `src/models/master_state.py`.
 
 ---
 
-## 1. High-Level Architecture
+## The Master State Tuple $\mathcal{D}$
 
-```
-┌────────────────────────────────────────────────────────────────┐
-│                         USER / CLIENT                          │
-└─────────────────────────────┬──────────────────────────────────┘
-                              │
-┌─────────────────────────────▼──────────────────────────────────┐
-│                        INGESTION LAYER                         │
-│ ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌────────┐ │
-│ │   PDF    │ │   DOCX   │ │   PPTX   │ │   XLSX   │ │ Images │ │
-│ └──────────┘ └──────────┘ └──────────┘ └──────────┘ └────────┘ │
-└─────────────────────────────┬──────────────────────────────────┘
-                              │
-┌─────────────────────────────▼──────────────────────────────────┐
-│                       NORMALIZATION LAYER                      │
-│        Layout · OCR · Metadata · Language Detection            │
-└─────────────────────────────┬──────────────────────────────────┘
-                              │
-┌─────────────────────────────▼──────────────────────────────────┐
-│                  12 ENGINES LAYER (Wave 1-4)                   │
-│ ┌─────┐ ┌─────┐ ┌─────┐ ┌─────┐ ┌─────┐ ┌─────┐ ┌─────┐ ┌─────┐│
-│ │Geom │ │Freq │ │Recur│ │Matri│ │Tpl  │ │Sem  │ │Graph│ │Topo ││
-│ └─────┘ └─────┘ └─────┘ └─────┘ └─────┘ └─────┘ └─────┘ └─────┘│
-│ ┌─────┐ ┌─────┐ ┌─────┐ ┌────────────┐                         │
-│ │Spec │ │Tens │ │Info │ │Retrieval   │                         │
-│ └─────┘ └─────┘ └Phys │ └────────────┘                         │
-└─────────────────────────────┬──────────────────────────────────┘
-                              │
-┌─────────────────────────────▼──────────────────────────────────┐
-│                       FUSION ENGINE LAYER                      │
-│    Dynamic Weighting · Ranking · Confidence · Fusion Scoring    │
-└─────────────────────────────┬──────────────────────────────────┘
-                              │
-┌─────────────────────────────▼──────────────────────────────────┐
-│                HIERARCHICAL MEMORY LAYER (L0-L5)               │
-│             Store · Cache · Promote · Evict · Retrieve         │
-└─────────────────────────────┬──────────────────────────────────┘
-                              │
-┌─────────────────────────────▼──────────────────────────────────┐
-│                     HYBRID RETRIEVAL LAYER                     │
-│      Semantic · Matrix · Geometry · Graph · Template ·         │
-│       Frequency · Recurrence (7 methods → RRF fusion)          │
-└─────────────────────────────┬──────────────────────────────────┘
-                              │
-┌─────────────────────────────▼──────────────────────────────────┐
-│                     CONTEXT BUILDER LAYER                      │
-│             Rank → Compress → Summarize → Assemble             │
-└─────────────────────────────┬──────────────────────────────────┘
-                              │
-┌─────────────────────────────▼──────────────────────────────────┐
-│                          EXPORT LAYER                          │
-│        JSON · Markdown · YAML · Universal Export Object        │
-└─────────────────────────────┬──────────────────────────────────┘
-                              │
-┌─────────────────────────────▼──────────────────────────────────┐
-│                   AI AGENT CONNECTORS LAYER                    │
-│ ┌────────┐ ┌────────┐ ┌────────┐ ┌────────┐ ┌────────┐ ┌─────┐ │
-│ │ChatGPT │ │ Gemini │ │ Claude │ │DeepSeek│ │  Qwen  │ │Local│ │
-│ └────────┘ └────────┘ └────────┘ └────────┘ └────────┘ └─────┘ │
-└─────────────────────────────┬──────────────────────────────────┘
-                              │
-┌─────────────────────────────▼──────────────────────────────────┐
-│                       VERIFICATION LAYER                       │
-│          Citation · Fact · Confidence · Hallucination          │
-└─────────────────────────────┬──────────────────────────────────┘
-                              │
-                              ▼
-                       RESPONSE → USER
+The mathematical state of any document processed by AEGIS-DocIntel is represented as:
+
+$$\mathcal{D} = (P, S, G, R, F, M, T, X, H, E)$$
+
+Each component captures a discrete structural dimension:
+
+| Element | Formal Domain | Description & Implementation | Status |
+|---|---|---|---|
+| **$P$** | Physical Geometry | 2D bounding boxes $(x_0, y_0, x_1, y_1)$, page numbers, font sizes, line heights, and spatial coordinates. Sourced via PDF extraction. | Hardened |
+| **$S$** | Semantic Embedding | Contextual dense vector embeddings. Generated via LayoutLM / Sentence-Transformers, with deterministic fallback when ML packages are absent. | Functional (Fallback flag) |
+| **$G$** | Reading Graph | Directed Acyclic Graph $(V, E)$ encoding natural reading sequence. Edges derived from vertical overlap, horizontal margins, and multi-column heuristics. | Hardened |
+| **$R$** | Redaction Layer | Compliance transformation mapping $R: \text{Text} \to \text{Text}$ with differential audit logs tracking redacted PII spans. | Hardened |
+| **$F$** | Fused Representation | Spectral Laplacian embedding fusing spatial adjacency ($P$) with text semantics ($S$) into a lower-dimensional manifold. | Hardened |
+| **$M$** | Memory State | Multi-tier cache representation (L1 in-memory LRU, L2 vector store) maintaining document state and lifecycle metadata. | Hardened |
+| **$T$** | Tabular Structure | Matrix representation of structured tables, grid lines, merged cells, and headers extracted via PDFPlumber bbox transformations. | Hardened |
+| **$X$** | Cross-References | Citation and cross-reference bipartite graph linking in-text references to figures, footnotes, and bibliographic entries. | Hardened |
+| **$H$** | Homology Hierarchy | Persistent Homology barcodes and Vietoris-Rips complexes capturing multiscale document topological holes and hierarchy. | Research Target |
+| **$E$** | Elastic Chunks | Dynamically sized, semantic-boundary-preserving chunks optimized via submodular knapsack selection for LLM injection. | Hardened |
+
+---
+
+## Architectural Pipeline Flow
+
+```mermaid
+flowchart TD
+    Doc[Raw Document: PDF / Scan / Text] --> Ingest[Document Ingestion Workflow]
+    
+    subgraph Extraction["Geometry & Structural Extraction"]
+        Ingest --> P_Ext["Physical Coordinates (P)"]
+        Ingest --> T_Ext["Tabular Matrices (T)"]
+        Ingest --> R_Ext["PII Scrubbing & Compliance (R)"]
+    end
+    
+    subgraph Graph["Topology & Graph Formulation"]
+        P_Ext --> G_Sort["DAG Reading Order (G)"]
+        G_Sort --> F_Spec["Spectral Embedding (F)"]
+        G_Sort --> X_Ref["Cross-Reference Links (X)"]
+    end
+    
+    subgraph Synthesis["Master State Synthesis"]
+        P_Ext & T_Ext & R_Ext & G_Sort & F_Spec & X_Ref --> MasterState["Master State D = (P,S,G,R,F,M,T,X,H,E)"]
+    end
+    
+    subgraph Output["Downstream Consumption"]
+        MasterState --> Submodular["Submodular Context Packer (E)"]
+        Submodular --> LLM["LLM Prompt / Context Window"]
+        MasterState --> Cache["Memory & Cascade Deletion (M)"]
+        MasterState --> Metrics["Prometheus Observability /metrics"]
+    end
 ```
 
 ---
 
-## 2. Layer Architecture
+## Implementation Details
 
-### 2.1 Layered Stack
+### MasterState Dataclass (`src/models/master_state.py`)
 
-```
-┌────────────────────────────────────────────────────────────────┐
-│ L9 PRESENTATION    │ Dashboards (11 pages) · Reports           │
-├────────────────────────────────────────────────────────────────┤
-│ L8 CROSS-CUTTING   │ Security · Optimization · Validation ·     │
-│                    │ Benchmarking · Monitoring · Logging       │
-├────────────────────────────────────────────────────────────────┤
-│ L7 VERIFICATION    │ Citation / Fact / Confidence / Halluc.    │
-├────────────────────────────────────────────────────────────────┤
-│ L6 CONNECTORS      │ 6 AI agents (ChatGPT / Gemini / Claude /  │
-│                    │ DeepSeek / Qwen / Local)                  │
-├────────────────────────────────────────────────────────────────┤
-│ L5 EXPORT          │ JSON / Markdown / YAML / UEO              │
-├────────────────────────────────────────────────────────────────┤
-│ L4 CONTEXT         │ Rank → Compress → Summarize → Assemble    │
-├────────────────────────────────────────────────────────────────┤
-│ L3 RETRIEVAL       │ 7 hybrid methods + RRF fusion             │
-├────────────────────────────────────────────────────────────────┤
-│ L2 INTELLIGENCE    │ Fusion + Memory (L0-L5) + 12 Engines      │
-├────────────────────────────────────────────────────────────────┤
-│ L1 INGESTION       │ PDF / DOCX / PPTX / XLSX / OCR            │
-├────────────────────────────────────────────────────────────────┤
-│ L0 INFRASTRUCTURE  │ Docker / Kubernetes / Terraform / CI/CD   │
-└────────────────────────────────────────────────────────────────┘
+The Master State is instantiated as an immutable, strictly-typed Python dataclass:
+
+```python
+from dataclasses import dataclass, field
+from typing import Dict, List, Optional, Any
+
+@dataclass(frozen=True)
+class MasterState:
+    doc_id: str
+    physical_layout: List[Dict[str, Any]]      # P
+    semantic_vectors: Optional[Any]            # S
+    reading_graph: Dict[str, List[str]]        # G
+    redaction_manifest: Dict[str, Any]         # R
+    spectral_features: Optional[Any]           # F
+    memory_status: Dict[str, Any]              # M
+    tables: List[Dict[str, Any]]               # T
+    cross_references: List[Dict[str, Any]]     # X
+    homology_barcode: Optional[Any] = None     # H (Research target)
+    elastic_chunks: List[str] = field(default_factory=list) # E
+    semantic_status: str = "production"        # Flag: 'production' | 'mock_fallback'
 ```
 
-### 2.2 Data Flow Between Layers
+### Cascade Deletion Architecture (Phase 11)
 
-User → L1 Ingestion → L2 Intelligence (12 Engines) → L3 Fusion + Memory + Retrieval → L4 Context Builder → L5 Export (UEO) → L6 Connectors → L7 Verification → User
+When a document $\mathcal{D}$ is purged via `DELETE /v1/documents/{doc_id}`, the storage engine triggers a cascade across all state layers:
 
----
-
-## 3. Microservice Architecture
-
-For production deployment, AMDI-OS runs as independent microservices:
-
-```
- ┌──────────────┐      ┌──────────────┐      ┌──────────────┐
- │     API      │      │    Worker    │      │  Dashboard   │
- │  (FastAPI)   │      │   (Celery)   │      │   (React)    │
- └──────┬───────┘      └──────┬───────┘      └──────┬───────┘
-        │                     │                     │
-        └──────────────┬──────┴─────────────────────┘
-                       │
-        ┌──────────────▼─────────────────────┐
-        │                                    │
- ┌──────▼──────┐        ┌───────▼──────┐     ┌──────▼──────┐
- │ PostgreSQL  │        │    Redis     │     │   Qdrant    │
- │    (RDS)    │        │ (ElastiCache)│     │  (Vector)   │
- └─────────────┘        └──────────────┘     └─────────────┘
- ┌─────────────┐        ┌──────────────┐     ┌─────────────┐
- │    Neo4j    │        │  Prometheus  │     │   Grafana   │
- │   (Graph)   │        │  (Metrics)   │     │ (Dashboard) │
- └─────────────┘        └──────────────┘     └─────────────┘
-```
-
----
-
-## 4. Data Flow Diagrams
-
-### 4.1 Document Processing Flow
-
-```
-   [PDF / Files]
-         │
-         ▼
-       [OCR] ──► [Layout Detection] ──► [Metadata Extraction]
-                                              │
-                                              ▼
-                                      [Document Object]
-                                              │
-                                              ▼
-                                         [12 Engines]
-                                              │
-                                              ▼
-                                    [Multi-representation]
-                                              │
-                                              ▼
-                                       [Fusion Engine]
-                                              │
-                                              ▼
-                                   [Confidence Weighted Score]
-                                              │
-                                              ▼
-                                  [Hierarchical Memory L0-L5]
-                                              │
-                                              ▼
-                                      [Indexed Storage]
-                                              │
-                                              ▼
-                                      [Hybrid Retrieval]
-                                              │
-                                              ▼
-                                      [Context Builder]
-                                              │
-                                              ▼
-                                  [Universal Export Object]
-                                              │
-                                              ▼
-                                         [AI Agent]
-                                              │
-                                              ▼
-                                        [Verification]
-                                              │
-                                              ▼
-                                          [Response]
-```
-
-### 4.2 Query Flow
-
-```
-                  [User Query]
-                       │
-                       ▼
-             [Embedding Generation]
-                       │
-                       ▼
-               [Parallel Search]
-                       │
-     ┌─────────┬───────┼───────┬─────────┬─────────┬─────────┐
-     ▼         ▼       ▼       ▼         ▼         ▼         ▼
-  [Semantic][Matrix][Geometry][Graph][Template][Frequency][Recurrence]
-     └─────────┴───────┼───────┴─────────┴─────────┴─────────┘
-                       │
-                       ▼
-            [Reciprocal Rank Fusion] (RRF)
-                       │
-                       ▼
-               [Top-K Candidates]
-                       │
-                       ▼
-                [Context Builder] (Budget-Optimized Context)
-                       │
-                       ▼
-               [Agent Connector] (LLM Response)
-                       │
-                       ▼
-              [Verification Engine] (Confidence Check)
-                       │
-                       ▼
-          [Final Answer with Citations]
-```
-
----
-
-## 5. Communication Protocols
-
-| Layer | Protocol | Format |
-| :--- | :--- | :--- |
-| External API | HTTPS / REST | JSON |
-| Internal services | gRPC + Protobuf | Binary |
-| Database | PostgreSQL wire | SQL |
-| Vector search | Qdrant REST / gRPC | JSON / Protobuf |
-| Graph | Bolt / Cypher | Protobuf |
-| Message queue | Redis Streams | Binary |
-| Caching | Redis | Binary |
-| Frontend | HTTPS / REST / WebSocket | JSON |
-| Metrics | Prometheus exposition | Text |
-| Logs | Fluentd → Elasticsearch | JSON |
-| Tracing | OTLP | Protobuf |
-
----
-
-## 6. Infrastructure Design
-
-```
-AWS Region: us-east-1
-├── VPC (10.0.0.0/16)
-│   ├── Public subnets × 3 AZs
-│   └── Private subnets × 3 AZs
-├── EKS Cluster (Kubernetes 1.28)
-│   ├── Backend pods × 3-20 (HPA)
-│   ├── Worker pods × 2-10 (HPA)
-│   ├── Frontend pods × 2-4
-│   └── Monitoring stack
-├── RDS PostgreSQL (Multi-AZ, encrypted)
-├── ElastiCache Redis (cluster mode)
-├── S3 (versioned, encrypted backups)
-├── Route53 + ACM (DNS + TLS)
-└── Application Load Balancer
-```
-
----
-
-## 7. Scalability Model
-
-### Horizontal scaling
-
-- **API pods**: HPA 3-20 (CPU + Memory)
-- **Worker pods**: HPA 2-10 (CPU)
-- **Frontend pods**: HPA 2-4 (CPU)
-
-### Vertical scaling
-
-- Per-pod limits: 2 CPU, 4 GB memory (backend/worker)
-- RDS: db.r6g.large → db.r6g.4xlarge
-- Redis: cache.r6g.large → cache.r6g.4xlarge
-
-### Data scaling
-
-- Qdrant: scales to billions of vectors
-- Neo4j: scales to billions of graph nodes
-- PostgreSQL: scales via partitioning + read replicas
-
----
-
-## 8. Security Model
-
-- **Network**: TLS 1.3 at ingress, mTLS internal
-- **Authentication**: JWT (HS256) + API keys + TOTP MFA
-- **Authorization**: RBAC + ABAC
-- **Encryption**: AES-256-GCM at rest, TLS in transit
-- **Audit**: Hash-chained tamper-evident logs
-- **Secrets**: Encrypted Vault, rotated regularly
-- **Network policies**: default-deny + explicit allow
-- **Container security**: non-root, read-only FS, dropped caps
+1. **Physical & Raw Store**: Local temporary files and PDF artifacts are unlinked.
+2. **Tabular & Graph Cache**: In-memory DAG representation and extracted Markdown tables are evicted from the LRU cache.
+3. **Vector Indices**: Dense embeddings associated with the `doc_id` chunk partitions are pruned from vector memory.
+4. **Audit Log**: A cryptographic deletion certificate is appended to the immutable compliance log.

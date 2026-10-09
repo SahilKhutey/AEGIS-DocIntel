@@ -48,3 +48,7 @@ target/
 .gemini/
 *.zip
 .amdi_last_doc
+
+# MkDocs build output
+site/
+

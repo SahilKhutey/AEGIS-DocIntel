@@ -1,0 +1,82 @@
+site_name: AEGIS-DocIntel
+site_description: "Adaptive Mathematical Document Intelligence Operating System — Research Platform & Production Primitives"
+site_author: "AEGIS-DocIntel Development Team"
+repo_url: "https://github.com/SahilKhutey/AEGIS-DocIntel"
+repo_name: "SahilKhutey/AEGIS-DocIntel"
+edit_uri: ""
+
+theme:
+  name: material
+  palette:
+    - scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - scheme: slate
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - navigation.instant
+    - navigation.tracking
+    - navigation.sections
+    - navigation.expand
+    - content.code.copy
+    - content.action.edit
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.tabbed:
+      alternate_style: true
+  - tables
+  - toc:
+      permalink: true
+
+not_in_nav: |
+  DEVLOG.md
+  history.md
+  known-duplication.md
+  Mathematics.md
+  ROADMAP.md
+  Systems.md
+  Validation.md
+  Workflow.md
+  Architecture.md
+  Benchmarks.md
+  Deployment.md
+  Design.md
+  SUPPORT.md
+  deployment/**
+  pilot/**
+
+validation:
+  omitted_files: ignore
+  absolute_links: ignore
+  unrecognized_links: ignore
+
+nav:
+  - Home: index.md
+  - Status & 16-Phase Journey: status.md
+  - aegis-docprep (Start Here): docprep.md
+  - Full Platform:
+      - Architecture & Master State: architecture.md
+      - Installation & Cold-Start: installation.md
+      - API Reference: api.md
+  - Compliance & Security:
+      - Compliance Gap Analysis: compliance.md
+      - Security Policy & Audit: security.md
+  - Community & Pilot:
+      - Contributing Guide: contributing.md
+      - Support & SLA Policy: support.md
+      - Pilot Case Studies: pilot_cases.md
+  - Changelog: changelog.md
