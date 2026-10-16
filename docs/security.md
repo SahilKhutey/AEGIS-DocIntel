@@ -23,10 +23,17 @@ Please include:
 
 During Phase 10, a comprehensive code review of authentication, authorization, and input processing identified the following issues:
 
-### 1. Critical: Development Authentication Bypass Elimination
-- **Issue**: A legacy development flag (`ALLOW_DEV_BYPASS=true`) permitted unauthenticated API access regardless of environment configuration if specific headers were omitted.
-- **Resolution**: Completely excised the bypass code path. Authentication is now strictly enforced via standard Bearer tokens, with test mocking restricted exclusively to isolated unit test fixtures.
-- **Reference**: Traced and verified in `production/security-audit/`.
+### 1. Critical: development authentication bypass (gated — not removed)
+- **Issue (Phase 10)**: `dev-<tenant>` bearer tokens and the `aegis-dev-key` API key were accepted regardless of environment.
+- **Resolution**: they are accepted **only** when `AEGIS_ENVIRONMENT=development`; the default is `production`, where they return 401. The bypass code path still exists by design for local development and tests. There is no `ALLOW_DEV_BYPASS` variable (earlier versions of this page named one in error). Verified by `tests/test_auth_guard.py`.
+
+### 2. Critical: most routes had no authentication at all (found and fixed in Phase 0)
+- **Issue**: probing the live app without credentials showed that 45 of 59 operations accepted anonymous requests — the legacy AEL routes, annotations, admin, advanced and webhook routers had never been wired to authentication. An anonymous caller could export another tenant's document (`GET /v1/documents/{id}/export`) and wipe every document for every tenant (`DELETE /v1/document` → 204).
+- **Resolution**: `src/api/auth_guard.py` — a deny-by-default ASGI middleware. Every HTTP route returns 401 without valid credentials unless it is on a short explicit public list (`/health`, `/readiness`, `/docs`, `/redoc`, `/openapi.json`, `/metrics`). New routes are protected automatically. `tests/test_auth_guard.py` probes every operation in the app, so a future unprotected route fails CI.
+- **Known exposure**: `/metrics` is public and its series are labelled with `tenant_id`; keep it off the public internet.
+
+### 3. Known gap: production credentials cannot be validated yet
+The RS256 JWT and API-key validators in `src/api/auth.py` are stubs. Outside development every credential is rejected, so the API is currently usable only in development mode. Tracked as I-20.
 
 ### 2. Transitive Dependency Vulnerability Triage
 - **Issue**: Dependency vulnerability scanning detected known CVE advisories in optional legacy packages.

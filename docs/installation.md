@@ -67,16 +67,13 @@ pip install -r requirements-ml.txt
 
 ## Verifying the Installation
 
-Execute the test suite to confirm that all 944 unit tests pass cleanly:
+Run the test suite from the repository root:
 
 ```bash
-python -m pytest tests/
+pytest tests/
 ```
 
-Expected output:
-```
-============================= 944 passed in 12.45s =============================
-```
+All tests should pass. A few are reported as `skipped` (optional dependencies) or `xfailed` — the `xfail`s are **tracked, documented defects** (see `STATUS.md`), not noise. Pass counts are intentionally not quoted here because they change with every commit; the CI badge in the README is the source of truth.
 
 ### Testing the Standalone `aegis-docprep` Distribution
 

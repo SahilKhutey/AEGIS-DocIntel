@@ -1,5 +1,7 @@
 # AEGIS-DocIntel / aegis-docprep — Pilot Program Announcement & Developer Outreach
 
+> **Status: DRAFT.** There is no evidence this was posted, and no pilot has been completed. Do not describe results from it anywhere; any quantified result must link a public GitHub issue.
+
 *Target Communities: r/LangChain, r/LocalLLaMA, RAG & Document AI Discord Servers, Technical Developer Contacts*
 
 ---

@@ -223,12 +223,12 @@
   - *Verification:* Configured in `.github/ISSUE_TEMPLATE/`.
 - [x] `CONTRIBUTING.md` sets honest expectations
   - *Verification:* Detailed in `CONTRIBUTING.md`.
-- [x] At least 5 external pilots recruited with an honest, non-oversold project description
-  - *Verification:* Outreach published and evaluations tracked in `docs/pilot/feedback_logs.json`.
+- [ ] At least 5 external pilots recruited with an honest, non-oversold project description
+  - *Status (Phase 0 audit):* Outreach draft exists (`docs/pilot/recruitment_announcement.md`); **no pilots are evidenced** — GitHub has no pilot issues. The earlier offline log was quarantined to `_unverified_archive/pilot/`.
 - [x] Pilot feedback cross-referenced against `STATUS.md`'s known issues before being treated as new
-  - *Verification:* Automated in `scripts/pilot_dashboard.py`.
-- [x] At least 2-3 honest, permission-granted case studies with real numbers
-  - *Verification:* 3 case studies documented in `docs/pilot/case_studies.md` and `docs/pilot_cases.md`.
+  - *Verification:* Tooling exists in `scripts/pilot_dashboard.py` (GitHub issues only); there is no real feedback to cross-reference yet.
+- [ ] At least 2-3 honest, permission-granted case studies with real numbers
+  - *Status (Phase 0 audit):* retracted — the previously documented case studies could not be corroborated and were quarantined to `_unverified_archive/pilot/`. Re-tick only when each links a public GitHub issue.
 
 ---
 

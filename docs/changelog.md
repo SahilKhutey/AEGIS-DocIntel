@@ -6,6 +6,33 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [Unreleased] - Phase 0: Restore Green & Restore Honesty
+
+### Security
+- **Fixed (critical): anonymous access to most of the API.** Probing the live app without credentials showed 45 of 59 operations accepted anonymous requests — the legacy AEL routes, annotations, admin, advanced and webhook routers had never been wired to authentication. An anonymous caller could export another tenant's document (`GET /v1/documents/{id}/export`) and wipe every document for every tenant (`DELETE /v1/document` → 204). Added `src/api/auth_guard.py`, a **deny-by-default** ASGI middleware: every HTTP route now requires credentials unless it is on a short explicit public list. `tests/test_auth_guard.py` probes every operation (and was mutation-tested: it fails when the guard is disabled).
+- **Known, not fixed:** production JWT / API-key validation is still a stub (outside development every credential is rejected); `/metrics` is public and labelled with `tenant_id`.
+
+### Fixed
+- Documented install path aborted with zero tests run: `hypothesis`, `python-docx`, `python-pptx` and `openpyxl` were declared nowhere / only in one of two divergent dependency lists. `pyproject.toml` is now the single source of truth; `requirements-*.txt` are generated from it and `scripts/check_dependency_sync.py` fails on drift.
+- CI: secret scan false positive allowlisted with a documented fingerprint (`.gitleaksignore`); actions bumped to Node 24 majors; runners pinned to `ubuntu-24.04` (the floating `ubuntu-latest` migrates to Ubuntu 26 on 2026-10-19); new `cold-start` job runs the README's commands on a fresh virtualenv.
+- Stale AEL integration test split into independent tests; the one blocked by a real route collision is a *strict* xfail.
+- `data/annotations.db` (mutated by the test suite) is no longer tracked.
+- Docs: removed documented examples that did not run and outputs that were false (see below); fixed links and a case-sensitivity bug (`Architecture.md`) that broke the docs site on Linux.
+
+### Added
+- Tests: `test_auth_guard.py`, `test_api_route_integrity.py` (ratchet on 5 duplicate routes and 3 duplicate operation IDs), `test_dependency_sync.py`, `test_docs_examples.py` (executes documented examples and compares documented outputs), `test_docs_claims.py`, `test_repo_hygiene.py`, `test_packer_guarantee_gap.py`.
+- Scripts: `scripts/cold_start_check.sh`, `check_dependency_sync.py`, `check_docs_claims.py`, `list_routes.py`.
+
+### Corrected (claims that were false or unsupported)
+- PII redaction was documented as covering emails and API tokens; it detects four entity types only, and can leave a surname in clear text. Limitations are now documented and executed as tests.
+- The context packer was documented with a "provably (1 − 1/e)" guarantee; it has none (0.02 of optimal on a two-chunk counterexample). Pinned by a strict xfail.
+- Pilot case studies had no public corroboration; quarantined in `_unverified_archive/pilot/`.
+- `docs/security.md` claimed the dev bypass was "completely excised" and named an `ALLOW_DEV_BYPASS` variable that never existed.
+- Stale test counts, a fabricated sample test output, and "Python 3.10–3.12" support (CI tests 3.12 and 3.13).
+- The previous `STATUS.md` is preserved with a warning banner at `docs/history/STATUS_2026-10-09.md`; the new one links every claim to a test or script.
+
+---
+
 ## [Unreleased] - Phase 16 Productization & Go-to-Market Readiness
 
 ### Fixed (16-Phase Historical Retrospective)
@@ -32,12 +59,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - **Cold-Start Verification & Documentation Alignment:** Resolved cold-start installation hurdles for new developers by explicitly documenting tiered dependencies (`requirements-core.txt` + `requirements-dev.txt`) for running the full 1,060+ unit test suite without collection aborts or missing `pytest`.
   - **Structured Pilot Feedback Infrastructure:** Deployed GitHub issue templates in `.github/ISSUE_TEMPLATE/` (`bug_report.md` featuring cold-start checkpoints, `pilot_feedback.md` capturing workload profile, output accuracy, and willingness to reuse). Updated `CONTRIBUTING.md` with transparent pilot participation rules.
   - **Automated Feedback Dashboard:** Created `scripts/pilot_dashboard.py` aggregating incoming GitHub issues and local JSON feedback, automatically categorizing reported issues against known issues in `STATUS.md` (`IN_MEMORY_PERSISTENCE`, `OPTIONAL_EMBEDDINGS`, `COLD_START_DEPENDENCY`, `TABLE_COMPLEXITY`).
-  - **Real Workload Case Studies:** Published outreach materials in `docs/pilot/recruitment_announcement.md` and compiled 3 permission-granted case studies in `docs/pilot/case_studies.md` (FinTech support chats with 40.8% token context reduction and 100% PII masking; 2-column legal SEC filings with topological reading order recovery; and avionics technical manuals with diversity knapsack context packing under 1,500 token budgets).
+  - **Pilot case studies (retracted in Phase 0):** an earlier revision of this entry described three permission-granted case studies with specific metrics. They could not be corroborated (the repository has no pilot issues) and were moved to `_unverified_archive/pilot/`. Published outreach materials remain in `docs/pilot/recruitment_announcement.md`.
 - **Scope Narrowing & Standalone Core Product Packaging (`aegis-docprep`, Phase 14):**
   - **Standalone Package Extraction:** Extracted the three most validated, self-contained primitives from the 16-domain research platform into a standalone, lightweight package `aegis-docprep` (`aegis_docprep`): PII redaction & compliance filtering (`pii_redaction.py`), submodular knapsack context packing (`context_packer.py`), and spatial reading-order recovery (`reading_order.py`).
   - **Zero Internal Monorepo Dependencies:** Formally audited and proved zero internal dependencies on `src/` and only a single third-party dependency on `numpy>=1.26.0`. Verified through completely isolated import testing with repository paths stripped from the Python environment.
   - **API Ergonomics & Friction Reduction:** Resolved API discoverability gaps identified during extraction by introducing intuitive method aliases (`SubmodularKnapsackPacker.pack()` alongside `pack_context()`, `token_count` alias for `token_cost`), and publishing copy-paste runnable quickstart documentation in `aegis-docprep/README.md`.
-  - **Live LangChain & LlamaIndex Integrations:** Implemented and executed real framework integrations against installed libraries: `PIIRedactingTransformer` (LangChain document transformer scrubbing PII before model ingestion) and `SubmodularPackingPostprocessor` (LlamaIndex node post-processor enforcing knapsack token budgets with diversity guarantees).
+  - **Live LangChain & LlamaIndex Integrations:** Implemented and executed real framework integrations against installed libraries: `PIIRedactingTransformer` (LangChain document transformer scrubbing PII before model ingestion) and `SubmodularPackingPostprocessor` (LlamaIndex node post-processor enforcing knapsack token budgets with diversity guarantees). *(Correction, Phase 0: the LlamaIndex example could not be verified and was removed; the LangChain example was verified manually only.)*
   - **Permanent Dedicated Test Suite:** Created 17 unit and property-based tests in `aegis-docprep/tests/` covering Luhn mod-10 credit card validation, multi-column reading flow, Theorem 6.1 spatial DAG acyclicity, Theorem 6.2 Kahn determinism, and Theorem 9.1 greedy knapsack approximation bounds.
   - **Packaging & TestPyPI Distribution Infrastructure:** Standardized build via `setuptools.build_meta` generating `.tar.gz` and `.whl` distributions, verified via pip installation into clean environments and standalone CLI invocation.
 - **API & SDK Stabilization (Phase 13):**
@@ -81,14 +108,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Published real benchmark reports in `production/performance-report/pdf_pipeline_benchmark.json` and `pdf_pipeline_benchmark_raw.json` with 61/62 (98.4%) success rate, replacing quarantined Phase 1 synthetic reports.
   - Corrected Phase 7 import diagnosis: aliased `ResponseVerificationLayer` as `ResponseVerifier` and exposed `CONNECTOR_REGISTRY = ConnectorFactory.REGISTRY`.
 
-- **Formal Verification Baseline:** Added [`STATUS.md`](STATUS.md) detailing verified capabilities, known issues, and quarantined items.
+- **Formal Verification Baseline:** Added [`STATUS.md`](https://github.com/SahilKhutey/AEGIS-DocIntel/blob/master/STATUS.md) detailing verified capabilities, known issues, and quarantined items.
 - **16-Phase Roadmap:** Added [`docs/ROADMAP.md`](ROADMAP.md) detailing the step-by-step path to production readiness.
 - **Development Log:** Added [`docs/DEVLOG.md`](DEVLOG.md) tracking tasks, findings, and test verification results.
 - **Packaging Infrastructure:** Added [`pyproject.toml`](https://github.com/SahilKhutey/AEGIS-DocIntel/blob/main/pyproject.toml) supporting PEP 517/621 standards with optional extras (`[ml]`, `[dev]`, `[all]`).
 - **Tiered Requirements:** Added [`requirements-core.txt`](https://github.com/SahilKhutey/AEGIS-DocIntel/blob/main/requirements-core.txt), [`requirements-ml.txt`](https://github.com/SahilKhutey/AEGIS-DocIntel/blob/main/requirements-ml.txt), and [`requirements-dev.txt`](https://github.com/SahilKhutey/AEGIS-DocIntel/blob/main/requirements-dev.txt).
 - **Automated CI Workflow:** Added [`.github/workflows/ci.yml`](https://github.com/SahilKhutey/AEGIS-DocIntel/blob/main/.github/workflows/ci.yml) with Ruff linting, Bandit security scanning, Pip-Audit vulnerability checking, and multi-version Python test matrix.
 
-- **Contributing Guidelines:** Added [`CONTRIBUTING.md`](CONTRIBUTING.md) documenting branch protection rules and CI verification requirements.
+- **Contributing Guidelines:** Added [`CONTRIBUTING.md`](https://github.com/SahilKhutey/AEGIS-DocIntel/blob/master/CONTRIBUTING.md) documenting branch protection rules and CI verification requirements.
 - **Lock Files:** Added [`requirements-core.lock.txt`](https://github.com/SahilKhutey/AEGIS-DocIntel/blob/main/requirements-core.lock.txt) and [`requirements-ml.lock.txt`](https://github.com/SahilKhutey/AEGIS-DocIntel/blob/main/requirements-ml.lock.txt) from clean installs.
 - **Infrastructure Requirements:** Added [`requirements-infra.txt`](https://github.com/SahilKhutey/AEGIS-DocIntel/blob/main/requirements-infra.txt) isolating optional caching/tracing deps.
 - **Architectural History:** Added [`docs/history.md`](history.md) detailing codebase lineage from legacy iterations to unified canonical architecture.
@@ -123,7 +150,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Migrated [`src/core/orchestrator.py`](https://github.com/SahilKhutey/AEGIS-DocIntel/blob/main/src/core/orchestrator.py) to populate and synchronize one canonical `MasterState` per document (`self._doc_state`), maintaining backward compatibility through dynamic property accessors and dual dict/attr access wrappers (`IngestionStats`, `QueryResult`).
   - Added permanent multi-tenant data isolation regression suite in [`tests/test_multitenancy_isolation.py`](https://github.com/SahilKhutey/AEGIS-DocIntel/blob/main/tests/test_multitenancy_isolation.py) validating strict isolation across queries, element access, and state retrieval.
   - Added schema versioning and migration framework in [`src/core/schema_migrations.py`](https://github.com/SahilKhutey/AEGIS-DocIntel/blob/main/src/core/schema_migrations.py) with test coverage in [`tests/test_schema_migrations.py`](https://github.com/SahilKhutey/AEGIS-DocIntel/blob/main/tests/test_schema_migrations.py).
-  - Surfaced the monograph's Appendix E layer status honesty matrix in [`STATUS.md`](STATUS.md).
+  - Surfaced the monograph's Appendix E layer status honesty matrix in [`STATUS.md`](https://github.com/SahilKhutey/AEGIS-DocIntel/blob/master/STATUS.md).
 - **Architectural Deduplication (Phase 4):**
   - Consolidated `BoundingBox` into canonical Pydantic model in [`src/models/geometry_object.py`](https://github.com/SahilKhutey/AEGIS-DocIntel/blob/main/src/models/geometry_object.py) with positional argument support, tuple conversion, and page normalization.
   - Consolidated `Citation` into canonical Pydantic model in [`src/models/context_object.py`](https://github.com/SahilKhutey/AEGIS-DocIntel/blob/main/src/models/context_object.py) with bounding box support and confidence calculation.
@@ -136,10 +163,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Workflow & Engine Defensiveness:** Added PageRank centrality scoring in `DocumentGraph` and `GraphEngine`, dynamic `compute_weights` in `AdaptiveFusionEngine` and `FusionEngine`, array dimension flattening in `SemanticEngine`, and safe graph metric handling in `ExportWorkflow`.
 - **Connectors Reconciliation:** Reconciled `src/connectors/` as the single canonical agent integration layer; unified sync and async execution paths (`send`, `stream`, `send_ueo`, `query`), and redirected AEL exporter and export workflows to `src/connectors`.
 - **Dependency Repair:** Updated [`requirements.txt`](https://github.com/SahilKhutey/AEGIS-DocIntel/blob/main/requirements.txt) to include missing runtime packages (`networkx`, `scipy`, `scikit-learn`, `loguru`) and split dependencies into modular tiers.
-- **README Restructuring:** Rewrote [`README.md`](README.md) with live CI badge, measured coverage badge (76%), and tiered install instructions.
+- **README Restructuring:** Rewrote [`README.md`](https://github.com/SahilKhutey/AEGIS-DocIntel/blob/master/README.md) with live CI badge, measured coverage badge (76%), and tiered install instructions.
 - **Defensive CLI Logging:** Updated `src/cli.py` with safe logging fallback.
 - **Typing Fixes:** Fixed 18 `F821` undefined typing names in `src/` to ensure clean linter passes.
-- **Release Documentation:** Annotated [`production/PRODUCTION_RELEASE_CHECKLIST.md`](production/PRODUCTION_RELEASE_CHECKLIST.md) and [`production/release/RELEASE_NOTES_v1.0.0.md`](production/release/RELEASE_NOTES_v1.0.0.md) to indicate development prototype status.
+- **Release Documentation:** Annotated [`production/PRODUCTION_RELEASE_CHECKLIST.md`](https://github.com/SahilKhutey/AEGIS-DocIntel/blob/master/production/PRODUCTION_RELEASE_CHECKLIST.md) and [`production/release/RELEASE_NOTES_v1.0.0.md`](https://github.com/SahilKhutey/AEGIS-DocIntel/blob/master/production/release/RELEASE_NOTES_v1.0.0.md) to indicate development prototype status.
 - **License Annotation:** Annotated [`LICENSE`](https://github.com/SahilKhutey/AEGIS-DocIntel/blob/main/LICENSE) template noting no commercial licenses have yet been issued.
 
 ### Quarantined / Removed

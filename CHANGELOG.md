@@ -6,6 +6,33 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [Unreleased] - Phase 0: Restore Green & Restore Honesty
+
+### Security
+- **Fixed (critical): anonymous access to most of the API.** Probing the live app without credentials showed 45 of 59 operations accepted anonymous requests — the legacy AEL routes, annotations, admin, advanced and webhook routers had never been wired to authentication. An anonymous caller could export another tenant's document (`GET /v1/documents/{id}/export`) and wipe every document for every tenant (`DELETE /v1/document` → 204). Added `src/api/auth_guard.py`, a **deny-by-default** ASGI middleware: every HTTP route now requires credentials unless it is on a short explicit public list. `tests/test_auth_guard.py` probes every operation (and was mutation-tested: it fails when the guard is disabled).
+- **Known, not fixed:** production JWT / API-key validation is still a stub (outside development every credential is rejected); `/metrics` is public and labelled with `tenant_id`.
+
+### Fixed
+- Documented install path aborted with zero tests run: `hypothesis`, `python-docx`, `python-pptx` and `openpyxl` were declared nowhere / only in one of two divergent dependency lists. `pyproject.toml` is now the single source of truth; `requirements-*.txt` are generated from it and `scripts/check_dependency_sync.py` fails on drift.
+- CI: secret scan false positive allowlisted with a documented fingerprint (`.gitleaksignore`); actions bumped to Node 24 majors; runners pinned to `ubuntu-24.04` (the floating `ubuntu-latest` migrates to Ubuntu 26 on 2026-10-19); new `cold-start` job runs the README's commands on a fresh virtualenv.
+- Stale AEL integration test split into independent tests; the one blocked by a real route collision is a *strict* xfail.
+- `data/annotations.db` (mutated by the test suite) is no longer tracked.
+- Docs: removed documented examples that did not run and outputs that were false (see below); fixed links and a case-sensitivity bug (`Architecture.md`) that broke the docs site on Linux.
+
+### Added
+- Tests: `test_auth_guard.py`, `test_api_route_integrity.py` (ratchet on 5 duplicate routes and 3 duplicate operation IDs), `test_dependency_sync.py`, `test_docs_examples.py` (executes documented examples and compares documented outputs), `test_docs_claims.py`, `test_repo_hygiene.py`, `test_packer_guarantee_gap.py`.
+- Scripts: `scripts/cold_start_check.sh`, `check_dependency_sync.py`, `check_docs_claims.py`, `list_routes.py`.
+
+### Corrected (claims that were false or unsupported)
+- PII redaction was documented as covering emails and API tokens; it detects four entity types only, and can leave a surname in clear text. Limitations are now documented and executed as tests.
+- The context packer was documented with a "provably (1 − 1/e)" guarantee; it has none (0.02 of optimal on a two-chunk counterexample). Pinned by a strict xfail.
+- Pilot case studies had no public corroboration; quarantined in `_unverified_archive/pilot/`.
+- `docs/security.md` claimed the dev bypass was "completely excised" and named an `ALLOW_DEV_BYPASS` variable that never existed.
+- Stale test counts, a fabricated sample test output, and "Python 3.10–3.12" support (CI tests 3.12 and 3.13).
+- The previous `STATUS.md` is preserved with a warning banner at `docs/history/STATUS_2026-10-09.md`; the new one links every claim to a test or script.
+
+---
+
 ## [Unreleased] - Phase 16 Productization & Go-to-Market Readiness
 
 ### Fixed (16-Phase Historical Retrospective)
@@ -32,12 +59,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - **Cold-Start Verification & Documentation Alignment:** Resolved cold-start installation hurdles for new developers by explicitly documenting tiered dependencies (`requirements-core.txt` + `requirements-dev.txt`) for running the full 1,060+ unit test suite without collection aborts or missing `pytest`.
   - **Structured Pilot Feedback Infrastructure:** Deployed GitHub issue templates in `.github/ISSUE_TEMPLATE/` (`bug_report.md` featuring cold-start checkpoints, `pilot_feedback.md` capturing workload profile, output accuracy, and willingness to reuse). Updated `CONTRIBUTING.md` with transparent pilot participation rules.
   - **Automated Feedback Dashboard:** Created `scripts/pilot_dashboard.py` aggregating incoming GitHub issues and local JSON feedback, automatically categorizing reported issues against known issues in `STATUS.md` (`IN_MEMORY_PERSISTENCE`, `OPTIONAL_EMBEDDINGS`, `COLD_START_DEPENDENCY`, `TABLE_COMPLEXITY`).
-  - **Real Workload Case Studies:** Published outreach materials in `docs/pilot/recruitment_announcement.md` and compiled 3 permission-granted case studies in `docs/pilot/case_studies.md` (FinTech support chats with 40.8% token context reduction and 100% PII masking; 2-column legal SEC filings with topological reading order recovery; and avionics technical manuals with diversity knapsack context packing under 1,500 token budgets).
+  - **Pilot case studies (retracted in Phase 0):** an earlier revision of this entry described three permission-granted case studies with specific metrics. They could not be corroborated (the repository has no pilot issues) and were moved to `_unverified_archive/pilot/`. Published outreach materials remain in `docs/pilot/recruitment_announcement.md`.
 - **Scope Narrowing & Standalone Core Product Packaging (`aegis-docprep`, Phase 14):**
   - **Standalone Package Extraction:** Extracted the three most validated, self-contained primitives from the 16-domain research platform into a standalone, lightweight package `aegis-docprep` (`aegis_docprep`): PII redaction & compliance filtering (`pii_redaction.py`), submodular knapsack context packing (`context_packer.py`), and spatial reading-order recovery (`reading_order.py`).
   - **Zero Internal Monorepo Dependencies:** Formally audited and proved zero internal dependencies on `src/` and only a single third-party dependency on `numpy>=1.26.0`. Verified through completely isolated import testing with repository paths stripped from the Python environment.
   - **API Ergonomics & Friction Reduction:** Resolved API discoverability gaps identified during extraction by introducing intuitive method aliases (`SubmodularKnapsackPacker.pack()` alongside `pack_context()`, `token_count` alias for `token_cost`), and publishing copy-paste runnable quickstart documentation in `aegis-docprep/README.md`.
-  - **Live LangChain & LlamaIndex Integrations:** Implemented and executed real framework integrations against installed libraries: `PIIRedactingTransformer` (LangChain document transformer scrubbing PII before model ingestion) and `SubmodularPackingPostprocessor` (LlamaIndex node post-processor enforcing knapsack token budgets with diversity guarantees).
+  - **Live LangChain & LlamaIndex Integrations:** Implemented and executed real framework integrations against installed libraries: `PIIRedactingTransformer` (LangChain document transformer scrubbing PII before model ingestion) and `SubmodularPackingPostprocessor` (LlamaIndex node post-processor enforcing knapsack token budgets with diversity guarantees). *(Correction, Phase 0: the LlamaIndex example could not be verified and was removed; the LangChain example was verified manually only.)*
   - **Permanent Dedicated Test Suite:** Created 17 unit and property-based tests in `aegis-docprep/tests/` covering Luhn mod-10 credit card validation, multi-column reading flow, Theorem 6.1 spatial DAG acyclicity, Theorem 6.2 Kahn determinism, and Theorem 9.1 greedy knapsack approximation bounds.
   - **Packaging & TestPyPI Distribution Infrastructure:** Standardized build via `setuptools.build_meta` generating `.tar.gz` and `.whl` distributions, verified via pip installation into clean environments and standalone CLI invocation.
 - **API & SDK Stabilization (Phase 13):**

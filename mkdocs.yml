@@ -51,7 +51,6 @@ not_in_nav: |
   Systems.md
   Validation.md
   Workflow.md
-  Architecture.md
   Benchmarks.md
   Deployment.md
   Design.md
@@ -71,7 +70,7 @@ nav:
       - Master Remediation Checklist: MASTER_REMEDIATION_CHECKLIST.md
   - aegis-docprep (Start Here): docprep.md
   - Full Platform:
-      - Architecture & Master State: architecture.md
+      - Architecture & Master State: Architecture.md
       - Installation & Cold-Start: installation.md
       - API Reference: api.md
   - Compliance & Security:
@@ -80,5 +79,4 @@ nav:
   - Community & Pilot:
       - Contributing Guide: contributing.md
       - Support & SLA Policy: support.md
-      - Pilot Case Studies: pilot_cases.md
   - Changelog: changelog.md

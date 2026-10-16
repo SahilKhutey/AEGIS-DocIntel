@@ -855,3 +855,9 @@ All changes have been committed across discrete, atomic Git commits and synchron
 * 8cc9b2a docs: correct README badges and status claims to reflect reality
 * 9e90fb1 chore: quarantine fabricated security/compliance/benchmark artifacts
 ```
+
+---
+
+## 2026-10-10 — Correction (Phase 0 audit)
+
+Several entries above describe things as "verified" that a later audit found to be false or unsupported: pilot case studies with no public corroboration; Phase 10 and Phase 13 security/API fixes while 45 of 59 routes had no authentication and 5 routes were registered twice; a PII redaction claim covering emails and API tokens; a "provable (1 − 1/e)" packer guarantee. See `STATUS.md` (current) and `docs/history/STATUS_2026-10-09.md` (as it stood), and the `CHANGELOG.md` Phase 0 entry. This log is otherwise left unedited as a historical record.

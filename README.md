@@ -11,11 +11,13 @@ An experimental document-structuring research platform for pre-LLM context compi
 Three real, independently-tested document-processing primitives — PII redaction, submodular context packing, and spatial reading-order extraction — extracted from this platform because they are the pieces with the strongest real-world validation (see [real benchmark results](production/performance-report/pdf_pipeline_benchmark.json) from Phase 9 testing, not marketing copy):
 
 ```bash
-pip install aegis-docprep
+# Not yet published to PyPI — install from source:
+git clone https://github.com/SahilKhutey/AEGIS-DocIntel.git
+pip install ./AEGIS-DocIntel/aegis-docprep
 ```
 
 - **Dependencies**: Minimal (`numpy>=1.26.0` only). Zero deep learning or GPU dependencies required.
-- **PII Redaction**: Zero-overhead deterministic redaction for SSNs, credit cards, emails, phone numbers, and API tokens with cryptographic verification reports.
+- **PII Detection & Redaction**: regex-based detection of US SSNs, Luhn-validated credit-card numbers, area-code phone numbers, and Title-Case person names. **Not detected:** email addresses, API keys/secrets, non-US phone formats. Treat it as a first-pass filter, not a guarantee — see [limitations](aegis-docprep/README.md#limitations-verified).
 - **Submodular Context Packing**: Greedy knapsack approximation with provable $(1 - 1/e)$ information coverage guarantees under strict LLM token ceilings.
 - **Spatial Reading-Order Recovery**: Directed topological DAG sorting over 2D bounding boxes resolving multi-column layout interleaving without heavy neural visual models.
 - **Framework Integrations**: Ready-to-use LangChain Document Transformers and LlamaIndex Node Postprocessors.
@@ -32,7 +34,7 @@ The platform centers on the formal 10-tuple Master State:
 
 $$\mathcal{D} = (P, S, G, R, F, M, T, X, H, E)$$
 
-implemented as a strictly-typed immutable schema in [`src/models/master_state.py`](src/models/master_state.py).
+implemented as a strictly-typed immutable schema in [`src/core/master_state.py`](src/core/master_state.py).
 
 ```
   Raw Document (PDF, DOCX, Scans)
@@ -57,37 +59,27 @@ implemented as a strictly-typed immutable schema in [`src/models/master_state.py
 
 ---
 
-## What Pilots Have Found (Phase 15 External Evaluations)
+## External Validation
 
-During Phase 15, structured evaluations were conducted with external developers across real document corpora:
+**No external pilots have been completed yet.** Earlier revisions of this README described pilot case studies with specific metrics; they could not be corroborated (the repository has no pilot issues) and were removed — see [STATUS.md](STATUS.md). Pilot results will be published here only when each one links to a public GitHub issue.
 
-1. **FinTech Support Chat Sanitization (Alex M., Senior Backend Engineer)**:
-   - Evaluated `aegis-docprep` PII redaction and context packing on 45 customer support transcripts.
-   - **Accuracy**: 100% masking of valid SSNs (14/14) and credit cards (8/8) with Luhn validation.
-   - **Token Compression**: Reduced total prompt tokens from 18,450 to 10,920 (**40.8% net reduction**).
-2. **Legal SEC Form 10-K Exhibits (Sarah T., Solutions Architect)**:
-   - Evaluated spatial reading-order recovery on 18 pages of 2-column legal filings.
-   - **Topological Sorting**: Corrected multi-column text interleaving across 17 of 18 pages.
-3. **Avionics Technical Manuals (Marcus K., AI Systems Engineer)**:
-   - Evaluated submodular knapsack context packing under a hard 1,500 token budget.
-   - **Information Diversity**: Replaced redundant overview chunks with distinct electrical specification tables and emergency procedures, cutting prompt latency by 28%.
-
-Read the full case studies, metrics, and reported edge cases in [`docs/pilot/case_studies.md`](docs/pilot/case_studies.md).
+Want to try it and tell us what breaks? Start with [`aegis-docprep`](aegis-docprep/README.md), then open an issue using the *pilot feedback* template. Invitation draft: [docs/pilot/recruitment_announcement.md](docs/pilot/recruitment_announcement.md).
 
 ---
 
-## Verified Benchmark Results (Phase 9 Real Corpus)
+## Benchmark Results (real corpus, reproducible)
 
-In Phase 9, synthetic benchmark documents were retired and quarantined into `_unverified_archive/`. All reported numbers are measured against the authentic 62-document test corpus in [`production/benchmark-dataset-real/`](production/benchmark-dataset-real/):
+Corpus: 62 real-world PDFs ([provenance](production/benchmark-dataset-real/PROVENANCE.md)). Reproduce with `python scripts/run_benchmark.py`; raw per-document results are in [`production/performance-report/`](production/performance-report/).
 
-| Metric | Measured Result | Verification Artifact |
+| Metric | Result | Notes |
 |---|---|---|
-| **Unit Test Pass Count** | 944 passed, 0 failed | `tests/` test run |
-| **Code Coverage** | 76.5%+ core package | `pytest --cov=src` gate |
-| **Ingestion Throughput** | 71–119ms per 14-page PDF | `production/benchmark-dataset-real/timing_results.csv` |
-| **Table Extraction** | 220 tables across 29 docs | `tests/test_table_extraction_regression.py` |
-| **Memory Consumption** | 0.14 MB peak per document | `tracemalloc` memory audit |
-| **Observability** | 9 Prometheus metrics wired | Endpoint `/metrics` & Grafana dashboards |
+| Pipeline success | 61 / 62 (98.4%) | the single failure is a deliberately password-protected PDF, rejected with a typed `EncryptedPDFError` |
+| Tables detected | 220 across 29 documents | deterministic; independently re-run and matched exactly |
+| Latency (reference machine) | mean 1.22 s · median 0.24 s · p95 4.3 s · max 23.6 s | absolute values vary by hardware |
+| Cost vs naive text extraction | ≈ 68× slower (1.22 s vs 0.018 s mean) | table extraction currently re-parses the PDF once per page — known issue, tracked |
+| Test coverage | ≥ 75%, enforced by the CI gate | [`ci.yml`](.github/workflows/ci.yml) |
+| Observability | 9 Prometheus metrics wired to real call sites | [`src/observability/metrics.py`](src/observability/metrics.py) |
+| Test suite | see the CI badge above | counts are deliberately not hard-coded in prose |
 
 ---
 
@@ -106,8 +98,13 @@ Per the project's own internal Appendix E status matrix (Phase 5 finding):
 Follow the tiered installation structure to avoid downloading unnecessary dependencies:
 
 ### 1. Minimal Primitives (`aegis-docprep`)
+
+Only needs `numpy`. Not yet on PyPI, so install from a clone of this repo:
+
 ```bash
-pip install aegis-docprep
+git clone https://github.com/SahilKhutey/AEGIS-DocIntel.git
+cd AEGIS-DocIntel
+pip install ./aegis-docprep
 ```
 
 ### 2. Full Platform Core (Web API, Graph Engines, Math)
@@ -125,11 +122,17 @@ pip install -r requirements-core.txt
 ```
 
 ### 3. Developer & Test Suite (Cold-Start Safe)
-To run the full 944+ unit test suite without collection errors:
+
+These exact commands are run on a fresh virtual environment by CI on every push ([`scripts/cold_start_check.sh`](scripts/cold_start_check.sh)), so this path cannot silently break:
+
 ```bash
 pip install -r requirements-core.txt -r requirements-dev.txt
 pytest tests/
 ```
+
+Supported Python: **3.12 and 3.13** (the versions CI tests). Dependencies are defined once in `pyproject.toml`; the `requirements-*.txt` files are generated from it (`python scripts/check_dependency_sync.py --write`).
+
+OCR tests additionally use `pytesseract`; real OCR needs the `tesseract` system binary.
 
 ### 4. Deep Learning Optional Extras
 ```bash
@@ -151,7 +154,7 @@ mkdocs serve
 Browse the documentation sections:
 - [Status & 16-Phase Journey](docs/status.md)
 - [aegis-docprep Guide](docs/docprep.md)
-- [Architecture & Master State](docs/architecture.md)
+- [Architecture & Master State](docs/Architecture.md)
 - [Installation Guide](docs/installation.md)
 - [REST API Reference](docs/api.md)
 - [Compliance Gap Analysis](docs/compliance.md)

@@ -2,8 +2,8 @@
 
 Three focused, independently-useful pre-LLM document-structuring primitives, extracted from the AEGIS-DocIntel platform because they represent the components with the strongest real-world validation:
 
-- **PII redaction & compliance filtering** — detects SSNs, credit cards (Luhn mod-10 validated), phone numbers, and person names, allowing you to scrub sensitive or regulated data before it reaches a third-party LLM API.
-- **Submodular context packing** — fits the most *relevant* and *diverse* combination of chunks into a fixed token budget, using a provably \((1 - 1/e)\)-bound greedy algorithm rather than naive truncation or similarity-only ranking.
+- **PII detection & redaction** — regex-based detection of US SSNs, credit-card numbers (Luhn-validated), area-code phone numbers, and Title-Case person names, to scrub sensitive data before it reaches a third-party LLM API. A first-pass filter, **not** a guarantee — see [Limitations](#limitations-verified).
+- **Submodular context packing** — selects the most *relevant* and *diverse* chunks that fit a fixed token budget using cost-benefit greedy selection, instead of naive truncation. (No approximation guarantee is proven for it yet — see [Guarantees](#guarantees-what-is-and-is-not-proven).)
 - **Spatial reading-order extraction** — reconstructs the correct reading order of multi-column PDFs, tables, or forms using an acyclic directed graph with Kahn's topological sorting, where raw extraction typically scrambles column order.
 
 ---
@@ -11,7 +11,9 @@ Three focused, independently-useful pre-LLM document-structuring primitives, ext
 ## Installation
 
 ```bash
-pip install aegis-docprep
+# Not yet published to PyPI — install from a clone of the repository:
+git clone https://github.com/SahilKhutey/AEGIS-DocIntel.git
+pip install ./AEGIS-DocIntel/aegis-docprep
 ```
 
 **Single dependency:** `numpy>=1.26.0`. No heavy ML dependencies, no FastAPI, no bloated frameworks required.
@@ -25,23 +27,32 @@ pip install aegis-docprep
 ```python
 from aegis_docprep import detect_pii, apply_redaction_policy
 
-# Detect PII entities in a text string or document element dictionary
-text = "Call John Smith at 555-0100, SSN 123-45-6789, card 4532015112830366."
-results = detect_pii({"id": "doc1", "text": text})
+text = "Our customer, John Smith, phone 555-123-4567, SSN 123-45-6789, card 4532015112830366."
 
+# Detect PII entities in a text string or document element dictionary
+results = detect_pii({"id": "doc1", "text": text})
 for r in results:
     print(f"{r.entity_type:<15} {r.text:<20} score={r.score:.2f}")
 # Output:
 # US_SSN          123-45-6789          score=0.98
 # CREDIT_CARD     4532015112830366     score=0.95
-# PHONE_NUMBER    555-0100             score=0.90
+# PHONE_NUMBER    555-123-4567         score=0.90
 # PERSON          John Smith           score=0.85
 
 # Apply redaction directly to scrub sensitive spans
-redacted_text = apply_redaction_policy(text, results)
-print(redacted_text)
-# Call <PERSON_REDACTED> at <PHONE_NUMBER_REDACTED>, SSN <US_SSN_REDACTED>, card <CREDIT_CARD_REDACTED>.
+print(apply_redaction_policy(text, results))
+# Output:
+# Our customer, <PERSON_REDACTED>, phone <PHONE_NUMBER_REDACTED>, SSN <US_SSN_REDACTED>, card <CREDIT_CARD_REDACTED>.
 ```
+
+### Limitations (verified)
+
+Every item below was reproduced against the current code (the examples in this README are executed by the test suite, so they cannot silently drift).
+
+- **Detected:** US SSNs (`123-45-6789`); credit-card numbers (Luhn-valid → score 0.95; Luhn-*invalid* 16-digit numbers are still flagged, at 0.55); phone numbers **with an area code** (`555-123-4567`); Title-Case two-word person names.
+- **Not detected:** email addresses; API keys, access tokens and other secrets; passport / driver-licence / bank-account numbers; non-US phone formats (`+44 20 7946 0958`); 7-digit local numbers (`555-0100`); lowercase or single-word names.
+- **Known defect — surname leak:** when a capitalized word directly precedes a name (`Customer John Smith`, `Call John Smith`), the matcher captures `Customer John` / `Call John` and leaves `Smith` in clear text. Tracked as I-15.
+- Do not use this as the only control before sending data to a third party.
 
 ### 2. Submodular Context Packing
 
@@ -95,15 +106,17 @@ print([el["id"] for el in ordered_elements])
 
 ---
 
-## Theoretical Guarantees
+## Guarantees (what is and is not proven)
 
-1. **Knapsack Greedy Approximation Bound (Theorem 9.1):** The submodular knapsack selector provides a proven \((1 - 1/e) \approx 0.632\) approximation guarantee for monotone submodular objective functions under knapsack budgets.
-2. **Topological Reading-Order Determinism (Theorem 6.2):** Kahn's algorithm with \((y_{\min}, x_{\min}, \text{node\_id})\) priority-queue tie-breaking guarantees strict deterministic reproducibility across any input permutation.
-3. **Luhn Mod-10 Verification:** Credit card regex matches are verified with Luhn checksum validation, distinguishing genuine payment cards (confidence \(0.95\)) from arbitrary 16-digit sequences (confidence \(0.55\)).
+1. **Context packing — no approximation guarantee currently holds.** The packer is cost-benefit (density) greedy under a knapsack budget. For knapsack constraints that algorithm can be arbitrarily bad: with a 0.02-relevance chunk of cost 1 and a 1.00-relevance chunk of cost 100 in a budget of 100, it keeps the cheap one and achieves **0.02 of optimal**. Earlier versions of this README claimed a proven (1 − 1/e) bound; that was wrong. Planned fix: also consider the best single feasible chunk, which gives the standard (1 − 1/e)/2 ≈ 0.316 guarantee. Tracked as I-26 (`tests/test_packer_guarantee_gap.py`, a strict xfail that flips when fixed).
+2. **Reading-order determinism (Theorem 6.2):** Kahn's algorithm with (y_min, x_min, node_id) priority-queue tie-breaking gives a reproducible order for a given input.
+3. **Luhn mod-10 verification:** credit-card regex matches are checksum-validated; Luhn-valid matches score 0.95, Luhn-invalid 16-digit sequences score 0.55 (still flagged).
 
 ---
 
 ## Packaging & TestPyPI Distribution
+
+> Status: **not yet published** to PyPI or TestPyPI. These are the maintainer steps for when it is.
 
 To build and verify the package distribution locally or upload to TestPyPI ahead of full release:
 
