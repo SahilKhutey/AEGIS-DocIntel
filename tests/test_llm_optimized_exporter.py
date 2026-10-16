@@ -14,7 +14,7 @@ from src.export.llm_optimized_exporter import LLMTokenOptimizedExporter, LLMExpo
 from src.ael.token_budget import count_tokens
 from src.main import app
 
-client = TestClient(app)
+client = TestClient(app, headers={"Authorization": "Bearer dev-test-tenant"})
 
 
 def test_llm_optimized_exporter_markdown_direct():

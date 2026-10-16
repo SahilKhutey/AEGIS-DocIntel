@@ -28,6 +28,7 @@ from fastapi.middleware.gzip import GZipMiddleware
 from fastapi.responses import JSONResponse, StreamingResponse
 from prometheus_client import make_asgi_app
 
+from src.api.auth_guard import AuthGuardMiddleware
 from src.api.auth import get_current_tenant, require_role
 from src.api.models import (
     DocumentResponse, QueryRequest, QueryResponse,
@@ -93,6 +94,9 @@ def create_app() -> FastAPI:
     )
 
     # ── Middleware ──────────────────────────────────────────────
+    # Added FIRST => innermost: CORS (added below, outermost) still decorates its 401s.
+    # Deny-by-default auth for every HTTP route; see src/api/auth_guard.py for why.
+    app.add_middleware(AuthGuardMiddleware)
     app.add_middleware(GZipMiddleware, minimum_size=1000)
     app.add_middleware(
         CORSMiddleware,

@@ -17,7 +17,7 @@ import pytest
 from fastapi.testclient import TestClient
 from src.main import app
 
-client = TestClient(app)
+client = TestClient(app, headers={"Authorization": "Bearer dev-test-tenant"})
 
 
 def test_api_pii_scan():

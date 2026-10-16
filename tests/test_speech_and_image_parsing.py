@@ -25,7 +25,7 @@ from ui.src.pages.speech_image_dashboard import (
 )
 from src.main import app
 
-client = TestClient(app)
+client = TestClient(app, headers={"Authorization": "Bearer dev-test-tenant"})
 
 
 @pytest.mark.asyncio
