@@ -57,7 +57,7 @@ async def benchmark_pdf_corpus(corpus_dir: Path, metric: str = "all") -> dict:
     excluded_files = ["empty.pdf"]
     active_files = [f for f in all_files if f.name not in excluded_files]
 
-    print(f"=== AEGIS-DocIntel Real PDF Pipeline Benchmark ===")
+    print("=== AEGIS-DocIntel Real PDF Pipeline Benchmark ===")
     print(f"Corpus: {corpus_dir}")
     print(f"Total PDFs found: {len(all_files)}")
     print(f"Excluded: {excluded_files} (deliberate invalid-input edge cases)")
@@ -214,12 +214,12 @@ async def benchmark_pdf_corpus(corpus_dir: Path, metric: str = "all") -> dict:
             writer.writerows(csv_rows)
 
     print("-" * 60)
-    print(f"Results Summary:")
+    print("Results Summary:")
     print(f"  Success rate:    {summary['pipeline_success_rate']}")
     print(f"  Latency:         mean={lat_stats.get('mean')}s, median={lat_stats.get('median')}s, p95={lat_stats.get('p95')}s, max={lat_stats.get('max')}s")
     print(f"  Naive baseline:  mean={naive_stats.get('mean')}s, median={naive_stats.get('median')}s ({slowdown_ratio}x slowdown)")
     print(f"  Tables detected: {total_tables} across {docs_with_tables} documents")
-    print(f"Reports written to:")
+    print("Reports written to:")
     print(f"  {summary_path}")
     print(f"  {raw_path}")
     print(f"  {OUTPUT_CSV}")

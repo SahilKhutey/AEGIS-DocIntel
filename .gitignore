@@ -54,3 +54,9 @@ target/
 # MkDocs build output
 site/
 
+
+# Runtime state — never commit (tests and the app write here)
+data/*.db
+data/*.db-journal
+data/*.db-wal
+data/*.db-shm

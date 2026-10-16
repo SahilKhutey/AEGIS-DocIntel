@@ -1,0 +1,7 @@
+# gitleaks allowlist — each entry is a specific, reviewed FALSE POSITIVE (never a rule-wide disable).
+#
+# production/PRODUCTION_RELEASE_CHECKLIST.md:372 (commit 6323de3, 2026-06-21)
+#   Matched `generic-api-key` on the literal placeholder text "SHA-256: a1b2c3d4e5f6..."
+#   in an early (since quarantined) release checklist. It is a documentation placeholder,
+#   not a credential. Full-history scan (157 commits, all branches) found no other hits.
+6323de3b7a1f6ac30b0a1af6d2a58225976255b4:production/PRODUCTION_RELEASE_CHECKLIST.md:generic-api-key:372
