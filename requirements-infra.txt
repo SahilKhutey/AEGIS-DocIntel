@@ -1,5 +1,6 @@
-# AEGIS-DocIntel — Optional Infrastructure Dependencies
-# Install if deploying with distributed caching or tracing.
+# GENERATED from pyproject.toml — DO NOT EDIT BY HAND.
+# Regenerate with: python scripts/check_dependency_sync.py --write
+# AEGIS-DocIntel — Optional infrastructure: Redis caching + OpenTelemetry tracing.
 -r requirements-core.txt
 
 redis>=5.0.0

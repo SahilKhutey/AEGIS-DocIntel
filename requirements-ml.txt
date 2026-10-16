@@ -1,5 +1,6 @@
-# AEGIS-DocIntel — Optional ML/Embeddings Dependencies
-# Install ONLY if you need semantic search / vector retrieval.
+# GENERATED from pyproject.toml — DO NOT EDIT BY HAND.
+# Regenerate with: python scripts/check_dependency_sync.py --write
+# AEGIS-DocIntel — Optional ML tier: semantic embeddings + vector search.
 # WARNING: sentence-transformers pulls in torch (multi-GB download).
 -r requirements-core.txt
 

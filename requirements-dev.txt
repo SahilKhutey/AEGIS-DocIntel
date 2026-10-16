@@ -1,8 +1,14 @@
-# AEGIS-DocIntel — Development & Testing Dependencies
+# GENERATED from pyproject.toml — DO NOT EDIT BY HAND.
+# Regenerate with: python scripts/check_dependency_sync.py --write
+# AEGIS-DocIntel — Development & testing (pytest, hypothesis, linters, security scanners).
 -r requirements-core.txt
 
 pytest>=8.0.0
 pytest-asyncio>=0.24.0
 pytest-cov>=5.0.0
+hypothesis>=6.98.0
 ruff>=0.6.0
 mypy>=1.11.0
+bandit>=1.7.8
+pip-audit>=2.7.0
+pytesseract>=0.3.10
