@@ -188,11 +188,16 @@ def create_app() -> FastAPI:
     # ── Health endpoints ────────────────────────────────────────
     @app.get("/health", response_model=HealthResponse, tags=["System"])
     async def health_check(request: Request):
-        container = request.app.state.container
+        container = getattr(request.app.state, "container", None)
+        if container is None:
+            return JSONResponse(
+                content={"status": "degraded", "checks": {"api": "initializing"}},
+                status_code=503,
+            )
         checks = await container.health_check()
-        status_code = 200 if all(v == "ok" for v in checks.values()) else 503
+        status_code = 200 if checks.get("api") == "ok" else 503
         return JSONResponse(
-            content={"status": "healthy" if status_code == 200 else "degraded", "checks": checks},
+            content={"status": "healthy" if all(v == "ok" for v in checks.values()) else "degraded", "checks": checks},
             status_code=status_code,
         )
 

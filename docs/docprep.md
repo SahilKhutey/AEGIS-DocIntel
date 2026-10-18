@@ -124,9 +124,9 @@ print([el["id"] for el in ordered_elements])
 
 ### LangChain (document transformer)
 
-Verified manually against `langchain-core` 1.6.10; not run in CI because `langchain-core` is not a dependency of this project.
+Verified manually against `langchain-core` 1.6.7; not run in CI because `langchain-core` is not a dependency of this project.
 
-<!-- doc-test: skip reason="needs langchain-core (verified manually against langchain-core 1.6.10); not installed in CI" -->
+<!-- doc-test: skip reason="needs langchain-core (verified manually against langchain-core 1.6.7); not installed in CI" -->
 ```python
 from typing import Sequence
 
