@@ -2,8 +2,8 @@
 
 Three focused, independently-useful pre-LLM document-structuring primitives, extracted from the AEGIS-DocIntel platform because they represent the components with the strongest real-world validation:
 
-- **PII detection & redaction** — regex-based detection of US SSNs, credit-card numbers (Luhn-validated), area-code phone numbers, and Title-Case person names, to scrub sensitive data before it reaches a third-party LLM API. A first-pass filter, **not** a guarantee — see [Limitations](#limitations-verified).
-- **Submodular context packing** — selects the most *relevant* and *diverse* chunks that fit a fixed token budget using cost-benefit greedy selection, instead of naive truncation. (No approximation guarantee is proven for it yet — see [Guarantees](#guarantees-what-is-and-is-not-proven).)
+- **PII detection & redaction** — regex and tokenization-based detection of US SSNs, credit-card numbers (Luhn-validated), area-code phone numbers, and Title-Case person names (with prefix stripping to prevent surname leaks), to scrub sensitive data before it reaches a third-party LLM API. A first-pass filter, **not** a guarantee — see [Limitations](#limitations-verified).
+- **Submodular context packing** — selects the most *relevant* and *diverse* chunks that fit a fixed token budget using modified cost-benefit greedy selection with best-single-item fallback, achieving the proven $(1 - 1/e)/2 \approx 0.316$ approximation guarantee for monotone submodular knapsack (see [Guarantees](#guarantees-what-is-and-is-not-proven)).
 - **Spatial reading-order extraction** — reconstructs the correct reading order of multi-column PDFs, tables, or forms using an acyclic directed graph with Kahn's topological sorting, where raw extraction typically scrambles column order.
 
 ---
@@ -49,9 +49,8 @@ print(apply_redaction_policy(text, results))
 
 Every item below was reproduced against the current code (the examples in this README are executed by the test suite, so they cannot silently drift).
 
-- **Detected:** US SSNs (`123-45-6789`); credit-card numbers (Luhn-valid → score 0.95; Luhn-*invalid* 16-digit numbers are still flagged, at 0.55); phone numbers **with an area code** (`555-123-4567`); Title-Case two-word person names.
+- **Detected:** US SSNs (`123-45-6789`); credit-card numbers (Luhn-valid → score 0.95; Luhn-*invalid* 16-digit numbers are still flagged, at 0.55); phone numbers **with an area code** (`555-123-4567`); Title-Case person names (2–3 words, with non-name prefix stripping e.g. `Customer John Smith` -> `John Smith`).
 - **Not detected:** email addresses; API keys, access tokens and other secrets; passport / driver-licence / bank-account numbers; non-US phone formats (`+44 20 7946 0958`); 7-digit local numbers (`555-0100`); lowercase or single-word names.
-- **Known defect — surname leak:** when a capitalized word directly precedes a name (`Customer John Smith`, `Call John Smith`), the matcher captures `Customer John` / `Call John` and leaves `Smith` in clear text. Tracked as I-15.
 - Do not use this as the only control before sending data to a third party.
 
 ### 2. Submodular Context Packing
@@ -108,7 +107,7 @@ print([el["id"] for el in ordered_elements])
 
 ## Guarantees (what is and is not proven)
 
-1. **Context packing — no approximation guarantee currently holds.** The packer is cost-benefit (density) greedy under a knapsack budget. For knapsack constraints that algorithm can be arbitrarily bad: with a 0.02-relevance chunk of cost 1 and a 1.00-relevance chunk of cost 100 in a budget of 100, it keeps the cheap one and achieves **0.02 of optimal**. Earlier versions of this README claimed a proven (1 − 1/e) bound; that was wrong. Planned fix: also consider the best single feasible chunk, which gives the standard (1 − 1/e)/2 ≈ 0.316 guarantee. Tracked as I-26 (`tests/test_packer_guarantee_gap.py`, a strict xfail that flips when fixed).
+1. **Context packing — (1 − 1/e)/2 approximation guarantee.** The packer uses modified density-greedy selection with a best-single-item fallback: it returns the better of the greedy set and the single best feasible chunk $\max_{i: c_i \le B} F(\{i\})$. This achieves the standard $(1 - 1/e)/2 \approx 0.316$ approximation factor for monotone submodular knapsack (verified in `tests/test_packer_guarantee_gap.py`). Earlier claims of an unconstrained $(1 - 1/e)$ bound without the fallback were incorrect.
 2. **Reading-order determinism (Theorem 6.2):** Kahn's algorithm with (y_min, x_min, node_id) priority-queue tie-breaking gives a reproducible order for a given input.
 3. **Luhn mod-10 verification:** credit-card regex matches are checksum-validated; Luhn-valid matches score 0.95, Luhn-invalid 16-digit sequences score 0.55 (still flagged).
 

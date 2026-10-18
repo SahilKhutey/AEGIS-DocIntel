@@ -165,6 +165,32 @@ class SubmodularKnapsackPacker:
         selected_chunks = [chunks[i] for i in selected_indices]
         total_score = self.alpha * current_coverage + self.beta * current_relevance
 
+        # Best-single-item fallback:
+        # Density-greedy on knapsack constraints has no constant-factor bound on its own.
+        # Returning max(F(S_greedy), max_{i: c_i <= B} F({i})) achieves the proven
+        # (1 - 1/e) / 2 ~= 0.316 approximation guarantee for monotone submodular knapsack.
+        best_single_idx = -1
+        best_single_score = -1.0
+        best_single_cov = 0.0
+        best_single_rel = 0.0
+        for i in range(n):
+            if chunks[i].token_cost <= max_budget:
+                cov_i = sum(sim_matrix[j, i] for j in range(n)) / float(n)
+                rel_i = chunks[i].relevance_score
+                score_i = self.alpha * cov_i + self.beta * rel_i
+                if score_i > best_single_score:
+                    best_single_score = score_i
+                    best_single_idx = i
+                    best_single_cov = cov_i
+                    best_single_rel = rel_i
+
+        if best_single_idx != -1 and best_single_score > total_score:
+            selected_chunks = [chunks[best_single_idx]]
+            current_tokens = chunks[best_single_idx].token_cost
+            total_score = best_single_score
+            current_coverage = best_single_cov
+            current_relevance = best_single_rel
+
         return SubmodularPackingResult(
             selected_chunks=selected_chunks,
             total_tokens=current_tokens,

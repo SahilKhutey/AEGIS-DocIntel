@@ -50,12 +50,8 @@ def test_packer_respects_budget_on_the_counterexample():
     assert result.total_tokens <= BUDGET
 
 
-@pytest.mark.xfail(
-    strict=True,
-    reason="DEFECT I-26: density-greedy under a knapsack budget has no approximation guarantee; "
-           "docs claim (1-1/e). Fix: also consider the best single feasible chunk (Phase 4).",
-)
 def test_packer_achieves_a_constant_fraction_of_optimal():
+    """Verifies that the best-single-item fallback achieves the (1 - 1/e) / 2 bound."""
     result = SubmodularKnapsackPacker(alpha=0.0, beta=1.0).pack_context(_instance(), max_budget=BUDGET)
     optimal = 1.0
-    assert _value(result) >= 0.316 * optimal   # even the weaker standard (1-1/e)/2 bound
+    assert _value(result) >= 0.316 * optimal   # (1 - 1/e)/2 bound holds

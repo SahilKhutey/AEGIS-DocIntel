@@ -54,9 +54,8 @@ print(apply_redaction_policy(text, results))
 
 Every item below was reproduced against the current code (the examples in this README are executed by the test suite, so they cannot silently drift).
 
-- **Detected:** US SSNs (`123-45-6789`); credit-card numbers (Luhn-valid → score 0.95; Luhn-*invalid* 16-digit numbers are still flagged, at 0.55); phone numbers **with an area code** (`555-123-4567`); Title-Case two-word person names.
+- **Detected:** US SSNs (`123-45-6789`); credit-card numbers (Luhn-valid → score 0.95; Luhn-*invalid* 16-digit numbers are still flagged, at 0.55); phone numbers **with an area code** (`555-123-4567`); Title-Case person names (2–3 words, with non-name prefix stripping e.g. `Customer John Smith` -> `John Smith`).
 - **Not detected:** email addresses; API keys, access tokens and other secrets; passport / driver-licence / bank-account numbers; non-US phone formats (`+44 20 7946 0958`); 7-digit local numbers (`555-0100`); lowercase or single-word names.
-- **Known defect — surname leak:** when a capitalized word directly precedes a name (`Customer John Smith`, `Call John Smith`), the matcher captures `Customer John` / `Call John` and leaves `Smith` in clear text. Tracked as I-15.
 - Do not use this as the only control before sending data to a third party.
 
 ### 2. Submodular Context Packing
@@ -114,7 +113,7 @@ print([el["id"] for el in ordered_elements])
 
 ## Guarantees (what is and is not proven)
 
-1. **Context packing has no approximation guarantee today.** The packer is density-greedy under a knapsack budget, which can be arbitrarily bad: with a 0.02-relevance chunk of cost 1 and a 1.00-relevance chunk of cost 100 in a budget of 100 it achieves 0.02 of optimal. Earlier docs claimed a proven (1 − 1/e) bound; that was wrong. Tracked as I-26.
+1. **Context packing — (1 − 1/e)/2 approximation guarantee.** The packer uses modified density-greedy selection with a best-single-item fallback: it returns the better of the greedy set and the single best feasible chunk $\max_{i: c_i \le B} F(\{i\})$. This achieves the standard $(1 - 1/e)/2 \approx 0.316$ approximation factor for monotone submodular knapsack (verified in `tests/test_packer_guarantee_gap.py`). Earlier claims of an unconstrained $(1 - 1/e)$ bound without the fallback were incorrect.
 2. **Reading-order determinism:** a fixed tie-break rule gives a reproducible order for a given input.
 3. **Luhn validation:** credit-card matches are checksum-validated (valid → 0.95, invalid → 0.55, still flagged).
 

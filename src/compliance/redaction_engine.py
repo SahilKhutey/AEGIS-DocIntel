@@ -47,6 +47,8 @@ NON_NAME_WORDS = {
     "Report", "Annual", "Executive", "Summary", "Total", "Net", "Gross", "Revenue",
     "Margin", "Operating", "Financial", "System", "Service", "Engine", "Member", "Card",
     "Order", "ID", "Number", "Date", "Status", "Type", "Format", "Page", "Block", "Pay",
+    "Call", "Customer", "Client", "Patient", "User", "Account", "Dear", "Agent", "Manager",
+    "Employee", "Developer", "Director", "Author", "Sender", "Recipient", "Dr", "Mr", "Mrs", "Ms", "Prof",
 }
 
 # Exclusion lists for Title Case pairs that are locations
@@ -56,10 +58,8 @@ GEO_EXCLUSIONS = {
     "Saudi Arabia", "South Africa", "Sri Lanka", "Costa Rica", "El Salvador",
 }
 
-# Build regex for PERSON matching that excludes non-name words at the match boundary
-NAME_REGEX = re.compile(
-    r'\b(?!(?:' + "|".join(re.escape(w) for w in NON_NAME_WORDS) + r')\b)[A-Z][a-z]{1,20}\s+[A-Z][a-z]{1,20}\b'
-)
+TITLE_CASE_RUN = re.compile(r'\b[A-Z][a-z]{1,20}(?:\s+[A-Z][a-z]{1,20})+\b')
+WORD_TOKEN = re.compile(r'[A-Z][a-z]{1,20}')
 
 
 
@@ -126,23 +126,36 @@ def detect_pii(element: Dict[str, Any]) -> List[PIIEntity]:
             )
         )
 
-    for match in NAME_REGEX.finditer(text):
-        match_text = match.group(0)
-        words = match_text.split()
-        if (
-            match_text not in GEO_EXCLUSIONS
-            and not any(w in NON_NAME_WORDS for w in words)
-        ):
-            entities.append(
-                PIIEntity(
-                    entity_type='PERSON',
-                    element_id=elem_id,
-                    start=match.start(),
-                    end=match.end(),
-                    score=0.85,
-                    text=match_text,
+    for match in TITLE_CASE_RUN.finditer(text):
+        full_span = match.group(0)
+        tokens = list(WORD_TOKEN.finditer(full_span))
+        start_idx = 0
+        while start_idx < len(tokens) and tokens[start_idx].group(0) in NON_NAME_WORDS:
+            start_idx += 1
+        end_idx = len(tokens)
+        while end_idx > start_idx and tokens[end_idx - 1].group(0) in NON_NAME_WORDS:
+            end_idx -= 1
+
+        valid_tokens = tokens[start_idx:end_idx]
+        if len(valid_tokens) >= 2:
+            name_text = full_span[valid_tokens[0].start():valid_tokens[-1].end()]
+            words = name_text.split()
+            if (
+                name_text not in GEO_EXCLUSIONS
+                and not any(w in NON_NAME_WORDS for w in words)
+            ):
+                abs_start = match.start() + valid_tokens[0].start()
+                abs_end = match.start() + valid_tokens[-1].end()
+                entities.append(
+                    PIIEntity(
+                        entity_type='PERSON',
+                        element_id=elem_id,
+                        start=abs_start,
+                        end=abs_end,
+                        score=0.85,
+                        text=name_text,
+                    )
                 )
-            )
 
     return entities
 

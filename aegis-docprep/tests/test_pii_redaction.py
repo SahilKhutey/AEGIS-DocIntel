@@ -76,3 +76,41 @@ def test_redact_elements_dict_list():
     assert len(redacted_elems) == 2
     assert "555-987-6543" not in redacted_elems[0]["text"]
     assert report.redactions_applied >= 1
+
+
+def test_person_name_with_preceding_label_does_not_leak_surname():
+    """Regression test for I-15: Capitalized label before name must not leak surname."""
+    for text in [
+        "Customer John Smith called about the account.",
+        "Call John Smith at the office.",
+        "Patient Jane Doe checked in.",
+        "Dear Customer Alice Brown, your order is ready.",
+    ]:
+        entities = detect_pii(text)
+        persons = [e for e in entities if e.entity_type == "PERSON"]
+        assert len(persons) == 1, f"Expected 1 PERSON in '{text}', found: {persons}"
+        assert persons[0].text in ("John Smith", "Jane Doe", "Alice Brown")
+        redacted = apply_redaction_policy(text, entities)
+        assert "Smith" not in redacted
+        assert "Doe" not in redacted
+        assert "Brown" not in redacted
+
+
+def test_person_name_three_words():
+    text = "Please reach out to John William Smith immediately."
+    entities = detect_pii(text)
+    persons = [e for e in entities if e.entity_type == "PERSON"]
+    assert len(persons) == 1
+    assert persons[0].text == "John William Smith"
+    redacted = apply_redaction_policy(text, entities)
+    assert "Smith" not in redacted
+    assert "<PERSON_REDACTED>" in redacted
+
+
+def test_person_name_trailing_label():
+    text = "Report authored by John Smith Table analysis."
+    entities = detect_pii(text)
+    persons = [e for e in entities if e.entity_type == "PERSON"]
+    assert len(persons) == 1
+    assert persons[0].text == "John Smith"
+
