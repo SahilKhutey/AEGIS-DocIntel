@@ -15,10 +15,15 @@ _Last verified: 2026-10-10 against `master` @ `5bec766` plus the Phase 0 changes
 | Capability | State | Re-verify with |
 |---|---|---|
 | Ingest PDF / DOCX / PPTX / XLSX / image / text into structured elements | Working | `pytest tests/test_ingest_workflow.py tests/test_real_world_ingestion.py` |
-| Table extraction | Working, but slow — re-parses the PDF once per page (I-14) | `tests/test_table_extraction_regression.py`, `python scripts/run_benchmark.py` |
+| Table extraction | Working, single-pass PDF parser without re-parsing | `tests/test_table_extraction_regression.py`, `python scripts/run_benchmark.py` |
 | Real-corpus benchmark | 61 of 62 documents succeed; 220 tables detected — independently re-run and reproduced | `python scripts/run_benchmark.py`, artifacts in `production/performance-report/` |
-| Tenant isolation on `/v1/documents` and `/v1/query` | Working | `tests/test_multitenancy.py`, `tests/test_retrieval_tenant_isolation.py` |
+| Tenant isolation on `/v1/documents` and `/v1/query` | Working (404 on missing/foreign tenant) | `tests/test_multitenancy.py`, `tests/test_retrieval_tenant_isolation.py` |
 | **Deny-by-default authentication** — every non-public route returns 401 without credentials | Working (added in Phase 0) | `tests/test_auth_guard.py` |
+| **Production authentication** — RS256 JWT validation and real API-key lookup | Working (added in Phase 4) | `tests/test_production_auth.py` |
+| **Document persistence** — SQLite store preserves ingested document metadata across service restarts | Working (added in Phase 4) | `tests/test_persistence_and_audit.py` |
+| **Tamper-evident audit logging** — Append-only log with cryptographic SHA-256 chaining | Working (added in Phase 4) | `tests/test_persistence_and_audit.py` |
+| **Submodular packer approximation guarantee** — (1 - 1/e)/2 bound with single-item fallback | Working (added in Phase 2) | `pytest aegis-docprep/tests/test_packer.py` |
+| **API consolidation** — 0 duplicate route collisions, unified `/v1/query` | Working (added in Phase 3) | `tests/test_api_route_integrity.py` |
 | Dev-token bypass rejected outside `AEGIS_ENVIRONMENT=development` | Working | `tests/test_auth_guard.py` |
 | Document delete returns 404 afterwards | Re-verified. The vector-store / cache cascade was **not** independently re-checked | manual probe, Oct 2026 |
 | 9 Prometheus metrics | Each has at least one real call site (audited by grep) | `src/observability/metrics.py` |
@@ -30,11 +35,8 @@ _Last verified: 2026-10-10 against `master` @ `5bec766` plus the Phase 0 changes
 
 | Gap | ID | Evidence |
 |---|---|---|
-| **Production authentication** — the RS256 JWT and API-key validators are stubs; outside development every credential is rejected | I-20 | `src/api/auth.py` |
 | LLM answers are mock by default (`[MOCK]`) | I-17 | live query |
 | Semantic embeddings are mock unless the ML tier is installed | I-18 | container warning |
-| Persistence — document state is an in-memory dict, lost on restart | I-19 | `src/services/container.py` |
-| Audit log | I-21 | no implementation |
 | Signed releases / provenance | I-23 | no tags published |
 | Any external validation — no pilots have been completed | I-24 | GitHub has no pilot issues |
 
@@ -42,16 +44,24 @@ _Last verified: 2026-10-10 against `master` @ `5bec766` plus the Phase 0 changes
 
 | Defect | ID | Pinned by |
 |---|---|---|
-| 5 `(method, path)` pairs are claimed by two handlers; for `POST /v1/query` the AEL query endpoint is unreachable | I-12, I-13 | `tests/test_api_route_integrity.py` (ratchet) |
-| 3 duplicate OpenAPI operation IDs | I-12 | `tests/test_api_route_integrity.py` (ratchet) |
-| Cross-tenant query returns 200 with a placeholder answer and citations lacking `chunk_id`/`doc_id`, instead of 404 | I-11 | manual probe |
-| PII `PERSON` detection can leave the surname in clear text (`Customer John Smith` → `Customer John`) | I-15 | documented in `aegis-docprep/README.md` |
 | PII does not detect emails, API keys or secrets, non-US phone formats, or local 7-digit numbers | I-28 | documented in `aegis-docprep/README.md` |
-| `SubmodularKnapsackPacker` has no approximation guarantee (0.02 of optimal on a 2-chunk counterexample) | I-26 | `tests/test_packer_guarantee_gap.py` (strict xfail) |
-| `/health` reports 503 in mock mode and the Docker healthcheck calls a route that does not exist | I-09, I-10 | manual probe |
 | `/metrics` is public and its series are labelled with `tenant_id` | — | `src/api/auth_guard.py` (documented exposure) |
 | Not on PyPI — install from source | I-08 | `pypi.org` returns 404 |
-| `requires-python` declares 3.10+ but CI tests only 3.12 and 3.13 | I-30 | `pyproject.toml`, CI matrix |
+
+## Fixed in Phases 1–4
+
+| Fix | Phase | ID |
+|---|---|---|
+| Root Dockerfile created, healthcheck target aligned, `/health` mock-mode 503 false alarm fixed | Phase 1 | I-09, I-10 |
+| PDF table extraction O(N^2) page-reparsing eliminated | Phase 2 | I-14 |
+| SubmodularKnapsackPacker (1 - 1/e)/2 approximation guarantee implemented with best-single-item fallback | Phase 2 | I-26 |
+| PII surname truncation leak resolved | Phase 2 | I-15 |
+| 5 API route collisions and 3 duplicate OpenAPI operation IDs eliminated | Phase 3 | I-12 |
+| Unified `POST /v1/query` with AEL export routing; cross-tenant queries return 404 | Phase 3 | I-11, I-13 |
+| Production RS256 JWT validation and real API-key lookup | Phase 4 | I-20 |
+| SQLite document persistence across service restarts | Phase 4 | I-19 |
+| Tamper-evident structured audit logging with SHA-256 cryptographic chaining | Phase 4 | I-21 |
+| Aligned `requires-python` to `>=3.12` and modernized trove classifiers | Phase 4 | I-30 |
 
 ## Fixed in Phase 0
 

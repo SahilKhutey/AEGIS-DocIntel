@@ -9,9 +9,11 @@ from __future__ import annotations
 import asyncio
 import logging
 import os
+import sqlite3
 import uuid
 from datetime import datetime, timezone
-from typing import Any
+from pathlib import Path
+from typing import Any, Optional
 
 import structlog
 
@@ -20,6 +22,7 @@ from src.models.document_object import DocumentObject, DocumentFormat
 from src.core.orchestrator import AMDIOrchestrator
 from src.llm_service.llm_client import LLMService
 from src.services.query_service import QueryService
+from src.observability.audit_logger import audit_logger
 from src.observability.metrics import (
     DOCUMENTS_INGESTED,
     CHUNKS_INDEXED,
@@ -30,11 +33,110 @@ log = structlog.get_logger("aegis.container")
 
 
 class RealDocumentService:
-    """Document service that delegates to AMDIOrchestrator."""
+    """Document service that delegates to AMDIOrchestrator and persists state."""
 
-    def __init__(self, orchestrator: AMDIOrchestrator):
+    def __init__(self, orchestrator: AMDIOrchestrator, db_path: Optional[str] = None):
         self.orchestrator = orchestrator
         self._docs: dict = {}
+        if db_path is None:
+            self.db_path = os.environ.get("AEGIS_SQLITE_PATH", "data/documents.db")
+        else:
+            self.db_path = db_path
+        self._init_db()
+        self._load_docs()
+
+    def _init_db(self):
+        if not self.db_path or self.db_path == ":memory:":
+            return
+        try:
+            p = Path(self.db_path)
+            p.parent.mkdir(parents=True, exist_ok=True)
+            with sqlite3.connect(self.db_path) as conn:
+                conn.execute("""
+                    CREATE TABLE IF NOT EXISTS documents (
+                        doc_id TEXT PRIMARY KEY,
+                        tenant_id TEXT NOT NULL,
+                        filename TEXT NOT NULL,
+                        status TEXT NOT NULL,
+                        page_count INTEGER NOT NULL,
+                        chunk_count INTEGER NOT NULL,
+                        is_scanned BOOLEAN NOT NULL,
+                        language TEXT NOT NULL,
+                        created_at TEXT NOT NULL
+                    )
+                """)
+                conn.commit()
+        except Exception as e:
+            log.warning("Could not initialize SQLite document store", error=str(e))
+
+    def _load_docs(self):
+        if not self.db_path or self.db_path == ":memory:":
+            return
+        try:
+            if not Path(self.db_path).exists():
+                return
+            with sqlite3.connect(self.db_path) as conn:
+                cursor = conn.execute(
+                    "SELECT doc_id, tenant_id, filename, status, page_count, chunk_count, is_scanned, language, created_at FROM documents"
+                )
+                for row in cursor.fetchall():
+                    try:
+                        created = datetime.fromisoformat(row[8]) if row[8] else datetime.now(timezone.utc)
+                    except Exception:
+                        created = datetime.now(timezone.utc)
+                    doc_info = {
+                        "doc_id": row[0],
+                        "tenant_id": row[1],
+                        "filename": row[2],
+                        "status": row[3],
+                        "page_count": row[4],
+                        "chunk_count": row[5],
+                        "is_scanned": bool(row[6]),
+                        "language": row[7],
+                        "created_at": created,
+                    }
+                    self._docs[row[0]] = doc_info
+        except Exception as e:
+            log.warning("Could not load documents from SQLite", error=str(e))
+
+    def _persist_doc(self, doc_info: dict):
+        if not self.db_path or self.db_path == ":memory:":
+            return
+        try:
+            created_str = (
+                doc_info["created_at"].isoformat()
+                if isinstance(doc_info["created_at"], datetime)
+                else str(doc_info["created_at"])
+            )
+            with sqlite3.connect(self.db_path) as conn:
+                conn.execute("""
+                    INSERT OR REPLACE INTO documents
+                    (doc_id, tenant_id, filename, status, page_count, chunk_count, is_scanned, language, created_at)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+                """, (
+                    doc_info["doc_id"],
+                    doc_info["tenant_id"],
+                    doc_info["filename"],
+                    doc_info["status"],
+                    doc_info["page_count"],
+                    doc_info["chunk_count"],
+                    1 if doc_info["is_scanned"] else 0,
+                    doc_info["language"],
+                    created_str,
+                ))
+                conn.commit()
+        except Exception as e:
+            log.warning("Could not persist document to SQLite", error=str(e))
+
+    def _delete_persisted_doc(self, doc_id: str):
+        if not self.db_path or self.db_path == ":memory:":
+            return
+        try:
+            with sqlite3.connect(self.db_path) as conn:
+                conn.execute("DELETE FROM documents WHERE doc_id = ?", (doc_id,))
+                conn.commit()
+        except Exception as e:
+            log.warning("Could not delete document from SQLite", error=str(e))
 
     async def ingest(self, file_bytes: bytes, filename: str, content_type: str, tenant_id: str):
         doc_id = str(uuid.uuid4())
@@ -62,6 +164,14 @@ class RealDocumentService:
             }
             
             self._docs[stats.get("doc_id", doc_id)] = doc_info
+            self._persist_doc(doc_info)
+            audit_logger.log(
+                action="doc.ingest",
+                tenant_id=str(tenant_id),
+                resource_id=doc_info["doc_id"],
+                status="SUCCESS",
+                detail={"filename": filename, "pages": doc_info["page_count"]},
+            )
             
             DOCUMENTS_INGESTED.labels(tenant_id=str(tenant_id), status="success").inc()
             CHUNKS_INDEXED.labels(tenant_id=str(tenant_id), block_type="mixed").inc(stats.get("elements", 0))
@@ -153,6 +263,13 @@ class RealDocumentService:
                 log.warning(f"Orchestrator document deletion failed for {doc_id}: {e}")
 
         self._docs.pop(str(doc_id), None)
+        self._delete_persisted_doc(str(doc_id))
+        audit_logger.log(
+            action="doc.delete",
+            tenant_id=str(tenant_id),
+            resource_id=str(doc_id),
+            status="SUCCESS",
+        )
         ACTIVE_DOCUMENTS.labels(tenant_id=str(tenant_id)).dec()
         return True
 

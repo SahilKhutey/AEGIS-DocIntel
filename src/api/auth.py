@@ -63,6 +63,8 @@ def _validate_jwt(token: str) -> TenantContext:
     In development: accept 'dev-{tenant_id}' tokens when explicitly enabled.
     In production: validate RS256 JWT via PyJWT with public key.
     """
+    from src.observability.audit_logger import audit_logger
+
     env = os.environ.get("AEGIS_ENVIRONMENT", "production").lower()
     if env == "development" and token.startswith("dev-"):
         tenant_id = token[4:] or "default-tenant"
@@ -75,24 +77,100 @@ def _validate_jwt(token: str) -> TenantContext:
     # Production / non-dev: decode and verify JWT using PyJWT
     try:
         import jwt
-        # TODO: real RS256 validation against a configured public key
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="JWT validation not configured",
-        )
     except ImportError:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="PyJWT not installed. Cannot validate JWT.",
+            headers={"WWW-Authenticate": "Bearer"},
         )
+
+    public_key = os.environ.get("AEGIS_JWT_PUBLIC_KEY")
+    if not public_key:
+        key_path = os.environ.get("AEGIS_JWT_PUBLIC_KEY_PATH")
+        if key_path and os.path.isfile(key_path):
+            with open(key_path, "r", encoding="utf-8") as f:
+                public_key = f.read()
+
+    if not public_key:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="JWT validation not configured: public key missing",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+
+    algorithms = ["RS256"]
+    if not any(header in public_key for header in ("BEGIN PUBLIC KEY", "BEGIN RSA PUBLIC KEY", "BEGIN CERTIFICATE")):
+        algorithms.append("HS256")
+
+    try:
+        payload = jwt.decode(
+            token,
+            public_key,
+            algorithms=algorithms,
+            options={"require": ["exp"]},
+        )
+    except jwt.ExpiredSignatureError:
+        audit_logger.log(
+            action="auth.jwt_expired",
+            tenant_id="unknown",
+            user_id="anonymous",
+            status="FAILURE",
+            detail={"error": "Token has expired"},
+        )
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Token has expired",
+            headers={"WWW-Authenticate": 'Bearer error="invalid_token", error_description="The token has expired"'},
+        )
+    except jwt.InvalidTokenError as e:
+        audit_logger.log(
+            action="auth.jwt_invalid",
+            tenant_id="unknown",
+            user_id="anonymous",
+            status="FAILURE",
+            detail={"error": str(e)},
+        )
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail=f"Invalid token: {e}",
+            headers={"WWW-Authenticate": 'Bearer error="invalid_token"'},
+        )
+
+    tenant_id = payload.get("tenant_id") or payload.get("tid")
+    if not tenant_id:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Token missing tenant_id claim",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+
+    user_id = payload.get("sub") or payload.get("user_id") or "anonymous-user"
+    role = payload.get("role") or "viewer"
+
+    audit_logger.log(
+        action="auth.jwt_success",
+        tenant_id=str(tenant_id),
+        user_id=str(user_id),
+        status="SUCCESS",
+        detail={"role": role},
+    )
+
+    return TenantContext(
+        tenant_id=str(tenant_id),
+        user_id=str(user_id),
+        role=str(role),
+    )
 
 
 def _validate_api_key(api_key: str) -> TenantContext:
     """
     Validate API key.
     In development: accept 'aegis-dev-key' when explicitly enabled.
-    In production: hash lookup against secure store.
+    In production: hash lookup against secure store or configured keys.
     """
+    import hmac
+    from src.observability.audit_logger import audit_logger
+
     env = os.environ.get("AEGIS_ENVIRONMENT", "production").lower()
     if env == "development" and api_key == "aegis-dev-key":
         return TenantContext(
@@ -102,10 +180,51 @@ def _validate_api_key(api_key: str) -> TenantContext:
         )
 
     key_hash = hashlib.sha256(api_key.encode()).hexdigest()
-    # Production: look up key_hash in Postgres api_keys table
+
+    raw_keys = os.environ.get("AEGIS_API_KEYS")
+    if raw_keys:
+        try:
+            import json
+            keys_map = json.loads(raw_keys)
+            if isinstance(keys_map, dict):
+                for stored_k, meta in keys_map.items():
+                    stored_hash = hashlib.sha256(stored_k.encode()).hexdigest() if len(stored_k) != 64 else stored_k
+                    if hmac.compare_digest(key_hash, stored_hash) or hmac.compare_digest(api_key, stored_k):
+                        if isinstance(meta, dict):
+                            tenant_id = str(meta.get("tenant_id", "default-tenant"))
+                            user_id = str(meta.get("user_id", "api-user"))
+                            role = str(meta.get("role", "editor"))
+                        else:
+                            tenant_id = str(meta)
+                            user_id = "api-user"
+                            role = "editor"
+
+                        audit_logger.log(
+                            action="auth.api_key_success",
+                            tenant_id=tenant_id,
+                            user_id=user_id,
+                            status="SUCCESS",
+                            detail={"role": role},
+                        )
+                        return TenantContext(
+                            tenant_id=tenant_id,
+                            user_id=user_id,
+                            role=role,
+                        )
+        except Exception as e:
+            logger.warning("Failed to parse AEGIS_API_KEYS: %s", e)
+
+    audit_logger.log(
+        action="auth.api_key_failure",
+        tenant_id="unknown",
+        user_id="anonymous",
+        status="FAILURE",
+        detail={"key_prefix": api_key[:6] if len(api_key) >= 6 else "***"},
+    )
     raise HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Invalid API key",
+        headers={"WWW-Authenticate": "ApiKey"},
     )
 
 
