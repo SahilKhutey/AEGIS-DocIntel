@@ -89,15 +89,6 @@ def test_ael_export_markdown(client, ingested):
     assert '## Confidence' in md
 
 
-@pytest.mark.xfail(
-    strict=True,
-    reason=(
-        'DEFECT: POST /v1/query is registered twice (routers.queries.query_documents wins, '
-        'routes.query.query is shadowed) so the AEL query endpoint is unreachable. '
-        'Fix in API consolidation (Phase 3); strict=True makes this fail loudly (XPASS) the '
-        'moment it is fixed so this marker cannot be forgotten.'
-    ),
-)
 def test_ael_query_integration(client, ingested):
     from unittest.mock import AsyncMock, patch
 

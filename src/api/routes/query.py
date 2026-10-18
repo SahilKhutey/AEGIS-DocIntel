@@ -11,7 +11,7 @@ import uuid
 from typing import List, Dict, Any, Optional
 
 try:
-    from fastapi import APIRouter, File, Form, HTTPException, UploadFile, status, Request
+    from fastapi import APIRouter, Depends, File, Form, HTTPException, UploadFile, status, Request
     from fastapi.responses import StreamingResponse
     from pydantic import BaseModel, Field
     HAS_FASTAPI = True
@@ -24,6 +24,8 @@ from src.models.document_object import DocumentObject
 from src.engines.geometry.element import ElementType, GeometricElement
 from src.ael.exporter import AgentExporter
 from src.core.config import settings
+from src.api.auth import TenantContext, get_current_tenant
+from src.api.models import QueryRequest, QueryResponse
 
 log = logging.getLogger('amdi.api.routes')
 
@@ -46,31 +48,6 @@ if HAS_FASTAPI:
         ingestion_ms:       float
         compression_pct:    float
         status:             str = 'ok'
-
-    class QueryRequest(BaseModel):
-        question: str = Field(..., min_length=1, max_length=2000)
-        doc_id:   Optional[str] = None
-        top_k:    int = Field(default=12, ge=1, le=50)
-        stream:   bool = False
-        # Agent Export Layer parameters
-        export_agent: Optional[str] = None
-        export_format: Optional[str] = 'json'
-        api_key: Optional[str] = None
-        model: Optional[str] = None
-
-    class QueryResponse(BaseModel):
-        question:      str
-        answer:        str
-        citations:     list[dict] = []
-        confidence:    float
-        confidence_label: str
-        query_type:    str
-        weights_used:  dict[str, float]
-        table_direct:  list[str] = []
-        grounded:      bool
-        latency_ms:    float
-        tokens_used:   int
-        model:         str
 
     class DocumentMeta(BaseModel):
         doc_id:    str
@@ -101,30 +78,12 @@ if HAS_FASTAPI:
             if hasattr(orchestrator, 'physics') and orchestrator.physics:
                 orchestrator.physics.particles.clear()
 
-    @router.get('/documents/{doc_id}/elements')
-    async def get_elements(doc_id: str, request: Request):
-        global _requests_total
-        _requests_total += 1
-        orchestrator = request.app.state.orchestrator
-        if not orchestrator:
-            raise HTTPException(503, 'Orchestrator not initialized')
-        elements = orchestrator.get_document_elements(doc_id)
-        return [
-            {
-                'element_id': e.element_id,
-                'doc_id': e.doc_id,
-                'page': e.page,
-                'type': e.type.value,
-                'content': e.content,
-                'bbox': e.bbox.to_tuple() if e.bbox else None,
-                'importance_weight': getattr(e, 'importance_weight', 1.0),
-                'section': e.section
-            }
-            for e in elements
-        ]
-
     @router.post('/ingest', response_model=IngestResponse, status_code=status.HTTP_201_CREATED)
-    async def ingest(request: Request, file: UploadFile = File(...)):
+    async def ingest(
+        request: Request,
+        file: UploadFile = File(...),
+        tenant: TenantContext = Depends(get_current_tenant),
+    ):
         global _requests_total
         _requests_total += 1
         orchestrator = request.app.state.orchestrator
@@ -136,10 +95,12 @@ if HAS_FASTAPI:
         if not raw:
             raise HTTPException(400, 'Empty file')
 
+        tenant_id = tenant.tenant_id if tenant else "default"
         doc = DocumentObject(
             doc_id=str(uuid.uuid4()),
             filename=file.filename or 'upload',
             raw_bytes=raw,
+            tenant_id=tenant_id,
         )
 
         t0 = time.perf_counter()
@@ -154,6 +115,7 @@ if HAS_FASTAPI:
 
         doc_registry[stats['doc_id']] = {
             'doc_id':      stats['doc_id'],
+            'tenant_id':   tenant_id,
             'filename':    stats.get('filename', file.filename),
             'pages':       stats.get('pages', 0),
             'tables':      stats.get('tables', 0),
@@ -171,8 +133,11 @@ if HAS_FASTAPI:
             compression_pct = stats.get('compression_pct', 0.0),
         )
 
-    @router.post('/query', response_model=QueryResponse)
-    async def query(req: QueryRequest, request: Request):
+    async def ael_query_handler(
+        req: Any,
+        request: Request,
+        tenant: Optional[Any] = None,
+    ) -> QueryResponse:
         global _requests_total, _queries_total
         _requests_total += 1
         _queries_total += 1
@@ -188,14 +153,22 @@ if HAS_FASTAPI:
         if req.export_agent:
             try:
                 # 1. Resolve doc_id
-                doc_id = req.doc_id
+                doc_id = getattr(req, 'doc_id', None)
+                if not doc_id and getattr(req, 'doc_ids', None):
+                    doc_id = str(req.doc_ids[0])
                 if not doc_id:
                     if doc_registry:
                         doc_id = max(doc_registry.values(), key=lambda d: d.get('ingested_at', 0)).get('doc_id')
                     else:
                         raise HTTPException(400, 'No doc_id specified and no documents ingested.')
 
-                doc_meta = doc_registry.get(doc_id)
+                tenant_id = getattr(tenant, 'tenant_id', None)
+                if tenant_id and doc_id:
+                    owner = orchestrator._doc_tenant.get(doc_id)
+                    if owner is not None and owner != tenant_id:
+                        raise HTTPException(404, 'Document not found')
+
+                doc_meta = doc_registry.get(doc_id) if doc_registry else None
                 if not doc_meta:
                     doc_meta = {
                         'doc_id': doc_id,
@@ -206,8 +179,11 @@ if HAS_FASTAPI:
                     }
 
                 # 2. Extract context elements
-                elements = orchestrator.get_document_elements(doc_id)
-                tables_elems = orchestrator.get_document_tables(doc_id)
+                try:
+                    elements = orchestrator.get_document_elements(doc_id, tenant_id=tenant_id)
+                    tables_elems = orchestrator.get_document_tables(doc_id, tenant_id=tenant_id)
+                except PermissionError:
+                    raise HTTPException(404, 'Document not found')
 
                 # Convert TableMatrix into dict format for UEO
                 tables = []
@@ -411,7 +387,18 @@ if HAS_FASTAPI:
 
         # Default local engine path if not exporting
         try:
-            result = await orchestrator.query(req.question, doc_id=req.doc_id, top_k=req.top_k)
+            doc_id = getattr(req, 'doc_id', None)
+            if not doc_id and getattr(req, 'doc_ids', None):
+                doc_id = str(req.doc_ids[0])
+            tenant_id = getattr(tenant, 'tenant_id', None)
+            result = await orchestrator.query(
+                req.question,
+                doc_id=doc_id,
+                tenant_id=tenant_id,
+                top_k=getattr(req, 'top_k', None) or 12,
+            )
+        except PermissionError:
+            raise HTTPException(404, 'Document not found')
         except Exception as e:
             log.error('Query failed: %s', e, exc_info=True)
             raise HTTPException(500, f'Query failed: {e}')
@@ -449,22 +436,6 @@ if HAS_FASTAPI:
 
         return StreamingResponse(event_generator(), media_type='text/event-stream')
 
-    @router.get('/documents', response_model=list[DocumentMeta])
-    async def list_documents(request: Request):
-        doc_registry = request.app.state.doc_registry
-        return [DocumentMeta(**v) for v in doc_registry.values()]
-
-    @router.delete('/documents/{doc_id}', status_code=status.HTTP_204_NO_CONTENT)
-    async def delete_document(doc_id: str, request: Request):
-        doc_registry = request.app.state.doc_registry
-        orchestrator = request.app.state.orchestrator
-
-        if doc_id not in doc_registry:
-            raise HTTPException(404, f'Document {doc_id} not found')
-        del doc_registry[doc_id]
-        if orchestrator:
-            await orchestrator.memory.invalidate(doc_id)
-
     @router.get('/documents/{doc_id}/explain')
     async def explain(doc_id: str, question: str, request: Request):
         orchestrator = request.app.state.orchestrator
@@ -481,7 +452,8 @@ if HAS_FASTAPI:
     async def export_document(
         doc_id: str,
         request: Request,
-        format: str = 'json'
+        format: str = 'json',
+        tenant: TenantContext = Depends(get_current_tenant),
     ):
         '''
         Compiles and downloads the Universal Export Object (UEO) for a document.
@@ -492,13 +464,18 @@ if HAS_FASTAPI:
         if not orchestrator:
             raise HTTPException(503, 'Orchestrator not initialized')
 
+        owner = orchestrator._doc_tenant.get(doc_id)
+        if owner is not None and tenant and owner != tenant.tenant_id:
+            raise HTTPException(404, f'Document {doc_id} not found')
+
         doc_meta = doc_registry.get(doc_id)
         if not doc_meta:
             raise HTTPException(404, f'Document {doc_id} not found')
 
         # Extract elements
-        elements = orchestrator.get_document_elements(doc_id)
-        tables_elems = orchestrator.get_document_tables(doc_id)
+        tenant_id = tenant.tenant_id if tenant else None
+        elements = orchestrator.get_document_elements(doc_id, tenant_id=tenant_id)
+        tables_elems = orchestrator.get_document_tables(doc_id, tenant_id=tenant_id)
 
         # Convert tables
         tables = []

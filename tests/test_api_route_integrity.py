@@ -24,23 +24,10 @@ import pytest
 from src.api.route_inspect import iter_operations
 from src.main import app
 
-# (method, path) -> handlers that claim it. Ordered as registered: the FIRST one wins.
-KNOWN_COLLISIONS: dict[tuple[str, str], tuple[str, ...]] = {
-    ("DELETE", "/v1/documents/{doc_id}"): ("routers.documents.delete_document", "routes.query.delete_document"),
-    ("GET", "/v1/documents"): ("routers.documents.list_documents", "routes.query.list_documents"),
-    ("GET", "/v1/documents/{doc_id}/elements"): ("routers.documents.get_elements", "routes.query.get_elements"),
-    ("POST", "/v1/advanced/compliance/pii-scan"): (
-        "routers.advanced_features.scan_and_redact_pii",
-        "routers.advanced_features.scan_pii_entities",
-    ),
-    ("POST", "/v1/query"): ("routers.queries.query_documents", "routes.query.query"),
-}
+# (method, path) -> handlers that claim it. All collisions have been resolved.
+KNOWN_COLLISIONS: dict[tuple[str, str], tuple[str, ...]] = {}
 
-KNOWN_DUPLICATE_OPERATION_IDS = {
-    "delete_document_v1_documents__doc_id__delete",
-    "get_elements_v1_documents__doc_id__elements_get",
-    "list_documents_v1_documents_get",
-}
+KNOWN_DUPLICATE_OPERATION_IDS: set[str] = set()
 
 
 @pytest.fixture(scope="module")
@@ -81,12 +68,12 @@ def test_known_collision_handlers_unchanged(operations):
         assert current.get(key) == handlers, f"{key}: handlers changed to {current.get(key)}; update the allowlist"
 
 
-def test_ael_query_is_shadowed_documented():
-    """Pins the *consequence* of the POST /v1/query collision so nobody 'discovers' it again:
-    the first-registered (documents) handler wins, so the AEL handler is unreachable."""
-    handlers = KNOWN_COLLISIONS[("POST", "/v1/query")]
-    assert handlers[0] == "routers.queries.query_documents"
-    assert handlers[1] == "routes.query.query"
+def test_ael_query_is_unified():
+    """Verify POST /v1/query is unified into routers.queries.query_documents with 0 collisions."""
+    assert ("POST", "/v1/query") not in KNOWN_COLLISIONS
+    ops = list(iter_operations(app.routes))
+    query_handlers = [h for m, p, h in ops if (m, p) == ("POST", "/v1/query")]
+    assert query_handlers == ["routers.queries.query_documents"]
 
 
 def test_duplicate_operation_ids_ratchet():

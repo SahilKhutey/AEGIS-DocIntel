@@ -69,7 +69,12 @@ class QueryService:
         # Call the orchestrator
         try:
             with RETRIEVAL_LATENCY.labels(stage="total").time():
-                res = await self.rag.query(question, doc_id=doc_id, top_k=top_k or 12)
+                res = await self.rag.query(
+                    question,
+                    doc_id=doc_id,
+                    tenant_id=str(tenant_id),
+                    top_k=top_k or 12,
+                )
         except Exception as exc:
             QUERY_ERRORS.labels(tenant_id=str(tenant_id), error_type=type(exc).__name__).inc()
             raise

@@ -31,6 +31,17 @@ def test_api_pii_scan():
     assert data["redactions_applied"] == 1
 
 
+def test_api_pii_detect():
+    resp = client.post(
+        "/v1/advanced/compliance/pii-detect",
+        json={"element_id": "e1", "text": "SSN: 123-45-6789", "redact_ssn": True},
+    )
+    assert resp.status_code == 200
+    data = resp.json()
+    assert data["entities_found_count"] >= 1
+    assert any(e["entity_type"] == "US_SSN" for e in data["entities"])
+
+
 def test_api_entity_resolve():
     resp = client.post(
         "/v1/advanced/entity/resolve",

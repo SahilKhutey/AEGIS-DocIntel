@@ -108,8 +108,20 @@
         }
       },
       "delete": {
-        "summary": "Delete Document",
+        "tags": [
+          "Documents"
+        ],
+        "summary": "Delete a document",
+        "description": "Delete a document and all its associated chunks, vectors, and cache entries.",
         "operationId": "delete_document_v1_documents__doc_id__delete",
+        "security": [
+          {
+            "HTTPBearer": []
+          },
+          {
+            "APIKeyHeader": []
+          }
+        ],
         "parameters": [
           {
             "name": "doc_id",
@@ -117,6 +129,7 @@
             "required": true,
             "schema": {
               "type": "string",
+              "format": "uuid",
               "title": "Doc Id"
             }
           }
@@ -192,19 +205,78 @@
     },
     "/v1/documents": {
       "get": {
-        "summary": "List Documents",
+        "tags": [
+          "Documents"
+        ],
+        "summary": "List all documents",
+        "description": "List all documents for the tenant with optional status filter.",
         "operationId": "list_documents_v1_documents_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          },
+          {
+            "APIKeyHeader": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 1,
+              "title": "Page"
+            }
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 100,
+              "minimum": 1,
+              "default": 20,
+              "title": "Page Size"
+            }
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/DocumentStatus"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Status"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "Successful Response",
             "content": {
               "application/json": {
                 "schema": {
-                  "items": {
-                    "$ref": "#/components/schemas/DocumentMeta"
-                  },
-                  "type": "array",
-                  "title": "Response List Documents V1 Documents Get"
+                  "$ref": "#/components/schemas/DocumentListResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
                 }
               }
             }
@@ -391,8 +463,20 @@
     },
     "/v1/documents/{doc_id}/elements": {
       "get": {
-        "summary": "Get Elements",
+        "tags": [
+          "Documents"
+        ],
+        "summary": "Get document elements",
+        "description": "Return all geometric elements belonging to a specific document (for 3D layout visualization).",
         "operationId": "get_elements_v1_documents__doc_id__elements_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          },
+          {
+            "APIKeyHeader": []
+          }
+        ],
         "parameters": [
           {
             "name": "doc_id",
@@ -400,6 +484,7 @@
             "required": true,
             "schema": {
               "type": "string",
+              "format": "uuid",
               "title": "Doc Id"
             }
           }
@@ -428,13 +513,17 @@
     },
     "/v1/query": {
       "post": {
-        "summary": "Query",
-        "operationId": "query_v1_query_post",
+        "tags": [
+          "Query"
+        ],
+        "summary": "Query documents with RAG",
+        "description": "Submit a natural language question against indexed documents.\n\nThe system will:\n1. Check semantic cache (cosine \u2265 0.95 \u2192 instant response)\n2. Run hybrid BM25 + dense retrieval\n3. Cross-encoder reranking\n4. Build token-budget-aware context\n5. Query LLM with citations\n6. Return structured answer with source citations",
+        "operationId": "query_documents_v1_query_post",
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/src__api__routes__query__QueryRequest"
+                "$ref": "#/components/schemas/QueryRequest"
               }
             }
           },
@@ -446,7 +535,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/src__api__routes__query__QueryResponse"
+                  "$ref": "#/components/schemas/QueryResponse"
                 }
               }
             }
@@ -461,7 +550,15 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          },
+          {
+            "APIKeyHeader": []
+          }
+        ]
       }
     },
     "/v1/admin/stats": {
@@ -1284,7 +1381,15 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          },
+          {
+            "APIKeyHeader": []
+          }
+        ]
       }
     },
     "/v1/query/stream": {
@@ -1391,6 +1496,14 @@
         "summary": "Export Document",
         "description": "Compiles and downloads the Universal Export Object (UEO) for a document.",
         "operationId": "export_document_v1_documents__doc_id__export_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          },
+          {
+            "APIKeyHeader": []
+          }
+        ],
         "parameters": [
           {
             "name": "doc_id",
@@ -1439,8 +1552,8 @@
         "tags": [
           "Advanced Systems & Pre-LLM"
         ],
-        "summary": "Scan Pii Entities",
-        "operationId": "scan_pii_entities_v1_advanced_compliance_pii_scan_post",
+        "summary": "Scan And Redact Pii",
+        "operationId": "scan_and_redact_pii_v1_advanced_compliance_pii_scan_post",
         "requestBody": {
           "content": {
             "application/json": {
@@ -1459,7 +1572,7 @@
                 "schema": {
                   "additionalProperties": true,
                   "type": "object",
-                  "title": "Response Scan Pii Entities V1 Advanced Compliance Pii Scan Post"
+                  "title": "Response Scan And Redact Pii V1 Advanced Compliance Pii Scan Post"
                 }
               }
             }
@@ -1589,6 +1702,49 @@
                   "additionalProperties": true,
                   "type": "object",
                   "title": "Response Scan Ingestion Anomalies V1 Advanced Ingestion Anomaly Check Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/advanced/compliance/pii-detect": {
+      "post": {
+        "tags": [
+          "Advanced Systems & Pre-LLM"
+        ],
+        "summary": "Scan Pii Entities",
+        "operationId": "scan_pii_entities_v1_advanced_compliance_pii_detect_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PIIScanRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "type": "object",
+                  "title": "Response Scan Pii Entities V1 Advanced Compliance Pii Detect Post"
                 }
               }
             }
@@ -2387,81 +2543,6 @@
         ],
         "title": "ChunkResponse"
       },
-      "CitationModel": {
-        "properties": {
-          "source_num": {
-            "type": "integer",
-            "title": "Source Num"
-          },
-          "chunk_id": {
-            "type": "string",
-            "title": "Chunk Id"
-          },
-          "doc_id": {
-            "type": "string",
-            "title": "Doc Id"
-          },
-          "filename": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Filename"
-          },
-          "page": {
-            "type": "integer",
-            "title": "Page"
-          },
-          "section": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Section"
-          },
-          "snippet": {
-            "type": "string",
-            "title": "Snippet"
-          },
-          "confidence": {
-            "anyOf": [
-              {
-                "type": "number"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Confidence"
-          }
-        },
-        "type": "object",
-        "required": [
-          "source_num",
-          "chunk_id",
-          "doc_id",
-          "page",
-          "snippet"
-        ],
-        "title": "CitationModel"
-      },
-      "ConfidenceLevel": {
-        "type": "string",
-        "enum": [
-          "HIGH",
-          "MEDIUM",
-          "LOW"
-        ],
-        "title": "ConfidenceLevel"
-      },
       "CorrectionCreate": {
         "properties": {
           "doc_id": {
@@ -2559,39 +2640,6 @@
           "page_size"
         ],
         "title": "DocumentListResponse"
-      },
-      "DocumentMeta": {
-        "properties": {
-          "doc_id": {
-            "type": "string",
-            "title": "Doc Id"
-          },
-          "filename": {
-            "type": "string",
-            "title": "Filename"
-          },
-          "pages": {
-            "type": "integer",
-            "title": "Pages"
-          },
-          "tables": {
-            "type": "integer",
-            "title": "Tables"
-          },
-          "ingested_at": {
-            "type": "number",
-            "title": "Ingested At"
-          }
-        },
-        "type": "object",
-        "required": [
-          "doc_id",
-          "filename",
-          "pages",
-          "tables",
-          "ingested_at"
-        ],
-        "title": "DocumentMeta"
       },
       "DocumentResponse": {
         "properties": {
@@ -3280,6 +3328,330 @@
         ],
         "title": "QueryDecomposeRequest"
       },
+      "QueryRequest": {
+        "properties": {
+          "question": {
+            "type": "string",
+            "maxLength": 4000,
+            "minLength": 1,
+            "title": "Question"
+          },
+          "doc_ids": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Doc Ids",
+            "description": "Filter to specific documents. None = all tenant docs."
+          },
+          "doc_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Doc Id",
+            "description": "Single document ID alias (supports AEL workflows)."
+          },
+          "top_k": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "maximum": 50.0,
+                "minimum": 1.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Top K"
+          },
+          "session_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Session Id"
+          },
+          "include_citations": {
+            "type": "boolean",
+            "title": "Include Citations",
+            "default": true
+          },
+          "stream": {
+            "type": "boolean",
+            "title": "Stream",
+            "default": false
+          },
+          "block_types": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/BlockTypeEnum"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Block Types"
+          },
+          "language": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Language"
+          },
+          "export_agent": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Export Agent"
+          },
+          "export_format": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Export Format",
+            "default": "json"
+          },
+          "api_key": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Api Key"
+          },
+          "model": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Model"
+          }
+        },
+        "type": "object",
+        "required": [
+          "question"
+        ],
+        "title": "QueryRequest"
+      },
+      "QueryResponse": {
+        "properties": {
+          "answer": {
+            "type": "string",
+            "title": "Answer"
+          },
+          "citations": {
+            "items": {},
+            "type": "array",
+            "title": "Citations",
+            "default": []
+          },
+          "confidence": {
+            "title": "Confidence"
+          },
+          "confidence_score": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Confidence Score"
+          },
+          "session_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Session Id"
+          },
+          "tokens_used": {
+            "anyOf": [
+              {
+                "additionalProperties": {
+                  "type": "integer"
+                },
+                "type": "object"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "title": "Tokens Used"
+          },
+          "retrieval_latency_ms": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Retrieval Latency Ms"
+          },
+          "total_latency_ms": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Total Latency Ms"
+          },
+          "cached": {
+            "type": "boolean",
+            "title": "Cached",
+            "default": false
+          },
+          "model": {
+            "type": "string",
+            "title": "Model"
+          },
+          "question": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Question"
+          },
+          "grounded": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Grounded"
+          },
+          "confidence_label": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Confidence Label"
+          },
+          "query_type": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Query Type"
+          },
+          "weights_used": {
+            "anyOf": [
+              {
+                "additionalProperties": {
+                  "type": "number"
+                },
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Weights Used"
+          },
+          "table_direct": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Table Direct"
+          },
+          "latency_ms": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Latency Ms"
+          }
+        },
+        "type": "object",
+        "required": [
+          "answer",
+          "confidence",
+          "tokens_used",
+          "model"
+        ],
+        "title": "QueryResponse"
+      },
       "SpeechParseRequest": {
         "properties": {
           "filename": {
@@ -3399,322 +3771,6 @@
           "is_correct"
         ],
         "title": "VerificationCreate"
-      },
-      "src__api__models__QueryRequest": {
-        "properties": {
-          "question": {
-            "type": "string",
-            "maxLength": 4000,
-            "minLength": 1,
-            "title": "Question"
-          },
-          "doc_ids": {
-            "anyOf": [
-              {
-                "items": {
-                  "type": "string",
-                  "format": "uuid"
-                },
-                "type": "array"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Doc Ids",
-            "description": "Filter to specific documents. None = all tenant docs."
-          },
-          "top_k": {
-            "anyOf": [
-              {
-                "type": "integer",
-                "maximum": 50.0,
-                "minimum": 1.0
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Top K"
-          },
-          "session_id": {
-            "anyOf": [
-              {
-                "type": "string",
-                "format": "uuid"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Session Id"
-          },
-          "include_citations": {
-            "type": "boolean",
-            "title": "Include Citations",
-            "default": true
-          },
-          "stream": {
-            "type": "boolean",
-            "title": "Stream",
-            "default": false
-          },
-          "block_types": {
-            "anyOf": [
-              {
-                "items": {
-                  "$ref": "#/components/schemas/BlockTypeEnum"
-                },
-                "type": "array"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Block Types"
-          },
-          "language": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Language"
-          }
-        },
-        "type": "object",
-        "required": [
-          "question"
-        ],
-        "title": "QueryRequest"
-      },
-      "src__api__models__QueryResponse": {
-        "properties": {
-          "answer": {
-            "type": "string",
-            "title": "Answer"
-          },
-          "citations": {
-            "items": {
-              "$ref": "#/components/schemas/CitationModel"
-            },
-            "type": "array",
-            "title": "Citations",
-            "default": []
-          },
-          "confidence": {
-            "$ref": "#/components/schemas/ConfidenceLevel"
-          },
-          "confidence_score": {
-            "type": "number",
-            "title": "Confidence Score"
-          },
-          "session_id": {
-            "type": "string",
-            "format": "uuid",
-            "title": "Session Id"
-          },
-          "tokens_used": {
-            "additionalProperties": {
-              "type": "integer"
-            },
-            "type": "object",
-            "title": "Tokens Used"
-          },
-          "retrieval_latency_ms": {
-            "type": "number",
-            "title": "Retrieval Latency Ms"
-          },
-          "total_latency_ms": {
-            "type": "number",
-            "title": "Total Latency Ms"
-          },
-          "cached": {
-            "type": "boolean",
-            "title": "Cached",
-            "default": false
-          },
-          "model": {
-            "type": "string",
-            "title": "Model"
-          }
-        },
-        "type": "object",
-        "required": [
-          "answer",
-          "confidence",
-          "confidence_score",
-          "session_id",
-          "tokens_used",
-          "retrieval_latency_ms",
-          "total_latency_ms",
-          "model"
-        ],
-        "title": "QueryResponse"
-      },
-      "src__api__routes__query__QueryRequest": {
-        "properties": {
-          "question": {
-            "type": "string",
-            "maxLength": 2000,
-            "minLength": 1,
-            "title": "Question"
-          },
-          "doc_id": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Doc Id"
-          },
-          "top_k": {
-            "type": "integer",
-            "maximum": 50.0,
-            "minimum": 1.0,
-            "title": "Top K",
-            "default": 12
-          },
-          "stream": {
-            "type": "boolean",
-            "title": "Stream",
-            "default": false
-          },
-          "export_agent": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Export Agent"
-          },
-          "export_format": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Export Format",
-            "default": "json"
-          },
-          "api_key": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Api Key"
-          },
-          "model": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Model"
-          }
-        },
-        "type": "object",
-        "required": [
-          "question"
-        ],
-        "title": "QueryRequest"
-      },
-      "src__api__routes__query__QueryResponse": {
-        "properties": {
-          "question": {
-            "type": "string",
-            "title": "Question"
-          },
-          "answer": {
-            "type": "string",
-            "title": "Answer"
-          },
-          "citations": {
-            "items": {
-              "additionalProperties": true,
-              "type": "object"
-            },
-            "type": "array",
-            "title": "Citations",
-            "default": []
-          },
-          "confidence": {
-            "type": "number",
-            "title": "Confidence"
-          },
-          "confidence_label": {
-            "type": "string",
-            "title": "Confidence Label"
-          },
-          "query_type": {
-            "type": "string",
-            "title": "Query Type"
-          },
-          "weights_used": {
-            "additionalProperties": {
-              "type": "number"
-            },
-            "type": "object",
-            "title": "Weights Used"
-          },
-          "table_direct": {
-            "items": {
-              "type": "string"
-            },
-            "type": "array",
-            "title": "Table Direct",
-            "default": []
-          },
-          "grounded": {
-            "type": "boolean",
-            "title": "Grounded"
-          },
-          "latency_ms": {
-            "type": "number",
-            "title": "Latency Ms"
-          },
-          "tokens_used": {
-            "type": "integer",
-            "title": "Tokens Used"
-          },
-          "model": {
-            "type": "string",
-            "title": "Model"
-          }
-        },
-        "type": "object",
-        "required": [
-          "question",
-          "answer",
-          "confidence",
-          "confidence_label",
-          "query_type",
-          "weights_used",
-          "grounded",
-          "latency_ms",
-          "tokens_used",
-          "model"
-        ],
-        "title": "QueryResponse"
       }
     },
     "securitySchemes": {

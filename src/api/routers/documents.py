@@ -163,6 +163,14 @@ async def delete_document(
     )
     if not deleted:
         raise HTTPException(status_code=404, detail=f"Document {doc_id} not found")
+    if hasattr(request.app.state, "doc_registry") and request.app.state.doc_registry is not None:
+        request.app.state.doc_registry.pop(str(doc_id), None)
+    if hasattr(request.app.state, "orchestrator") and request.app.state.orchestrator:
+        if hasattr(request.app.state.orchestrator, "memory") and request.app.state.orchestrator.memory:
+            try:
+                await request.app.state.orchestrator.memory.invalidate(str(doc_id))
+            except Exception:
+                pass
 
 
 @router.post(
@@ -239,7 +247,10 @@ async def get_elements(
     orchestrator = container.rag_engine
     if not orchestrator:
         raise HTTPException(503, "Orchestrator not initialized")
-    elements = orchestrator.get_document_elements(str(doc_id))
+    try:
+        elements = orchestrator.get_document_elements(str(doc_id), tenant_id=tenant.tenant_id)
+    except PermissionError:
+        raise HTTPException(404, f"Document {doc_id} not found")
     return [
         {
             "element_id": e.element_id,
@@ -247,7 +258,7 @@ async def get_elements(
             "page": e.page,
             "type": e.type.value if hasattr(e.type, "value") else str(e.type),
             "content": e.content,
-            "bbox": [e.bbox.x0, e.bbox.y0, e.bbox.x1, e.bbox.y1] if e.bbox else None,
+            "bbox": e.bbox.to_tuple() if (e.bbox and hasattr(e.bbox, "to_tuple")) else ([e.bbox.x0, e.bbox.y0, e.bbox.x1, e.bbox.y1] if e.bbox else None),
             "importance_weight": getattr(e, "importance_weight", 1.0),
             "section": e.section,
         }

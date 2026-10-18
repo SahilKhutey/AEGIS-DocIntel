@@ -65,3 +65,58 @@ async def test_cross_tenant_query_isolation():
         assert state_a.doc_id == doc_a.doc_id
     finally:
         await orch.close()
+
+
+def test_cross_tenant_query_api_returns_404(monkeypatch):
+    """
+    HTTP API integration test: a tenant querying another tenant's document
+    via POST /v1/query returns 404 Not Found (not 200 with phantom citations,
+    nor 500 error).
+    """
+    from fastapi.testclient import TestClient
+    from src.main import app
+
+    monkeypatch.setenv("AEGIS_ENVIRONMENT", "development")
+    tenant_a_headers = {"Authorization": "Bearer dev-tenant-alpha"}
+    tenant_b_headers = {"Authorization": "Bearer dev-tenant-bravo"}
+
+    with TestClient(app, raise_server_exceptions=False) as client:
+        # Ingest document as tenant A
+        r = client.post(
+            "/v1/ingest",
+            headers=tenant_a_headers,
+            files={"file": ("alpha_secret.md", b"# Secret\n\nConfidential Alpha Financial Plan.", "text/markdown")},
+        )
+        assert r.status_code == 201, r.text
+        doc_id = r.json()["doc_id"]
+
+        # Tenant A can query their own document
+        r_owner = client.post(
+            "/v1/query",
+            headers=tenant_a_headers,
+            json={"question": "What is the secret?", "doc_ids": [doc_id]},
+        )
+        assert r_owner.status_code == 200, r_owner.text
+
+        # Tenant B queries tenant A's doc_id with doc_ids list -> 404
+        r_cross = client.post(
+            "/v1/query",
+            headers=tenant_b_headers,
+            json={"question": "What is the secret?", "doc_ids": [doc_id]},
+        )
+        assert r_cross.status_code == 404, f"Expected 404, got {r_cross.status_code}: {r_cross.text}"
+
+        # Tenant B queries tenant A's doc_id with doc_id scalar -> 404
+        r_cross_scalar = client.post(
+            "/v1/query",
+            headers=tenant_b_headers,
+            json={"question": "What is the secret?", "doc_id": doc_id},
+        )
+        assert r_cross_scalar.status_code == 404, f"Expected 404, got {r_cross_scalar.status_code}: {r_cross_scalar.text}"
+
+        # Tenant B attempts to export tenant A's document -> 404
+        r_cross_export = client.get(
+            f"/v1/documents/{doc_id}/export?format=json",
+            headers=tenant_b_headers,
+        )
+        assert r_cross_export.status_code == 404, f"Expected 404, got {r_cross_export.status_code}"
