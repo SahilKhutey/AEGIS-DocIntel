@@ -21,9 +21,9 @@ def _check_sentence_transformers() -> bool:
     if is_test or mock_env:
         return False
     try:
-        import sentence_transformers
-        return True
-    except ImportError:
+        import importlib.util
+        return importlib.util.find_spec("sentence_transformers") is not None
+    except Exception:
         return False
 
 HAS_SENTENCE_TRANSFORMERS = _check_sentence_transformers()

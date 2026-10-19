@@ -40,7 +40,13 @@ class ComplianceReport:
 # Structured PII Regex Patterns with Validation Logic
 SSN_REGEX = re.compile(r'\b\d{3}-\d{2}-\d{4}\b')
 CREDIT_CARD_REGEX = re.compile(r'\b(?:\d{4}[-\s]?){3}\d{4}\b')
-PHONE_REGEX = re.compile(r'\b(?:\+?1[-\s]?)?\(?\d{3}\)?[-\s]?\d{3}[-\s]?\d{4}\b')
+PHONE_REGEX = re.compile(
+    r'(?:\+\d{1,4}[-\s]?(?:\(\d{1,4}\)[-\s]?)?\d{1,4}[-\s]?\d{1,4}[-\s]?\d{1,9})|'
+    r'(?:(?:\+?1[-\s]?)?\(?\d{3}\)?[-\s]?\d{3}[-\s]?\d{4})|'
+    r'(?:(?<![\d-])\b\d{3}-\d{4}\b)'
+)
+EMAIL_REGEX = re.compile(r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b')
+API_KEY_REGEX = re.compile(r'\b(?:sk-[a-zA-Z0-9_\-]{20,}|AKIA[0-9A-Z]{16}|ASIA[0-9A-Z]{16}|ghp_[0-9a-zA-Z]{36}|github_pat_[0-9a-zA-Z_]{22,})\b')
 
 NON_NAME_WORDS = {
     "Contact", "Visited", "Invoice", "Ref", "Document", "Section", "Table", "Figure",
@@ -60,8 +66,6 @@ GEO_EXCLUSIONS = {
 
 TITLE_CASE_RUN = re.compile(r'\b[A-Z][a-z]{1,20}(?:\s+[A-Z][a-z]{1,20})+\b')
 WORD_TOKEN = re.compile(r'[A-Z][a-z]{1,20}')
-
-
 
 
 def _luhn_check(card_num: str) -> bool:
@@ -88,6 +92,9 @@ def detect_pii(element: Dict[str, Any]) -> List[PIIEntity]:
     elem_id = str(element.get('id', 'elem_0'))
     entities: List[PIIEntity] = []
 
+    def _is_overlapping(s: int, e: int) -> bool:
+        return any(ent.start < e and s < ent.end for ent in entities)
+
     for match in SSN_REGEX.finditer(text):
         entities.append(
             PIIEntity(
@@ -103,28 +110,56 @@ def detect_pii(element: Dict[str, Any]) -> List[PIIEntity]:
     for match in CREDIT_CARD_REGEX.finditer(text):
         match_text = match.group(0)
         score = 0.95 if _luhn_check(match_text) else 0.55
-        entities.append(
-            PIIEntity(
-                entity_type='CREDIT_CARD',
-                element_id=elem_id,
-                start=match.start(),
-                end=match.end(),
-                score=score,
-                text=match_text,
+        if not _is_overlapping(match.start(), match.end()):
+            entities.append(
+                PIIEntity(
+                    entity_type='CREDIT_CARD',
+                    element_id=elem_id,
+                    start=match.start(),
+                    end=match.end(),
+                    score=score,
+                    text=match_text,
+                )
             )
-        )
+
+    for match in EMAIL_REGEX.finditer(text):
+        if not _is_overlapping(match.start(), match.end()):
+            entities.append(
+                PIIEntity(
+                    entity_type='EMAIL',
+                    element_id=elem_id,
+                    start=match.start(),
+                    end=match.end(),
+                    score=0.95,
+                    text=match.group(0),
+                )
+            )
+
+    for match in API_KEY_REGEX.finditer(text):
+        if not _is_overlapping(match.start(), match.end()):
+            entities.append(
+                PIIEntity(
+                    entity_type='API_KEY',
+                    element_id=elem_id,
+                    start=match.start(),
+                    end=match.end(),
+                    score=0.99,
+                    text=match.group(0),
+                )
+            )
 
     for match in PHONE_REGEX.finditer(text):
-        entities.append(
-            PIIEntity(
-                entity_type='PHONE_NUMBER',
-                element_id=elem_id,
-                start=match.start(),
-                end=match.end(),
-                score=0.90,
-                text=match.group(0),
+        if not _is_overlapping(match.start(), match.end()):
+            entities.append(
+                PIIEntity(
+                    entity_type='PHONE_NUMBER',
+                    element_id=elem_id,
+                    start=match.start(),
+                    end=match.end(),
+                    score=0.90,
+                    text=match.group(0),
+                )
             )
-        )
 
     for match in TITLE_CASE_RUN.finditer(text):
         full_span = match.group(0)
@@ -146,16 +181,17 @@ def detect_pii(element: Dict[str, Any]) -> List[PIIEntity]:
             ):
                 abs_start = match.start() + valid_tokens[0].start()
                 abs_end = match.start() + valid_tokens[-1].end()
-                entities.append(
-                    PIIEntity(
-                        entity_type='PERSON',
-                        element_id=elem_id,
-                        start=abs_start,
-                        end=abs_end,
-                        score=0.85,
-                        text=name_text,
+                if not _is_overlapping(abs_start, abs_end):
+                    entities.append(
+                        PIIEntity(
+                            entity_type='PERSON',
+                            element_id=elem_id,
+                            start=abs_start,
+                            end=abs_end,
+                            score=0.85,
+                            text=name_text,
+                        )
                     )
-                )
 
     return entities
 

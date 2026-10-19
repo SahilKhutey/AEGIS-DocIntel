@@ -25,11 +25,20 @@ from typing import Optional, Any
 
 import numpy as np
 
-try:
-    from sentence_transformers import SentenceTransformer
-    HAS_SENTENCE_TRANSFORMERS = True
-except ImportError:
-    HAS_SENTENCE_TRANSFORMERS = False
+def _check_sentence_transformers() -> bool:
+    import sys
+    import os
+    is_test = "pytest" in sys.modules or os.getenv("AMDI_ENV") == "test"
+    mock_env = os.getenv("AMDI_MOCK_EMBEDDINGS", "false").lower() == "true"
+    if is_test or mock_env:
+        return False
+    try:
+        import importlib.util
+        return importlib.util.find_spec("sentence_transformers") is not None
+    except Exception:
+        return False
+
+HAS_SENTENCE_TRANSFORMERS = _check_sentence_transformers()
 
 logger = logging.getLogger(__name__)
 
@@ -211,6 +220,7 @@ class EmbeddingService:
         mock_env = os.getenv("AMDI_MOCK_EMBEDDINGS", "false").lower() == "true"
         if HAS_SENTENCE_TRANSFORMERS and not (is_test or mock_env or self.model_name == "mock"):
             try:
+                from sentence_transformers import SentenceTransformer  # type: ignore
                 self._model = SentenceTransformer(self.model_name, device=self.device)
 
                 if hasattr(self._model, "get_embedding_dimension"):

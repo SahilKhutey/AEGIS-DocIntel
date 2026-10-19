@@ -114,3 +114,38 @@ def test_person_name_trailing_label():
     assert len(persons) == 1
     assert persons[0].text == "John Smith"
 
+
+def test_detects_email_and_api_keys():
+    text = "Contact alice.smith@example.com using token sk-ant-api03-abcdef1234567890abcdef."
+    entities = detect_pii(text)
+    types = {e.entity_type for e in entities}
+    assert "EMAIL" in types
+    assert "API_KEY" in types
+
+    email_ent = next(e for e in entities if e.entity_type == "EMAIL")
+    assert email_ent.text == "alice.smith@example.com"
+
+    key_ent = next(e for e in entities if e.entity_type == "API_KEY")
+    assert key_ent.text == "sk-ant-api03-abcdef1234567890abcdef"
+
+    redacted = apply_redaction_policy(text, entities)
+    assert "alice.smith@example.com" not in redacted
+    assert "sk-ant-api03-abcdef1234567890abcdef" not in redacted
+    assert "<EMAIL_REDACTED>" in redacted
+    assert "<API_KEY_REDACTED>" in redacted
+
+
+def test_detects_international_and_local_phone_numbers():
+    text = "UK office: +44 20 7946 0958, local extension: 555-0100."
+    entities = detect_pii(text)
+    phones = [e for e in entities if e.entity_type == "PHONE_NUMBER"]
+    assert len(phones) == 2
+    phone_texts = {p.text for p in phones}
+    assert "+44 20 7946 0958" in phone_texts
+    assert "555-0100" in phone_texts
+
+    redacted = apply_redaction_policy(text, entities)
+    assert "+44 20 7946 0958" not in redacted
+    assert "555-0100" not in redacted
+
+

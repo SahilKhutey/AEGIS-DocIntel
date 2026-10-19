@@ -24,6 +24,7 @@ from __future__ import annotations
 
 import asyncio
 import logging
+import os
 import re
 from dataclasses import dataclass, field
 from typing import Any, AsyncIterator, Dict, List, Optional
@@ -133,12 +134,16 @@ class LLMInterface:
         self._endpoint = endpoint
 
         if self._provider != "mock" and not _LITELLM_AVAILABLE:
-            logger.warning(
-                "Provider '%s' requested but litellm is unavailable. "
-                "Falling back to mock provider.",
-                self._provider,
-            )
-            self._provider = "mock"
+            try:
+                import openai
+                logger.info("Using native openai client for provider=%s", self._provider)
+            except ImportError:
+                logger.warning(
+                    "Provider '%s' requested but litellm and openai are unavailable. "
+                    "Falling back to mock provider.",
+                    self._provider,
+                )
+                self._provider = "mock"
 
         logger.info(
             "LLMInterface initialised — provider=%s model=%s",
@@ -232,7 +237,7 @@ class LLMInterface:
                 yield token
             return
 
-        if not _LITELLM_AVAILABLE:
+        if not _LITELLM_AVAILABLE and self._provider == "mock":
             async for token in self._mock_stream(question):
                 yield token
             return
@@ -240,24 +245,38 @@ class LLMInterface:
         messages = getattr(context, "messages", [])
         model_id = self._build_model_id()
         try:
-            stream = await litellm.acompletion(
-                model=model_id,
-                messages=messages,
-                stream=True,
-                api_key=self._api_key or None,
-                base_url=self._endpoint or None,
-                **kwargs,
-            )
-            async for chunk in stream:
-                delta = (
-                    chunk.choices[0].delta.content
-                    if chunk.choices and chunk.choices[0].delta
-                    else None
+            if _LITELLM_AVAILABLE:
+                stream = await litellm.acompletion(
+                    model=model_id,
+                    messages=messages,
+                    stream=True,
+                    api_key=self._api_key or None,
+                    base_url=self._endpoint or None,
+                    **kwargs,
                 )
-                if delta:
-                    yield delta
+                async for chunk in stream:
+                    delta = (
+                        chunk.choices[0].delta.content
+                        if chunk.choices and chunk.choices[0].delta
+                        else None
+                    )
+                    if delta:
+                        yield delta
+            else:
+                from openai import AsyncOpenAI
+                client = AsyncOpenAI(api_key=self._api_key or os.environ.get("OPENAI_API_KEY", ""), base_url=self._endpoint or None)
+                stream = await client.chat.completions.create(
+                    model=self._model,
+                    messages=messages,
+                    stream=True,
+                    **kwargs,
+                )
+                async for chunk in stream:
+                    delta = chunk.choices[0].delta.content if chunk.choices and chunk.choices[0].delta else None
+                    if delta:
+                        yield delta
         except Exception as exc:  # pylint: disable=broad-except
-            logger.error("litellm stream error: %s", exc)
+            logger.error("LLM stream error: %s", exc)
             yield f"[ERROR: {exc}]"
 
     # ------------------------------------------------------------------
@@ -379,18 +398,27 @@ class LLMInterface:
         LLMResponse
         """
         model_id = self._build_model_id()
-        logger.info("litellm.acompletion — model=%s messages=%d", model_id, len(messages))
+        logger.info("LLM reasoning completion — model=%s messages=%d", model_id, len(messages))
 
         try:
-            response = await litellm.acompletion(
-                model=model_id,
-                messages=messages,
-                api_key=self._api_key or None,
-                base_url=self._endpoint or None,
-                **kwargs,
-            )
+            if _LITELLM_AVAILABLE:
+                response = await litellm.acompletion(
+                    model=model_id,
+                    messages=messages,
+                    api_key=self._api_key or None,
+                    base_url=self._endpoint or None,
+                    **kwargs,
+                )
+            else:
+                from openai import AsyncOpenAI
+                client = AsyncOpenAI(api_key=self._api_key or os.environ.get("OPENAI_API_KEY", ""), base_url=self._endpoint or None)
+                response = await client.chat.completions.create(
+                    model=self._model,
+                    messages=messages,
+                    **kwargs,
+                )
         except Exception as exc:  # pylint: disable=broad-except
-            logger.error("litellm.acompletion failed: %s", exc)
+            logger.error("LLM reasoning completion failed: %s", exc)
             return LLMResponse(
                 answer=f"[LLM ERROR: {exc}]",
                 citations=[],

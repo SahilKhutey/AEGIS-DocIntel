@@ -26,6 +26,7 @@ from __future__ import annotations
 
 import asyncio
 from collections import defaultdict
+import os
 import time
 import traceback
 import uuid
@@ -331,7 +332,19 @@ class AMDIOrchestrator:
             self._retriever = None
             
         self._ctx_builder = self._init_engine("ContextBuilder",    ContextBuilder)
-        self._llm         = self._init_engine("LLMInterface",      LLMInterface)
+        if LLMInterface is not None:
+            llm_prov = self._cfg_get("llm_provider", os.environ.get("LLM_PROVIDER", "mock"))
+            if llm_prov == "mock" and os.environ.get("OPENAI_API_KEY"):
+                llm_prov = "openai"
+            llm_model = self._cfg_get("llm_model", os.environ.get("LLM_MODEL", "gpt-4o-mini"))
+            llm_key = self._cfg_get("openai_api_key", os.environ.get("OPENAI_API_KEY", ""))
+            try:
+                self._llm = LLMInterface(llm_provider=llm_prov, model=llm_model, api_key=llm_key)
+            except Exception as e:
+                log.warning("LLMInterface initialization error: %s, falling back to mock", e)
+                self._llm = LLMInterface(llm_provider="mock")
+        else:
+            self._llm = None
 
         # Vector store
         dim = self._cfg_get("embedding_dim", 1024)

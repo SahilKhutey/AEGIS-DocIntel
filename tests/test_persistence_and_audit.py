@@ -132,3 +132,62 @@ async def test_realdocumentservice_sqlite_persistence_and_restart(tmp_path):
     is_valid, count, err = logger.verify_integrity()
     assert is_valid is True
     assert count >= 2
+
+
+@pytest.mark.asyncio
+async def test_realdocumentservice_document_hydration_after_restart(tmp_path):
+    db_file = tmp_path / "documents.db"
+
+    # Orchestrator with memory doc_state
+    orchestrator = MagicMock()
+    orchestrator._doc_state = {}
+
+    async def mock_ingest(doc_obj):
+        orchestrator._doc_state[doc_obj.doc_id] = {
+            "doc_id": doc_obj.doc_id,
+            "filename": doc_obj.filename,
+            "raw_bytes": doc_obj.raw_bytes,
+        }
+        return {
+            "doc_id": doc_obj.doc_id,
+            "filename": doc_obj.filename,
+            "pages": 1,
+            "elements": 5,
+        }
+    orchestrator.ingest = mock_ingest
+
+    # 1. Ingest via service 1
+    service1 = RealDocumentService(orchestrator, db_path=str(db_file))
+    res = await service1.ingest(
+        file_bytes=b"sample doc content bytes",
+        filename="hydrated_test.pdf",
+        content_type="application/pdf",
+        tenant_id="tenant-hydrate",
+    )
+    doc_id = res.doc_id
+    assert doc_id in orchestrator._doc_state
+
+    # 2. Simulate complete memory wipe / server restart with empty orchestrator
+    fresh_orchestrator = MagicMock()
+    fresh_orchestrator._doc_state = {}
+    ingest_called_with = []
+    async def fresh_mock_ingest(doc_obj):
+        ingest_called_with.append(doc_obj)
+        fresh_orchestrator._doc_state[doc_obj.doc_id] = {"doc_id": doc_obj.doc_id}
+        return {"doc_id": doc_obj.doc_id, "pages": 1, "elements": 5}
+    fresh_orchestrator.ingest = fresh_mock_ingest
+
+    service2 = RealDocumentService(fresh_orchestrator, db_path=str(db_file))
+    assert doc_id not in fresh_orchestrator._doc_state
+
+    # 3. Hydrate document into orchestrator
+    hydrated = await service2.hydrate_document(doc_id, "tenant-hydrate")
+    assert hydrated is True
+    assert doc_id in fresh_orchestrator._doc_state
+    assert len(ingest_called_with) == 1
+    assert ingest_called_with[0].raw_bytes == b"sample doc content bytes"
+
+    # 4. Attempt hydration from wrong tenant should fail
+    wrong_tenant = await service2.hydrate_document(doc_id, "wrong-tenant")
+    assert wrong_tenant is False
+

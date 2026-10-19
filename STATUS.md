@@ -30,12 +30,15 @@ _Last verified: 2026-10-10 against `master` @ `5bec766` plus the Phase 0 changes
 | `aegis-docprep` | Alpha. Installs from source with only `numpy`; its documented examples and outputs are executed by tests | `tests/test_docs_examples.py`, `aegis-docprep/tests/` |
 | Dependency single-source-of-truth | `pyproject.toml` generates `requirements-*.txt` | `python scripts/check_dependency_sync.py` |
 | README install path | Run on a fresh virtualenv by CI | `scripts/cold_start_check.sh` |
+| **Expanded PII detection & redaction** — emails, API keys/tokens, international E.164, and local 7-digit phones | Working (added in Phase 5) | `pytest aegis-docprep/tests/test_pii_redaction.py tests/test_docs_examples.py` |
+| **Real LLM provider interface** — OpenAI and litellm integration with structured mock fallback | Working (added in Phase 5) | `pytest tests/test_llm_interface_wiring.py` |
+| **Document re-hydration across restarts** — SQLite preserves document raw bytes and restores orchestrator state | Working (added in Phase 5) | `pytest tests/test_persistence_and_audit.py` |
+| **Direct CLI execution** — CLI resolves root path and commands run directly from workspace root | Working (added in Phase 5) | `python src/cli.py --help` |
 
 ## Not implemented or not real yet
 
 | Gap | ID | Evidence |
 |---|---|---|
-| LLM answers are mock by default (`[MOCK]`) | I-17 | live query |
 | Semantic embeddings are mock unless the ML tier is installed | I-18 | container warning |
 | Signed releases / provenance | I-23 | no tags published |
 | Any external validation — no pilots have been completed | I-24 | GitHub has no pilot issues |
@@ -44,9 +47,17 @@ _Last verified: 2026-10-10 against `master` @ `5bec766` plus the Phase 0 changes
 
 | Defect | ID | Pinned by |
 |---|---|---|
-| PII does not detect emails, API keys or secrets, non-US phone formats, or local 7-digit numbers | I-28 | documented in `aegis-docprep/README.md` |
 | `/metrics` is public and its series are labelled with `tenant_id` | — | `src/api/auth_guard.py` (documented exposure) |
 | Not on PyPI — install from source | I-08 | `pypi.org` returns 404 |
+
+## Fixed in Phase 5 (MVP Progression)
+
+| Fix | Phase | ID |
+|---|---|---|
+| Expanded PII redaction engine to emails, API tokens/keys, international E.164 phone formats, and local 7-digit numbers | Phase 5 | I-28 |
+| Real LLM provider wiring via AMDIOrchestrator and LLMInterface with native OpenAI & litellm support and mock fallback | Phase 5 | I-17 |
+| Cross-restart document re-hydration from SQLite raw_bytes store into AMDI memory state | Phase 5 | I-19 |
+| Fixed CLI path resolution allowing direct `python src/cli.py` execution from any directory | Phase 5 | — |
 
 ## Fixed in Phases 1–4
 

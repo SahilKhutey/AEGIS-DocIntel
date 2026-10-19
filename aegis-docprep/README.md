@@ -2,7 +2,7 @@
 
 Three focused, independently-useful pre-LLM document-structuring primitives, extracted from the AEGIS-DocIntel platform because they represent the components with the strongest real-world validation:
 
-- **PII detection & redaction** — regex and tokenization-based detection of US SSNs, credit-card numbers (Luhn-validated), area-code phone numbers, and Title-Case person names (with prefix stripping to prevent surname leaks), to scrub sensitive data before it reaches a third-party LLM API. A first-pass filter, **not** a guarantee — see [Limitations](#limitations-verified).
+- **PII detection & redaction** — regex and tokenization-based detection of US SSNs, credit-card numbers (Luhn-validated), phone numbers (US, international, local 7-digit), email addresses, API keys/tokens, and Title-Case person names (with prefix stripping to prevent surname leaks), to scrub sensitive data before it reaches a third-party LLM API. A first-pass filter, **not** a guarantee — see [Limitations](#limitations-verified).
 - **Submodular context packing** — selects the most *relevant* and *diverse* chunks that fit a fixed token budget using modified cost-benefit greedy selection with best-single-item fallback, achieving the proven $(1 - 1/e)/2 \approx 0.316$ approximation guarantee for monotone submodular knapsack (see [Guarantees](#guarantees-what-is-and-is-not-proven)).
 - **Spatial reading-order extraction** — reconstructs the correct reading order of multi-column PDFs, tables, or forms using an acyclic directed graph with Kahn's topological sorting, where raw extraction typically scrambles column order.
 
@@ -49,8 +49,8 @@ print(apply_redaction_policy(text, results))
 
 Every item below was reproduced against the current code (the examples in this README are executed by the test suite, so they cannot silently drift).
 
-- **Detected:** US SSNs (`123-45-6789`); credit-card numbers (Luhn-valid → score 0.95; Luhn-*invalid* 16-digit numbers are still flagged, at 0.55); phone numbers **with an area code** (`555-123-4567`); Title-Case person names (2–3 words, with non-name prefix stripping e.g. `Customer John Smith` -> `John Smith`).
-- **Not detected:** email addresses; API keys, access tokens and other secrets; passport / driver-licence / bank-account numbers; non-US phone formats (`+44 20 7946 0958`); 7-digit local numbers (`555-0100`); lowercase or single-word names.
+- **Detected:** US SSNs (`123-45-6789`); credit-card numbers (Luhn-valid → score 0.95; Luhn-*invalid* 16-digit numbers are still flagged, at 0.55); phone numbers (US area-code, international E.164 e.g. `+44 20 7946 0958`, and local 7-digit e.g. `555-0100`); email addresses (`user@domain.com`); API keys and tokens (`sk-...`, `AKIA...`, `ghp_...`); Title-Case person names (2–3 words, with non-name prefix stripping e.g. `Customer John Smith` -> `John Smith`).
+- **Not detected:** passport / driver-licence / bank-account numbers; lowercase or single-word names.
 - Do not use this as the only control before sending data to a third party.
 
 ### 2. Submodular Context Packing

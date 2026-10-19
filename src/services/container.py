@@ -62,9 +62,14 @@ class RealDocumentService:
                         chunk_count INTEGER NOT NULL,
                         is_scanned BOOLEAN NOT NULL,
                         language TEXT NOT NULL,
-                        created_at TEXT NOT NULL
+                        created_at TEXT NOT NULL,
+                        raw_bytes BLOB
                     )
                 """)
+                cursor = conn.execute("PRAGMA table_info(documents)")
+                cols = [col[1] for col in cursor.fetchall()]
+                if "raw_bytes" not in cols:
+                    conn.execute("ALTER TABLE documents ADD COLUMN raw_bytes BLOB")
                 conn.commit()
         except Exception as e:
             log.warning("Could not initialize SQLite document store", error=str(e))
@@ -99,7 +104,7 @@ class RealDocumentService:
         except Exception as e:
             log.warning("Could not load documents from SQLite", error=str(e))
 
-    def _persist_doc(self, doc_info: dict):
+    def _persist_doc(self, doc_info: dict, raw_bytes: Optional[bytes] = None):
         if not self.db_path or self.db_path == ":memory:":
             return
         try:
@@ -111,8 +116,8 @@ class RealDocumentService:
             with sqlite3.connect(self.db_path) as conn:
                 conn.execute("""
                     INSERT OR REPLACE INTO documents
-                    (doc_id, tenant_id, filename, status, page_count, chunk_count, is_scanned, language, created_at)
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    (doc_id, tenant_id, filename, status, page_count, chunk_count, is_scanned, language, created_at, raw_bytes)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                 """, (
                     doc_info["doc_id"],
                     doc_info["tenant_id"],
@@ -123,10 +128,46 @@ class RealDocumentService:
                     1 if doc_info["is_scanned"] else 0,
                     doc_info["language"],
                     created_str,
+                    raw_bytes,
                 ))
                 conn.commit()
         except Exception as e:
             log.warning("Could not persist document to SQLite", error=str(e))
+
+    def _load_raw_bytes(self, doc_id: str) -> Optional[bytes]:
+        if not self.db_path or self.db_path == ":memory:":
+            return None
+        try:
+            with sqlite3.connect(self.db_path) as conn:
+                cursor = conn.execute("SELECT raw_bytes FROM documents WHERE doc_id = ?", (doc_id,))
+                row = cursor.fetchone()
+                if row and row[0]:
+                    return row[0]
+        except Exception as e:
+            log.warning("Could not load raw_bytes from SQLite", error=str(e))
+        return None
+
+    async def hydrate_document(self, doc_id: str, tenant_id: str) -> bool:
+        """Re-hydrates document into orchestrator if not present in memory."""
+        doc = self._docs.get(str(doc_id))
+        if not doc or str(doc.get("tenant_id", "")) != str(tenant_id):
+            return False
+        if hasattr(self.orchestrator, "_doc_state") and str(doc_id) not in self.orchestrator._doc_state:
+            raw_bytes = self._load_raw_bytes(str(doc_id))
+            if raw_bytes:
+                try:
+                    from src.models.document_object import DocumentObject
+                    doc_obj = DocumentObject(
+                        doc_id=str(doc_id),
+                        filename=doc["filename"],
+                        raw_bytes=raw_bytes,
+                        tenant_id=str(tenant_id),
+                    )
+                    await self.orchestrator.ingest(doc_obj)
+                    return True
+                except Exception as e:
+                    log.warning("Failed to re-hydrate document into orchestrator", error=str(e))
+        return False
 
     def _delete_persisted_doc(self, doc_id: str):
         if not self.db_path or self.db_path == ":memory:":
@@ -164,7 +205,7 @@ class RealDocumentService:
             }
             
             self._docs[stats.get("doc_id", doc_id)] = doc_info
-            self._persist_doc(doc_info)
+            self._persist_doc(doc_info, raw_bytes=file_bytes)
             audit_logger.log(
                 action="doc.ingest",
                 tenant_id=str(tenant_id),
@@ -388,6 +429,7 @@ class ServiceContainer:
             memory_engine=self.memory_engine,
             llm_service=self.llm_service,
             embedding_model=self.embedding_model,
+            document_service=self.document_service,
         )
 
         # ── Advanced Submodules Wire-Up ─────────────────────────

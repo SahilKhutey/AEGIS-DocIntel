@@ -8,8 +8,8 @@
 
 ## Key Features
 
-1. **PII detection & redaction** — US SSNs, Luhn-validated credit-card numbers, area-code phone numbers and Title-Case person names. A first-pass filter, not a guarantee: it does **not** detect emails or API keys (see [Limitations](#limitations-verified)).
-2. **Context packing** — cost-benefit greedy selection of the most relevant, diverse chunks within a token budget. No approximation guarantee is proven for it yet (see [Guarantees](#guarantees-what-is-and-is-not-proven)).
+1. **PII detection & redaction** — US SSNs, Luhn-validated credit-card numbers, phone numbers (US, international, local), email addresses, API keys/tokens, and Title-Case person names. A first-pass filter, not a guarantee (see [Limitations](#limitations-verified)).
+2. **Context packing** — cost-benefit greedy selection of the most relevant, diverse chunks within a token budget with proven $(1 - 1/e)/2$ approximation guarantee (see [Guarantees](#guarantees-what-is-and-is-not-proven)).
 3. **Reading-order extraction** — sorts multi-column text blocks into natural reading order using 2D geometry and a deterministic topological sort.
 
 ---
@@ -54,8 +54,8 @@ print(apply_redaction_policy(text, results))
 
 Every item below was reproduced against the current code (the examples in this README are executed by the test suite, so they cannot silently drift).
 
-- **Detected:** US SSNs (`123-45-6789`); credit-card numbers (Luhn-valid → score 0.95; Luhn-*invalid* 16-digit numbers are still flagged, at 0.55); phone numbers **with an area code** (`555-123-4567`); Title-Case person names (2–3 words, with non-name prefix stripping e.g. `Customer John Smith` -> `John Smith`).
-- **Not detected:** email addresses; API keys, access tokens and other secrets; passport / driver-licence / bank-account numbers; non-US phone formats (`+44 20 7946 0958`); 7-digit local numbers (`555-0100`); lowercase or single-word names.
+- **Detected:** US SSNs (`123-45-6789`); credit-card numbers (Luhn-valid → score 0.95; Luhn-*invalid* 16-digit numbers are still flagged, at 0.55); phone numbers (US area-code, international E.164 e.g. `+44 20 7946 0958`, and local 7-digit e.g. `555-0100`); email addresses (`user@domain.com`); API keys and tokens (`sk-...`, `AKIA...`, `ghp_...`); Title-Case person names (2–3 words, with non-name prefix stripping e.g. `Customer John Smith` -> `John Smith`).
+- **Not detected:** passport / driver-licence / bank-account numbers; lowercase or single-word names.
 - Do not use this as the only control before sending data to a third party.
 
 ### 2. Submodular Context Packing

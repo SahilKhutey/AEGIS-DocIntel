@@ -47,12 +47,14 @@ class QueryService:
         llm_service: LLMService,
         embedding_model,
         token_budget_enforcer=None,
+        document_service=None,
     ):
         self.rag = rag_engine
         self.memory = memory_engine
         self.llm = llm_service
         self.embedder = embedding_model
         self.budget = token_budget_enforcer
+        self.document_service = document_service
 
     async def query(
         self,
@@ -65,6 +67,10 @@ class QueryService:
         """Execute query using the real AMDIOrchestrator."""
         t_start = time.perf_counter()
         doc_id = doc_ids[0] if doc_ids else None
+
+        # Re-hydrate document into orchestrator if needed (e.g. after service restart)
+        if doc_id and self.document_service and hasattr(self.document_service, "hydrate_document"):
+            await self.document_service.hydrate_document(doc_id, str(tenant_id))
 
         # Call the orchestrator
         try:
