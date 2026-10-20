@@ -37,12 +37,12 @@ _Last verified: 2026-10-10 against `master` @ `5bec766` plus the Phase 0 changes
 | **Real LLM provider interface** — OpenAI and litellm integration with structured mock fallback | Working (added in Phase 5) | `pytest tests/test_llm_interface_wiring.py` |
 | **Document re-hydration across restarts** — SQLite preserves document raw bytes and restores orchestrator state | Working (added in Phase 5) | `pytest tests/test_persistence_and_audit.py` |
 | **Direct CLI execution** — CLI resolves root path and commands run directly from workspace root | Working (added in Phase 5) | `python src/cli.py --help` |
+| **Multi-provider semantic embeddings** — Native OpenAI, LiteLLM, and local SentenceTransformers support with resilient mock fallback | Working (added in Phase 5) | `pytest tests/test_embedding_providers.py` |
 
 ## Not implemented or not real yet
 
 | Gap | ID | Evidence |
 |---|---|---|
-| Semantic embeddings are mock unless the ML tier is installed | I-18 | container warning |
 | Signed releases / provenance | I-23 | no tags published |
 | Any external validation — no pilots have been completed | I-24 | GitHub has no pilot issues |
 
@@ -57,6 +57,7 @@ _Last verified: 2026-10-10 against `master` @ `5bec766` plus the Phase 0 changes
 
 | Fix | Phase | ID |
 |---|---|---|
+| Multi-provider dense embeddings supporting OpenAI, LiteLLM, and SentenceTransformers with resilient fallback | Phase 5 | I-18 |
 | Expanded PII redaction engine to emails, API tokens/keys, international E.164 phone formats, and local 7-digit numbers | Phase 5 | I-28 |
 | Real LLM provider wiring via AMDIOrchestrator and LLMInterface with native OpenAI & litellm support and mock fallback | Phase 5 | I-17 |
 | Cross-restart document re-hydration from SQLite raw_bytes store into AMDI memory state | Phase 5 | I-19 |

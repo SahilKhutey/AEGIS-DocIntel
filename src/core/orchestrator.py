@@ -306,7 +306,24 @@ class AMDIOrchestrator:
         self._hypergraph_eng = self._init_engine("HypergraphEngine", HypergraphEngine)
         self._spectral    = self._init_engine("SpectralEngine",    SpectralEngine)
         
-        self._embedding   = self._init_engine("EmbeddingService",  EmbeddingService)
+        if EmbeddingService is not None:
+            emb_provider = self._cfg_get("embedding_provider", os.environ.get("EMBEDDING_PROVIDER", "auto"))
+            emb_model = self._cfg_get("embedding_model", os.environ.get("EMBEDDING_MODEL", "BAAI/bge-large-en-v1.5"))
+            emb_dim = int(self._cfg_get("embedding_dim", os.environ.get("EMBEDDING_DIM", "1024")))
+            emb_api_key = self._cfg_get("openai_api_key", os.environ.get("OPENAI_API_KEY", ""))
+            try:
+                self._embedding = EmbeddingService(
+                    model_name=emb_model,
+                    dim=emb_dim,
+                    provider=emb_provider,
+                    api_key=emb_api_key,
+                )
+                log.debug("_init_engine: EmbeddingService initialised with provider=%s", emb_provider)
+            except Exception as e:
+                log.warning("_init_engine: EmbeddingService failed to initialise: %s", e)
+                self._embedding = self._init_engine("EmbeddingService", EmbeddingService)
+        else:
+            self._embedding = None
         if SemanticEngine is not None:
             self._semantic = SemanticEngine(embedder=self._embedding)
             log.debug("_init_engine: SemanticEngine initialised with embedder")

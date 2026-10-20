@@ -405,6 +405,8 @@ class ServiceContainer:
         # Config mapping for AMDIOrchestrator
         amdi_config = {
             "embedding_dim": self.settings.embeddings.dimension,
+            "embedding_provider": getattr(self.settings.embeddings, "provider", "auto"),
+            "embedding_model": self.settings.embeddings.text_model,
             "redis_url": self.settings.redis.url,
             "llm_provider": self.settings.llm.provider,
             "llm_model": self.settings.llm.model,
@@ -429,6 +431,8 @@ class ServiceContainer:
 
         # ── Real AMDIOrchestrator ───────────────────────────────
         self.rag_engine = AMDIOrchestrator(config=amdi_config)
+        if self.embedding_model is None and hasattr(self.rag_engine, "_embedding") and self.rag_engine._embedding:
+            self.embedding_model = self.rag_engine._embedding
 
         # ── Memory Engine (Redis-backed Cache) ─────────────────
         self.memory_engine = await self._init_memory()
