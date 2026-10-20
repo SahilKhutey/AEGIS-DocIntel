@@ -187,6 +187,8 @@ class LLMInterface:
             Structured response with answer, citations, and confidence.
         """
         messages = getattr(context, "messages", [])
+        if not messages:
+            messages = [{"role": "user", "content": question}]
         source_map: Dict[int, str] = getattr(context, "source_map", {})
         table_count: int = getattr(context, "table_count", 0)
 
@@ -205,8 +207,8 @@ class LLMInterface:
     async def stream_reason(
         self,
         question: str,
-        context: Any,
-        hits: Any,
+        context: Any = None,
+        hits: Any = None,
         **kwargs: Any,
     ) -> AsyncIterator[str]:
         """
@@ -243,6 +245,8 @@ class LLMInterface:
             return
 
         messages = getattr(context, "messages", [])
+        if not messages:
+            messages = [{"role": "user", "content": question}]
         model_id = self._build_model_id()
         try:
             if _LITELLM_AVAILABLE:

@@ -244,6 +244,11 @@ async def get_elements(
 ):
     """Return all geometric elements belonging to a specific document (for 3D layout visualization)."""
     container = request.app.state.container
+    doc = await container.document_service.get(doc_id=str(doc_id), tenant_id=tenant.tenant_id)
+    if not doc:
+        raise HTTPException(404, f"Document {doc_id} not found")
+    if hasattr(container.document_service, "hydrate_document"):
+        await container.document_service.hydrate_document(str(doc_id), tenant.tenant_id)
     orchestrator = container.rag_engine
     if not orchestrator:
         raise HTTPException(503, "Orchestrator not initialized")

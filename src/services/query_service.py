@@ -130,9 +130,16 @@ class QueryService:
     ) -> AsyncGenerator[dict, None]:
         """Stream tokens from AMDIOrchestrator."""
         doc_id = doc_ids[0] if doc_ids else None
-        
+
+        # Re-hydrate document into orchestrator if needed (e.g. after service restart)
+        if doc_id and self.document_service and hasattr(self.document_service, "hydrate_document"):
+            await self.document_service.hydrate_document(doc_id, str(tenant_id))
+
         # Stream from the orchestrator
-        async for token in self.rag.stream_query(question):
+        async for token in self.rag.stream_query(
+            question,
+            doc_id=doc_id,
+            tenant_id=str(tenant_id),
+            top_k=top_k or 12,
+        ):
             yield {"type": "token", "content": token}
-        
-        yield {"type": "done"}

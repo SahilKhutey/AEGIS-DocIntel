@@ -445,11 +445,18 @@ class AMDIOrchestrator:
 
     async def delete_document(self, doc_id: str, tenant_id: Optional[str] = None) -> bool:
         """Cascading document deletion: removes state, vector store embeddings, and cache entries."""
+        if doc_id in self._doc_tenant:
+            owner = self._doc_tenant.get(doc_id)
+            if tenant_id and str(owner) != str(tenant_id):
+                return False
+            self._doc_tenant.pop(doc_id, None)
         if doc_id in self._doc_state:
             state = self._doc_state[doc_id]
             if tenant_id and getattr(state, "tenant_id", None) and str(state.tenant_id) != str(tenant_id):
                 return False
             self._doc_state.pop(doc_id, None)
+        self._elements = [e for e in self._elements if getattr(e, "doc_id", None) != doc_id]
+        self._tables = [t for t in self._tables if getattr(t, "doc_id", None) != doc_id]
         if self._vector_store is not None:
             await self._vector_store.delete(doc_id=doc_id)
         if getattr(self, "_semantic_cache", None) is not None:
@@ -928,17 +935,28 @@ class AMDIOrchestrator:
         )
         return response
 
-    async def stream_query(self, question: str) -> AsyncIterator[str]:
+    async def stream_query(
+        self,
+        question: str,
+        doc_id: Optional[str] = None,
+        top_k: int = 12,
+        tenant_id: Optional[str] = None,
+    ) -> AsyncIterator[str]:
         """Stream the answer token-by-token for a question.
 
-        Delegates to ``LLMInterface.stream_reason`` if available; falls
-        back to yielding the full answer from :meth:`query` in a single
-        chunk.
+        Delegates to ``LLMInterface.stream_reason`` with retrieved context if available;
+        falls back to yielding the answer from :meth:`query`.
 
         Parameters
         ----------
         question:
             Natural-language question to answer.
+        doc_id:
+            Optional filter to restrict retrieval to a specific document.
+        top_k:
+            Maximum number of source elements to retrieve.
+        tenant_id:
+            Caller's tenant for scoped retrieval.
 
         Yields
         ------
@@ -947,16 +965,74 @@ class AMDIOrchestrator:
         """
         self._check_open()
 
+        if doc_id and tenant_id is not None:
+            owner = self._doc_tenant.get(doc_id)
+            if owner is not None and owner != tenant_id:
+                raise PermissionError(
+                    f"doc_id={doc_id!r} belongs to a different tenant; "
+                    f"refusing cross-tenant access."
+                )
+
+        context: Any = None
+        retrieved: Any = None
+        if self._retriever is not None:
+            try:
+                if doc_id:
+                    state = self._doc_state.get(doc_id)
+                    elements = state.get_geometric_elements() if state else []
+                    tables = state.get_geometric_tables() if state else []
+                elif tenant_id is not None:
+                    allowed_docs = {
+                        d for d, t in self._doc_tenant.items() if t == tenant_id
+                    }
+                    elements = [
+                        e
+                        for d in allowed_docs
+                        if d in self._doc_state
+                        for e in self._doc_state[d].get_geometric_elements()
+                    ]
+                    tables = [
+                        t
+                        for d in allowed_docs
+                        if d in self._doc_state
+                        for t in self._doc_state[d].get_geometric_tables()
+                    ]
+                else:
+                    elements = self._elements
+                    tables = self._tables
+
+                retrieved = await self._call_maybe_async(
+                    self._retriever.retrieve,
+                    query=question,
+                    elements=elements,
+                    tables=tables,
+                    graph=self._graph,
+                    hypergraph=self._hypergraph,
+                    top_k=top_k,
+                )
+            except Exception as exc:
+                log.warning("stream_query: retriever error: %s", exc)
+
+        if self._ctx_builder is not None and retrieved is not None:
+            try:
+                context = await self._call_maybe_async(
+                    self._ctx_builder.build,
+                    question,
+                    retrieved,
+                )
+            except Exception as exc:
+                log.warning("stream_query: context builder error: %s", exc)
+
         if self._llm is not None and hasattr(self._llm, "stream_reason"):
             try:
-                async for token in self._llm.stream_reason(question):
+                async for token in self._llm.stream_reason(question, context=context, hits=retrieved):
                     yield token
                 return
             except Exception as exc:
                 log.warning("stream_query: stream_reason failed: %s", exc)
 
         # Fallback: run full query and yield result in one shot
-        result = await self.query(question)
+        result = await self.query(question, doc_id=doc_id, top_k=top_k, tenant_id=tenant_id)
         yield result.get("answer", "")
 
     async def close(self) -> None:

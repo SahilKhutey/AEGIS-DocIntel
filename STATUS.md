@@ -25,7 +25,8 @@ _Last verified: 2026-10-10 against `master` @ `5bec766` plus the Phase 0 changes
 | **Submodular packer approximation guarantee** — (1 - 1/e)/2 bound with single-item fallback | Working (added in Phase 2) | `pytest aegis-docprep/tests/test_packer.py` |
 | **API consolidation** — 0 duplicate route collisions, unified `/v1/query` | Working (added in Phase 3) | `tests/test_api_route_integrity.py` |
 | Dev-token bypass rejected outside `AEGIS_ENVIRONMENT=development` | Working | `tests/test_auth_guard.py` |
-| Document delete returns 404 afterwards | Re-verified. The vector-store / cache cascade was **not** independently re-checked | manual probe, Oct 2026 |
+| **Cascading document deletion** — cleans up document, state, elements, tables, vector store and semantic cache | Working | `pytest tests/test_document_deletion.py` |
+| **Streaming query with tenant scoping & auto-hydration** — real token streaming, cross-tenant isolation, post-restart re-hydration | Working (added in Phase 5) | `pytest tests/test_query_streaming_integration.py` |
 | 9 Prometheus metrics | Each has at least one real call site (audited by grep) | `src/observability/metrics.py` |
 | `aegis-docprep` | Alpha. Installs from source with only `numpy`; its documented examples and outputs are executed by tests | `tests/test_docs_examples.py`, `aegis-docprep/tests/` |
 | Dependency single-source-of-truth | `pyproject.toml` generates `requirements-*.txt` | `python scripts/check_dependency_sync.py` |
@@ -57,6 +58,7 @@ _Last verified: 2026-10-10 against `master` @ `5bec766` plus the Phase 0 changes
 | Expanded PII redaction engine to emails, API tokens/keys, international E.164 phone formats, and local 7-digit numbers | Phase 5 | I-28 |
 | Real LLM provider wiring via AMDIOrchestrator and LLMInterface with native OpenAI & litellm support and mock fallback | Phase 5 | I-17 |
 | Cross-restart document re-hydration from SQLite raw_bytes store into AMDI memory state | Phase 5 | I-19 |
+| Scoped streaming query pipeline with automatic document re-hydration and cascading deletion | Phase 5 | — |
 | Fixed CLI path resolution allowing direct `python src/cli.py` execution from any directory | Phase 5 | — |
 
 ## Fixed in Phases 1–4
