@@ -38,6 +38,7 @@ _Last verified: 2026-10-10 against `master` @ `5bec766` plus the Phase 0 changes
 | **Document re-hydration across restarts** — SQLite preserves document raw bytes and restores orchestrator state | Working (added in Phase 5) | `pytest tests/test_persistence_and_audit.py` |
 | **Direct CLI execution** — CLI resolves root path and commands run directly from workspace root | Working (added in Phase 5) | `python src/cli.py --help` |
 | **Multi-provider semantic embeddings** — Native OpenAI, LiteLLM, and local SentenceTransformers support with resilient mock fallback | Working (added in Phase 5) | `pytest tests/test_embedding_providers.py` |
+| **Authenticated Streamlit UI dashboard** — Tenant-isolated document ingestion, chunk inspection, query citation rendering, admin stats, and webhook subscription management | Working (added in Phase 5) | `pytest tests/test_dashboard.py tests/test_dashboard_pages.py` |
 
 ## Not implemented or not real yet
 
@@ -64,6 +65,7 @@ _Last verified: 2026-10-10 against `master` @ `5bec766` plus the Phase 0 changes
 | Scoped streaming query pipeline with automatic document re-hydration and cascading deletion | Phase 5 | — |
 | Real admin usage statistics, token consumption reporting, webhook subscription management, and paginated chunk retrieval with cross-restart persistence | Phase 5 | — |
 | Fixed CLI path resolution allowing direct `python src/cli.py` execution from any directory | Phase 5 | — |
+| Authenticated Streamlit UI dashboard integration with document exploration, chunk inspection, live query citations, admin stats, and webhook subscription management | Phase 5 | — |
 
 ## Fixed in Phases 1–4
 

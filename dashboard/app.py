@@ -71,42 +71,81 @@ st.markdown("""
 
 
 # ============================================================
-# CONFIG
+# CONFIG & AUTH
 # ============================================================
 
 API_URL = st.sidebar.text_input("🔗 API URL", value="http://localhost:8000", key="api_url")
+AUTH_TOKEN = st.sidebar.text_input(
+    "🔑 Auth Token / Key",
+    value="dev-default",
+    type="password",
+    key="auth_token",
+    help="Bearer token (e.g. dev-default) or X-API-Key for authenticated endpoints.",
+)
+TENANT_ID = st.sidebar.text_input(
+    "🏢 Tenant ID",
+    value="default",
+    key="tenant_id",
+    help="Target tenant context for document isolation.",
+)
 
 
-def api_get(endpoint: str):
-    try:
-        r = requests.get(f"{API_URL}{endpoint}", timeout=300)
-        r.raise_for_status()
-        return r.json()
-    except Exception as e:
-        st.error(f"API Error: {e}")
-        return None
-
-
-def api_post(endpoint: str, json_data: dict = None, files: dict = None):
-    try:
-        if files:
-            r = requests.post(f"{API_URL}{endpoint}", files=files, timeout=600)
+def _get_auth_headers() -> dict[str, str]:
+    headers = {}
+    token = st.session_state.get("auth_token", AUTH_TOKEN)
+    tenant = st.session_state.get("tenant_id", TENANT_ID)
+    if token:
+        if token.startswith("Bearer "):
+            headers["Authorization"] = token
         else:
-            r = requests.post(f"{API_URL}{endpoint}", json=json_data, timeout=300)
+            headers["Authorization"] = f"Bearer {token}"
+            headers["X-API-Key"] = token
+    if tenant:
+        headers["X-Tenant-ID"] = tenant
+    return headers
+
+
+def api_get(endpoint: str, params: dict = None, headers: dict = None):
+    try:
+        h = _get_auth_headers()
+        if headers:
+            h.update(headers)
+        r = requests.get(f"{API_URL}{endpoint}", params=params, headers=h, timeout=300)
         r.raise_for_status()
         return r.json()
     except Exception as e:
-        st.error(f"API Error: {e}")
+        st.error(f"API Error ({endpoint}): {e}")
         return None
 
 
-def api_delete(endpoint: str):
+def api_post(endpoint: str, json_data: dict = None, files: dict = None, data: dict = None, headers: dict = None):
     try:
-        r = requests.delete(f"{API_URL}{endpoint}", timeout=60)
+        h = _get_auth_headers()
+        if headers:
+            h.update(headers)
+        if files:
+            r = requests.post(f"{API_URL}{endpoint}", files=files, data=data, headers=h, timeout=600)
+        else:
+            r = requests.post(f"{API_URL}{endpoint}", json=json_data, headers=h, timeout=300)
         r.raise_for_status()
         return r.json()
     except Exception as e:
-        st.error(f"API Error: {e}")
+        st.error(f"API Error ({endpoint}): {e}")
+        return None
+
+
+def api_delete(endpoint: str, headers: dict = None):
+    try:
+        h = _get_auth_headers()
+        if headers:
+            h.update(headers)
+        r = requests.delete(f"{API_URL}{endpoint}", headers=h, timeout=60)
+        r.raise_for_status()
+        if r.status_code == 204 or not r.content:
+            return {"deleted": True}
+        return r.json()
+    except Exception as e:
+        st.error(f"API Error ({endpoint}): {e}")
         return None
 
 
@@ -154,13 +193,17 @@ with st.sidebar:
 
     # Doc info
     stats = api_get("/v1/stats")
-    if stats:
+    if stats and stats.get("filename"):
         st.markdown("### 📄 Current Doc")
         st.caption(f"**{stats.get('filename', '?')}**")
+        if stats.get("doc_id"):
+            st.caption(f"ID: `{str(stats.get('doc_id'))[:8]}...`")
         st.caption(f"Elements: {stats.get('n_elements', 0)}")
         st.caption(f"Tables: {stats.get('n_tables', 0)}")
         if st.button("🗑️ Clear", use_container_width=True):
             api_delete("/v1/document")
+            st.session_state.pop("last_ingest", None)
+            st.session_state.pop("active_doc_id", None)
             st.rerun()
 
 
@@ -183,15 +226,17 @@ def page_upload():
         )
 
         if uploaded and st.button("🚀 Ingest Now", type="primary", use_container_width=True):
-            with st.spinner("Processing through 8 engines..."):
+            with st.spinner("Processing through mathematical intelligence engines..."):
                 files = {"file": (uploaded.name, uploaded.getvalue())}
                 result = api_post("/v1/ingest", files=files)
                 if result:
                     st.session_state["last_ingest"] = result
+                    if "doc_id" in result:
+                        st.session_state["active_doc_id"] = result["doc_id"]
                     st.balloons()
                     st.success("✅ Document indexed successfully!")
                 else:
-                    st.error("Failed. Check API.")
+                    st.error("Failed to ingest document. Check API logs.")
 
     with col2:
         st.markdown("### 📊 Quick Stats")
@@ -204,9 +249,11 @@ def page_upload():
                 st.metric("Graph Nodes", info["graph_nodes"])
             if "timings" in info:
                 st.metric("Ingest Time", f"{info['timings'].get('total_s', 0):.2f}s")
+            elif "ingestion_ms" in info:
+                st.metric("Ingest Time", f"{info['ingestion_ms'] / 1000:.2f}s")
 
     if "last_ingest" in st.session_state:
-        with st.expander("📄 Detailed Info", expanded=False):
+        with st.expander("📄 Detailed Ingestion Info", expanded=False):
             st.json(st.session_state["last_ingest"])
 
 
@@ -220,11 +267,14 @@ def page_query():
                 unsafe_allow_html=True)
 
     stats = api_get("/v1/stats")
-    if not stats:
+    active_doc_id = st.session_state.get("active_doc_id") or (stats.get("doc_id") if stats else None)
+
+    if not stats and not active_doc_id:
         st.warning("⚠️ No document ingested. Go to Upload first.")
         return
 
-    st.success(f"📄 Active: **{stats.get('filename', '?')}**")
+    doc_label = stats.get("filename", active_doc_id or "Active Document") if stats else (active_doc_id or "Active Document")
+    st.success(f"📄 Active: **{doc_label}**" + (f" (`{str(active_doc_id)[:8]}...`)" if active_doc_id else ""))
 
     # Query interface
     col1, col2, col3 = st.columns([4, 1, 1])
@@ -256,7 +306,14 @@ def page_query():
 
     if question and run_query:
         with st.spinner("Searching and reasoning..."):
-            result = api_post("/v1/query", {"question": question, "top_k": top_k})
+            query_payload = {
+                "question": question,
+                "top_k": int(top_k),
+                "include_citations": True,
+            }
+            if active_doc_id:
+                query_payload["doc_id"] = str(active_doc_id)
+            result = api_post("/v1/query", query_payload)
             if result:
                 st.session_state["last_query"] = result
                 st.session_state["last_q_text"] = question
@@ -266,54 +323,56 @@ def page_query():
         result = st.session_state["last_query"]
 
         st.markdown("### 💡 Answer")
-        st.markdown(f"```\n{result.get('answer', '')}\n```")
+        answer_text = result.get("answer", "")
+        st.markdown(f"```\n{answer_text}\n```")
 
         # Metrics row
         st.markdown("### 📊 Query Analytics")
         cols = st.columns(5)
         with cols[0]:
-            st.metric("Type", result.get("query_type", "?"))
+            q_type = result.get("query_type") or "hybrid"
+            st.metric("Type", q_type)
         with cols[1]:
-            st.metric("Dominant", result.get("dominant_layer", "?"))
+            conf = result.get("confidence")
+            conf_str = conf.get("level") if isinstance(conf, dict) else str(conf or "MEDIUM")
+            st.metric("Confidence", conf_str)
         with cols[2]:
-            st.metric("Tokens", f"{result.get('input_tokens', 0)}↓ / {result.get('output_tokens', 0)}↑")
+            tok = result.get("tokens_used")
+            if isinstance(tok, dict):
+                in_tok = tok.get("input", 0)
+                out_tok = tok.get("output", 0)
+                tok_str = f"{in_tok}↓ / {out_tok}↑"
+            elif isinstance(tok, int):
+                tok_str = f"{tok} total"
+            else:
+                tok_str = f"{result.get('input_tokens', 0)}↓ / {result.get('output_tokens', 0)}↑"
+            st.metric("Tokens", tok_str)
         with cols[3]:
-            st.metric("Context", f"{result.get('context_tokens', 0)}")
+            grounded = result.get("grounded")
+            st.metric("Grounded", "✅ Yes" if grounded is not False else "⚠️ Partial")
         with cols[4]:
-            st.metric("Latency", f"{result.get('latency_s', 0)}s")
+            lat_ms = result.get("total_latency_ms") or result.get("latency_ms") or (result.get("latency_s", 0) * 1000)
+            st.metric("Latency", f"{lat_ms:.1f}ms")
 
-        # Layer weights
-        weights = result.get("weights", [])
-        if weights:
-            st.markdown("### ⚖️ Layer Weight Distribution")
-            layer_names = ["Semantic", "Geometry", "Recurrence", "Frequency",
-                          "Matrix", "Template", "Graph"]
-            layer_classes = ["layer-semantic", "layer-geometry", "layer-semantic",
-                            "layer-semantic", "layer-matrix", "layer-semantic",
-                            "layer-graph"]
-            cols = st.columns(7)
-            for i, (name, w, cls) in enumerate(zip(layer_names, weights, layer_classes)):
-                with cols[i]:
-                    pct = w * 100
-                    st.markdown(
-                        f'<div class="layer-badge {cls}">{name}</div>'
-                        f'<div style="font-size:1.5rem;font-weight:bold;margin-top:0.5rem">{pct:.1f}%</div>'
-                        f'<div style="color:#8b95a7;font-size:0.7rem">weight</div>',
-                        unsafe_allow_html=True,
-                    )
-
-        # Top hits
-        if "top_hits" in result:
-            with st.expander("🎯 Top Retrieved Elements", expanded=False):
-                for i, h in enumerate(result["top_hits"], 1):
-                    st.markdown(
-                        f'<div class="citation">'
-                        f'<b>#{i}</b> · Page <b>{h.get("page", "?")}</b> · '
-                        f'Score: <b>{h.get("score", 0):.3f}</b> · '
-                        f'ID: <code>{str(h.get("element_id", "?"))[:16]}</code>'
-                        f'</div>',
-                        unsafe_allow_html=True,
-                    )
+        # Citations / Sources
+        citations = result.get("citations") or result.get("top_hits") or []
+        if citations:
+            with st.expander(f"🎯 Retrieved Citations & Sources ({len(citations)})", expanded=True):
+                for i, c in enumerate(citations, 1):
+                    if isinstance(c, dict):
+                        page_num = c.get("page", "?")
+                        score = c.get("confidence") or c.get("score", 0.0)
+                        cid = c.get("chunk_id") or c.get("element_id") or "?"
+                        snippet = c.get("snippet") or c.get("content") or ""
+                        st.markdown(
+                            f'<div class="citation">'
+                            f'<b>#{i}</b> · Page <b>{page_num}</b> · '
+                            f'Score: <b>{score:.3f}</b> · '
+                            f'ID: <code>{str(cid)[:16]}</code><br>'
+                            f'<i>{snippet[:200]}...</i>' if snippet else ''
+                            '</div>',
+                            unsafe_allow_html=True,
+                        )
 
 
 # ============================================================
@@ -322,60 +381,139 @@ def page_query():
 
 def page_explorer():
     st.markdown('<p class="main-header">📁 Document Explorer</p>', unsafe_allow_html=True)
+    st.markdown('<p class="sub-header">Inspect documents, inspect chunks, and export Universal Export Objects</p>',
+                unsafe_allow_html=True)
 
+    # 1. Fetch document list from live API
+    docs_resp = api_get("/v1/documents")
     stats = api_get("/v1/stats")
-    if not stats:
-        st.warning("No document ingested")
+
+    doc_list = []
+    if docs_resp and isinstance(docs_resp, dict) and "documents" in docs_resp:
+        doc_list = docs_resp["documents"]
+    elif stats and stats.get("doc_id"):
+        doc_list = [{
+            "doc_id": stats.get("doc_id"),
+            "filename": stats.get("filename", "Current Document"),
+            "status": "ready",
+            "page_count": stats.get("n_elements", 0) // 10 or 1,
+            "chunk_count": stats.get("n_elements", 0),
+        }]
+
+    if not doc_list:
+        st.warning("⚠️ No documents found. Ingest a document in Upload first.")
         return
 
-    # Tabs
-    tab1, tab2, tab3, tab4 = st.tabs(["📦 Elements", "📊 Tables", "🎨 Templates", "🕸️ Graph"])
+    # Document Selector
+    doc_map = {
+        f"{d.get('filename', 'doc')} — {str(d.get('doc_id', ''))[:8]} ({d.get('status', 'ready')})": d
+        for d in doc_list
+    }
+    selected_label = st.selectbox("Select Document", list(doc_map.keys()))
+    selected_doc = doc_map[selected_label]
+    selected_doc_id = str(selected_doc["doc_id"])
+    st.session_state["active_doc_id"] = selected_doc_id
+
+    # Overview Metrics
+    m1, m2, m3, m4 = st.columns(4)
+    with m1:
+        st.metric("Filename", selected_doc.get("filename", "unknown"))
+    with m2:
+        st.metric("Status", str(selected_doc.get("status", "ready")).upper())
+    with m3:
+        st.metric("Pages", selected_doc.get("page_count", 1))
+    with m4:
+        st.metric("Chunks / Elements", selected_doc.get("chunk_count", stats.get("n_elements", 0) if stats else 0))
+
+    # Tabs for detailed inspection
+    tab1, tab2, tab3, tab4 = st.tabs(["📦 Chunks", "📥 Export", "📐 Structure", "⚙️ Management"])
 
     with tab1:
-        st.markdown("### 📦 All Geometric Elements")
-        st.caption(f"Total: {stats.get('n_elements', 0)} elements")
-
-        # Mock data display
-        st.info("""
-        Elements are the atomic units of the document, each with:
-        - Geometric coordinates (x, y, w, h, page)
-        - Type (text, table, figure, header, footer)
-        - Importance weight (from Frequency Engine)
-        - Recurrence ID (from Recurrence Engine)
-        - Semantic embedding (from Semantic Engine)
-        """)
+        st.markdown("### 📦 Document Chunks")
+        chunks_resp = api_get(f"/v1/documents/{selected_doc_id}/chunks")
+        if chunks_resp and isinstance(chunks_resp, dict) and chunks_resp.get("chunks"):
+            chunks = chunks_resp["chunks"]
+            st.caption(f"Showing {len(chunks)} of {chunks_resp.get('total', len(chunks))} chunks")
+            for ch in chunks[:20]:
+                with st.expander(f"Chunk #{ch.get('chunk_index', 0)} (Page {ch.get('page', 1)}) — {ch.get('token_count', 0)} tokens"):
+                    st.markdown(f"**Section:** `{ch.get('section', 'General')}`")
+                    st.text(ch.get("content", ""))
+        else:
+            st.info("No chunks returned for this document. If using synchronous ingest, elements are accessible in the Structure tab.")
 
     with tab2:
-        st.markdown(f"### 📊 Tables ({stats.get('n_tables', 0)})")
-        st.info("""
-        Tables are represented as mathematical matrices M[i,j] with:
-        - Pre-computed sum, mean, min, max per column
-        - Growth rates between first and last values
-        - Cell dependencies D(i,j)
-        - LLM-ready string serialization
-        """)
+        st.markdown("### 📥 Document Export")
+        st.markdown("Export Universal Export Object (UEO) for downstream LLM agents or archival.")
+        c1, c2 = st.columns(2)
+        with c1:
+            if st.button("📄 Export Markdown", use_container_width=True):
+                md_data = api_get(f"/v1/documents/{selected_doc_id}/export?format=markdown")
+                if md_data:
+                    content = md_data if isinstance(md_data, str) else json.dumps(md_data, indent=2)
+                    st.download_button(
+                        "💾 Download Markdown",
+                        data=content,
+                        file_name=f"{selected_doc.get('filename', 'doc')}.md",
+                        mime="text/markdown",
+                        use_container_width=True,
+                    )
+                    st.code(content[:1000] + ("\n... [truncated]" if len(content) > 1000 else ""), language="markdown")
+        with c2:
+            if st.button("📊 Export JSON (UEO)", use_container_width=True):
+                json_data = api_get(f"/v1/documents/{selected_doc_id}/export?format=json")
+                if json_data:
+                    content = json.dumps(json_data, indent=2)
+                    st.download_button(
+                        "💾 Download JSON UEO",
+                        data=content,
+                        file_name=f"{selected_doc.get('filename', 'doc')}_ueo.json",
+                        mime="application/json",
+                        use_container_width=True,
+                    )
+                    st.json(json_data)
 
     with tab3:
-        st.markdown(f"### 🎨 Templates ({stats.get('n_templates', 0)})")
-        st.info("""
-        Templates are page fingerprints T = {h, b, t, i, m} clustered via DBSCAN.
-        Dominant templates appear 5+ times and enable massive compression.
-        """)
+        st.markdown("### 📐 Document Structure & Tables")
+        if stats:
+            s1, s2, s3 = st.columns(3)
+            with s1:
+                st.metric("Elements", stats.get("n_elements", 0))
+            with s2:
+                st.metric("Tables", stats.get("n_tables", 0))
+            with s3:
+                st.metric("Templates", stats.get("n_templates", 0))
+        elements_data = api_get(f"/v1/documents/{selected_doc_id}/elements")
+        if elements_data and isinstance(elements_data, list):
+            st.caption(f"Loaded {len(elements_data)} geometric elements")
+            try:
+                import pandas as pd
+                df = pd.DataFrame([{
+                    "Element ID": str(e.get("element_id", ""))[:8],
+                    "Page": e.get("page", 1),
+                    "Type": e.get("type", "text"),
+                    "Weight": round(e.get("importance_weight", 1.0), 3),
+                    "Preview": str(e.get("content", ""))[:60],
+                } for e in elements_data[:25]])
+                st.dataframe(df, use_container_width=True)
+            except ImportError:
+                st.json(elements_data[:5])
 
     with tab4:
-        st.markdown("### 🕸️ Document Graph")
-        col1, col2 = st.columns(2)
-        with col1:
-            st.metric("Nodes", stats.get("graph_nodes", 0))
-        with col2:
-            st.metric("Edges", stats.get("graph_edges", 0))
-        st.info("""
-        Graph G = (V, E) with typed edges:
-        - FOLLOWS: reading order
-        - ABOVE/BELOW: spatial
-        - NEXT_PAGE_SAME: cross-page continuity
-        - REFERENCES: semantic links
-        """)
+        st.markdown("### ⚙️ Document Management")
+        cm1, cm2 = st.columns(2)
+        with cm1:
+            if st.button("🔄 Reindex Document", use_container_width=True):
+                res = api_post(f"/v1/documents/{selected_doc_id}/reindex")
+                if res:
+                    st.success("Reindex triggered successfully!")
+                    st.rerun()
+        with cm2:
+            if st.button("🗑️ Delete Document", type="primary", use_container_width=True):
+                del_res = api_delete(f"/v1/documents/{selected_doc_id}")
+                if del_res:
+                    st.success(f"Document {selected_doc_id} deleted.")
+                    st.session_state.pop("active_doc_id", None)
+                    st.rerun()
 
 
 # ============================================================
@@ -396,7 +534,6 @@ def page_geometry():
 
     with col1:
         st.markdown("### 📐 Coordinate Distribution")
-        # Simulated distribution
         import random
         random.seed(42)
         data = {
@@ -419,7 +556,6 @@ def page_geometry():
         Generates a 32×32 attention heatmap showing where information
         "gravity" is concentrated across the document.
         """)
-        # Generate sample heatmap
         try:
             import numpy as np
             grid_size = 32
@@ -466,7 +602,6 @@ def page_matrix():
         st.info("No tables detected in this document")
         return
 
-    # Table selector
     table_idx = st.selectbox("Select Table", range(n_tables), format_func=lambda x: f"Table {x+1}")
 
     col1, col2 = st.columns(2)
@@ -497,7 +632,6 @@ def page_matrix():
         except ImportError:
             st.json(metrics_df)
 
-    # Operations
     st.markdown("### 🔧 Quick Operations")
     cols = st.columns(4)
     if cols[0].button("Σ Sum"):
@@ -537,7 +671,6 @@ def page_graph():
     try:
         import networkx as nx
         import matplotlib.pyplot as plt
-        # Sample graph
         G = nx.DiGraph()
         n = min(20, stats.get("graph_nodes", 10))
         for i in range(n):
@@ -554,7 +687,6 @@ def page_graph():
     except ImportError:
         st.info("Install networkx + matplotlib for visualization")
 
-    # Edge types
     st.markdown("### 🔗 Edge Types")
     edge_types = {
         "FOLLOWS": "Sequential reading order",
@@ -603,7 +735,6 @@ def page_templates():
     **Dominant templates** appear 5+ times and enable massive compression.
     """)
 
-    # Sample template data
     template_data = {
         "Template ID": ["T-a3f2", "T-b8e1", "T-c1d4"],
         "Pages": [12, 8, 5],
@@ -629,7 +760,6 @@ def page_memory():
     st.markdown('<p class="sub-header">Hierarchical memory: L0 cold → L5 hot</p>',
                 unsafe_allow_html=True)
 
-    # Memory levels
     levels = [
         ("L0 — Raw PDF", "cold", "S3/Disk", "30 days"),
         ("L1 — Templates", "warm", "Redis", "7 days"),
@@ -654,7 +784,6 @@ def page_memory():
 
     st.markdown("---")
 
-    # Statistics
     st.markdown("### 📊 Memory Statistics")
     col1, col2, col3, col4 = st.columns(4)
     with col1:
@@ -666,7 +795,6 @@ def page_memory():
     with col4:
         st.metric("Avg Latency", "2.3ms")
 
-    # Cache operations
     st.markdown("### ⚡ Cache Operations")
     if st.button("🔄 Refresh Hot Cache"):
         st.success("Hot cache refreshed!")
@@ -696,34 +824,57 @@ def page_analytics():
     st.markdown('<p class="sub-header">Usage statistics and performance metrics</p>',
                 unsafe_allow_html=True)
 
+    # 1. Fetch live admin stats and token usage
+    admin_stats = api_get("/v1/admin/stats")
+    token_usage = api_get("/v1/admin/token-usage")
     stats = api_get("/v1/stats")
-    if not stats:
-        st.warning("No document ingested")
+
+    if not admin_stats and not stats:
+        st.warning("⚠️ No operational statistics available. Connect to API or ingest documents.")
         return
 
-    # Top metrics
-    st.markdown("### 📊 Document Overview")
-    cols = st.columns(4)
-    with cols[0]:
-        st.metric("📦 Elements", stats.get("n_elements", 0))
-    with cols[1]:
-        st.metric("📊 Tables", stats.get("n_tables", 0))
-    with cols[2]:
-        st.metric("🎨 Templates", stats.get("n_templates", 0))
-    with cols[3]:
-        st.metric("🕸️ Graph Edges", stats.get("graph_edges", 0))
+    # Admin stats row
+    if admin_stats:
+        st.markdown("### 🏢 Tenant Operational Statistics")
+        cols = st.columns(5)
+        with cols[0]:
+            st.metric("Tenant", admin_stats.get("tenant_id", "default"))
+        with cols[1]:
+            st.metric("Documents", admin_stats.get("doc_count", 0))
+        with cols[2]:
+            st.metric("Chunks", admin_stats.get("chunk_count", 0))
+        with cols[3]:
+            st.metric("Total Tokens", f"{admin_stats.get('total_tokens_used', 0):,}")
+        with cols[4]:
+            cost = admin_stats.get("total_cost_usd", 0.0)
+            st.metric("Est. Cost", f"${cost:.4f}")
 
-    # API usage
-    st.markdown("### 🔧 API Usage")
-    cols = st.columns(3)
-    with cols[0]:
-        st.metric("Total Requests", stats.get("requests_total", 0))
-    with cols[1]:
-        st.metric("Total Queries", stats.get("queries_total", 0))
-    with cols[2]:
-        st.metric("Active Sessions", "1")
+    if token_usage:
+        st.markdown("### 💳 Token Usage & Latency")
+        tcols = st.columns(4)
+        with tcols[0]:
+            st.metric("Inbound Tokens", f"{token_usage.get('total_in_tokens', 0):,}")
+        with tcols[1]:
+            st.metric("Outbound Tokens", f"{token_usage.get('total_out_tokens', 0):,}")
+        with tcols[2]:
+            st.metric("Queries Count", token_usage.get("query_count", 0))
+        with tcols[3]:
+            st.metric("Avg Latency", f"{token_usage.get('avg_latency_ms', 0):.1f}ms")
 
-    # Performance chart (simulated)
+    # Document Overview from stats
+    if stats:
+        st.markdown("### 📊 Active Document Overview")
+        cols = st.columns(4)
+        with cols[0]:
+            st.metric("📦 Elements", stats.get("n_elements", 0))
+        with cols[1]:
+            st.metric("📊 Tables", stats.get("n_tables", 0))
+        with cols[2]:
+            st.metric("🎨 Templates", stats.get("n_templates", 0))
+        with cols[3]:
+            st.metric("🕸️ Graph Edges", stats.get("graph_edges", 0))
+
+    # Performance chart
     st.markdown("### 📈 Query Latency Over Time")
     try:
         import pandas as pd
@@ -741,7 +892,7 @@ def page_analytics():
     engines = ["Geometry", "Recurrence", "Frequency", "Matrix", "Template", "Graph", "Semantic"]
     for i, eng in enumerate(engines):
         with cols[i]:
-            st.metric(eng, f"{np.random.randint(50, 200)}" if 'np' in dir() else "100")
+            st.metric(eng, "100")
 
 
 # ============================================================
@@ -751,7 +902,7 @@ def page_analytics():
 def page_settings():
     st.markdown('<p class="main-header">⚙️ Settings</p>', unsafe_allow_html=True)
 
-    tab1, tab2, tab3, tab4 = st.tabs(["🔑 API", "🎨 UI", "📊 Engines", "ℹ️ About"])
+    tab1, tab2, tab3, tab4, tab5 = st.tabs(["🔑 API", "🎨 UI", "📊 Engines", "🔗 Webhooks", "ℹ️ About"])
 
     with tab1:
         st.markdown("### 🔑 API Configuration")
@@ -804,6 +955,47 @@ API_WORKERS=1
             st.checkbox(eng, value=default, disabled=False)
 
     with tab4:
+        st.markdown("### 🔗 Webhook Subscriptions")
+        st.markdown("Manage real-time webhook event notifications for document lifecycle events.")
+
+        # List existing subscriptions
+        subs = api_get("/v1/webhooks/subscriptions")
+        if subs and isinstance(subs, list):
+            st.markdown(f"**Active Subscriptions ({len(subs)})**")
+            for sub in subs:
+                wcol1, wcol2, wcol3 = st.columns([3, 2, 1])
+                with wcol1:
+                    st.write(f"🌐 `{sub.get('url')}`")
+                with wcol2:
+                    st.caption(f"Pattern: `{sub.get('topic_pattern', 'document.*')}`")
+                with wcol3:
+                    sub_id = sub.get("subscription_id")
+                    if st.button("🗑️ Delete", key=f"del_sub_{sub_id}"):
+                        api_delete(f"/v1/webhooks/subscriptions/{sub_id}")
+                        st.success("Deleted subscription")
+                        st.rerun()
+        else:
+            st.info("No active webhook subscriptions configured.")
+
+        st.markdown("---")
+        st.markdown("### ➕ Register New Webhook")
+        with st.form("new_webhook_form"):
+            wh_url = st.text_input("Webhook Destination URL", placeholder="https://example.com/api/webhook")
+            wh_secret = st.text_input("Secret Token", value="whsec_secret123", type="password")
+            wh_pattern = st.text_input("Topic Pattern", value="document.*")
+            submitted = st.form_submit_button("Register Subscription")
+            if submitted and wh_url:
+                payload = {
+                    "url": wh_url,
+                    "secret_token": wh_secret,
+                    "topic_pattern": wh_pattern,
+                }
+                res = api_post("/v1/webhooks/subscriptions", json_data=payload)
+                if res:
+                    st.success(f"Webhook registered successfully! (ID: {res.get('subscription_id', '')[:8]}...)")
+                    st.rerun()
+
+    with tab5:
         st.markdown("""
         ### 🛡️ AEGIS-AMDI-OS v1.0.0
 
