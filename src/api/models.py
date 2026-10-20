@@ -190,7 +190,7 @@ class ChunkListResponse(BaseModel):
 # ─────────────────────────────────────────────────────────────────
 
 class TenantStats(BaseModel):
-    tenant_id: UUID
+    tenant_id: Union[UUID, str]
     doc_count: int
     chunk_count: int
     total_tokens_used: int

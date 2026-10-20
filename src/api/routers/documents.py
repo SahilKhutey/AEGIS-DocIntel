@@ -208,6 +208,9 @@ async def list_chunks(
 ):
     """List all chunks for a document (for debugging and inspection)."""
     container = request.app.state.container
+    doc = await container.document_service.get(doc_id=str(doc_id), tenant_id=tenant.tenant_id)
+    if not doc:
+        raise HTTPException(status_code=404, detail=f"Document {doc_id} not found")
     result = await container.document_service.list_chunks(
         doc_id=str(doc_id), tenant_id=tenant.tenant_id, page=page, page_size=page_size
     )

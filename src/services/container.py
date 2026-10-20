@@ -329,10 +329,27 @@ class RealDocumentService:
         # never passes the parameter needed to trigger it bypasses that
         # protection entirely rather than merely leaving it unenforced by
         # this method's own logic.
+        class _ChunkList:
+            def __init__(self, items, total):
+                self.items = items
+                self.total = total
+
+        doc = self._docs.get(str(doc_id))
+        if not doc or str(doc.get("tenant_id", "")) != str(tenant_id):
+            return _ChunkList([], 0)
+
+        await self.hydrate_document(str(doc_id), str(tenant_id))
+
         try:
             elements = self.orchestrator.get_document_elements(str(doc_id), tenant_id=str(tenant_id))
         except PermissionError:
             elements = []
+
+        total = len(elements)
+        start = (page - 1) * page_size
+        end = start + page_size
+        paged_elements = elements[start:end]
+
         class _Chunk:
             def __init__(self, e):
                 self.chunk_id = e.element_id
@@ -343,10 +360,8 @@ class RealDocumentService:
                 self.block_type = e.type.value if hasattr(e.type, "value") else str(e.type)
                 self.text = e.content
                 self.token_count = e.token_count if hasattr(e, "token_count") else max(1, len(e.content.split()))
-        class _ChunkList:
-            items = [_Chunk(e) for e in elements]
-            total = len(elements)
-        return _ChunkList()
+
+        return _ChunkList([_Chunk(e) for e in paged_elements], total)
 
     async def batch_ingest(self, documents: list, tenant_id: str):
         class _Job:

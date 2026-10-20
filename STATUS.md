@@ -27,6 +27,8 @@ _Last verified: 2026-10-10 against `master` @ `5bec766` plus the Phase 0 changes
 | Dev-token bypass rejected outside `AEGIS_ENVIRONMENT=development` | Working | `tests/test_auth_guard.py` |
 | **Cascading document deletion** — cleans up document, state, elements, tables, vector store and semantic cache | Working | `pytest tests/test_document_deletion.py` |
 | **Streaming query with tenant scoping & auto-hydration** — real token streaming, cross-tenant isolation, post-restart re-hydration | Working (added in Phase 5) | `pytest tests/test_query_streaming_integration.py` |
+| **Admin statistics & token usage** — RBAC-enforced tenant-scoped stats and token consumption breakdown | Working (added in Phase 5) | `pytest tests/test_admin_and_webhooks.py` |
+| **Webhook subscriptions & chunk inspection** — full subscription CRUD with tenant scoping and paginated chunk retrieval with post-restart hydration | Working (added in Phase 5) | `pytest tests/test_admin_and_webhooks.py` |
 | 9 Prometheus metrics | Each has at least one real call site (audited by grep) | `src/observability/metrics.py` |
 | `aegis-docprep` | Alpha. Installs from source with only `numpy`; its documented examples and outputs are executed by tests | `tests/test_docs_examples.py`, `aegis-docprep/tests/` |
 | Dependency single-source-of-truth | `pyproject.toml` generates `requirements-*.txt` | `python scripts/check_dependency_sync.py` |
@@ -59,6 +61,7 @@ _Last verified: 2026-10-10 against `master` @ `5bec766` plus the Phase 0 changes
 | Real LLM provider wiring via AMDIOrchestrator and LLMInterface with native OpenAI & litellm support and mock fallback | Phase 5 | I-17 |
 | Cross-restart document re-hydration from SQLite raw_bytes store into AMDI memory state | Phase 5 | I-19 |
 | Scoped streaming query pipeline with automatic document re-hydration and cascading deletion | Phase 5 | — |
+| Real admin usage statistics, token consumption reporting, webhook subscription management, and paginated chunk retrieval with cross-restart persistence | Phase 5 | — |
 | Fixed CLI path resolution allowing direct `python src/cli.py` execution from any directory | Phase 5 | — |
 
 ## Fixed in Phases 1–4
