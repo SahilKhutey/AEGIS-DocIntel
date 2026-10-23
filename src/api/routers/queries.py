@@ -123,6 +123,7 @@ async def query_documents(
             tokens_used=result.tokens_used,
             retrieval_latency_ms=result.retrieval_latency_ms,
             total_latency_ms=total_ms,
+            latency_ms=total_ms,
             cached=result.cached,
             model=result.model,
         )

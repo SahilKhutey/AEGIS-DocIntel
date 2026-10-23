@@ -47,8 +47,18 @@ def test_root_directory_clean_structure():
     tracked_scratch = [f for f in _git("ls-files", "scratch").stdout.splitlines()]
     assert not tracked_scratch, f"Scratch directory should not be tracked in git: {tracked_scratch}"
     
-    # Assert specifications and reports directories exist and contain files
+    # Assert specifications, reports, and papers directories exist and contain files
     specs_dir = ROOT / "docs" / "specifications"
     reports_dir = ROOT / "docs" / "reports"
+    papers_dir = ROOT / "docs" / "papers"
     assert specs_dir.is_dir() and any(specs_dir.glob("*.md")), "docs/specifications should exist and contain markdown files"
     assert reports_dir.is_dir() and any(reports_dir.glob("*.md")), "docs/reports should exist and contain markdown files"
+    assert papers_dir.is_dir() and any(papers_dir.glob("*.pdf")), "docs/papers should exist and contain research papers"
+
+    # Assert deployment and API contract files exist
+    assert (ROOT / "deploy" / "docker-compose.yml").exists(), "deploy/docker-compose.yml must exist"
+    assert (ROOT / "Dockerfile").exists(), "Dockerfile must exist"
+    assert (ROOT / "openapi.json").exists() and (ROOT / "openapi.json").stat().st_size > 1000, "openapi.json must exist and be valid"
+
+    # Assert no obsolete Retrack directory exists
+    assert not (ROOT / "Retrack").exists(), "Obsolete Retrack directory must not exist"

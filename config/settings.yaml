@@ -82,8 +82,8 @@ retrieval:
   mmr_lambda: 0.7
 
 llm:
-  provider: "openai"
-  model: "gpt-4o-mini"
+  provider: "${LLM_PROVIDER:openai}"
+  model: "${LLM_MODEL:gpt-4o-mini}"
   endpoint: "${VLLM_ENDPOINT:}"
   api_key: "${OPENAI_API_KEY:}"
   max_input_tokens: 128000

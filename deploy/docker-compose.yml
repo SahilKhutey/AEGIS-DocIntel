@@ -10,7 +10,7 @@ services:
       - "8000:8000"
       - "9090:9090"
     environment:
-      - APP_ENV=production
+      - AEGIS_ENVIRONMENT=${AEGIS_ENVIRONMENT:-production}
       - LOG_LEVEL=INFO
       - METRICS_ENABLED=true
       - METRICS_PORT=9090

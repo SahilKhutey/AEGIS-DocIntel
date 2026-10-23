@@ -130,7 +130,7 @@ class RetrievalConfig(BaseModel):
 
 
 class LLMConfig(BaseModel):
-    provider: Literal["vllm", "openai", "anthropic", "google"] = "openai"
+    provider: Literal["vllm", "openai", "anthropic", "google", "mock"] = "openai"
     model: str = "gpt-4o-mini"
     endpoint: str | None = None
     api_key: str | None = None

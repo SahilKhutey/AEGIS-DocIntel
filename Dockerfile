@@ -26,6 +26,7 @@ RUN pip install --no-cache-dir -r requirements-core.txt
 
 # Copy source code and config
 COPY --chown=aegis:aegis src/ ./src/
+COPY --chown=aegis:aegis backend/ ./backend/
 COPY --chown=aegis:aegis config/ ./config/
 COPY --chown=aegis:aegis openapi.json ./
 

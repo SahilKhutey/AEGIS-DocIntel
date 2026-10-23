@@ -41,6 +41,8 @@ _Last verified: 2026-10-10 against `master` @ `5bec766` plus the Phase 0 changes
 | **Authenticated Streamlit UI dashboard** — Tenant-isolated document ingestion, chunk inspection, query citation rendering, admin stats, and webhook subscription management | Working (added in Phase 5) | `pytest tests/test_dashboard.py tests/test_dashboard_pages.py` |
 | **End-to-end API document lifecycle** — Full authenticated upload, metadata polling, chunk retrieval, tenant-isolated RAG query, and cascading deletion | Working (added in Phase 5) | `pytest tests/test_e2e_api_workflow.py` |
 | **Repository structure & hygiene guards** — Root folder organized into canonical docs trees (`specifications/`, `reports/`, `assets/`, `papers/`) with zero untracked scratch/database artifacts | Working (added in Phase 5) | `pytest tests/test_repo_hygiene.py` |
+| **Mathematical invariant property verification** — Hypothesis-driven validation of graph Laplacian positive semi-definiteness, Dirichlet energy, Vietoris-Rips filtration monotonicity, and information theory bounds | Working (added in Phase 6) | `pytest tests/test_math_properties.py tests/test_theorem_properties.py` |
+| **Containerization & deployability hardening** — Multi-stage Dockerfile bundling src and backend with production healthcheck and unified orchestration | Working (added in Phase 6) | `deploy/docker-compose.yml`, `Dockerfile` |
 
 ## Not implemented or not real yet
 
@@ -55,6 +57,16 @@ _Last verified: 2026-10-10 against `master` @ `5bec766` plus the Phase 0 changes
 |---|---|---|
 | `/metrics` is public and its series are labelled with `tenant_id` | — | `src/api/auth_guard.py` (documented exposure) |
 | Not on PyPI — install from source | I-08 | `pypi.org` returns 404 |
+
+## Fixed in Phase 6 (Test Hardening & Math Property Verification)
+
+| Fix | Phase | ID |
+|---|---|---|
+| Property-based testing for math engines: spectral graph Laplacian positive semi-definiteness, Dirichlet energy conservation, Vietoris-Rips filtration monotonicity, and information theory bounds | Phase 6 | — |
+| Python SDK model resilience against null latency_ms and total_candidates deserialization | Phase 6 | — |
+| Dockerfile copy instructions updated to bundle backend/ alongside src/ and config/ | Phase 6 | I-09 |
+| Aligned deploy/docker-compose.yml environment variables to AEGIS_ENVIRONMENT | Phase 6 | — |
+| Removed obsolete Retrack bundle directory and added permanent repository hygiene guards | Phase 6 | — |
 
 ## Fixed in Phase 5 (MVP Progression)
 
