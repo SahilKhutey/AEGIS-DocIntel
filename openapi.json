@@ -566,8 +566,68 @@
         "tags": [
           "Admin"
         ],
-        "summary": "Get Stats",
+        "summary": "Get tenant operational statistics",
+        "description": "Retrieve usage and aggregate index statistics for the calling tenant.",
         "operationId": "get_stats_v1_admin_stats_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TenantStats"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          },
+          {
+            "APIKeyHeader": []
+          }
+        ]
+      }
+    },
+    "/v1/admin/token-usage": {
+      "get": {
+        "tags": [
+          "Admin"
+        ],
+        "summary": "Get token usage breakdown",
+        "description": "Retrieve token consumption breakdown across model calls.",
+        "operationId": "get_token_usage_v1_admin_token_usage_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TokenUsageResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          },
+          {
+            "APIKeyHeader": []
+          }
+        ]
+      }
+    },
+    "/v1/webhooks/subscriptions": {
+      "get": {
+        "tags": [
+          "Webhooks"
+        ],
+        "summary": "List Subscriptions",
+        "operationId": "list_subscriptions_v1_webhooks_subscriptions_get",
         "responses": {
           "200": {
             "description": "Successful Response",
@@ -577,22 +637,104 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          },
+          {
+            "APIKeyHeader": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "Webhooks"
+        ],
+        "summary": "Create Subscription",
+        "operationId": "create_subscription_v1_webhooks_subscriptions_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WebhookCreate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          },
+          {
+            "APIKeyHeader": []
+          }
+        ]
       }
     },
-    "/v1/admin/token-usage": {
-      "get": {
+    "/v1/webhooks/subscriptions/{subscription_id}": {
+      "delete": {
         "tags": [
-          "Admin"
+          "Webhooks"
         ],
-        "summary": "Get Token Usage",
-        "operationId": "get_token_usage_v1_admin_token_usage_get",
+        "summary": "Delete Subscription",
+        "operationId": "delete_subscription_v1_webhooks_subscriptions__subscription_id__delete",
+        "security": [
+          {
+            "HTTPBearer": []
+          },
+          {
+            "APIKeyHeader": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "subscription_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Subscription Id"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "Successful Response",
             "content": {
               "application/json": {
                 "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
               }
             }
           }
@@ -3674,6 +3816,100 @@
         "type": "object",
         "title": "SpeechParseRequest"
       },
+      "TenantStats": {
+        "properties": {
+          "tenant_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Tenant Id"
+          },
+          "doc_count": {
+            "type": "integer",
+            "title": "Doc Count"
+          },
+          "chunk_count": {
+            "type": "integer",
+            "title": "Chunk Count"
+          },
+          "total_tokens_used": {
+            "type": "integer",
+            "title": "Total Tokens Used"
+          },
+          "total_cost_usd": {
+            "type": "number",
+            "title": "Total Cost Usd"
+          },
+          "cache_hit_rate": {
+            "type": "number",
+            "title": "Cache Hit Rate"
+          },
+          "avg_query_latency_ms": {
+            "type": "number",
+            "title": "Avg Query Latency Ms"
+          }
+        },
+        "type": "object",
+        "required": [
+          "tenant_id",
+          "doc_count",
+          "chunk_count",
+          "total_tokens_used",
+          "total_cost_usd",
+          "cache_hit_rate",
+          "avg_query_latency_ms"
+        ],
+        "title": "TenantStats"
+      },
+      "TokenUsageResponse": {
+        "properties": {
+          "period": {
+            "type": "string",
+            "title": "Period"
+          },
+          "total_in_tokens": {
+            "type": "integer",
+            "title": "Total In Tokens"
+          },
+          "total_out_tokens": {
+            "type": "integer",
+            "title": "Total Out Tokens"
+          },
+          "total_cost_usd": {
+            "type": "number",
+            "title": "Total Cost Usd"
+          },
+          "query_count": {
+            "type": "integer",
+            "title": "Query Count"
+          },
+          "cache_hits": {
+            "type": "integer",
+            "title": "Cache Hits"
+          },
+          "avg_latency_ms": {
+            "type": "number",
+            "title": "Avg Latency Ms"
+          }
+        },
+        "type": "object",
+        "required": [
+          "period",
+          "total_in_tokens",
+          "total_out_tokens",
+          "total_cost_usd",
+          "query_count",
+          "cache_hits",
+          "avg_latency_ms"
+        ],
+        "title": "TokenUsageResponse"
+      },
       "UnifiedMathRequest": {
         "properties": {
           "document": {
@@ -3771,6 +4007,29 @@
           "is_correct"
         ],
         "title": "VerificationCreate"
+      },
+      "WebhookCreate": {
+        "properties": {
+          "url": {
+            "type": "string",
+            "title": "Url"
+          },
+          "secret_token": {
+            "type": "string",
+            "title": "Secret Token"
+          },
+          "topic_pattern": {
+            "type": "string",
+            "title": "Topic Pattern",
+            "default": "document.*"
+          }
+        },
+        "type": "object",
+        "required": [
+          "url",
+          "secret_token"
+        ],
+        "title": "WebhookCreate"
       }
     },
     "securitySchemes": {
