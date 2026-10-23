@@ -45,6 +45,8 @@ _Last verified: 2026-10-10 against `master` @ `5bec766` plus the Phase 0 changes
 | **Containerization & deployability hardening** — Multi-stage Dockerfile bundling src and backend with production healthcheck and unified orchestration | Working (added in Phase 6) | `deploy/docker-compose.yml`, `Dockerfile` |
 | **Empirical benchmark proof & data integrity** — Automated verification of 62-doc PDF ingestion, 220 tables, timing CSV schema, IR accuracy metrics, and submodular approximation | Working (verified for MVP) | `pytest tests/test_benchmark_proof.py`, `python scripts/run_benchmark.py` |
 | **Security hardening & penetration resistance** — Automated verification of SQL injection resistance, path traversal sanitization, cross-tenant IDOR defense, deny-by-default auth, and webhook scoping | Working (added in Phase 10) | `pytest tests/test_security_pentest_proof.py` |
+| **Compliance controls & gap analysis** — Machine-verified right-to-erasure cascading deletion, PII redaction, tamper-evident audit logging, and logical access controls | Working (verified in Phase 11) | `pytest tests/test_document_deletion.py tests/test_compliance_redaction.py` |
+| **9 Prometheus metrics & Grafana telemetry** — Ingestion throughput, chunk indexing, active documents, cache hits/misses, retrieval latency, and token consumption | Working (activated in Phase 12) | `pytest tests/test_observability_metrics.py`, `deploy/docker-compose.yml` |
 
 ## Not implemented or not real yet
 
@@ -59,6 +61,23 @@ _Last verified: 2026-10-10 against `master` @ `5bec766` plus the Phase 0 changes
 |---|---|---|
 | `/metrics` is public and its series are labelled with `tenant_id` | — | `src/api/auth_guard.py` (documented exposure) |
 | Not on PyPI — install from source | I-08 | `pypi.org` returns 404 |
+
+## Fixed in Phase 12 (Observability Activation & Distributed Tracing)
+
+| Fix | Phase | ID |
+|---|---|---|
+| Active Prometheus metric instrumentation across ingestion, chunking, caching, retrieval latency, and token accounting | Phase 12 | — |
+| Context-aware asynchronous request correlation ID propagation via structlog | Phase 12 | — |
+| Automated Grafana dashboard and datasource provisioning with Docker Compose orchestration | Phase 12 | — |
+
+## Fixed in Phase 11 (Compliance Documentation Rebuild & Verifiable Controls)
+
+| Fix | Phase | ID |
+|---|---|---|
+| Cascading document erasure across SQLite metadata, orchestrator memory, FAISS index, and query caches | Phase 11 | — |
+| Replaced self-graded compliance scorecard with verified gap analysis in `production/security-audit/compliance_gap_analysis.json` | Phase 11 | — |
+| Verified PII redaction engine across SSN, credit cards, phones, emails, and API keys with non-truncating surname preservation | Phase 11 | I-28 |
+| Cryptographically chained SHA-256 tamper-evident structured audit logging | Phase 11 | I-21 |
 
 ## Fixed in Phase 10 (Security Penetration Hardening & Multi-Tenant Defense)
 
