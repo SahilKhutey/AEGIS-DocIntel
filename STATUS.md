@@ -43,6 +43,7 @@ _Last verified: 2026-10-10 against `master` @ `5bec766` plus the Phase 0 changes
 | **Repository structure & hygiene guards** — Root folder organized into canonical docs trees (`specifications/`, `reports/`, `assets/`, `papers/`) with zero untracked scratch/database artifacts | Working (added in Phase 5) | `pytest tests/test_repo_hygiene.py` |
 | **Mathematical invariant property verification** — Hypothesis-driven validation of graph Laplacian positive semi-definiteness, Dirichlet energy, Vietoris-Rips filtration monotonicity, and information theory bounds | Working (added in Phase 6) | `pytest tests/test_math_properties.py tests/test_theorem_properties.py` |
 | **Containerization & deployability hardening** — Multi-stage Dockerfile bundling src and backend with production healthcheck and unified orchestration | Working (added in Phase 6) | `deploy/docker-compose.yml`, `Dockerfile` |
+| **Empirical benchmark proof & data integrity** — Automated verification of 62-doc PDF ingestion, 220 tables, timing CSV schema, IR accuracy metrics, and submodular approximation | Working (verified for MVP) | `pytest tests/test_benchmark_proof.py`, `python scripts/run_benchmark.py` |
 
 ## Not implemented or not real yet
 
@@ -67,6 +68,7 @@ _Last verified: 2026-10-10 against `master` @ `5bec766` plus the Phase 0 changes
 | Dockerfile copy instructions updated to bundle backend/ alongside src/ and config/ | Phase 6 | I-09 |
 | Aligned deploy/docker-compose.yml environment variables to AEGIS_ENVIRONMENT | Phase 6 | — |
 | Removed obsolete Retrack bundle directory and added permanent repository hygiene guards | Phase 6 | — |
+| Automated benchmark proof suite validating real PDF ingestion dataset, timing CSV schema, and IR evaluation metrics | Phase 6 | — |
 
 ## Fixed in Phase 5 (MVP Progression)
 
