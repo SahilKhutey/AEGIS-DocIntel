@@ -1,5 +1,5 @@
 {
-  "run_date": "2026-10-23 04:08:36 UTC",
+  "run_date": "2026-10-23 04:42:06 UTC",
   "corpus": "production/benchmark-dataset-real/pdf-corpus",
   "documents_tested": 62,
   "documents_excluded": [
@@ -8,16 +8,16 @@
   "pipeline_success_rate": "61/62 (98.4%)",
   "known_failure": "password-example.pdf \u2014 encrypted PDF, handled via typed EncryptedPDFError",
   "latency_seconds": {
-    "mean": 0.581,
-    "median": 0.171,
-    "p95": 2.451,
-    "max": 6.451
+    "mean": 0.6,
+    "median": 0.164,
+    "p95": 2.493,
+    "max": 6.983
   },
   "naive_baseline_latency_seconds": {
-    "mean": 0.015,
+    "mean": 0.013,
     "median": 0.005
   },
-  "pipeline_slowdown_vs_naive": "38.7x",
+  "pipeline_slowdown_vs_naive": "46.2x",
   "table_extraction": {
     "status_before_fix": "0/61 documents \u2014 silent 100% failure due to PyMuPDF to_bytes() and pdfplumber open(stream=...) swallowed by bare except",
     "status_after_fix": "220 total tables detected across 29 documents (spot-checked: table-curves-example.pdf=1, federal-register-2020-17221.pdf=1, issue-982-example.pdf=0)",

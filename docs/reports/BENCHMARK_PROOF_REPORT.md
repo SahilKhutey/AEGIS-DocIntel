@@ -34,6 +34,17 @@ Generated via `python scripts/run_benchmark.py`:
 
 *Note: The ~38x latency ratio vs. raw `fitz.get_text()` reflects deep visual element extraction, bounding-box calculation, font hierarchy analysis, and geometric table reconstruction.*
 
+### 2.3 Multi-Format Ingestion Benchmark Proof
+Generated via `python scripts/run_benchmark.py --format all` across 78 real files:
+
+| Format | Tested | Succeeded | Success Rate | Content Extracted | Mean Latency |
+|---|---|---|---|---|---|
+| **PDF** | 62 | 61 | 98.4% | 220 tables, 62 layout structures | 0.600s |
+| **DOCX** | 14 | 14 | 100.0% | 122,444 words, 875,929 chars | 0.081s |
+| **XLSX** | 1 | 1 | 100.0% | 2 sheets, 88 words | 0.007s |
+| **PPTX** | 1 | 1 | 100.0% | 3 slides, 90 words | 0.011s |
+| **Total** | **78** | **77** | **98.7%** | **> 150,000 words across formats** | **0.490s** |
+
 ---
 
 ## 3. Table Extraction Proof

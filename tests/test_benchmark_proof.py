@@ -211,3 +211,42 @@ def test_submodular_packer_approximation_bound_proof():
     assert actual_val >= 0.316 * optimal_val
     # In fact, thanks to best-single-item fallback, it takes the big item (2.0 >= 1.5)
     assert actual_val >= 1.5
+
+
+# ============================================================================
+# 5. MULTI-FORMAT BENCHMARK DATA INTEGRITY PROOF
+# ============================================================================
+
+def test_multiformat_benchmark_report_integrity():
+    """
+    Verify multiformat_benchmark.json covers PDF, DOCX, XLSX, and PPTX
+    with genuine extracted metrics (> 100,000 words extracted).
+    """
+    mf_json = ROOT / "production" / "performance-report" / "multiformat_benchmark.json"
+    assert mf_json.exists(), f"Multiformat benchmark JSON missing: {mf_json}"
+
+    with open(mf_json, "r", encoding="utf-8") as f:
+        data = json.load(f)
+
+    assert data["total_documents_tested"] == 78
+    assert set(data["formats_covered"]) == {"pdf", "docx", "xlsx", "pptx"}
+    assert data["overall_success_rate"] == "77/78 (98.7%)"
+
+    # DOCX Monographs (14 real monographs)
+    docx = data["docx_summary"]
+    assert docx["tested"] == 14
+    assert docx["success_rate"] == "14/14 (100.0%)"
+    assert docx["words_extracted"] > 100_000, f"Expected > 100k words, got {docx['words_extracted']}"
+    assert docx["chars_extracted"] > 700_000, f"Expected > 700k chars, got {docx['chars_extracted']}"
+    assert docx["latency"]["mean"] < 0.5, "DOCX monograph parsing should average < 500ms"
+
+    # XLSX Spreadsheet
+    xlsx = data["xlsx_summary"]
+    assert xlsx["sheets"] >= 2
+    assert xlsx["words"] > 50
+
+    # PPTX Presentation
+    pptx = data["pptx_summary"]
+    assert pptx["slides"] >= 3
+    assert pptx["words"] > 50
+

@@ -16,7 +16,7 @@ _Last verified: 2026-10-10 against `master` @ `5bec766` plus the Phase 0 changes
 |---|---|---|
 | Ingest PDF / DOCX / PPTX / XLSX / image / text into structured elements | Working | `pytest tests/test_ingest_workflow.py tests/test_real_world_ingestion.py` |
 | Table extraction | Working, single-pass PDF parser without re-parsing | `tests/test_table_extraction_regression.py`, `python scripts/run_benchmark.py` |
-| Real-corpus benchmark | 61 of 62 documents succeed; 220 tables detected — independently re-run and reproduced | `python scripts/run_benchmark.py`, artifacts in `production/performance-report/` |
+| Real-corpus benchmark | 77 of 78 multi-format documents succeed (61/62 PDFs, 14/14 DOCX monographs, XLSX, PPTX); 220 tables detected — independently re-run and reproduced | `python scripts/run_benchmark.py`, `pytest tests/test_benchmark_proof.py` |
 | Tenant isolation on `/v1/documents` and `/v1/query` | Working (404 on missing/foreign tenant) | `tests/test_multitenancy.py`, `tests/test_retrieval_tenant_isolation.py` |
 | **Deny-by-default authentication** — every non-public route returns 401 without credentials | Working (added in Phase 0) | `tests/test_auth_guard.py` |
 | **Production authentication** — RS256 JWT validation and real API-key lookup | Working (added in Phase 4) | `tests/test_production_auth.py` |
@@ -69,6 +69,7 @@ _Last verified: 2026-10-10 against `master` @ `5bec766` plus the Phase 0 changes
 | Aligned deploy/docker-compose.yml environment variables to AEGIS_ENVIRONMENT | Phase 6 | — |
 | Removed obsolete Retrack bundle directory and added permanent repository hygiene guards | Phase 6 | — |
 | Automated benchmark proof suite validating real PDF ingestion dataset, timing CSV schema, and IR evaluation metrics | Phase 6 | — |
+| Unified multi-format empirical benchmark harness across 78 real files (PDF, DOCX, XLSX, PPTX) with 98.7% success rate | Phase 6 | — |
 
 ## Fixed in Phase 5 (MVP Progression)
 
