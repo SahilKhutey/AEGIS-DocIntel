@@ -390,7 +390,7 @@ def page_explorer():
 
     doc_list = []
     if docs_resp and isinstance(docs_resp, dict) and "documents" in docs_resp:
-        doc_list = docs_resp["documents"]
+        doc_list = docs_resp.get("items") or docs_resp.get("documents", [])
     elif stats and stats.get("doc_id"):
         doc_list = [{
             "doc_id": stats.get("doc_id"),
@@ -432,7 +432,7 @@ def page_explorer():
         st.markdown("### 📦 Document Chunks")
         chunks_resp = api_get(f"/v1/documents/{selected_doc_id}/chunks")
         if chunks_resp and isinstance(chunks_resp, dict) and chunks_resp.get("chunks"):
-            chunks = chunks_resp["chunks"]
+            chunks = chunks_resp.get("items") or chunks_resp.get("chunks", [])
             st.caption(f"Showing {len(chunks)} of {chunks_resp.get('total', len(chunks))} chunks")
             for ch in chunks[:20]:
                 with st.expander(f"Chunk #{ch.get('chunk_index', 0)} (Page {ch.get('page', 1)}) — {ch.get('token_count', 0)} tokens"):

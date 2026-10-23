@@ -39,6 +39,8 @@ _Last verified: 2026-10-10 against `master` @ `5bec766` plus the Phase 0 changes
 | **Direct CLI execution** — CLI resolves root path and commands run directly from workspace root | Working (added in Phase 5) | `python src/cli.py --help` |
 | **Multi-provider semantic embeddings** — Native OpenAI, LiteLLM, and local SentenceTransformers support with resilient mock fallback | Working (added in Phase 5) | `pytest tests/test_embedding_providers.py` |
 | **Authenticated Streamlit UI dashboard** — Tenant-isolated document ingestion, chunk inspection, query citation rendering, admin stats, and webhook subscription management | Working (added in Phase 5) | `pytest tests/test_dashboard.py tests/test_dashboard_pages.py` |
+| **End-to-end API document lifecycle** — Full authenticated upload, metadata polling, chunk retrieval, tenant-isolated RAG query, and cascading deletion | Working (added in Phase 5) | `pytest tests/test_e2e_api_workflow.py` |
+| **Repository structure & hygiene guards** — Root folder organized into canonical docs trees (`specifications/`, `reports/`, `assets/`, `papers/`) with zero untracked scratch/database artifacts | Working (added in Phase 5) | `pytest tests/test_repo_hygiene.py` |
 
 ## Not implemented or not real yet
 
@@ -66,6 +68,8 @@ _Last verified: 2026-10-10 against `master` @ `5bec766` plus the Phase 0 changes
 | Real admin usage statistics, token consumption reporting, webhook subscription management, and paginated chunk retrieval with cross-restart persistence | Phase 5 | — |
 | Fixed CLI path resolution allowing direct `python src/cli.py` execution from any directory | Phase 5 | — |
 | Authenticated Streamlit UI dashboard integration with document exploration, chunk inspection, live query citations, admin stats, and webhook subscription management | Phase 5 | — |
+| End-to-end API lifecycle integration suite verifying upload, chunk inspection, RAG query, cross-tenant isolation, and cascading deletion | Phase 5 | — |
+| Proper repository restructuring: segregated engine specs into docs/specifications, phase reports into docs/reports, assets into docs/assets, and removed obsolete root scratch directory | Phase 5 | — |
 
 ## Fixed in Phases 1–4
 

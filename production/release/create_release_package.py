@@ -12,19 +12,19 @@ def create_release_package():
     
     # We will add some root files to the archive
     workspace_root = os.path.dirname(os.path.dirname(base_dir))
-    files_to_include = ["README.md", "requirements.txt", "Architecture.md", "Systems.md", "Workflow.md"]
+    files_to_include = ["README.md", "requirements.txt", "docs/Architecture.md", "docs/Systems.md", "docs/Workflow.md"]
     
     with tarfile.open(tar_path, "w:gz") as tar:
         for fname in files_to_include:
             fpath = os.path.join(workspace_root, fname)
             if os.path.exists(fpath):
-                tar.add(fpath, arcname=fname)
+                tar.add(fpath, arcname=os.path.basename(fname))
             else:
                 # Fallback: write a small placeholder in archive
                 temp_placeholder = os.path.join(base_dir, fname + ".tmp")
                 with open(temp_placeholder, "w") as f:
                     f.write(f"AMDI-OS Release File: {fname}")
-                tar.add(temp_placeholder, arcname=fname)
+                tar.add(temp_placeholder, arcname=os.path.basename(fname))
                 os.remove(temp_placeholder)
                 
     print(f"Created release tarball at {tar_path}")
