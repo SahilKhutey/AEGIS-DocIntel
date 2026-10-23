@@ -44,6 +44,7 @@ _Last verified: 2026-10-10 against `master` @ `5bec766` plus the Phase 0 changes
 | **Mathematical invariant property verification** — Hypothesis-driven validation of graph Laplacian positive semi-definiteness, Dirichlet energy, Vietoris-Rips filtration monotonicity, and information theory bounds | Working (added in Phase 6) | `pytest tests/test_math_properties.py tests/test_theorem_properties.py` |
 | **Containerization & deployability hardening** — Multi-stage Dockerfile bundling src and backend with production healthcheck and unified orchestration | Working (added in Phase 6) | `deploy/docker-compose.yml`, `Dockerfile` |
 | **Empirical benchmark proof & data integrity** — Automated verification of 62-doc PDF ingestion, 220 tables, timing CSV schema, IR accuracy metrics, and submodular approximation | Working (verified for MVP) | `pytest tests/test_benchmark_proof.py`, `python scripts/run_benchmark.py` |
+| **Security hardening & penetration resistance** — Automated verification of SQL injection resistance, path traversal sanitization, cross-tenant IDOR defense, deny-by-default auth, and webhook scoping | Working (added in Phase 10) | `pytest tests/test_security_pentest_proof.py` |
 
 ## Not implemented or not real yet
 
@@ -58,6 +59,16 @@ _Last verified: 2026-10-10 against `master` @ `5bec766` plus the Phase 0 changes
 |---|---|---|
 | `/metrics` is public and its series are labelled with `tenant_id` | — | `src/api/auth_guard.py` (documented exposure) |
 | Not on PyPI — install from source | I-08 | `pypi.org` returns 404 |
+
+## Fixed in Phase 10 (Security Penetration Hardening & Multi-Tenant Defense)
+
+| Fix | Phase | ID |
+|---|---|---|
+| Automated penetration testing suite machine-verifying SQL injection resilience, path traversal sanitization, multi-tenant IDOR isolation, and deny-by-default auth | Phase 10 | — |
+| Cross-tenant document isolation across upload, status polling, chunk inspection, RAG query, and cascading deletion | Phase 10 | I-27 |
+| Production dev-token bypass prevention when `AEGIS_ENVIRONMENT=production` | Phase 10 | I-31 |
+| Webhook subscription isolation with HMAC cryptographic integrity | Phase 10 | — |
+| Bandit static analysis triage and pip-audit CVE verification | Phase 10 | — |
 
 ## Fixed in Phase 6 (Test Hardening & Math Property Verification)
 
