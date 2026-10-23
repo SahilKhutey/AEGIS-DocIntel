@@ -47,6 +47,8 @@ _Last verified: 2026-10-10 against `master` @ `5bec766` plus the Phase 0 changes
 | **Security hardening & penetration resistance** — Automated verification of SQL injection resistance, path traversal sanitization, cross-tenant IDOR defense, deny-by-default auth, and webhook scoping | Working (added in Phase 10) | `pytest tests/test_security_pentest_proof.py` |
 | **Compliance controls & gap analysis** — Machine-verified right-to-erasure cascading deletion, PII redaction, tamper-evident audit logging, and logical access controls | Working (verified in Phase 11) | `pytest tests/test_document_deletion.py tests/test_compliance_redaction.py` |
 | **9 Prometheus metrics & Grafana telemetry** — Ingestion throughput, chunk indexing, active documents, cache hits/misses, retrieval latency, and token consumption | Working (activated in Phase 12) | `pytest tests/test_observability_metrics.py`, `deploy/docker-compose.yml` |
+| **Client SDK parity & live API integration** — Official Python, TypeScript, Java, and C++ client libraries aligned to OpenAPI contract with in-process live test harness | Working (stabilized in Phase 13) | `pytest sdk/python/tests/`, `pytest tests/test_api_route_integrity.py` |
+| **Standalone `aegis-docprep` packaging** — Lightweight numpy-only document prep package with spatial reading order, submodular packing, and PII redaction | Working (packaged in Phase 14) | `pytest aegis-docprep/tests/`, `pytest tests/test_docs_examples.py` |
 
 ## Not implemented or not real yet
 
@@ -61,6 +63,29 @@ _Last verified: 2026-10-10 against `master` @ `5bec766` plus the Phase 0 changes
 |---|---|---|
 | `/metrics` is public and its series are labelled with `tenant_id` | — | `src/api/auth_guard.py` (documented exposure) |
 | Not on PyPI — install from source | I-08 | `pypi.org` returns 404 |
+
+## Fixed in Phase 16 (Productization & MVP Readiness)
+
+| Fix | Phase | ID |
+|---|---|---|
+| Comprehensive productization synthesis across standalone `aegis-docprep`, unified core API, authenticated Streamlit dashboard, and container orchestration | Phase 16 | — |
+| Multi-format real-corpus benchmark validation (78 documents, 98.7% success, 220 tables) | Phase 16 | — |
+| Formal repository structuring under `docs/specifications/`, `docs/reports/`, `docs/assets/`, and `docs/papers/` with automated hygiene guards | Phase 16 | — |
+
+## Fixed in Phase 14 (Scope Narrowing & Core Packaging)
+
+| Fix | Phase | ID |
+|---|---|---|
+| Extracted lightweight standalone `aegis-docprep` package requiring only numpy for spatial reading order, submodular packing, and PII redaction | Phase 14 | — |
+| Executable documentation tests verifying every README code snippet against live runtime outputs | Phase 14 | — |
+
+## Fixed in Phase 13 (API & SDK Stabilization)
+
+| Fix | Phase | ID |
+|---|---|---|
+| Aligned Python, TypeScript, Java, and C++ client SDKs to canonical `/v1/` routes matching `openapi.json` | Phase 13 | I-12 |
+| Implemented in-process live API integration test suite for Python SDK | Phase 13 | — |
+| Enforced zero route collisions and unique OpenAPI operation IDs across routers | Phase 13 | I-11 |
 
 ## Fixed in Phase 12 (Observability Activation & Distributed Tracing)
 
