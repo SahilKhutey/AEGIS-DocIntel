@@ -37,7 +37,14 @@ During Phase 10, a comprehensive code review of authentication, authorization, a
 - **Production API Keys**: Validates incoming API keys via SHA-256 hash lookup in `AEGIS_API_KEYS` using constant-time comparison (`hmac.compare_digest`). Configuration strictly requires 64-character lowercase hex digest keys and rejects raw plaintext keys in configuration. Plaintext keys are never logged in audit trails.
 - **Verification**: Machine-tested by `tests/test_production_auth.py` across positive, expired, invalid key, algorithm confusion, missing claims, unsupported roles, and hash-only lookup scenarios.
 
-### 2. Transitive Dependency Vulnerability Triage
+### 4. Persistence & Document Lifecycle Integrity (Hardened in P1)
+- **Tenant-Scoped Raw Byte Storage**: Document binaries stored in SQLite are strictly scoped by `tenant_id`. Foreign tenant reads and cross-tenant rehydration requests return `None` (404-equivalent) without disclosing document presence.
+- **SHA-256 Byte Integrity Verification**: During ingestion, a SHA-256 digest is computed and stored alongside the document record. During rehydration or byte access, the digest is recomputed; any byte tampering raises `DocumentRecoveryError` immediately.
+- **Fail-Closed Cascading Deletion**: Document deletion commits a durable `deleting` tombstone in SQLite before downstream stores (vector store, semantic cache) are instructed to delete. If any store fails, the document remains in `delete_failed` status in SQLite and deletion returns `False` (retryable), preventing partial deletions from leaking orphan vectors or cached answers.
+- **Crash Recovery Reconciliation**: Interrupted `processing` documents are automatically marked `failed` (`STALE_PROCESSING_INTERRUPTED`) and interrupted `deleting` documents are marked `delete_failed` (`STALE_DELETION_INTERRUPTED`) on startup, preventing zombie states.
+- **Verification**: Automated tests in `tests/test_persistence_and_audit.py` and `tests/test_document_deletion.py`.
+
+### 5. Transitive Dependency Vulnerability Triage
 - **Issue**: Dependency vulnerability scanning detected known CVE advisories in optional legacy packages.
 - **Resolution**: Pruned obsolete packages, pinned modern versions in `requirements-core.txt`, and isolated deep learning components into optional `requirements-ml.txt`. Continuous automated scanning (`pip-audit` / GitHub Dependabot) is now active in CI.
 

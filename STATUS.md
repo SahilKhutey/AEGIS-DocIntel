@@ -18,7 +18,7 @@ _Last verified: 2026-10-10 against `master` @ `5bec766` plus the Phase 0 changes
 | API-key authentication | Implemented in `src/api/auth.py` | `tests/test_production_auth.py` | Hash-only SHA-256 configuration, constant-time comparison (`hmac.compare_digest`), raw keys in config rejected |
 | HTTP route guard | Implemented in `src/api/auth_guard.py` | `tests/test_auth_guard.py` | Deny-by-default on all routes; public allowlist restricted to operational health probes |
 | Tenant isolation | Implemented in API, orchestrator & DB | `tests/test_multitenancy_isolation.py` | Non-disclosing 404/401 on cross-tenant document, export, deletion, and query operations |
-| Document persistence | SQLite in `src/services/container.py` | `tests/test_persistence_and_audit.py` | Persists metadata and raw bytes; fails closed on SQLite commit failure with cleanup |
+| Document persistence & lifecycle | SQLite schema v2 in `src/services/container.py` | `tests/test_persistence_and_audit.py`, `tests/test_document_deletion.py` | Atomic lifecycle (`processing`→`ready`/`failed`), SHA-256 byte checksum, tombstoned cascading deletion, and cold-start crash recovery |
 | Secret scanning | GitHub Actions integration | `.gitleaksignore` reviewed | Gitleaks scan blocks unreviewed credentials across repository history |
 | CI Pipeline | GitHub Actions `.github/workflows/ci.yml` | Candidate PR & push triggers | Real security gates with `pip-audit` and `bandit -ll` without suppression |
 
