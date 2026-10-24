@@ -218,20 +218,16 @@ class RealDocumentService:
             raise DocumentPersistenceError(f"Failed to persist document {doc_info.get('doc_id')}: {e}") from e
 
     def _load_raw_bytes(self, doc_id: str, tenant_id: Optional[str] = None) -> Optional[bytes]:
+        if not tenant_id:
+            raise ValueError("tenant_id is required to load raw document bytes")
         if not self.db_path or self.db_path == ":memory:":
             return None
         try:
             with sqlite3.connect(self.db_path, timeout=10.0) as conn:
-                if tenant_id:
-                    cursor = conn.execute(
-                        "SELECT raw_bytes, sha256 FROM documents WHERE doc_id = ? AND tenant_id = ? AND status = 'ready'",
-                        (str(doc_id), str(tenant_id)),
-                    )
-                else:
-                    cursor = conn.execute(
-                        "SELECT raw_bytes, sha256 FROM documents WHERE doc_id = ? AND status = 'ready'",
-                        (str(doc_id),),
-                    )
+                cursor = conn.execute(
+                    "SELECT raw_bytes, sha256 FROM documents WHERE doc_id = ? AND tenant_id = ? AND status = 'ready'",
+                    (str(doc_id), str(tenant_id)),
+                )
                 row = cursor.fetchone()
                 if row and row[0]:
                     raw_bytes, sha256_hash = row[0], row[1]
@@ -540,14 +536,16 @@ class RealDocumentService:
         return _List(items, total, page, page_size)
 
     async def delete(self, doc_id: str, tenant_id: str) -> bool:
+        if not tenant_id:
+            raise ValueError("tenant_id is required for document deletion")
         # 1. Authorize tenant
         doc = self._docs.get(str(doc_id))
         if not doc and self.db_path and self.db_path != ":memory:":
             try:
                 with sqlite3.connect(self.db_path, timeout=10.0) as conn:
                     cur = conn.execute(
-                        "SELECT tenant_id FROM documents WHERE doc_id = ?",
-                        (str(doc_id),),
+                        "SELECT tenant_id FROM documents WHERE doc_id = ? AND tenant_id = ?",
+                        (str(doc_id), str(tenant_id)),
                     )
                     row = cur.fetchone()
                     if row:
@@ -883,7 +881,10 @@ class ServiceContainer:
         try:
             import redis.asyncio as redis_async
             self._redis = redis_async.from_url(
-                self.settings.redis.url, decode_responses=False
+                self.settings.redis.url,
+                decode_responses=False,
+                socket_timeout=1.0,
+                socket_connect_timeout=1.0,
             )
             await self._redis.ping()
             log.info("Redis connected", url=self.settings.redis.url)

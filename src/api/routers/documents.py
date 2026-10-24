@@ -53,6 +53,12 @@ async def upload_document(
     Returns immediately with doc_id and status=pending.
     Use GET /documents/{doc_id} to poll indexing status.
     """
+    if not tenant.can_write_document():
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Forbidden: Document upload requires editor or admin permissions.",
+        )
+
     # Validate content type
     if file.content_type not in ALLOWED_MIMETYPES:
         raise HTTPException(
@@ -192,6 +198,11 @@ async def delete_document(
     tenant: TenantContext = Depends(get_current_tenant),
 ):
     """Delete a document and all its associated chunks, vectors, and cache entries."""
+    if not tenant.can_delete_document():
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Forbidden: Document deletion requires tenant_admin or platform_admin permissions.",
+        )
     container = request.app.state.container
     deleted = await container.document_service.delete(
         doc_id=str(doc_id), tenant_id=tenant.tenant_id
@@ -220,6 +231,11 @@ async def reindex_document(
     tenant: TenantContext = Depends(get_current_tenant),
 ):
     """Force re-indexing of a document. Invalidates all caches."""
+    if not tenant.can_write_document():
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Forbidden: Document reindexing requires editor or admin permissions.",
+        )
     container = request.app.state.container
     result = await container.document_service.reindex(
         doc_id=str(doc_id), tenant_id=tenant.tenant_id
@@ -264,6 +280,11 @@ async def batch_upload(
     tenant: TenantContext = Depends(get_current_tenant),
 ):
     """Queue a batch of S3 documents for indexing."""
+    if not tenant.can_write_document():
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Forbidden: Batch document upload requires editor or admin permissions.",
+        )
     container = request.app.state.container
     job = await container.document_service.batch_ingest(
         documents=body.documents, tenant_id=tenant.tenant_id
