@@ -24,6 +24,19 @@ _Last verified: 2026-10-10 against `master` @ `5bec766` plus the Phase 0 changes
 
 ---
 
+## P2 AI Quality, Mathematical Invariants & Retrieval Evaluation Status
+
+| Control / Capability | Implementation | Verification | Remaining limitation |
+|---|---|---|---|
+| Document extraction fidelity & provenance | `SourceLocation`, `NormalizedElement` in `src/models/evidence_object.py` and `aegis-docprep/` | `tests/test_extraction_fidelity.py` | Full page coordinate, section path, and table row/col matrix preserved; rotation normalization in progress |
+| Layout-aware reading order recovery | `layout_aware_reading_order` in `aegis-docprep/aegis_docprep/reading_order.py` | `tests/test_extraction_fidelity.py`, `evaluation/scripts/evaluate_extraction.py` | Multi-column clustering and spatial ambiguity detection; complex wrapped text flows around irregular polygons remain future work |
+| Context packing mathematical invariants | `SubmodularKnapsackPacker`, `validate_packing_inputs` in `aegis-docprep/` & `src/engines/retrieval/submodular_packer.py` | `aegis-docprep/tests/test_context_packer_invariants.py`, `evaluation/scripts/evaluate_packing.py` | 0% budget violations, non-negative affine/clipped cosine transformations, and provable $(1 - 1/e)/2 \approx 0.316$ knapsack bound |
+| Privacy & PII precision-recall benchmark | `redact_or_block`, `ComplianceReport.safe_summary()` in `aegis-docprep/` & `src/compliance/` | `aegis-docprep/tests/test_pii_precision_recall.py`, `evaluation/scripts/evaluate_privacy.py` | Precision >= 0.85, recall >= 0.85, 0.0% downstream secret leakage, and mandatory fail-closed blocking |
+| Evidence-grounded retrieval & citation verification | `RetrievedEvidence`, `validate_citations`, and abstention logic in `src/engines/retrieval/` & `src/core/orchestrator.py` | `tests/test_retrieval_grounding.py`, `evaluation/scripts/evaluate_retrieval.py` | Pre-retrieval tenant scoping, RRF rank fusion, 100% citation verification, and explicit abstention on unanswerable queries |
+| Quality benchmark framework & regression runner | `evaluation/scripts/run_all.py` with versioned `qa_eval_dataset.json` and `manifest.json` | `tests/test_evaluation_runner.py` | Automated evaluation gates with structured report generation and exit code enforcement |
+
+---
+
 ## What works (and how to re-verify it)
 
 | Capability | State | Re-verify with |

@@ -81,6 +81,26 @@ Corpus: 62 real-world PDFs ([provenance](production/benchmark-dataset-real/PROVE
 | Observability | 9 Prometheus metrics wired to real call sites | [`src/observability/metrics.py`](src/observability/metrics.py) |
 | Test suite | see the CI badge above | counts are deliberately not hard-coded in prose |
 
+### P2 AI Quality & Evaluation Framework
+
+AEGIS-DocIntel includes a versioned evaluation framework in [`evaluation/`](evaluation/README.md) testing document extraction fidelity, context packing invariants, PII redaction precision/recall, and retrieval grounding:
+
+| Domain | Key Metric | Gate | Baseline Result |
+|---|---|---|---|
+| **Extraction Fidelity** | Reading Order Kendall's $\tau$ | $\ge 0.80$ | $1.00$ |
+| **Table Reconstruction** | Table Cell Grid F1 | $\ge 0.90$ | $1.00$ |
+| **Context Packing** | Token Budget Violation Rate | $0.0\%$ | $0.0\%$ |
+| **Submodular Bound** | Min Approximation Ratio vs Optimal | $\ge 0.316$ | $0.857$ |
+| **PII Redaction** | Precision / Recall on Labeled Corpus | $\ge 0.85$ | $1.00 / 1.00$ |
+| **Secret Protection** | Downstream Raw Secret Leakage | $0.0\%$ | $0.0\%$ |
+| **Retrieval Accuracy** | MRR / Recall@5 | $\ge 0.70 / \ge 0.80$ | $1.00 / 1.00$ |
+| **Hallucination Defense** | Abstention on Unanswerable Queries | $100.0\%$ | $100.0\%$ |
+
+Run the unified evaluation suite locally:
+```bash
+python evaluation/scripts/run_all.py --fail-under-gates
+```
+
 ---
 
 ## Roadmap

@@ -99,6 +99,11 @@ graph = SpatialReadingGraph()
 ordered_elements = graph.extract_reading_order(elements)
 
 print([el["id"] for el in ordered_elements])
+# Output: ['title', 'col_a1', 'col_b1', 'col_a2', 'col_b2', 'footer']
+
+# Or use layout_aware_reading_order with column clustering:
+from aegis_docprep import layout_aware_reading_order
+ordered_elements, meta = layout_aware_reading_order(elements)
 # Output:
 # ['title', 'col_a1', 'col_b1', 'col_a2', 'col_b2', 'footer']
 ```
