@@ -851,6 +851,14 @@ class AMDIOrchestrator:
             if first_el and getattr(first_el, "doc_id", None):
                 retrieved_doc_id = first_el.doc_id
 
+        # Abstention when no authorized evidence exists
+        if not results_list:
+            llm_dict["answer"] = "I do not have sufficient evidence in the authorized documents to answer this question."
+            llm_dict["confidence"] = 0.0
+            llm_dict["confidence_label"] = "LOW"
+            llm_dict["grounded"] = False
+            llm_dict["citations"] = []
+
         has_table = any(
             getattr(getattr(r, "element", None), "type", None) == ElementType.TABLE
             for r in results_list
@@ -1191,6 +1199,17 @@ class AMDIOrchestrator:
                 except (TypeError, ValueError):
                     bbox = None
 
+            blk_meta = dict(getattr(blk, "metadata", {}) or {})
+            if "source_format" not in blk_meta:
+                source_fmt = (
+                    getattr(nd, "metadata", {}).get("format")
+                    or getattr(nd, "metadata", {}).get("source_format")
+                )
+                if not source_fmt and getattr(nd, "filename", None):
+                    ext = Path(nd.filename).suffix.lstrip(".").lower()
+                    source_fmt = ext or "unknown"
+                blk_meta["source_format"] = source_fmt or "unknown"
+
             el = GeometricElement(
                 element_id=getattr(blk, "block_id", str(uuid.uuid4())),
                 doc_id=getattr(nd, "doc_id", ""),
@@ -1199,6 +1218,8 @@ class AMDIOrchestrator:
                 content=getattr(blk, "text", ""),
                 page=getattr(blk, "page", 1),
                 bbox=bbox,
+                parent_id=blk_meta.get("parent_id"),
+                metadata=blk_meta,
             )
             section_val = getattr(blk, "section", getattr(blk, "section_id", None))
             if section_val is not None:

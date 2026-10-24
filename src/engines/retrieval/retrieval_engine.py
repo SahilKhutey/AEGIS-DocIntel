@@ -149,3 +149,11 @@ class RetrievalEngine:
             num_sources=ranking.num_sources,
             metadata=metadata or {},
         )
+
+
+
+from src.models.evidence_object import (
+    CitationValidationResult,
+    RetrievedEvidence,
+    validate_citations,
+)
