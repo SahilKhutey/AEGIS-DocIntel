@@ -191,3 +191,107 @@ async def test_realdocumentservice_document_hydration_after_restart(tmp_path):
     wrong_tenant = await service2.hydrate_document(doc_id, "wrong-tenant")
     assert wrong_tenant is False
 
+
+
+@pytest.mark.asyncio
+async def test_realdocumentservice_pagination_and_status_filter(tmp_path):
+    db_file = tmp_path / "pagination_test.db"
+    audit_file = tmp_path / "pagination_audit.log"
+    orchestrator = MagicMock()
+    async def mock_ingest(doc_obj):
+        return {
+            "doc_id": doc_obj.doc_id,
+            "filename": doc_obj.filename,
+            "pages": 1,
+            "elements": 2,
+        }
+    orchestrator.ingest = mock_ingest
+
+    service = RealDocumentService(orchestrator, db_path=str(db_file))
+    with pytest.MonkeyPatch.context() as mp:
+        mp.setattr("src.services.container.audit_logger", AuditLogger(log_path=audit_file))
+        # Ingest 5 documents for tenant-page
+        for i in range(5):
+            await service.ingest(
+                file_bytes=f"content_{i}".encode(),
+                filename=f"doc_{i}.txt",
+                content_type="text/plain",
+                tenant_id="tenant-page",
+            )
+        # Manually set 2 to status 'archived' for filtering test
+        keys = list(service._docs.keys())
+        service._docs[keys[3]]["status"] = "archived"
+        service._docs[keys[4]]["status"] = "archived"
+
+    # Test page 1, page_size 2
+    p1 = await service.list_documents("tenant-page", page=1, page_size=2)
+    assert p1.total == 5
+    assert len(p1.items) == 2
+    assert p1.page == 1
+
+    # Test page 2, page_size 2
+    p2 = await service.list_documents("tenant-page", page=2, page_size=2)
+    assert p2.total == 5
+    assert len(p2.items) == 2
+    assert p2.page == 2
+    assert p1.items[0].doc_id != p2.items[0].doc_id
+
+    # Test page 3, page_size 2 (last page, 1 item)
+    p3 = await service.list_documents("tenant-page", page=3, page_size=2)
+    assert p3.total == 5
+    assert len(p3.items) == 1
+
+    # Test status filter: 'ready' (3 docs)
+    ready_list = await service.list_documents("tenant-page", status="ready")
+    assert ready_list.total == 3
+    assert len(ready_list.items) == 3
+    for it in ready_list.items:
+        assert it.status == "ready"
+
+    # Test status filter: 'archived' (2 docs)
+    arch_list = await service.list_documents("tenant-page", status="archived")
+    assert arch_list.total == 2
+    assert len(arch_list.items) == 2
+
+    # Test invalid page
+    with pytest.raises(ValueError, match="page must be >= 1"):
+        await service.list_documents("tenant-page", page=0)
+
+    # Test invalid page_size
+    with pytest.raises(ValueError, match="page_size must be between 1 and 100"):
+        await service.list_documents("tenant-page", page_size=0)
+
+
+@pytest.mark.asyncio
+async def test_realdocumentservice_persistence_failure_propagates_and_cleans_up(tmp_path):
+    from src.services.container import DocumentPersistenceError
+
+    db_file = tmp_path / "fail_test.db"
+    orchestrator = MagicMock()
+    async def mock_ingest(doc_obj):
+        return {
+            "doc_id": doc_obj.doc_id,
+            "filename": doc_obj.filename,
+            "pages": 1,
+            "elements": 2,
+        }
+    orchestrator.ingest = mock_ingest
+
+    service = RealDocumentService(orchestrator, db_path=str(db_file))
+    
+    # Force _persist_doc to fail
+    def failing_persist(doc_info, raw_bytes=None):
+        raise DocumentPersistenceError("Simulated disk full")
+
+    service._persist_doc = failing_persist
+
+    with pytest.raises(DocumentPersistenceError):
+        await service.ingest(
+            file_bytes=b"sample",
+            filename="fail.txt",
+            content_type="text/plain",
+            tenant_id="tenant-fail",
+        )
+
+    # Ensure document was removed from in-memory cache to prevent phantom successful state
+    assert len(service._docs) == 0
