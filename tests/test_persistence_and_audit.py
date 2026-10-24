@@ -222,6 +222,9 @@ async def test_realdocumentservice_pagination_and_status_filter(tmp_path):
         keys = list(service._docs.keys())
         service._docs[keys[3]]["status"] = "archived"
         service._docs[keys[4]]["status"] = "archived"
+        with sqlite3.connect(str(db_file)) as conn:
+            conn.execute("UPDATE documents SET status = 'archived' WHERE doc_id IN (?, ?)", (keys[3], keys[4]))
+            conn.commit()
 
     # Test page 1, page_size 2
     p1 = await service.list_documents("tenant-page", page=1, page_size=2)
@@ -295,3 +298,219 @@ async def test_realdocumentservice_persistence_failure_propagates_and_cleans_up(
 
     # Ensure document was removed from in-memory cache to prevent phantom successful state
     assert len(service._docs) == 0
+
+
+# =====================================================================
+# P1 Specification: Failure-Injection, Recovery & Lifecycle Tests
+# =====================================================================
+
+@pytest.mark.asyncio
+async def test_database_initialization_failure_fails_startup(tmp_path, monkeypatch):
+    """P1.1: Database initialization failures must fail startup closed with DocumentStorageError."""
+    from src.services.storage_errors import DocumentStorageError
+
+    orchestrator = MagicMock()
+    # Point db_path to an uncreatable location or simulate sqlite connect error
+    db_file = tmp_path / "subfolder_does_not_exist" / "documents.db"
+
+    def broken_connect(*args, **kwargs):
+        raise sqlite3.OperationalError("Unable to open database file")
+
+    monkeypatch.setattr(sqlite3, "connect", broken_connect)
+
+    with pytest.raises(DocumentStorageError, match="Database initialization failed"):
+        RealDocumentService(orchestrator, db_path=str(db_file))
+
+
+@pytest.mark.asyncio
+async def test_source_checksum_verified_during_hydration(tmp_path):
+    """P1.2: SHA-256 byte checksum must be verified during raw-byte rehydration."""
+    from src.services.storage_errors import DocumentRecoveryError
+
+    db_file = tmp_path / "checksum_test.db"
+    orchestrator = MagicMock()
+    orchestrator._doc_state = {}
+    async def mock_ingest(d):
+        return {"pages": 1, "elements": 1}
+    orchestrator.ingest = mock_ingest
+
+    service = RealDocumentService(orchestrator, db_path=str(db_file))
+    res = await service.ingest(
+        file_bytes=b"authentic uncorrupted content",
+        filename="integrity.pdf",
+        content_type="application/pdf",
+        tenant_id="tenant-security",
+    )
+    doc_id = res.doc_id
+
+    # Tamper with the raw_bytes in SQLite
+    with sqlite3.connect(str(db_file)) as conn:
+        conn.execute(
+            "UPDATE documents SET raw_bytes = ? WHERE doc_id = ?",
+            (b"corrupted or tampered content", doc_id),
+        )
+        conn.commit()
+
+    # Hydration / raw byte load must detect checksum mismatch
+    with pytest.raises(DocumentRecoveryError, match=f"Checksum mismatch for document {doc_id}"):
+        service._load_raw_bytes(doc_id, tenant_id="tenant-security")
+
+
+@pytest.mark.asyncio
+async def test_stale_processing_document_reconciled_after_restart(tmp_path):
+    """P1.2: Stale 'processing' or 'deleting' documents interrupted by server death are reconciled on startup."""
+    db_file = tmp_path / "recovery_test.db"
+    orchestrator = MagicMock()
+
+    # 1. Initialize DB and seed interrupted records
+    s1 = RealDocumentService(orchestrator, db_path=str(db_file))
+    with sqlite3.connect(str(db_file)) as conn:
+        conn.execute("""
+            INSERT INTO documents (doc_id, tenant_id, filename, status, page_count, chunk_count, is_scanned, language, created_at, error_code)
+            VALUES 
+            ('doc-stale-proc', 'tenant-rec', 'crash_in_flight.pdf', 'processing', 0, 0, 0, 'en', '2026-01-01T00:00:00', NULL),
+            ('doc-stale-del', 'tenant-rec', 'crash_during_del.pdf', 'deleting', 2, 5, 0, 'en', '2026-01-01T00:00:00', NULL)
+        """)
+        conn.commit()
+
+    # 2. Restart service (calls _load_docs which runs recovery reconciliation)
+    s2 = RealDocumentService(orchestrator, db_path=str(db_file))
+
+    with sqlite3.connect(str(db_file)) as conn:
+        r1 = conn.execute("SELECT status, error_code FROM documents WHERE doc_id = 'doc-stale-proc'").fetchone()
+        assert r1[0] == "failed"
+        assert r1[1] == "STALE_PROCESSING_INTERRUPTED"
+
+        r2 = conn.execute("SELECT status, error_code FROM documents WHERE doc_id = 'doc-stale-del'").fetchone()
+        assert r2[0] == "delete_failed"
+        assert r2[1] == "STALE_DELETION_INTERRUPTED"
+
+
+@pytest.mark.asyncio
+async def test_raw_bytes_lookup_is_tenant_scoped(tmp_path):
+    """P1.3: Raw bytes lookup must be strictly tenant-scoped."""
+    db_file = tmp_path / "tenant_raw_bytes.db"
+    orchestrator = MagicMock()
+    async def mock_ingest(d):
+        return {"pages": 1, "elements": 1}
+    orchestrator.ingest = mock_ingest
+    service = RealDocumentService(orchestrator, db_path=str(db_file))
+
+    res = await service.ingest(
+        file_bytes=b"confidential company payroll data",
+        filename="payroll.pdf",
+        content_type="application/pdf",
+        tenant_id="tenant-owner",
+    )
+    doc_id = res.doc_id
+
+    # Owner tenant can load raw bytes
+    owner_bytes = service._load_raw_bytes(doc_id, tenant_id="tenant-owner")
+    assert owner_bytes == b"confidential company payroll data"
+
+    # Attacking/foreign tenant gets None
+    attacker_bytes = service._load_raw_bytes(doc_id, tenant_id="tenant-attacker")
+    assert attacker_bytes is None
+
+
+@pytest.mark.asyncio
+async def test_database_migration_preserves_records(tmp_path):
+    """P1.1: Schema migration from v1 to v2 adds columns and preserves existing document data."""
+    db_file = tmp_path / "legacy_v1.db"
+
+    # 1. Create a schema v1 database
+    with sqlite3.connect(str(db_file)) as conn:
+        conn.execute("""
+            CREATE TABLE documents (
+                doc_id TEXT PRIMARY KEY,
+                tenant_id TEXT NOT NULL,
+                filename TEXT NOT NULL,
+                status TEXT NOT NULL,
+                page_count INTEGER NOT NULL,
+                chunk_count INTEGER NOT NULL,
+                is_scanned BOOLEAN NOT NULL,
+                language TEXT NOT NULL,
+                created_at TEXT NOT NULL
+            )
+        """)
+        conn.execute("PRAGMA user_version = 1")
+        conn.execute("""
+            INSERT INTO documents VALUES (
+                'doc-legacy-1', 'tenant-leg', 'legacy_report.txt', 'ready', 5, 20, 0, 'en', '2026-01-01T12:00:00'
+            )
+        """)
+        conn.commit()
+
+    # 2. Boot RealDocumentService on legacy DB
+    orchestrator = MagicMock()
+    async def mock_ingest(d):
+        return {"pages": 1, "elements": 1}
+    orchestrator.ingest = mock_ingest
+    service = RealDocumentService(orchestrator, db_path=str(db_file))
+
+    # 3. Verify user_version is now 2
+    with sqlite3.connect(str(db_file)) as conn:
+        v = conn.execute("PRAGMA user_version").fetchone()[0]
+        assert v == 2
+
+        # Verify new columns exist
+        cols = {r[1] for r in conn.execute("PRAGMA table_info(documents)").fetchall()}
+        assert "byte_size" in cols
+        assert "sha256" in cols
+        assert "error_code" in cols
+        assert "raw_bytes" in cols
+
+    # 4. Verify existing legacy document was preserved and is readable
+    doc_list = await service.list_documents("tenant-leg")
+    assert doc_list.total == 1
+    assert doc_list.items[0].doc_id == "doc-legacy-1"
+    assert doc_list.items[0].filename == "legacy_report.txt"
+
+
+@pytest.mark.asyncio
+async def test_delete_partial_failure_is_retryable(tmp_path):
+    """P1.4: Partial downstream store failures mark status as delete_failed and are safely retryable."""
+    from unittest.mock import AsyncMock
+
+    db_file = tmp_path / "retry_deletion.db"
+    orchestrator = MagicMock()
+    async def mock_ingest(d):
+        return {"pages": 1, "elements": 1}
+    orchestrator.ingest = mock_ingest
+    
+    mock_vector = AsyncMock()
+    # First attempt: vector store raises error
+    mock_vector.delete.side_effect = ConnectionResetError("Vector DB transient network blip")
+    orchestrator.vector_store = mock_vector
+    orchestrator.semantic_cache = None
+
+    service = RealDocumentService(orchestrator, db_path=str(db_file))
+    res = await service.ingest(
+        file_bytes=b"retryable document content",
+        filename="resilience.txt",
+        content_type="text/plain",
+        tenant_id="tenant-retry",
+    )
+    doc_id = res.doc_id
+
+    # Deletion attempt 1: store fails -> delete returns False, marked delete_failed
+    del1 = await service.delete(doc_id, "tenant-retry")
+    assert del1 is False
+
+    with sqlite3.connect(str(db_file)) as conn:
+        row = conn.execute("SELECT status, error_code FROM documents WHERE doc_id = ?", (doc_id,)).fetchone()
+        assert row is not None
+        assert row[0] == "delete_failed"
+        assert "Vector DB transient network blip" in row[1]
+
+    # Deletion attempt 2: vector store recovers
+    mock_vector.delete.side_effect = None
+    mock_vector.delete.return_value = None
+
+    del2 = await service.delete(doc_id, "tenant-retry")
+    assert del2 is True
+
+    # Record must now be completely removed from SQLite
+    with sqlite3.connect(str(db_file)) as conn:
+        row = conn.execute("SELECT 1 FROM documents WHERE doc_id = ?", (doc_id,)).fetchone()
+        assert row is None

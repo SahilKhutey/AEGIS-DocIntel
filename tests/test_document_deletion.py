@@ -126,7 +126,8 @@ async def test_cascading_deletion_resilience_to_store_failures():
 
     # Should catch errors, log warnings, and still remove doc from primary index
     res = await service.delete(doc_id, tenant_id="t1")
-    assert res is True
+    # P1: Partial failure reports False
+    assert res is False
     assert doc_id not in service._docs
     mock_vector_store.delete.assert_called_once_with(doc_id=doc_id)
     mock_cache.invalidate.assert_called_once_with(doc_id=doc_id)
