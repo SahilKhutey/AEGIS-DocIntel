@@ -67,6 +67,18 @@ class GeometricElement:
     metadata:          dict[str, Any]        = field(default_factory=dict)
 
     @property
+    def source_location(self) -> Any:
+        from src.core.normalized_document import SourceLocation
+        sec_path = (self.section,) if self.section else ()
+        return SourceLocation(
+            document_id=self.doc_id,
+            page_number=self.page if self.page > 0 else 1,
+            element_id=self.element_id,
+            section_path=sec_path,
+            source_format=self.metadata.get("source_format", "unknown"),
+        )
+
+    @property
     def token_count(self) -> int:
         return max(1, int(len(self.content.split()) * 1.33))
 
