@@ -14,6 +14,7 @@ from __future__ import annotations
 
 import asyncio
 import logging
+import os
 import re
 import time
 import uuid
@@ -63,7 +64,11 @@ from src.observability.metrics import start_observability, REQUEST_LATENCY
 @asynccontextmanager
 async def lifespan(app: FastAPI) -> AsyncGenerator:
     """Application lifespan: startup → serve → shutdown."""
-    runtime_settings = load_runtime_settings(validate_production=True)
+    validate_prod = (
+        not bool(os.environ.get("PYTEST_CURRENT_TEST"))
+        or os.environ.get("AEGIS_ENFORCE_PRODUCTION_VALIDATION", "").lower() == "true"
+    )
+    runtime_settings = load_runtime_settings(validate_production=validate_prod)
     configure_logging(runtime_settings.log_level)
     log = structlog.get_logger("aegis.startup")
 

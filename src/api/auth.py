@@ -15,25 +15,28 @@ import time
 from dataclasses import dataclass
 from typing import Optional
 
-from fastapi import Depends, HTTPException, Security, status, WebSocket
+from fastapi import Depends, HTTPException, Request, Security, status, WebSocket
 from fastapi.security import APIKeyHeader, HTTPAuthorizationCredentials, HTTPBearer
+
+from src.core.security_context import (
+    TenantContext,
+    ROLE_VIEWER,
+    ROLE_EDITOR,
+    ROLE_TENANT_ADMIN,
+    ROLE_PLATFORM_ADMIN,
+    LEGACY_ADMIN,
+    STANDARD_ROLES,
+)
 
 BEARER = HTTPBearer(auto_error=False)
 API_KEY_HEADER = APIKeyHeader(name="X-API-Key", auto_error=False)
 
-ALLOWED_ROLES: frozenset[str] = frozenset({"admin", "editor", "viewer"})
+ALLOWED_ROLES: frozenset[str] = STANDARD_ROLES
 _SHA256_HEX = re.compile(r"^[0-9a-f]{64}$")
 
 
-@dataclass
-class TenantContext:
-    tenant_id: str
-    user_id: str
-    role: str  # admin | editor | viewer
-    monthly_token_limit: int = 10_000_000
-
-
 async def get_current_tenant(
+    request: Request = None,
     bearer: Optional[HTTPAuthorizationCredentials] = Depends(BEARER),
     api_key: Optional[str] = Security(API_KEY_HEADER),
 ) -> TenantContext:
@@ -41,17 +44,26 @@ async def get_current_tenant(
     Validate JWT or API key and return TenantContext.
     In production: validate JWT (RS256) or look up API key hash from configuration/store.
     """
+    if request is not None:
+        cached = getattr(request.state, "tenant_context", None)
+        if isinstance(cached, TenantContext):
+            return cached
+
+    context: TenantContext
     if bearer and bearer.credentials:
-        return _validate_jwt(bearer.credentials)
+        context = _validate_jwt(bearer.credentials)
+    elif api_key:
+        context = _validate_api_key(api_key)
+    else:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Missing authentication. Provide Bearer token or X-API-Key header.",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
 
-    if api_key:
-        return _validate_api_key(api_key)
-
-    raise HTTPException(
-        status_code=status.HTTP_401_UNAUTHORIZED,
-        detail="Missing authentication. Provide Bearer token or X-API-Key header.",
-        headers={"WWW-Authenticate": "Bearer"},
-    )
+    if request is not None:
+        request.state.tenant_context = context
+    return context
 
 
 logger = logging.getLogger("aegis.api.auth")
@@ -75,8 +87,9 @@ def _validate_jwt(token: str) -> TenantContext:
         tenant_id = token[4:] or "default-tenant"
         return TenantContext(
             tenant_id=tenant_id,
-            user_id="dev-user",
-            role="admin",
+            principal_id="dev-user",
+            roles=frozenset({"admin", "tenant_admin", "editor"}),
+            authentication_method="dev_token",
         )
 
     # Production / non-dev: decode and verify JWT using PyJWT
@@ -205,10 +218,15 @@ def _validate_jwt(token: str) -> TenantContext:
         detail={"role": role},
     )
 
+    roles = frozenset({"admin", "tenant_admin"}) if role == "admin" else frozenset({role})
+    if "roles" in payload and isinstance(payload["roles"], (list, set, tuple)):
+        roles = frozenset(payload["roles"])
+
     return TenantContext(
         tenant_id=str(tenant_id),
-        user_id=str(user_id),
-        role=str(role),
+        principal_id=str(user_id),
+        roles=roles,
+        authentication_method="bearer",
     )
 
 
@@ -231,8 +249,9 @@ def _validate_api_key(api_key: str) -> TenantContext:
     if env == "development" and api_key == "aegis-dev-key":
         return TenantContext(
             tenant_id="default-tenant",
-            user_id="api-user",
-            role="editor",
+            principal_id="api-user",
+            roles=frozenset({"editor"}),
+            authentication_method="dev_key",
         )
 
     raw_keys = os.environ.get("AEGIS_API_KEYS")
@@ -319,17 +338,22 @@ def _validate_api_key(api_key: str) -> TenantContext:
         detail={"role": role, "key_prefix": supplied_hash[:8]},
     )
 
+    roles = frozenset({"admin", "tenant_admin"}) if role == "admin" else frozenset({role})
+    if "roles" in matched_meta and isinstance(matched_meta["roles"], (list, set, tuple)):
+        roles = frozenset(matched_meta["roles"])
+
     return TenantContext(
         tenant_id=str(tenant_id),
-        user_id=str(user_id),
-        role=str(role),
+        principal_id=str(user_id),
+        roles=roles,
+        authentication_method="api_key",
     )
 
 
 def require_role(*roles: str):
     """Role-based access control dependency factory."""
     async def check(tenant: TenantContext = Depends(get_current_tenant)):
-        if tenant.role != "admin" and tenant.role not in roles:
+        if not tenant.has_role(*roles):
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,
                 detail=f"Role '{tenant.role}' not authorized. Required: {list(roles)}",

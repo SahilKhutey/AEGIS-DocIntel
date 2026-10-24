@@ -63,7 +63,7 @@ def _is_public(path: str, public_paths: frozenset[str], public_prefixes: Iterabl
     return any(norm == p or norm.startswith(p + "/") for p in public_prefixes)
 
 
-def _authenticate(headers: dict[str, str]) -> None:
+def _authenticate(headers: dict[str, str]):
     """Raise HTTPException(401) unless the headers carry credentials the real validators
     accept. Mirrors ``src.api.auth.get_current_tenant`` exactly (same functions)."""
     # Imported lazily: src.api.auth imports FastAPI security classes and we avoid import cycles.
@@ -72,12 +72,12 @@ def _authenticate(headers: dict[str, str]) -> None:
     authorization = headers.get("authorization", "")
     scheme, _, token = authorization.partition(" ")
     if scheme.lower() == "bearer" and token.strip():
-        _validate_jwt(token.strip())
+        return _validate_jwt(token.strip())
         return
 
     api_key = headers.get("x-api-key", "").strip()
     if api_key:
-        _validate_api_key(api_key)
+        return _validate_api_key(api_key)
         return
 
     raise HTTPException(
@@ -112,7 +112,10 @@ class AuthGuardMiddleware:
 
         headers = {k.decode("latin-1").lower(): v.decode("latin-1") for k, v in scope["headers"]}
         try:
-            _authenticate(headers)
+            context = _authenticate(headers)
+            if "state" not in scope:
+                scope["state"] = {}
+            scope["state"]["tenant_context"] = context
         except HTTPException as exc:
             response = JSONResponse({"detail": exc.detail}, status_code=exc.status_code, headers=exc.headers)
             await response(scope, receive, send)
