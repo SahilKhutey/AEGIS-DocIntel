@@ -2,9 +2,15 @@ name: CI
 
 on:
   push:
-    branches: [master, main]
+    branches:
+      - master
+      - main
+      - "p0/**"
+      - fix/phase0-green-and-honest
   pull_request:
-    branches: [master, main]
+    branches:
+      - master
+      - main
   schedule:
     - cron: "0 6 * * 1"   # weekly, Monday 06:00 UTC — powers dependency-drift-check below
   workflow_dispatch: {}
@@ -136,11 +142,11 @@ jobs:
       - name: Dependency vulnerability scan
         run: |
           pip install pip-audit
-          pip-audit --requirement requirements-core.txt || true
+          pip-audit --requirement requirements-core.txt
       - name: Static security analysis (bandit)
         run: |
           pip install bandit
-          bandit -r src -ll || true
+          bandit -r src -ll
       - name: Secret scan
         # Reviewed false positives live in .gitleaksignore, each with an explanatory comment.
         uses: gitleaks/gitleaks-action@v3
