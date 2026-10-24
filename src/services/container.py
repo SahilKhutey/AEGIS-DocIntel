@@ -7,6 +7,7 @@ Central access point for all services.
 from __future__ import annotations
 
 import asyncio
+import inspect
 import logging
 import os
 import sqlite3
@@ -32,9 +33,21 @@ from src.observability.metrics import (
 log = structlog.get_logger("aegis.container")
 
 
-class DocumentPersistenceError(RuntimeError):
-    """Raised when document metadata or raw bytes fail to persist reliably."""
-    pass
+from src.services.storage_errors import (
+    DocumentStorageError,
+    DocumentPersistenceError,
+    DocumentNotFoundError,
+    DocumentRecoveryError,
+    DocumentCleanupPending,
+)
+
+ALLOWED_TRANSITIONS = {
+    "processing": {"ready", "failed", "deleting"},
+    "ready": {"deleting"},
+    "failed": {"processing", "deleting"},
+    "deleting": {"delete_failed"},
+    "delete_failed": {"deleting"},
+}
 
 
 class RealDocumentService:
@@ -56,7 +69,10 @@ class RealDocumentService:
         try:
             p = Path(self.db_path)
             p.parent.mkdir(parents=True, exist_ok=True)
-            with sqlite3.connect(self.db_path) as conn:
+            with sqlite3.connect(self.db_path, timeout=10.0) as conn:
+                cursor = conn.execute("PRAGMA user_version")
+                version = cursor.fetchone()[0]
+
                 conn.execute("""
                     CREATE TABLE IF NOT EXISTS documents (
                         doc_id TEXT PRIMARY KEY,
@@ -68,16 +84,36 @@ class RealDocumentService:
                         is_scanned BOOLEAN NOT NULL,
                         language TEXT NOT NULL,
                         created_at TEXT NOT NULL,
-                        raw_bytes BLOB
+                        updated_at TEXT,
+                        raw_bytes BLOB,
+                        content_type TEXT,
+                        byte_size INTEGER,
+                        sha256 TEXT,
+                        error_code TEXT
                     )
                 """)
+                conn.execute("CREATE INDEX IF NOT EXISTS idx_documents_tenant_status ON documents(tenant_id, status)")
+                conn.execute("CREATE INDEX IF NOT EXISTS idx_documents_created_at ON documents(created_at DESC)")
+
                 cursor = conn.execute("PRAGMA table_info(documents)")
-                cols = [col[1] for col in cursor.fetchall()]
-                if "raw_bytes" not in cols:
-                    conn.execute("ALTER TABLE documents ADD COLUMN raw_bytes BLOB")
+                existing_cols = {col[1] for col in cursor.fetchall()}
+                for col_name, col_type in [
+                    ("updated_at", "TEXT"),
+                    ("raw_bytes", "BLOB"),
+                    ("content_type", "TEXT"),
+                    ("byte_size", "INTEGER"),
+                    ("sha256", "TEXT"),
+                    ("error_code", "TEXT"),
+                ]:
+                    if col_name not in existing_cols:
+                        conn.execute(f"ALTER TABLE documents ADD COLUMN {col_name} {col_type}")
+
+                if version < 2:
+                    conn.execute("PRAGMA user_version = 2")
                 conn.commit()
         except Exception as e:
-            log.warning("Could not initialize SQLite document store", error=str(e))
+            log.exception("Could not initialize SQLite document store", error=str(e))
+            raise DocumentStorageError(f"Database initialization failed: {e}") from e
 
     def _load_docs(self):
         if not self.db_path or self.db_path == ":memory:":
@@ -85,9 +121,26 @@ class RealDocumentService:
         try:
             if not Path(self.db_path).exists():
                 return
-            with sqlite3.connect(self.db_path) as conn:
+            with sqlite3.connect(self.db_path, timeout=10.0) as conn:
+                # Reconcile stale processing or deleting documents interrupted by a previous restart
+                conn.execute("""
+                    UPDATE documents
+                    SET status = 'failed', error_code = 'STALE_PROCESSING_INTERRUPTED'
+                    WHERE status = 'processing'
+                """)
+                conn.execute("""
+                    UPDATE documents
+                    SET status = 'delete_failed', error_code = 'STALE_DELETION_INTERRUPTED'
+                    WHERE status = 'deleting'
+                """)
+                conn.commit()
+
                 cursor = conn.execute(
-                    "SELECT doc_id, tenant_id, filename, status, page_count, chunk_count, is_scanned, language, created_at FROM documents"
+                    """
+                    SELECT doc_id, tenant_id, filename, status, page_count, chunk_count,
+                           is_scanned, language, created_at, updated_at, content_type, byte_size, sha256
+                    FROM documents
+                    """
                 )
                 for row in cursor.fetchall():
                     try:
@@ -104,12 +157,19 @@ class RealDocumentService:
                         "is_scanned": bool(row[6]),
                         "language": row[7],
                         "created_at": created,
+                        "updated_at": row[9] or str(created),
+                        "content_type": row[10] or "application/octet-stream",
+                        "byte_size": row[11] or 0,
+                        "sha256": row[12] or "",
                     }
-                    self._docs[row[0]] = doc_info
+                    if doc_info["status"] == "ready":
+                        self._docs[row[0]] = doc_info
         except Exception as e:
-            log.warning("Could not load documents from SQLite", error=str(e))
+            log.exception("Could not load documents from SQLite", error=str(e))
+            raise DocumentStorageError(f"Failed to load documents from database: {e}") from e
 
     def _persist_doc(self, doc_info: dict, raw_bytes: Optional[bytes] = None):
+        """Persist or update document metadata and raw bytes in SQLite."""
         if not self.db_path or self.db_path == ":memory:":
             return
         try:
@@ -118,48 +178,92 @@ class RealDocumentService:
                 if isinstance(doc_info["created_at"], datetime)
                 else str(doc_info["created_at"])
             )
-            with sqlite3.connect(self.db_path) as conn:
+            updated_str = (
+                doc_info.get("updated_at", created_str).isoformat()
+                if isinstance(doc_info.get("updated_at"), datetime)
+                else str(doc_info.get("updated_at") or created_str)
+            )
+            with sqlite3.connect(self.db_path, timeout=10.0) as conn:
                 conn.execute("""
-                    INSERT OR REPLACE INTO documents
-                    (doc_id, tenant_id, filename, status, page_count, chunk_count, is_scanned, language, created_at, raw_bytes)
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    INSERT INTO documents
+                    (doc_id, tenant_id, filename, status, page_count, chunk_count, is_scanned, language, created_at, updated_at, raw_bytes, content_type, byte_size, sha256, error_code)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    ON CONFLICT(doc_id) DO UPDATE SET
+                        status = excluded.status,
+                        page_count = excluded.page_count,
+                        chunk_count = excluded.chunk_count,
+                        updated_at = excluded.updated_at,
+                        error_code = excluded.error_code,
+                        raw_bytes = COALESCE(excluded.raw_bytes, documents.raw_bytes)
                 """, (
                     doc_info["doc_id"],
                     doc_info["tenant_id"],
                     doc_info["filename"],
                     doc_info["status"],
-                    doc_info["page_count"],
-                    doc_info["chunk_count"],
-                    1 if doc_info["is_scanned"] else 0,
-                    doc_info["language"],
+                    doc_info.get("page_count", 0),
+                    doc_info.get("chunk_count", 0),
+                    1 if doc_info.get("is_scanned") else 0,
+                    doc_info.get("language", "en"),
                     created_str,
+                    updated_str,
                     raw_bytes,
+                    doc_info.get("content_type", "application/octet-stream"),
+                    doc_info.get("byte_size", len(raw_bytes) if raw_bytes else 0),
+                    doc_info.get("sha256", ""),
+                    doc_info.get("error_code"),
                 ))
                 conn.commit()
         except Exception as e:
             log.warning("Could not persist document to SQLite", error=str(e))
             raise DocumentPersistenceError(f"Failed to persist document {doc_info.get('doc_id')}: {e}") from e
 
-    def _load_raw_bytes(self, doc_id: str) -> Optional[bytes]:
+    def _load_raw_bytes(self, doc_id: str, tenant_id: Optional[str] = None) -> Optional[bytes]:
         if not self.db_path or self.db_path == ":memory:":
             return None
         try:
-            with sqlite3.connect(self.db_path) as conn:
-                cursor = conn.execute("SELECT raw_bytes FROM documents WHERE doc_id = ?", (doc_id,))
+            with sqlite3.connect(self.db_path, timeout=10.0) as conn:
+                if tenant_id:
+                    cursor = conn.execute(
+                        "SELECT raw_bytes, sha256 FROM documents WHERE doc_id = ? AND tenant_id = ? AND status = 'ready'",
+                        (str(doc_id), str(tenant_id)),
+                    )
+                else:
+                    cursor = conn.execute(
+                        "SELECT raw_bytes, sha256 FROM documents WHERE doc_id = ? AND status = 'ready'",
+                        (str(doc_id),),
+                    )
                 row = cursor.fetchone()
                 if row and row[0]:
-                    return row[0]
+                    raw_bytes, sha256_hash = row[0], row[1]
+                    if sha256_hash:
+                        import hashlib
+                        if hashlib.sha256(raw_bytes).hexdigest() != sha256_hash:
+                            raise DocumentRecoveryError(f"Checksum mismatch for document {doc_id}")
+                    return raw_bytes
+        except DocumentRecoveryError:
+            raise
         except Exception as e:
             log.warning("Could not load raw_bytes from SQLite", error=str(e))
+            raise DocumentStorageError(f"Database error loading raw bytes: {e}") from e
         return None
 
     async def hydrate_document(self, doc_id: str, tenant_id: str) -> bool:
         """Re-hydrates document into orchestrator if not present in memory."""
         doc = self._docs.get(str(doc_id))
+        if not doc:
+            if self.db_path and self.db_path != ":memory:":
+                with sqlite3.connect(self.db_path, timeout=10.0) as conn:
+                    cursor = conn.execute(
+                        "SELECT doc_id, tenant_id, filename FROM documents WHERE doc_id = ? AND tenant_id = ? AND status = 'ready'",
+                        (str(doc_id), str(tenant_id)),
+                    )
+                    row = cursor.fetchone()
+                    if row:
+                        doc = {"doc_id": row[0], "tenant_id": row[1], "filename": row[2]}
         if not doc or str(doc.get("tenant_id", "")) != str(tenant_id):
             return False
         if hasattr(self.orchestrator, "_doc_state") and str(doc_id) not in self.orchestrator._doc_state:
-            raw_bytes = self._load_raw_bytes(str(doc_id))
+            raw_bytes = self._load_raw_bytes(str(doc_id), tenant_id=str(tenant_id))
             if raw_bytes:
                 try:
                     from src.models.document_object import DocumentObject
@@ -175,80 +279,142 @@ class RealDocumentService:
                     log.warning("Failed to re-hydrate document into orchestrator", error=str(e))
         return False
 
-    def _delete_persisted_doc(self, doc_id: str):
+    def _delete_persisted_doc(self, doc_id: str, tenant_id: Optional[str] = None) -> bool:
         if not self.db_path or self.db_path == ":memory:":
-            return
+            return True
         try:
-            with sqlite3.connect(self.db_path) as conn:
-                conn.execute("DELETE FROM documents WHERE doc_id = ?", (doc_id,))
+            with sqlite3.connect(self.db_path, timeout=10.0) as conn:
+                if tenant_id:
+                    cursor = conn.execute(
+                        "DELETE FROM documents WHERE doc_id = ? AND tenant_id = ?",
+                        (str(doc_id), str(tenant_id)),
+                    )
+                else:
+                    cursor = conn.execute(
+                        "DELETE FROM documents WHERE doc_id = ?",
+                        (str(doc_id),),
+                    )
                 conn.commit()
+                return cursor.rowcount > 0
         except Exception as e:
             log.warning("Could not delete document from SQLite", error=str(e))
+            raise DocumentStorageError(f"Database error deleting document: {e}") from e
 
     async def ingest(self, file_bytes: bytes, filename: str, content_type: str, tenant_id: str):
+        import hashlib
         doc_id = str(uuid.uuid4())
+        sha256_hash = hashlib.sha256(file_bytes).hexdigest()
+        byte_size = len(file_bytes)
+        now = datetime.now(timezone.utc)
+
+        # 1. Pre-persist durable record in 'processing' state
+        initial_info = {
+            "doc_id": doc_id,
+            "tenant_id": str(tenant_id),
+            "filename": filename,
+            "status": "processing",
+            "page_count": 0,
+            "chunk_count": 0,
+            "is_scanned": False,
+            "language": "en",
+            "created_at": now,
+            "updated_at": now.isoformat(),
+            "content_type": content_type,
+            "byte_size": byte_size,
+            "sha256": sha256_hash,
+            "error_code": None,
+        }
+        self._persist_doc(initial_info, raw_bytes=file_bytes)
+
         doc = DocumentObject(
             doc_id=doc_id,
             filename=filename,
             raw_bytes=file_bytes,
             tenant_id=str(tenant_id),
         )
-        
+
         try:
-            # Ingest using orchestrator
+            # 2. Ingest using orchestrator
             stats = await self.orchestrator.ingest(doc)
-            
-            doc_info = {
-                "doc_id": stats.get("doc_id", doc_id),
-                "tenant_id": str(tenant_id),
-                "filename": filename,
+            page_count = stats.get("pages", 1)
+            chunk_count = stats.get("elements", 0)
+
+            # 3. Transition to 'ready' state
+            ready_info = {
+                **initial_info,
                 "status": "ready",
-                "page_count": stats.get("pages", 1),
-                "chunk_count": stats.get("elements", 0),
-                "is_scanned": False,
-                "language": "en",
-                "created_at": datetime.now(timezone.utc),
+                "page_count": page_count,
+                "chunk_count": chunk_count,
+                "updated_at": datetime.now(timezone.utc).isoformat(),
             }
-            
-            self._docs[stats.get("doc_id", doc_id)] = doc_info
-            try:
-                self._persist_doc(doc_info, raw_bytes=file_bytes)
-            except Exception:
-                self._docs.pop(stats.get("doc_id", doc_id), None)
-                raise
+            self._persist_doc(ready_info, raw_bytes=file_bytes)
+            self._docs[doc_id] = ready_info
+
             audit_logger.log(
                 action="doc.ingest",
                 tenant_id=str(tenant_id),
-                resource_id=doc_info["doc_id"],
+                resource_id=doc_id,
                 status="SUCCESS",
-                detail={"filename": filename, "pages": doc_info["page_count"]},
+                detail={"filename": filename, "pages": page_count},
             )
-            
+
             DOCUMENTS_INGESTED.labels(tenant_id=str(tenant_id), status="success").inc()
-            CHUNKS_INDEXED.labels(tenant_id=str(tenant_id), block_type="mixed").inc(stats.get("elements", 0))
+            CHUNKS_INDEXED.labels(tenant_id=str(tenant_id), block_type="mixed").inc(chunk_count)
             ACTIVE_DOCUMENTS.labels(tenant_id=str(tenant_id)).inc()
 
             class _DocResp:
                 def __init__(self, d):
                     for k, v in d.items():
                         setattr(self, k, v)
-            return _DocResp(doc_info)
-        except Exception:
+            return _DocResp(ready_info)
+        except Exception as exc:
+            # Transition to 'failed' state in SQLite & cleanup memory
+            failed_info = {
+                **initial_info,
+                "status": "failed",
+                "updated_at": datetime.now(timezone.utc).isoformat(),
+                "error_code": type(exc).__name__,
+            }
+            try:
+                self._persist_doc(failed_info, raw_bytes=file_bytes)
+            except Exception:
+                pass
+            self._docs.pop(doc_id, None)
             DOCUMENTS_INGESTED.labels(tenant_id=str(tenant_id), status="failed").inc()
             raise
 
     async def get(self, doc_id: str, tenant_id: str):
         doc = self._docs.get(str(doc_id))
-        if not doc:
-            return None
-        # Tenant-isolation fix (found during Repository Audit follow-up):
-        # tenant_id was accepted as a parameter here but never actually
-        # checked, so any authenticated tenant could fetch any other
-        # tenant's document metadata by doc_id alone. Returning None (the
-        # same "not found" result an unknown doc_id produces) rather than
-        # raising is deliberate: a 403 would confirm the document exists
-        # for some other tenant, leaking its existence; 404 does not.
-        if str(doc.get("tenant_id", "")) != str(tenant_id):
+        if not doc and self.db_path and self.db_path != ":memory:":
+            try:
+                with sqlite3.connect(self.db_path, timeout=10.0) as conn:
+                    cursor = conn.execute(
+                        """
+                        SELECT doc_id, tenant_id, filename, status, page_count, chunk_count, is_scanned, language, created_at, content_type, byte_size
+                        FROM documents
+                        WHERE doc_id = ? AND tenant_id = ? AND status = 'ready'
+                        """,
+                        (str(doc_id), str(tenant_id)),
+                    )
+                    row = cursor.fetchone()
+                    if row:
+                        doc = {
+                            "doc_id": row[0],
+                            "tenant_id": row[1],
+                            "filename": row[2],
+                            "status": row[3],
+                            "page_count": row[4],
+                            "chunk_count": row[5],
+                            "is_scanned": bool(row[6]),
+                            "language": row[7],
+                            "created_at": row[8],
+                            "content_type": row[9],
+                            "byte_size": row[10],
+                        }
+            except Exception:
+                pass
+
+        if not doc or str(doc.get("tenant_id", "")) != str(tenant_id):
             return None
         class _DocResp:
             def __init__(self, d):
@@ -258,18 +424,34 @@ class RealDocumentService:
 
     async def get_status(self, doc_id: str, tenant_id: str):
         doc = self._docs.get(str(doc_id))
-        if not doc:
-            return None
-        if str(doc.get("tenant_id", "")) != str(tenant_id):
+        if not doc and self.db_path and self.db_path != ":memory:":
+            try:
+                with sqlite3.connect(self.db_path, timeout=10.0) as conn:
+                    cursor = conn.execute(
+                        "SELECT doc_id, tenant_id, status, chunk_count FROM documents WHERE doc_id = ? AND tenant_id = ?",
+                        (str(doc_id), str(tenant_id)),
+                    )
+                    row = cursor.fetchone()
+                    if row:
+                        doc = {
+                            "doc_id": row[0],
+                            "tenant_id": row[1],
+                            "status": row[2],
+                            "chunk_count": row[3],
+                        }
+            except Exception:
+                pass
+
+        if not doc or str(doc.get("tenant_id", "")) != str(tenant_id):
             return None
         class _Status:
             def __init__(self, d):
                 self.doc_id = d["doc_id"]
                 self.status = d["status"]
-                self.progress_percent = 100.0
-                self.stage = "complete"
+                self.progress_percent = 100.0 if d["status"] == "ready" else 0.0
+                self.stage = "complete" if d["status"] == "ready" else d["status"]
                 self.error = None
-                self.chunks_indexed = d["chunk_count"]
+                self.chunks_indexed = d.get("chunk_count", 0)
         return _Status(doc)
 
     async def list_documents(self, tenant_id: str, page: int = 1, page_size: int = 20, status: str | None = None):
@@ -278,14 +460,72 @@ class RealDocumentService:
         if not 1 <= page_size <= 100:
             raise ValueError("page_size must be between 1 and 100")
 
-        filtered = [
-            v for v in self._docs.values()
-            if str(v.get("tenant_id", "")) == str(tenant_id)
-            and (status is None or str(v.get("status", "")).lower() == str(status).lower())
-        ]
-        total = len(filtered)
-        start = (page - 1) * page_size
-        paged_items = filtered[start : start + page_size]
+        if self.db_path and self.db_path != ":memory:" and Path(self.db_path).exists():
+            with sqlite3.connect(self.db_path, timeout=10.0) as conn:
+                if status is not None:
+                    count_cur = conn.execute(
+                        "SELECT COUNT(*) FROM documents WHERE tenant_id = ? AND LOWER(status) = LOWER(?)",
+                        (str(tenant_id), str(status)),
+                    )
+                else:
+                    count_cur = conn.execute(
+                        "SELECT COUNT(*) FROM documents WHERE tenant_id = ? AND status != 'deleting'",
+                        (str(tenant_id),),
+                    )
+                total = count_cur.fetchone()[0]
+
+                offset = (page - 1) * page_size
+                if status is not None:
+                    cur = conn.execute(
+                        """
+                        SELECT doc_id, tenant_id, filename, status, page_count, chunk_count, is_scanned, language, created_at, content_type, byte_size
+                        FROM documents
+                        WHERE tenant_id = ? AND LOWER(status) = LOWER(?)
+                        ORDER BY created_at DESC, doc_id DESC
+                        LIMIT ? OFFSET ?
+                        """,
+                        (str(tenant_id), str(status), page_size, offset),
+                    )
+                else:
+                    cur = conn.execute(
+                        """
+                        SELECT doc_id, tenant_id, filename, status, page_count, chunk_count, is_scanned, language, created_at, content_type, byte_size
+                        FROM documents
+                        WHERE tenant_id = ? AND status != 'deleting'
+                        ORDER BY created_at DESC, doc_id DESC
+                        LIMIT ? OFFSET ?
+                        """,
+                        (str(tenant_id), page_size, offset),
+                    )
+                items = [
+                    {
+                        "doc_id": r[0],
+                        "tenant_id": r[1],
+                        "filename": r[2],
+                        "status": r[3],
+                        "page_count": r[4],
+                        "chunk_count": r[5],
+                        "is_scanned": bool(r[6]),
+                        "language": r[7],
+                        "created_at": r[8],
+                        "content_type": r[9] or "application/octet-stream",
+                        "byte_size": r[10] or 0,
+                    }
+                    for r in cur.fetchall()
+                ]
+        else:
+            filtered = [
+                v for v in self._docs.values()
+                if str(v.get("tenant_id", "")) == str(tenant_id)
+                and (status is None or str(v.get("status", "")).lower() == str(status).lower())
+            ]
+            filtered.sort(
+                key=lambda doc: (str(doc.get("created_at", "")), str(doc.get("doc_id", ""))),
+                reverse=True,
+            )
+            total = len(filtered)
+            start = (page - 1) * page_size
+            items = filtered[start : start + page_size]
 
         class _Doc:
             def __init__(self, d):
@@ -297,37 +537,114 @@ class RealDocumentService:
                 self.total = total
                 self.page = page
                 self.page_size = page_size
-        return _List(paged_items, total, page, page_size)
+        return _List(items, total, page, page_size)
 
     async def delete(self, doc_id: str, tenant_id: str) -> bool:
+        # 1. Authorize tenant
         doc = self._docs.get(str(doc_id))
-        if not doc:
-            return False
-        if str(doc.get("tenant_id", "")) != str(tenant_id):
-            # Same not-found-shaped response as a genuinely missing
-            # document, for the same existence-leak reason as get() above.
+        if not doc and self.db_path and self.db_path != ":memory:":
+            try:
+                with sqlite3.connect(self.db_path, timeout=10.0) as conn:
+                    cur = conn.execute(
+                        "SELECT tenant_id FROM documents WHERE doc_id = ?",
+                        (str(doc_id),),
+                    )
+                    row = cur.fetchone()
+                    if row:
+                        doc = {"tenant_id": row[0]}
+            except Exception:
+                pass
+
+        if not doc or str(doc.get("tenant_id", "")) != str(tenant_id):
             return False
 
-        # Real cascading deletion — was previously only self._docs.pop(),
-        # despite the API endpoint's docstring already claiming this happened.
-        if hasattr(self.orchestrator, "vector_store") and self.orchestrator.vector_store:
+        # 2. Commit a deletion tombstone in SQLite
+        if self.db_path and self.db_path != ":memory:":
             try:
-                await self.orchestrator.vector_store.delete(doc_id=str(doc_id))
+                now_iso = datetime.now(timezone.utc).isoformat()
+                with sqlite3.connect(self.db_path, timeout=10.0) as conn:
+                    row = conn.execute(
+                        "SELECT status FROM documents WHERE doc_id = ? AND tenant_id = ?",
+                        (str(doc_id), str(tenant_id)),
+                    ).fetchone()
+                    if row is not None:
+                        if row[0] not in ('ready', 'failed', 'delete_failed'):
+                            return False
+                        conn.execute(
+                            """
+                            UPDATE documents
+                            SET status = 'deleting', updated_at = ?
+                            WHERE doc_id = ? AND tenant_id = ? AND status IN ('ready', 'failed', 'delete_failed')
+                            """,
+                            (now_iso, str(doc_id), str(tenant_id)),
+                        )
+                        conn.commit()
             except Exception as e:
-                log.warning(f"Vector store deletion failed for {doc_id}: {e}")
-        if hasattr(self.orchestrator, "semantic_cache") and self.orchestrator.semantic_cache:
-            try:
-                await self.orchestrator.semantic_cache.invalidate(doc_id=str(doc_id))
-            except Exception as e:
-                log.warning(f"Cache invalidation failed for {doc_id}: {e}")
-        if hasattr(self.orchestrator, "delete_document"):
-            try:
-                await self.orchestrator.delete_document(str(doc_id), tenant_id=str(tenant_id))
-            except Exception as e:
-                log.warning(f"Orchestrator document deletion failed for {doc_id}: {e}")
+                log.exception("Failed to mark document as deleting", error=str(e))
+                raise DocumentStorageError(f"Database error during deletion tombstone: {e}") from e
 
         self._docs.pop(str(doc_id), None)
-        self._delete_persisted_doc(str(doc_id))
+
+        # 3. Clean up derived stores
+        cleanup_failed = False
+        store_errors = []
+
+        if hasattr(self.orchestrator, "vector_store") and self.orchestrator.vector_store:
+            try:
+                res = self.orchestrator.vector_store.delete(doc_id=str(doc_id))
+                if inspect.isawaitable(res):
+                    await res
+            except Exception as e:
+                cleanup_failed = True
+                store_errors.append(f"vector_store: {e}")
+                log.warning("Vector store deletion failed for %s: %s", doc_id, e)
+
+        if hasattr(self.orchestrator, "semantic_cache") and self.orchestrator.semantic_cache:
+            try:
+                res = self.orchestrator.semantic_cache.invalidate(doc_id=str(doc_id))
+                if inspect.isawaitable(res):
+                    await res
+            except Exception as e:
+                cleanup_failed = True
+                store_errors.append(f"semantic_cache: {e}")
+                log.warning("Cache invalidation failed for %s: %s", doc_id, e)
+
+        if hasattr(self.orchestrator, "delete_document"):
+            try:
+                res = self.orchestrator.delete_document(str(doc_id), tenant_id=str(tenant_id))
+                if inspect.isawaitable(res):
+                    res = await res
+                if res is False:
+                    cleanup_failed = True
+                    store_errors.append("orchestrator: delete_document returned False")
+            except Exception as e:
+                cleanup_failed = True
+                store_errors.append(f"orchestrator: {e}")
+                log.warning("Orchestrator document deletion failed for %s: %s", doc_id, e)
+
+        # 4. Handle store failure vs complete success
+        if cleanup_failed:
+            if self.db_path and self.db_path != ":memory:":
+                try:
+                    with sqlite3.connect(self.db_path, timeout=10.0) as conn:
+                        conn.execute(
+                            "UPDATE documents SET status = 'delete_failed', updated_at = ?, error_code = ? WHERE doc_id = ? AND tenant_id = ?",
+                            (datetime.now(timezone.utc).isoformat(), "; ".join(store_errors), str(doc_id), str(tenant_id)),
+                        )
+                        conn.commit()
+                except Exception:
+                    pass
+            audit_logger.log(
+                action="doc.delete",
+                tenant_id=str(tenant_id),
+                resource_id=str(doc_id),
+                status="PENDING",
+                detail={"errors": store_errors},
+            )
+            return False
+
+        # If all stores succeeded, finalize deletion from SQLite
+        self._delete_persisted_doc(str(doc_id), tenant_id=str(tenant_id))
         audit_logger.log(
             action="doc.delete",
             tenant_id=str(tenant_id),
@@ -336,6 +653,7 @@ class RealDocumentService:
         )
         ACTIVE_DOCUMENTS.labels(tenant_id=str(tenant_id)).dec()
         return True
+
 
     async def reindex(self, doc_id: str, tenant_id: str):
         return await self.get_status(doc_id, tenant_id)

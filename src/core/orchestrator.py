@@ -472,8 +472,6 @@ class AMDIOrchestrator:
             if tenant_id and getattr(state, "tenant_id", None) and str(state.tenant_id) != str(tenant_id):
                 return False
             self._doc_state.pop(doc_id, None)
-        self._elements = [e for e in self._elements if getattr(e, "doc_id", None) != doc_id]
-        self._tables = [t for t in self._tables if getattr(t, "doc_id", None) != doc_id]
         if self._vector_store is not None:
             await self._vector_store.delete(doc_id=doc_id)
         if getattr(self, "_semantic_cache", None) is not None:
