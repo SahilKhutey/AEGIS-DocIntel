@@ -12,6 +12,11 @@ from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional, Tuple, Union
 
 
+class PIIRedactionPolicyError(RuntimeError):
+    """Raised when mandatory redaction fails or privacy validation policy is violated."""
+    pass
+
+
 @dataclass
 class PIIEntity:
     entity_type: str
@@ -35,18 +40,30 @@ class ComplianceReport:
     entities_found: List[PIIEntity] = field(default_factory=list)
     redactions_applied: int = 0
     policy_version: str = "1.0.0"
+    def safe_summary(self) -> Dict[str, Any]:
+        """Returns safe aggregate telemetry without sensitive matched strings."""
+        by_category: Dict[str, int] = {}
+        for ent in self.entities_found:
+            by_category[ent.entity_type] = by_category.get(ent.entity_type, 0) + 1
+        return {
+            "document_id": self.document_id,
+            "total_entities_found": len(self.entities_found),
+            "redactions_applied": self.redactions_applied,
+            "entity_categories": by_category,
+            "policy_version": self.policy_version,
+        }
 
 
 # Structured PII Regex Patterns with Validation Logic
 SSN_REGEX = re.compile(r'\b\d{3}-\d{2}-\d{4}\b')
 CREDIT_CARD_REGEX = re.compile(r'\b(?:\d{4}[-\s]?){3}\d{4}\b')
 PHONE_REGEX = re.compile(
-    r'(?:\+\d{1,4}[-\s]?(?:\(\d{1,4}\)[-\s]?)?\d{1,4}[-\s]?\d{1,4}[-\s]?\d{1,9})|'
-    r'(?:(?:\+?1[-\s]?)?\(?\d{3}\)?[-\s]?\d{3}[-\s]?\d{4})|'
+    r'(?:(?<!\w)\+\d{1,4}[-\s]?(?:\(\d{1,4}\)[-\s]?)?\d{1,4}[-\s]?\d{1,4}[-\s]?\d{1,9}\b)|'
+    r'(?:\b(?:\+?1[-\s]?)?\(?\d{3}\)?[-\s]?\d{3}[-\s]?\d{4}\b)|'
     r'(?:(?<![\d-])\b\d{3}-\d{4}\b)'
 )
 EMAIL_REGEX = re.compile(r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b')
-API_KEY_REGEX = re.compile(r'\b(?:sk-[a-zA-Z0-9_\-]{20,}|AKIA[0-9A-Z]{16}|ASIA[0-9A-Z]{16}|ghp_[0-9a-zA-Z]{36}|github_pat_[0-9a-zA-Z_]{22,})\b')
+API_KEY_REGEX = re.compile(r'\b(?:sk-[a-zA-Z0-9_\-]{20,}|AKIA[0-9A-Z]{16}|ASIA[0-9A-Z]{16}|ghp_[0-9a-zA-Z]{30,}|github_pat_[0-9a-zA-Z_]{22,})\b')
 
 NON_NAME_WORDS = {
     "Contact", "Visited", "Invoice", "Ref", "Document", "Section", "Table", "Figure",
@@ -54,7 +71,7 @@ NON_NAME_WORDS = {
     "Margin", "Operating", "Financial", "System", "Service", "Engine", "Member", "Card",
     "Order", "ID", "Number", "Date", "Status", "Type", "Format", "Page", "Block", "Pay",
     "Call", "Customer", "Client", "Patient", "User", "Account", "Dear", "Agent", "Manager",
-    "Employee", "Developer", "Director", "Author", "Sender", "Recipient", "Dr", "Mr", "Mrs", "Ms", "Prof",
+    "Employee", "Developer", "Director", "Managing", "Executive", "Senior", "Chief", "Officer", "Lead", "Head", "President", "Vice", "Author", "Sender", "Recipient", "Dr", "Mr", "Mrs", "Ms", "Prof",
 }
 
 # Exclusion lists for Title Case pairs that are locations
@@ -282,6 +299,8 @@ def redact_elements(
         RedactionPolicy('US_SSN', 'redact'),
         RedactionPolicy('CREDIT_CARD', 'redact'),
         RedactionPolicy('PHONE_NUMBER', 'redact'),
+        RedactionPolicy('EMAIL_ADDRESS', 'redact'),
+        RedactionPolicy('API_KEY_TOKEN', 'redact'),
     ]
     all_entities: List[PIIEntity] = []
     total_redactions = 0
@@ -322,3 +341,51 @@ def redact_elements(
         redactions_applied=total_redactions,
     )
     return redacted_elements, report
+
+
+
+def redact_or_block(
+    content: Any,
+    policies: Optional[List[RedactionPolicy]] = None,
+    mandatory: bool = True,
+) -> Tuple[Any, ComplianceReport]:
+    """
+    Applies PII redaction according to policy with fail-closed safety.
+    If mandatory=True and an unexpected error occurs, raises PIIRedactionPolicyError,
+    blocking downstream external transfer rather than leaking plaintext data.
+    """
+    default_p = policies or [
+        RedactionPolicy('US_SSN', 'redact'),
+        RedactionPolicy('CREDIT_CARD', 'redact'),
+        RedactionPolicy('PHONE_NUMBER', 'redact'),
+        RedactionPolicy('EMAIL', 'redact'),
+        RedactionPolicy('API_KEY', 'redact'),
+        RedactionPolicy('PERSON', 'redact'),
+    ]
+    try:
+        if isinstance(content, str):
+            entities = detect_pii(content)
+            redacted_text = apply_redaction_policy(content, entities, default_p)
+            report = ComplianceReport(
+                document_id="doc_str",
+                entities_found=entities,
+                redactions_applied=len(entities),
+            )
+            return redacted_text, report
+        elif isinstance(content, list):
+            return redact_elements(content, default_p)
+        else:
+            entities = detect_pii(content)
+            res = apply_redaction_policy(content, entities, default_p)
+            if isinstance(res, tuple):
+                return res
+            report = ComplianceReport(
+                document_id="doc_elem",
+                entities_found=entities,
+                redactions_applied=len(entities),
+            )
+            return res, report
+    except Exception as exc:
+        if mandatory:
+            raise PIIRedactionPolicyError(f"Mandatory redaction failed: {exc}") from exc
+        raise
