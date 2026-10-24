@@ -9,7 +9,9 @@ import hashlib
 import uuid
 from typing import Annotated, Optional
 
+import json
 import structlog
+from fastapi.responses import JSONResponse
 from fastapi import (
     APIRouter, BackgroundTasks, Depends, File, Form,
     HTTPException, Query, Request, UploadFile, status
@@ -62,7 +64,7 @@ async def upload_document(
     file_bytes = await file.read()
     if len(file_bytes) > MAX_UPLOAD_BYTES:
         raise HTTPException(
-            status_code=status.HTTP_413_REQUEST_ENTITY_TOO_LARGE,
+            status_code=status.HTTP_413_CONTENT_TOO_LARGE,
             detail=f"File size {len(file_bytes) / 1024 / 1024:.1f}MB exceeds limit of 200MB",
         )
     if len(file_bytes) == 0:
@@ -70,6 +72,23 @@ async def upload_document(
 
     container = request.app.state.container
     doc_service = container.document_service
+
+    # Idempotency check
+    idempotency_key = request.headers.get("Idempotency-Key", "").strip()
+    idempotency_store = getattr(request.app.state, "idempotency_store", None)
+    if idempotency_key and idempotency_store:
+        payload_hash = idempotency_store.compute_payload_hash(file_bytes)
+        existing_record = await idempotency_store.check_and_start(
+            tenant_id=tenant.tenant_id,
+            operation="document_upload",
+            key=idempotency_key,
+            payload_hash=payload_hash,
+        )
+        if existing_record and existing_record.response_body:
+            return JSONResponse(
+                status_code=existing_record.response_code,
+                content=existing_record.response_body,
+            )
 
     try:
         doc = await doc_service.ingest(
@@ -79,8 +98,24 @@ async def upload_document(
             tenant_id=tenant.tenant_id,
         )
         log.info("Document queued", doc_id=str(doc.doc_id), filename=file.filename, tenant=tenant.tenant_id)
+        if idempotency_key and idempotency_store:
+            body = doc.model_dump() if hasattr(doc, "model_dump") else (doc.dict() if hasattr(doc, "dict") else dict(doc))
+            body = json.loads(json.dumps(body, default=str))
+            await idempotency_store.complete(
+                tenant_id=tenant.tenant_id,
+                operation="document_upload",
+                key=idempotency_key,
+                response_code=202,
+                response_body=body,
+            )
         return doc
     except Exception as e:
+        if idempotency_key and idempotency_store:
+            await idempotency_store.release_on_error(
+                tenant_id=tenant.tenant_id,
+                operation="document_upload",
+                key=idempotency_key,
+            )
         log.error("Upload failed", error=str(e), tenant=tenant.tenant_id)
         raise HTTPException(status_code=500, detail=f"Upload failed: {e}")
 
