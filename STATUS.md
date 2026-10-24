@@ -37,6 +37,22 @@ _Last verified: 2026-10-10 against `master` @ `5bec766` plus the Phase 0 changes
 
 ---
 
+## P3 Production Reliability, Deployment & Operational Readiness Status
+
+| Control / Capability | Implementation | Verification | Remaining limitation |
+|---|---|---|---|
+| Runtime configuration validation | Fail-closed validation in `src/core/settings.py` | `tests/test_runtime_configuration.py` | Mandatory in production: persistent SQLite, explicit CORS, JWT issuer/aud, hash-only API keys; mock LLMs and unauthorized external transfer rejected |
+| Health & readiness probes | `/health` (liveness) and `/readiness` (database/container query probe) in `src/main.py` | `tests/test_runtime_configuration.py`, `tests/test_performance_and_capacity.py` | Returns 503 if container not started or database unreachable; decoupled from auth guard |
+| Structured JSON logging & redaction | Structlog JSON renderer + credential scrubber in `src/observability/logging.py` | `tests/test_observability_and_diagnostics.py` | Automatic redaction of tokens, keys, passwords, and raw text; tenant IDs pseudonymized to irreversible SHA-256 hashes |
+| Request correlation & latency | `X-Request-ID` extraction/generation & `X-Response-Time-ms` in `src/main.py` middleware | `tests/test_observability_and_diagnostics.py` | Enforces alphanumeric/hyphen sanitization ($\le 64$ chars); bound to structlog contextvars |
+| Bounded async retries | `retry_transient_async` with exponential backoff & full jitter in `src/core/resilience.py` | `tests/test_resilience_and_recovery.py` | Strict deadline enforcement; fails fast immediately on non-transient domain errors |
+| Tenant-scoped idempotency | `IdempotencyStore` with payload hash & conflict detection in `src/core/resilience.py` | `tests/test_resilience_and_recovery.py`, `tests/test_performance_and_capacity.py` | Mutual exclusion under concurrent races; payload divergence triggers 409 Conflict |
+| Crash & restart recovery | Automatic state reconciliation on startup in `src/services/container.py` | `tests/test_resilience_and_recovery.py` | Transitions interrupted `processing` to `failed` and `deleting` to `delete_failed` with explicit error codes |
+| SQLite migration & rollback safety | Schema v1 to v2 auto-upgrade in `src/services/container.py` | `tests/test_migrations_and_rollback.py` | Zero data loss on schema upgrade; backup snapshots verified with `PRAGMA integrity_check` |
+| Multi-tenant concurrency & capacity | ASGI concurrent requests & bounded memory profiling | `tests/test_performance_and_capacity.py` | p50 < 80ms, p95 < 250ms for probes; memory growth bounded under 2MB across 500 operations |
+
+---
+
 ## What works (and how to re-verify it)
 
 | Capability | State | Re-verify with |

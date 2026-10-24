@@ -175,6 +175,8 @@ Browse the documentation sections:
 - [Status & 16-Phase Journey](docs/status.md)
 - [aegis-docprep Guide](docs/docprep.md)
 - [Architecture & Master State](docs/Architecture.md)
+- [Deployment & Operational Runbooks](docs/deployment/README.md)
+- [Performance & Benchmark Plan](docs/performance/benchmark-plan.md)
 - [Installation Guide](docs/installation.md)
 - [REST API Reference](docs/api.md)
 - [Compliance Gap Analysis](docs/compliance.md)
