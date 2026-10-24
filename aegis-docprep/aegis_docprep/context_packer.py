@@ -4,7 +4,7 @@ aegis-docprep — Submodular Knapsack Context Packer
 Formulates context packing as a submodular facility-location coverage optimization
 problem under strict token budget constraints.
 
-Provides provable (1 - 1/e) approximation bound for submodular greedy maximization.
+Provides provable (1 - 1/e)/2 ~= 0.316 approximation guarantee for submodular greedy maximization.
 
 Example usage:
 --------------
@@ -61,15 +61,21 @@ class SubmodularKnapsackPacker:
     """
 
     def __init__(self, alpha: float = 0.6, beta: float = 0.4):
-        self.alpha = alpha
-        self.beta = beta
+        if not (np.isfinite(alpha) and alpha >= 0.0):
+            raise ValueError(f"alpha must be finite and non-negative, got {alpha}")
+        if not (np.isfinite(beta) and beta >= 0.0):
+            raise ValueError(f"beta must be finite and non-negative, got {beta}")
+        self.alpha = float(alpha)
+        self.beta = float(beta)
 
     def _cosine_similarity(self, v1: np.ndarray, v2: np.ndarray) -> float:
         norm1 = np.linalg.norm(v1)
         norm2 = np.linalg.norm(v2)
         if norm1 == 0 or norm2 == 0:
             return 0.0
-        return float(np.dot(v1, v2) / (norm1 * norm2))
+        raw_cos = float(np.dot(v1, v2) / (norm1 * norm2))
+        # Enforce non-negative similarity to maintain submodular facility-location monotonicity
+        return max(0.0, raw_cos)
 
     def pack(
         self,
@@ -88,7 +94,9 @@ class SubmodularKnapsackPacker:
         Greedy submodular selection under knapsack budget.
         At each step, picks chunk j that maximizes delta_f(j | S) / token_cost(j).
         """
-        if not chunks or max_budget <= 0:
+        if max_budget < 0:
+            raise ValueError(f"max_budget must be non-negative, got {max_budget}")
+        if not chunks or max_budget == 0:
             return SubmodularPackingResult(
                 selected_chunks=[],
                 total_tokens=0,
@@ -96,6 +104,12 @@ class SubmodularKnapsackPacker:
                 coverage_score=0.0,
                 relevance_score=0.0,
             )
+
+        for c in chunks:
+            if c.token_cost < 0:
+                raise ValueError(f"chunk token_cost must be non-negative, got {c.token_cost}")
+            if not (np.isfinite(c.relevance_score) and c.relevance_score >= 0.0):
+                raise ValueError(f"chunk relevance_score must be non-negative, got {c.relevance_score}")
 
         n = len(chunks)
         # Precompute similarity matrix if embeddings are present

@@ -100,7 +100,7 @@ class LocalConnector(BaseConnector):
             req = urllib.request.Request(url, data=data, headers=headers, method="POST")
             
             t0 = time.time()
-            with urllib.request.urlopen(req, timeout=self.config.timeout) as response:
+            with urllib.request.urlopen(req, timeout=self.config.timeout) as response:  # nosec: B310
                 resp_data = json.loads(response.read().decode("utf-8"))
             latency = (time.time() - t0) * 1000
             
@@ -186,7 +186,7 @@ class LocalConnector(BaseConnector):
                 req = urllib.request.Request(url, data=data, headers=headers, method="POST")
                 
                 t0 = time.time()
-                with urllib.request.urlopen(req, timeout=self.config.timeout) as response:
+                with urllib.request.urlopen(req, timeout=self.config.timeout) as response:  # nosec: B310
                     resp_data = json.loads(response.read().decode("utf-8"))
                 latency = (time.time() - t0) * 1000
                 

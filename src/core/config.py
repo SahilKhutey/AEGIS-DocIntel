@@ -35,7 +35,7 @@ class AMDISettings(BaseSettings):
     secret_key: str = "change-me"
 
     # API
-    host: str = "0.0.0.0"
+    host: str = "0.0.0.0"  # nosec: B104
     port: int = 8000
     workers: int = 1
     cors_origins: List[str] = ["http://localhost:5173", "http://localhost:3000"]

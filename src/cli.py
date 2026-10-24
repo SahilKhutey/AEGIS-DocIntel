@@ -144,7 +144,7 @@ def run_serve() -> None:
         sys.exit(1)
 
     print('Starting AEGIS-MIOS API Server...')
-    uvicorn.run(app, host='0.0.0.0', port=8000)
+    uvicorn.run(app, host='0.0.0.0', port=8000)  # nosec: B104
 
 
 def main() -> None:

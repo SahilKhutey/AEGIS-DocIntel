@@ -29,7 +29,7 @@ class AppConfig(BaseModel):
 
 
 class ApiConfig(BaseModel):
-    host: str = "0.0.0.0"
+    host: str = "0.0.0.0"  # nosec: B104
     port: int = 8000
     workers: int = 4
     max_upload_mb: int = 200

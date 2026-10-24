@@ -32,6 +32,11 @@ from src.observability.metrics import (
 log = structlog.get_logger("aegis.container")
 
 
+class DocumentPersistenceError(RuntimeError):
+    """Raised when document metadata or raw bytes fail to persist reliably."""
+    pass
+
+
 class RealDocumentService:
     """Document service that delegates to AMDIOrchestrator and persists state."""
 
@@ -133,6 +138,7 @@ class RealDocumentService:
                 conn.commit()
         except Exception as e:
             log.warning("Could not persist document to SQLite", error=str(e))
+            raise DocumentPersistenceError(f"Failed to persist document {doc_info.get('doc_id')}: {e}") from e
 
     def _load_raw_bytes(self, doc_id: str) -> Optional[bytes]:
         if not self.db_path or self.db_path == ":memory:":
@@ -205,7 +211,11 @@ class RealDocumentService:
             }
             
             self._docs[stats.get("doc_id", doc_id)] = doc_info
-            self._persist_doc(doc_info, raw_bytes=file_bytes)
+            try:
+                self._persist_doc(doc_info, raw_bytes=file_bytes)
+            except Exception:
+                self._docs.pop(stats.get("doc_id", doc_id), None)
+                raise
             audit_logger.log(
                 action="doc.ingest",
                 tenant_id=str(tenant_id),
@@ -263,7 +273,20 @@ class RealDocumentService:
         return _Status(doc)
 
     async def list_documents(self, tenant_id: str, page: int = 1, page_size: int = 20, status: str | None = None):
-        items = [v for v in self._docs.values() if str(v.get("tenant_id", "")) == str(tenant_id)]
+        if page < 1:
+            raise ValueError("page must be >= 1")
+        if not 1 <= page_size <= 100:
+            raise ValueError("page_size must be between 1 and 100")
+
+        filtered = [
+            v for v in self._docs.values()
+            if str(v.get("tenant_id", "")) == str(tenant_id)
+            and (status is None or str(v.get("status", "")).lower() == str(status).lower())
+        ]
+        total = len(filtered)
+        start = (page - 1) * page_size
+        paged_items = filtered[start : start + page_size]
+
         class _Doc:
             def __init__(self, d):
                 for k, v in d.items():
@@ -274,7 +297,7 @@ class RealDocumentService:
                 self.total = total
                 self.page = page
                 self.page_size = page_size
-        return _List(items, len(items), page, page_size)
+        return _List(paged_items, total, page, page_size)
 
     async def delete(self, doc_id: str, tenant_id: str) -> bool:
         doc = self._docs.get(str(doc_id))
