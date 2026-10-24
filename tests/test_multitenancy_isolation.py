@@ -120,3 +120,56 @@ def test_cross_tenant_query_api_returns_404(monkeypatch):
             headers=tenant_b_headers,
         )
         assert r_cross_export.status_code == 404, f"Expected 404, got {r_cross_export.status_code}"
+
+
+def test_cross_tenant_document_lifecycle_idor_attacks(monkeypatch):
+    """
+    Verify that across all document lifecycle operations (GET, DELETE, CHUNKS, LIST),
+    cross-tenant resource probing yields non-disclosing 404 responses (IDOR defense).
+    """
+    from fastapi.testclient import TestClient
+    from src.main import app
+
+    monkeypatch.setenv("AEGIS_ENVIRONMENT", "development")
+    tenant_a_headers = {"Authorization": "Bearer dev-tenant-alpha"}
+    tenant_b_headers = {"Authorization": "Bearer dev-tenant-bravo"}
+
+    with TestClient(app, raise_server_exceptions=False) as client:
+        # 1. Ingest document as tenant A via /v1/documents/upload
+        r = client.post(
+            "/v1/documents/upload",
+            headers=tenant_a_headers,
+            files={"file": ("alpha_secret_lifecycle.pdf", b"%PDF-1.7 Confidential Alpha Data", "application/pdf")},
+        )
+        assert r.status_code == 202, r.text
+        doc_id = r.json()["doc_id"]
+
+        # 2. Tenant B GET /v1/documents/{doc_id} -> 404
+        r_get = client.get(f"/v1/documents/{doc_id}", headers=tenant_b_headers)
+        assert r_get.status_code == 404, f"Expected 404 on get, got {r_get.status_code}"
+
+        # 3. Tenant B GET /v1/documents/{doc_id}/status -> 404
+        r_status = client.get(f"/v1/documents/{doc_id}/status", headers=tenant_b_headers)
+        assert r_status.status_code == 404, f"Expected 404 on status, got {r_status.status_code}"
+
+        # 4. Tenant B GET /v1/documents/{doc_id}/chunks -> 404
+        r_chunks = client.get(f"/v1/documents/{doc_id}/chunks", headers=tenant_b_headers)
+        assert r_chunks.status_code == 404, f"Expected 404 on chunks, got {r_chunks.status_code}"
+
+        # 5. Tenant B DELETE /v1/documents/{doc_id} -> 404
+        r_del = client.delete(f"/v1/documents/{doc_id}", headers=tenant_b_headers)
+        assert r_del.status_code == 404, f"Expected 404 on delete, got {r_del.status_code}"
+
+        # 6. Document still exists for Tenant A
+        r_owner = client.get(f"/v1/documents/{doc_id}", headers=tenant_a_headers)
+        assert r_owner.status_code == 200, f"Expected 200 for owner, got {r_owner.status_code}"
+
+        # 7. List documents for Tenant B must not contain Tenant A doc
+        r_list = client.get("/v1/documents", headers=tenant_b_headers)
+        assert r_list.status_code == 200
+        items = r_list.json().get("items", [])
+        assert all(i.get("doc_id") != doc_id for i in items)
+
+        # 8. Tenant A can delete their own document
+        r_del_owner = client.delete(f"/v1/documents/{doc_id}", headers=tenant_a_headers)
+        assert r_del_owner.status_code == 204
