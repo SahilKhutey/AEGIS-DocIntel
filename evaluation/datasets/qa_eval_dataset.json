@@ -1,0 +1,201 @@
+{
+  "version": "1.0.0",
+  "extraction_cases": [
+    {
+      "case_id": "ext_two_column_01",
+      "description": "Standard two-column journal layout reading left column then right column",
+      "blocks": [
+        {"id": "b1", "x0": 50, "y0": 100, "x1": 250, "y1": 150, "text": "Left Col Header"},
+        {"id": "b2", "x0": 50, "y0": 160, "x1": 250, "y1": 220, "text": "Left Col Para 1"},
+        {"id": "b3", "x0": 50, "y0": 230, "x1": 250, "y1": 300, "text": "Left Col Para 2"},
+        {"id": "b4", "x0": 300, "y0": 100, "x1": 500, "y1": 150, "text": "Right Col Header"},
+        {"id": "b5", "x0": 300, "y0": 160, "x1": 500, "y1": 250, "text": "Right Col Para 1"}
+      ],
+      "expected_order": ["b1", "b2", "b3", "b4", "b5"]
+    },
+    {
+      "case_id": "ext_single_column_02",
+      "description": "Linear report layout top to bottom",
+      "blocks": [
+        {"id": "h1", "x0": 50, "y0": 50, "x1": 500, "y1": 90, "text": "Executive Summary"},
+        {"id": "p1", "x0": 50, "y0": 100, "x1": 500, "y1": 180, "text": "During Q3 operations reached record volume."},
+        {"id": "p2", "x0": 50, "y0": 190, "x1": 500, "y1": 270, "text": "Capital expenditures remained within guidance."}
+      ],
+      "expected_order": ["h1", "p1", "p2"]
+    },
+    {
+      "case_id": "ext_table_grid_03",
+      "description": "Structured table with 2 rows and 2 columns",
+      "rows": 2,
+      "cols": 2,
+      "cells": [
+        {"row": 0, "col": 0, "text": "Quarter", "rowspan": 1, "colspan": 1},
+        {"row": 0, "col": 1, "text": "Revenue ($M)", "rowspan": 1, "colspan": 1},
+        {"row": 1, "col": 0, "text": "Q1 2025", "rowspan": 1, "colspan": 1},
+        {"row": 1, "col": 1, "text": "142.5", "rowspan": 1, "colspan": 1}
+      ],
+      "expected_cell_count": 4
+    }
+  ],
+  "packing_cases": [
+    {
+      "case_id": "pack_budget_100",
+      "budget": 100,
+      "costs": [30, 40, 50, 20, 60],
+      "weights": [0.8, 0.7, 0.9, 0.5, 0.85]
+    },
+    {
+      "case_id": "pack_budget_tight",
+      "budget": 45,
+      "costs": [15, 20, 25, 30],
+      "weights": [0.6, 0.7, 0.8, 0.9]
+    },
+    {
+      "case_id": "pack_submodular_ratio",
+      "budget": 70,
+      "costs": [25, 30, 35, 40, 20, 15],
+      "weights": [0.75, 0.85, 0.90, 0.95, 0.50, 0.45]
+    }
+  ],
+  "privacy_cases": [
+    {
+      "id": "priv_01",
+      "text": "Contact Senior Director Alice Morgan at alice.morgan@enterprise.corp or call +1-555-019-2834.",
+      "expected_pii": [
+        {"entity": "alice.morgan@enterprise.corp", "type": "EMAIL"},
+        {"entity": "+1-555-019-2834", "type": "PHONE"},
+        {"entity": "Alice Morgan", "type": "PERSON"}
+      ],
+      "safe_distractors": ["Senior Director"]
+    },
+    {
+      "id": "priv_02",
+      "text": "Employee SSN 123-45-6789 was verified by HR specialist Johnathan Vance.",
+      "expected_pii": [
+        {"entity": "123-45-6789", "type": "SSN"},
+        {"entity": "Johnathan Vance", "type": "PERSON"}
+      ],
+      "safe_distractors": ["HR"]
+    },
+    {
+      "id": "priv_03",
+      "text": "Use internal API token ghp_A1B2C3D4E5F6G7H8I9J0K1L2M3N4O5P6Q7R8 for deployment access.",
+      "expected_pii": [
+        {"entity": "ghp_A1B2C3D4E5F6G7H8I9J0K1L2M3N4O5P6Q7R8", "type": "API_KEY"}
+      ],
+      "safe_distractors": ["API"]
+    },
+    {
+      "id": "priv_04",
+      "text": "Managing Partner Robert Chen noted that the 2024 annual report showed zero compliance violations.",
+      "expected_pii": [
+        {"entity": "Robert Chen", "type": "PERSON"}
+      ],
+      "safe_distractors": ["Managing Partner", "2024"]
+    },
+    {
+      "id": "priv_05",
+      "text": "Cardholder payment transaction 4532-1100-8899-2341 was rejected by payment gateway.",
+      "expected_pii": [
+        {"entity": "4532-1100-8899-2341", "type": "CREDIT_CARD"}
+      ],
+      "safe_distractors": ["4532"]
+    },
+    {
+      "id": "priv_06",
+      "text": "Send telemetry metrics to devops-monitor@acme-cloud.io with header key sk-live-99887766554433221100aabb.",
+      "expected_pii": [
+        {"entity": "devops-monitor@acme-cloud.io", "type": "EMAIL"},
+        {"entity": "sk-live-99887766554433221100aabb", "type": "API_KEY"}
+      ],
+      "safe_distractors": []
+    },
+    {
+      "id": "priv_07",
+      "text": "Chief Executive Officer Clara Oswald reached out from mobile +44 20 7946 0912.",
+      "expected_pii": [
+        {"entity": "Clara Oswald", "type": "PERSON"},
+        {"entity": "+44 20 7946 0912", "type": "PHONE"}
+      ],
+      "safe_distractors": ["Chief Executive Officer"]
+    },
+    {
+      "id": "priv_08",
+      "text": "No personal information is present in this sentence describing machine learning loss curves.",
+      "expected_pii": [],
+      "safe_distractors": ["machine learning"]
+    }
+  ],
+  "retrieval_cases": [
+    {
+      "query_id": "q01",
+      "query": "What was the total revenue for FY2024?",
+      "corpus": [
+        {"id": "c1", "text": "In fiscal year 2024, consolidated revenue grew by 18% to $450 million.", "rel": 2},
+        {"id": "c2", "text": "Operating margin improved from 12% to 15.5% over the same fiscal period.", "rel": 1},
+        {"id": "c3", "text": "The company hired 120 software engineers in London and Singapore.", "rel": 0}
+      ],
+      "relevant_ids": ["c1", "c2"],
+      "top_relevant_id": "c1",
+      "is_unanswerable": false
+    },
+    {
+      "query_id": "q02",
+      "query": "What are the primary storage guarantees of SQLite WAL mode?",
+      "corpus": [
+        {"id": "c4", "text": "SQLite WAL mode provides atomic commits and concurrent readers without blocking writes.", "rel": 2},
+        {"id": "c5", "text": "Relational databases use B-trees for on-disk page indexing.", "rel": 1},
+        {"id": "c6", "text": "Python asyncio handles cooperative multitasking through event loops.", "rel": 0}
+      ],
+      "relevant_ids": ["c4"],
+      "top_relevant_id": "c4",
+      "is_unanswerable": false
+    },
+    {
+      "query_id": "q03",
+      "query": "What is the token budget formula used by the context compiler?",
+      "corpus": [
+        {"id": "c7", "text": "The available token budget B is computed as window size minus query, system prompt, output and overhead tokens.", "rel": 2},
+        {"id": "c8", "text": "Context packing solves a submodular knapsack maximization problem.", "rel": 1},
+        {"id": "c9", "text": "JWT authorization headers require Bearer schema validation.", "rel": 0}
+      ],
+      "relevant_ids": ["c7"],
+      "top_relevant_id": "c7",
+      "is_unanswerable": false
+    },
+    {
+      "query_id": "q04_unanswerable",
+      "query": "What was the orbital velocity of the Apollo 11 lunar module ascent stage?",
+      "corpus": [
+        {"id": "c10", "text": "Document ingestion parses PDFs into normalized blocks with bounding coordinates.", "rel": 0},
+        {"id": "c11", "text": "Tenant isolation is enforced strictly before vector query execution.", "rel": 0}
+      ],
+      "relevant_ids": [],
+      "top_relevant_id": null,
+      "is_unanswerable": true
+    },
+    {
+      "query_id": "q05",
+      "query": "How is PII redaction failure handled under strict compliance?",
+      "corpus": [
+        {"id": "c12", "text": "When policy on_violation is block, detecting forbidden PII raises PIIRedactionPolicyError and halts pipeline.", "rel": 2},
+        {"id": "c13", "text": "Telemetry reports redact matched secrets and only record aggregate occurrence counts.", "rel": 1},
+        {"id": "c14", "text": "FAISS indices support FlatIP and FlatL2 distance metrics.", "rel": 0}
+      ],
+      "relevant_ids": ["c12"],
+      "top_relevant_id": "c12",
+      "is_unanswerable": false
+    },
+    {
+      "query_id": "q06_unanswerable",
+      "query": "What is the deep ocean salinity level in the Mariana Trench?",
+      "corpus": [
+        {"id": "c15", "text": "Reciprocal Rank Fusion computes score RRF(d) = sum 1 / (60 + r).", "rel": 0},
+        {"id": "c16", "text": "Citation integrity checks compare answer citations against retrieved chunk IDs.", "rel": 0}
+      ],
+      "relevant_ids": [],
+      "top_relevant_id": null,
+      "is_unanswerable": true
+    }
+  ]
+}

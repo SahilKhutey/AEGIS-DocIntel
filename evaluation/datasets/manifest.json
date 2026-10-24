@@ -1,0 +1,50 @@
+{
+  "manifest_version": "1.0.0",
+  "name": "AEGIS-DocIntel AI Quality & Retrieval Benchmark",
+  "description": "Standardized evaluation suite for document extraction fidelity, context packing invariants, PII redaction precision/recall, and evidence-grounded retrieval.",
+  "created_at": "2026-10-24T12:00:00Z",
+  "maintainer": "AEGIS Engineering Team",
+  "slices": {
+    "extraction": {
+      "description": "Multipage, multi-column reading order and structured table reconstruction evaluation",
+      "test_cases_count": 8,
+      "metrics": ["reading_order_kendall_tau", "table_cell_f1"]
+    },
+    "packing": {
+      "description": "Submodular context packing budget constraints, greedy approximation bounds, and diversity",
+      "test_cases_count": 10,
+      "metrics": ["budget_violation_rate", "min_approx_ratio", "mean_approx_ratio"]
+    },
+    "privacy": {
+      "description": "Synthetic PII redaction precision, recall, and zero downstream secret leakage",
+      "test_cases_count": 15,
+      "metrics": ["precision", "recall", "f1", "leakage_rate"]
+    },
+    "retrieval": {
+      "description": "Evidence retrieval accuracy, citation integrity, and unanswerable query abstention",
+      "test_cases_count": 20,
+      "metrics": ["mrr", "recall_at_5", "ndcg_at_5", "abstention_accuracy", "citation_precision"]
+    }
+  },
+  "quality_gates": {
+    "extraction": {
+      "min_reading_order_kendall_tau": 0.80,
+      "min_table_cell_f1": 0.90
+    },
+    "packing": {
+      "max_budget_violation_rate": 0.0,
+      "min_approx_ratio": 0.316
+    },
+    "privacy": {
+      "min_precision": 0.85,
+      "min_recall": 0.85,
+      "max_leakage_rate": 0.0
+    },
+    "retrieval": {
+      "min_mrr": 0.70,
+      "min_recall_at_5": 0.80,
+      "min_abstention_accuracy": 1.0,
+      "min_citation_precision": 0.90
+    }
+  }
+}
