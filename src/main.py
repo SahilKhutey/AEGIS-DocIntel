@@ -2,17 +2,19 @@
 AEGIS-DocIntel — FastAPI Application Entry Point
 =================================================
 Production-grade REST API with:
-- JWT authentication
-- Multi-tenant routing
-- Document upload + query endpoints
+- Strict runtime configuration & validation
+- Fail-closed JWT & API-key authentication
+- Multi-tenant routing & pre-retrieval isolation
+- Durable document upload with idempotency keys
 - WebSocket progress notifications
 - Prometheus metrics + OpenTelemetry tracing
-- Graceful shutdown
+- Graceful shutdown & readiness probes
 """
 from __future__ import annotations
 
 import asyncio
 import logging
+import re
 import time
 import uuid
 from contextlib import asynccontextmanager
@@ -37,6 +39,19 @@ from src.api.models import (
 )
 from src.api.routers import documents, queries, admin, webhooks
 from src.config import settings
+from src.core.resilience import (
+    DocumentStorageError,
+    ExtractionError,
+    IdempotencyConflictError,
+    IdempotencyInProgressError,
+    IdempotencyStore,
+    InvalidDocumentError,
+    ProviderRateLimitError,
+    ProviderTimeoutError,
+    ProviderUnavailableError,
+    ResourceLimitError,
+)
+from src.core.settings import ConfigurationError, load_runtime_settings
 from src.observability.logging import configure_logging
 from src.observability.metrics import start_observability, REQUEST_LATENCY
 
@@ -48,10 +63,16 @@ from src.observability.metrics import start_observability, REQUEST_LATENCY
 @asynccontextmanager
 async def lifespan(app: FastAPI) -> AsyncGenerator:
     """Application lifespan: startup → serve → shutdown."""
-    configure_logging(settings.app.log_level)
+    runtime_settings = load_runtime_settings(validate_production=True)
+    configure_logging(runtime_settings.log_level)
     log = structlog.get_logger("aegis.startup")
 
-    log.info("Starting AEGIS-DocIntel", version=settings.app.version, env=settings.app.env)
+    log.info(
+        "Starting AEGIS-DocIntel",
+        version=settings.app.version,
+        env=runtime_settings.environment,
+        max_upload_bytes=runtime_settings.max_upload_bytes,
+    )
 
     # Initialize all services
     from src.services.container import ServiceContainer
@@ -60,6 +81,7 @@ async def lifespan(app: FastAPI) -> AsyncGenerator:
     app.state.container = container
     app.state.orchestrator = container.rag_engine
     app.state.doc_registry = {}
+    app.state.runtime_settings = runtime_settings
 
     # Start observability (Prometheus metrics endpoint)
     if settings.observability.enable_metrics:
@@ -69,9 +91,15 @@ async def lifespan(app: FastAPI) -> AsyncGenerator:
 
     yield  # ← Application serves requests here
 
-    # Graceful shutdown
+    # Graceful shutdown with deadline
     log.info("Shutting down AEGIS-DocIntel")
-    await container.shutdown()
+    shutdown_timeout = runtime_settings.request_timeout_seconds
+    try:
+        await asyncio.wait_for(container.shutdown(), timeout=shutdown_timeout)
+    except asyncio.TimeoutError:
+        log.warning("Container shutdown timed out", timeout_seconds=shutdown_timeout)
+    except Exception as exc:
+        log.warning("Container shutdown error", error=str(exc))
     log.info("Shutdown complete")
 
 
@@ -80,6 +108,8 @@ async def lifespan(app: FastAPI) -> AsyncGenerator:
 # ─────────────────────────────────────────────────────────────────
 
 def create_app() -> FastAPI:
+    runtime_settings = load_runtime_settings(validate_production=False)
+
     app = FastAPI(
         title="AEGIS-DocIntel",
         description=(
@@ -87,29 +117,50 @@ def create_app() -> FastAPI:
             "Reverse-engineered architecture of ChatGPT/Gemini/Claude document pipelines."
         ),
         version=settings.app.version,
-        docs_url="/docs" if settings.app.env != "production" else None,
-        redoc_url="/redoc" if settings.app.env != "production" else None,
-        openapi_url="/openapi.json" if settings.app.env != "production" else None,
+        docs_url="/docs" if runtime_settings.enable_docs else None,
+        redoc_url="/redoc" if runtime_settings.enable_docs else None,
+        openapi_url="/openapi.json" if runtime_settings.enable_docs else None,
         lifespan=lifespan,
     )
 
+    app.state.runtime_settings = runtime_settings
+    app.state.idempotency_store = IdempotencyStore(ttl_seconds=3600.0)
+
     # ── Middleware ──────────────────────────────────────────────
-    # Added FIRST => innermost: CORS (added below, outermost) still decorates its 401s.
-    # Deny-by-default auth for every HTTP route; see src/api/auth_guard.py for why.
     app.add_middleware(AuthGuardMiddleware)
     app.add_middleware(GZipMiddleware, minimum_size=1000)
     app.add_middleware(
         CORSMiddleware,
-        allow_origins=settings.api.cors_origins,
+        allow_origins=runtime_settings.cors_origins,
         allow_credentials=True,
         allow_methods=["*"],
         allow_headers=["*"],
     )
 
-    # Request ID + latency middleware
+    # Request ID + Payload Limit + Latency Middleware
     @app.middleware("http")
     async def request_middleware(request: Request, call_next):
-        request_id = str(uuid.uuid4())
+        # 1. Enforce payload size limit prior to streaming large files
+        content_length = request.headers.get("content-length")
+        if content_length:
+            try:
+                cl_int = int(content_length)
+                max_bytes = getattr(request.app.state, "runtime_settings", runtime_settings).max_upload_bytes
+                if cl_int > max_bytes:
+                    return JSONResponse(
+                        status_code=status.HTTP_413_CONTENT_TOO_LARGE,
+                        content={"detail": f"Payload size {cl_int} bytes exceeds limit of {max_bytes} bytes"},
+                    )
+            except ValueError:
+                pass
+
+        # 2. Extract or generate sanitized Request ID
+        incoming_id = request.headers.get("X-Request-ID", "").strip()
+        if incoming_id and len(incoming_id) <= 64 and re.match(r"^[a-zA-Z0-9_\-]+$", incoming_id):
+            request_id = incoming_id
+        else:
+            request_id = str(uuid.uuid4())
+
         request.state.request_id = request_id
         structlog.contextvars.bind_contextvars(request_id=request_id)
         start = time.perf_counter()
@@ -146,19 +197,19 @@ def create_app() -> FastAPI:
     @app.get("/v1/stats", tags=["System"])
     @app.get("/stats", tags=["System"])
     async def get_stats(request: Request):
-        container = request.app.state.container
+        container = getattr(request.app.state, "container", None)
+        if container is None:
+            return {}
         orchestrator = container.rag_engine
         doc_service = container.document_service
         if not doc_service or not doc_service._docs:
             return {}
-        # Get last ingested doc info
         try:
             doc_info = max(doc_service._docs.values(), key=lambda d: d.get('created_at', 0))
         except ValueError:
             return {}
             
         doc_id = doc_info['doc_id']
-        
         elements = orchestrator.get_document_elements(doc_id) if orchestrator else []
         tables = orchestrator.get_document_tables(doc_id) if orchestrator else []
         templates = orchestrator.get_document_templates(doc_id) if orchestrator else []
@@ -185,9 +236,10 @@ def create_app() -> FastAPI:
             'graph_edges': n_edges,
         }
 
-    # ── Health endpoints ────────────────────────────────────────
+    # ── Health & Readiness Probes ────────────────────────────────
     @app.get("/health", response_model=HealthResponse, tags=["System"])
     async def health_check(request: Request):
+        """Liveness probe: verifies process is alive and responsive."""
         container = getattr(request.app.state, "container", None)
         if container is None:
             return JSONResponse(
@@ -202,14 +254,98 @@ def create_app() -> FastAPI:
         )
 
     @app.get("/readiness", tags=["System"])
-    async def readiness():
-        return {"ready": True}
+    async def readiness(request: Request):
+        """Readiness probe: verifies persistent storage and dependencies can serve traffic."""
+        container = getattr(request.app.state, "container", None)
+        if container is None:
+            return JSONResponse(
+                status_code=503,
+                content={"ready": False, "reason": "initializing"},
+            )
+        is_ready, details = await container.verify_readiness()
+        status_code = 200 if is_ready else 503
+        return JSONResponse(
+            status_code=status_code,
+            content={"ready": is_ready, "details": details},
+        )
 
-    # ── Global exception handler ────────────────────────────────
+    # ── Exception Handlers ──────────────────────────────────────
+    @app.exception_handler(InvalidDocumentError)
+    async def invalid_doc_handler(request: Request, exc: InvalidDocumentError):
+        return JSONResponse(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            content={"detail": str(exc), "request_id": getattr(request.state, "request_id", "")},
+        )
+
+    @app.exception_handler(IdempotencyConflictError)
+    async def idempotency_conflict_handler(request: Request, exc: IdempotencyConflictError):
+        return JSONResponse(
+            status_code=status.HTTP_409_CONFLICT,
+            content={"detail": str(exc), "request_id": getattr(request.state, "request_id", "")},
+        )
+
+    @app.exception_handler(IdempotencyInProgressError)
+    async def idempotency_in_progress_handler(request: Request, exc: IdempotencyInProgressError):
+        return JSONResponse(
+            status_code=status.HTTP_409_CONFLICT,
+            headers={"Retry-After": "1"},
+            content={"detail": str(exc), "request_id": getattr(request.state, "request_id", "")},
+        )
+
+    @app.exception_handler(ExtractionError)
+    async def extraction_error_handler(request: Request, exc: ExtractionError):
+        return JSONResponse(
+            status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
+            content={"detail": str(exc), "request_id": getattr(request.state, "request_id", "")},
+        )
+
+    @app.exception_handler(ResourceLimitError)
+    async def resource_limit_handler(request: Request, exc: ResourceLimitError):
+        return JSONResponse(
+            status_code=status.HTTP_413_CONTENT_TOO_LARGE,
+            content={"detail": str(exc), "request_id": getattr(request.state, "request_id", "")},
+        )
+
+    @app.exception_handler(ProviderTimeoutError)
+    async def provider_timeout_handler(request: Request, exc: ProviderTimeoutError):
+        return JSONResponse(
+            status_code=status.HTTP_504_GATEWAY_TIMEOUT,
+            content={"detail": "Downstream model provider timed out", "request_id": getattr(request.state, "request_id", "")},
+        )
+
+    @app.exception_handler(ProviderRateLimitError)
+    async def provider_ratelimit_handler(request: Request, exc: ProviderRateLimitError):
+        return JSONResponse(
+            status_code=status.HTTP_429_TOO_MANY_REQUESTS,
+            headers={"Retry-After": "5"},
+            content={"detail": "Downstream model provider throttled requests", "request_id": getattr(request.state, "request_id", "")},
+        )
+
+    @app.exception_handler(ProviderUnavailableError)
+    async def provider_unavailable_handler(request: Request, exc: ProviderUnavailableError):
+        return JSONResponse(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            content={"detail": "Downstream model provider temporarily unavailable", "request_id": getattr(request.state, "request_id", "")},
+        )
+
+    @app.exception_handler(DocumentStorageError)
+    async def storage_error_handler(request: Request, exc: DocumentStorageError):
+        return JSONResponse(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            content={"detail": "Durable document storage operation failed", "request_id": getattr(request.state, "request_id", "")},
+        )
+
+    @app.exception_handler(ConfigurationError)
+    async def config_error_handler(request: Request, exc: ConfigurationError):
+        return JSONResponse(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            content={"detail": "Configuration validation error", "request_id": getattr(request.state, "request_id", "")},
+        )
+
     @app.exception_handler(Exception)
     async def global_exception_handler(request: Request, exc: Exception):
         log = structlog.get_logger("aegis.error")
-        log.error("Unhandled exception", exc=str(exc), path=request.url.path)
+        log.error("Unhandled exception", exc_info=False, error_type=type(exc).__name__, path=request.url.path)
         return JSONResponse(
             status_code=500,
             content={"detail": "Internal server error", "request_id": getattr(request.state, "request_id", "")},

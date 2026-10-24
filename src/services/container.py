@@ -815,8 +815,47 @@ class ServiceContainer:
     async def shutdown(self):
         """Graceful shutdown of all services."""
         log.info("Shutting down service container")
+        self._started = False
         if self.rag_engine:
-            await self.rag_engine.close()
+            try:
+                await self.rag_engine.close()
+            except Exception as e:
+                log.warning("Error closing RAG engine during shutdown", error=str(e))
+        if hasattr(self, "_redis") and self._redis:
+            try:
+                await self._redis.close()
+            except Exception as e:
+                log.warning("Error closing Redis during shutdown", error=str(e))
+
+    async def verify_readiness(self) -> tuple[bool, dict[str, str]]:
+        """Verify whether critical services and persistent database are ready to serve traffic."""
+        details: dict[str, str] = {}
+        if not getattr(self, "_started", False):
+            details["container"] = "not_started"
+            return False, details
+        details["container"] = "ok"
+
+        # Database readiness check
+        if self.document_service is not None:
+            db_path = getattr(self.document_service, "db_path", None)
+            if db_path and db_path != ":memory:":
+                try:
+                    with sqlite3.connect(db_path, timeout=3.0) as conn:
+                        cursor = conn.cursor()
+                        cursor.execute("SELECT 1 FROM documents LIMIT 1")
+                    details["database"] = "ok"
+                except Exception as db_err:
+                    details["database"] = f"unhealthy: {db_err}"
+                    return False, details
+            else:
+                details["database"] = "ok"
+        else:
+            details["database"] = "missing_service"
+            return False, details
+
+        details["memory"] = "ok" if getattr(self, "memory", None) is not None else "degraded"
+        details["rag_engine"] = "ok" if self.rag_engine is not None else "missing"
+        return True, details
 
     async def health_check(self) -> dict[str, str]:
         """Check health of all dependent services."""
