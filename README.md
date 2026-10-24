@@ -17,8 +17,8 @@ pip install ./AEGIS-DocIntel/aegis-docprep
 ```
 
 - **Dependencies**: Minimal (`numpy>=1.26.0` only). Zero deep learning or GPU dependencies required.
-- **PII Detection & Redaction**: regex-based detection of US SSNs, Luhn-validated credit-card numbers, area-code phone numbers, and Title-Case person names. **Not detected:** email addresses, API keys/secrets, non-US phone formats. Treat it as a first-pass filter, not a guarantee — see [limitations](aegis-docprep/README.md#limitations-verified).
-- **Submodular Context Packing**: Greedy knapsack approximation with provable $(1 - 1/e)$ information coverage guarantees under strict LLM token ceilings.
+- **PII Detection & Redaction**: Regex and tokenization-based detection of US SSNs, Luhn-validated credit-card numbers, phone numbers (US, international E.164, local 7-digit), email addresses, API keys/tokens, and Title-Case person names. Treat it as a first-pass filter with human review, not a compliance guarantee — see [limitations](aegis-docprep/README.md#limitations-verified).
+- **Submodular Context Packing**: Greedy knapsack optimization with provable $(1 - 1/e)/2 \approx 0.316$ information coverage guarantee under strict LLM token ceilings.
 - **Spatial Reading-Order Recovery**: Directed topological DAG sorting over 2D bounding boxes resolving multi-column layout interleaving without heavy neural visual models.
 - **Framework Integrations**: Ready-to-use LangChain Document Transformers and LlamaIndex Node Postprocessors.
 

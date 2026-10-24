@@ -4,9 +4,23 @@ _Last verified: 2026-10-10 against `master` @ `5bec766` plus the Phase 0 changes
 
 **One rule governs this file: a capability is listed as working only if a test, CI job or script in this repository re-checks it.** Numbers that rot (test counts, coverage) are not hard-coded — the CI badge in the [README](README.md) is the source of truth. Anything not re-verified is labelled as such.
 
-**Overall: alpha research prototype — not production-ready.** The ingest → retrieve → delete pipeline runs end to end in-process, but answers are mock by default, state is held in memory, and production authentication is not implemented.
+**Overall: alpha research prototype with verified core modules.** The ingest → retrieve → delete pipeline runs end to end in-process. Production RS256 JWT validation, hash-only API-key lookup, deny-by-default route guard, SQLite document metadata & raw-byte persistence, and cryptographic audit logging are implemented and verified by automated regression test suites. External pilot verification, independent third-party certification, and distributed multi-tenant storage remain future roadmap items.
 
 > **CI note:** `master` was red at the start of Phase 0 (test jobs aborted at collection; the secret scan flagged a placeholder hash). The Phase 0 fixes were verified locally from a fresh virtualenv; they have **not yet been observed passing on GitHub** — check the badge.
+
+---
+
+## P0 Security and Reliability Status
+
+| Control | Implementation | Verification | Remaining limitation |
+|---|---|---|---|
+| JWT authentication | Implemented in `src/api/auth.py` | `tests/test_production_auth.py` | Strictly RS256, requires verified RSA public key; validates `exp`, `sub`, `tenant_id`, `role`, `iss`, `aud` |
+| API-key authentication | Implemented in `src/api/auth.py` | `tests/test_production_auth.py` | Hash-only SHA-256 configuration, constant-time comparison (`hmac.compare_digest`), raw keys in config rejected |
+| HTTP route guard | Implemented in `src/api/auth_guard.py` | `tests/test_auth_guard.py` | Deny-by-default on all routes; public allowlist restricted to operational health probes |
+| Tenant isolation | Implemented in API, orchestrator & DB | `tests/test_multitenancy_isolation.py` | Non-disclosing 404/401 on cross-tenant document, export, deletion, and query operations |
+| Document persistence | SQLite in `src/services/container.py` | `tests/test_persistence_and_audit.py` | Persists metadata and raw bytes; fails closed on SQLite commit failure with cleanup |
+| Secret scanning | GitHub Actions integration | `.gitleaksignore` reviewed | Gitleaks scan blocks unreviewed credentials across repository history |
+| CI Pipeline | GitHub Actions `.github/workflows/ci.yml` | Candidate PR & push triggers | Real security gates with `pip-audit` and `bandit -ll` without suppression |
 
 ---
 

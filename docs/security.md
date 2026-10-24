@@ -32,8 +32,10 @@ During Phase 10, a comprehensive code review of authentication, authorization, a
 - **Resolution**: `src/api/auth_guard.py` — a deny-by-default ASGI middleware. Every HTTP route returns 401 without valid credentials unless it is on a short explicit public list (`/health`, `/readiness`, `/docs`, `/redoc`, `/openapi.json`, `/metrics`). New routes are protected automatically. `tests/test_auth_guard.py` probes every operation in the app, so a future unprotected route fails CI.
 - **Known exposure**: `/metrics` is public and its series are labelled with `tenant_id`; keep it off the public internet.
 
-### 3. Known gap: production credentials cannot be validated yet
-The RS256 JWT and API-key validators in `src/api/auth.py` are stubs. Outside development every credential is rejected, so the API is currently usable only in development mode. Tracked as I-20.
+### 3. Production Authentication Architecture (Hardened in P0)
+- **RS256 JWT Authentication**: `src/api/auth.py` validates RS256 JWT signatures using a cryptographically verified RSA public key (`AEGIS_JWT_PUBLIC_KEY` or file path). It enforces strict RS256 algorithm pinning (rejecting HMAC/HS256 algorithm confusion attacks), validates expiration (`exp`), user identity (`sub`), tenant scoping (`tenant_id`), role permissions (`admin`, `editor`, `viewer`), and optionally validates issuer (`iss`) and audience (`aud`).
+- **Production API Keys**: Validates incoming API keys via SHA-256 hash lookup in `AEGIS_API_KEYS` using constant-time comparison (`hmac.compare_digest`). Configuration strictly requires 64-character lowercase hex digest keys and rejects raw plaintext keys in configuration. Plaintext keys are never logged in audit trails.
+- **Verification**: Machine-tested by `tests/test_production_auth.py` across positive, expired, invalid key, algorithm confusion, missing claims, unsupported roles, and hash-only lookup scenarios.
 
 ### 2. Transitive Dependency Vulnerability Triage
 - **Issue**: Dependency vulnerability scanning detected known CVE advisories in optional legacy packages.
