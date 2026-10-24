@@ -53,6 +53,17 @@ _Last verified: 2026-10-10 against `master` @ `5bec766` plus the Phase 0 changes
 
 ---
 
+## P4 Enterprise Architecture, Multi-Tenancy & Data Governance Status
+
+| Control / Capability | Implementation | Verification | Remaining limitation |
+|---|---|---|---|
+| Tenant isolation & RBAC | `TenantContext` in `src/core/security_context.py` & `src/core/authorization.py` | `tests/test_multitenancy_isolation.py`, `tests/test_api_contracts.py` | Parameterized SQL `WHERE doc_id = ? AND tenant_id = ?`; non-disclosing 404s on IDOR probes; viewer/editor/admin role matrix |
+| Data governance & lifecycle | `RetentionPolicy`, `ClassificationLevel`, `RetentionEngine` in `src/core/governance.py` | `tests/test_data_governance.py` | Automated expiry formula; legal hold blocks purging; cascading deletion inventory with cryptographic audit event |
+| Extensible adapters & sovereignty | `ExtractionAdapter`, `ParserAdapterRegistry`, `LLMProviderAdapter`, `ModelProviderRegistry` in `src/core/adapters.py` | `tests/test_provider_policy.py` | Pluggable extraction fallback cascades; external LLM egress blocked unless `AEGIS_ALLOW_EXTERNAL_LLM=true`; prompt injection input sanitization |
+| Asynchronous jobs & webhook security | `JobManager` in `src/core/jobs.py` & `is_safe_webhook_url` in `src/core/webhook_security.py` | `tests/test_webhook_security.py`, `tests/test_api_contracts.py` | Durable job state machine with pipeline version fingerprint; SSRF validation blocks loopback, private RFC 1918, and cloud metadata; HMAC-SHA256 signatures with 300s replay window |
+
+---
+
 ## What works (and how to re-verify it)
 
 | Capability | State | Re-verify with |
