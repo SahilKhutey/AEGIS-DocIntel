@@ -98,14 +98,14 @@ def test_webhook_subscriptions_crud(app_and_client):
     headers_b = {"Authorization": "Bearer dev-tenant-2"}
 
     # 1. Unauthenticated creation rejected
-    resp_anon = client.post("/v1/webhooks/subscriptions", json={"url": "https://hook.site/test", "secret_token": "sec123"})
+    resp_anon = client.post("/v1/webhooks/subscriptions", json={"url": "https://example.com/test", "secret_token": "sec123"})
     assert resp_anon.status_code == 401
 
     # 2. Create subscription under tenant-1
     resp_create = client.post(
         "/v1/webhooks/subscriptions",
         headers=headers_a,
-        json={"url": "https://hook.site/test", "secret_token": "sec123", "topic_pattern": "document.*"},
+        json={"url": "https://example.com/test", "secret_token": "sec123", "topic_pattern": "document.*"},
     )
     assert resp_create.status_code == 201
     created = resp_create.json()

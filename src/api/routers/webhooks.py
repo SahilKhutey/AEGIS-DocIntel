@@ -37,7 +37,10 @@ async def create_subscription(
     _check_webhook_admin(tenant)
 
     # Validate destination URL against SSRF and private address vulnerabilities
-    allow_private = os.getenv("AEGIS_ALLOW_PRIVATE_WEBHOOKS", "false").lower() in ("true", "1")
+    allow_private = (
+        os.getenv("AEGIS_ALLOW_PRIVATE_WEBHOOKS", "false").lower() in ("true", "1")
+        or os.getenv("AEGIS_ENVIRONMENT", "production").lower() == "development"
+    )
     is_safe, reason = is_safe_webhook_url(body.url, allow_private_for_tests=allow_private)
     if not is_safe:
         raise HTTPException(

@@ -2315,6 +2315,7 @@
           "System"
         ],
         "summary": "Health Check",
+        "description": "Liveness probe: verifies process is alive and responsive.",
         "operationId": "health_check_health_get",
         "responses": {
           "200": {
@@ -2336,6 +2337,7 @@
           "System"
         ],
         "summary": "Readiness",
+        "description": "Readiness probe: verifies persistent storage and dependencies can serve traffic.",
         "operationId": "readiness_readiness_get",
         "responses": {
           "200": {

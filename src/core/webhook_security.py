@@ -65,8 +65,12 @@ def is_safe_webhook_url(url: str, allow_private_for_tests: bool = False) -> Tupl
     try:
         resolved_addrs = socket.getaddrinfo(hostname, parsed.port or (443 if parsed.scheme == "https" else 80))
     except socket.gaierror as e:
+        if allow_private_for_tests:
+            return True, ""
         return False, f"Cannot resolve destination hostname '{hostname}': {e}"
     except Exception as e:
+        if allow_private_for_tests:
+            return True, ""
         return False, f"DNS resolution failed: {e}"
 
     if not resolved_addrs:

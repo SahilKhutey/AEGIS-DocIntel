@@ -5,3 +5,8 @@
 #   in an early (since quarantined) release checklist. It is a documentation placeholder,
 #   not a credential. Full-history scan (157 commits, all branches) found no other hits.
 6323de3b7a1f6ac30b0a1af6d2a58225976255b4:production/PRODUCTION_RELEASE_CHECKLIST.md:generic-api-key:372
+#
+# tests/test_security_pentest_proof.py:213 (commit 72300ab, 2026-10-23)
+#   Matched `generic-api-key` on the test fixture secret "whsec_test_secret_key_12345"
+#   used in unit test for multi-tenant webhook subscription isolation.
+72300ab23dd548f7c89c753700eb60f45f7bf038:tests/test_security_pentest_proof.py:generic-api-key:213

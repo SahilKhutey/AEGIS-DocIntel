@@ -52,6 +52,7 @@ async def test_llm_interface_mock_streaming():
 
 @pytest.mark.asyncio
 async def test_llm_interface_real_provider_litellm():
+    pytest.importorskip("litellm")
     llm = LLMInterface(llm_provider="openai", model="gpt-4o", api_key="sk-test-key")
     assert llm._provider == "openai"
     assert llm._model == "gpt-4o"
