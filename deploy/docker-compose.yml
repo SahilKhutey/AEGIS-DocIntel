@@ -8,13 +8,17 @@ services:
     container_name: aegis-docintel-api
     ports:
       - "8000:8000"
-      - "9090:9090"
     environment:
       - AEGIS_ENVIRONMENT=${AEGIS_ENVIRONMENT:-production}
-      - LOG_LEVEL=INFO
+      - LOG_LEVEL=${LOG_LEVEL:-INFO}
       - METRICS_ENABLED=true
       - METRICS_PORT=9090
       - TIKTOKEN_CACHE_DIR=/app/config/tiktoken
+      - AEGIS_JWT_PUBLIC_KEY=${AEGIS_JWT_PUBLIC_KEY:-}
+      - AEGIS_JWT_PUBLIC_KEY_PATH=${AEGIS_JWT_PUBLIC_KEY_PATH:-}
+      - AEGIS_JWT_ISSUER=${AEGIS_JWT_ISSUER:-}
+      - AEGIS_JWT_AUDIENCE=${AEGIS_JWT_AUDIENCE:-}
+      - AEGIS_API_KEYS=${AEGIS_API_KEYS:-}
     volumes:
       - aegis-data:/app/data
     healthcheck:
@@ -23,35 +27,45 @@ services:
       timeout: 10s
       retries: 3
     restart: unless-stopped
+    networks:
+      - internal-net
 
   prometheus:
-    image: prom/prometheus:latest
+    image: prom/prometheus:v2.50.1
     container_name: aegis-prometheus
     ports:
-      - "9091:9090"
+      - "127.0.0.1:9091:9090"
     volumes:
-      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
       - prometheus-data:/prometheus
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
     restart: unless-stopped
+    networks:
+      - internal-net
     depends_on:
       - aegis-api
 
   grafana:
-    image: grafana/grafana:latest
+    image: grafana/grafana:10.4.1
     container_name: aegis-grafana
     ports:
-      - "3000:3000"
+      - "127.0.0.1:3000:3000"
     environment:
-      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_ADMIN_PASSWORD:-changeme}
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_ADMIN_PASSWORD:?GRAFANA_ADMIN_PASSWORD environment variable must be set in production}
     volumes:
       - grafana-data:/var/lib/grafana
-      - ./grafana/dashboards:/etc/grafana/provisioning/dashboards
-      - ./grafana/datasources:/etc/grafana/provisioning/datasources
+      - ./grafana/dashboards:/etc/grafana/provisioning/dashboards:ro
+      - ./grafana/datasources:/etc/grafana/provisioning/datasources:ro
     restart: unless-stopped
+    networks:
+      - internal-net
     depends_on:
       - prometheus
+
+networks:
+  internal-net:
+    driver: bridge
 
 volumes:
   aegis-data:

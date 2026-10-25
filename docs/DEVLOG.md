@@ -1340,3 +1340,32 @@ This section documents the chronological development tasks, architectural decisi
   - `ruff check src tests scripts dashboard`: All checks passed.
   - `bandit -r src dashboard scripts -ll`: 49,727 LOC scanned, 0 issues.
   - `pytest tests/test_dependency_sync.py tests/test_dashboard_pages.py`: Passed.
+
+### Task P4.17 — Production Deployment Hardening, Release Version Stratification, and GTM Contract Alignment
+- **Time:** 2026-10-25 14:35:00 – 14:50:00 UTC
+- **Context & Objective:**
+  Remediate production deployment defaults, release versioning inconsistencies, and market-readiness findings:
+  1. Reconciled release versioning architecture across tiers in [`docs/architecture/versioning.md`](architecture/versioning.md):
+     - Tier 1: Platform distribution package (`aegis-docintel`: `0.1.0-alpha.1`).
+     - Tier 2: REST & WebSocket API specification contract (`v1`: `1.0.0`).
+     - Tier 3: Standalone preprocessing engine (`aegis-docprep`: `0.1.0`, Apache 2.0).
+     - Synchronized `production/release/VERSION` to `0.1.0-alpha.1`.
+  2. Hardened production container deployment in [`deploy/docker-compose.yml`](../deploy/docker-compose.yml):
+     - Pinned container images: `prom/prometheus:v2.50.1` and `grafana/grafana:10.4.1` (eliminated floating `:latest`).
+     - Enforced strict production secret configuration for `GRAFANA_ADMIN_PASSWORD` (eliminated fallback to `changeme`).
+     - Bound monitoring service ports strictly to localhost (`127.0.0.1:3000` and `127.0.0.1:9091`) to prevent public exposure.
+     - Removed host exposure of internal metrics port 9090; isolated container traffic inside `internal-net` bridge network.
+     - Added read-only volume constraints (`:ro`) for Grafana and Prometheus configuration files.
+  3. Added `GRAFANA_ADMIN_PASSWORD` declaration to [`.env.example`](../.env.example).
+  4. Verified that all unique security, auth, and test fixes from `p0/security-and-ci` and `p1/persistence-correctness` are fully integrated into canonical `master`.
+- **Files Modified / Created:**
+  - `deploy/docker-compose.yml`
+  - `.env.example`
+  - `production/release/VERSION`
+  - `docs/architecture/versioning.md`
+  - `docs/DEVLOG.md`
+- **Verification:**
+  - `python scripts/check_dependency_sync.py`: OK (6 requirements files match pyproject.toml).
+  - `python scripts/check_docs_claims.py`: OK (R1–R6 passed).
+  - `ruff check src tests scripts dashboard`: All checks passed.
+  - `bandit -r src dashboard scripts -ll`: 49,727 LOC scanned, 0 issues.
