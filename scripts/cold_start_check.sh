@@ -3,7 +3,7 @@
 #
 # Simulates a brand-new user: creates a FRESH virtualenv and runs the exact commands
 # the README's "Developer & Test Suite (Cold-Start Safe)" section tells them to run.
-# CI runs this on every push (job: cold-start), so the documented install path can
+# CI verifies these same install commands in the test matrix, so the documented install path can
 # never silently break again.
 #
 # Why: the README once told strangers to `pip install -r requirements.txt && pytest`

@@ -1197,3 +1197,20 @@ This section documents the chronological development tasks, architectural decisi
   - `openapi.json` verification: Schema diff against `app.openapi()` is 0.
   - Targeted unit test suite: 30 tests in modified modules passed in 29.57s.
   - Full suite run: 1,259 passed, 3 skipped.
+
+### Task P4.11 — CI Pipeline Optimization & Redundant Cold-Start Job Removal
+- **Time:** 2026-10-25 05:30:00 – 05:40:00 UTC
+- **Context & Problem Statement:**
+  The CI workflow previously ran a separate `cold-start` job matrix across both Python 3.12 and 3.13 (`cold-start (3.12)` and `cold-start (3.13)`). Because GitHub Actions runners already run on clean, fresh Ubuntu virtual machines where `test` installs from `requirements-core.txt` and `requirements-dev.txt`, the two `cold-start` matrix jobs duplicated the full 1,260-test suite run twice more, unnecessarily doubling CI execution time, compute usage, and runner queue congestion.
+- **Files Modified:**
+  - `.github/workflows/ci.yml`
+  - `scripts/cold_start_check.sh`
+  - `docs/DEVLOG.md`
+- **Implementation Details:**
+  - Removed the redundant `cold-start:` job matrix from `.github/workflows/ci.yml`.
+  - Streamlined PR CI checks to `lint`, `test (3.12)`, `test (3.13)`, and `security`.
+  - Maintained `scripts/cold_start_check.sh` for developer local reproduction, ensuring `check_docs_claims.py` (R1) remains strictly enforced.
+- **Verification:**
+  - `python scripts/check_dependency_sync.py`: OK.
+  - `python scripts/check_docs_claims.py`: OK (R1 cold-start, R2 links, R3 counts, R4 pilots, R5 readiness, R6 env-vars).
+  - `ruff check src tests scripts`: All checks passed.

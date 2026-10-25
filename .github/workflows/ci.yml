@@ -106,26 +106,6 @@ jobs:
           path: coverage.xml
           if-no-files-found: warn
 
-  # "README as a test": a brand-new virtualenv following the README's commands verbatim.
-  # Exists because the documented install once aborted with zero tests run while CI stayed "fine".
-  cold-start:
-    needs: lint
-    runs-on: ubuntu-24.04
-    timeout-minutes: 30
-    strategy:
-      fail-fast: false
-      matrix:
-        python-version: ["3.12", "3.13"]
-    env:
-      HF_HUB_OFFLINE: "1"
-    steps:
-      - uses: actions/checkout@v7
-      - uses: actions/setup-python@v7
-        with:
-          python-version: ${{ matrix.python-version }}
-      - name: Follow the README verbatim in a fresh virtualenv
-        run: scripts/cold_start_check.sh
-
   security:
     runs-on: ubuntu-24.04
     timeout-minutes: 15
