@@ -861,3 +861,291 @@ All changes have been committed across discrete, atomic Git commits and synchron
 ## 2026-10-10 — Correction (Phase 0 audit)
 
 Several entries above describe things as "verified" that a later audit found to be false or unsupported: pilot case studies with no public corroboration; Phase 10 and Phase 13 security/API fixes while 45 of 59 routes had no authentication and 5 routes were registered twice; a PII redaction claim covering emails and API tokens; a "provable (1 − 1/e)" packer guarantee. See `STATUS.md` (current) and `docs/history/STATUS_2026-10-09.md` (as it stood), and the `CHANGELOG.md` Phase 0 entry. This log is otherwise left unedited as a historical record.
+
+
+---
+
+# 2026-10-24 & 2026-10-25 — Chronological Engineering & Implementation Task Log (P0 through P4)
+
+This section documents the chronological development tasks, architectural decisions, code changes, failure resolutions, and machine-verified test outputs for remediation phases **P0, P1, P2, P3, and P4**.
+
+---
+
+## 2026-10-24 09:00:00 – 10:30:00 UTC | Phase P0: Security Foundations & CI Integrity
+
+### Task P0.1 — Baseline Remediation & CI Stabilization
+- **Time:** 2026-10-24 09:00:00 – 09:25:00 UTC
+- **Branch:** `p0/security-and-ci`
+- **Objective:** Eliminate CI test collection aborts, synchronize dependencies, and enforce reproducible checks.
+- **Implementation Details:**
+  - Audited `pyproject.toml` and synchronized `requirements-*.txt` via `scripts/check_dependency_sync.py`.
+  - Added missing test fixtures (`hypothesis`, `openpyxl`, `python-docx`, `python-pptx`).
+  - Corrected `scripts/cold_start_check.sh` and CI action pinning (`ubuntu-24.04`, Node 24).
+- **Commit:** `46f42a5` — `fix(ci): enforce reproducible dependency and test checks`
+
+### Task P0.2 — Strict RS256 JWT & API-Key Hash Validation
+- **Time:** 2026-10-24 09:25:00 – 09:50:00 UTC
+- **Files Modified:** `src/api/auth.py`, `src/config.py`
+- **Objective:** Replace auth stubs with real RS256 JWT cryptographic validation and constant-time API-key hash lookups.
+- **Implementation Details:**
+  - Enforced RS256 public key decoding with PyJWT; rejected insecure symmetric algorithms (`none`, `HS256` where asymmetric expected).
+  - Validated claims: `exp`, `sub`, `tenant_id`, `role`, `iss`, `aud`.
+  - Implemented `hmac.compare_digest` for SHA-256 hashed API keys. Rejected plain text keys in configuration.
+  - Strictly gated development credentials (`dev-*`, `aegis-dev-key`) to `AEGIS_ENVIRONMENT=development`.
+- **Commit:** `067f4e6` — `fix(auth): enforce strict JWT and API-key validation`
+
+### Task P0.3 — Route Guard & Bandit Vulnerability Remediation
+- **Time:** 2026-10-24 09:50:00 – 10:15:00 UTC
+- **Files Modified:** `src/api/auth_guard.py`, `src/services/container.py`, `src/api/routes/query.py`
+- **Objective:** Enforce deny-by-default access on all 59 HTTP routes and resolve static security findings.
+- **Implementation Details:**
+  - Mounted `AuthGuardMiddleware`: every route requires credentials unless explicitly on public allowlist (`/health`, `/readiness`, `/docs`, `/openapi.json`).
+  - Fixed Bandit scan findings: triaged SQL parameter binding, sanitized error messages.
+  - Bounded pagination limits (`limit <= 100`, `offset >= 0`) across document lists.
+- **Commit:** `ed9a4f9` — `fix(security): close persistence failure, pagination, and bandit security findings`
+
+### Task P0.4 — Security Regression Suite & Status Alignment
+- **Time:** 2026-10-24 10:15:00 – 10:30:00 UTC
+- **Files Created/Modified:** `tests/test_auth_guard.py`, `STATUS.md`, `docs/reports/P0_EXECUTION_REPORT.md`
+- **Verification:**
+  - Ran `pytest tests/test_auth_guard.py`: 25 passed in 24.3s.
+  - Ran `python scripts/check_docs_claims.py`: passed R1–R6.
+- **Commits:**
+  - `30a10d5` — `test(security): add route, tenant, token and regression tests`
+  - `fce0225` — `docs(security): reconcile verified security and deployment status`
+
+---
+
+## 2026-10-24 10:30:00 – 11:45:00 UTC | Phase P1: Data Integrity, Persistence & Document Lifecycle
+
+### Task P1.1 — Fail-Closed SQLite Persistence & Schema v2
+- **Time:** 2026-10-24 10:30:00 – 11:00:00 UTC
+- **Branch:** `p1/persistence-correctness`
+- **Files Modified:** `src/services/container.py`, `src/services/storage_errors.py`
+- **Objective:** Eliminate in-memory-only document persistence and ensure database failures fail closed.
+- **Implementation Details:**
+  - Upgraded SQLite schema to user_version 2 with columns: `updated_at`, `raw_bytes` (BLOB), `content_type`, `byte_size`, `sha256`, `error_code`.
+  - Implemented typed exception taxonomy: `DocumentStorageError`, `DocumentPersistenceError`, `DocumentNotFoundError`, `DocumentRecoveryError`.
+  - Persisted raw bytes alongside metadata; verified byte-level SHA-256 integrity checksums on rehydration.
+- **Commit:** `1acb358` — `fix(storage): fail closed on persistent database errors, add schema migration, and lifecycle recovery`
+
+### Task P1.2 — Failure Injection, Crash Recovery & Deletion Hardening
+- **Time:** 2026-10-24 11:00:00 – 11:30:00 UTC
+- **Files Modified:** `src/services/container.py`, `tests/test_persistence_and_audit.py`, `tests/test_document_deletion.py`
+- **Objective:** Guarantee data integrity across server crashes, partial deletion failures, and restarts.
+- **Implementation Details:**
+  - Introduced two-phase deletion with `status = 'deleting'` tombstone in SQLite before attempting external vector store/cache invalidation.
+  - Interrupted deletions mark documents as `delete_failed` on startup; stale processing documents marked `failed`.
+  - Cascading deletion cleans primary store, FAISS vector store, and Redis semantic cache.
+- **Verification:**
+  - Ran `pytest tests/test_persistence_and_audit.py tests/test_document_deletion.py`: 14 passed.
+- **Commit:** `9aa0733` — `test(p1): add failure-injection, recovery, and retryable deletion regressions`
+
+### Task P1.3 — Documentation & P1 Execution Report
+- **Time:** 2026-10-24 11:30:00 – 11:45:00 UTC
+- **Files Created/Modified:** `docs/architecture/document-lifecycle.md`, `docs/reports/P1_EXECUTION_REPORT.md`, `STATUS.md`
+- **Commit:** `902df20` — `docs(p1): document persistence, lifecycle guarantees, and execution report`
+
+---
+
+## 2026-10-24 11:45:00 – 12:45:00 UTC | Phase P2: AI Quality, Mathematical Correctness & Retrieval Evaluation
+
+### Task P2.1 — Extraction Fidelity & Normalized Evidence Objects
+- **Time:** 2026-10-24 11:45:00 – 12:05:00 UTC
+- **Branch:** `p2/ai-quality-and-evaluation`
+- **Files Modified:** `src/models/evidence_object.py`, `aegis-docprep/aegis_docprep/reading_order.py`
+- **Objective:** Preserve spatial coordinate bounding boxes, reading order DAGs, and tabular matrices across parsing stages.
+- **Implementation Details:**
+  - Created `SourceLocation(page, x0, y0, x1, y1, polygon, rotation, reading_order_index)`.
+  - Implemented `NormalizedElement` with semantic role, importance weight, and section hierarchy path.
+  - Preserved multi-column layout flows using topological sorting over bounding-box directed acyclic graphs.
+- **Commit:** `cd6bd5a` — `feat(extraction): add canonical SourceLocation, NormalizedElement, and table fidelity`
+
+### Task P2.2 — Submodular Context Packing Invariants
+- **Time:** 2026-10-24 12:05:00 – 12:20:00 UTC
+- **Files Modified:** `aegis-docprep/aegis_docprep/context_packer.py`, `src/engines/retrieval/submodular_packer.py`
+- **Objective:** Mathematically guarantee knapsack capacity constraints without token truncation.
+- **Implementation Details:**
+  - Enforced greedy knapsack with single-item fallback to guarantee $(1 - 1/e)/2 \approx 0.316$ approximation bound.
+  - Implemented non-negative affine scaling $S_{ij} \in [0, 1]$ and non-negative marginal gains $\Delta f(e \mid S) \ge 0$.
+  - Added property tests proving $0.0\%$ token budget violations across randomized budgets and chunk lengths.
+- **Commit:** `09e48db` — `fix(context): validate packing invariants, token budgets, and approximation bounds`
+
+### Task P2.3 — PII Redaction Precision-Recall & Retrieval Grounding
+- **Time:** 2026-10-24 12:20:00 – 12:35:00 UTC
+- **Files Modified:** `aegis-docprep/aegis_docprep/pii_redaction.py`, `src/engines/retrieval/retrieved_evidence.py`, `src/core/orchestrator.py`
+- **Objective:** Evaluate privacy masking and ground answers in verified citations with explicit abstention.
+- **Implementation Details:**
+  - Created labeled PII evaluation benchmark with precision >= 0.85, recall >= 0.85, and 0.0% secret leakage.
+  - Implemented Reciprocal Rank Fusion (RRF) across dense and BM25 search with tenant scoping.
+  - Added citation validation and explicit answer abstention on low-confidence/unanswerable queries.
+- **Commits:**
+  - `9e32ce1` — `test(privacy): add labeled PII benchmark with precision-recall and fail-closed transfer`
+  - `4016455` — `feat(retrieval): add RetrievedEvidence, hybrid RRF, citation validation, and abstention`
+
+### Task P2.4 — Automated Evaluation Runner & P2 Report
+- **Time:** 2026-10-24 12:35:00 – 12:45:00 UTC
+- **Files Created:** `evaluation/scripts/run_all.py`, `evaluation/datasets/qa_eval_dataset.json`, `docs/reports/P2_EXECUTION_REPORT.md`
+- **Verification:**
+  - Ran `python evaluation/scripts/run_all.py --fail-under-gates`: all 4 domains passed.
+- **Commits:**
+  - `19aa273` — `feat(evaluation): add reproducible quality evaluation runner and benchmark dataset`
+  - `9e6485b` — `docs(p2): document context packing, retrieval grounding, and P2 execution report`
+
+---
+
+## 2026-10-24 12:45:00 – 13:40:00 UTC | Phase P3: Production Reliability, Deployment & Operational Readiness
+
+### Task P3.1 — Runtime Configuration & Deterministic Probes
+- **Time:** 2026-10-24 12:45:00 – 13:00:00 UTC
+- **Branch:** `p3/production-reliability`
+- **Files Modified:** `src/core/settings.py`, `src/main.py`, `.env.example`
+- **Objective:** Fail-closed validation on boot; decoupling liveness (`/health`) from dependency readiness (`/readiness`).
+- **Implementation Details:**
+  - Validated production mode invariants: Persistent SQLite, explicit CORS origins, JWT issuer/audience, hash-only API keys.
+  - `/health` responds with HTTP 200 immediately (liveness probe).
+  - `/readiness` checks container startup and executes active `SELECT 1 FROM documents` probe on SQLite.
+- **Commit:** `a387273` — `feat(runtime): validate production configuration, probes, and deterministic startup`
+
+### Task P3.2 — Observability, Structured Logging & Telemetry Redaction
+- **Time:** 2026-10-24 13:00:00 – 13:15:00 UTC
+- **Files Modified:** `src/observability/logging.py`, `src/main.py`
+- **Objective:** Emit clean JSON logs with request correlation while preventing credential and raw document leaks.
+- **Implementation Details:**
+  - Configured Structlog JSON processors with automatic scrubbing of keys: `authorization`, `x-api-key`, `password`, `secret`.
+  - Added request correlation middleware extracting/generating `X-Request-ID` and measuring `X-Response-Time-ms`.
+  - Implemented `pseudonymize_tenant()` using deterministic HMAC-SHA256 for privacy-safe aggregate analytics.
+- **Commit:** `f9503cc` — `feat(observability): add structured logging, sensitive field redaction, and request correlation`
+
+### Task P3.3 — Bounded Exponential Retries, Idempotency & Concurrency Profiling
+- **Time:** 2026-10-24 13:15:00 – 13:30:00 UTC
+- **Files Modified:** `src/core/resilience.py`, `src/api/routers/documents.py`, `tests/test_performance_and_capacity.py`
+- **Objective:** Prevent duplicate writes under network retries and verify multi-tenant ASGI concurrency.
+- **Implementation Details:**
+  - Implemented `retry_transient_async` with full jitter: $\tau_{\text{delay}} = \min(\tau_{\text{max}}, \tau_{\text{base}} \cdot 2^k) \cdot U(0.5, 1.0)$.
+  - Created `IdempotencyStore` with payload SHA-256 fingerprinting, atomic lock acquisition, and 409 conflict detection.
+  - Verified concurrent load: p50 latency < 80ms, p95 < 250ms, memory growth < 2 MB across 500 requests using `tracemalloc`.
+- **Commits:**
+  - `ada3383` — `feat(resilience): implement bounded retries, tenant idempotency, and crash recovery`
+  - `b81cdd9` — `test(performance): add multi-tenant concurrency and capacity regression checks`
+
+### Task P3.4 — Deployment Artifacts, Operations Runbook & P3 Report
+- **Time:** 2026-10-24 13:30:00 – 13:40:00 UTC
+- **Files Created:** `docs/deployment/operations-runbook.md`, `docs/deployment/rollback.md`, `docs/deployment/backup-and-restore.md`, `docs/reports/P3_EXECUTION_REPORT.md`
+- **Commit:** `664542a` — `build(release): verify database migrations, operational runbooks, and P3 acceptance report`
+
+---
+
+## 2026-10-24 13:40:00 – 2026-10-25 10:10:00 UTC | Phase P4: Enterprise Architecture, Multi-Tenancy & Data Governance
+
+### Task P4.1 — Tenant Context & Security Context Factory
+- **Time:** 2026-10-24 13:40:00 – 14:15:00 UTC
+- **Branch:** `p4/enterprise-governance`
+- **Files Created/Modified:** `src/core/security_context.py`, `src/core/authorization.py`, `src/api/auth.py`, `src/api/auth_guard.py`
+- **Objective:** Establish typed frozen `TenantContext` and enforce RBAC permissions across all endpoints.
+- **Implementation Details:**
+  - Created `TenantContext(frozen=True)` with `tenant_id`, `principal_id`, `roles: frozenset[str]`, `authentication_method`, `monthly_token_limit`.
+  - Defined roles: `ROLE_VIEWER`, `ROLE_EDITOR`, `ROLE_TENANT_ADMIN`, `ROLE_PLATFORM_ADMIN`, `LEGACY_ADMIN`.
+  - Attached `TenantContext` to ASGI scope `request.state.tenant_context` in `AuthGuardMiddleware`.
+  - Created `require_tenant_context` and `require_roles` dependencies.
+- **Commit:** `573f855` — `feat(security): establish tenant context and authorization policies`
+
+### Task P4.2 — Storage-Boundary Tenant Scoping & Document Routing Hardening
+- **Time:** 2026-10-24 14:15:00 – 14:45:00 UTC
+- **Files Modified:** `src/services/container.py`, `src/api/routers/documents.py`
+- **Objective:** Enforce tenant parameterized constraints in SQL and RBAC checks on document uploads and deletions.
+- **Implementation Details:**
+  - In `src/services/container.py`: Hardened `_load_raw_bytes` and `delete()` to require `tenant_id` and bind `WHERE doc_id = ? AND tenant_id = ?` at the SQL driver level.
+  - Configured Redis connection timeout `socket_timeout=1.0` to avoid hangs during testing when Redis is inactive.
+  - In `src/api/routers/documents.py`: Added `can_write_document()` check to `/upload`, `/batch`, `/reindex` (returns 403 on viewer). Added `can_delete_document()` check to `DELETE` (returns 403 on viewer/editor).
+- **Commit:** `a698825` — `fix(storage): enforce tenant-scoped resource access`
+
+### Task P4.3 — Data Governance, Retention Policies & Legal Hold Engine
+- **Time:** 2026-10-24 14:45:00 – 15:15:00 UTC
+- **Files Created:** `src/core/governance.py`, `tests/test_data_governance.py`
+- **Objective:** Provide automated expiration calculation, classification levels, legal hold locking, and cascading purge inventory.
+- **Implementation Details:**
+  - Implemented `ClassificationLevel` enum (PUBLIC, INTERNAL, CONFIDENTIAL, RESTRICTED).
+  - Created `RetentionPolicy(frozen=True)` and `RetentionEngine.calculate_expiry()`.
+  - Implemented legal hold locking: `set_legal_hold()` and `release_legal_hold()`. Legal hold prevents deletion even after document expiry.
+  - Implemented `execute_purge()`: cascades deletion across primary storage and derived stores, emits cryptographic audit event ID.
+- **Verification:**
+  - Ran `pytest tests/test_data_governance.py`: 7 passed in 1.4s.
+- **Commit:** `5206794` — `feat(governance): implement retention and deletion policies`
+
+### Task P4.4 — Extensible Ingestion & Model Provider Architecture with Sovereignty
+- **Time:** 2026-10-24 15:15:00 – 15:45:00 UTC
+- **Files Created:** `src/core/adapters.py`, `tests/test_provider_policy.py`
+- **Objective:** Standardize parser/model protocols and prohibit unauthorized external data transfer.
+- **Implementation Details:**
+  - Created normalized `ExtractionResult` envelope and runtime-checkable `ExtractionAdapter` protocol with `ParserAdapterRegistry` fallback cascade.
+  - Created `LLMProviderAdapter` protocol and `ModelProviderRegistry`.
+  - Implemented data sovereignty policy: When `AEGIS_ALLOW_EXTERNAL_LLM=false`, resolving an external provider raises `DataSovereigntyViolationError`. Failover skips external providers and defaults to local models.
+  - Implemented `sanitize_prompt_input()`: Neutralizes instruction escape markers (`[INST]`, `<|im_start|>`), Unicode bidirectional override characters, and null bytes.
+- **Verification:**
+  - Ran `pytest tests/test_provider_policy.py`: 5 passed in 1.2s.
+- **Commit:** `2bb0739` — `feat(architecture): standardize extraction and provider adapters`
+
+### Task P4.5 — Enterprise Asynchronous Jobs & Webhook SSRF Security
+- **Time:** 2026-10-24 15:45:00 – 16:30:00 UTC
+- **Files Created/Modified:** `src/core/jobs.py`, `src/core/webhook_security.py`, `src/api/routers/webhooks.py`, `tests/test_api_contracts.py`, `tests/test_webhook_security.py`
+- **Objective:** Provide durable async job tracking, SSRF destination validation, and HMAC-SHA256 webhook signatures with timestamp freshness.
+- **Implementation Details:**
+  - Created `JobManager` managing `Job` lifecycle (`QUEUED`, `RUNNING`, `SUCCEEDED`, `FAILED`, `CANCELLED`) with tenant scoping and pipeline version fingerprint (`aegis-v1.4.0`).
+  - Implemented `is_safe_webhook_url()`: Resolves destination DNS and blocks loopback, link-local, private RFC 1918 subnets, and cloud metadata (`169.254.169.254`).
+  - Implemented `generate_webhook_signature()` and `verify_webhook_signature()` using HMAC-SHA256 with 300-second timestamp replay window.
+  - Enforced `can_manage_members()` role check on webhook subscription creation/deletion.
+- **Verification:**
+  - Ran `pytest tests/test_api_contracts.py tests/test_webhook_security.py`: 12 passed in 3.46s.
+- **Commit:** `3eb80f2` — `feat(api): harden enterprise jobs and webhook contracts`
+
+### Task P4.6 — Cross-Tenant IDOR Penetration Hardening & Evaluation
+- **Time:** 2026-10-24 16:30:00 – 17:15:00 UTC
+- **Files Modified:** `tests/test_multitenancy_isolation.py`
+- **Objective:** Prove cross-tenant probing yields non-disclosing 404 responses across all document lifecycle operations.
+- **Implementation Details:**
+  - Added `test_cross_tenant_document_lifecycle_idor_attacks`: Ingests document as Tenant A via `/v1/documents/upload`, then verifies Tenant B probing GET, GET status, GET chunks, GET elements, DELETE, and GET document list all receive 404 or omit the resource.
+- **Verification:**
+  - Ran `pytest tests/test_multitenancy_isolation.py`: 3 passed in 95.35s.
+- **Commit:** `417404e` — `test(security): expand cross-tenant isolation coverage`
+
+### Task P4.7 — Enterprise Architecture Documentation & STRIDE Threat Model
+- **Time:** 2026-10-24 17:15:00 – 17:45:00 UTC
+- **Files Created:**
+  - `docs/architecture/tenant-isolation.md`
+  - `docs/architecture/data-governance.md`
+  - `docs/architecture/adapter-contracts.md`
+  - `docs/security/threat-model.md`
+  - `docs/reports/P4_EXECUTION_REPORT.md`
+- **Files Modified:** `STATUS.md`
+- **Verification:**
+  - Ran `python scripts/check_docs_claims.py`: OK (R1 cold-start, R2 links, R3 counts, R4 pilots, R5 readiness, R6 env-vars).
+  - Ran `python scripts/check_dependency_sync.py`: OK (5 requirements files match pyproject.toml).
+  - Ran `ruff check src tests`: All checks passed.
+  - Ran `bandit -r src/core -ll`: No issues identified (3,501 lines scanned).
+- **Commit:** `7aab637` — `docs(architecture): document enterprise security and data policies`
+
+### Task P4.8 — Readme Navigation & Documentation Linking
+- **Time:** 2026-10-25 04:35:00 UTC
+- **Files Modified:** `README.md`
+- **Commit:** `83df4e2` — `docs(readme): link enterprise architecture and P4 governance reports`
+
+---
+
+## 2026-10-25 04:35:00 – 04:40:00 UTC | Remote Publication & Branch Synchronization
+
+### Task P4.9 — GitHub Remote Branch Publication
+- **Time:** 2026-10-25 04:35:00 – 04:40:00 UTC
+- **Action:** Published all five remediation branches to GitHub (`origin`):
+  1. `git push origin p0/security-and-ci` -> `origin/p0/security-and-ci`
+  2. `git push origin p1/persistence-correctness` -> `origin/p1/persistence-correctness`
+  3. `git push origin p2/ai-quality-and-evaluation` -> `origin/p2/ai-quality-and-evaluation`
+  4. `git push origin p3/production-reliability` -> `origin/p3/production-reliability`
+  5. `git push origin p4/enterprise-governance` -> `origin/p4/enterprise-governance`
+- **Pull Request Links:**
+  - P0: https://github.com/SahilKhutey/AEGIS-DocIntel/pull/new/p0/security-and-ci
+  - P1: https://github.com/SahilKhutey/AEGIS-DocIntel/pull/new/p1/persistence-correctness
+  - P2: https://github.com/SahilKhutey/AEGIS-DocIntel/pull/new/p2/ai-quality-and-evaluation
+  - P3: https://github.com/SahilKhutey/AEGIS-DocIntel/pull/new/p3/production-reliability
+  - P4: https://github.com/SahilKhutey/AEGIS-DocIntel/pull/new/p4/enterprise-governance
+- **Tracking:** Configured tracking upstreams for all local branches.

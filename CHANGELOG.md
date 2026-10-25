@@ -6,6 +6,71 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.4.0] - 2026-10-25 — Phase P4: Enterprise Architecture, Multi-Tenancy & Data Governance
+
+### Added
+- **Tenant Context & RBAC:** Created immutable TenantContext dataclass in src/core/security_context.py with multi-tenant roles (iewer, editor, 	enant_admin, platform_admin) and permission helpers (can_read_document, can_write_document, can_delete_document, can_manage_members). Attached context to ASGI scope in AuthGuardMiddleware.
+- **Data Governance & Retention Engine:** Implemented src/core/governance.py with RetentionPolicy, ClassificationLevel (PUBLIC, INTERNAL, CONFIDENTIAL, RESTRICTED), automated expiration calculation, and legal hold locks preventing deletion/purge.
+- **Cascading Purge Inventory:** Created RetentionEngine.execute_purge() coordinating atomic deletion across raw storage and derived indices with permanent cryptographic audit event generation.
+- **Pluggable Extraction & Provider Protocols:** Implemented runtime-checkable ExtractionAdapter and LLMProviderAdapter in src/core/adapters.py with ParserAdapterRegistry and ModelProviderRegistry supporting priority cascades and fallback routing.
+- **Data Sovereignty Guardrails:** Enforced AEGIS_ALLOW_EXTERNAL_LLM flag: external model provider access raises DataSovereigntyViolationError when external transfer is disabled, automatically falling back to certified local inference.
+- **Prompt Injection Defense:** Implemented sanitize_prompt_input() neutralizing instruction escape delimiters ([INST], <|im_start|>), Unicode bidirectional override characters, and null bytes.
+- **Enterprise Asynchronous Jobs:** Created durable JobManager in src/core/jobs.py tracking job states (QUEUED, RUNNING, SUCCEEDED, FAILED, CANCELLED), progress percentage, and pipeline version fingerprints.
+- **SSRF Webhook Protection:** Implemented is_safe_webhook_url() in src/core/webhook_security.py validating destination hostnames via DNS and blocking loopback, link-local, private RFC 1918 subnets, and cloud instance metadata (169.254.169.254).
+- **HMAC-SHA256 Webhook Signatures:** Generated and verified signatures with timestamp freshness validation (300-second window) mitigating replay attacks.
+
+### Security & IDOR Hardening
+- **Storage-Boundary Parameterized Constraints:** Bound authenticated 	enant_id at the SQLite driver parameter level (WHERE doc_id = ? AND tenant_id = ?), guaranteeing that cross-tenant document queries cannot execute.
+- **Non-Disclosing 404 Responses:** Verified that cross-tenant resource probes across all document lifecycle operations (GET, status, chunks, elements, delete) return 404 Not Found rather than 403 or 500, preventing IDOR enumeration attacks.
+- **Route RBAC Enforcement:** Restricted document mutations (upload, 
+eindex, atch) to editor/dmin, and deletions to 	enant_admin/platform_admin.
+
+---
+
+## [0.3.3] - 2026-10-24 — Phase P3: Production Reliability, Deployment & Operational Readiness
+
+### Added
+- **Fail-Closed Runtime Validation:** Implemented authoritative configuration loading in src/core/settings.py aborting startup on invalid production configurations (in-memory SQLite, wildcard CORS, unhashed API keys, unconfigured JWT claims).
+- **Deterministic Health & Readiness Probes:** Decoupled lightweight liveness probe (GET /health) from active database query probe (GET /readiness).
+- **Structured JSON Logging & Redaction:** Configured Structlog JSON processors automatically masking tokens, keys, passwords, and raw document contents. Pseudonymized tenant IDs using deterministic HMAC-SHA256.
+- **Request Correlation & Timing:** Propagated X-Request-ID and measured X-Response-Time-ms across all request and response lifecycles.
+- **Bounded Jittered Retries:** Implemented 
+etry_transient_async with exponential backoff and full jitter: tau_delay = min(tau_max, tau_base * 2^k) * U(0.5, 1.0).
+- **Tenant-Scoped Idempotency:** Implemented IdempotencyStore with payload SHA-256 fingerprinting, atomic state transitions, and 409 conflict detection.
+- **Disaster Recovery & Operations Runbooks:** Authored docs/deployment/operations-runbook.md, 
+ollback.md, and ackup-and-restore.md.
+
+---
+
+## [0.3.2] - 2026-10-24 — Phase P2: AI Quality, Mathematical Invariants & Retrieval Evaluation
+
+### Added
+- **Canonical Evidence Objects:** Created SourceLocation and NormalizedElement preserving 2D bounding boxes, multi-column reading-order DAGs, and table cell matrices.
+- **Submodular Context Packing Invariants:** Mathematically guaranteed knapsack capacity bounds with (1 - 1/e)/2 approx 0.316 approximation ratio without token budget violations.
+- **PII Redaction Precision-Recall Benchmark:** Validated privacy masking on labeled corpus with precision >= 0.85, recall >= 0.85, and 0.0% downstream secret leakage.
+- **Evidence-Grounded Retrieval:** Implemented Reciprocal Rank Fusion (RRF), citation verification, and explicit answer abstention on unanswerable queries.
+- **Reproducible Evaluation Runner:** Added evaluation/scripts/run_all.py with automated quality gates across all four evaluation domains.
+
+---
+
+## [0.3.1] - 2026-10-24 — Phase P1: Data Integrity, Persistence & Document Lifecycle
+
+### Added
+- **Persistent SQLite Document Store:** Upgraded schema to user_version 2, persisting document metadata and raw bytes across service restarts.
+- **Tombstoned Cascading Deletion:** Introduced atomic status = 'deleting' tombstones and crash reconciliation. Interrupted deletions transition to delete_failed on startup; stale processing transitions to ailed.
+- **Integrity Checksums:** Verified byte-level SHA-256 integrity checksums on document rehydration.
+
+---
+
+## [0.3.0] - 2026-10-24 — Phase P0: Security Foundations & CI Integrity
+
+### Added
+- **Deny-by-Default Route Guard:** Mounted AuthGuardMiddleware enforcing credentials on all routes outside the public health allowlist.
+- **Production RS256 JWT & API-Key Validation:** Replaced auth stubs with real RS256 public key verification and constant-time SHA-256 API-key lookup.
+- **Reproducible CI Pipeline:** Resolved dependency drift across requirements manifests and pinned GitHub Actions runners.
+
+---
+
 ## [Unreleased] - Phase 0: Restore Green & Restore Honesty
 
 ### Security
