@@ -1,6 +1,12 @@
 """Tests for dashboard components and API integration."""
 import pytest
+import importlib.util
 from unittest.mock import patch, MagicMock
+
+pytestmark = pytest.mark.skipif(
+    importlib.util.find_spec("streamlit") is None,
+    reason="streamlit not installed (optional UI dependency)",
+)
 
 
 def test_dashboard_imports_cleanly():

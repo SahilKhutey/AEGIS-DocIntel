@@ -344,24 +344,43 @@ async def get_current_tenant_ws(
     token: Optional[str] = None,
 ) -> TenantContext:
     """Validate WebSocket connection credentials from query params or headers."""
-    api_key = api_key or websocket.headers.get("X-API-Key")
-    auth_header = websocket.headers.get("Authorization", "")
-    if auth_header.startswith("Bearer "):
+    headers = getattr(websocket, "headers", {})
+    if isinstance(headers, dict):
+        lower_headers = {str(k).lower(): v for k, v in headers.items()}
+        api_key = api_key or lower_headers.get("x-api-key")
+        auth_header = lower_headers.get("authorization", "")
+    elif hasattr(headers, "get"):
+        api_key = api_key or headers.get("X-API-Key") or headers.get("x-api-key")
+        auth_header = headers.get("Authorization") or headers.get("authorization") or ""
+    else:
+        auth_header = ""
+
+    if auth_header.startswith("Bearer ") or auth_header.startswith("bearer "):
         token = auth_header[7:]
+
+    async def _safe_close():
+        if hasattr(websocket, "close"):
+            try:
+                import inspect
+                close_res = websocket.close(code=status.WS_1008_POLICY_VIOLATION)
+                if inspect.isawaitable(close_res):
+                    await close_res
+            except Exception:
+                pass
 
     if token:
         try:
             return _validate_jwt(token)
         except HTTPException:
-            await websocket.close(code=status.WS_1008_POLICY_VIOLATION)
+            await _safe_close()
             raise
 
     if api_key:
         try:
             return _validate_api_key(api_key)
         except HTTPException:
-            await websocket.close(code=status.WS_1008_POLICY_VIOLATION)
+            await _safe_close()
             raise
 
-    await websocket.close(code=status.WS_1008_POLICY_VIOLATION)
+    await _safe_close()
     raise HTTPException(status_code=401, detail="WebSocket authentication required")
