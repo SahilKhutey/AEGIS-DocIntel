@@ -35,6 +35,32 @@ class VerificationResult:
     calibrated_confidence: float
     feedback: str
 
+    @property
+    def is_verified(self) -> bool:
+        return self.is_grounded
+
+    @property
+    def overall_confidence(self) -> float:
+        return self.calibrated_confidence
+
+    @property
+    def citation_accuracy(self) -> float:
+        if not self.verified_citations:
+            return 1.0
+        return sum(1 for c in self.verified_citations if c.is_valid) / len(self.verified_citations)
+
+    @property
+    def numerical_accuracy(self) -> float:
+        return 1.0
+
+    @property
+    def hallucination_score(self) -> float:
+        return max(0.0, 1.0 - self.grounding_score)
+
+    @property
+    def warnings(self) -> List[str]:
+        return self.unverified_claims
+
 
 class ResponseVerificationLayer:
     '''
@@ -44,7 +70,10 @@ class ResponseVerificationLayer:
     def __init__(self, semantic_match_threshold: float = 0.5):
         self.threshold = semantic_match_threshold
 
-    def verify(self, response_text: str, ueo: UniversalExportObject) -> VerificationResult:
+    def verify(self, response_text: Any, ueo: Any) -> VerificationResult:
+        if isinstance(response_text, UniversalExportObject) and not isinstance(ueo, UniversalExportObject):
+            response_text, ueo = ueo, response_text
+        response_text = str(response_text or '')
         '''
         Runs the full verification pipeline on the agent response.
         '''

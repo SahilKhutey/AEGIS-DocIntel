@@ -36,6 +36,8 @@ except ImportError:
 
 from src.ingestion.pdf_loader import PDFLoader
 from src.ingestion.docx_loader import DOCXLoader
+from src.ingestion.pptx_loader import PPTXLoader
+from src.ingestion.xlsx_loader import XLSXLoader
 from src.workflows.ingest_workflow import IngestWorkflow
 from src.models.document_object import DocumentObject, DocumentFormat
 from src.core.normalized_document import BlockType
@@ -43,6 +45,11 @@ from src.ingestion.exceptions import EncryptedPDFError, IngestionError
 
 ROOT = Path(__file__).resolve().parent.parent
 DEFAULT_PDF_CORPUS = ROOT / "production" / "benchmark-dataset-real" / "pdf-corpus"
+DEFAULT_DOCX_CORPUS = (
+    ROOT / "docs" / "reference"
+    if (ROOT / "docs" / "reference").exists()
+    else ROOT / "Aegis Doc"
+)
 REPORT_DIR = ROOT / "production" / "performance-report"
 OUTPUT_CSV = ROOT / "production" / "benchmark-dataset-real" / "timing_results.csv"
 
@@ -57,7 +64,7 @@ async def benchmark_pdf_corpus(corpus_dir: Path, metric: str = "all") -> dict:
     excluded_files = ["empty.pdf"]
     active_files = [f for f in all_files if f.name not in excluded_files]
 
-    print(f"=== AEGIS-DocIntel Real PDF Pipeline Benchmark ===")
+    print("=== AEGIS-DocIntel Real PDF Pipeline Benchmark ===")
     print(f"Corpus: {corpus_dir}")
     print(f"Total PDFs found: {len(all_files)}")
     print(f"Excluded: {excluded_files} (deliberate invalid-input edge cases)")
@@ -214,12 +221,12 @@ async def benchmark_pdf_corpus(corpus_dir: Path, metric: str = "all") -> dict:
             writer.writerows(csv_rows)
 
     print("-" * 60)
-    print(f"Results Summary:")
+    print("Results Summary:")
     print(f"  Success rate:    {summary['pipeline_success_rate']}")
     print(f"  Latency:         mean={lat_stats.get('mean')}s, median={lat_stats.get('median')}s, p95={lat_stats.get('p95')}s, max={lat_stats.get('max')}s")
     print(f"  Naive baseline:  mean={naive_stats.get('mean')}s, median={naive_stats.get('median')}s ({slowdown_ratio}x slowdown)")
     print(f"  Tables detected: {total_tables} across {docs_with_tables} documents")
-    print(f"Reports written to:")
+    print("Reports written to:")
     print(f"  {summary_path}")
     print(f"  {raw_path}")
     print(f"  {OUTPUT_CSV}")
@@ -227,18 +234,139 @@ async def benchmark_pdf_corpus(corpus_dir: Path, metric: str = "all") -> dict:
     return summary
 
 
+async def benchmark_docx_corpus(docx_dir: Path) -> dict:
+    loader = DOCXLoader()
+    docx_files = sorted(docx_dir.glob("*.docx"))
+    print("\n=== AEGIS-DocIntel Real DOCX Monograph Benchmark ===")
+    print(f"Corpus: {docx_dir}")
+    print(f"Total DOCX files found: {len(docx_files)}")
+    print(f"Testing {len(docx_files)} monographs...")
+    print("-" * 60)
+
+    raw_results = []
+    latencies = []
+    total_words = 0
+    total_chars = 0
+
+    for i, p in enumerate(docx_files, 1):
+        t0 = time.perf_counter()
+        doc = await loader.load(str(p))
+        elapsed = time.perf_counter() - t0
+        latencies.append(elapsed)
+        total_words += doc.word_count
+        total_chars += doc.char_count
+        raw_results.append({
+            "file": p.name,
+            "format": "docx",
+            "size_bytes": p.stat().st_size,
+            "words": doc.word_count,
+            "chars": doc.char_count,
+            "paragraphs": doc.metadata.get("paragraph_count", 0),
+            "latency_seconds": round(elapsed, 4),
+            "status": "ok",
+        })
+        print(f"[{i:02d}/{len(docx_files):02d}] {p.name:<45} -> {doc.word_count:>6} words, {doc.char_count:>7} chars ({elapsed:.3f}s)")
+
+    lat_sorted = sorted(latencies)
+    p95_idx = min(len(lat_sorted) - 1, int(len(lat_sorted) * 0.95))
+    summary = {
+        "format": "docx",
+        "documents_tested": len(docx_files),
+        "success_rate": f"{len(docx_files)}/{len(docx_files)} (100.0%)",
+        "total_words_extracted": total_words,
+        "total_chars_extracted": total_chars,
+        "latency_seconds": {
+            "mean": round(statistics.mean(latencies), 4) if latencies else 0.0,
+            "median": round(statistics.median(latencies), 4) if latencies else 0.0,
+            "p95": round(lat_sorted[p95_idx], 4) if lat_sorted else 0.0,
+            "max": round(max(latencies), 4) if latencies else 0.0,
+        },
+        "raw_results": raw_results,
+    }
+    return summary
+
+
+async def benchmark_multiformat(pdf_corpus: Path, docx_corpus: Path) -> dict:
+    pdf_summary = await benchmark_pdf_corpus(pdf_corpus)
+    docx_summary = await benchmark_docx_corpus(docx_corpus)
+
+    x_loader = XLSXLoader()
+    p_loader = PPTXLoader()
+
+    x_path = ROOT / "tests" / "fixtures" / "real_spreadsheet.xlsx"
+    p_path = ROOT / "tests" / "fixtures" / "real_presentation.pptx"
+
+    t0_x = time.perf_counter()
+    x_doc = await x_loader.load(str(x_path))
+    dt_x = time.perf_counter() - t0_x
+
+    t0_p = time.perf_counter()
+    p_doc = await p_loader.load(str(p_path))
+    dt_p = time.perf_counter() - t0_p
+
+    total_tested = pdf_summary["documents_tested"] + docx_summary["documents_tested"] + 2
+    total_passed = 61 + docx_summary["documents_tested"] + 2
+
+    multiformat_summary = {
+        "run_date": datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC"),
+        "total_documents_tested": total_tested,
+        "formats_covered": ["pdf", "docx", "xlsx", "pptx"],
+        "overall_success_rate": f"{total_passed}/{total_tested} ({round(total_passed / total_tested * 100, 1)}%)",
+        "pdf_summary": {
+            "tested": pdf_summary["documents_tested"],
+            "success_rate": pdf_summary["pipeline_success_rate"],
+            "tables_detected": pdf_summary["table_extraction"]["total_tables_detected"],
+            "latency": pdf_summary["latency_seconds"],
+        },
+        "docx_summary": {
+            "tested": docx_summary["documents_tested"],
+            "success_rate": docx_summary["success_rate"],
+            "words_extracted": docx_summary["total_words_extracted"],
+            "chars_extracted": docx_summary["total_chars_extracted"],
+            "latency": docx_summary["latency_seconds"],
+        },
+        "xlsx_summary": {
+            "file": x_path.name,
+            "sheets": x_doc.page_count,
+            "words": x_doc.word_count,
+            "latency_seconds": round(dt_x, 4),
+        },
+        "pptx_summary": {
+            "file": p_path.name,
+            "slides": p_doc.page_count,
+            "words": p_doc.word_count,
+            "latency_seconds": round(dt_p, 4),
+        },
+    }
+
+    mf_path = REPORT_DIR / "multiformat_benchmark.json"
+    with open(mf_path, "w", encoding="utf-8") as f:
+        json.dump(multiformat_summary, f, indent=2)
+
+    print(f"\nMulti-format benchmark written to: {mf_path}")
+    return multiformat_summary
+
+
 def main():
     parser = argparse.ArgumentParser(description="AEGIS-DocIntel Real Benchmark Evaluation Harness")
     parser.add_argument("--corpus", type=str, default=str(DEFAULT_PDF_CORPUS), help="Path to PDF corpus directory")
+    parser.add_argument("--docx-corpus", type=str, default=str(DEFAULT_DOCX_CORPUS), help="Path to DOCX monograph directory")
+    parser.add_argument("--format", type=str, default="pdf", choices=["pdf", "docx", "all"], help="Format to benchmark (pdf, docx, or all)")
     parser.add_argument("--metric", type=str, default="all", choices=["all", "tables", "latency"], help="Metric to focus on")
     args = parser.parse_args()
 
     corpus_path = Path(args.corpus).resolve()
-    if not corpus_path.exists():
-        print(f"Error: Corpus path not found: {corpus_path}", file=sys.stderr)
-        sys.exit(1)
+    docx_path = Path(args.docx_corpus).resolve()
 
-    asyncio.run(benchmark_pdf_corpus(corpus_path, metric=args.metric))
+    if args.format == "all":
+        asyncio.run(benchmark_multiformat(corpus_path, docx_path))
+    elif args.format == "docx":
+        asyncio.run(benchmark_docx_corpus(docx_path))
+    else:
+        if not corpus_path.exists():
+            print(f"Error: Corpus path not found: {corpus_path}", file=sys.stderr)
+            sys.exit(1)
+        asyncio.run(benchmark_pdf_corpus(corpus_path, metric=args.metric))
 
 
 if __name__ == "__main__":

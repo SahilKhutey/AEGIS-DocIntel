@@ -17,6 +17,7 @@ def live_api_client():
     os.environ["HF_HUB_OFFLINE"] = "1"
     os.environ["TRANSFORMERS_OFFLINE"] = "1"
     os.environ["AEGIS_ENVIRONMENT"] = "development"
+    os.environ["LLM_PROVIDER"] = "mock"
     with TestClient(app) as test_client:
         sdk_client = AmdiClient(api_key="dev-test-tenant", base_url="http://testserver")
         orig_req = test_client.request

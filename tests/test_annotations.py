@@ -265,7 +265,7 @@ def test_ai_assistance(test_ai):
 def test_api_endpoints():
     """Test FastAPI endpoint handlers using TestClient."""
     from src.main import app
-    client = TestClient(app)
+    client = TestClient(app, headers={"Authorization": "Bearer dev-test-tenant"})
 
     # 1. Create note
     payload = {

@@ -2,8 +2,11 @@
 """
 scripts/pilot_dashboard.py — Minimal, Honest Pilot Feedback Tracking Tool
 ===========================================================================
-Aggregates GitHub issues labeled 'pilot-feedback' (via GitHub CLI) or
-local feedback entries from 'docs/pilot/feedback_logs.json'.
+Aggregates GitHub issues labeled 'pilot-feedback' (via the GitHub CLI).
+
+GitHub issues are the ONLY accepted source of pilot evidence. An earlier version also read an
+offline JSON log; that allowed unverifiable "feedback" (citing issue numbers that did not exist)
+to be reported as real, so the offline path was removed.
 
 Cross-references reported issues against STATUS.md known issues to separate
 known architectural gaps from genuinely novel findings.
@@ -48,18 +51,6 @@ def get_github_issues() -> List[Dict[str, Any]]:
         return []
 
 
-def get_local_feedback() -> List[Dict[str, Any]]:
-    """Loads offline feedback logs from docs/pilot/feedback_logs.json if available."""
-    local_path = Path(__file__).parent.parent / "docs" / "pilot" / "feedback_logs.json"
-    if local_path.is_file():
-        try:
-            with open(local_path, "r", encoding="utf-8") as f:
-                return json.load(f)
-        except json.JSONDecodeError:
-            return []
-    return []
-
-
 def categorize_issue(text: str) -> str:
     """Matches text against known issues in STATUS.md."""
     lower = text.lower()
@@ -82,7 +73,7 @@ def generate_report(feedbacks: List[Dict[str, Any]]) -> None:
 
     if not feedbacks:
         print("No pilot feedback recorded yet.")
-        print("To record offline feedback, populate docs/pilot/feedback_logs.json.")
+        print("Pilot feedback is recorded only as public GitHub issues (template: pilot_feedback.md, label: pilot-feedback).")
         return
 
     component_counts: Dict[str, int] = {}
@@ -125,10 +116,7 @@ def generate_report(feedbacks: List[Dict[str, Any]]) -> None:
 
 
 def main() -> None:
-    feedbacks = get_github_issues()
-    if not feedbacks:
-        feedbacks = get_local_feedback()
-    generate_report(feedbacks)
+    generate_report(get_github_issues())
 
 
 if __name__ == "__main__":

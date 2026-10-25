@@ -221,7 +221,7 @@ class AnnotationStore:
         params.append(annotation_id)
         with self._connect() as conn:
             cursor = conn.execute(
-                f"UPDATE annotations SET {', '.join(updates)} WHERE id = ?",
+                f"UPDATE annotations SET {', '.join(updates)} WHERE id = ?",  # nosec: B608
                 params,
             )
             return cursor.rowcount > 0

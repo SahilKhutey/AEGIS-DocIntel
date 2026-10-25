@@ -3,6 +3,13 @@ AEGIS-AMDI-OS — Data Models
 =============================
 All schemas for the system.
 """
+from src.models.evidence_object import (
+    SourceLocation,
+    NormalizedElement,
+    RetrievedEvidence,
+    CitationValidationResult,
+    validate_citations,
+)
 from src.models.document_object import (
     DocumentObject, DocumentFormat, DocumentStatus, DocumentSource, MAGIC, EXT_MAP,
 )
@@ -33,6 +40,7 @@ from src.models.export_object import (
 
 __all__ = [
     # Document
+    "SourceLocation", "NormalizedElement", "RetrievedEvidence",
     "DocumentObject", "DocumentFormat", "DocumentStatus", "DocumentSource",
     # Page
     "PageObject", "PageLayout", "PageOrientation",

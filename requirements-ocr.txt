@@ -1,0 +1,6 @@
+# GENERATED from pyproject.toml — DO NOT EDIT BY HAND.
+# Regenerate with: python scripts/check_dependency_sync.py --write
+# AEGIS-DocIntel — Optional OCR tier (also needs the `tesseract` system binary).
+-r requirements-core.txt
+
+pytesseract>=0.3.10

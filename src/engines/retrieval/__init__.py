@@ -43,7 +43,13 @@ from .matrix_search import MatrixResult, MatrixSearch
 # Promoter import removed as it resides in the memory engine
 from .ranker import HybridRanker, HybridRanking, RankedDocument
 from .recurrence_search import RecurrenceResult, RecurrenceSearch
-from .retrieval_engine import RetrievalEngine, RetrievalReport
+from .retrieval_engine import (
+    RetrievalEngine,
+    RetrievalReport,
+    RetrievedEvidence,
+    CitationValidationResult,
+    validate_citations,
+)
 from .semantic_search import SemanticResult, SemanticSearch
 from .template_search import TemplateResult, TemplateSearch
 

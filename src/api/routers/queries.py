@@ -70,11 +70,22 @@ async def query_documents(
             },
         )
 
+    # If export_agent is specified, route through Agent Export Layer
+    if body.export_agent:
+        from src.api.routes.query import ael_query_handler
+        return await ael_query_handler(body, request, tenant)
+
+    doc_ids = (
+        [str(d) for d in body.doc_ids]
+        if body.doc_ids
+        else ([str(body.doc_id)] if body.doc_id else None)
+    )
+
     try:
         result = await container.query_service.query(
             question=body.question,
             tenant_id=tenant.tenant_id,
-            doc_ids=[str(d) for d in body.doc_ids] if body.doc_ids else None,
+            doc_ids=doc_ids,
             session_id=str(session_id),
             top_k=body.top_k,
         )
@@ -112,10 +123,14 @@ async def query_documents(
             tokens_used=result.tokens_used,
             retrieval_latency_ms=result.retrieval_latency_ms,
             total_latency_ms=total_ms,
+            latency_ms=total_ms,
             cached=result.cached,
             model=result.model,
         )
 
+    except PermissionError as e:
+        log.warning("Cross-tenant access rejected", error=str(e), tenant=tenant.tenant_id)
+        raise HTTPException(status_code=404, detail="Document not found")
     except Exception as e:
         log.error("Query failed", error=str(e), tenant=tenant.tenant_id)
         raise HTTPException(status_code=500, detail=f"Query failed: {e}")
@@ -132,15 +147,23 @@ async def _stream_query(
     def sse(data: dict) -> str:
         return f"data: {json.dumps(data)}\n\n"
 
+    doc_ids = (
+        [str(d) for d in body.doc_ids]
+        if body.doc_ids
+        else ([str(body.doc_id)] if body.doc_id else None)
+    )
+
     try:
         async for chunk in container.query_service.stream_query(
             question=body.question,
             tenant_id=tenant.tenant_id,
-            doc_ids=[str(d) for d in body.doc_ids] if body.doc_ids else None,
+            doc_ids=doc_ids,
             session_id=str(session_id),
             top_k=body.top_k,
         ):
             yield sse(chunk)
+    except PermissionError:
+        yield sse({"type": "error", "error": "Document not found"})
     except Exception as e:
         yield sse({"type": "error", "error": str(e)})
     finally:

@@ -142,7 +142,7 @@ class PIIRedactRequest(BaseModel):
     policy_actions: Optional[Dict[str, str]] = None
 
 
-@router.post("/compliance/pii-scan")
+@router.post("/compliance/pii-detect")
 async def scan_pii_entities(req: PIIScanRequest) -> Dict[str, Any]:
     from src.compliance.redaction_engine import detect_pii, apply_redaction_policy, RedactionPolicy
     if req.text is not None:

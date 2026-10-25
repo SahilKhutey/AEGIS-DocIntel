@@ -9,7 +9,9 @@ import hashlib
 import uuid
 from typing import Annotated, Optional
 
+import json
 import structlog
+from fastapi.responses import JSONResponse
 from fastapi import (
     APIRouter, BackgroundTasks, Depends, File, Form,
     HTTPException, Query, Request, UploadFile, status
@@ -51,6 +53,12 @@ async def upload_document(
     Returns immediately with doc_id and status=pending.
     Use GET /documents/{doc_id} to poll indexing status.
     """
+    if not tenant.can_write_document():
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Forbidden: Document upload requires editor or admin permissions.",
+        )
+
     # Validate content type
     if file.content_type not in ALLOWED_MIMETYPES:
         raise HTTPException(
@@ -62,7 +70,7 @@ async def upload_document(
     file_bytes = await file.read()
     if len(file_bytes) > MAX_UPLOAD_BYTES:
         raise HTTPException(
-            status_code=status.HTTP_413_REQUEST_ENTITY_TOO_LARGE,
+            status_code=status.HTTP_413_CONTENT_TOO_LARGE,
             detail=f"File size {len(file_bytes) / 1024 / 1024:.1f}MB exceeds limit of 200MB",
         )
     if len(file_bytes) == 0:
@@ -70,6 +78,23 @@ async def upload_document(
 
     container = request.app.state.container
     doc_service = container.document_service
+
+    # Idempotency check
+    idempotency_key = request.headers.get("Idempotency-Key", "").strip()
+    idempotency_store = getattr(request.app.state, "idempotency_store", None)
+    if idempotency_key and idempotency_store:
+        payload_hash = idempotency_store.compute_payload_hash(file_bytes)
+        existing_record = await idempotency_store.check_and_start(
+            tenant_id=tenant.tenant_id,
+            operation="document_upload",
+            key=idempotency_key,
+            payload_hash=payload_hash,
+        )
+        if existing_record and existing_record.response_body:
+            return JSONResponse(
+                status_code=existing_record.response_code,
+                content=existing_record.response_body,
+            )
 
     try:
         doc = await doc_service.ingest(
@@ -79,8 +104,24 @@ async def upload_document(
             tenant_id=tenant.tenant_id,
         )
         log.info("Document queued", doc_id=str(doc.doc_id), filename=file.filename, tenant=tenant.tenant_id)
+        if idempotency_key and idempotency_store:
+            body = doc.model_dump() if hasattr(doc, "model_dump") else (doc.dict() if hasattr(doc, "dict") else dict(doc))
+            body = json.loads(json.dumps(body, default=str))
+            await idempotency_store.complete(
+                tenant_id=tenant.tenant_id,
+                operation="document_upload",
+                key=idempotency_key,
+                response_code=202,
+                response_body=body,
+            )
         return doc
     except Exception as e:
+        if idempotency_key and idempotency_store:
+            await idempotency_store.release_on_error(
+                tenant_id=tenant.tenant_id,
+                operation="document_upload",
+                key=idempotency_key,
+            )
         log.error("Upload failed", error=str(e), tenant=tenant.tenant_id)
         raise HTTPException(status_code=500, detail=f"Upload failed: {e}")
 
@@ -157,12 +198,25 @@ async def delete_document(
     tenant: TenantContext = Depends(get_current_tenant),
 ):
     """Delete a document and all its associated chunks, vectors, and cache entries."""
+    if not tenant.can_delete_document():
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Forbidden: Document deletion requires tenant_admin or platform_admin permissions.",
+        )
     container = request.app.state.container
     deleted = await container.document_service.delete(
         doc_id=str(doc_id), tenant_id=tenant.tenant_id
     )
     if not deleted:
         raise HTTPException(status_code=404, detail=f"Document {doc_id} not found")
+    if hasattr(request.app.state, "doc_registry") and request.app.state.doc_registry is not None:
+        request.app.state.doc_registry.pop(str(doc_id), None)
+    if hasattr(request.app.state, "orchestrator") and request.app.state.orchestrator:
+        if hasattr(request.app.state.orchestrator, "memory") and request.app.state.orchestrator.memory:
+            try:
+                await request.app.state.orchestrator.memory.invalidate(str(doc_id))
+            except Exception:
+                pass
 
 
 @router.post(
@@ -177,6 +231,11 @@ async def reindex_document(
     tenant: TenantContext = Depends(get_current_tenant),
 ):
     """Force re-indexing of a document. Invalidates all caches."""
+    if not tenant.can_write_document():
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Forbidden: Document reindexing requires editor or admin permissions.",
+        )
     container = request.app.state.container
     result = await container.document_service.reindex(
         doc_id=str(doc_id), tenant_id=tenant.tenant_id
@@ -200,6 +259,9 @@ async def list_chunks(
 ):
     """List all chunks for a document (for debugging and inspection)."""
     container = request.app.state.container
+    doc = await container.document_service.get(doc_id=str(doc_id), tenant_id=tenant.tenant_id)
+    if not doc:
+        raise HTTPException(status_code=404, detail=f"Document {doc_id} not found")
     result = await container.document_service.list_chunks(
         doc_id=str(doc_id), tenant_id=tenant.tenant_id, page=page, page_size=page_size
     )
@@ -218,6 +280,11 @@ async def batch_upload(
     tenant: TenantContext = Depends(get_current_tenant),
 ):
     """Queue a batch of S3 documents for indexing."""
+    if not tenant.can_write_document():
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Forbidden: Batch document upload requires editor or admin permissions.",
+        )
     container = request.app.state.container
     job = await container.document_service.batch_ingest(
         documents=body.documents, tenant_id=tenant.tenant_id
@@ -236,10 +303,18 @@ async def get_elements(
 ):
     """Return all geometric elements belonging to a specific document (for 3D layout visualization)."""
     container = request.app.state.container
+    doc = await container.document_service.get(doc_id=str(doc_id), tenant_id=tenant.tenant_id)
+    if not doc:
+        raise HTTPException(404, f"Document {doc_id} not found")
+    if hasattr(container.document_service, "hydrate_document"):
+        await container.document_service.hydrate_document(str(doc_id), tenant.tenant_id)
     orchestrator = container.rag_engine
     if not orchestrator:
         raise HTTPException(503, "Orchestrator not initialized")
-    elements = orchestrator.get_document_elements(str(doc_id))
+    try:
+        elements = orchestrator.get_document_elements(str(doc_id), tenant_id=tenant.tenant_id)
+    except PermissionError:
+        raise HTTPException(404, f"Document {doc_id} not found")
     return [
         {
             "element_id": e.element_id,
@@ -247,7 +322,7 @@ async def get_elements(
             "page": e.page,
             "type": e.type.value if hasattr(e.type, "value") else str(e.type),
             "content": e.content,
-            "bbox": [e.bbox.x0, e.bbox.y0, e.bbox.x1, e.bbox.y1] if e.bbox else None,
+            "bbox": e.bbox.to_tuple() if (e.bbox and hasattr(e.bbox, "to_tuple")) else ([e.bbox.x0, e.bbox.y0, e.bbox.x1, e.bbox.y1] if e.bbox else None),
             "importance_weight": getattr(e, "importance_weight", 1.0),
             "section": e.section,
         }

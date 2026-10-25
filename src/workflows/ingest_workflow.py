@@ -340,6 +340,14 @@ class IngestWorkflow:
                 raise IngestionError(f"Failed to open PDF {doc.filename}: {exc}", filename=doc.filename) from exc
             raise
 
+        pl_pdf = None
+        try:
+            import io
+            import pdfplumber
+            pl_pdf = pdfplumber.open(io.BytesIO(doc.raw_bytes))
+        except Exception as e:
+            logger.debug(f"pdfplumber not available or failed to open {doc.filename}: {e}")
+
         try:
             for page_index in range(len(pdf)):
                 page_obj = pdf[page_index]
@@ -370,7 +378,8 @@ class IngestWorkflow:
                             page=page.page_number,
                         ))
                 # Tables
-                self._extract_tables(page_obj, page)
+                pl_page = pl_pdf.pages[page_index] if pl_pdf and page_index < len(pl_pdf.pages) else None
+                self._extract_tables(page_obj, page, pl_page=pl_page)
                 # OCR fallback
                 if len(page.text.strip()) < 50:
                     try:
@@ -391,6 +400,11 @@ class IngestWorkflow:
                 normalized.pages.append(page)
         finally:
             pdf.close()
+            if pl_pdf:
+                try:
+                    pl_pdf.close()
+                except Exception:
+                    pass
         return normalized
 
     async def _normalize_docx(self, doc: DocumentObject) -> NormalizedDocument:
@@ -536,24 +550,31 @@ class IngestWorkflow:
         return BlockType.TEXT
 
     @staticmethod
-    def _extract_tables(page_obj, page: NormalizedPage):
+    def _extract_tables(page_obj, page: NormalizedPage, pl_page=None):
         try:
-            import io
-            import pdfplumber
-            with pdfplumber.open(io.BytesIO(page_obj.parent.tobytes())) as pdf:
-                pl_page = pdf.pages[page_obj.number]
-                for table in pl_page.find_tables():
-                    rows = table.extract()
-                    if not rows or len(rows) < 2:
-                        continue
-                    page.blocks.append(NormalizedBlock(
-                        type=BlockType.TABLE,
-                        text=IngestWorkflow._rows_to_md(rows),
-                        bbox=BoundingBox(*table.bbox),
-                        page=page.page_number,
-                    ))
+            if pl_page is None:
+                import io
+                import pdfplumber
+                with pdfplumber.open(io.BytesIO(page_obj.parent.tobytes())) as pdf:
+                    pl_page = pdf.pages[page_obj.number]
+                    IngestWorkflow._extract_tables_from_pl_page(pl_page, page)
+            else:
+                IngestWorkflow._extract_tables_from_pl_page(pl_page, page)
         except Exception as e:
             logger.warning(f"Table extraction failed for page {page.page_number} of {getattr(page_obj.parent, 'name', 'document')}: {e}")
+
+    @staticmethod
+    def _extract_tables_from_pl_page(pl_page, page: NormalizedPage):
+        for table in pl_page.find_tables():
+            rows = table.extract()
+            if not rows or len(rows) < 2:
+                continue
+            page.blocks.append(NormalizedBlock(
+                type=BlockType.TABLE,
+                text=IngestWorkflow._rows_to_md(rows),
+                bbox=BoundingBox(*table.bbox),
+                page=page.page_number,
+            ))
 
     @staticmethod
     def _rows_to_md(rows: list[list[str]]) -> str:

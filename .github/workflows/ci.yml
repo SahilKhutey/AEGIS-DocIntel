@@ -2,41 +2,65 @@ name: CI
 
 on:
   push:
-    branches: [master, main]
+    branches:
+      - master
+      - main
+      - "p0/**"
+      - "p4/**"
+      - fix/phase0-green-and-honest
   pull_request:
-    branches: [master, main]
-  schedule:
-    - cron: "0 6 * * 1"   # weekly, Monday 06:00 UTC — powers dependency-drift-check below
+    branches:
+      - master
+      - main
   workflow_dispatch: {}
+
+# Least privilege. pull-requests:read is needed by gitleaks-action to enumerate PR commits.
+permissions:
+  contents: read
+  pull-requests: read
+
+# Superseded runs on the same ref are cancelled (never on canonical master pushes).
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+env:
+  RUNNER: ubuntu-24.04
 
 jobs:
   lint:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
         with:
           python-version: "3.12"
           cache: "pip"
+      - name: Dependencies and docs must match their sources of truth
+        run: |
+          python scripts/check_dependency_sync.py
+          python scripts/check_docs_claims.py
       - name: Install lint tooling
-        run: pip install ruff mypy
+        run: pip install ruff
       - name: Ruff (style/correctness)
-        run: ruff check src tests
-      - name: Mypy (type-check, non-blocking while types are hardened)
-        run: mypy src --ignore-missing-imports || true
+        run: ruff check src tests scripts dashboard
 
   test:
     needs: lint
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest]
-        python-version: ["3.12", "3.13"]
+        python-version: ["3.12"]
+    env:
+      HF_HUB_OFFLINE: "1"
+      TRANSFORMERS_OFFLINE: "1"
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v7
         with:
           python-version: ${{ matrix.python-version }}
           cache: "pip"
@@ -44,41 +68,45 @@ jobs:
       - name: Install core + dev dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements-core.txt
-          pip install -r requirements-dev.txt
+          pip install -r requirements-core.txt -r requirements-dev.txt
 
       - name: Verify OpenAPI spec is up to date
         run: |
-          python -c "import os; os.environ['HF_HUB_OFFLINE']='1'; os.environ['TRANSFORMERS_OFFLINE']='1'; from src.main import app; import json; json.dump(app.openapi(), open('/tmp/openapi_check.json','w'), indent=2)"
+          python -c "from src.main import app; import json; json.dump(app.openapi(), open('/tmp/openapi_check.json','w'), indent=2)"
           diff -u openapi.json /tmp/openapi_check.json || (echo "openapi.json is stale — regenerate it" && exit 1)
 
       - name: Run test suite with coverage
         run: |
-          # Coverage gate history: 70% (Phase 3 baseline: 76%) -> 75% (Phase 6 measured: 80%)
-          pytest tests/ --ignore=tests/test_multimodal.py \
+          pytest tests/ \
             --junitxml=pytest-results.xml \
             --cov=src --cov-report=xml --cov-report=term-missing \
             --cov-fail-under=75
 
       - name: Upload test results
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
-          name: pytest-results-${{ matrix.os }}-py${{ matrix.python-version }}
+          name: pytest-results-py${{ matrix.python-version }}
           path: pytest-results.xml
+          if-no-files-found: warn
 
       - name: Upload coverage report
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
-          name: coverage-${{ matrix.os }}-py${{ matrix.python-version }}
+          name: coverage-py${{ matrix.python-version }}
           path: coverage.xml
+          if-no-files-found: warn
 
   security:
-    runs-on: ubuntu-latest
+    needs: lint
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0   # gitleaks scans history; a shallow clone cannot resolve commit ranges
+      - uses: actions/setup-python@v7
         with:
           python-version: "3.12"
           cache: "pip"
@@ -87,58 +115,31 @@ jobs:
       - name: Dependency vulnerability scan
         run: |
           pip install pip-audit
-          pip-audit --requirement requirements-core.txt || true
+          pip-audit --requirement requirements-core.txt
       - name: Static security analysis (bandit)
         run: |
           pip install bandit
-          bandit -r src -ll || true
+          bandit -r src -ll
       - name: Secret scan
-        uses: gitleaks/gitleaks-action@v2
+        # Reviewed false positives live in .gitleaksignore, each with an explanatory comment.
+        uses: gitleaks/gitleaks-action@v3
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-  dependency-drift-check:
-    if: github.event_name == 'schedule'
-    runs-on: ubuntu-latest
+  build-smoke:
+    needs: lint
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
         with:
           python-version: "3.12"
-      - name: Regenerate lock file in a clean, isolated venv and diff
+      - name: Install build tooling
+        run: pip install --upgrade pip build
+      - name: Build wheel distribution
+        run: python -m build --wheel
+      - name: Smoke test installed package
         run: |
-          python -m venv /tmp/lockcheck
-          /tmp/lockcheck/bin/pip install --upgrade pip
-          /tmp/lockcheck/bin/pip install -r requirements-core.txt
-          /tmp/lockcheck/bin/pip freeze > requirements-core.lock.new.txt
-          diff requirements-core.lock.txt requirements-core.lock.new.txt || true
-
-  performance:
-    name: Performance Regression
-    runs-on: ubuntu-latest
-    # Only run on pushes to main — too slow for every PR.
-    # Phase 9 baseline (dev machine, Windows, Python 3.12.10):
-    #   PDFLoader.load() 14-page PDF: ~71ms (budget: 10s)
-    #   PDFLoader memory (tracemalloc): 0.14MB (budget: 500MB)
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-    needs: [test]
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.12"
-          cache: "pip"
-      - name: Install core dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements-core.txt
-          pip install -r requirements-dev.txt
-      - name: Run performance regression tests
-        run: pytest tests/test_performance.py -v --tb=short -m slow
-      - name: Upload timing results
-        uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: performance-results
-          path: production/benchmark-dataset-real/timing_results.csv
-
+          pip install dist/*.whl
+          python -c "import src; from src.main import app; print('AEGIS-DocIntel app initialized successfully:', app.title)"

@@ -27,7 +27,9 @@ class BlockType(str, Enum):
 
 
 
+from src.models.evidence_object import NormalizedElement, SourceLocation
 from src.models.geometry_object import BoundingBox
+
 
 
 @dataclass(init=False)
@@ -68,6 +70,53 @@ class NormalizedBlock:
     @property
     def block_type(self) -> BlockType:
         return self.type
+
+    def to_normalized_element(
+        self,
+        document_id: str = "",
+        source_format: str = "unknown",
+        reading_order: int = 0,
+    ) -> NormalizedElement:
+        """Convert this NormalizedBlock into canonical NormalizedElement with SourceLocation."""
+        sec_path = (self.section,) if self.section else ()
+        kind_map = {
+            BlockType.TEXT: "paragraph",
+            BlockType.HEADING: "heading",
+            BlockType.TITLE: "heading",
+            BlockType.SUBTITLE: "heading",
+            BlockType.TABLE: "table",
+            BlockType.LIST: "list_item",
+            BlockType.CAPTION: "caption",
+            BlockType.HEADER: "heading",
+            BlockType.FOOTER: "footnote",
+            BlockType.EQUATION: "formula",
+            BlockType.CODE: "paragraph",
+            BlockType.FIGURE: "image",
+        }
+        kind = kind_map.get(self.type, "paragraph")
+        bbox_tuple = (
+            self.bbox.to_tuple()
+            if hasattr(self.bbox, "to_tuple")
+            else (tuple(self.bbox) if isinstance(self.bbox, (list, tuple)) else None)
+        )
+        return NormalizedElement(
+            element_id=self.block_id,
+            kind=kind,
+            content=self.text,
+            location=SourceLocation(
+                document_id=document_id,
+                page_number=self.page if self.page > 0 else 1,
+                element_id=self.block_id,
+                section_path=sec_path,
+                source_format=source_format,
+            ),
+            reading_order=reading_order,
+            bounding_box=bbox_tuple,
+            parent_id=self.metadata.get("parent_id"),
+            confidence=self.confidence,
+            metadata=self.metadata,
+        )
+
 
 
 @dataclass(init=False)
@@ -152,3 +201,20 @@ class NormalizedDocument:
 
     def figures(self) -> list[NormalizedBlock]:
         return [b for p in self.pages for b in p.blocks if b.type == BlockType.FIGURE]
+
+    def to_normalized_elements(self, source_format: str = "unknown") -> list[NormalizedElement]:
+        """Convert all blocks across all pages into canonical NormalizedElement instances with deterministic reading order."""
+        elements = []
+        idx = 0
+        for page in self.pages:
+            for blk in page.blocks:
+                elements.append(
+                    blk.to_normalized_element(
+                        document_id=self.doc_id,
+                        source_format=source_format,
+                        reading_order=idx,
+                    )
+                )
+                idx += 1
+        return elements
+

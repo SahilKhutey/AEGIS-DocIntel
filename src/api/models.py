@@ -7,7 +7,7 @@ from __future__ import annotations
 
 from datetime import datetime
 from enum import Enum
-from typing import Any, Optional
+from typing import Any, Optional, Union
 from uuid import UUID
 
 from pydantic import BaseModel, Field, field_validator
@@ -99,12 +99,21 @@ class QueryRequest(BaseModel):
         default=None,
         description="Filter to specific documents. None = all tenant docs.",
     )
+    doc_id: Optional[str] = Field(
+        default=None,
+        description="Single document ID alias (supports AEL workflows).",
+    )
     top_k: Optional[int] = Field(default=None, ge=1, le=50)
     session_id: Optional[UUID] = None
     include_citations: bool = True
     stream: bool = False
     block_types: Optional[list[BlockTypeEnum]] = None
     language: Optional[str] = None
+    # Agent Export Layer parameters
+    export_agent: Optional[str] = None
+    export_format: Optional[str] = "json"
+    api_key: Optional[str] = None
+    model: Optional[str] = None
 
     @field_validator("question")
     @classmethod
@@ -115,27 +124,37 @@ class QueryRequest(BaseModel):
 
 
 class CitationModel(BaseModel):
-    source_num: int
-    chunk_id: str
-    doc_id: str
+    source_num: Optional[int] = None
+    chunk_id: Optional[str] = None
+    doc_id: Optional[str] = None
     filename: Optional[str] = None
-    page: int
+    page: Optional[int] = None
     section: Optional[str] = None
-    snippet: str
+    snippet: Optional[str] = None
     confidence: Optional[float] = None
+    is_valid: Optional[bool] = None
+    reason: Optional[str] = None
 
 
 class QueryResponse(BaseModel):
     answer: str
-    citations: list[CitationModel] = []
-    confidence: ConfidenceLevel
-    confidence_score: float
-    session_id: UUID
-    tokens_used: dict[str, int]  # {"input": N, "output": N, "total": N}
-    retrieval_latency_ms: float
-    total_latency_ms: float
+    citations: list[Any] = []
+    confidence: Any
+    confidence_score: Optional[float] = None
+    session_id: Optional[UUID] = None
+    tokens_used: Union[dict[str, int], int]  # {"input": N, "output": N, "total": N} or total int
+    retrieval_latency_ms: Optional[float] = None
+    total_latency_ms: Optional[float] = None
     cached: bool = False
     model: str
+    # AEL and extended fields
+    question: Optional[str] = None
+    grounded: Optional[bool] = None
+    confidence_label: Optional[str] = None
+    query_type: Optional[str] = None
+    weights_used: Optional[dict[str, float]] = None
+    table_direct: Optional[list[str]] = None
+    latency_ms: Optional[float] = None
 
 
 class StreamChunk(BaseModel):
@@ -171,7 +190,7 @@ class ChunkListResponse(BaseModel):
 # ─────────────────────────────────────────────────────────────────
 
 class TenantStats(BaseModel):
-    tenant_id: UUID
+    tenant_id: Union[UUID, str]
     doc_count: int
     chunk_count: int
     total_tokens_used: int

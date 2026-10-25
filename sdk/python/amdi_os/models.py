@@ -129,8 +129,8 @@ class RetrievalResult:
             query=query_text,
             hits=hits,
             per_method_counts=data.get("per_method_counts", {}),
-            latency_ms=float(data.get("latency_ms", data.get("total_latency_ms", 0.0))),
-            total_candidates=int(data.get("total_candidates", len(hits))),
+            latency_ms=float(data.get("latency_ms") or data.get("total_latency_ms") or 0.0),
+            total_candidates=int(data.get("total_candidates") if data.get("total_candidates") is not None else len(hits)),
         )
 
 

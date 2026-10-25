@@ -14,7 +14,7 @@ from fastapi.testclient import TestClient
 from src.math_concepts.master_math_engine import MasterUnifiedMathEngine
 from src.main import app
 
-client = TestClient(app)
+client = TestClient(app, headers={"Authorization": "Bearer dev-test-tenant"})
 
 
 def test_master_unified_math_engine_direct():

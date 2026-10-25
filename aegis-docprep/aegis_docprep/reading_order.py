@@ -254,3 +254,124 @@ class SpatialReadingGraph:
         '''Convenience method: builds the DAG and recovers the reading order in one call.'''
         V, E = self.build_reading_graph(elements)
         return self.recover_reading_order(V, E)
+
+
+
+def _extract_box(el: Any) -> Tuple[float, float, float, float, str]:
+    if isinstance(el, dict):
+        x = float(el.get("x", el.get("x_min", el.get("x0", 0.0))))
+        y = float(el.get("y", el.get("y_min", el.get("y0", 0.0))))
+        w = float(el.get("w", el.get("width", 0.0)))
+        h = float(el.get("h", el.get("height", 0.0)))
+        if w == 0.0 and "x1" in el:
+            w = max(0.0, float(el["x1"]) - x)
+        if h == 0.0 and "y1" in el:
+            h = max(0.0, float(el["y1"]) - y)
+        el_id = str(el.get("id", el.get("element_id", "")))
+        return x, y, w, h, el_id
+
+    bbox = getattr(el, "bbox", None)
+    el_id = str(getattr(el, "element_id", getattr(el, "id", "")))
+    if bbox is not None:
+        x0 = float(getattr(bbox, "x0", getattr(bbox, "x_min", 0.0)))
+        y0 = float(getattr(bbox, "y0", getattr(bbox, "y_min", 0.0)))
+        x1 = float(getattr(bbox, "x1", getattr(bbox, "x_max", 0.0)))
+        y1 = float(getattr(bbox, "y1", getattr(bbox, "y_max", 0.0)))
+        return x0, y0, max(0.0, x1 - x0), max(0.0, y1 - y0), el_id
+
+    x = float(getattr(el, "x", getattr(el, "x_min", getattr(el, "x0", 0.0))))
+    y = float(getattr(el, "y", getattr(el, "y_min", getattr(el, "y0", 0.0))))
+    w = float(getattr(el, "w", getattr(el, "width", 0.0)))
+    h = float(getattr(el, "h", getattr(el, "height", 0.0)))
+    if w == 0.0 and hasattr(el, "x1"):
+        w = max(0.0, float(getattr(el, "x1")) - x)
+    if h == 0.0 and hasattr(el, "y1"):
+        h = max(0.0, float(getattr(el, "y1")) - y)
+    return x, y, w, h, el_id
+
+
+def layout_aware_reading_order(
+    elements: List[Any],
+    column_gap_threshold: float = 0.05,
+    spanning_width_threshold: float = 0.7,
+) -> Tuple[List[Any], Dict[str, Any]]:
+    """
+    Layout-aware reading order recovery preserving multi-column flow, headings, and tables.
+    
+    1. Distinguishes full-width spanning headers/titles and footers.
+    2. Clusters columnar blocks into distinct vertical column regions (left-to-right columns).
+    3. Orders within each column region top-to-bottom.
+    4. Detects layout ambiguities (overlapping bounding boxes or conflicting bounds)
+       and returns explicit diagnostics.
+    """
+    if not elements:
+        return [], {"detected_columns": 0, "is_ambiguous": False, "ambiguities": [], "spanning_count": 0}
+
+    spanning_top: List[Any] = []
+    spanning_bottom: List[Any] = []
+    columnar_candidates: List[Any] = []
+    ambiguities: List[str] = []
+
+    # Detect bounding box collisions/ambiguity
+    for i in range(len(elements)):
+        for j in range(i + 1, len(elements)):
+            x1, y1, w1, h1, id1 = _extract_box(elements[i])
+            x2, y2, w2, h2, id2 = _extract_box(elements[j])
+            ix0, iy0 = max(x1, x2), max(y1, y2)
+            ix1, iy1 = min(x1 + w1, x2 + w2), min(y1 + h1, y2 + h2)
+            if ix1 > ix0 and iy1 > iy0:
+                inter = (ix1 - ix0) * (iy1 - iy0)
+                union = (w1 * h1) + (w2 * h2) - inter
+                if union > 0 and (inter / union) > 0.4:
+                    ambiguities.append(f"High spatial overlap (IoU={inter/union:.2f}) between {id1 or i} and {id2 or j}")
+
+    for el in elements:
+        x, y, w, h, _ = _extract_box(el)
+        if w >= spanning_width_threshold:
+            if y < 0.2:
+                spanning_top.append(el)
+            else:
+                spanning_bottom.append(el)
+        else:
+            columnar_candidates.append(el)
+
+    spanning_top.sort(key=lambda e: (_extract_box(e)[1], _extract_box(e)[0]))
+    spanning_bottom.sort(key=lambda e: (_extract_box(e)[1], _extract_box(e)[0]))
+
+    if not columnar_candidates:
+        result = spanning_top + spanning_bottom
+        return result, {
+            "detected_columns": 1,
+            "is_ambiguous": bool(ambiguities),
+            "ambiguities": ambiguities,
+            "spanning_count": len(spanning_top) + len(spanning_bottom),
+        }
+
+    x_centers = [_extract_box(e)[0] + _extract_box(e)[2] / 2 for e in columnar_candidates]
+    min_x, max_x = min(x_centers), max(x_centers)
+
+    if max_x - min_x > 0.15:
+        mid_x = (min_x + max_x) / 2
+        col1 = [e for e in columnar_candidates if (_extract_box(e)[0] + _extract_box(e)[2] / 2) < mid_x]
+        col2 = [e for e in columnar_candidates if (_extract_box(e)[0] + _extract_box(e)[2] / 2) >= mid_x]
+        col1.sort(key=lambda e: (_extract_box(e)[1], _extract_box(e)[0]))
+        col2.sort(key=lambda e: (_extract_box(e)[1], _extract_box(e)[0]))
+        columns = [col1, col2]
+        detected_cols = 2
+    else:
+        single_col = list(columnar_candidates)
+        single_col.sort(key=lambda e: (_extract_box(e)[1], _extract_box(e)[0]))
+        columns = [single_col]
+        detected_cols = 1
+
+    ordered: List[Any] = list(spanning_top)
+    for col in columns:
+        ordered.extend(col)
+    ordered.extend(spanning_bottom)
+
+    return ordered, {
+        "detected_columns": detected_cols,
+        "is_ambiguous": bool(ambiguities),
+        "ambiguities": ambiguities,
+        "spanning_count": len(spanning_top) + len(spanning_bottom),
+    }

@@ -40,6 +40,24 @@ def test_dashboard_package_imports_cleanly():
     assert GeometryDashboard is not None
 
 
+def test_canonical_dashboard_pages_package_imports():
+    """Verify that dashboard.pages can be imported directly as the canonical UI package."""
+    from dashboard.pages import (
+        UploadDashboard,
+        SettingsDashboard,
+        GeometryDashboard,
+        MatrixDashboard,
+        GraphDashboard,
+        MemoryDashboard,
+    )
+    assert UploadDashboard is not None
+    assert SettingsDashboard is not None
+    assert GeometryDashboard is not None
+    assert MatrixDashboard is not None
+    assert GraphDashboard is not None
+    assert MemoryDashboard is not None
+
+
 def test_upload_dashboard():
     """Test UploadDashboard controller and model operations."""
     from ui.src.pages.upload_dashboard import UploadDashboard, UploadStatus

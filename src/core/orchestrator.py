@@ -26,6 +26,8 @@ from __future__ import annotations
 
 import asyncio
 from collections import defaultdict
+import os
+from pathlib import Path
 import time
 import traceback
 import uuid
@@ -305,7 +307,24 @@ class AMDIOrchestrator:
         self._hypergraph_eng = self._init_engine("HypergraphEngine", HypergraphEngine)
         self._spectral    = self._init_engine("SpectralEngine",    SpectralEngine)
         
-        self._embedding   = self._init_engine("EmbeddingService",  EmbeddingService)
+        if EmbeddingService is not None:
+            emb_provider = self._cfg_get("embedding_provider", os.environ.get("EMBEDDING_PROVIDER", "auto"))
+            emb_model = self._cfg_get("embedding_model", os.environ.get("EMBEDDING_MODEL", "BAAI/bge-large-en-v1.5"))
+            emb_dim = int(self._cfg_get("embedding_dim", os.environ.get("EMBEDDING_DIM", "1024")))
+            emb_api_key = self._cfg_get("openai_api_key", os.environ.get("OPENAI_API_KEY", ""))
+            try:
+                self._embedding = EmbeddingService(
+                    model_name=emb_model,
+                    dim=emb_dim,
+                    provider=emb_provider,
+                    api_key=emb_api_key,
+                )
+                log.debug("_init_engine: EmbeddingService initialised with provider=%s", emb_provider)
+            except Exception as e:
+                log.warning("_init_engine: EmbeddingService failed to initialise: %s", e)
+                self._embedding = self._init_engine("EmbeddingService", EmbeddingService)
+        else:
+            self._embedding = None
         if SemanticEngine is not None:
             self._semantic = SemanticEngine(embedder=self._embedding)
             log.debug("_init_engine: SemanticEngine initialised with embedder")
@@ -331,7 +350,19 @@ class AMDIOrchestrator:
             self._retriever = None
             
         self._ctx_builder = self._init_engine("ContextBuilder",    ContextBuilder)
-        self._llm         = self._init_engine("LLMInterface",      LLMInterface)
+        if LLMInterface is not None:
+            llm_prov = self._cfg_get("llm_provider", os.environ.get("LLM_PROVIDER", "mock"))
+            if llm_prov == "mock" and os.environ.get("OPENAI_API_KEY"):
+                llm_prov = "openai"
+            llm_model = self._cfg_get("llm_model", os.environ.get("LLM_MODEL", "gpt-4o-mini"))
+            llm_key = self._cfg_get("openai_api_key", os.environ.get("OPENAI_API_KEY", ""))
+            try:
+                self._llm = LLMInterface(llm_provider=llm_prov, model=llm_model, api_key=llm_key)
+            except Exception as e:
+                log.warning("LLMInterface initialization error: %s, falling back to mock", e)
+                self._llm = LLMInterface(llm_provider="mock")
+        else:
+            self._llm = None
 
         # Vector store
         dim = self._cfg_get("embedding_dim", 1024)
@@ -432,6 +463,11 @@ class AMDIOrchestrator:
 
     async def delete_document(self, doc_id: str, tenant_id: Optional[str] = None) -> bool:
         """Cascading document deletion: removes state, vector store embeddings, and cache entries."""
+        if doc_id in self._doc_tenant:
+            owner = self._doc_tenant.get(doc_id)
+            if tenant_id and str(owner) != str(tenant_id):
+                return False
+            self._doc_tenant.pop(doc_id, None)
         if doc_id in self._doc_state:
             state = self._doc_state[doc_id]
             if tenant_id and getattr(state, "tenant_id", None) and str(state.tenant_id) != str(tenant_id):
@@ -816,6 +852,14 @@ class AMDIOrchestrator:
             if first_el and getattr(first_el, "doc_id", None):
                 retrieved_doc_id = first_el.doc_id
 
+        # Abstention when no authorized evidence exists
+        if not results_list:
+            llm_dict["answer"] = "I do not have sufficient evidence in the authorized documents to answer this question."
+            llm_dict["confidence"] = 0.0
+            llm_dict["confidence_label"] = "LOW"
+            llm_dict["grounded"] = False
+            llm_dict["citations"] = []
+
         has_table = any(
             getattr(getattr(r, "element", None), "type", None) == ElementType.TABLE
             for r in results_list
@@ -915,17 +959,28 @@ class AMDIOrchestrator:
         )
         return response
 
-    async def stream_query(self, question: str) -> AsyncIterator[str]:
+    async def stream_query(
+        self,
+        question: str,
+        doc_id: Optional[str] = None,
+        top_k: int = 12,
+        tenant_id: Optional[str] = None,
+    ) -> AsyncIterator[str]:
         """Stream the answer token-by-token for a question.
 
-        Delegates to ``LLMInterface.stream_reason`` if available; falls
-        back to yielding the full answer from :meth:`query` in a single
-        chunk.
+        Delegates to ``LLMInterface.stream_reason`` with retrieved context if available;
+        falls back to yielding the answer from :meth:`query`.
 
         Parameters
         ----------
         question:
             Natural-language question to answer.
+        doc_id:
+            Optional filter to restrict retrieval to a specific document.
+        top_k:
+            Maximum number of source elements to retrieve.
+        tenant_id:
+            Caller's tenant for scoped retrieval.
 
         Yields
         ------
@@ -934,16 +989,74 @@ class AMDIOrchestrator:
         """
         self._check_open()
 
+        if doc_id and tenant_id is not None:
+            owner = self._doc_tenant.get(doc_id)
+            if owner is not None and owner != tenant_id:
+                raise PermissionError(
+                    f"doc_id={doc_id!r} belongs to a different tenant; "
+                    f"refusing cross-tenant access."
+                )
+
+        context: Any = None
+        retrieved: Any = None
+        if self._retriever is not None:
+            try:
+                if doc_id:
+                    state = self._doc_state.get(doc_id)
+                    elements = state.get_geometric_elements() if state else []
+                    tables = state.get_geometric_tables() if state else []
+                elif tenant_id is not None:
+                    allowed_docs = {
+                        d for d, t in self._doc_tenant.items() if t == tenant_id
+                    }
+                    elements = [
+                        e
+                        for d in allowed_docs
+                        if d in self._doc_state
+                        for e in self._doc_state[d].get_geometric_elements()
+                    ]
+                    tables = [
+                        t
+                        for d in allowed_docs
+                        if d in self._doc_state
+                        for t in self._doc_state[d].get_geometric_tables()
+                    ]
+                else:
+                    elements = self._elements
+                    tables = self._tables
+
+                retrieved = await self._call_maybe_async(
+                    self._retriever.retrieve,
+                    query=question,
+                    elements=elements,
+                    tables=tables,
+                    graph=self._graph,
+                    hypergraph=self._hypergraph,
+                    top_k=top_k,
+                )
+            except Exception as exc:
+                log.warning("stream_query: retriever error: %s", exc)
+
+        if self._ctx_builder is not None and retrieved is not None:
+            try:
+                context = await self._call_maybe_async(
+                    self._ctx_builder.build,
+                    question,
+                    retrieved,
+                )
+            except Exception as exc:
+                log.warning("stream_query: context builder error: %s", exc)
+
         if self._llm is not None and hasattr(self._llm, "stream_reason"):
             try:
-                async for token in self._llm.stream_reason(question):
+                async for token in self._llm.stream_reason(question, context=context, hits=retrieved):
                     yield token
                 return
             except Exception as exc:
                 log.warning("stream_query: stream_reason failed: %s", exc)
 
         # Fallback: run full query and yield result in one shot
-        result = await self.query(question)
+        result = await self.query(question, doc_id=doc_id, top_k=top_k, tenant_id=tenant_id)
         yield result.get("answer", "")
 
     async def close(self) -> None:
@@ -1087,6 +1200,17 @@ class AMDIOrchestrator:
                 except (TypeError, ValueError):
                     bbox = None
 
+            blk_meta = dict(getattr(blk, "metadata", {}) or {})
+            if "source_format" not in blk_meta:
+                source_fmt = (
+                    getattr(nd, "metadata", {}).get("format")
+                    or getattr(nd, "metadata", {}).get("source_format")
+                )
+                if not source_fmt and getattr(nd, "filename", None):
+                    ext = Path(nd.filename).suffix.lstrip(".").lower()
+                    source_fmt = ext or "unknown"
+                blk_meta["source_format"] = source_fmt or "unknown"
+
             el = GeometricElement(
                 element_id=getattr(blk, "block_id", str(uuid.uuid4())),
                 doc_id=getattr(nd, "doc_id", ""),
@@ -1095,6 +1219,8 @@ class AMDIOrchestrator:
                 content=getattr(blk, "text", ""),
                 page=getattr(blk, "page", 1),
                 bbox=bbox,
+                parent_id=blk_meta.get("parent_id"),
+                metadata=blk_meta,
             )
             section_val = getattr(blk, "section", getattr(blk, "section_id", None))
             if section_val is not None:

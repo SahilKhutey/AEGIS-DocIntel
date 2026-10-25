@@ -62,24 +62,22 @@ The platform integrates reading-order graphs, spectral embeddings, elastic token
 
 In Phase 9, synthetic benchmark claims were permanently replaced with measurements from a real 62-document corpus (`production/benchmark-dataset-real/`):
 
-| Metric | Real Verified Value | Status |
+| Metric | Result | How to verify |
 |---|---|---|
-| **Unit Test Suite** | 944 passed, 0 failed | Verified across Python 3.10–3.12 |
-| **Test Coverage** | 76.5%+ core package | Verified via pytest-cov |
-| **Context Compression** | 35.8% token savings | Submodular knapsack optimization |
-| **PII Redaction Precision** | 100% on standard identifiers | SSN, CC, Email, Phone, Keys |
-| **Table Extraction** | Fixed compound API bug | PDFPlumber bbox coordinate conversion |
-| **Observability** | 9 Prometheus metrics wired | Full scraping endpoint at `/metrics` |
+| Pipeline success on the real corpus | 61 of 62 documents | `python scripts/run_benchmark.py` |
+| Tables detected | 220 across 29 documents (independently reproduced) | `python scripts/run_benchmark.py` |
+| Test suite | see the CI badge | counts are deliberately not hard-coded |
+| Coverage | ≥ 75%, enforced by the CI gate | `.github/workflows/ci.yml` |
+| Observability | 9 Prometheus metrics wired to call sites | `/metrics` |
 
 ---
 
 ## Documentation Navigation
 
 - [**Status & 16-Phase Journey**](status.md): Complete audit of what was broken, what was fixed, and the layer-by-layer roadmap.
-- [**aegis-docprep Package**](docprep.md): The decoupled standalone package ready for production pipelines.
-- [**Architecture & Master State**](architecture.md): Formal mathematical specification of $\mathcal{D}$ and the engine hierarchy.
+- [**aegis-docprep Package**](docprep.md): Alpha standalone package (install from source; not yet on PyPI).
+- [**Architecture & Master State**](Architecture.md): Formal mathematical specification of $\mathcal{D}$ and the engine hierarchy.
 - [**Installation & Cold-Start**](installation.md): Tiered requirements (`core`, `dev`, `ml`, `infra`) and clean cold-start execution.
 - [**API Reference**](api.md): Verified FastAPI endpoints and SDK alignment.
 - [**Compliance Gap Analysis**](compliance.md): Audit against GDPR, HIPAA, and SOC 2 requirements.
 - [**Security Policy & Audit**](security.md): Internal vulnerability findings and reporting guidelines.
-- [**Pilot Case Studies**](pilot_cases.md): Real feedback and performance metrics from pilot deployments.

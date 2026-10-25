@@ -171,6 +171,38 @@ async def test_export_workflow_export_mocked(sample_document):
     await ingest_wf.shutdown()
 
 
+@pytest.mark.asyncio
+async def test_export_workflow_export_with_real_answer_verification(sample_document):
+    """Test ExportWorkflow export execution verifying answer verification and property calibration."""
+    ingest_wf = IngestWorkflow(llm_provider="mock")
+    await ingest_wf.ingest(sample_document)
+    query_wf = QueryWorkflow(ingest=ingest_wf, llm_provider="mock")
+
+    export_wf = ExportWorkflow(ingest=ingest_wf, query=query_wf)
+
+    mock_send = AsyncMock(return_value={
+        "status": "success",
+        "answer": "The document describes a 40% token reduction [page 1].",
+        "input_tokens": 100,
+        "output_tokens": 20,
+    })
+    with patch("src.workflows.export_workflow.get_connector") as mock_get_conn:
+        mock_connector = AsyncMock()
+        mock_connector.send = mock_send
+        mock_get_conn.return_value = mock_connector
+
+        res = await export_wf.export("What is the token reduction?", agent="claude", verify=True)
+        assert "error" not in res
+        assert res["answer"] == "The document describes a 40% token reduction [page 1]."
+        assert res["verification"] is not None
+        assert "citation_accuracy" in res["verification"]
+        assert "hallucination_score" in res["verification"]
+
+
+
+    await ingest_wf.shutdown()
+
+
 # ============================================================================
 # BatchWorkflow Tests
 # ============================================================================

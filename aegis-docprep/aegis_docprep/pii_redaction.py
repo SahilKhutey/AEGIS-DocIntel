@@ -12,6 +12,11 @@ from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional, Tuple, Union
 
 
+class PIIRedactionPolicyError(RuntimeError):
+    """Raised when mandatory redaction fails or privacy validation policy is violated."""
+    pass
+
+
 @dataclass
 class PIIEntity:
     entity_type: str
@@ -35,18 +40,38 @@ class ComplianceReport:
     entities_found: List[PIIEntity] = field(default_factory=list)
     redactions_applied: int = 0
     policy_version: str = "1.0.0"
+    def safe_summary(self) -> Dict[str, Any]:
+        """Returns safe aggregate telemetry without sensitive matched strings."""
+        by_category: Dict[str, int] = {}
+        for ent in self.entities_found:
+            by_category[ent.entity_type] = by_category.get(ent.entity_type, 0) + 1
+        return {
+            "document_id": self.document_id,
+            "total_entities_found": len(self.entities_found),
+            "redactions_applied": self.redactions_applied,
+            "entity_categories": by_category,
+            "policy_version": self.policy_version,
+        }
 
 
 # Structured PII Regex Patterns with Validation Logic
 SSN_REGEX = re.compile(r'\b\d{3}-\d{2}-\d{4}\b')
 CREDIT_CARD_REGEX = re.compile(r'\b(?:\d{4}[-\s]?){3}\d{4}\b')
-PHONE_REGEX = re.compile(r'\b(?:\+?1[-\s]?)?\(?\d{3}\)?[-\s]?\d{3}[-\s]?\d{4}\b')
+PHONE_REGEX = re.compile(
+    r'(?:(?<!\w)\+\d{1,4}[-\s]?(?:\(\d{1,4}\)[-\s]?)?\d{1,4}[-\s]?\d{1,4}[-\s]?\d{1,9}\b)|'
+    r'(?:\b(?:\+?1[-\s]?)?\(?\d{3}\)?[-\s]?\d{3}[-\s]?\d{4}\b)|'
+    r'(?:(?<![\d-])\b\d{3}-\d{4}\b)'
+)
+EMAIL_REGEX = re.compile(r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b')
+API_KEY_REGEX = re.compile(r'\b(?:sk-[a-zA-Z0-9_\-]{20,}|AKIA[0-9A-Z]{16}|ASIA[0-9A-Z]{16}|ghp_[0-9a-zA-Z]{30,}|github_pat_[0-9a-zA-Z_]{22,})\b')
 
 NON_NAME_WORDS = {
     "Contact", "Visited", "Invoice", "Ref", "Document", "Section", "Table", "Figure",
     "Report", "Annual", "Executive", "Summary", "Total", "Net", "Gross", "Revenue",
     "Margin", "Operating", "Financial", "System", "Service", "Engine", "Member", "Card",
     "Order", "ID", "Number", "Date", "Status", "Type", "Format", "Page", "Block", "Pay",
+    "Call", "Customer", "Client", "Patient", "User", "Account", "Dear", "Agent", "Manager",
+    "Employee", "Developer", "Director", "Managing", "Executive", "Senior", "Chief", "Officer", "Lead", "Head", "President", "Vice", "Author", "Sender", "Recipient", "Dr", "Mr", "Mrs", "Ms", "Prof",
 }
 
 # Exclusion lists for Title Case pairs that are locations
@@ -56,10 +81,8 @@ GEO_EXCLUSIONS = {
     "Saudi Arabia", "South Africa", "Sri Lanka", "Costa Rica", "El Salvador",
 }
 
-# Build regex for PERSON matching that excludes non-name words at the match boundary
-NAME_REGEX = re.compile(
-    r'\b(?!(?:' + "|".join(re.escape(w) for w in NON_NAME_WORDS) + r')\b)[A-Z][a-z]{1,20}\s+[A-Z][a-z]{1,20}\b'
-)
+TITLE_CASE_RUN = re.compile(r'\b[A-Z][a-z]{1,20}(?:\s+[A-Z][a-z]{1,20})+\b')
+WORD_TOKEN = re.compile(r'[A-Z][a-z]{1,20}')
 
 
 def _luhn_check(card_num: str) -> bool:
@@ -91,6 +114,9 @@ def detect_pii(element: Union[Dict[str, Any], str]) -> List[PIIEntity]:
 
     entities: List[PIIEntity] = []
 
+    def _is_overlapping(s: int, e: int) -> bool:
+        return any(ent.start < e and s < ent.end for ent in entities)
+
     for match in SSN_REGEX.finditer(text):
         entities.append(
             PIIEntity(
@@ -106,46 +132,88 @@ def detect_pii(element: Union[Dict[str, Any], str]) -> List[PIIEntity]:
     for match in CREDIT_CARD_REGEX.finditer(text):
         match_text = match.group(0)
         score = 0.95 if _luhn_check(match_text) else 0.55
-        entities.append(
-            PIIEntity(
-                entity_type='CREDIT_CARD',
-                element_id=elem_id,
-                start=match.start(),
-                end=match.end(),
-                score=score,
-                text=match_text,
-            )
-        )
-
-    for match in PHONE_REGEX.finditer(text):
-        entities.append(
-            PIIEntity(
-                entity_type='PHONE_NUMBER',
-                element_id=elem_id,
-                start=match.start(),
-                end=match.end(),
-                score=0.90,
-                text=match.group(0),
-            )
-        )
-
-    for match in NAME_REGEX.finditer(text):
-        match_text = match.group(0)
-        words = match_text.split()
-        if (
-            match_text not in GEO_EXCLUSIONS
-            and not any(w in NON_NAME_WORDS for w in words)
-        ):
+        if not _is_overlapping(match.start(), match.end()):
             entities.append(
                 PIIEntity(
-                    entity_type='PERSON',
+                    entity_type='CREDIT_CARD',
                     element_id=elem_id,
                     start=match.start(),
                     end=match.end(),
-                    score=0.85,
+                    score=score,
                     text=match_text,
                 )
             )
+
+    for match in EMAIL_REGEX.finditer(text):
+        if not _is_overlapping(match.start(), match.end()):
+            entities.append(
+                PIIEntity(
+                    entity_type='EMAIL',
+                    element_id=elem_id,
+                    start=match.start(),
+                    end=match.end(),
+                    score=0.95,
+                    text=match.group(0),
+                )
+            )
+
+    for match in API_KEY_REGEX.finditer(text):
+        if not _is_overlapping(match.start(), match.end()):
+            entities.append(
+                PIIEntity(
+                    entity_type='API_KEY',
+                    element_id=elem_id,
+                    start=match.start(),
+                    end=match.end(),
+                    score=0.99,
+                    text=match.group(0),
+                )
+            )
+
+    for match in PHONE_REGEX.finditer(text):
+        if not _is_overlapping(match.start(), match.end()):
+            entities.append(
+                PIIEntity(
+                    entity_type='PHONE_NUMBER',
+                    element_id=elem_id,
+                    start=match.start(),
+                    end=match.end(),
+                    score=0.90,
+                    text=match.group(0),
+                )
+            )
+
+    for match in TITLE_CASE_RUN.finditer(text):
+        full_span = match.group(0)
+        tokens = list(WORD_TOKEN.finditer(full_span))
+        start_idx = 0
+        while start_idx < len(tokens) and tokens[start_idx].group(0) in NON_NAME_WORDS:
+            start_idx += 1
+        end_idx = len(tokens)
+        while end_idx > start_idx and tokens[end_idx - 1].group(0) in NON_NAME_WORDS:
+            end_idx -= 1
+
+        valid_tokens = tokens[start_idx:end_idx]
+        if len(valid_tokens) >= 2:
+            name_text = full_span[valid_tokens[0].start():valid_tokens[-1].end()]
+            words = name_text.split()
+            if (
+                name_text not in GEO_EXCLUSIONS
+                and not any(w in NON_NAME_WORDS for w in words)
+            ):
+                abs_start = match.start() + valid_tokens[0].start()
+                abs_end = match.start() + valid_tokens[-1].end()
+                if not _is_overlapping(abs_start, abs_end):
+                    entities.append(
+                        PIIEntity(
+                            entity_type='PERSON',
+                            element_id=elem_id,
+                            start=abs_start,
+                            end=abs_end,
+                            score=0.85,
+                            text=name_text,
+                        )
+                    )
 
     return entities
 
@@ -166,6 +234,8 @@ def apply_redaction_policy(
         RedactionPolicy('CREDIT_CARD', 'redact'),
         RedactionPolicy('PHONE_NUMBER', 'redact'),
         RedactionPolicy('PERSON', 'redact'),
+        RedactionPolicy('EMAIL', 'redact'),
+        RedactionPolicy('API_KEY', 'redact'),
     ]
     policy_map = {p.entity_type: p for p in default_policies}
 
@@ -229,6 +299,8 @@ def redact_elements(
         RedactionPolicy('US_SSN', 'redact'),
         RedactionPolicy('CREDIT_CARD', 'redact'),
         RedactionPolicy('PHONE_NUMBER', 'redact'),
+        RedactionPolicy('EMAIL_ADDRESS', 'redact'),
+        RedactionPolicy('API_KEY_TOKEN', 'redact'),
     ]
     all_entities: List[PIIEntity] = []
     total_redactions = 0
@@ -269,3 +341,51 @@ def redact_elements(
         redactions_applied=total_redactions,
     )
     return redacted_elements, report
+
+
+
+def redact_or_block(
+    content: Any,
+    policies: Optional[List[RedactionPolicy]] = None,
+    mandatory: bool = True,
+) -> Tuple[Any, ComplianceReport]:
+    """
+    Applies PII redaction according to policy with fail-closed safety.
+    If mandatory=True and an unexpected error occurs, raises PIIRedactionPolicyError,
+    blocking downstream external transfer rather than leaking plaintext data.
+    """
+    default_p = policies or [
+        RedactionPolicy('US_SSN', 'redact'),
+        RedactionPolicy('CREDIT_CARD', 'redact'),
+        RedactionPolicy('PHONE_NUMBER', 'redact'),
+        RedactionPolicy('EMAIL', 'redact'),
+        RedactionPolicy('API_KEY', 'redact'),
+        RedactionPolicy('PERSON', 'redact'),
+    ]
+    try:
+        if isinstance(content, str):
+            entities = detect_pii(content)
+            redacted_text = apply_redaction_policy(content, entities, default_p)
+            report = ComplianceReport(
+                document_id="doc_str",
+                entities_found=entities,
+                redactions_applied=len(entities),
+            )
+            return redacted_text, report
+        elif isinstance(content, list):
+            return redact_elements(content, default_p)
+        else:
+            entities = detect_pii(content)
+            res = apply_redaction_policy(content, entities, default_p)
+            if isinstance(res, tuple):
+                return res
+            report = ComplianceReport(
+                document_id="doc_elem",
+                entities_found=entities,
+                redactions_applied=len(entities),
+            )
+            return res, report
+    except Exception as exc:
+        if mandatory:
+            raise PIIRedactionPolicyError(f"Mandatory redaction failed: {exc}") from exc
+        raise

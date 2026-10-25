@@ -1,0 +1,46 @@
+{
+  "run_date": "2026-10-23 04:42:07 UTC",
+  "total_documents_tested": 78,
+  "formats_covered": [
+    "pdf",
+    "docx",
+    "xlsx",
+    "pptx"
+  ],
+  "overall_success_rate": "77/78 (98.7%)",
+  "pdf_summary": {
+    "tested": 62,
+    "success_rate": "61/62 (98.4%)",
+    "tables_detected": 220,
+    "latency": {
+      "mean": 0.6,
+      "median": 0.164,
+      "p95": 2.493,
+      "max": 6.983
+    }
+  },
+  "docx_summary": {
+    "tested": 14,
+    "success_rate": "14/14 (100.0%)",
+    "words_extracted": 122444,
+    "chars_extracted": 875929,
+    "latency": {
+      "mean": 0.0812,
+      "median": 0.0641,
+      "p95": 0.1719,
+      "max": 0.1719
+    }
+  },
+  "xlsx_summary": {
+    "file": "real_spreadsheet.xlsx",
+    "sheets": 2,
+    "words": 88,
+    "latency_seconds": 0.0068
+  },
+  "pptx_summary": {
+    "file": "real_presentation.pptx",
+    "slides": 3,
+    "words": 90,
+    "latency_seconds": 0.0108
+  }
+}

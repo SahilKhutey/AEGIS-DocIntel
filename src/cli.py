@@ -14,6 +14,10 @@ import sys
 from pathlib import Path
 from typing import Any
 
+ROOT = Path(__file__).resolve().parent.parent
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
 try:
     from loguru import logger
 except ImportError:  # pragma: no cover
@@ -140,7 +144,7 @@ def run_serve() -> None:
         sys.exit(1)
 
     print('Starting AEGIS-MIOS API Server...')
-    uvicorn.run(app, host='0.0.0.0', port=8000)
+    uvicorn.run(app, host='0.0.0.0', port=8000)  # nosec: B104
 
 
 def main() -> None:

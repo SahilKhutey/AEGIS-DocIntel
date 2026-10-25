@@ -144,7 +144,7 @@ class ExportWorkflow:
         # Verify
         verification = None
         if verify and result.get('answer'):
-            v = self.verifier.verify(ueo, result['answer'])
+            v = self.verifier.verify(result['answer'], ueo)
             verification = {
                 'is_verified': v.is_verified,
                 'overall_confidence': v.overall_confidence,

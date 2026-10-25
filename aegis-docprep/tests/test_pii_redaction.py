@@ -76,3 +76,76 @@ def test_redact_elements_dict_list():
     assert len(redacted_elems) == 2
     assert "555-987-6543" not in redacted_elems[0]["text"]
     assert report.redactions_applied >= 1
+
+
+def test_person_name_with_preceding_label_does_not_leak_surname():
+    """Regression test for I-15: Capitalized label before name must not leak surname."""
+    for text in [
+        "Customer John Smith called about the account.",
+        "Call John Smith at the office.",
+        "Patient Jane Doe checked in.",
+        "Dear Customer Alice Brown, your order is ready.",
+    ]:
+        entities = detect_pii(text)
+        persons = [e for e in entities if e.entity_type == "PERSON"]
+        assert len(persons) == 1, f"Expected 1 PERSON in '{text}', found: {persons}"
+        assert persons[0].text in ("John Smith", "Jane Doe", "Alice Brown")
+        redacted = apply_redaction_policy(text, entities)
+        assert "Smith" not in redacted
+        assert "Doe" not in redacted
+        assert "Brown" not in redacted
+
+
+def test_person_name_three_words():
+    text = "Please reach out to John William Smith immediately."
+    entities = detect_pii(text)
+    persons = [e for e in entities if e.entity_type == "PERSON"]
+    assert len(persons) == 1
+    assert persons[0].text == "John William Smith"
+    redacted = apply_redaction_policy(text, entities)
+    assert "Smith" not in redacted
+    assert "<PERSON_REDACTED>" in redacted
+
+
+def test_person_name_trailing_label():
+    text = "Report authored by John Smith Table analysis."
+    entities = detect_pii(text)
+    persons = [e for e in entities if e.entity_type == "PERSON"]
+    assert len(persons) == 1
+    assert persons[0].text == "John Smith"
+
+
+def test_detects_email_and_api_keys():
+    text = "Contact alice.smith@example.com using token sk-ant-api03-abcdef1234567890abcdef."
+    entities = detect_pii(text)
+    types = {e.entity_type for e in entities}
+    assert "EMAIL" in types
+    assert "API_KEY" in types
+
+    email_ent = next(e for e in entities if e.entity_type == "EMAIL")
+    assert email_ent.text == "alice.smith@example.com"
+
+    key_ent = next(e for e in entities if e.entity_type == "API_KEY")
+    assert key_ent.text == "sk-ant-api03-abcdef1234567890abcdef"
+
+    redacted = apply_redaction_policy(text, entities)
+    assert "alice.smith@example.com" not in redacted
+    assert "sk-ant-api03-abcdef1234567890abcdef" not in redacted
+    assert "<EMAIL_REDACTED>" in redacted
+    assert "<API_KEY_REDACTED>" in redacted
+
+
+def test_detects_international_and_local_phone_numbers():
+    text = "UK office: +44 20 7946 0958, local extension: 555-0100."
+    entities = detect_pii(text)
+    phones = [e for e in entities if e.entity_type == "PHONE_NUMBER"]
+    assert len(phones) == 2
+    phone_texts = {p.text for p in phones}
+    assert "+44 20 7946 0958" in phone_texts
+    assert "555-0100" in phone_texts
+
+    redacted = apply_redaction_policy(text, entities)
+    assert "+44 20 7946 0958" not in redacted
+    assert "555-0100" not in redacted
+
+

@@ -101,7 +101,7 @@ async def test_all_loaders_populate_char_count():
 @pytest.mark.asyncio
 async def test_docx_loader_on_real_monographs():
     """Verify DOCXLoader against available real monographs in Aegis Doc/."""
-    monograph_dir = Path("Aegis Doc")
+    monograph_dir = Path("docs/reference") if Path("docs/reference").exists() else Path("Aegis Doc")
     if not monograph_dir.exists():
         pytest.skip("Aegis Doc/ directory not present in current test environment")
 
