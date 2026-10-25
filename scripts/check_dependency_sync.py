@@ -32,6 +32,7 @@ MIRRORS: dict[str, tuple[str, tuple[str, ...]]] = {
     "requirements-ml.txt": ("ml", ("requirements-core.txt",)),
     "requirements-infra.txt": ("infra", ("requirements-core.txt",)),
     "requirements-ocr.txt": ("ocr", ("requirements-core.txt",)),
+    "requirements-ui.txt": ("ui", ("requirements-core.txt",)),
     "requirements-dev.txt": ("dev", ("requirements-core.txt",)),
 }
 
@@ -42,6 +43,7 @@ HEADERS = {
           "# WARNING: sentence-transformers pulls in torch (multi-GB download).",
     "infra": "Optional infrastructure: Redis caching + OpenTelemetry tracing.",
     "ocr": "Optional OCR tier (also needs the `tesseract` system binary).",
+    "ui": "Optional UI tier: Streamlit interactive visualization dashboard.",
     "dev": "Development & testing (pytest, hypothesis, linters, security scanners).",
 }
 

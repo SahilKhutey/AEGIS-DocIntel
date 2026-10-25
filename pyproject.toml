@@ -86,6 +86,10 @@ infra = [
 ocr = [
     "pytesseract>=0.3.10",
 ]
+ui = [
+    "streamlit>=1.30.0",
+    "requests>=2.31.0",
+]
 dev = [
     "pytest>=8.0.0",
     "pytest-asyncio>=0.24.0",
@@ -98,7 +102,7 @@ dev = [
     "pytesseract>=0.3.10",
 ]
 all = [
-    "aegis-docintel[ml,infra,ocr,dev]"
+    "aegis-docintel[ml,infra,ocr,ui,dev]"
 ]
 
 [tool.setuptools.packages.find]

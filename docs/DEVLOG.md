@@ -1313,3 +1313,30 @@ This section documents the chronological development tasks, architectural decisi
     - Pushed commit `d22be1c` to `origin/p1/persistence-correctness`.
   - `p4/enterprise-governance`:
     - Pushed commit `47bd28a` enabling `p1/**` CI triggers uniformly across branches.
+
+### Task P4.16 — Repository Verification Audit Remediations & Maintenance Streamlining
+- **Time:** 2026-10-25 14:15:00 – 14:30:00 UTC
+- **Context & Objective:**
+  Address all remaining release readiness findings from the Live Repository Verification Report:
+  1. Confirmed post-merge CI run on canonical `master` (run ID `40170128278`, commit `3f5c7b0`) completed with 100% SUCCESS across all 4 jobs (`lint`, `build-smoke`, `security`, `test (3.12)`).
+  2. Refactored maintenance dependency-drift check in `.github/workflows/maintenance.yml`:
+     - Added `lockfile-reproducibility` job verifying deterministic, clean installation and app initialization from `requirements-core.lock.txt`.
+     - Converted `dependency-drift` into an advisory upstream drift report publishing diffs to `$GITHUB_STEP_SUMMARY` without failing the pipeline on benign third-party patch releases.
+  3. Defined explicit `ui` optional dependency group (`streamlit>=1.30.0`, `requests>=2.31.0`) in `pyproject.toml` and mirrored to `requirements-ui.txt` via `scripts/check_dependency_sync.py`.
+  4. Added dedicated `ui-dashboard` verification job in `.github/workflows/maintenance.yml` to install UI dependencies, run dashboard test suites (`test_dashboard.py`, `test_dashboard_pages.py`), and smoke-test the Streamlit entry point.
+  5. Expanded static security scan (`bandit`) in `.github/workflows/ci.yml` across all production Python code (`src`, `dashboard`, `scripts`), validating 49,727 LOC with 0 findings.
+  6. Clarified Python runtime documentation in `README.md`: declared Python 3.12 as the canonical MVP runtime and Python 3.13 as an experimental compatibility sweep.
+- **Files Modified:**
+  - `.github/workflows/ci.yml`
+  - `.github/workflows/maintenance.yml`
+  - `README.md`
+  - `pyproject.toml`
+  - `requirements-ui.txt`
+  - `scripts/check_dependency_sync.py`
+  - `docs/DEVLOG.md`
+- **Verification:**
+  - `python scripts/check_dependency_sync.py`: OK (6 requirements files match pyproject.toml).
+  - `python scripts/check_docs_claims.py`: OK (R1–R6 passed).
+  - `ruff check src tests scripts dashboard`: All checks passed.
+  - `bandit -r src dashboard scripts -ll`: 49,727 LOC scanned, 0 issues.
+  - `pytest tests/test_dependency_sync.py tests/test_dashboard_pages.py`: Passed.

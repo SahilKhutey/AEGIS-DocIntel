@@ -63,8 +63,8 @@ jobs:
           path: pytest-results-py313.xml
           if-no-files-found: warn
 
-  dependency-drift:
-    name: Dependency Drift Sweep
+  lockfile-reproducibility:
+    name: Lockfile Reproducibility Verification
     runs-on: ubuntu-24.04
     timeout-minutes: 15
     steps:
@@ -72,10 +72,57 @@ jobs:
       - uses: actions/setup-python@v7
         with:
           python-version: "3.12"
-      - name: Check lockfile drift in clean environment
+      - name: Verify clean installation from committed lockfile
         run: |
-          python -m venv /tmp/lockcheck
-          /tmp/lockcheck/bin/pip install --upgrade pip
-          /tmp/lockcheck/bin/pip install -r requirements-core.txt
-          /tmp/lockcheck/bin/pip freeze > requirements-core.lock.new.txt
-          diff -u requirements-core.lock.txt requirements-core.lock.new.txt || (echo "Notice: dependency drift detected against PyPI latest" && exit 1)
+          python -m venv /tmp/locktest
+          /tmp/locktest/bin/pip install --upgrade pip
+          /tmp/locktest/bin/pip install -r requirements-core.lock.txt
+          /tmp/locktest/bin/python -c "import src; from src.main import app; print('Lockfile reproducible and app initialized:', app.title)"
+
+  dependency-drift:
+    name: Upstream Dependency Drift Report
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+      - name: Resolve latest upstream packages and generate drift report
+        run: |
+          python -m venv /tmp/driftcheck
+          /tmp/driftcheck/bin/pip install --upgrade pip
+          /tmp/driftcheck/bin/pip install -r requirements-core.txt
+          /tmp/driftcheck/bin/pip freeze > /tmp/requirements-core.latest.txt
+          diff -u requirements-core.lock.txt /tmp/requirements-core.latest.txt > /tmp/dependency_drift.diff || true
+          if [ -s /tmp/dependency_drift.diff ]; then
+            echo "## Upstream Dependency Drift Report" >> $GITHUB_STEP_SUMMARY
+            echo "Upstream package releases differ from committed lockfile. Review the diff below for potential upgrades:" >> $GITHUB_STEP_SUMMARY
+            echo '```diff' >> $GITHUB_STEP_SUMMARY
+            cat /tmp/dependency_drift.diff >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+          else
+            echo "## Upstream Dependency Drift Report" >> $GITHUB_STEP_SUMMARY
+            echo "No drift detected between committed lock and latest PyPI releases." >> $GITHUB_STEP_SUMMARY
+          fi
+
+  ui-dashboard:
+    name: UI Dashboard Verification
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+          cache: "pip"
+      - name: Install dependencies including Streamlit
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements-core.txt -r requirements-dev.txt -r requirements-ui.txt
+      - name: Run Dashboard unit and integration tests
+        run: |
+          pytest tests/test_dashboard.py tests/test_dashboard_pages.py -v
+      - name: Smoke test Streamlit Dashboard entry point
+        run: |
+          python -c "import streamlit, dashboard.app; print('Streamlit dashboard loaded successfully')" 

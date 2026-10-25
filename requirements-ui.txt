@@ -1,0 +1,7 @@
+# GENERATED from pyproject.toml — DO NOT EDIT BY HAND.
+# Regenerate with: python scripts/check_dependency_sync.py --write
+# AEGIS-DocIntel — Optional UI tier: Streamlit interactive visualization dashboard.
+-r requirements-core.txt
+
+streamlit>=1.30.0
+requests>=2.31.0

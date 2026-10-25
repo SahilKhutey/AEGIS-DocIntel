@@ -150,13 +150,15 @@ pip install -r requirements-core.txt -r requirements-dev.txt
 pytest tests/
 ```
 
-Supported Python: **3.12 and 3.13** (the versions CI tests). Dependencies are defined once in `pyproject.toml`; the `requirements-*.txt` files are generated from it (`python scripts/check_dependency_sync.py --write`).
+Supported Python: **3.12** (canonical MVP runtime, validated in CI PR gate) and **3.13** (experimental / compatibility sweep in scheduled maintenance). Dependencies are defined once in `pyproject.toml`; the `requirements-*.txt` files are generated from it (`python scripts/check_dependency_sync.py --write`).
 
 OCR tests additionally use `pytesseract`; real OCR needs the `tesseract` system binary.
 
-### 4. Deep Learning Optional Extras
+### 4. Optional Extras
+- **Deep Learning / Embeddings:** `pip install -r requirements-ml.txt` (or `pip install -e ".[ml]"`)
+- **Interactive Web UI Dashboard:** `pip install -r requirements-ui.txt` (or `pip install -e ".[ui]"`)
 ```bash
-pip install -r requirements-ml.txt
+streamlit run dashboard/app.py
 ```
 
 ---

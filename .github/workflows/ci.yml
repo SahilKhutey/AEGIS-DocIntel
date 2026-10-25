@@ -120,7 +120,7 @@ jobs:
       - name: Static security analysis (bandit)
         run: |
           pip install bandit
-          bandit -r src -ll
+          bandit -r src dashboard scripts -ll
       - name: Secret scan
         # Reviewed false positives live in .gitleaksignore, each with an explanatory comment.
         uses: gitleaks/gitleaks-action@v3
