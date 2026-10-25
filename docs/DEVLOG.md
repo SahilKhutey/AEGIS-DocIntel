@@ -1236,3 +1236,21 @@ This section documents the chronological development tasks, architectural decisi
   - `ruff check src tests scripts dashboard`: All checks passed.
   - `pytest tests/test_real_world_ingestion.py`: 5 passed in 18.03s.
   - `pytest tests/test_dashboard_pages.py`: 14 passed in 6.30s.
+
+### Task P4.13 — GitHub Actions Workflow Audit Remediation & Distribution Smoke Tests
+- **Time:** 2026-10-25 06:30:00 – 06:45:00 UTC
+- **Context & Objective:**
+  Remediate workflow defects and inefficiencies identified in the comprehensive GitHub Actions audit:
+  1. Gated `performance` regression job strictly to `github.event_name == 'push' && github.ref == 'refs/heads/master'`, eliminating all spurious 30-min performance runs on feature and pull request branches.
+  2. Removed non-blocking `mypy ... || true` step from `lint` job (which swallowed 267 errors without enforcing policy) while maintaining 100% blocking enforcement of `ruff check`, dependency sync, and documentation claims validation.
+  3. Added `build-smoke` job to test packaging and distribution: builds wheel via `python -m build`, verifies clean installation and initializes application.
+  4. Streamlined `test` job to target canonical Python 3.12 release runtime on PRs, eliminating redundant runner execution while preserving OpenAPI drift checks and the 75% coverage gate.
+  5. Retained full blocking `security` job (pip-audit, bandit, gitleaks).
+- **Files Modified:**
+  - `.github/workflows/ci.yml`
+  - `docs/DEVLOG.md`
+- **Verification:**
+  - `python scripts/check_dependency_sync.py`: OK.
+  - `python scripts/check_docs_claims.py`: OK.
+  - `ruff check src tests scripts dashboard`: All checks passed.
+  - Packaging smoke test: `python -m build --wheel` and `python -c "import src; from src.main import app; print(app.title)"` passed cleanly.
