@@ -65,6 +65,7 @@ def test_embedding_service_openai_provider():
 
 
 def test_embedding_service_litellm_provider():
+    pytest.importorskip("litellm")
     mock_resp = {
         "data": [
             {"embedding": [0.3] * 768},

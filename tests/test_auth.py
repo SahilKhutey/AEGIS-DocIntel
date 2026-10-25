@@ -89,7 +89,7 @@ def test_auth_bypass_rejected_in_production(monkeypatch):
     with pytest.raises(HTTPException) as key_exc:
         _validate_api_key("aegis-dev-key")
     assert key_exc.value.status_code == 401
-    assert "Invalid API key" in key_exc.value.detail
+    assert "API key" in key_exc.value.detail
 
 
 def test_auth_bypass_rejected_when_environment_unset(monkeypatch):

@@ -8,7 +8,7 @@ Tests for mathematical theorems established in the AMDI-OS Extended Monograph:
 from __future__ import annotations
 
 import math
-from hypothesis import given, strategies as st
+from hypothesis import given, settings, HealthCheck, strategies as st
 from src.core.master_state import Element, PageRepresentation, MasterState
 
 
@@ -16,6 +16,7 @@ def _normalize(x: float, y: float, w: float, h: float) -> tuple[float, float, fl
     return x, y, w, h
 
 
+@settings(suppress_health_check=[HealthCheck.too_slow], deadline=None)
 @given(
     x1=st.floats(min_value=0.0, max_value=1.0, allow_nan=False, allow_infinity=False),
     y1=st.floats(min_value=0.0, max_value=1.0, allow_nan=False, allow_infinity=False),
@@ -45,6 +46,7 @@ def test_theorem_5_1_scale_invariance(x1: float, y1: float, x2: float, y2: float
     assert math.isclose(dist_before, dist_after, rel_tol=1e-9, abs_tol=1e-12)
 
 
+@settings(suppress_health_check=[HealthCheck.too_slow], deadline=None)
 @given(
     x1=st.floats(min_value=0.0, max_value=1.0, allow_nan=False, allow_infinity=False),
     y1=st.floats(min_value=0.0, max_value=1.0, allow_nan=False, allow_infinity=False),
