@@ -45,7 +45,11 @@ from src.ingestion.exceptions import EncryptedPDFError, IngestionError
 
 ROOT = Path(__file__).resolve().parent.parent
 DEFAULT_PDF_CORPUS = ROOT / "production" / "benchmark-dataset-real" / "pdf-corpus"
-DEFAULT_DOCX_CORPUS = ROOT / "Aegis Doc"
+DEFAULT_DOCX_CORPUS = (
+    ROOT / "docs" / "reference"
+    if (ROOT / "docs" / "reference").exists()
+    else ROOT / "Aegis Doc"
+)
 REPORT_DIR = ROOT / "production" / "performance-report"
 OUTPUT_CSV = ROOT / "production" / "benchmark-dataset-real" / "timing_results.csv"
 

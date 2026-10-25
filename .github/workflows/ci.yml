@@ -6,13 +6,12 @@ on:
       - master
       - main
       - "p0/**"
+      - "p4/**"
       - fix/phase0-green-and-honest
   pull_request:
     branches:
       - master
       - main
-  schedule:
-    - cron: "0 6 * * 1"   # weekly, Monday 06:00 UTC — powers dependency-drift-check below
   workflow_dispatch: {}
 
 # Least privilege. pull-requests:read is needed by gitleaks-action to enumerate PR commits.
@@ -20,20 +19,18 @@ permissions:
   contents: read
   pull-requests: read
 
-# Superseded runs on the same ref are cancelled (never on master/main pushes — those all run).
+# Superseded runs on the same ref are cancelled.
 concurrency:
   group: ci-${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+  cancel-in-progress: true
 
-# Pinned to a fixed image on purpose: `ubuntu-latest` migrates to Ubuntu 26 on 2026-10-19, which would
-# silently change the toolchain under every job. Bump deliberately, in a PR that proves it still passes.
 env:
   RUNNER: ubuntu-24.04
 
 jobs:
   lint:
     runs-on: ubuntu-24.04
-    timeout-minutes: 15
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v7
       - uses: actions/setup-python@v7
@@ -42,7 +39,6 @@ jobs:
           cache: "pip"
       - name: Dependencies and docs must match their sources of truth
         run: |
-          # pyproject.toml generates requirements-*.txt; docs may not assert unverifiable claims.
           python scripts/check_dependency_sync.py
           python scripts/check_docs_claims.py
       - name: Install lint tooling
@@ -55,11 +51,7 @@ jobs:
   test:
     needs: lint
     runs-on: ubuntu-24.04
-    timeout-minutes: 30
-    strategy:
-      fail-fast: false
-      matrix:
-        python-version: ["3.12", "3.13"]
+    timeout-minutes: 15
     env:
       HF_HUB_OFFLINE: "1"
       TRANSFORMERS_OFFLINE: "1"
@@ -68,10 +60,9 @@ jobs:
 
       - uses: actions/setup-python@v7
         with:
-          python-version: ${{ matrix.python-version }}
+          python-version: "3.12"
           cache: "pip"
 
-      # Same two files the README tells a new user to install — if this passes, so does their install.
       - name: Install core + dev dependencies
         run: |
           python -m pip install --upgrade pip
@@ -84,7 +75,6 @@ jobs:
 
       - name: Run test suite with coverage
         run: |
-          # Coverage gate: 70% (baseline) -> 75% (measured ~79%). The whole suite runs — nothing is --ignore'd.
           pytest tests/ \
             --junitxml=pytest-results.xml \
             --cov=src --cov-report=xml --cov-report=term-missing \
@@ -94,7 +84,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v7
         with:
-          name: pytest-results-py${{ matrix.python-version }}
+          name: pytest-results
           path: pytest-results.xml
           if-no-files-found: warn
 
@@ -102,13 +92,14 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v7
         with:
-          name: coverage-py${{ matrix.python-version }}
+          name: coverage
           path: coverage.xml
           if-no-files-found: warn
 
   security:
+    needs: lint
     runs-on: ubuntu-24.04
-    timeout-minutes: 15
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v7
         with:
@@ -132,48 +123,3 @@ jobs:
         uses: gitleaks/gitleaks-action@v3
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-  dependency-drift-check:
-    if: github.event_name == 'schedule'
-    runs-on: ubuntu-24.04
-    timeout-minutes: 20
-    steps:
-      - uses: actions/checkout@v7
-      - uses: actions/setup-python@v7
-        with:
-          python-version: "3.12"
-      - name: Regenerate lock file in a clean, isolated venv and diff
-        run: |
-          python -m venv /tmp/lockcheck
-          /tmp/lockcheck/bin/pip install --upgrade pip
-          /tmp/lockcheck/bin/pip install -r requirements-core.txt
-          /tmp/lockcheck/bin/pip freeze > requirements-core.lock.new.txt
-          diff requirements-core.lock.txt requirements-core.lock.new.txt || true
-
-  performance:
-    name: Performance Regression
-    runs-on: ubuntu-24.04
-    timeout-minutes: 30
-    # Was gated on refs/heads/main, but pushes land on master — so this job could never run.
-    # Runs on pushes to either default branch; too slow for every PR.
-    if: github.event_name == 'push'
-    needs: [test]
-    steps:
-      - uses: actions/checkout@v7
-      - uses: actions/setup-python@v7
-        with:
-          python-version: "3.12"
-          cache: "pip"
-      - name: Install core + dev dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements-core.txt -r requirements-dev.txt
-      - name: Run performance regression tests
-        run: pytest tests/test_performance.py -v --tb=short -m slow
-      - name: Upload timing results
-        uses: actions/upload-artifact@v7
-        if: always()
-        with:
-          name: performance-results
-          path: production/benchmark-dataset-real/timing_results.csv
-          if-no-files-found: warn

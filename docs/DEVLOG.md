@@ -1214,3 +1214,25 @@ This section documents the chronological development tasks, architectural decisi
   - `python scripts/check_dependency_sync.py`: OK.
   - `python scripts/check_docs_claims.py`: OK (R1 cold-start, R2 links, R3 counts, R4 pilots, R5 readiness, R6 env-vars).
   - `ruff check src tests scripts`: All checks passed.
+
+### Task P4.12 — CI Workflow Streamlining & Repository Architecture Restructuring
+- **Time:** 2026-10-25 05:45:00 – 06:30:00 UTC
+- **Context & Objective:**
+  Streamline the developer and CI workflow to eliminate unnecessary jobs (slow 30-minute performance benchmarks, scheduled drift checks, multi-version test matrix bloat), and restructure the repository around the canonical Document Intelligence processing pipeline (`Ingest -> Normalize/OCR -> Spatial & Math Engines -> Hybrid Retrieval -> Context Synthesis -> API/UI`).
+- **Files Modified / Renamed / Created:**
+  - `.github/workflows/ci.yml`: Streamlined CI pipeline to 3 lean jobs (`lint`, `test`, `security`) targeting < 5 minute runtime.
+  - `docs/reference/`: Consolidated all 14 `.docx` monographs from `Aegis Doc/` into `docs/reference/`, eliminating unescaped whitespace in root folder paths.
+  - `_archive/`: Removed obsolete empty legacy folder pointer.
+  - `scripts/run_benchmark.py`: Updated default corpus path to `docs/reference/`.
+  - `tests/test_real_world_ingestion.py`: Updated real monograph test loader to `docs/reference/`.
+  - `dashboard/pages/`: Unified dashboard page controllers and UI contracts from `ui/src/pages/` into standard Streamlit multi-page structure.
+  - `tests/test_dashboard_pages.py`: Added direct verification of `dashboard.pages` canonical package.
+  - `src/workflows/__init__.py`: Documented deprecation of standalone workflows in favor of `AMDIOrchestrator`.
+  - `docs/architecture/pipeline.md`: Authored formal end-to-end architecture specification for the 7-stage pre-LLM context compiler pipeline.
+  - `docs/DEVLOG.md`: Recorded implementation chronology and verification results.
+- **Verification:**
+  - `python scripts/check_dependency_sync.py`: OK (5 requirements files match pyproject.toml).
+  - `python scripts/check_docs_claims.py`: OK (R1 cold-start, R2 links, R3 counts, R4 pilots, R5 readiness, R6 env-vars).
+  - `ruff check src tests scripts dashboard`: All checks passed.
+  - `pytest tests/test_real_world_ingestion.py`: 5 passed in 18.03s.
+  - `pytest tests/test_dashboard_pages.py`: 14 passed in 6.30s.
