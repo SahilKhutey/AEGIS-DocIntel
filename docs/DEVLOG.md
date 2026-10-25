@@ -1254,3 +1254,22 @@ This section documents the chronological development tasks, architectural decisi
   - `python scripts/check_docs_claims.py`: OK.
   - `ruff check src tests scripts dashboard`: All checks passed.
   - Packaging smoke test: `python -m build --wheel` and `python -c "import src; from src.main import app; print(app.title)"` passed cleanly.
+
+### Task P4.14 — Unified MVP Workflow Decoupling (ci.yml & maintenance.yml)
+- **Time:** 2026-10-25 06:45:00 – 07:10:00 UTC
+- **Context & Objective:**
+  Implement the target workflow architecture from the Unified MVP Implementation Plan:
+  1. Established recovery point tag `backup/pre-mvp-consolidation-2026-10-25` on canonical `master` and pushed to `origin`.
+  2. Verified remote advertised default branch is `master` (`refs/heads/master HEAD`).
+  3. Decoupled CI/CD into two distinct workflows:
+     - `.github/workflows/ci.yml`: Lean, fast (< 4 min) PR and push gate with 4 jobs (`lint`, `test`, `security`, `build-smoke`).
+     - `.github/workflows/maintenance.yml`: Scheduled (weekly Monday 06:00 UTC) and manual `workflow_dispatch` workflow containing `performance` regression benchmarks, `python-compat` (Python 3.13 compatibility sweep), and `dependency-drift` (actionable lockfile synchronization sweep without `|| true`).
+  4. Verified linear progression across all five phase branches (P0 -> P1 -> P2 -> P3 -> P4) with zero divergence.
+- **Files Modified / Created:**
+  - `.github/workflows/ci.yml`
+  - `.github/workflows/maintenance.yml`
+  - `docs/DEVLOG.md`
+- **Verification:**
+  - `python scripts/check_dependency_sync.py`: OK.
+  - `python scripts/check_docs_claims.py`: OK.
+  - `ruff check src tests scripts dashboard`: All checks passed.
