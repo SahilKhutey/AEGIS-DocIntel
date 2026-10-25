@@ -5,67 +5,100 @@ services:
     build:
       context: ..
       dockerfile: Dockerfile
-    container_name: aegis-docintel-api
+    image: aegis-docintel:${AEGIS_IMAGE_TAG:?Set AEGIS_IMAGE_TAG to an explicit release tag}
+    restart: unless-stopped
+    init: true
     ports:
-      - "8000:8000"
+      # Local-only access pending TLS reverse proxy
+      - "127.0.0.1:8000:8000"
     environment:
-      - AEGIS_ENVIRONMENT=${AEGIS_ENVIRONMENT:-production}
-      - LOG_LEVEL=${LOG_LEVEL:-INFO}
-      - METRICS_ENABLED=true
-      - METRICS_PORT=9090
-      - TIKTOKEN_CACHE_DIR=/app/config/tiktoken
-      - AEGIS_JWT_PUBLIC_KEY=${AEGIS_JWT_PUBLIC_KEY:-}
-      - AEGIS_JWT_PUBLIC_KEY_PATH=${AEGIS_JWT_PUBLIC_KEY_PATH:-}
-      - AEGIS_JWT_ISSUER=${AEGIS_JWT_ISSUER:-}
-      - AEGIS_JWT_AUDIENCE=${AEGIS_JWT_AUDIENCE:-}
-      - AEGIS_API_KEYS=${AEGIS_API_KEYS:-}
+      AEGIS_ENVIRONMENT: production
+      AEGIS_SQLITE_PATH: /app/data/documents.db
+      AEGIS_ENABLE_DOCS: "false"
+      AEGIS_LOG_LEVEL: INFO
+      AEGIS_ALLOW_EXTERNAL_LLM: ${AEGIS_ALLOW_EXTERNAL_LLM:-false}
+      AEGIS_JWT_ISSUER: ${AEGIS_JWT_ISSUER:?Set JWT issuer}
+      AEGIS_JWT_AUDIENCE: ${AEGIS_JWT_AUDIENCE:?Set JWT audience}
+      AEGIS_JWT_PUBLIC_KEY: ${AEGIS_JWT_PUBLIC_KEY:?Set JWT public key}
+      AEGIS_API_KEYS: ${AEGIS_API_KEYS:-}
+      TIKTOKEN_CACHE_DIR: /tmp/tiktoken
     volumes:
       - aegis-data:/app/data
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-    restart: unless-stopped
     networks:
-      - internal-net
+      - aegis-internal
+    read_only: true
+    tmpfs:
+      - /tmp:rw,noexec,nosuid,size=256m
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    mem_limit: 2g
+    cpus: 2.0
+    pids_limit: 256
+    healthcheck:
+      test:
+        - CMD
+        - curl
+        - -fsS
+        - http://127.0.0.1:8000/health
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 45s
+    stop_grace_period: 30s
 
   prometheus:
-    image: prom/prometheus:v2.50.1
-    container_name: aegis-prometheus
-    ports:
-      - "127.0.0.1:9091:9090"
+    image: ${PROMETHEUS_IMAGE:?Set PROMETHEUS_IMAGE to a pinned version or digest}
+    restart: unless-stopped
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+      - --storage.tsdb.path=/prometheus
+      - --web.enable-lifecycle
     volumes:
       - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
       - prometheus-data:/prometheus
-    command:
-      - '--config.file=/etc/prometheus/prometheus.yml'
-    restart: unless-stopped
     networks:
-      - internal-net
+      - aegis-internal
     depends_on:
-      - aegis-api
+      aegis-api:
+        condition: service_healthy
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    mem_limit: 512m
+    cpus: 1.0
 
   grafana:
-    image: grafana/grafana:10.4.1
-    container_name: aegis-grafana
-    ports:
-      - "127.0.0.1:3000:3000"
+    image: ${GRAFANA_IMAGE:?Set GRAFANA_IMAGE to a pinned version or digest}
+    restart: unless-stopped
     environment:
-      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_ADMIN_PASSWORD:?GRAFANA_ADMIN_PASSWORD environment variable must be set in production}
+      GF_SECURITY_ADMIN_USER: ${GRAFANA_ADMIN_USER:?Set Grafana admin username}
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_ADMIN_PASSWORD:?Set a strong Grafana password}
+      GF_USERS_ALLOW_SIGN_UP: "false"
+      GF_AUTH_ANONYMOUS_ENABLED: "false"
+      GF_SECURITY_COOKIE_SECURE: "true"
+      GF_SECURITY_STRICT_TRANSPORT_SECURITY: "true"
     volumes:
       - grafana-data:/var/lib/grafana
       - ./grafana/dashboards:/etc/grafana/provisioning/dashboards:ro
       - ./grafana/datasources:/etc/grafana/provisioning/datasources:ro
-    restart: unless-stopped
     networks:
-      - internal-net
+      - aegis-internal
     depends_on:
       - prometheus
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    mem_limit: 512m
+    cpus: 1.0
 
 networks:
-  internal-net:
+  aegis-internal:
     driver: bridge
+    internal: true
 
 volumes:
   aegis-data:

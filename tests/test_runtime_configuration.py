@@ -197,3 +197,28 @@ def test_docs_endpoints_disabled_when_configured():
         assert app.docs_url is None
         assert app.redoc_url is None
         assert app.openapi_url is None
+
+
+def test_production_rejects_missing_authentication(monkeypatch):
+    """Contract: Production startup must fail when no valid authentication mechanism is configured."""
+    monkeypatch.setenv("AEGIS_ENVIRONMENT", "production")
+    monkeypatch.delenv("AEGIS_JWT_PUBLIC_KEY", raising=False)
+    monkeypatch.delenv("AEGIS_JWT_PUBLIC_KEY_PATH", raising=False)
+    monkeypatch.delenv("AEGIS_JWT_SECRET", raising=False)
+    monkeypatch.delenv("AEGIS_API_KEY_HASHES", raising=False)
+    monkeypatch.delenv("AEGIS_API_KEYS", raising=False)
+
+    with pytest.raises(ConfigurationError):
+        load_runtime_settings(validate_production=True)
+
+
+def test_production_rejects_placeholder_secrets(monkeypatch):
+    """Contract: Insecure placeholders (e.g., 'change-me', 'changeme') must be rejected in production."""
+    monkeypatch.setenv("AEGIS_ENVIRONMENT", "production")
+    monkeypatch.setenv("AEGIS_JWT_PUBLIC_KEY", "change-me")
+    monkeypatch.setenv("AEGIS_JWT_ISSUER", "https://auth.example.com")
+    monkeypatch.setenv("AEGIS_JWT_AUDIENCE", "aegis-docintel")
+    monkeypatch.delenv("AEGIS_API_KEYS", raising=False)
+
+    with pytest.raises(ConfigurationError, match="Insecure placeholder"):
+        load_runtime_settings(validate_production=True)

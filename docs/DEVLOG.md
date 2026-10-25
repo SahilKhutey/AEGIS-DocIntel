@@ -1369,3 +1369,45 @@ This section documents the chronological development tasks, architectural decisi
   - `python scripts/check_docs_claims.py`: OK (R1–R6 passed).
   - `ruff check src tests scripts dashboard`: All checks passed.
   - `bandit -r src dashboard scripts -ll`: 49,727 LOC scanned, 0 issues.
+
+### Task P4.18 — Security & Deployment Hardening Implementation
+- **Time:** 2026-10-25 15:00:00 – 15:15:00 UTC
+- **Context & Objective:**
+  Implement the comprehensive Security & Deployment Hardening blueprint across Docker Compose, secrets management, reverse proxy, backup recovery, and CI gates:
+  1. **Hardened Docker Compose Configuration (`deploy/docker-compose.yml`):**
+     - Pinned release images: `prom/prometheus:v2.50.1` and `grafana/grafana:10.4.1`.
+     - Bound API strictly to `127.0.0.1:8000:8000` pending reverse-proxy setup.
+     - Removed host port publishing for Prometheus and Grafana; isolated monitoring in private internal network `aegis-internal` (`internal: true`).
+     - Hardened container security: `init: true`, `read_only: true`, `tmpfs: /tmp:rw,noexec,nosuid,size=256m`, `security_opt: no-new-privileges:true`, `cap_drop: ALL`, and operational resource limits (`mem_limit: 2g`, `cpus: 2.0`, `pids_limit: 256`).
+  2. **Prometheus Endpoint Alignment (`deploy/prometheus.yml`):**
+     - Aligned target to `aegis-api:8000` with `metrics_path: /metrics`, matching FastAPI's internal mounted metrics endpoint.
+  3. **Environment Security & Secrets Protection:**
+     - Created [`.env.production.example`](../.env.production.example) declaring required production parameters (`AEGIS_IMAGE_TAG`, `GRAFANA_ADMIN_USER`, `GRAFANA_ADMIN_PASSWORD`, `AEGIS_JWT_ISSUER`, `AEGIS_JWT_AUDIENCE`, `AEGIS_JWT_PUBLIC_KEY`, `AEGIS_ALLOW_EXTERNAL_LLM`).
+     - Updated [`.gitignore`](../.gitignore) to strictly exclude `.env.*` while explicitly preserving `.env.example` and `.env.production.example`.
+  4. **Removal of Insecure Defaults:**
+     - Added `INSECURE_PLACEHOLDERS` check in [`src/core/settings.py`](../src/core/settings.py) (`validate_production_invariants`), rejecting empty, default, or placeholder secrets (`change-me`, `changeme`, `minioadmin`, `aegis_secret`, `replace_me`, etc.) when running in production mode.
+     - Added production configuration regression tests in [`tests/test_runtime_configuration.py`](../tests/test_runtime_configuration.py) (`test_production_rejects_missing_authentication`, `test_production_rejects_placeholder_secrets`).
+  5. **TLS Reverse Proxy Configuration:**
+     - Created [`deploy/nginx/aegis.conf`](../deploy/nginx/aegis.conf) with HTTP-to-HTTPS 301 redirection, TLS 1.2/1.3, rate limiting (10 req/s with burst 20), security headers (`X-Content-Type-Options: nosniff`, `X-Frame-Options: DENY`), and strict blocking of public metrics (`location = /metrics { return 404; }`).
+  6. **Data Protection & Online Backup Utility:**
+     - Implemented [`scripts/backup_sqlite.py`](../scripts/backup_sqlite.py) using SQLite's online backup API (`src.backup(dst)`), verifying `PRAGMA integrity_check` and enforcing `chmod 0600` permissions.
+  7. **Deployment Validation & CI Gates:**
+     - Implemented [`scripts/verify_deployment.sh`](../scripts/verify_deployment.sh).
+     - Added `deployment-security` job to [`.github/workflows/ci.yml`](../.github/workflows/ci.yml) validating Docker Compose configuration deterministically in CI.
+- **Files Modified / Created:**
+  - `deploy/docker-compose.yml`
+  - `deploy/prometheus.yml`
+  - `deploy/nginx/aegis.conf`
+  - `.env.production.example`
+  - `.gitignore`
+  - `src/core/settings.py`
+  - `tests/test_runtime_configuration.py`
+  - `scripts/backup_sqlite.py`
+  - `scripts/verify_deployment.sh`
+  - `.github/workflows/ci.yml`
+  - `docs/DEVLOG.md`
+- **Verification:**
+  - `python scripts/check_dependency_sync.py`: OK (6 requirements files match pyproject.toml).
+  - `python scripts/check_docs_claims.py`: OK (R1–R6 passed).
+  - `ruff check src tests scripts dashboard`: All checks passed.
+  - `pytest tests/test_runtime_configuration.py tests/test_auth_guard.py tests/test_multitenancy_isolation.py tests/test_document_deletion.py`: 42 passed in 211.74s.

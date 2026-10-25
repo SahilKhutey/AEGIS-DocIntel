@@ -19,6 +19,21 @@ class ConfigurationError(RuntimeError):
     pass
 
 
+INSECURE_PLACEHOLDERS: frozenset[str] = frozenset({
+    "",
+    "change-me",
+    "changeme",
+    "minioadmin",
+    "aegis_secret",
+    "replace_me",
+    "replace-with-a-real-secret",
+    "placeholder",
+    "your-secret-here",
+    "secret",
+    "password",
+})
+
+
 def _get_bool(key: str, default: bool = False) -> bool:
     val = os.getenv(key, "").strip().lower()
     if not val:
@@ -193,9 +208,11 @@ def validate_production_invariants(settings: RuntimeSettings) -> None:
         )
 
     if has_jwt_key:
-        if not settings.jwt_issuer:
+        if settings.jwt_public_key and settings.jwt_public_key.strip().lower() in INSECURE_PLACEHOLDERS:
+            raise ConfigurationError("Insecure placeholder detected in AEGIS_JWT_PUBLIC_KEY in production mode")
+        if not settings.jwt_issuer or settings.jwt_issuer.strip().lower() in INSECURE_PLACEHOLDERS:
             raise ConfigurationError("AEGIS_JWT_ISSUER is required in production mode")
-        if not settings.jwt_audience:
+        if not settings.jwt_audience or settings.jwt_audience.strip().lower() in INSECURE_PLACEHOLDERS:
             raise ConfigurationError("AEGIS_JWT_AUDIENCE is required in production mode")
 
     # 4. API keys hash-only validation

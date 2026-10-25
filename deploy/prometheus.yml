@@ -1,7 +1,11 @@
 global:
   scrape_interval: 15s
+  evaluation_interval: 15s
 
 scrape_configs:
-  - job_name: 'aegis-docintel'
+  - job_name: aegis-docintel
+    metrics_path: /metrics
+    scrape_interval: 15s
     static_configs:
-      - targets: ['aegis-api:9090']
+      - targets:
+          - aegis-api:8000
