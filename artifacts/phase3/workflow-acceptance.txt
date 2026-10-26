@@ -6,10 +6,11 @@ rootdir: C:\Users\ASUS\Documents\Aegis-DocIntel
 configfile: pyproject.toml
 plugins: anyio-4.12.1, hypothesis-6.156.6, langsmith-0.14.4, asyncio-1.4.0, cov-7.1.0
 asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
-collecting ... collected 3 items
+collecting ... collected 4 items
 
-tests/integration/test_document_workflow.py::test_complete_document_workflow_end_to_end PASSED [ 33%]
-tests/integration/test_document_workflow.py::test_unsupported_file_format_rejection PASSED [ 66%]
-tests/integration/test_document_workflow.py::test_context_packing_bounds_verification PASSED [100%]
+tests/integration/test_document_workflow.py::test_complete_document_workflow_end_to_end PASSED [ 25%]
+tests/integration/test_document_workflow.py::test_empty_file_upload_rejected PASSED [ 50%]
+tests/integration/test_document_workflow.py::test_unsupported_file_format_rejection PASSED [ 75%]
+tests/integration/test_document_workflow.py::test_token_budget_invariants_and_serialization PASSED [100%]
 
-============================= 3 passed in 48.29s ==============================
+============================= 4 passed in 54.27s ==============================

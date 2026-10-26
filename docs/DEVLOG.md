@@ -1622,3 +1622,33 @@ uff check src tests scripts dashboard: All checks passed.
   - python scripts/check_dependency_sync.py: OK.
   - python scripts/check_docs_claims.py: OK (R1–R6 passed).
   - python -m ruff check src tests scripts dashboard: All checks passed.
+
+
+### Task P4.24 — Phase 3.2 End-to-End Document Workflow Acceptance & Token Budget Invariants
+- **Time:** 2026-10-26 09:30:00 – 09:40:00 UTC
+- **Context & Objective:**
+  Complete Phase 3.2 End-to-End Document Workflow Acceptance:
+  1. **Synthetic Orion Multi-Page Fixture (evaluation/mvp-golden/text/orion-multipage.txt):**
+     - Page 1: Project Orion approved operating budget (12.5 million credits).
+     - Page 2: Quarterly financial performance table (Quarter | Revenue with Q1 = 142.5).
+     - Page 3: Administration and security contacts (Dr. Elena Rostova, email, phone, SSN, and API key token).
+  2. **Work Package B — 6-Step Workflow Acceptance (tests/integration/test_document_workflow.py):**
+     - Upload and validation: Content types, empty file rejection (HTTP 400), unsupported MIME rejection (HTTP 415).
+     - Extraction & normalization: Multi-page blocks converted into NormalizedElement instances preserving page numbers, heading/table element kinds, reading order, and source locations.
+     - Privacy controls: Applied redact_or_block ensuring synthetic email, phone, SSN, and API key tokens are masked, and safe telemetry summaries leak no secrets.
+     - Retrieval and tenant authorization: Querying approved budget resolves to Page 1; cross-tenant query from tenant-foreign returns zero matching candidates.
+     - Grounded QA: Verified answer with source citations matching ingested doc_id; unanswerable query triggers explicit abstention.
+  3. **Work Package C — Token Budget Invariants & Production Tokenizer:**
+     - Verified T(final serialized context) <= B using tiktoken cl100k_base.
+     - Verified deterministic chunk selection and score across repeated runs.
+     - Verified oversized candidate chunks (> budget) are skipped.
+  4. **Evidence Bundle & Checklists:**
+     - Updated artifacts/phase3/workflow-acceptance.txt (4/4 integration tests passed in 54.27s).
+- **Verification:**
+  - pytest tests/integration/test_document_workflow.py -vv: 4 passed in 54.27s.
+  - pytest tests/test_retrieval_grounding.py -q: 8 passed in 5.92s.
+  - python scripts/validate_mvp_dataset.py: PASSED (53/53 cases matching manifest).
+  - python evaluation/scripts/run_all.py --fail-under-gates: PASSED (All 4 quality benchmark gates passed).
+  - python scripts/check_dependency_sync.py: OK.
+  - python scripts/check_docs_claims.py: OK (R1–R6 passed).
+  - python -m ruff check src tests scripts dashboard: All checks passed.

@@ -1,0 +1,21 @@
+=== PAGE 1 ===
+# Project Orion Overview
+Project Orion's approved operating budget is 12.5 million credits for the current fiscal cycle.
+The primary directive is autonomous planetary survey and mathematical structure extraction.
+
+=== PAGE 2 ===
+# Financial Performance & Revenue
+Table: Quarterly Financial Summary
+Quarter | Revenue
+Q1 | 142.5
+Q2 | 158.0
+Q3 | 165.2
+Q4 | 180.0
+
+=== PAGE 3 ===
+# Administration and Security Contacts
+Project Lead: Dr. Elena Rostova
+Email: elena.rostova@orion-survey.internal
+Phone: +1-555-0142
+Secret API Token: sk-live-99228833774411223344aabb
+Confidential employee SSN record: 000-45-6789.
