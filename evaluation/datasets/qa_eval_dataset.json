@@ -5,23 +5,89 @@
       "case_id": "ext_two_column_01",
       "description": "Standard two-column journal layout reading left column then right column",
       "blocks": [
-        {"id": "b1", "x0": 50, "y0": 100, "x1": 250, "y1": 150, "text": "Left Col Header"},
-        {"id": "b2", "x0": 50, "y0": 160, "x1": 250, "y1": 220, "text": "Left Col Para 1"},
-        {"id": "b3", "x0": 50, "y0": 230, "x1": 250, "y1": 300, "text": "Left Col Para 2"},
-        {"id": "b4", "x0": 300, "y0": 100, "x1": 500, "y1": 150, "text": "Right Col Header"},
-        {"id": "b5", "x0": 300, "y0": 160, "x1": 500, "y1": 250, "text": "Right Col Para 1"}
+        {
+          "id": "b1",
+          "x0": 50,
+          "y0": 100,
+          "x1": 250,
+          "y1": 150,
+          "text": "Left Col Header"
+        },
+        {
+          "id": "b2",
+          "x0": 50,
+          "y0": 160,
+          "x1": 250,
+          "y1": 220,
+          "text": "Left Col Para 1"
+        },
+        {
+          "id": "b3",
+          "x0": 50,
+          "y0": 230,
+          "x1": 250,
+          "y1": 300,
+          "text": "Left Col Para 2"
+        },
+        {
+          "id": "b4",
+          "x0": 300,
+          "y0": 100,
+          "x1": 500,
+          "y1": 150,
+          "text": "Right Col Header"
+        },
+        {
+          "id": "b5",
+          "x0": 300,
+          "y0": 160,
+          "x1": 500,
+          "y1": 250,
+          "text": "Right Col Para 1"
+        }
       ],
-      "expected_order": ["b1", "b2", "b3", "b4", "b5"]
+      "expected_order": [
+        "b1",
+        "b2",
+        "b3",
+        "b4",
+        "b5"
+      ]
     },
     {
       "case_id": "ext_single_column_02",
       "description": "Linear report layout top to bottom",
       "blocks": [
-        {"id": "h1", "x0": 50, "y0": 50, "x1": 500, "y1": 90, "text": "Executive Summary"},
-        {"id": "p1", "x0": 50, "y0": 100, "x1": 500, "y1": 180, "text": "During Q3 operations reached record volume."},
-        {"id": "p2", "x0": 50, "y0": 190, "x1": 500, "y1": 270, "text": "Capital expenditures remained within guidance."}
+        {
+          "id": "h1",
+          "x0": 50,
+          "y0": 50,
+          "x1": 500,
+          "y1": 90,
+          "text": "Executive Summary"
+        },
+        {
+          "id": "p1",
+          "x0": 50,
+          "y0": 100,
+          "x1": 500,
+          "y1": 180,
+          "text": "During Q3 operations reached record volume."
+        },
+        {
+          "id": "p2",
+          "x0": 50,
+          "y0": 190,
+          "x1": 500,
+          "y1": 270,
+          "text": "Capital expenditures remained within guidance."
+        }
       ],
-      "expected_order": ["h1", "p1", "p2"]
+      "expected_order": [
+        "h1",
+        "p1",
+        "p2"
+      ]
     },
     {
       "case_id": "ext_table_grid_03",
@@ -29,32 +95,512 @@
       "rows": 2,
       "cols": 2,
       "cells": [
-        {"row": 0, "col": 0, "text": "Quarter", "rowspan": 1, "colspan": 1},
-        {"row": 0, "col": 1, "text": "Revenue ($M)", "rowspan": 1, "colspan": 1},
-        {"row": 1, "col": 0, "text": "Q1 2025", "rowspan": 1, "colspan": 1},
-        {"row": 1, "col": 1, "text": "142.5", "rowspan": 1, "colspan": 1}
+        {
+          "row": 0,
+          "col": 0,
+          "text": "Quarter",
+          "rowspan": 1,
+          "colspan": 1
+        },
+        {
+          "row": 0,
+          "col": 1,
+          "text": "Revenue ($M)",
+          "rowspan": 1,
+          "colspan": 1
+        },
+        {
+          "row": 1,
+          "col": 0,
+          "text": "Q1 2025",
+          "rowspan": 1,
+          "colspan": 1
+        },
+        {
+          "row": 1,
+          "col": 1,
+          "text": "142.5",
+          "rowspan": 1,
+          "colspan": 1
+        }
       ],
       "expected_cell_count": 4
+    },
+    {
+      "case_id": "ext_three_column_04",
+      "description": "Three-column article layout reading top-to-bottom across three columns",
+      "blocks": [
+        {
+          "id": "c1_h1",
+          "x0": 50,
+          "y0": 50,
+          "x1": 150,
+          "y1": 80,
+          "text": "Column 1 Header"
+        },
+        {
+          "id": "c1_p1",
+          "x0": 50,
+          "y0": 90,
+          "x1": 150,
+          "y1": 180,
+          "text": "Column 1 Text"
+        },
+        {
+          "id": "c2_h1",
+          "x0": 200,
+          "y0": 50,
+          "x1": 300,
+          "y1": 80,
+          "text": "Column 2 Header"
+        },
+        {
+          "id": "c2_p1",
+          "x0": 200,
+          "y0": 90,
+          "x1": 300,
+          "y1": 180,
+          "text": "Column 2 Text"
+        }
+      ],
+      "expected_order": [
+        "c1_h1",
+        "c1_p1",
+        "c2_h1",
+        "c2_p1"
+      ]
+    },
+    {
+      "case_id": "ext_header_columns_footer_05",
+      "description": "Spanning header, two body columns, and spanning footer",
+      "blocks": [
+        {
+          "id": "hdr",
+          "x0": 50,
+          "y0": 30,
+          "x1": 500,
+          "y1": 60,
+          "text": "Document Title Banner"
+        },
+        {
+          "id": "col1",
+          "x0": 50,
+          "y0": 100,
+          "x1": 250,
+          "y1": 200,
+          "text": "Left Column Body"
+        },
+        {
+          "id": "col2",
+          "x0": 300,
+          "y0": 100,
+          "x1": 500,
+          "y1": 200,
+          "text": "Right Column Body"
+        },
+        {
+          "id": "ftr",
+          "x0": 50,
+          "y0": 700,
+          "x1": 500,
+          "y1": 730,
+          "text": "Confidential - Page 1"
+        }
+      ],
+      "expected_order": [
+        "hdr",
+        "col1",
+        "col2",
+        "ftr"
+      ]
+    },
+    {
+      "case_id": "ext_table_financial_06",
+      "description": "Structured financial metrics table with 3 rows and 3 columns",
+      "rows": 3,
+      "cols": 3,
+      "cells": [
+        {
+          "row": 0,
+          "col": 0,
+          "text": "Metric",
+          "rowspan": 1,
+          "colspan": 1
+        },
+        {
+          "row": 0,
+          "col": 1,
+          "text": "Q1",
+          "rowspan": 1,
+          "colspan": 1
+        },
+        {
+          "row": 0,
+          "col": 2,
+          "text": "Q2",
+          "rowspan": 1,
+          "colspan": 1
+        },
+        {
+          "row": 1,
+          "col": 0,
+          "text": "Gross Profit",
+          "rowspan": 1,
+          "colspan": 1
+        },
+        {
+          "row": 1,
+          "col": 1,
+          "text": "",
+          "rowspan": 1,
+          "colspan": 1
+        },
+        {
+          "row": 1,
+          "col": 2,
+          "text": "",
+          "rowspan": 1,
+          "colspan": 1
+        },
+        {
+          "row": 2,
+          "col": 0,
+          "text": "Net Margin",
+          "rowspan": 1,
+          "colspan": 1
+        },
+        {
+          "row": 2,
+          "col": 1,
+          "text": "18%",
+          "rowspan": 1,
+          "colspan": 1
+        },
+        {
+          "row": 2,
+          "col": 2,
+          "text": "21%",
+          "rowspan": 1,
+          "colspan": 1
+        }
+      ],
+      "expected_cell_count": 9
+    },
+    {
+      "case_id": "ext_table_empty_cells_07",
+      "description": "Key-value configuration table with 3 rows and 2 columns",
+      "rows": 3,
+      "cols": 2,
+      "cells": [
+        {
+          "row": 0,
+          "col": 0,
+          "text": "Key",
+          "rowspan": 1,
+          "colspan": 1
+        },
+        {
+          "row": 0,
+          "col": 1,
+          "text": "Value",
+          "rowspan": 1,
+          "colspan": 1
+        },
+        {
+          "row": 1,
+          "col": 0,
+          "text": "Endpoint",
+          "rowspan": 1,
+          "colspan": 1
+        },
+        {
+          "row": 1,
+          "col": 1,
+          "text": "/v1/query",
+          "rowspan": 1,
+          "colspan": 1
+        },
+        {
+          "row": 2,
+          "col": 0,
+          "text": "Fallback",
+          "rowspan": 1,
+          "colspan": 1
+        },
+        {
+          "row": 2,
+          "col": 1,
+          "text": "None",
+          "rowspan": 1,
+          "colspan": 1
+        }
+      ],
+      "expected_cell_count": 6
+    },
+    {
+      "case_id": "ext_table_multiheader_08",
+      "description": "Security status matrix table with 4 rows and 3 columns",
+      "rows": 4,
+      "cols": 3,
+      "cells": [
+        {
+          "row": 0,
+          "col": 0,
+          "text": "Category",
+          "rowspan": 1,
+          "colspan": 1
+        },
+        {
+          "row": 0,
+          "col": 1,
+          "text": "Subcategory",
+          "rowspan": 1,
+          "colspan": 1
+        },
+        {
+          "row": 0,
+          "col": 2,
+          "text": "Status",
+          "rowspan": 1,
+          "colspan": 1
+        },
+        {
+          "row": 1,
+          "col": 0,
+          "text": "Security",
+          "rowspan": 1,
+          "colspan": 1
+        },
+        {
+          "row": 1,
+          "col": 1,
+          "text": "TLS 1.3",
+          "rowspan": 1,
+          "colspan": 1
+        },
+        {
+          "row": 1,
+          "col": 2,
+          "text": "Enabled",
+          "rowspan": 1,
+          "colspan": 1
+        },
+        {
+          "row": 2,
+          "col": 0,
+          "text": "Identity",
+          "rowspan": 1,
+          "colspan": 1
+        },
+        {
+          "row": 2,
+          "col": 1,
+          "text": "JWT Bearer",
+          "rowspan": 1,
+          "colspan": 1
+        },
+        {
+          "row": 2,
+          "col": 2,
+          "text": "Verified",
+          "rowspan": 1,
+          "colspan": 1
+        },
+        {
+          "row": 3,
+          "col": 0,
+          "text": "Database",
+          "rowspan": 1,
+          "colspan": 1
+        },
+        {
+          "row": 3,
+          "col": 1,
+          "text": "SQLite WAL",
+          "rowspan": 1,
+          "colspan": 1
+        },
+        {
+          "row": 3,
+          "col": 2,
+          "text": "Active",
+          "rowspan": 1,
+          "colspan": 1
+        }
+      ],
+      "expected_cell_count": 12
     }
   ],
   "packing_cases": [
     {
       "case_id": "pack_budget_100",
       "budget": 100,
-      "costs": [30, 40, 50, 20, 60],
-      "weights": [0.8, 0.7, 0.9, 0.5, 0.85]
+      "costs": [
+        30,
+        40,
+        50,
+        20,
+        60
+      ],
+      "weights": [
+        0.8,
+        0.7,
+        0.9,
+        0.5,
+        0.85
+      ]
     },
     {
       "case_id": "pack_budget_tight",
       "budget": 45,
-      "costs": [15, 20, 25, 30],
-      "weights": [0.6, 0.7, 0.8, 0.9]
+      "costs": [
+        15,
+        20,
+        25,
+        30
+      ],
+      "weights": [
+        0.6,
+        0.7,
+        0.8,
+        0.9
+      ]
     },
     {
       "case_id": "pack_submodular_ratio",
       "budget": 70,
-      "costs": [25, 30, 35, 40, 20, 15],
-      "weights": [0.75, 0.85, 0.90, 0.95, 0.50, 0.45]
+      "costs": [
+        25,
+        30,
+        35,
+        40,
+        20,
+        15
+      ],
+      "weights": [
+        0.75,
+        0.85,
+        0.9,
+        0.95,
+        0.5,
+        0.45
+      ]
+    },
+    {
+      "case_id": "pack_zero_redundancy_04",
+      "budget": 60,
+      "costs": [
+        20,
+        20,
+        20,
+        20
+      ],
+      "weights": [
+        0.8,
+        0.8,
+        0.7,
+        0.6
+      ]
+    },
+    {
+      "case_id": "pack_high_cost_filter_05",
+      "budget": 50,
+      "costs": [
+        100,
+        20,
+        15,
+        15
+      ],
+      "weights": [
+        0.99,
+        0.8,
+        0.7,
+        0.6
+      ]
+    },
+    {
+      "case_id": "pack_small_budget_06",
+      "budget": 25,
+      "costs": [
+        10,
+        15,
+        20,
+        25
+      ],
+      "weights": [
+        0.7,
+        0.8,
+        0.85,
+        0.9
+      ]
+    },
+    {
+      "case_id": "pack_uniform_weights_07",
+      "budget": 50,
+      "costs": [
+        15,
+        15,
+        15,
+        15,
+        15
+      ],
+      "weights": [
+        0.6,
+        0.6,
+        0.6,
+        0.6,
+        0.6
+      ]
+    },
+    {
+      "case_id": "pack_varied_costs_08",
+      "budget": 80,
+      "costs": [
+        10,
+        20,
+        30,
+        40,
+        50
+      ],
+      "weights": [
+        0.5,
+        0.7,
+        0.85,
+        0.9,
+        0.95
+      ]
+    },
+    {
+      "case_id": "pack_marginal_decay_09",
+      "budget": 55,
+      "costs": [
+        15,
+        20,
+        25,
+        30
+      ],
+      "weights": [
+        0.85,
+        0.8,
+        0.75,
+        0.7
+      ]
+    },
+    {
+      "case_id": "pack_exact_knapsack_10",
+      "budget": 60,
+      "costs": [
+        10,
+        20,
+        30,
+        40
+      ],
+      "weights": [
+        0.4,
+        0.6,
+        0.8,
+        0.9
+      ]
     }
   ],
   "privacy_cases": [
@@ -62,51 +608,92 @@
       "id": "priv_01",
       "text": "Contact Senior Director Alice Morgan at alice.morgan@enterprise.corp or call +1-555-019-2834.",
       "expected_pii": [
-        {"entity": "alice.morgan@enterprise.corp", "type": "EMAIL"},
-        {"entity": "+1-555-019-2834", "type": "PHONE"},
-        {"entity": "Alice Morgan", "type": "PERSON"}
+        {
+          "entity": "alice.morgan@enterprise.corp",
+          "type": "EMAIL"
+        },
+        {
+          "entity": "+1-555-019-2834",
+          "type": "PHONE"
+        },
+        {
+          "entity": "Alice Morgan",
+          "type": "PERSON"
+        }
       ],
-      "safe_distractors": ["Senior Director"]
+      "safe_distractors": [
+        "Senior Director"
+      ]
     },
     {
       "id": "priv_02",
       "text": "Employee SSN 123-45-6789 was verified by HR specialist Johnathan Vance.",
       "expected_pii": [
-        {"entity": "123-45-6789", "type": "SSN"},
-        {"entity": "Johnathan Vance", "type": "PERSON"}
+        {
+          "entity": "123-45-6789",
+          "type": "SSN"
+        },
+        {
+          "entity": "Johnathan Vance",
+          "type": "PERSON"
+        }
       ],
-      "safe_distractors": ["HR"]
+      "safe_distractors": [
+        "HR"
+      ]
     },
     {
       "id": "priv_03",
       "text": "Use internal API token ghp_A1B2C3D4E5F6G7H8I9J0K1L2M3N4O5P6Q7R8 for deployment access.",
       "expected_pii": [
-        {"entity": "ghp_A1B2C3D4E5F6G7H8I9J0K1L2M3N4O5P6Q7R8", "type": "API_KEY"}
+        {
+          "entity": "ghp_A1B2C3D4E5F6G7H8I9J0K1L2M3N4O5P6Q7R8",
+          "type": "API_KEY"
+        }
       ],
-      "safe_distractors": ["API"]
+      "safe_distractors": [
+        "API"
+      ]
     },
     {
       "id": "priv_04",
       "text": "Managing Partner Robert Chen noted that the 2024 annual report showed zero compliance violations.",
       "expected_pii": [
-        {"entity": "Robert Chen", "type": "PERSON"}
+        {
+          "entity": "Robert Chen",
+          "type": "PERSON"
+        }
       ],
-      "safe_distractors": ["Managing Partner", "2024"]
+      "safe_distractors": [
+        "Managing Partner",
+        "2024"
+      ]
     },
     {
       "id": "priv_05",
       "text": "Cardholder payment transaction 4532-1100-8899-2341 was rejected by payment gateway.",
       "expected_pii": [
-        {"entity": "4532-1100-8899-2341", "type": "CREDIT_CARD"}
+        {
+          "entity": "4532-1100-8899-2341",
+          "type": "CREDIT_CARD"
+        }
       ],
-      "safe_distractors": ["4532"]
+      "safe_distractors": [
+        "4532"
+      ]
     },
     {
       "id": "priv_06",
       "text": "Send telemetry metrics to devops-monitor@acme-cloud.io with header key sk-live-99887766554433221100aabb.",
       "expected_pii": [
-        {"entity": "devops-monitor@acme-cloud.io", "type": "EMAIL"},
-        {"entity": "sk-live-99887766554433221100aabb", "type": "API_KEY"}
+        {
+          "entity": "devops-monitor@acme-cloud.io",
+          "type": "EMAIL"
+        },
+        {
+          "entity": "sk-live-99887766554433221100aabb",
+          "type": "API_KEY"
+        }
       ],
       "safe_distractors": []
     },
@@ -114,16 +701,128 @@
       "id": "priv_07",
       "text": "Chief Executive Officer Clara Oswald reached out from mobile +44 20 7946 0912.",
       "expected_pii": [
-        {"entity": "Clara Oswald", "type": "PERSON"},
-        {"entity": "+44 20 7946 0912", "type": "PHONE"}
+        {
+          "entity": "Clara Oswald",
+          "type": "PERSON"
+        },
+        {
+          "entity": "+44 20 7946 0912",
+          "type": "PHONE"
+        }
       ],
-      "safe_distractors": ["Chief Executive Officer"]
+      "safe_distractors": [
+        "Chief Executive Officer"
+      ]
     },
     {
       "id": "priv_08",
       "text": "No personal information is present in this sentence describing machine learning loss curves.",
       "expected_pii": [],
-      "safe_distractors": ["machine learning"]
+      "safe_distractors": [
+        "machine learning"
+      ]
+    },
+    {
+      "id": "priv_09",
+      "text": "Audit logs confirm that analyst Marcus Brody accessed the terminal using key sk-prod-secret-998877665544332211.",
+      "expected_pii": [
+        {
+          "entity": "sk-prod-secret-998877665544332211",
+          "type": "API_KEY"
+        },
+        {
+          "entity": "Marcus Brody",
+          "type": "PERSON"
+        }
+      ],
+      "safe_distractors": [
+        "Audit"
+      ]
+    },
+    {
+      "id": "priv_10",
+      "text": "Please send the settlement receipt to billing-support@fintech-partners.org as soon as possible.",
+      "expected_pii": [
+        {
+          "entity": "billing-support@fintech-partners.org",
+          "type": "EMAIL"
+        }
+      ],
+      "safe_distractors": [
+        "settlement"
+      ]
+    },
+    {
+      "id": "priv_11",
+      "text": "Security officer Elena Rostova flagged SSN 987-65-4321 during the identity audit.",
+      "expected_pii": [
+        {
+          "entity": "987-65-4321",
+          "type": "SSN"
+        },
+        {
+          "entity": "Elena Rostova",
+          "type": "PERSON"
+        }
+      ],
+      "safe_distractors": [
+        "Security"
+      ]
+    },
+    {
+      "id": "priv_12",
+      "text": "For urgent infrastructure escalations, dial on-call support at +1-800-555-0199 immediately.",
+      "expected_pii": [
+        {
+          "entity": "+1-800-555-0199",
+          "type": "PHONE"
+        }
+      ],
+      "safe_distractors": [
+        "infrastructure"
+      ]
+    },
+    {
+      "id": "priv_13",
+      "text": "GitHub deployment sync requires secret token ghp_Z9Y8X7W6V5U4T3S2R1Q0P9O8N7M6L5K4J3I2.",
+      "expected_pii": [
+        {
+          "entity": "ghp_Z9Y8X7W6V5U4T3S2R1Q0P9O8N7M6L5K4J3I2",
+          "type": "API_KEY"
+        }
+      ],
+      "safe_distractors": [
+        "GitHub"
+      ]
+    },
+    {
+      "id": "priv_14",
+      "text": "The deterministic context packer computes token budgets without processing personal identities.",
+      "expected_pii": [],
+      "safe_distractors": [
+        "deterministic context"
+      ]
+    },
+    {
+      "id": "priv_15",
+      "text": "HR Director Sarah Jenkins verified employee email s.jenkins@global-enterprises.net and phone +1-555-432-8765.",
+      "expected_pii": [
+        {
+          "entity": "Sarah Jenkins",
+          "type": "PERSON"
+        },
+        {
+          "entity": "s.jenkins@global-enterprises.net",
+          "type": "EMAIL"
+        },
+        {
+          "entity": "+1-555-432-8765",
+          "type": "PHONE"
+        }
+      ],
+      "safe_distractors": [
+        "HR Director"
+      ]
     }
   ],
   "retrieval_cases": [
@@ -131,11 +830,26 @@
       "query_id": "q01",
       "query": "What was the total revenue for FY2024?",
       "corpus": [
-        {"id": "c1", "text": "In fiscal year 2024, consolidated revenue grew by 18% to $450 million.", "rel": 2},
-        {"id": "c2", "text": "Operating margin improved from 12% to 15.5% over the same fiscal period.", "rel": 1},
-        {"id": "c3", "text": "The company hired 120 software engineers in London and Singapore.", "rel": 0}
+        {
+          "id": "c1",
+          "text": "In fiscal year 2024, consolidated revenue grew by 18% to $450 million.",
+          "rel": 2
+        },
+        {
+          "id": "c2",
+          "text": "Operating margin improved from 12% to 15.5% over the same fiscal period.",
+          "rel": 1
+        },
+        {
+          "id": "c3",
+          "text": "The company hired 120 software engineers in London and Singapore.",
+          "rel": 0
+        }
       ],
-      "relevant_ids": ["c1", "c2"],
+      "relevant_ids": [
+        "c1",
+        "c2"
+      ],
       "top_relevant_id": "c1",
       "is_unanswerable": false
     },
@@ -143,11 +857,25 @@
       "query_id": "q02",
       "query": "What are the primary storage guarantees of SQLite WAL mode?",
       "corpus": [
-        {"id": "c4", "text": "SQLite WAL mode provides atomic commits and concurrent readers without blocking writes.", "rel": 2},
-        {"id": "c5", "text": "Relational databases use B-trees for on-disk page indexing.", "rel": 1},
-        {"id": "c6", "text": "Python asyncio handles cooperative multitasking through event loops.", "rel": 0}
+        {
+          "id": "c4",
+          "text": "SQLite WAL mode provides atomic commits and concurrent readers without blocking writes.",
+          "rel": 2
+        },
+        {
+          "id": "c5",
+          "text": "Relational databases use B-trees for on-disk page indexing.",
+          "rel": 1
+        },
+        {
+          "id": "c6",
+          "text": "Python asyncio handles cooperative multitasking through event loops.",
+          "rel": 0
+        }
       ],
-      "relevant_ids": ["c4"],
+      "relevant_ids": [
+        "c4"
+      ],
       "top_relevant_id": "c4",
       "is_unanswerable": false
     },
@@ -155,11 +883,25 @@
       "query_id": "q03",
       "query": "What is the token budget formula used by the context compiler?",
       "corpus": [
-        {"id": "c7", "text": "The available token budget B is computed as window size minus query, system prompt, output and overhead tokens.", "rel": 2},
-        {"id": "c8", "text": "Context packing solves a submodular knapsack maximization problem.", "rel": 1},
-        {"id": "c9", "text": "JWT authorization headers require Bearer schema validation.", "rel": 0}
+        {
+          "id": "c7",
+          "text": "The available token budget B is computed as window size minus query, system prompt, output and overhead tokens.",
+          "rel": 2
+        },
+        {
+          "id": "c8",
+          "text": "Context packing solves a submodular knapsack maximization problem.",
+          "rel": 1
+        },
+        {
+          "id": "c9",
+          "text": "JWT authorization headers require Bearer schema validation.",
+          "rel": 0
+        }
       ],
-      "relevant_ids": ["c7"],
+      "relevant_ids": [
+        "c7"
+      ],
       "top_relevant_id": "c7",
       "is_unanswerable": false
     },
@@ -167,8 +909,16 @@
       "query_id": "q04_unanswerable",
       "query": "What was the orbital velocity of the Apollo 11 lunar module ascent stage?",
       "corpus": [
-        {"id": "c10", "text": "Document ingestion parses PDFs into normalized blocks with bounding coordinates.", "rel": 0},
-        {"id": "c11", "text": "Tenant isolation is enforced strictly before vector query execution.", "rel": 0}
+        {
+          "id": "c10",
+          "text": "Document ingestion parses PDFs into normalized blocks with bounding coordinates.",
+          "rel": 0
+        },
+        {
+          "id": "c11",
+          "text": "Tenant isolation is enforced strictly before vector query execution.",
+          "rel": 0
+        }
       ],
       "relevant_ids": [],
       "top_relevant_id": null,
@@ -178,11 +928,25 @@
       "query_id": "q05",
       "query": "How is PII redaction failure handled under strict compliance?",
       "corpus": [
-        {"id": "c12", "text": "When policy on_violation is block, detecting forbidden PII raises PIIRedactionPolicyError and halts pipeline.", "rel": 2},
-        {"id": "c13", "text": "Telemetry reports redact matched secrets and only record aggregate occurrence counts.", "rel": 1},
-        {"id": "c14", "text": "FAISS indices support FlatIP and FlatL2 distance metrics.", "rel": 0}
+        {
+          "id": "c12",
+          "text": "When policy on_violation is block, detecting forbidden PII raises PIIRedactionPolicyError and halts pipeline.",
+          "rel": 2
+        },
+        {
+          "id": "c13",
+          "text": "Telemetry reports redact matched secrets and only record aggregate occurrence counts.",
+          "rel": 1
+        },
+        {
+          "id": "c14",
+          "text": "FAISS indices support FlatIP and FlatL2 distance metrics.",
+          "rel": 0
+        }
       ],
-      "relevant_ids": ["c12"],
+      "relevant_ids": [
+        "c12"
+      ],
       "top_relevant_id": "c12",
       "is_unanswerable": false
     },
@@ -190,8 +954,351 @@
       "query_id": "q06_unanswerable",
       "query": "What is the deep ocean salinity level in the Mariana Trench?",
       "corpus": [
-        {"id": "c15", "text": "Reciprocal Rank Fusion computes score RRF(d) = sum 1 / (60 + r).", "rel": 0},
-        {"id": "c16", "text": "Citation integrity checks compare answer citations against retrieved chunk IDs.", "rel": 0}
+        {
+          "id": "c15",
+          "text": "Reciprocal Rank Fusion computes score RRF(d) = sum 1 / (60 + r).",
+          "rel": 0
+        },
+        {
+          "id": "c16",
+          "text": "Citation integrity checks compare answer citations against retrieved chunk IDs.",
+          "rel": 0
+        }
+      ],
+      "relevant_ids": [],
+      "top_relevant_id": null,
+      "is_unanswerable": true
+    },
+    {
+      "query_id": "q07",
+      "query": "What is the role of the spatial reading order graph?",
+      "corpus": [
+        {
+          "id": "c17",
+          "text": "The spatial reading order graph builds an acyclic DAG to order document elements deterministically.",
+          "rel": 2
+        },
+        {
+          "id": "c18",
+          "text": "Topological sorting with priority queues resolves reading ambiguities.",
+          "rel": 1
+        },
+        {
+          "id": "c19",
+          "text": "PostgreSQL connection pooling is managed via PgBouncer.",
+          "rel": 0
+        }
+      ],
+      "relevant_ids": [
+        "c17",
+        "c18"
+      ],
+      "top_relevant_id": "c17",
+      "is_unanswerable": false
+    },
+    {
+      "query_id": "q08",
+      "query": "How does the submodular knapsack packer optimize context selection?",
+      "corpus": [
+        {
+          "id": "c20",
+          "text": "The submodular knapsack packer selects chunks maximizing relevance coverage under token capacity.",
+          "rel": 2
+        },
+        {
+          "id": "c21",
+          "text": "Greedy approximation guarantees at least 31.6 percent of the optimal value.",
+          "rel": 1
+        },
+        {
+          "id": "c22",
+          "text": "Kubernetes deployments scale pods horizontally based on CPU utilization.",
+          "rel": 0
+        }
+      ],
+      "relevant_ids": [
+        "c20",
+        "c21"
+      ],
+      "top_relevant_id": "c20",
+      "is_unanswerable": false
+    },
+    {
+      "query_id": "q09_unanswerable",
+      "query": "What is the average surface temperature on Titan during summer?",
+      "corpus": [
+        {
+          "id": "c23",
+          "text": "Document ingestion extracts layout geometry and paragraph blocks.",
+          "rel": 0
+        },
+        {
+          "id": "c24",
+          "text": "Vector embeddings are generated using sentence transformer models.",
+          "rel": 0
+        }
+      ],
+      "relevant_ids": [],
+      "top_relevant_id": null,
+      "is_unanswerable": true
+    },
+    {
+      "query_id": "q10",
+      "query": "Which hashing algorithm is used for API key authentication?",
+      "corpus": [
+        {
+          "id": "c25",
+          "text": "API key authentication computes SHA-256 hashes before verifying key signatures.",
+          "rel": 2
+        },
+        {
+          "id": "c26",
+          "text": "Plaintext keys are never stored directly in the database.",
+          "rel": 1
+        },
+        {
+          "id": "c27",
+          "text": "Docker compose health checks ping the readiness endpoint every ten seconds.",
+          "rel": 0
+        }
+      ],
+      "relevant_ids": [
+        "c25",
+        "c26"
+      ],
+      "top_relevant_id": "c25",
+      "is_unanswerable": false
+    },
+    {
+      "query_id": "q11",
+      "query": "What happens when an unauthenticated request reaches protected endpoints?",
+      "corpus": [
+        {
+          "id": "c28",
+          "text": "Unauthenticated requests to protected endpoints return HTTP 401 Unauthorized with error detail.",
+          "rel": 2
+        },
+        {
+          "id": "c29",
+          "text": "Authorization headers must provide a valid Bearer token.",
+          "rel": 1
+        },
+        {
+          "id": "c30",
+          "text": "Prometheus scrapes metrics from the internal telemetry port.",
+          "rel": 0
+        }
+      ],
+      "relevant_ids": [
+        "c28"
+      ],
+      "top_relevant_id": "c28",
+      "is_unanswerable": false
+    },
+    {
+      "query_id": "q12_unanswerable",
+      "query": "Who was the lead architect of the Great Pyramid of Giza?",
+      "corpus": [
+        {
+          "id": "c31",
+          "text": "Tenant isolation ensures cross-tenant queries cannot access unauthorized document indices.",
+          "rel": 0
+        },
+        {
+          "id": "c32",
+          "text": "Database migrations are applied transactionally on application startup.",
+          "rel": 0
+        }
+      ],
+      "relevant_ids": [],
+      "top_relevant_id": null,
+      "is_unanswerable": true
+    },
+    {
+      "query_id": "q13",
+      "query": "How are multi-tenant vector namespaces separated in storage?",
+      "corpus": [
+        {
+          "id": "c33",
+          "text": "Multi-tenant vector storage partitions indices by tenant ID prefix to prevent data leaks.",
+          "rel": 2
+        },
+        {
+          "id": "c34",
+          "text": "FAISS index collections enforce strict boundary checks on every query.",
+          "rel": 1
+        },
+        {
+          "id": "c35",
+          "text": "Nginx reverse proxy terminates SSL connections at edge routers.",
+          "rel": 0
+        }
+      ],
+      "relevant_ids": [
+        "c33",
+        "c34"
+      ],
+      "top_relevant_id": "c33",
+      "is_unanswerable": false
+    },
+    {
+      "query_id": "q14",
+      "query": "What is the maximum allowed token budget for context packing?",
+      "corpus": [
+        {
+          "id": "c36",
+          "text": "The context packing token budget is capped by the maximum model context window minus completion overhead.",
+          "rel": 2
+        },
+        {
+          "id": "c37",
+          "text": "Calculated available context budget enforces strict non-negative limits.",
+          "rel": 1
+        },
+        {
+          "id": "c38",
+          "text": "Redis clusters distribute cache keys across sixteen thousand hash slots.",
+          "rel": 0
+        }
+      ],
+      "relevant_ids": [
+        "c36"
+      ],
+      "top_relevant_id": "c36",
+      "is_unanswerable": false
+    },
+    {
+      "query_id": "q15_unanswerable",
+      "query": "What is the atomic mass of Darmstadtium element 110?",
+      "corpus": [
+        {
+          "id": "c39",
+          "text": "Evaluation quality gates enforce automated thresholds across all benchmark suites.",
+          "rel": 0
+        },
+        {
+          "id": "c40",
+          "text": "Markdown claims verification ensures documentation matches live code.",
+          "rel": 0
+        }
+      ],
+      "relevant_ids": [],
+      "top_relevant_id": null,
+      "is_unanswerable": true
+    },
+    {
+      "query_id": "q16",
+      "query": "How does citation verification detect fabricated sources in responses?",
+      "corpus": [
+        {
+          "id": "c41",
+          "text": "Citation verification cross-references response chunk IDs against the retrieved evidence pool to detect hallucinations.",
+          "rel": 2
+        },
+        {
+          "id": "c42",
+          "text": "Unmatched citation IDs fail validation and trigger groundedness warnings.",
+          "rel": 1
+        },
+        {
+          "id": "c43",
+          "text": "CSS layout rules specify responsive grid columns for web dashboards.",
+          "rel": 0
+        }
+      ],
+      "relevant_ids": [
+        "c41",
+        "c42"
+      ],
+      "top_relevant_id": "c41",
+      "is_unanswerable": false
+    },
+    {
+      "query_id": "q17",
+      "query": "What mechanism does the API provide for document upload and ingestion?",
+      "corpus": [
+        {
+          "id": "c44",
+          "text": "The API provides POST /v1/documents/upload to ingest multipart document files.",
+          "rel": 2
+        },
+        {
+          "id": "c45",
+          "text": "Uploaded documents are parsed, chunked, and stored in the document repository.",
+          "rel": 1
+        },
+        {
+          "id": "c46",
+          "text": "Grafana dashboards visualize request rates and error latency histograms.",
+          "rel": 0
+        }
+      ],
+      "relevant_ids": [
+        "c44",
+        "c45"
+      ],
+      "top_relevant_id": "c44",
+      "is_unanswerable": false
+    },
+    {
+      "query_id": "q18_unanswerable",
+      "query": "What is the exact population of Reykjavik in the year 1850?",
+      "corpus": [
+        {
+          "id": "c47",
+          "text": "Security scanners identify hardcoded tokens and vulnerable dependencies.",
+          "rel": 0
+        },
+        {
+          "id": "c48",
+          "text": "Rate limiting throttles client requests exceeding configured tier quotas.",
+          "rel": 0
+        }
+      ],
+      "relevant_ids": [],
+      "top_relevant_id": null,
+      "is_unanswerable": true
+    },
+    {
+      "query_id": "q19",
+      "query": "How does the health readiness probe verify service availability?",
+      "corpus": [
+        {
+          "id": "c49",
+          "text": "The readiness probe GET /ready checks database connectivity and vector storage health before serving traffic.",
+          "rel": 2
+        },
+        {
+          "id": "c50",
+          "text": "Liveness probe GET /health returns HTTP 200 when the process event loop is responsive.",
+          "rel": 1
+        },
+        {
+          "id": "c51",
+          "text": "Elasticsearch clusters rebalance shards across data nodes during maintenance.",
+          "rel": 0
+        }
+      ],
+      "relevant_ids": [
+        "c49"
+      ],
+      "top_relevant_id": "c49",
+      "is_unanswerable": false
+    },
+    {
+      "query_id": "q20_unanswerable",
+      "query": "What was the airspeed velocity of an unladen European swallow?",
+      "corpus": [
+        {
+          "id": "c52",
+          "text": "Automated smoke tests execute end-to-end ingestion and query flows.",
+          "rel": 0
+        },
+        {
+          "id": "c53",
+          "text": "Audit logs record all access decisions with timestamp and caller identity.",
+          "rel": 0
+        }
       ],
       "relevant_ids": [],
       "top_relevant_id": null,

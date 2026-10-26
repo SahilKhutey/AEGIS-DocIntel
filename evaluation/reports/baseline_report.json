@@ -1,20 +1,20 @@
 {
-  "benchmark_timestamp": "2026-10-24T07:41:34.126890+00:00",
+  "benchmark_timestamp": "2026-10-26T08:20:42.484322+00:00",
   "overall_status": "PASSED",
   "gate_failures": [],
   "metrics": {
     "extraction": {
       "reading_order_kendall_tau": 1.0,
       "table_cell_f1": 1.0,
-      "reading_order_cases_evaluated": 2,
-      "table_cases_evaluated": 1,
+      "reading_order_cases_evaluated": 4,
+      "table_cases_evaluated": 4,
       "passed": true
     },
     "packing": {
       "budget_violation_rate": 0.0,
       "min_approx_ratio": 0.8571,
-      "mean_approx_ratio": 0.9173,
-      "cases_evaluated": 3,
+      "mean_approx_ratio": 0.9649,
+      "cases_evaluated": 10,
       "passed": true
     },
     "privacy": {
@@ -23,16 +23,16 @@
       "f1": 1.0,
       "leakage_rate": 0.0,
       "fail_closed_blocked": true,
-      "cases_evaluated": 8,
+      "cases_evaluated": 15,
       "passed": true
     },
     "retrieval": {
       "mrr": 1.0,
-      "recall_at_5": 1.0,
-      "ndcg_at_5": 0.9041,
+      "recall_at_5": 0.9231,
+      "ndcg_at_5": 0.9276,
       "abstention_accuracy": 1.0,
       "citation_validation_passed": true,
-      "queries_evaluated": 6,
+      "queries_evaluated": 20,
       "passed": true
     }
   },

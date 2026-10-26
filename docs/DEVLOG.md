@@ -1469,3 +1469,60 @@ This section documents the chronological development tasks, architectural decisi
   - python scripts/check_docs_claims.py: OK (R1–R6 passed).
   - 
 uff check src tests scripts dashboard: All checks passed.
+
+
+### Task P4.21 — Phase 2 MVP Product Validation & Developer Experience
+- **Time:** 2026-10-26 08:15:00 – 08:30:00 UTC
+- **Context & Objective:**
+  Implement Phase 2: MVP Product Validation & Developer Experience:
+  1. **Evaluation Dataset Contract Validator (scripts/validate_mvp_dataset.py):**
+     - Validates evaluation/datasets/manifest.json against evaluation/datasets/qa_eval_dataset.json.
+     - Validates slice declarations, case counts, required fields, and unique identifiers without drift.
+  2. **Contract Unit & Drift Detection Tests (	ests/test_mvp_dataset_contract.py):**
+     - Verifies repository dataset match, count drift detection, and duplicate ID detection.
+  3. **Evaluation Dataset Expansion (evaluation/datasets/qa_eval_dataset.json):**
+     - Expanded from 20 to full 53 cases matching manifest target counts:
+       - Extraction: 3 -> 8 cases (multi-column layouts, financial tables, multi-headers).
+       - Packing: 3 -> 10 cases (budget constraints, uniform weights, marginal decay).
+       - Privacy: 8 -> 15 cases (realistic emails, phone numbers, SSNs, API keys, safe distractors).
+       - Retrieval: 6 -> 20 cases (hybrid RRF tokens, grounding, answerable and unanswerable queries).
+     - Verified all 4 quality gates pass:
+       - Extraction: Kendall\'s Tau 1.0 (>= 0.80), Table Cell F1 1.0 (>= 0.90).
+       - Packing: Budget Violations 0.0 (<= 0.0), Min Approx Ratio 0.8571 (>= 0.316).
+       - Privacy: Precision 1.0 (>= 0.85), Recall 1.0 (>= 0.85), Leakage 0.0 (<= 0.0).
+       - Retrieval: MRR 1.0 (>= 0.70), Recall@5 0.9231 (>= 0.80), Abstention 1.0 (== 1.0).
+  4. **Developer Quickstart Guide (docs/quickstart-mvp.md):**
+     - Step-by-step developer onboarding from fresh clone to authenticated document upload, status polling, and grounded citation retrieval.
+  5. **External Design-Partner Protocol (docs/pilot/phase2-design-partner-protocol.md):**
+     - Transparent protocol for 3–5 design partners with consent, synthetic data only, 4 standard evaluation tasks, and feedback issue template while preserving unverified pilot status (Rule R4).
+  6. **CI Integration (.github/workflows/ci.yml):**
+     - Added python scripts/validate_mvp_dataset.py to CI lint job.
+  7. **Phase 2 Evidence Bundle (rtifacts/phase2/):**
+     - dataset-contract.txt: Validator output.
+     - evaluation-console.txt: Benchmark runner output.
+     - evaluation-report.json: Structured benchmark metrics report.
+     - environment.txt: Pip freeze dependencies.
+     - pilot-results-template.json: Design partner feedback template.
+- **Files Modified / Created:**
+  - scripts/validate_mvp_dataset.py
+  - 	ests/test_mvp_dataset_contract.py
+  - evaluation/datasets/qa_eval_dataset.json
+  - evaluation/reports/baseline_report.json
+  - docs/quickstart-mvp.md
+  - docs/pilot/phase2-design-partner-protocol.md
+  - .github/workflows/ci.yml
+  - mkdocs.yml
+  - rtifacts/phase2/dataset-contract.txt
+  - rtifacts/phase2/evaluation-console.txt
+  - rtifacts/phase2/evaluation-report.json
+  - rtifacts/phase2/environment.txt
+  - rtifacts/phase2/pilot-results-template.json
+  - docs/DEVLOG.md
+- **Verification:**
+  - python scripts/validate_mvp_dataset.py: PASSED (All declared slices, counts, and schemas match).
+  - pytest tests/test_mvp_dataset_contract.py -vv: 3 passed in 0.51s.
+  - python evaluation/scripts/run_all.py --fail-under-gates: PASSED (All 4 gates passed).
+  - pytest tests/test_mvp_dataset_contract.py tests/test_mvp_workflow_acceptance.py -q: 6 passed in 58.89s.
+  - python scripts/check_dependency_sync.py: OK.
+  - python scripts/check_docs_claims.py: OK (R1–R6 passed).
+  - python -m ruff check src tests scripts dashboard: All checks passed.

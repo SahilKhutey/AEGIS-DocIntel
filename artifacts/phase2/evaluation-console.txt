@@ -1,0 +1,16 @@
+============================================================
+AEGIS-DocIntel P2 Quality & Evaluation Suite
+============================================================
+[1/4] Running Document Extraction Fidelity Evaluation...
+      Reading Order Tau: 1.0 | Table Cell F1: 1.0
+[2/4] Running Context Packing Invariants Evaluation...
+      Budget Violations: 0.0 | Min Approx Ratio: 0.8571
+[3/4] Running Privacy & PII Redaction Evaluation...
+      Precision: 1.0 | Recall: 1.0 | Leakage: 0.0
+[4/4] Running Retrieval & Grounding Evaluation...
+      MRR: 1.0 | Recall@5: 0.9231 | Abstention: 1.0
+
+Report written to: artifacts\phase2\evaluation-report.json
+------------------------------------------------------------
+OVERALL EVALUATION RESULT: PASSED
+------------------------------------------------------------

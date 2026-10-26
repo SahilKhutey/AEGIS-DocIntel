@@ -72,6 +72,7 @@ nav:
   - Full Platform:
       - Architecture & Master State: Architecture.md
       - Installation & Cold-Start: installation.md
+      - Developer Quickstart (MVP): quickstart-mvp.md
       - API Reference: api.md
   - Compliance & Security:
       - Compliance Gap Analysis: compliance.md

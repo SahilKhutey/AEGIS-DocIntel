@@ -1,0 +1,8 @@
+========================================================================
+AEGIS-DocIntel — Evaluation Dataset Contract Validator
+Manifest: C:\Users\ASUS\Documents\Aegis-DocIntel\evaluation\datasets\manifest.json
+Dataset:  C:\Users\ASUS\Documents\Aegis-DocIntel\evaluation\datasets\qa_eval_dataset.json
+========================================================================
+[OK] All declared slices, counts, and case schemas match.
+MVP DATASET CONTRACT: PASSED
+========================================================================

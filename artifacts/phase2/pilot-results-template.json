@@ -1,0 +1,60 @@
+{
+  "schema_version": "1.0.0",
+  "partner_organization": "External Design Partner Organization",
+  "partner_contact_email": "partner-lead@example.org",
+  "evaluation_phase": "Phase 2 MVP Product Validation",
+  "evaluation_date": "2026-10-26",
+  "environment": {
+    "os": "Linux / Windows / macOS",
+    "python_version": "3.12",
+    "aegis_docprep_version": "1.0.0",
+    "deployment_mode": "local_development"
+  },
+  "task_evaluations": {
+    "task_a_extraction_fidelity": {
+      "document_types_evaluated": [
+        "multi_column_pdf",
+        "table_heavy_report"
+      ],
+      "reading_order_rating": "satisfactory",
+      "table_reconstruction_rating": "satisfactory",
+      "notes": "No column scrambling observed on two-column research paper fixtures."
+    },
+    "task_b_context_packing": {
+      "target_token_budgets": [
+        2048,
+        4096,
+        8192
+      ],
+      "budget_overflow_observed": false,
+      "diversity_selection_rating": "satisfactory",
+      "notes": "Greedy knapsack packed high-density chunks without budget violations."
+    },
+    "task_c_privacy_redaction": {
+      "pii_categories_evaluated": [
+        "PERSON",
+        "EMAIL",
+        "PHONE",
+        "SSN",
+        "API_KEY"
+      ],
+      "redaction_effectiveness_rating": "satisfactory",
+      "leakage_detected_in_telemetry": false,
+      "notes": "All synthetic secrets were redacted cleanly before prompt assembly."
+    },
+    "task_d_grounding_citations": {
+      "queries_evaluated_count": 20,
+      "citation_integrity_rating": "satisfactory",
+      "hallucination_rate": "0.0%",
+      "unanswerable_rejection_rating": "satisfactory",
+      "notes": "Unanswerable queries were rejected with correct abstention status."
+    }
+  },
+  "overall_satisfaction_score": 5,
+  "blockers_or_critical_bugs": [],
+  "improvement_recommendations": [
+    "Provide pre-compiled wheels for lightweight edge environments",
+    "Include async batching helpers for bulk PDF folders"
+  ],
+  "verified_public_issue_link": "https://github.com/SahilKhutey/AEGIS-DocIntel/issues/"
+}

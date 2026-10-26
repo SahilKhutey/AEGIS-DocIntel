@@ -42,6 +42,7 @@ jobs:
         run: |
           python scripts/check_dependency_sync.py
           python scripts/check_docs_claims.py
+          python scripts/validate_mvp_dataset.py
       - name: Install lint tooling
         run: pip install ruff
       - name: Ruff (style/correctness)

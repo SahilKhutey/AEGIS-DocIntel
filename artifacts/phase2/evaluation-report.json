@@ -1,0 +1,60 @@
+{
+  "benchmark_timestamp": "2026-10-26T08:16:27.886663+00:00",
+  "overall_status": "PASSED",
+  "gate_failures": [],
+  "metrics": {
+    "extraction": {
+      "reading_order_kendall_tau": 1.0,
+      "table_cell_f1": 1.0,
+      "reading_order_cases_evaluated": 4,
+      "table_cases_evaluated": 4,
+      "passed": true
+    },
+    "packing": {
+      "budget_violation_rate": 0.0,
+      "min_approx_ratio": 0.8571,
+      "mean_approx_ratio": 0.9649,
+      "cases_evaluated": 10,
+      "passed": true
+    },
+    "privacy": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "leakage_rate": 0.0,
+      "fail_closed_blocked": true,
+      "cases_evaluated": 15,
+      "passed": true
+    },
+    "retrieval": {
+      "mrr": 1.0,
+      "recall_at_5": 0.9231,
+      "ndcg_at_5": 0.9276,
+      "abstention_accuracy": 1.0,
+      "citation_validation_passed": true,
+      "queries_evaluated": 20,
+      "passed": true
+    }
+  },
+  "gates_applied": {
+    "extraction": {
+      "min_reading_order_kendall_tau": 0.8,
+      "min_table_cell_f1": 0.9
+    },
+    "packing": {
+      "max_budget_violation_rate": 0.0,
+      "min_approx_ratio": 0.316
+    },
+    "privacy": {
+      "min_precision": 0.85,
+      "min_recall": 0.85,
+      "max_leakage_rate": 0.0
+    },
+    "retrieval": {
+      "min_mrr": 0.7,
+      "min_recall_at_5": 0.8,
+      "min_abstention_accuracy": 1.0,
+      "min_citation_precision": 0.9
+    }
+  }
+}
