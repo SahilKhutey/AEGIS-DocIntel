@@ -1411,3 +1411,23 @@ This section documents the chronological development tasks, architectural decisi
   - `python scripts/check_docs_claims.py`: OK (R1–R6 passed).
   - `ruff check src tests scripts dashboard`: All checks passed.
   - `pytest tests/test_runtime_configuration.py tests/test_auth_guard.py tests/test_multitenancy_isolation.py tests/test_document_deletion.py`: 42 passed in 211.74s.
+
+### Task P4.19 — Standalone Library Packaging (aegis-docprep), Canonical Branch Synchronization (main -> master), and E2E Journey Validation
+- **Time:** 2026-10-26 03:15:00 – 03:30:00 UTC
+- **Context & Objective:**
+  Finalize MVP market-readiness verification, standalone library packaging, and branch alignment:
+  1. **Standalone Library Build & Verification (`aegis-docprep`):**
+     - Executed `python -m build aegis-docprep` producing `aegis_docprep-0.1.0-py3-none-any.whl` and `aegis_docprep-0.1.0.tar.gz`.
+     - Verified wheel installation via `pip install --force-reinstall --no-deps`.
+     - Executed all 37 test cases in `aegis-docprep/tests/` (100% passed in 2.09s).
+     - Validated all documented quick-start code snippets in [`aegis-docprep/README.md`](../aegis-docprep/README.md) (PII redaction, submodular packing, and spatial reading-order reconstruction).
+  2. **Canonical Branch Synchronization:**
+     - Fast-forwarded `origin/main` to `master` (`049691e`), eliminating legacy divergence and ensuring clone parity across both branch conventions.
+  3. **End-to-End User Journey & Real Ingestion Validation:**
+     - Verified complete document ingestion-to-query lifecycle in [`tests/test_e2e_api_workflow.py`](../tests/test_e2e_api_workflow.py) (2 passed in 11.87s).
+     - Verified real-world PDF, DOCX, PPTX, XLSX, and scanned image loaders in [`tests/test_real_world_ingestion.py`](../tests/test_real_world_ingestion.py) (5 passed in 24.30s).
+  4. **Repository Hygiene & Security Gates:**
+     - `ruff check src tests scripts dashboard`: All checks passed.
+     - `bandit -r src dashboard scripts -ll`: 49,787 lines scanned, 0 issues.
+     - `python scripts/check_dependency_sync.py`: OK (6 requirements files match `pyproject.toml`).
+     - `python scripts/check_docs_claims.py`: OK (Rules R1–R6 passed).
