@@ -1,0 +1,17 @@
+﻿============================= test session starts =============================
+platform win32 -- Python 3.12.10, pytest-9.1.1, pluggy-1.6.0 -- C:\Users\ASUS\AppData\Local\Programs\Python\Python312\python.exe
+cachedir: .pytest_cache
+hypothesis profile 'default'
+rootdir: C:\Users\ASUS\Documents\Aegis-DocIntel
+configfile: pyproject.toml
+plugins: anyio-4.12.1, hypothesis-6.156.6, langsmith-0.14.4, asyncio-1.4.0, cov-7.1.0
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collecting ... collected 5 items
+
+tests/integration/test_restart_persistence.py::test_document_metadata_and_state_survives_restart PASSED [ 20%]
+tests/integration/test_backup_restore.py::test_online_backup_and_restore_recovery_drill PASSED [ 40%]
+tests/integration/test_failure_recovery.py::test_idempotency_store_duplicate_and_in_progress_detection PASSED [ 60%]
+tests/integration/test_failure_recovery.py::test_malformed_upload_leaves_no_orphan_records PASSED [ 80%]
+tests/integration/test_failure_recovery.py::test_database_initialization_failure_raises_storage_error PASSED [100%]
+
+============================= 5 passed in 27.89s ==============================

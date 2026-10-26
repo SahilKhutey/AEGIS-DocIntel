@@ -1526,3 +1526,63 @@ uff check src tests scripts dashboard: All checks passed.
   - python scripts/check_dependency_sync.py: OK.
   - python scripts/check_docs_claims.py: OK (R1–R6 passed).
   - python -m ruff check src tests scripts dashboard: All checks passed.
+
+
+### Task P4.22 — Phase 3 Production Readiness, Security Hardening & Release Qualification
+- **Time:** 2026-10-26 08:50:00 – 09:10:00 UTC
+- **Context & Objective:**
+  Implement Phase 3: Production Readiness, Security Hardening & Release Qualification:
+  1. **Phase 3.1 Security Acceptance Suite (tests/security/):**
+     - test_auth_acceptance.py: JWT algorithm confusion rejection (HMAC with RSA public key rejected), signature tampering rejection, expired token rejection, issuer/audience enforcement, hash-only API keys (sha256:<64-hex>), dev bypass rejection in prod, upload limits (AEGIS_MAX_UPLOAD_BYTES -> HTTP 413), secret masking in audit logs.
+     - test_role_boundaries.py: Viewer (read-only queries), Editor (uploads/extractions), Admin (tenant admin/deletions) RBAC boundaries with HTTP 403 on forbidden operations.
+     - test_tenant_route_isolation.py: Cross-tenant IDOR protection with strict HTTP 404 on cross-tenant document, chunk, status, export, query, and delete calls.
+  2. **Phase 3.2 Complete Document Workflow (tests/integration/):**
+     - test_document_workflow.py: Deterministic 6-step MVP path (upload, normalization, PII redaction, retrieval, context packing, grounded answer verification, and unanswerable query abstention).
+  3. **Phase 3.3 Persistence, Restart, and Recovery (tests/integration/):**
+     - test_restart_persistence.py: Saved documents and metadata survive process restart using isolated SQLite databases.
+     - test_backup_restore.py: Exercise scripts/backup_sqlite.py, verify PRAGMA integrity_check, restore to clean path, and verify parity.
+     - test_failure_recovery.py: Idempotency key handling (IdempotencyStore), malformed upload cleanup (no orphan state), and storage failure handling.
+  4. **Phase 3.4 Evaluation Quality Suite (tests/evaluation/):**
+     - test_citation_integrity.py: Citation validation against real vs fabricated chunk IDs.
+     - test_context_budget.py: Token budget bounds and greedy knapsack approximation ratio guarantees.
+  5. **Phase 3.5 Deployment & Release Scripts (scripts/):**
+     - validate_release_config.py: Release configuration validation (environment, storage, JWT, CORS, LLM policy).
+     - run_mvp_acceptance.py: Comprehensive acceptance and release qualification test runner emitting artifacts/phase3/mvp-release-report.json.
+  6. **Phase 3.6 Release Documentation & Runbooks (docs/release/):**
+     - docs/release/MVP_READINESS.md: Readiness assessment, test evidence matrix, explicit go/no-go release decision.
+     - docs/release/SECURITY_ACCEPTANCE.md: Threat model, auth verification, role boundaries, tenant isolation guarantees.
+     - docs/release/RECOVERY_RUNBOOK.md: Disaster recovery procedures with scripts/backup_sqlite.py, integrity check, restore drill.
+     - docs/release/RELEASE_CHECKLIST.md: Step-by-step checklist with verification commands and rollback instructions.
+     - Updated mkdocs.yml and scripts/check_docs_claims.py.
+  7. **Phase 3.7 Evidence Bundle (artifacts/phase3/):**
+     - security-acceptance.txt, workflow-acceptance.txt, persistence-recovery.txt, release-config-validation.txt, evaluation-report.json, mvp-release-report.json.
+- **Files Modified / Created:**
+  - tests/security/test_auth_acceptance.py
+  - tests/security/test_role_boundaries.py
+  - tests/security/test_tenant_route_isolation.py
+  - tests/integration/test_document_workflow.py
+  - tests/integration/test_restart_persistence.py
+  - tests/integration/test_backup_restore.py
+  - tests/integration/test_failure_recovery.py
+  - tests/evaluation/test_citation_integrity.py
+  - tests/evaluation/test_context_budget.py
+  - scripts/validate_release_config.py
+  - scripts/run_mvp_acceptance.py
+  - docs/release/MVP_READINESS.md
+  - docs/release/SECURITY_ACCEPTANCE.md
+  - docs/release/RECOVERY_RUNBOOK.md
+  - docs/release/RELEASE_CHECKLIST.md
+  - scripts/check_docs_claims.py
+  - mkdocs.yml
+  - artifacts/phase3/security-acceptance.txt
+  - artifacts/phase3/workflow-acceptance.txt
+  - artifacts/phase3/persistence-recovery.txt
+  - artifacts/phase3/release-config-validation.txt
+  - artifacts/phase3/evaluation-report.json
+  - artifacts/phase3/mvp-release-report.json
+  - docs/DEVLOG.md
+- **Verification:**
+  - python scripts/run_mvp_acceptance.py: RELEASE QUALIFICATION DECISION: GO (8/8 gates passed).
+  - python scripts/check_dependency_sync.py: OK.
+  - python scripts/check_docs_claims.py: OK (R1–R6 passed).
+  - python -m ruff check src tests scripts dashboard: All checks passed.

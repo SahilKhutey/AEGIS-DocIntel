@@ -55,8 +55,9 @@ not_in_nav: |
   Deployment.md
   Design.md
   SUPPORT.md
-  deployment/**
-  pilot/**
+  deployment/**
+  pilot/**
+  release/**
 
 validation:
   omitted_files: ignore

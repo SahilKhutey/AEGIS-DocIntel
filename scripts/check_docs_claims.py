@@ -33,7 +33,7 @@ ROOT = Path(__file__).resolve().parent.parent
 
 # Living documents: held to every rule.
 LIVING = ["README.md", "STATUS.md", "SECURITY.md", "CONTRIBUTING.md", "CHANGELOG.md"]
-LIVING_GLOBS = ["docs/*.md", "docs/pilot/*.md"]
+LIVING_GLOBS = ["docs/*.md", "docs/pilot/*.md", "docs/release/*.md"]
 # Historical records: they describe what was claimed/true *at the time*; exempt from R3/R4/R5
 # (R2 link checks still apply, R6 does not).
 HISTORY = {"docs/DEVLOG.md", "docs/devlog.md", "docs/ROADMAP.md", "docs/MASTER_REMEDIATION_CHECKLIST.md",

@@ -1,0 +1,32 @@
+﻿============================= test session starts =============================
+platform win32 -- Python 3.12.10, pytest-9.1.1, pluggy-1.6.0 -- C:\Users\ASUS\AppData\Local\Programs\Python\Python312\python.exe
+cachedir: .pytest_cache
+hypothesis profile 'default'
+rootdir: C:\Users\ASUS\Documents\Aegis-DocIntel
+configfile: pyproject.toml
+plugins: anyio-4.12.1, hypothesis-6.156.6, langsmith-0.14.4, asyncio-1.4.0, cov-7.1.0
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collecting ... collected 20 items
+
+tests/security/test_auth_acceptance.py::test_missing_credentials_rejected_with_401 PASSED [  5%]
+tests/security/test_auth_acceptance.py::test_malformed_jwt_rejected_with_401 PASSED [ 10%]
+tests/security/test_auth_acceptance.py::test_expired_jwt_rejected_with_401 PASSED [ 15%]
+tests/security/test_auth_acceptance.py::test_invalid_signature_wrong_key_rejected PASSED [ 20%]
+tests/security/test_auth_acceptance.py::test_algorithm_confusion_rejected PASSED [ 25%]
+tests/security/test_auth_acceptance.py::test_issuer_and_audience_validation PASSED [ 30%]
+tests/security/test_auth_acceptance.py::test_missing_tenant_id_or_sub_rejected PASSED [ 35%]
+tests/security/test_auth_acceptance.py::test_production_api_key_valid_hash PASSED [ 40%]
+tests/security/test_auth_acceptance.py::test_production_rejects_dev_bypass_credentials PASSED [ 45%]
+tests/security/test_auth_acceptance.py::test_operational_endpoints_reachability PASSED [ 50%]
+tests/security/test_auth_acceptance.py::test_payload_limit_enforced PASSED [ 55%]
+tests/security/test_auth_acceptance.py::test_audit_logs_never_leak_plaintext_secrets PASSED [ 60%]
+tests/security/test_role_boundaries.py::test_viewer_role_cannot_upload_document PASSED [ 65%]
+tests/security/test_role_boundaries.py::test_viewer_role_cannot_delete_document PASSED [ 70%]
+tests/security/test_role_boundaries.py::test_viewer_role_cannot_access_admin_stats PASSED [ 75%]
+tests/security/test_role_boundaries.py::test_editor_role_can_upload_but_cannot_access_admin PASSED [ 80%]
+tests/security/test_role_boundaries.py::test_admin_role_can_access_admin_stats PASSED [ 85%]
+tests/security/test_role_boundaries.py::test_unsupported_role_rejected PASSED [ 90%]
+tests/security/test_tenant_route_isolation.py::test_orchestrator_cross_tenant_isolation PASSED [ 95%]
+tests/security/test_tenant_route_isolation.py::test_http_api_cross_tenant_lifecycle_idor_defense PASSED [100%]
+
+======================== 20 passed in 87.45s (0:01:27) ========================
