@@ -1,0 +1,186 @@
+{
+  "report_version": "1.0.0",
+  "timestamp_utc": "2026-10-26T07:46:28.129744+00:00",
+  "environment": {
+    "platform": "Windows-11-10.0.26300-SP0",
+    "python_version": "3.12.10",
+    "git_branch": "feat/mvp-readiness-acceptance",
+    "git_commit": "084ffaec4a606ef4a5805363a6dc0206b9b40fd2",
+    "git_clean": "false"
+  },
+  "summary": {
+    "mode": "quick",
+    "overall_status": "PASSED",
+    "total_checks": 12,
+    "passed_checks": 12,
+    "failed_checks": 0,
+    "total_duration_seconds": 265.33
+  },
+  "checks": [
+    {
+      "name": "dependency_sync",
+      "command": "C:\\Users\\ASUS\\AppData\\Local\\Programs\\Python\\Python312\\python.exe scripts/check_dependency_sync.py",
+      "status": "PASSED",
+      "exit_code": 0,
+      "duration_seconds": 0.06,
+      "output_tail": [
+        "OK \u2014 6 requirements files match pyproject.toml"
+      ],
+      "error_tail": []
+    },
+    {
+      "name": "documentation_claims",
+      "command": "C:\\Users\\ASUS\\AppData\\Local\\Programs\\Python\\Python312\\python.exe scripts/check_docs_claims.py",
+      "status": "PASSED",
+      "exit_code": 0,
+      "duration_seconds": 0.19,
+      "output_tail": [
+        "OK \u2014 docs claims check passed (R1 cold-start, R2 links, R3 counts, R4 pilots, R5 readiness, R6 env-vars)"
+      ],
+      "error_tail": []
+    },
+    {
+      "name": "code_linting",
+      "command": "C:\\Users\\ASUS\\AppData\\Local\\Programs\\Python\\Python312\\python.exe -m ruff check src tests scripts dashboard",
+      "status": "PASSED",
+      "exit_code": 0,
+      "duration_seconds": 0.08,
+      "output_tail": [
+        "All checks passed!"
+      ],
+      "error_tail": []
+    },
+    {
+      "name": "security_audit",
+      "command": "C:\\Users\\ASUS\\AppData\\Local\\Programs\\Python\\Python312\\python.exe -m bandit -r src dashboard scripts -ll",
+      "status": "PASSED",
+      "exit_code": 0,
+      "duration_seconds": 3.52,
+      "output_tail": [
+        "\t\tUndefined: 0",
+        "\t\tLow: 37",
+        "\t\tMedium: 0",
+        "\t\tHigh: 0",
+        "\tTotal issues (by confidence):",
+        "\t\tUndefined: 0",
+        "\t\tLow: 0",
+        "\t\tMedium: 1",
+        "\t\tHigh: 36",
+        "Files skipped (0):"
+      ],
+      "error_tail": [
+        "[main]\tINFO\tprofile include tests: None",
+        "[main]\tINFO\tprofile exclude tests: None",
+        "[main]\tINFO\tcli include tests: None",
+        "[main]\tINFO\tcli exclude tests: None",
+        "[main]\tINFO\trunning on Python 3.12.10",
+        "[tester]\tWARNING\tnosec encountered (B608), but no failed test on file src\\annotations\\store.py:224",
+        "[tester]\tWARNING\tnosec encountered (B608), but no failed test on file src\\annotations\\store.py:224"
+      ]
+    },
+    {
+      "name": "runtime_configuration",
+      "command": "C:\\Users\\ASUS\\AppData\\Local\\Programs\\Python\\Python312\\python.exe -m pytest tests/test_runtime_configuration.py -q",
+      "status": "PASSED",
+      "exit_code": 0,
+      "duration_seconds": 15.48,
+      "output_tail": [
+        "............                                                             [100%]",
+        "12 passed in 12.09s"
+      ],
+      "error_tail": []
+    },
+    {
+      "name": "production_auth",
+      "command": "C:\\Users\\ASUS\\AppData\\Local\\Programs\\Python\\Python312\\python.exe -m pytest tests/test_production_auth.py tests/test_auth_guard.py -q",
+      "status": "PASSED",
+      "exit_code": 0,
+      "duration_seconds": 133.66,
+      "output_tail": [
+        ".....................................                                    [100%]",
+        "37 passed in 130.04s (0:02:10)"
+      ],
+      "error_tail": []
+    },
+    {
+      "name": "multitenancy_isolation",
+      "command": "C:\\Users\\ASUS\\AppData\\Local\\Programs\\Python\\Python312\\python.exe -m pytest tests/test_multitenancy_isolation.py -q",
+      "status": "PASSED",
+      "exit_code": 0,
+      "duration_seconds": 48.45,
+      "output_tail": [
+        "...                                                                      [100%]",
+        "3 passed in 44.96s"
+      ],
+      "error_tail": []
+    },
+    {
+      "name": "persistence_and_deletion",
+      "command": "C:\\Users\\ASUS\\AppData\\Local\\Programs\\Python\\Python312\\python.exe -m pytest tests/test_persistence_and_audit.py tests/test_document_deletion.py -q",
+      "status": "PASSED",
+      "exit_code": 0,
+      "duration_seconds": 11.46,
+      "output_tail": [
+        "..............                                                           [100%]",
+        "14 passed in 8.91s"
+      ],
+      "error_tail": []
+    },
+    {
+      "name": "extraction_and_grounding",
+      "command": "C:\\Users\\ASUS\\AppData\\Local\\Programs\\Python\\Python312\\python.exe -m pytest tests/test_extraction_fidelity.py tests/test_retrieval_grounding.py -q",
+      "status": "PASSED",
+      "exit_code": 0,
+      "duration_seconds": 9.59,
+      "output_tail": [
+        "...........                                                              [100%]",
+        "11 passed in 7.03s"
+      ],
+      "error_tail": []
+    },
+    {
+      "name": "mvp_end_to_end_workflow",
+      "command": "C:\\Users\\ASUS\\AppData\\Local\\Programs\\Python\\Python312\\python.exe -m pytest tests/test_mvp_workflow_acceptance.py -q",
+      "status": "PASSED",
+      "exit_code": 0,
+      "duration_seconds": 38.29,
+      "output_tail": [
+        "...                                                                      [100%]",
+        "3 passed in 35.09s"
+      ],
+      "error_tail": []
+    },
+    {
+      "name": "standalone_docprep",
+      "command": "C:\\Users\\ASUS\\AppData\\Local\\Programs\\Python\\Python312\\python.exe -m pytest aegis-docprep/tests -q",
+      "status": "PASSED",
+      "exit_code": 0,
+      "duration_seconds": 2.28,
+      "output_tail": [
+        ".....................................                                    [100%]",
+        "37 passed in 1.04s"
+      ],
+      "error_tail": []
+    },
+    {
+      "name": "evaluation_quality_gates",
+      "command": "C:\\Users\\ASUS\\AppData\\Local\\Programs\\Python\\Python312\\python.exe evaluation/scripts/run_all.py --fail-under-gates",
+      "status": "PASSED",
+      "exit_code": 0,
+      "duration_seconds": 2.27,
+      "output_tail": [
+        "      Budget Violations: 0.0 | Min Approx Ratio: 0.8571",
+        "[3/4] Running Privacy & PII Redaction Evaluation...",
+        "      Precision: 1.0 | Recall: 1.0 | Leakage: 0.0",
+        "[4/4] Running Retrieval & Grounding Evaluation...",
+        "      MRR: 1.0 | Recall@5: 1.0 | Abstention: 1.0",
+        "",
+        "Report written to: evaluation\\reports\\baseline_report.json",
+        "------------------------------------------------------------",
+        "OVERALL EVALUATION RESULT: PASSED",
+        "------------------------------------------------------------"
+      ],
+      "error_tail": []
+    }
+  ]
+}

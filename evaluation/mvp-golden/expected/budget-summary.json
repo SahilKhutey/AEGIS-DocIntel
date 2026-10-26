@@ -1,0 +1,62 @@
+{
+  "document_id": "budget-summary-001",
+  "filename": "budget-summary.txt",
+  "format": "text/plain",
+  "key_facts": {
+    "project_name": "Project Orbit",
+    "project_code": "ORBIT-731",
+    "approved_budget": "125,000 INR",
+    "fiscal_year": "2026-Q1",
+    "owner": "Orbit Engineering Team"
+  },
+  "tables": [
+    {
+      "name": "Table 1: Department Resource Allocation",
+      "headers": ["Department", "Headcount", "Allocated Budget (INR)", "Utilization"],
+      "rows": [
+        ["Engineering", "12", "75,000", "92%"],
+        ["Operations", "4", "30,000", "85%"],
+        ["Compliance", "2", "20,000", "78%"]
+      ]
+    }
+  ],
+  "labeled_pii": [
+    {
+      "entity_type": "PERSON",
+      "text": "Alex Mercer"
+    },
+    {
+      "entity_type": "EMAIL",
+      "text": "alex.mercer@example.org"
+    },
+    {
+      "entity_type": "PHONE_NUMBER",
+      "text": "555-0199"
+    },
+    {
+      "entity_type": "CREDIT_CARD",
+      "text": "4532015112830366"
+    },
+    {
+      "entity_type": "US_SSN",
+      "text": "000-12-3456"
+    }
+  ],
+  "qa_pairs": [
+    {
+      "question": "What is the approved operating budget for Project Orbit?",
+      "expected_answer_contains": "125,000 INR",
+      "expected_grounded": true
+    },
+    {
+      "question": "Who is the document owner for Project Orbit?",
+      "expected_answer_contains": "Orbit Engineering Team",
+      "expected_grounded": true
+    },
+    {
+      "question": "What is the capital expenditure for Project Apollo in 2030?",
+      "expected_abstention": true,
+      "expected_grounded": false
+    }
+  ]
+}

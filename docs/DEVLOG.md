@@ -1431,3 +1431,41 @@ This section documents the chronological development tasks, architectural decisi
      - `bandit -r src dashboard scripts -ll`: 49,787 lines scanned, 0 issues.
      - `python scripts/check_dependency_sync.py`: OK (6 requirements files match `pyproject.toml`).
      - `python scripts/check_docs_claims.py`: OK (Rules R1–R6 passed).
+
+
+### Task P4.20 — MVP Readiness Acceptance Runner, Golden Corpus & End-to-End Workflow Verification
+- **Time:** 2026-10-26 07:45:00 – 07:55:00 UTC
+- **Context & Objective:**
+  Implement Phase 1 Release Baseline, End-to-End Acceptance, and MVP Verification:
+  1. **MVP Readiness Runner (scripts/mvp_readiness.py):**
+     - Standalone standard-library runner executing 12 core acceptance gates across dependency sync, docs claims, code linting, security scanning, runtime config, auth, tenant isolation, persistence, extraction, and evaluation quality gates.
+     - Supports --quick, --output, and --fail-fast options.
+     - Emits structured JSON diagnostic report to [rtifacts/mvp-readiness.json](../artifacts/mvp-readiness.json) with zero credentials or sensitive data.
+  2. **Golden Document Test Corpus (evaluation/mvp-golden/):**
+     - Established synthetic, version-controlled evaluation dataset: [evaluation/mvp-golden/text/budget-summary.txt](../evaluation/mvp-golden/text/budget-summary.txt).
+     - Cryptographic SHA-256 (568d33d9a7e168b165553185cca2b23cfda4948e7420d83f268a37973fa3de20) in manifest.json.
+     - Expected extractions, table structure, labeled PII, and answerable/unanswerable QA pairs in expected/budget-summary.json.
+  3. **End-to-End Workflow Acceptance Test (	ests/test_mvp_workflow_acceptance.py):**
+     - Verified /v1/ingest with synchronous indexing, metadata extraction, and storage isolation.
+     - Verified /v1/query with grounded evidence retrieval and verifiable source citations pointing to doc_id.
+     - Enforced strict cross-tenant IDOR protection (404 rejection on cross-tenant document probe and query).
+     - Validated safe abstention and cascading deletion (DELETE /v1/documents/{doc_id}).
+     - Verified PII redaction on golden fixture with egis-docprep.
+  4. **API Endpoint & Document Service Bridge:**
+     - Connected /v1/ingest in [src/api/routes/query.py](../src/api/routes/query.py) with RealDocumentService, ensuring documents ingested via /v1/ingest are tracked in SQLite and accessible across both /v1/documents and query routes.
+- **Files Modified / Created:**
+  - scripts/mvp_readiness.py
+  - 	ests/test_mvp_workflow_acceptance.py
+  - src/api/routes/query.py
+  - evaluation/mvp-golden/manifest.json
+  - evaluation/mvp-golden/text/budget-summary.txt
+  - evaluation/mvp-golden/expected/budget-summary.json
+  - evaluation/mvp-golden/README.md
+  - rtifacts/mvp-readiness.json
+  - docs/DEVLOG.md
+- **Verification:**
+  - python scripts/mvp_readiness.py --quick: PASSED (12/12 checks passed in 265.33s).
+  - python scripts/check_dependency_sync.py: OK.
+  - python scripts/check_docs_claims.py: OK (R1–R6 passed).
+  - 
+uff check src tests scripts dashboard: All checks passed.

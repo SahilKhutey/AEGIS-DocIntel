@@ -1,0 +1,19 @@
+AEGIS MVP Acceptance Fixture — Project Orbit
+
+Project Code: ORBIT-731
+Document Owner: Orbit Engineering Team (Contact: Alex Mercer, alex.mercer@example.org, phone 555-0199)
+Approved Operating Budget: 125,000 INR
+Fiscal Year: 2026-Q1
+
+Table 1: Department Resource Allocation
+Department | Headcount | Allocated Budget (INR) | Utilization
+Engineering | 12 | 75,000 | 92%
+Operations | 4 | 30,000 | 85%
+Compliance | 2 | 20,000 | 78%
+
+Security & Compliance Notice:
+Payment cards ending in test sequence 4532015112830366 or employee SSN 000-12-3456 must be masked prior to external transit.
+Key Deliverables:
+1. Complete core extraction and layout-aware topological sorting.
+2. Ensure submodular context packing respects token budgets.
+3. Validate tenant isolation and strict 404 boundary on cross-tenant probes.

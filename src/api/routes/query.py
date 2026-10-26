@@ -122,6 +122,32 @@ if HAS_FASTAPI:
             'ingested_at': time.time(),
         }
 
+        container = getattr(request.app.state, 'container', None)
+        if container and getattr(container, 'document_service', None):
+            try:
+                import hashlib
+                from datetime import datetime, timezone
+                doc_info = {
+                    'doc_id': stats['doc_id'],
+                    'tenant_id': str(tenant_id),
+                    'filename': stats.get('filename', file.filename) or 'upload.txt',
+                    'status': 'ready',
+                    'page_count': stats.get('pages', 1),
+                    'chunk_count': stats.get('elements', 0),
+                    'is_scanned': False,
+                    'language': 'en',
+                    'created_at': datetime.now(timezone.utc),
+                    'updated_at': datetime.now(timezone.utc).isoformat(),
+                    'content_type': file.content_type or 'text/plain',
+                    'byte_size': len(raw),
+                    'sha256': hashlib.sha256(raw).hexdigest(),
+                    'error_code': None,
+                }
+                container.document_service._persist_doc(doc_info, raw_bytes=raw)
+                container.document_service._docs[stats['doc_id']] = doc_info
+            except Exception as persist_err:
+                log.warning('Could not persist to document_service: %s', persist_err)
+
         return IngestResponse(
             doc_id          = stats['doc_id'],
             filename        = stats.get('filename', file.filename),

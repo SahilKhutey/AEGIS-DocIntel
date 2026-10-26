@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "dataset": "aegis-mvp-golden",
+  "purpose": "Regression fixtures for extraction and grounded retrieval",
+  "contains_sensitive_data": false,
+  "documents": [
+    {
+      "id": "budget-summary-001",
+      "path": "text/budget-summary.txt",
+      "format": "text/plain",
+      "sha256": "568d33d9a7e168b165553185cca2b23cfda4948e7420d83f268a37973fa3de20",
+      "expected": "expected/budget-summary.json"
+    }
+  ]
+}
