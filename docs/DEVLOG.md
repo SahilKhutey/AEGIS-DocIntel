@@ -1586,3 +1586,39 @@ uff check src tests scripts dashboard: All checks passed.
   - python scripts/check_dependency_sync.py: OK.
   - python scripts/check_docs_claims.py: OK (R1–R6 passed).
   - python -m ruff check src tests scripts dashboard: All checks passed.
+
+
+### Task P4.23 — Phase 3.1 Security Acceptance Suite & Phase 3.2 Citation Grounding Remediation
+- **Time:** 2026-10-26 09:15:00 – 09:30:00 UTC
+- **Context & Objective:**
+  Complete Phase 3.1 Security Acceptance Suite and Phase 3.2 Citation Grounding Defect Remediation:
+  1. **Work Package A — AuthGuard Acceptance (tests/security/test_auth_guard_acceptance.py):**
+     - Verified deny-by-default on newly introduced routes.
+     - Verified HTTP 401 fail-closed on missing, malformed, or invalid bearer tokens and API keys.
+     - Verified /health public liveness probe and /metrics operational allowlist.
+     - Verified CORS preflight OPTIONS bypass.
+  2. **Work Package B — Role Boundaries & WebSockets (tests/security/test_role_boundaries.py):**
+     - Expanded role coverage for Viewer, Editor, and Admin.
+     - Added get_current_tenant_ws WebSocket connection authentication and policy violation (1008 / 401) rejection on missing credentials.
+     - Added tenant administrator privilege elevation prevention across foreign tenant statistics.
+  3. **Work Package C — Metrics & Deployment Security (tests/security/test_metrics_deployment_security.py):**
+     - Verified API loopback-only host binding (127.0.0.1:8000:8000) in deploy/docker-compose.yml.
+     - Verified Prometheus and Grafana internal bridge network isolation (aegis-internal) with no published host monitoring ports.
+     - Verified Prometheus internal scrape target (aegis-api:8000/metrics).
+     - Verified default telemetry pseudonymization.
+  4. **Phase 3.2 Citation Grounding Remediation (src/models/evidence_object.py):**
+     - Fixed dictionary key lookup bug in validate_citations where citations supplying both doc_id and chunk_id were improperly validated due to ternary operator precedence.
+     - Implemented document mismatch detection: citations where chunk_id belongs to document A but cites document B are strictly flagged as invalid.
+     - Added test_citation_with_valid_chunk_but_wrong_document_is_rejected and test_citation_with_unknown_chunk_is_rejected to tests/test_retrieval_grounding.py (8/8 passed).
+  5. **Evidence Bundle & Documentation:**
+     - Updated artifacts/phase3/security-acceptance.txt (36/36 tests passing).
+     - Updated artifacts/phase3/mvp-release-report.json (8/8 qualification gates passing).
+     - Updated docs/release/SECURITY_ACCEPTANCE.md with fail-closed guard, WebSocket auth, and deployment topology specifications.
+- **Verification:**
+  - pytest tests/security/ -q: 36 passed in 92.01s.
+  - pytest tests/test_retrieval_grounding.py -vv: 8 passed in 5.92s.
+  - pytest tests/test_multitenancy_isolation.py tests/test_runtime_configuration.py -q: 15 passed in 36.25s.
+  - python scripts/run_mvp_acceptance.py: RELEASE QUALIFICATION DECISION: GO (8/8 gates passed in 144.39s).
+  - python scripts/check_dependency_sync.py: OK.
+  - python scripts/check_docs_claims.py: OK (R1–R6 passed).
+  - python -m ruff check src tests scripts dashboard: All checks passed.

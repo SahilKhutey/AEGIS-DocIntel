@@ -184,3 +184,53 @@ def test_hybrid_retrieval_rrf_scoring():
     assert ranked_docs[0].doc_id == "doc_1"
     assert ranked_docs[0].fused_score > 0.0
     assert ranked_docs[0].fused_score > 0.0
+
+
+def test_citation_with_valid_chunk_but_wrong_document_is_rejected():
+    """Citation with valid chunk ID but mismatched document ID is rejected."""
+    evidence = [
+        RetrievedEvidence(
+            document_id="doc-a",
+            chunk_id="chunk-a1",
+            text="Revenue increased by 12%.",
+            page_number=2,
+            section_path=("Financial Results",),
+            retrieval_score=0.91,
+            source_format="pdf",
+        )
+    ]
+    citations = [
+        {
+            "doc_id": "doc-b",
+            "chunk_id": "chunk-a1",
+            "page": 2,
+        }
+    ]
+    result = validate_citations(
+        citations,
+        evidence,
+        tenant_id="tenant-a",
+    )
+    assert result.is_valid is False
+    assert len(result.invalid_citations) == 1
+    assert "belongs to document 'doc-a'" in result.invalid_citations[0]["reason"]
+
+
+def test_citation_with_unknown_chunk_is_rejected():
+    """Citation referencing nonexistent chunk is rejected."""
+    evidence = [
+        RetrievedEvidence(
+            document_id="doc-a",
+            chunk_id="chunk-a1",
+            text="Revenue increased by 12%.",
+            page_number=2,
+            section_path=("Financial Results",),
+            retrieval_score=0.91,
+            source_format="pdf",
+        )
+    ]
+    citations = [{"doc_id": "doc-a", "chunk_id": "chunk-unknown"}]
+    result = validate_citations(citations, evidence, tenant_id="tenant-a")
+    assert result.is_valid is False
+    assert len(result.invalid_citations) == 1
+    assert "not found in retrieved evidence" in result.invalid_citations[0]["reason"]

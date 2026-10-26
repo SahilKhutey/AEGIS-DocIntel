@@ -1,13 +1,13 @@
 {
-  "timestamp": "2026-10-26T09:09:54.563314+00:00",
+  "timestamp": "2026-10-26T09:24:51.781552+00:00",
   "git": {
     "branch": "feat/phase3-production-readiness-qualification",
-    "commit": "22df8c2c14c139b3fa62968ab262d33829110c76",
+    "commit": "70e794bbd309e1ad848454061a6cc3a55ff4dfa8",
     "clean": "false"
   },
   "decision": "GO",
   "overall_passed": true,
-  "total_duration_seconds": 145.41,
+  "total_duration_seconds": 144.39,
   "gates_count": 8,
   "gates_passed": 8,
   "gates": [
@@ -23,7 +23,7 @@
       "gate_id": "docs_claims",
       "name": "Documentation Claims Verification",
       "passed": true,
-      "duration_seconds": 0.25,
+      "duration_seconds": 0.23,
       "command": "C:\\Users\\ASUS\\AppData\\Local\\Programs\\Python\\Python312\\python.exe scripts/check_docs_claims.py",
       "summary": "OK \u2014 docs claims check passed (R1 cold-start, R2 links, R3 counts, R4 pilots, R5 readiness, R6 env-vars)"
     },
@@ -39,7 +39,7 @@
       "gate_id": "release_config",
       "name": "Release Configuration Validation",
       "passed": true,
-      "duration_seconds": 2.02,
+      "duration_seconds": 1.89,
       "command": "C:\\Users\\ASUS\\AppData\\Local\\Programs\\Python\\Python312\\python.exe scripts/validate_release_config.py --env development",
       "summary": "============================================================"
     },
@@ -47,31 +47,31 @@
       "gate_id": "security_acceptance",
       "name": "Security Acceptance Suite (Auth, Roles, Tenant Isolation)",
       "passed": true,
-      "duration_seconds": 89.66,
+      "duration_seconds": 86.74,
       "command": "C:\\Users\\ASUS\\AppData\\Local\\Programs\\Python\\Python312\\python.exe -m pytest tests/security/ -q",
-      "summary": "20 passed in 86.49s (0:01:26)"
+      "summary": "36 passed in 83.65s (0:01:23)"
     },
     {
       "gate_id": "integration_acceptance",
       "name": "Integration & Recovery Suite (Workflow, Persistence, Backup, Recovery)",
       "passed": true,
-      "duration_seconds": 47.39,
+      "duration_seconds": 49.6,
       "command": "C:\\Users\\ASUS\\AppData\\Local\\Programs\\Python\\Python312\\python.exe -m pytest tests/integration/ -q",
-      "summary": "8 passed in 44.19s"
+      "summary": "8 passed in 46.54s"
     },
     {
       "gate_id": "evaluation_acceptance",
       "name": "Evaluation Test Suite (Citations, Context Budget)",
       "passed": true,
-      "duration_seconds": 3.67,
+      "duration_seconds": 3.5,
       "command": "C:\\Users\\ASUS\\AppData\\Local\\Programs\\Python\\Python312\\python.exe -m pytest tests/evaluation/ -q",
-      "summary": "8 passed in 2.12s"
+      "summary": "8 passed in 2.02s"
     },
     {
       "gate_id": "quality_benchmarks",
       "name": "Quality Benchmark Gates (Extraction, Retrieval, Packing, Redaction)",
       "passed": true,
-      "duration_seconds": 2.14,
+      "duration_seconds": 2.18,
       "command": "C:\\Users\\ASUS\\AppData\\Local\\Programs\\Python\\Python312\\python.exe evaluation/scripts/run_all.py --fail-under-gates --output artifacts/phase3/evaluation-report.json",
       "summary": "------------------------------------------------------------"
     }

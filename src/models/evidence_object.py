@@ -63,7 +63,7 @@ def validate_citations(
 ) -> CitationValidationResult:
     """
     Verifies that every citation in the answer references an actual chunk or document
-    in the retrieved evidence set. Flags invented or ungrounded citations.
+    in the retrieved evidence set. Flags invented, ungrounded, or cross-document citations.
     """
     if not citations:
         return CitationValidationResult(
@@ -76,20 +76,39 @@ def validate_citations(
 
     evidence_chunk_ids = {e.chunk_id for e in retrieved_evidence if e.chunk_id}
     evidence_doc_ids = {e.document_id for e in retrieved_evidence if e.document_id}
+    chunk_to_doc = {e.chunk_id: e.document_id for e in retrieved_evidence if e.chunk_id}
 
     invalid: List[Dict[str, Any]] = []
     for idx, c in enumerate(citations):
-        c_chunk = getattr(c, "chunk_id", None) or (c.get("chunk_id") if isinstance(c, dict) else None)
-        c_doc = getattr(c, "doc_id", None) or (c.get("doc_id") if isinstance(c, dict) else None)
+        if isinstance(c, dict):
+            c_chunk = c.get("chunk_id")
+            c_doc = c.get("doc_id") or c.get("document_id")
+        else:
+            c_chunk = getattr(c, "chunk_id", None)
+            c_doc = getattr(c, "doc_id", None) or getattr(c, "document_id", None)
 
-        if c_chunk and c_chunk not in evidence_chunk_ids:
+        if not c_chunk and not c_doc:
+            invalid.append({
+                "citation_index": idx,
+                "chunk_id": c_chunk,
+                "doc_id": c_doc,
+                "reason": "citation contains neither chunk_id nor doc_id",
+            })
+        elif c_chunk and c_chunk not in evidence_chunk_ids:
             invalid.append({
                 "citation_index": idx,
                 "chunk_id": c_chunk,
                 "doc_id": c_doc,
                 "reason": "chunk_id not found in retrieved evidence",
             })
-        elif c_doc and c_doc not in evidence_doc_ids and not c_chunk:
+        elif c_chunk and c_doc and chunk_to_doc.get(c_chunk) != c_doc:
+            invalid.append({
+                "citation_index": idx,
+                "chunk_id": c_chunk,
+                "doc_id": c_doc,
+                "reason": f"chunk_id '{c_chunk}' belongs to document '{chunk_to_doc.get(c_chunk)}', not cited document '{c_doc}'",
+            })
+        elif c_doc and not c_chunk and c_doc not in evidence_doc_ids:
             invalid.append({
                 "citation_index": idx,
                 "chunk_id": c_chunk,
