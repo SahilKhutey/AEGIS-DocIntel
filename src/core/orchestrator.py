@@ -477,6 +477,25 @@ class AMDIOrchestrator:
             await self._vector_store.delete(doc_id=doc_id)
         if getattr(self, "_semantic_cache", None) is not None:
             await self._semantic_cache.invalidate(doc_id=doc_id, tenant_id=tenant_id)
+        if self._memory is not None:
+            try:
+                await self._call_maybe_async(self._memory.invalidate, doc_id)
+            except Exception:
+                pass
+            if hasattr(self._memory, "storage") and hasattr(self._memory.storage, "items_at_level"):
+                try:
+                    from src.engines.memory.hierarchical_memory import MemoryLevel
+                    for level in MemoryLevel:
+                        for item in list(self._memory.storage.items_at_level(level)):
+                            if (tenant_id and item.item_id.startswith(f"{tenant_id}::")) or doc_id in item.item_id:
+                                self._memory.storage.remove(item.item_id, level)
+                except Exception:
+                    pass
+            if hasattr(self._memory, "cache_clear"):
+                try:
+                    self._memory.cache_clear()
+                except Exception:
+                    pass
         return True
 
     # ------------------------------------------------------------------

@@ -1705,3 +1705,36 @@ uff check src tests scripts dashboard: All checks passed.
   - `python scripts/check_docs_claims.py`: OK (R1–R6 passed).
   - `ruff check src tests scripts`: All checks passed.
   - `gitleaks detect --verbose`: 231 commits scanned, 0 leaks found.
+
+
+### Task P4.27 — MVP 2 Retrieval, Indexing, Ranking & Evidence Assembly Implementation
+- **Time:** 2026-10-27 14:15:00 UTC
+- **Context & Objective:**
+  Deliver MVP 2 Retrieval, Indexing, Ranking & Source-Grounded Context Assembly:
+  1. **Query Validation Boundary (`src/engines/retrieval/query_contract.py`):**
+     - Implemented `RetrievalQuery` (frozen dataclass) and `validate_query(...)`.
+     - Validates and normalizes non-empty string queries, enforces non-empty tenant IDs, validates integer `top_k` bounds (0 < top_k <= max_top_k, rejecting booleans and floats), and deduplicates document filters while preserving order.
+  2. **Rank Fusion Hardening (`src/engines/retrieval/ranker.py`):**
+     - Hardened `HybridRanker(method="rrf")` to strictly validate positive weights, reject non-finite scores (`NaN`, `inf`), deduplicate candidate IDs inside single search sources (taking the best score), and enforce deterministic tie-breaking across runs and platforms.
+  3. **Evidence Models & Citation Integrity (`src/models/evidence_object.py`):**
+     - Enhanced `RetrievedEvidence` with `tenant_id` and `is_deleted` attributes.
+     - Hardened `validate_citations` to detect and flag fabricated chunk IDs, mismatched document IDs, deleted documents/chunks, duplicate citations, and cross-tenant access.
+  4. **Index Lifecycle & Cache Consistency (`src/core/orchestrator.py`):**
+     - Enhanced `delete_document` to cascade deletion into `self._memory` storage, clearing cached query responses and preventing stale query hits for deleted documents.
+  5. **Context Budget Enforcement (`src/engines/context/context_builder.py`):**
+     - Verified knapsack budget limits, system prompt and user question accounting, and safe skipping of oversized passages.
+  6. **Regression Test Suites:**
+     - `tests/test_mvp2_query_contract.py`: 11 passed (boundary validation, normalization, error handling).
+     - `tests/test_mvp2_rank_fusion.py`: 11 passed (RRF consensus promotion, weight validation, tie-breaking).
+     - `tests/test_mvp2_retrieval_quality.py`: 9 passed (MRR, Recall@k math sanity, unanswerable conventions).
+     - `tests/test_mvp2_context_budget.py`: 3 passed (budget limits, oversized elements, source mapping).
+     - `tests/test_mvp2_index_lifecycle.py`: 3 passed (lifecycle ingest, update, delete, multi-tenant isolation).
+     - `tests/test_retrieval_grounding.py`: 11 passed (citation integrity, tenant scoping, abstention).
+- **Verification:**
+  - `python evaluation/scripts/evaluate_retrieval.py`: PASSED (MRR: 1.0, Recall@5: 0.9231, nDCG@5: 0.9276, Abstention: 1.0).
+  - `python evaluation/scripts/run_all.py --fail-under-gates`: PASSED (All 4 quality gates met).
+  - `python scripts/check_dependency_sync.py`: OK.
+  - `python scripts/check_docs_claims.py`: OK (R1-R6 passed).
+  - `python scripts/validate_mvp_dataset.py`: PASSED.
+  - `ruff check src tests scripts`: All checks passed.
+  - `gitleaks detect --verbose`: 232 commits scanned, 0 leaks found.

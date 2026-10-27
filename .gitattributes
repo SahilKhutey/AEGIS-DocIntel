@@ -6,3 +6,6 @@
 *.zip binary
 *.tar.gz binary
 *.whl binary
+
+# Preserve exact line endings for evaluation golden fixtures across platforms
+evaluation/mvp-golden/** text eol=lf

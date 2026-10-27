@@ -40,6 +40,7 @@ from .geometry_search import GeometryResult, GeometrySearch
 from .graph_search import GraphResult, GraphSearch
 from .hybrid_retrieval import HybridConfig, HybridRetriever as NewHybridRetriever
 from .matrix_search import MatrixResult, MatrixSearch
+from .query_contract import RetrievalQuery, validate_query
 # Promoter import removed as it resides in the memory engine
 from .ranker import HybridRanker, HybridRanking, RankedDocument
 from .recurrence_search import RecurrenceResult, RecurrenceSearch
@@ -156,6 +157,8 @@ __all__ = [
     "RetrievalReport",
     "HybridRetriever",
     "HybridConfig",
+    "RetrievalQuery",
+    "validate_query",
     "SemanticSearch",
     "SemanticResult",
     "MatrixSearch",

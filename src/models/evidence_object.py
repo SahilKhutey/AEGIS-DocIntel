@@ -44,6 +44,8 @@ class RetrievedEvidence:
     section_path: Tuple[str, ...]
     retrieval_score: float
     source_format: str = "pdf"
+    tenant_id: str = ""
+    is_deleted: bool = False
 
 
 @dataclass(frozen=True)
@@ -60,10 +62,12 @@ def validate_citations(
     citations: List[Any],
     retrieved_evidence: List[RetrievedEvidence],
     tenant_id: str = "",
+    allow_duplicates: bool = False,
 ) -> CitationValidationResult:
     """
     Verifies that every citation in the answer references an actual chunk or document
-    in the retrieved evidence set. Flags invented, ungrounded, or cross-document citations.
+    in the retrieved evidence set. Flags invented, ungrounded, cross-document,
+    unauthorized tenant, deleted document, or duplicate citations.
     """
     if not citations:
         return CitationValidationResult(
@@ -77,8 +81,12 @@ def validate_citations(
     evidence_chunk_ids = {e.chunk_id for e in retrieved_evidence if e.chunk_id}
     evidence_doc_ids = {e.document_id for e in retrieved_evidence if e.document_id}
     chunk_to_doc = {e.chunk_id: e.document_id for e in retrieved_evidence if e.chunk_id}
+    chunk_to_tenant = {e.chunk_id: getattr(e, "tenant_id", "") for e in retrieved_evidence if e.chunk_id}
+    chunk_to_deleted = {e.chunk_id: getattr(e, "is_deleted", False) for e in retrieved_evidence if e.chunk_id}
 
     invalid: List[Dict[str, Any]] = []
+    seen_keys: set[Tuple[Any, Any]] = set()
+
     for idx, c in enumerate(citations):
         if isinstance(c, dict):
             c_chunk = c.get("chunk_id")
@@ -86,6 +94,17 @@ def validate_citations(
         else:
             c_chunk = getattr(c, "chunk_id", None)
             c_doc = getattr(c, "doc_id", None) or getattr(c, "document_id", None)
+
+        cit_key = (c_chunk, c_doc)
+        if not allow_duplicates and cit_key in seen_keys and (c_chunk or c_doc):
+            invalid.append({
+                "citation_index": idx,
+                "chunk_id": c_chunk,
+                "doc_id": c_doc,
+                "reason": f"duplicate citation '{c_chunk}'",
+            })
+            continue
+        seen_keys.add(cit_key)
 
         if not c_chunk and not c_doc:
             invalid.append({
@@ -101,12 +120,26 @@ def validate_citations(
                 "doc_id": c_doc,
                 "reason": "chunk_id not found in retrieved evidence",
             })
+        elif c_chunk and chunk_to_deleted.get(c_chunk, False):
+            invalid.append({
+                "citation_index": idx,
+                "chunk_id": c_chunk,
+                "doc_id": c_doc,
+                "reason": f"chunk_id '{c_chunk}' references a deleted document or chunk",
+            })
         elif c_chunk and c_doc and chunk_to_doc.get(c_chunk) != c_doc:
             invalid.append({
                 "citation_index": idx,
                 "chunk_id": c_chunk,
                 "doc_id": c_doc,
                 "reason": f"chunk_id '{c_chunk}' belongs to document '{chunk_to_doc.get(c_chunk)}', not cited document '{c_doc}'",
+            })
+        elif c_chunk and tenant_id and chunk_to_tenant.get(c_chunk) and chunk_to_tenant.get(c_chunk) != tenant_id:
+            invalid.append({
+                "citation_index": idx,
+                "chunk_id": c_chunk,
+                "doc_id": c_doc,
+                "reason": f"chunk_id '{c_chunk}' belongs to tenant '{chunk_to_tenant.get(c_chunk)}', unauthorized for '{tenant_id}'",
             })
         elif c_doc and not c_chunk and c_doc not in evidence_doc_ids:
             invalid.append({

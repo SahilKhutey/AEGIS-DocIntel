@@ -234,3 +234,65 @@ def test_citation_with_unknown_chunk_is_rejected():
     assert result.is_valid is False
     assert len(result.invalid_citations) == 1
     assert "not found in retrieved evidence" in result.invalid_citations[0]["reason"]
+
+
+def test_duplicate_citation_is_rejected():
+    """P2.4: Duplicate citation to the same chunk and doc is flagged."""
+    evidence = [
+        RetrievedEvidence(
+            document_id="doc-a",
+            chunk_id="chunk-a1",
+            text="Revenue increased by 12%.",
+            page_number=2,
+            section_path=("Financial Results",),
+            retrieval_score=0.91,
+            source_format="pdf",
+        )
+    ]
+    citations = [
+        {"doc_id": "doc-a", "chunk_id": "chunk-a1"},
+        {"doc_id": "doc-a", "chunk_id": "chunk-a1"},
+    ]
+    result = validate_citations(citations, evidence, tenant_id="tenant-a")
+    assert result.is_valid is False
+    assert result.valid_citations == 1
+    assert len(result.invalid_citations) == 1
+    assert "duplicate citation" in result.invalid_citations[0]["reason"]
+
+
+def test_citation_referencing_deleted_document_is_rejected():
+    """P2.4: Citation referencing a chunk marked deleted is rejected."""
+    evidence = [
+        RetrievedEvidence(
+            document_id="doc-a",
+            chunk_id="chunk-a1",
+            text="Deleted content.",
+            page_number=1,
+            section_path=(),
+            retrieval_score=0.85,
+            is_deleted=True,
+        )
+    ]
+    citations = [{"doc_id": "doc-a", "chunk_id": "chunk-a1"}]
+    result = validate_citations(citations, evidence, tenant_id="tenant-a")
+    assert result.is_valid is False
+    assert "deleted document or chunk" in result.invalid_citations[0]["reason"]
+
+
+def test_citation_referencing_unauthorized_tenant_chunk_is_rejected():
+    """P2.4: Citation referencing a chunk owned by another tenant is rejected."""
+    evidence = [
+        RetrievedEvidence(
+            document_id="doc-secret",
+            chunk_id="chunk-secret-1",
+            text="Tenant B confidential.",
+            page_number=1,
+            section_path=(),
+            retrieval_score=0.90,
+            tenant_id="tenant-b",
+        )
+    ]
+    citations = [{"doc_id": "doc-secret", "chunk_id": "chunk-secret-1"}]
+    result = validate_citations(citations, evidence, tenant_id="tenant-a")
+    assert result.is_valid is False
+    assert "unauthorized for 'tenant-a'" in result.invalid_citations[0]["reason"]

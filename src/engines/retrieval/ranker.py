@@ -12,6 +12,7 @@ Combines ranked lists from multiple search strategies using:
 from __future__ import annotations
 
 from dataclasses import dataclass, field
+import math
 from typing import Any, Dict, List, Optional, Tuple
 
 import numpy as np
@@ -100,34 +101,52 @@ class HybridRanker:
         """
         if not method_results:
             raise RankFusionError("No method results provided.")
+
+        if top_k is not None:
+            if isinstance(top_k, bool) or not isinstance(top_k, int) or top_k <= 0:
+                raise ValueError("top_k must be a positive integer.")
+
         w = weights or self.weights
-        # normalize weights
+        if any(w.get(m, 1.0) < 0 for m in method_results):
+            raise ValueError("Weights must be non-negative.")
         w_total = sum(w.get(m, 1.0) for m in method_results)
         if w_total <= 0:
-            w_total = 1.0
+            raise ValueError("Sum of weights must be positive.")
         norm_w = {m: w.get(m, 1.0) / w_total for m in method_results}
 
+        # Validate finite scores and deduplicate within each method list (taking best score)
+        clean_results: Dict[str, List[Tuple[Any, float]]] = {}
+        for method, results in method_results.items():
+            doc_scores: Dict[Any, float] = {}
+            for did, s in results:
+                s_val = float(s)
+                if not math.isfinite(s_val):
+                    raise ValueError(f"Non-finite score encountered for doc_id {did}: {s_val}")
+                if did not in doc_scores or s_val > doc_scores[did]:
+                    doc_scores[did] = s_val
+            clean_results[method] = list(doc_scores.items())
+
         if self.method == "rrf":
-            fused_scores = self._rrf(method_results, norm_w)
+            fused_scores = self._rrf(clean_results, norm_w)
         elif self.method == "borda":
-            fused_scores = self._borda(method_results, norm_w)
+            fused_scores = self._borda(clean_results, norm_w)
         elif self.method == "weighted_sum":
-            fused_scores = self._weighted_sum(method_results, norm_w)
+            fused_scores = self._weighted_sum(clean_results, norm_w)
         elif self.method == "condorcet":
-            fused_scores = self._condorcet(method_results, norm_w)
+            fused_scores = self._condorcet(clean_results, norm_w)
         else:
             raise RankFusionError(f"Unknown method: {self.method}")
 
-        # sort
-        sorted_docs = sorted(fused_scores.items(), key=lambda x: x[1], reverse=True)
+        # Deterministic sorting: higher fused score first, then doc_id string for tie-breaking
+        sorted_docs = sorted(fused_scores.items(), key=lambda x: (-x[1], str(x[0])))
         if top_k is not None:
             sorted_docs = sorted_docs[:top_k]
 
         # build per-method rank map
         per_method_ranks: Dict[str, Dict[Any, int]] = {}
-        for method, results in method_results.items():
+        for method, results in clean_results.items():
             per_method_ranks[method] = {}
-            sorted_results = sorted(results, key=lambda x: x[1], reverse=True)
+            sorted_results = sorted(results, key=lambda x: (-x[1], str(x[0])))
             for rank, (did, _) in enumerate(sorted_results, start=1):
                 per_method_ranks[method][did] = rank
 
@@ -136,7 +155,7 @@ class HybridRanker:
             per_method_score = {}
             per_method_rank = {}
             methods_found = []
-            for method, results in method_results.items():
+            for method, results in clean_results.items():
                 for d, s in results:
                     if d == did:
                         per_method_score[method] = float(s)
@@ -165,7 +184,7 @@ class HybridRanker:
         fused: Dict[Any, float] = {}
         for method, results in method_results.items():
             weight = norm_w.get(method, 1.0)
-            sorted_results = sorted(results, key=lambda x: x[1], reverse=True)
+            sorted_results = sorted(results, key=lambda x: (-x[1], str(x[0])))
             for rank, (did, _) in enumerate(sorted_results, start=1):
                 fused[did] = fused.get(did, 0.0) + weight / (self.rrf_k + rank)
         return fused
@@ -180,7 +199,7 @@ class HybridRanker:
         fused: Dict[Any, float] = {}
         for method, results in method_results.items():
             weight = norm_w.get(method, 1.0)
-            sorted_results = sorted(results, key=lambda x: x[1], reverse=True)
+            sorted_results = sorted(results, key=lambda x: (-x[1], str(x[0])))
             for rank, (did, _) in enumerate(sorted_results, start=1):
                 points = N - rank
                 fused[did] = fused.get(did, 0.0) + weight * max(points, 0)
@@ -204,7 +223,7 @@ class HybridRanker:
         return fused
 
     def _condorcet(self, method_results: Dict[str, List[Tuple[Any, float]]], norm_w: Dict[str, float]) -> Dict[Any, float]:
-        all_docs = list({did for results in method_results.values() for did, _ in results})
+        all_docs = sorted({did for results in method_results.values() for did, _ in results}, key=lambda x: str(x))
         n = len(all_docs)
         if n == 0:
             return {}
@@ -212,7 +231,7 @@ class HybridRanker:
         ranks: Dict[str, Dict[Any, int]] = {}
         for method, results in method_results.items():
             ranks[method] = {}
-            sorted_res = sorted(results, key=lambda x: x[1], reverse=True)
+            sorted_res = sorted(results, key=lambda x: (-x[1], str(x[0])))
             for r, (did, _) in enumerate(sorted_res, start=1):
                 ranks[method][did] = r
 
