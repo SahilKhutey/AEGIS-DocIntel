@@ -38,7 +38,7 @@ from src.api.models import (
     IngestionStatusResponse, BatchUploadRequest,
     HealthResponse, ErrorResponse,
 )
-from src.api.routers import documents, queries, admin, webhooks
+from src.api.routers import documents, queries, admin, webhooks, answers
 from src.config import settings
 from src.core.resilience import (
     DocumentStorageError,
@@ -186,6 +186,7 @@ def create_app() -> FastAPI:
     # ── Routers ────────────────────────────────────────────────
     app.include_router(documents.router, prefix="/v1/documents", tags=["Documents"])
     app.include_router(queries.router, prefix="/v1/query", tags=["Query"])
+    app.include_router(answers.router, prefix="/v1/answers", tags=["Answers"])
     app.include_router(admin.router, prefix="/v1/admin", tags=["Admin"])
     app.include_router(webhooks.router, prefix="/v1/webhooks", tags=["Webhooks"])
 

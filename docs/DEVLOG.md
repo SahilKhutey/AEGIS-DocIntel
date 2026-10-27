@@ -1738,3 +1738,41 @@ uff check src tests scripts dashboard: All checks passed.
   - `python scripts/validate_mvp_dataset.py`: PASSED.
   - `ruff check src tests scripts`: All checks passed.
   - `gitleaks detect --verbose`: 232 commits scanned, 0 leaks found.
+
+
+### Task P4.28 — MVP 3 Evidence-Grounded Answer Generation & Citation Validation Implementation
+- **Time:** 2026-10-27 15:05:00 UTC
+- **Context & Objective:**
+  Deliver MVP 3 Answer Generation, Evidence Grounding, Citation Validation & Trustworthy Responses:
+  1. **Generation Data Contracts (`src/engines/generation/contracts.py`):**
+     - Implemented frozen dataclasses (`Evidence`, `Claim`, `Citation`, `GenerationPolicy`, `GenerationRequest`, `GenerationResult`).
+     - Enforces question length bounds (1..4000), tenant validation, evidence boundaries (<= 50 chunks, <= 8000 chars per chunk), and fail-closed cross-tenant evidence checks.
+  2. **Prompt Construction with Untrusted-Data Boundary (`src/engines/generation/prompts.py`):**
+     - Isolated retrieved document chunks in JSON envelopes within user prompt templates.
+     - Enforces system instruction separation to mitigate prompt injection, jailbreaks, and indirect document attacks.
+  3. **Deterministic Output & Citation Validation (`src/engines/generation/validation.py`):**
+     - Implemented deterministic model output parser, JSON schema validator, claim reference verification, and citation resolution.
+     - Strictly validates that every factual claim cites at least one valid evidence chunk, and every cited evidence chunk exists in retrieved evidence.
+  4. **Provider-Neutral Model Protocol & Generation Wrapper (`src/engines/generation/generator.py`):**
+     - Defined `TextModel` Protocol and `AnswerGenerator` wrapper with error classification (`ModelGenerationError`).
+  5. **Generation Orchestration Service (`src/engines/generation/service.py`):**
+     - Implemented `GenerationService` coordinating validation, prompt construction, model generation, citation mapping, and safe abstention.
+     - Guarantees immediate safe abstention on empty evidence, model-detected insufficient evidence, and conflicting evidence sources.
+  6. **Answers API Router (`src/api/routers/answers.py`):**
+     - Implemented and mounted `POST /v1/answers` in `src/main.py` with multi-tenant auth, candidate evidence gathering, generation execution, and citation resolution.
+  7. **Comprehensive Regression Test Suites:**
+     - `tests/test_mvp3_contracts.py`: Input boundary and invariant verification.
+     - `tests/test_mvp3_prompts.py`: Prompt structure and injection boundary isolation.
+     - `tests/test_mvp3_validation.py`: Output schema parsing, claim reference checks, citation mapping.
+     - `tests/test_mvp3_generation.py`: Generation service end-to-end execution, provider failure handling.
+     - `tests/test_mvp3_abstention.py`: Safe abstention on empty, insufficient, and conflicting evidence.
+     - `tests/test_mvp3_security.py`: Cross-tenant evidence rejection, prompt injection containment.
+     - `tests/test_mvp3_api.py`: FastAPI endpoint authentication, validation, grounded answers, and tenant isolation.
+- **Verification:**
+  - `python evaluation/scripts/evaluate_retrieval.py`: PASSED (MRR: 1.0, Recall@5: 0.9231, nDCG@5: 0.9276, Abstention: 1.0).
+  - `python evaluation/scripts/run_all.py --fail-under-gates`: PASSED (All 4 quality gates met).
+  - `python scripts/check_dependency_sync.py`: OK.
+  - `python scripts/check_docs_claims.py`: OK (R1-R6 passed).
+  - `python scripts/validate_mvp_dataset.py`: PASSED.
+  - `ruff check src tests scripts`: All checks passed.
+  - `gitleaks detect --verbose`: Scanned with 0 leaks found.
