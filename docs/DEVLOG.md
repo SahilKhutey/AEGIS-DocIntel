@@ -1680,3 +1680,28 @@ uff check src tests scripts dashboard: All checks passed.
   - `python scripts/check_dependency_sync.py`: OK.
   - `python scripts/check_docs_claims.py`: OK (R1–R6 passed).
   - `ruff check src tests scripts dashboard`: All checks passed.
+
+
+### Task P4.26 — MVP 1 Document-to-Context Pipeline & Provenance Chunking Implementation
+- **Time:** 2026-10-27 13:25:00 UTC
+- **Context & Objective:**
+  Deliver MVP 1 Core Document-to-Context Pipeline:
+  1. **Deterministic Context Chunker (`src/core/context_pipeline.py`):**
+     - Implemented `normalize_text` to standardize CRLF/CR line endings while preserving paragraph boundaries (`\n\n`).
+     - Implemented `chunk_text` with half-open character offsets (`char_start`, `char_end`), contiguous coverage without gaps, bounded overlap, and stable identifiers (`{doc_id}:chunk:{index:04d}`).
+     - Implemented `build_context_for_normalized_text` adapter boundary.
+     - Implemented `build_context_from_normalized_document` mapping chunks to real `page_start` and `page_end` provenance from `NormalizedDocument` block locations without heuristics.
+  2. **Regression Test Suite (`tests/test_context_pipeline_mvp1.py`):**
+     - Verified paragraph boundary preservation, empty text handling, source slice reconstruction, gap-free contiguous coverage, deterministic outputs, parameter validation (`ValueError` on invalid boundaries), adapter interface, multi-page provenance mapping, and scaling up to 50k characters.
+  3. **Baseline Integration Verification:**
+     - Verified all existing ingestion, workflow, state, retrieval grounding, and tenant isolation tests pass with zero regressions.
+- **Verification:**
+  - `pytest tests/test_context_pipeline_mvp1.py -v`: 9 passed in 2.35s.
+  - `pytest tests/test_ingestion.py tests/test_ingestion_hardening.py -q`: 47 passed in 2.78s.
+  - `pytest tests/test_real_world_ingestion.py -q`: 5 passed in 19.90s.
+  - `pytest tests/test_ingest_workflow.py tests/test_document_state.py tests/test_retrieval_grounding.py tests/test_retrieval_tenant_isolation.py -q`: 31 passed in 11.74s.
+  - `python evaluation/scripts/run_all.py --fail-under-gates`: PASSED (All 4 quality gates met).
+  - `python scripts/check_dependency_sync.py`: OK.
+  - `python scripts/check_docs_claims.py`: OK (R1–R6 passed).
+  - `ruff check src tests scripts`: All checks passed.
+  - `gitleaks detect --verbose`: 231 commits scanned, 0 leaks found.
