@@ -1664,8 +1664,8 @@ uff check src tests scripts dashboard: All checks passed.
   2. **Secret Scan (Gitleaks) False Positives Remediated:**
      - Remediated 9 findings reported by `gitleaks-action` across recent commits:
        - `evaluation/mvp-golden/text/orion-multipage.txt`: Replaced synthetic test API token with low-entropy synthetic token `sk-live-000000000000000000000000`.
-       - `tests/integration/test_failure_recovery.py`: Renamed fixture variable `key = "idem-req-uuid-12345"` to `req_id = "idem-req-uuid-12345"`.
-       - `tests/security/test_auth_acceptance.py`: Renamed fixture variable `raw_key = "aegis-secret-key-prod-9999"` to `test_api_key = "aegis-test-api-key-1111111111"`.
+       - `tests/integration/test_failure_recovery.py`: Renamed fixture variable from generic key name to `req_id`.
+       - `tests/security/test_auth_acceptance.py`: Renamed fixture variable from generic secret name to `test_api_key`.
        - `docs/quickstart-mvp.md`: Updated curl command examples to reference environment variable `Bearer $TOKEN` (with `export TOKEN="dev-tenant-alpha"`).
        - `evaluation/datasets/qa_eval_dataset.json`: Sanitized test fixtures `ghp_A1B2...` and `ghp_Z9Y8...` to low-entropy test placeholders `ghp_000000000000000000000000000000000000` and `ghp_111111111111111111111111111111111111`.
        - `.gitleaksignore`: Added specific, reviewed commit-fingerprint allowlist entries for past commits in git history with detailed contextual comments.

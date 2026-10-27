@@ -71,3 +71,8 @@ f9503cc807c1cfcf2f77323cfedd46adfebacc10:tests/test_observability_and_diagnostic
 # evaluation/mvp-golden/text/orion-multipage.txt:20 (commit ee9a696, 2026-10-26)
 #   Matched `generic-api-key` on synthetic multi-page document PII test token.
 ee9a6964e1d7adc414edf78e79361960c25c82ce:evaluation/mvp-golden/text/orion-multipage.txt:generic-api-key:20
+#
+# docs/DEVLOG.md:1667, 1668 (commit bc065a1, 2026-10-27)
+#   Matched `generic-api-key` on prose descriptions of resolved test fixture variables.
+bc065a16f126b97920517f077e19581412b9646f:docs/DEVLOG.md:generic-api-key:1667
+bc065a16f126b97920517f077e19581412b9646f:docs/DEVLOG.md:generic-api-key:1668
