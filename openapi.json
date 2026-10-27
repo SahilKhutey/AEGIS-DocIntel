@@ -561,6 +561,56 @@
         ]
       }
     },
+    "/v1/answers": {
+      "post": {
+        "tags": [
+          "Answers"
+        ],
+        "summary": "Generate evidence-grounded answer with validated citations",
+        "description": "Generate a strictly source-grounded answer for the authenticated tenant.\n\nWorkflow:\n1. Validate query format, tenant identity, and document filter boundaries.\n2. Retrieve authorized evidence chunks scoped to the tenant.\n3. Invoke the generation service with untrusted-evidence boundaries.\n4. Validate citation membership and claim grounding.\n5. Safely abstain on insufficient or conflicting evidence.",
+        "operationId": "create_answer_v1_answers_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AnswerRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AnswerResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          },
+          {
+            "APIKeyHeader": []
+          }
+        ]
+      }
+    },
     "/v1/admin/stats": {
       "get": {
         "tags": [
@@ -2508,6 +2558,97 @@
           "document"
         ],
         "title": "AnomalyScanRequest"
+      },
+      "AnswerCitation": {
+        "properties": {
+          "evidence_id": {
+            "type": "string",
+            "title": "Evidence Id"
+          },
+          "document_id": {
+            "type": "string",
+            "title": "Document Id"
+          },
+          "page_number": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Page Number"
+          },
+          "section_path": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Section Path"
+          }
+        },
+        "type": "object",
+        "required": [
+          "evidence_id",
+          "document_id"
+        ],
+        "title": "AnswerCitation"
+      },
+      "AnswerRequest": {
+        "properties": {
+          "question": {
+            "type": "string",
+            "maxLength": 4000,
+            "minLength": 1,
+            "title": "Question"
+          },
+          "document_ids": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "maxItems": 1000,
+            "title": "Document Ids"
+          }
+        },
+        "type": "object",
+        "required": [
+          "question"
+        ],
+        "title": "AnswerRequest"
+      },
+      "AnswerResponse": {
+        "properties": {
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "answer": {
+            "type": "string",
+            "title": "Answer"
+          },
+          "citations": {
+            "items": {
+              "$ref": "#/components/schemas/AnswerCitation"
+            },
+            "type": "array",
+            "title": "Citations"
+          },
+          "warnings": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Warnings"
+          }
+        },
+        "type": "object",
+        "required": [
+          "status",
+          "answer"
+        ],
+        "title": "AnswerResponse"
       },
       "AutoAnnotateRequest": {
         "properties": {
