@@ -27,7 +27,7 @@ from src.services.storage_errors import DocumentStorageError
 async def test_idempotency_store_duplicate_and_in_progress_detection():
     """Verify idempotency store rejects concurrent duplicates and returns completed records."""
     store = IdempotencyStore(ttl_seconds=60.0)
-    key = "idem-req-uuid-12345"
+    req_id = "idem-req-uuid-12345"
     payload = b'{"filename": "contract.pdf"}'
     payload_hash = store.compute_payload_hash(payload)
 
@@ -35,7 +35,7 @@ async def test_idempotency_store_duplicate_and_in_progress_detection():
     initial = await store.check_and_start(
         tenant_id="tenant-alpha",
         operation="documents.upload",
-        key=key,
+        key=req_id,
         payload_hash=payload_hash,
     )
     assert initial is None
@@ -45,7 +45,7 @@ async def test_idempotency_store_duplicate_and_in_progress_detection():
         await store.check_and_start(
             tenant_id="tenant-alpha",
             operation="documents.upload",
-            key=key,
+            key=req_id,
             payload_hash=payload_hash,
         )
 
@@ -54,7 +54,7 @@ async def test_idempotency_store_duplicate_and_in_progress_detection():
     await store.complete(
         tenant_id="tenant-alpha",
         operation="documents.upload",
-        key=key,
+        key=req_id,
         response_code=200,
         response_body=response_body,
     )
@@ -63,7 +63,7 @@ async def test_idempotency_store_duplicate_and_in_progress_detection():
     cached_record = await store.check_and_start(
         tenant_id="tenant-alpha",
         operation="documents.upload",
-        key=key,
+        key=req_id,
         payload_hash=payload_hash,
     )
     assert cached_record is not None
@@ -76,7 +76,7 @@ async def test_idempotency_store_duplicate_and_in_progress_detection():
         await store.check_and_start(
             tenant_id="tenant-alpha",
             operation="documents.upload",
-            key=key,
+            key=req_id,
             payload_hash=diff_hash,
         )
 

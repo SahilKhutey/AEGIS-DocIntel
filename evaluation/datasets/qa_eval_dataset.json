@@ -644,10 +644,10 @@
     },
     {
       "id": "priv_03",
-      "text": "Use internal API token ghp_A1B2C3D4E5F6G7H8I9J0K1L2M3N4O5P6Q7R8 for deployment access.",
+      "text": "Use internal API token ghp_000000000000000000000000000000000000 for deployment access.",
       "expected_pii": [
         {
-          "entity": "ghp_A1B2C3D4E5F6G7H8I9J0K1L2M3N4O5P6Q7R8",
+          "entity": "ghp_000000000000000000000000000000000000",
           "type": "API_KEY"
         }
       ],
@@ -784,10 +784,10 @@
     },
     {
       "id": "priv_13",
-      "text": "GitHub deployment sync requires secret token ghp_Z9Y8X7W6V5U4T3S2R1Q0P9O8N7M6L5K4J3I2.",
+      "text": "GitHub deployment sync requires secret token ghp_111111111111111111111111111111111111.",
       "expected_pii": [
         {
-          "entity": "ghp_Z9Y8X7W6V5U4T3S2R1Q0P9O8N7M6L5K4J3I2",
+          "entity": "ghp_111111111111111111111111111111111111",
           "type": "API_KEY"
         }
       ],

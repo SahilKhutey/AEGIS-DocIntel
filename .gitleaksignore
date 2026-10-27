@@ -6,7 +6,68 @@
 #   not a credential. Full-history scan (157 commits, all branches) found no other hits.
 6323de3b7a1f6ac30b0a1af6d2a58225976255b4:production/PRODUCTION_RELEASE_CHECKLIST.md:generic-api-key:372
 #
+# start.py:51, 53, 57 (commit baa9776, 2026-06-21)
+#   Matched `curl-auth-header` on placeholder examples for local dev server output.
+baa97760d1aba7b20373c3ea023422d0b9805941:start.py:curl-auth-header:51
+baa97760d1aba7b20373c3ea023422d0b9805941:start.py:curl-auth-header:53
+baa97760d1aba7b20373c3ea023422d0b9805941:start.py:curl-auth-header:57
+#
+# backend/src/streaming/client_examples.py:54 (commit 16823d2, 2026-06-22)
+#   Matched `curl-auth-header` on placeholder snippet using "YOUR_TOKEN".
+16823d2e99bd7f43258f5d1057581c595b4615d2:backend/src/streaming/client_examples.py:curl-auth-header:54
+#
+# tests/FINAL/conftest.py:15 (commit 883e761, 2026-07-31)
+#   Matched `generic-api-key` on mock JWT secret fixture "test-secret-with-enough-entropy-1234".
+883e7615c7c74cbc70179873505001de2eaa088d:tests/FINAL/conftest.py:generic-api-key:15
+#
+# tests/api/test_middleware_auth.py:17, tests/security/test_auth_jwt.py:22 (commit c1bf688, 2026-07-31)
+#   Matched `generic-api-key` on mock JWT secret fixture "test-secret-with-enough-entropy-1234".
+c1bf68813be2475c53e6cbacb715b9b81ecb8778:tests/api/test_middleware_auth.py:generic-api-key:17
+c1bf68813be2475c53e6cbacb715b9b81ecb8778:tests/security/test_auth_jwt.py:generic-api-key:22
+#
 # tests/test_security_pentest_proof.py:213 (commit 72300ab, 2026-10-23)
 #   Matched `generic-api-key` on the test fixture secret "whsec_test_secret_key_12345"
 #   used in unit test for multi-tenant webhook subscription isolation.
 72300ab23dd548f7c89c753700eb60f45f7bf038:tests/test_security_pentest_proof.py:generic-api-key:213
+#
+# docs/deployment/README.md:66 (commit a387273, 2026-10-24)
+#   Matched `generic-api-key` on SHA-256 hash example for AEGIS_API_KEY_HASHES env var.
+a387273e993907123df50345bc5f832c79fb7d91:docs/deployment/README.md:generic-api-key:66
+#
+# tests/test_observability_and_diagnostics.py:109 (commit f9503cc, 2026-10-24)
+#   Matched `generic-api-key` on mock key literal "sec_k1_abcdef1234567890" in unit test.
+f9503cc807c1cfcf2f77323cfedd46adfebacc10:tests/test_observability_and_diagnostics.py:generic-api-key:109
+#
+# evaluation/datasets/qa_eval_dataset.json:82, 84 (commit 19aa273, 2026-10-24)
+#   Matched `github-pat` on synthetic PII evaluation test fixtures.
+19aa2737937797da8c4438b5057ce1b60195de9e:evaluation/datasets/qa_eval_dataset.json:github-pat:82
+19aa2737937797da8c4438b5057ce1b60195de9e:evaluation/datasets/qa_eval_dataset.json:github-pat:84
+#
+# aegis-docprep/tests/test_pii_precision_recall.py:41, 43 (commit 9e32ce1, 2026-10-24)
+#   Matched `generic-api-key` and `github-pat` on synthetic PII precision/recall evaluation fixtures.
+9e32ce11768fa72f8a1effcb9a63288c214c9688:aegis-docprep/tests/test_pii_precision_recall.py:generic-api-key:41
+9e32ce11768fa72f8a1effcb9a63288c214c9688:aegis-docprep/tests/test_pii_precision_recall.py:github-pat:43
+#
+# docs/quickstart-mvp.md:136, 156, 175 (commit 22df8c2, 2026-10-26)
+#   Matched `curl-auth-header` on documentation curl command examples using Bearer dev-tenant-alpha.
+22df8c2c14c139b3fa62968ab262d33829110c76:docs/quickstart-mvp.md:curl-auth-header:136
+22df8c2c14c139b3fa62968ab262d33829110c76:docs/quickstart-mvp.md:curl-auth-header:156
+22df8c2c14c139b3fa62968ab262d33829110c76:docs/quickstart-mvp.md:curl-auth-header:175
+#
+# evaluation/datasets/qa_eval_dataset.json:650, 787, 790 (commit 22df8c2, 2026-10-26)
+#   Matched `github-pat` on synthetic PII benchmark fixtures in privacy test cases.
+22df8c2c14c139b3fa62968ab262d33829110c76:evaluation/datasets/qa_eval_dataset.json:github-pat:650
+22df8c2c14c139b3fa62968ab262d33829110c76:evaluation/datasets/qa_eval_dataset.json:github-pat:787
+22df8c2c14c139b3fa62968ab262d33829110c76:evaluation/datasets/qa_eval_dataset.json:github-pat:790
+#
+# tests/integration/test_failure_recovery.py:30 (commit 70e794b, 2026-10-26)
+#   Matched `generic-api-key` on idempotency store request UUID fixture variable `key`.
+70e794bbd309e1ad848454061a6cc3a55ff4dfa8:tests/integration/test_failure_recovery.py:generic-api-key:30
+#
+# tests/security/test_auth_acceptance.py:234 (commit 70e794b, 2026-10-26)
+#   Matched `generic-api-key` on mock API key test fixture `raw_key` for SHA-256 hash testing.
+70e794bbd309e1ad848454061a6cc3a55ff4dfa8:tests/security/test_auth_acceptance.py:generic-api-key:234
+#
+# evaluation/mvp-golden/text/orion-multipage.txt:20 (commit ee9a696, 2026-10-26)
+#   Matched `generic-api-key` on synthetic multi-page document PII test token.
+ee9a6964e1d7adc414edf78e79361960c25c82ce:evaluation/mvp-golden/text/orion-multipage.txt:generic-api-key:20

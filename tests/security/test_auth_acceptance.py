@@ -231,8 +231,8 @@ def test_missing_tenant_id_or_sub_rejected(rsa_keypair, test_app, tmp_path):
 # ─────────────────────────────────────────────────────────────────
 
 def test_production_api_key_valid_hash(test_app, tmp_path):
-    raw_key = "aegis-secret-key-prod-9999"
-    key_hash = hashlib.sha256(raw_key.encode("utf-8")).hexdigest()
+    test_api_key = "aegis-test-api-key-1111111111"
+    key_hash = hashlib.sha256(test_api_key.encode("utf-8")).hexdigest()
     # AEGIS_API_KEYS is a dictionary mapping SHA-256 hash to metadata
     key_config = json.dumps({
         key_hash: {"tenant_id": "tenant-prod", "role": "admin", "user_id": "prod-user"}
@@ -245,7 +245,7 @@ def test_production_api_key_valid_hash(test_app, tmp_path):
         "AEGIS_AUDIT_LOG_PATH": str(audit_file),
     }):
         client = TestClient(test_app)
-        res = client.get("/v1/secure-data", headers={"X-API-Key": raw_key})
+        res = client.get("/v1/secure-data", headers={"X-API-Key": test_api_key})
         assert res.status_code == 200, res.text
         data = res.json()
         assert data["tenant_id"] == "tenant-prod"

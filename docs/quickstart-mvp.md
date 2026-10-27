@@ -130,11 +130,12 @@ Upload a document (e.g., text or PDF) using the `/v1/documents/upload` endpoint.
 
 ```bash
 # Create a sample document
+export TOKEN="dev-tenant-alpha"
 echo "AEGIS-DocIntel provides submodular context packing for bounded token budgets." > sample_doc.txt
 
 # Ingest document
 curl -s -X POST http://localhost:8000/v1/documents/upload \
-  -H "Authorization: Bearer dev-tenant-alpha" \
+  -H "Authorization: Bearer $TOKEN" \
   -F "file=@sample_doc.txt"
 ```
 
@@ -154,7 +155,7 @@ Check processing status by querying the document endpoint with the returned `doc
 
 ```bash
 curl -s -X GET http://localhost:8000/v1/documents/doc-a1b2c3d4-sample \
-  -H "Authorization: Bearer dev-tenant-alpha"
+  -H "Authorization: Bearer $TOKEN"
 ```
 
 **Expected Response (HTTP 200 OK):**
@@ -173,7 +174,7 @@ Submit a natural language question against indexed documents:
 
 ```bash
 curl -s -X POST http://localhost:8000/v1/query \
-  -H "Authorization: Bearer dev-tenant-alpha" \
+  -H "Authorization: Bearer $TOKEN" \
   -H "Content-Type: application/json" \
   -d '{
     "query": "What does AEGIS-DocIntel provide?",

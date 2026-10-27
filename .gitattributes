@@ -1,0 +1,8 @@
+# Preserve binary files without text conversion in git diff
+*.pdf binary
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.zip binary
+*.tar.gz binary
+*.whl binary

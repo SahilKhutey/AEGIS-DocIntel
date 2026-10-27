@@ -1652,3 +1652,31 @@ uff check src tests scripts dashboard: All checks passed.
   - python scripts/check_dependency_sync.py: OK.
   - python scripts/check_docs_claims.py: OK (R1–R6 passed).
   - python -m ruff check src tests scripts dashboard: All checks passed.
+
+
+### Task P4.25 — Remediate CI Test Import Collision and Sanitize Gitleaks Secret Scan False Positives
+- **Time:** 2026-10-27 08:05:00 UTC
+- **Context & Objective:**
+  Resolve two concrete P0 release blockers identified in GitHub CI run 40301630208 on commit `ee9a696`:
+  1. **Full Test Suite Pytest Collection Failure (`tests/test_evaluation_runner.py`):**
+     - Cause: `tests/evaluation/__init__.py` was creating an `evaluation` package on Python's path during test discovery that shadowed the root repository `evaluation/` directory, causing `ModuleNotFoundError: No module named 'evaluation.scripts'`.
+     - Resolution: Removed `tests/evaluation/__init__.py` (treating `tests/evaluation/` as a directory of test modules rather than a package). Added `evaluation/__init__.py` and `evaluation/scripts/__init__.py`. Pytest now collects all 1,324 tests cleanly without collision, and `tests/test_evaluation_runner.py` and `tests/evaluation/` both pass.
+  2. **Secret Scan (Gitleaks) False Positives Remediated:**
+     - Remediated 9 findings reported by `gitleaks-action` across recent commits:
+       - `evaluation/mvp-golden/text/orion-multipage.txt`: Replaced synthetic test API token with low-entropy synthetic token `sk-live-000000000000000000000000`.
+       - `tests/integration/test_failure_recovery.py`: Renamed fixture variable `key = "idem-req-uuid-12345"` to `req_id = "idem-req-uuid-12345"`.
+       - `tests/security/test_auth_acceptance.py`: Renamed fixture variable `raw_key = "aegis-secret-key-prod-9999"` to `test_api_key = "aegis-test-api-key-1111111111"`.
+       - `docs/quickstart-mvp.md`: Updated curl command examples to reference environment variable `Bearer $TOKEN` (with `export TOKEN="dev-tenant-alpha"`).
+       - `evaluation/datasets/qa_eval_dataset.json`: Sanitized test fixtures `ghp_A1B2...` and `ghp_Z9Y8...` to low-entropy test placeholders `ghp_000000000000000000000000000000000000` and `ghp_111111111111111111111111111111111111`.
+       - `.gitleaksignore`: Added specific, reviewed commit-fingerprint allowlist entries for past commits in git history with detailed contextual comments.
+       - `.gitattributes`: Configured binary patterns for PDFs and archives to ensure diff textconv drivers do not interfere with git operations.
+- **Verification:**
+  - `gitleaks detect --verbose`: 228 commits scanned, scanned ~15.95 MB, no leaks found (0 leaks, exit code 0).
+  - `pytest tests/ --collect-only -q`: 1,324 tests collected in 20.41s with 0 errors.
+  - `pytest tests/test_evaluation_runner.py tests/evaluation/ -q`: 13 passed in 6.03s.
+  - `python scripts/validate_mvp_dataset.py`: PASSED (all declared slices, counts, and schemas match).
+  - `python evaluation/scripts/evaluate_privacy.py`: PASSED (precision=1.0, recall=1.0, f1=1.0, leakage=0.0).
+  - `python scripts/run_mvp_acceptance.py`: RELEASE QUALIFICATION DECISION: GO (8/8 gates passed).
+  - `python scripts/check_dependency_sync.py`: OK.
+  - `python scripts/check_docs_claims.py`: OK (R1–R6 passed).
+  - `ruff check src tests scripts dashboard`: All checks passed.

@@ -1,13 +1,13 @@
 {
-  "timestamp": "2026-10-26T09:24:51.781552+00:00",
+  "timestamp": "2026-10-27T02:39:45.645952+00:00",
   "git": {
-    "branch": "feat/phase3-production-readiness-qualification",
-    "commit": "70e794bbd309e1ad848454061a6cc3a55ff4dfa8",
+    "branch": "master",
+    "commit": "ee9a6964e1d7adc414edf78e79361960c25c82ce",
     "clean": "false"
   },
   "decision": "GO",
   "overall_passed": true,
-  "total_duration_seconds": 144.39,
+  "total_duration_seconds": 229.6,
   "gates_count": 8,
   "gates_passed": 8,
   "gates": [
@@ -15,7 +15,7 @@
       "gate_id": "dependency_sync",
       "name": "Dependency Synchronization",
       "passed": true,
-      "duration_seconds": 0.07,
+      "duration_seconds": 0.13,
       "command": "C:\\Users\\ASUS\\AppData\\Local\\Programs\\Python\\Python312\\python.exe scripts/check_dependency_sync.py",
       "summary": "OK \u2014 6 requirements files match pyproject.toml"
     },
@@ -23,7 +23,7 @@
       "gate_id": "docs_claims",
       "name": "Documentation Claims Verification",
       "passed": true,
-      "duration_seconds": 0.23,
+      "duration_seconds": 0.43,
       "command": "C:\\Users\\ASUS\\AppData\\Local\\Programs\\Python\\Python312\\python.exe scripts/check_docs_claims.py",
       "summary": "OK \u2014 docs claims check passed (R1 cold-start, R2 links, R3 counts, R4 pilots, R5 readiness, R6 env-vars)"
     },
@@ -31,7 +31,7 @@
       "gate_id": "dataset_contract",
       "name": "MVP Dataset Contract & Integrity",
       "passed": true,
-      "duration_seconds": 0.06,
+      "duration_seconds": 0.11,
       "command": "C:\\Users\\ASUS\\AppData\\Local\\Programs\\Python\\Python312\\python.exe scripts/validate_mvp_dataset.py",
       "summary": "========================================================================"
     },
@@ -39,7 +39,7 @@
       "gate_id": "release_config",
       "name": "Release Configuration Validation",
       "passed": true,
-      "duration_seconds": 1.89,
+      "duration_seconds": 2.73,
       "command": "C:\\Users\\ASUS\\AppData\\Local\\Programs\\Python\\Python312\\python.exe scripts/validate_release_config.py --env development",
       "summary": "============================================================"
     },
@@ -47,31 +47,31 @@
       "gate_id": "security_acceptance",
       "name": "Security Acceptance Suite (Auth, Roles, Tenant Isolation)",
       "passed": true,
-      "duration_seconds": 86.74,
+      "duration_seconds": 132.31,
       "command": "C:\\Users\\ASUS\\AppData\\Local\\Programs\\Python\\Python312\\python.exe -m pytest tests/security/ -q",
-      "summary": "36 passed in 83.65s (0:01:23)"
+      "summary": "36 passed in 128.12s (0:02:08)"
     },
     {
       "gate_id": "integration_acceptance",
       "name": "Integration & Recovery Suite (Workflow, Persistence, Backup, Recovery)",
       "passed": true,
-      "duration_seconds": 49.6,
+      "duration_seconds": 86.78,
       "command": "C:\\Users\\ASUS\\AppData\\Local\\Programs\\Python\\Python312\\python.exe -m pytest tests/integration/ -q",
-      "summary": "8 passed in 46.54s"
+      "summary": "9 passed in 82.72s (0:01:22)"
     },
     {
       "gate_id": "evaluation_acceptance",
       "name": "Evaluation Test Suite (Citations, Context Budget)",
       "passed": true,
-      "duration_seconds": 3.5,
+      "duration_seconds": 4.41,
       "command": "C:\\Users\\ASUS\\AppData\\Local\\Programs\\Python\\Python312\\python.exe -m pytest tests/evaluation/ -q",
-      "summary": "8 passed in 2.02s"
+      "summary": "8 passed in 2.69s"
     },
     {
       "gate_id": "quality_benchmarks",
       "name": "Quality Benchmark Gates (Extraction, Retrieval, Packing, Redaction)",
       "passed": true,
-      "duration_seconds": 2.18,
+      "duration_seconds": 2.5,
       "command": "C:\\Users\\ASUS\\AppData\\Local\\Programs\\Python\\Python312\\python.exe evaluation/scripts/run_all.py --fail-under-gates --output artifacts/phase3/evaluation-report.json",
       "summary": "------------------------------------------------------------"
     }

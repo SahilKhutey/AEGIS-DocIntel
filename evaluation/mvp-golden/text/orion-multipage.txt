@@ -17,5 +17,5 @@ Q4 | 180.0
 Project Lead: Dr. Elena Rostova
 Email: elena.rostova@orion-survey.internal
 Phone: +1-555-0142
-Secret API Token: sk-live-99228833774411223344aabb
+Secret API Token: sk-live-000000000000000000000000
 Confidential employee SSN record: 000-45-6789.
