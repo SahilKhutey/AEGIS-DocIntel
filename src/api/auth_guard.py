@@ -41,6 +41,8 @@ from starlette.types import ASGIApp, Receive, Scope, Send
 PUBLIC_PATHS: frozenset[str] = frozenset(
     {
         "/health",
+        "/health/live",
+        "/health/ready",
         "/readiness",
         "/docs",
         "/docs/oauth2-redirect",

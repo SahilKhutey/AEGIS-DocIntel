@@ -1776,3 +1776,43 @@ uff check src tests scripts dashboard: All checks passed.
   - `python scripts/validate_mvp_dataset.py`: PASSED.
   - `ruff check src tests scripts`: All checks passed.
   - `gitleaks detect --verbose`: Scanned with 0 leaks found.
+
+
+### Task P4.29 — MVP 4 Production API, Workflow Orchestration, Security & Reliability Implementation
+- **Time:** 2026-10-28 08:45:00 UTC
+- **Context & Objective:**
+  Deliver MVP 4 Production API, Workflow Orchestration, Security, Reliability & Observability:
+  1. **Runtime Configuration & Boundary Safety (`src/core/runtime_config.py`):**
+     - Implemented frozen `RuntimeConfig` validating positive integer constraints, request timeouts, question character bounds, rate limits, and environment modes.
+  2. **Request Correlation & Structured Logging (`src/api/middleware/request_id.py`, `src/core/observability.py`):**
+     - Created `RequestIdMiddleware` to sanitize untrusted client correlation IDs or generate server-controlled UUIDs.
+     - Implemented `log_event` and `StageTimer` to emit structured JSON stage telemetry without leaking document contents or secrets.
+  3. **Standardized Error Handling Contract (`src/api/error_handlers.py`):**
+     - Built `PublicServiceError` hierarchy returning standardized non-disclosing error response envelopes.
+  4. **Fine-Grained Authorization Service (`src/services/authorization_service.py`):**
+     - Defined `Principal` protocol, `DocumentAccessRepository`, and `DocumentAuthorizationService`.
+     - Validates tenant access before retrieval and verifies citation source ownership before response serialization.
+  5. **Workflow Orchestration Coordinator (`src/services/workflow_service.py`):**
+     - Implemented `WorkflowCoordinator` executing deterministic multi-stage pipelines (`validate_request` -> `authorize_documents` -> `retrieve_evidence` -> `enforce_context_limits` -> `generate_answer` -> `validate_citations` -> `recheck_citation_authorization` -> `record_telemetry`).
+  6. **Rate Limiting & Reliability (`src/core/rate_limiter.py`):**
+     - Implemented `LocalSlidingWindowLimiter` for thread-safe request throttling.
+  7. **Container Health & Readiness Probes (`src/services/health_service.py`, `src/api/routers/health.py`, `src/api/auth_guard.py`):**
+     - Implemented `/health/live` (process alive) and `/health/ready` (dependencies verified) non-disclosing probes, explicitly allowlisted in `AuthGuardMiddleware`.
+  8. **Comprehensive Regression Test Suites:**
+     - `tests/test_mvp4_config.py`: Configuration validation and environment fail-fast invariants.
+     - `tests/test_mvp4_error_handling.py`: Standardized error contract and security headers.
+     - `tests/test_mvp4_health.py`: Liveness and non-disclosing readiness probe checks.
+     - `tests/test_mvp4_workflows.py`: Complete multi-stage workflow execution, timing, and authorization halts.
+     - `tests/test_mvp4_authentication.py`: Principal derivation, standard roles, and header tampering immunity.
+     - `tests/test_mvp4_authorization.py`: Tenant boundary enforcement and citation source verification.
+     - `tests/test_mvp4_idempotency.py`: Idempotency lifecycle, replay, conflict detection, and concurrent guards.
+     - `tests/test_mvp4_security.py`: Local sliding window limiter isolation and boundary enforcement.
+     - `tests/test_mvp4_api_contracts.py`: Live FastAPI application factory integration and OpenAPI spec parity.
+- **Verification:**
+  - `python evaluation/scripts/evaluate_retrieval.py`: PASSED (MRR: 1.0, Recall@5: 0.9231, nDCG@5: 0.9276, Abstention: 1.0).
+  - `python evaluation/scripts/run_all.py --fail-under-gates`: PASSED (All 4 quality gates met).
+  - `python scripts/check_dependency_sync.py`: OK.
+  - `python scripts/check_docs_claims.py`: OK (R1-R6 passed).
+  - `python scripts/validate_mvp_dataset.py`: PASSED.
+  - `ruff check src tests scripts`: All checks passed.
+  - `gitleaks detect --verbose`: Scanned with 0 leaks found.

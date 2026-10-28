@@ -174,6 +174,8 @@ def create_app() -> FastAPI:
             latency = (time.perf_counter() - start) * 1000
             response.headers["X-Request-ID"] = request_id
             response.headers["X-Response-Time-ms"] = f"{latency:.1f}"
+            response.headers["X-Content-Type-Options"] = "nosniff"
+            response.headers["X-Frame-Options"] = "DENY"
             REQUEST_LATENCY.record(latency)
             return response
         finally:
@@ -198,6 +200,12 @@ def create_app() -> FastAPI:
 
     from src.api.routers import advanced_features
     app.include_router(advanced_features.router)
+
+    from src.api.routers import health as health_router_mod
+    app.include_router(health_router_mod.router)
+
+    from src.api.error_handlers import register_error_handlers
+    register_error_handlers(app)
 
     # ── Stats endpoint ──────────────────────────────────────────
     @app.get("/v1/stats", tags=["System"])

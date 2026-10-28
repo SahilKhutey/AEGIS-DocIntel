@@ -79,6 +79,10 @@ class TenantContext:
         return self.principal_id
 
     @property
+    def subject_id(self) -> str:
+        return self.principal_id
+
+    @property
     def role(self) -> str:
         """Backward-compatible primary role string."""
         for r in (ROLE_PLATFORM_ADMIN, LEGACY_ADMIN, ROLE_TENANT_ADMIN, ROLE_EDITOR, ROLE_VIEWER):
