@@ -213,6 +213,10 @@ def create_app() -> FastAPI:
     from src.api.routers import reviews as reviews_router_mod
     app.include_router(reviews_router_mod.router, prefix="/v1")
     app.include_router(reviews_router_mod.router, prefix="/api/v1", include_in_schema=False)
+    app.include_router(documents.router, prefix="/api/v1/documents", include_in_schema=False)
+    app.include_router(answers.router, prefix="/api/v1/answers", include_in_schema=False)
+    app.include_router(answers.router, prefix="/api/v1/ask", include_in_schema=False)
+    app.include_router(intelligence_router_mod.router, prefix="/api/v1", include_in_schema=False)
 
     from src.api.error_handlers import register_error_handlers
     register_error_handlers(app)

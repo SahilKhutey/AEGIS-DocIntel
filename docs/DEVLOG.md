@@ -1907,3 +1907,47 @@ uff check src tests scripts dashboard: All checks passed.
   - `bandit -r src dashboard scripts -ll`: PASSED (0 issues).
   - `ruff check src tests scripts evaluation dashboard`: All checks passed.
   - `gitleaks detect --verbose`: 238 commits scanned, 0 leaks found.
+
+
+### Task P4.32 — MVP 7 Document Intelligence Workbench, Evidence Explorer, Review UI & End-to-End Product Integration
+- **Time:** 2026-10-28 15:05:00 UTC
+- **Context & Objective:**
+  Deliver MVP 7 Document Intelligence Workbench, Evidence Explorer, Review UI, and End-to-End Product Integration:
+  1. **Integrated Web Workbench Application (`web/`):**
+     - Initialized responsive Next.js application with App Router, TypeScript, and Tailwind styling.
+     - Built application shell (`web/src/components/app-shell.tsx`) with workbench navigation, tenant indicator, and mobile responsive menus.
+  2. **Typed API Client & Domain Contracts (`web/src/lib/api-client.ts`, `web/src/lib/schemas.ts`, `web/src/lib/errors.ts`):**
+     - Built typed API client with Zod runtime schema validation, request ID propagation, fail-closed authentication headers, and safe error parsing.
+  3. **Document Workspace & Dashboard (`web/src/app/documents/page.tsx`, `web/src/app/documents/[documentId]/page.tsx`):**
+     - Implemented document list view with status filtering (`ready`, `indexing`, `pending`, `failed`) and filename search.
+     - Created accessible modal for document upload (`web/src/features/documents/upload-modal.tsx`).
+     - Built detailed document inspector displaying metadata, chunks, and extracted structured facts.
+  4. **Ask & Evidence Explorer (`web/src/app/ask/page.tsx`, `web/src/components/evidence-panel.tsx`):**
+     - Built grounded question-answering interface with document scope selection and clickable citations.
+     - Developed dedicated evidence panel showing exact quote snippets, page numbers, section paths, and chunk identifiers.
+     - Explicitly surfaced safe abstention and source inconsistency warnings.
+  5. **Cross-Document Comparison Workbench (`web/src/app/compare/page.tsx`):**
+     - Created multi-document comparator aligning facts side-by-side by subject and attribute.
+     - Visualized aligned attributes, quantity/date discrepancies, and detected multi-document conflicts.
+  6. **Human Governance Review UI (`web/src/app/reviews/page.tsx`, `web/src/app/reviews/[reviewId]/page.tsx`, `web/src/features/reviews/submit-decision.ts`):**
+     - Built review queue workspace with status filtering and governance metrics summary.
+     - Implemented detailed review decision workspace with item claiming, decision submissions (`approve`, `correct`, `reject`, `request_evidence`), rationale requirements, and evidence quote verification.
+     - Supported stable idempotency keys, handled optimistic concurrency conflicts (`409 Conflict`), rendered append-only audit history, captured evaluation feedback, and enabled administrative reopening.
+  7. **State-Driven Indicators & Error Recovery:**
+     - Created `StatusBadge`, `EmptyState`, and `ErrorState` components with distinct colors, shapes, and accessible ARIA attributes.
+  8. **Automated Testing Suite:**
+     - Vitest component tests: `web/src/components/evidence-panel.test.tsx` and `web/src/features/reviews/submit-decision.test.ts`.
+     - Playwright browser E2E test suite: `web/tests/e2e/workbench.spec.ts`.
+     - Backend API integration test suite: `tests/test_mvp7_integration.py`.
+- **Verification:**
+  - `npm run build` in `web/`: PASSED (0 errors across all routes).
+  - `npm run lint` in `web/`: PASSED (0 errors).
+  - `npm run test` in `web/`: PASSED (all unit and component tests passing).
+  - `python -m pytest tests/test_mvp7_integration.py`: PASSED (all integration tests passing).
+  - `python evaluation/scripts/run_all.py --fail-under-gates`: PASSED (All quality gates met).
+  - `python scripts/check_dependency_sync.py`: OK.
+  - `python scripts/check_docs_claims.py`: OK (R1-R6 passed).
+  - `python scripts/validate_mvp_dataset.py`: PASSED.
+  - `bandit -r src dashboard scripts -ll`: PASSED (0 issues).
+  - `ruff check src tests scripts evaluation dashboard`: All checks passed.
+  - `gitleaks detect --verbose`: 239 commits scanned, 0 leaks found.

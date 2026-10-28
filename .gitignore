@@ -70,3 +70,6 @@ outputs/
 Retrack/
 *.patch
 *.bundle
+
+.next/
+out/

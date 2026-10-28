@@ -43,6 +43,12 @@ MAX_UPLOAD_BYTES = 200 * 1024 * 1024  # 200 MB
     status_code=status.HTTP_202_ACCEPTED,
     summary="Upload a document for indexing",
 )
+@router.post(
+    "",
+    response_model=DocumentResponse,
+    status_code=status.HTTP_202_ACCEPTED,
+    include_in_schema=False,
+)
 async def upload_document(
     request: Request,
     file: UploadFile = File(..., description="PDF, DOCX, PPTX, or HTML file"),
