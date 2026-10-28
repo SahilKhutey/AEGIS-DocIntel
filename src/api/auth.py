@@ -88,7 +88,7 @@ def _validate_jwt(token: str) -> TenantContext:
         return TenantContext(
             tenant_id=tenant_id,
             principal_id="dev-user",
-            roles=frozenset({"admin", "tenant_admin", "editor"}),
+            roles=frozenset({"admin", "tenant_admin", "editor", "reviewer", "review_admin"}),
             authentication_method="dev_token",
         )
 

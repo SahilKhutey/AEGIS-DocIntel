@@ -1864,3 +1864,46 @@ uff check src tests scripts dashboard: All checks passed.
   - `python scripts/validate_mvp_dataset.py`: PASSED.
   - `ruff check src tests scripts evaluation`: All checks passed.
   - `gitleaks detect --verbose`: 236 commits scanned, 0 leaks found.
+
+
+### Task P4.31 — MVP 6 Human-in-the-Loop Review, Governance, Audit Trails & Feedback Loops Implementation
+- **Time:** 2026-10-28 14:25:00 UTC
+- **Context & Objective:**
+  Deliver MVP 6 Human-in-the-Loop Review, Governance, Audit Trails, and Feedback Loops:
+  1. **Data Contracts & Review States (`src/engines/governance/contracts.py`):**
+     - Implemented immutable, slotted contracts (`ReviewStatus`, `ReviewAction`, `ReviewActor`, `ReviewRevision`, `ReviewDecision`, `AuditEvent`, `ReviewItem`, `DecisionSubmission`).
+     - Preserves the fundamental engineering invariant: distinguishing what a document says (authoritative text), what the system inferred (candidate facts/conflicts), what a reviewer decided, and what was approved.
+  2. **Evidence Verification Engine (`src/engines/governance/evidence_validator.py`):**
+     - Implemented `validate_evidence_quote` enforcing minimum 8-character quote validation against authoritative document passages, stripping whitespace, and rejecting ungrounded or absent quotes.
+  3. **Governance Policy & RBAC Guard (`src/engines/governance/policy.py`):**
+     - Implemented `authorize_review_action` validating reviewer authorization, assigned reviewer constraints, terminal state transitions, and administrative reopen requirements.
+  4. **Persistence, Optimistic Concurrency & Audit Events (`src/repositories/review_repository.py`):**
+     - Implemented SQLite repository managing `review_items`, `review_decisions`, `review_revisions`, `review_audit_events`, and `review_feedback`.
+     - Guarantees single-transaction state changes, optimistic concurrency checking via `expected_version`, and Idempotency-Key caching.
+  5. **Governance Review Service (`src/engines/governance/review_service.py`):**
+     - Created `ReviewService` orchestrating review item creation from extracted facts or cross-document conflicts, claims, decision submissions, audit history queries, feedback capture, governance metrics calculation, and approved fact queries for downstream reporting.
+  6. **Security & Standard Role Extensions (`src/core/security_context.py`, `src/api/auth.py`):**
+     - Added `ROLE_REVIEWER = "reviewer"` and `ROLE_REVIEW_ADMIN = "review_admin"` to standard security roles, security context helpers, and dev token role mappings.
+  7. **Governance REST API (`src/api/routers/reviews.py`):**
+     - Mounted authenticated endpoints at `/v1/reviews` and `/api/v1/reviews` covering queue listing, detail lookup, item claiming, decision submission, audit trail retrieval, evaluation feedback recording, governance metrics, and approved facts.
+  8. **Service Container & Main App Integration (`src/services/container.py`, `src/main.py`):**
+     - Registered `ReviewRepository` and `ReviewService` in the dependency injection container and FastAPI lifespan state.
+  9. **Comprehensive Regression Test Suites:**
+     - `tests/test_mvp6_review_contracts.py`: Contract immutability, serialization round-trips, and invariants.
+     - `tests/test_mvp6_review_policy.py`: RBAC rules, reviewer assignment checks, reopen permissions, and tenant isolation.
+     - `tests/test_mvp6_evidence_validator.py`: Quote length, exact substring verification, and missing evidence errors.
+     - `tests/test_mvp6_review_repository.py`: Single-transaction atomicity, optimistic locking rollback, idempotency replay, and approved facts filtering.
+     - `tests/test_mvp6_review_service.py`: End-to-end workflow (fact ingestion -> claim -> decision -> audit trail -> approved facts) and evidence validation failures.
+     - `tests/test_mvp6_review_security.py`: Cross-tenant boundary enforcement and viewer role restrictions.
+     - `tests/test_mvp6_review_audit.py`: Append-only audit trail completeness, monotonically increasing sequence numbers, and state immutability.
+     - `tests/test_mvp6_feedback.py`: Evaluation feedback capture, tenant isolation, and governance metrics aggregation.
+     - `tests/test_mvp6_review_api.py`: FastAPI endpoints, anonymous authentication rejection, claim, decision, Idempotency-Key replay, audit history, feedback, approved facts, and administrative reopen.
+- **Verification:**
+  - `python -m pytest tests/test_mvp6_*.py`: PASSED (all suites passing).
+  - `python evaluation/scripts/run_all.py --fail-under-gates`: PASSED (All quality gates met).
+  - `python scripts/check_dependency_sync.py`: OK.
+  - `python scripts/check_docs_claims.py`: OK (R1-R6 passed).
+  - `python scripts/validate_mvp_dataset.py`: PASSED.
+  - `bandit -r src dashboard scripts -ll`: PASSED (0 issues).
+  - `ruff check src tests scripts evaluation dashboard`: All checks passed.
+  - `gitleaks detect --verbose`: 238 commits scanned, 0 leaks found.

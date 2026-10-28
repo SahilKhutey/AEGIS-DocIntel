@@ -2634,6 +2634,579 @@
         }
       }
     },
+    "/v1/reviews": {
+      "get": {
+        "tags": [
+          "Governance"
+        ],
+        "summary": "List tenant review queue items",
+        "description": "Retrieve review items for the authenticated tenant with cursor pagination.",
+        "operationId": "list_reviews_v1_reviews_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          },
+          {
+            "APIKeyHeader": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "status",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Filter by status",
+              "title": "Status"
+            },
+            "description": "Filter by status"
+          },
+          {
+            "name": "assigned_to",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Filter by assigned reviewer ID",
+              "title": "Assigned To"
+            },
+            "description": "Filter by assigned reviewer ID"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 100,
+              "minimum": 1,
+              "default": 50,
+              "title": "Limit"
+            }
+          },
+          {
+            "name": "cursor",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Cursor for pagination",
+              "title": "Cursor"
+            },
+            "description": "Cursor for pagination"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReviewQueueResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/reviews/approved-facts": {
+      "get": {
+        "tags": [
+          "Governance"
+        ],
+        "summary": "Retrieve approved facts for report generation",
+        "description": "Fetch approved and corrected facts only. Pending and rejected facts are excluded.",
+        "operationId": "get_approved_facts_v1_reviews_approved_facts_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          },
+          {
+            "APIKeyHeader": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "document_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Optional document filter",
+              "title": "Document Id"
+            },
+            "description": "Optional document filter"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "additionalProperties": true
+                  },
+                  "title": "Response Get Approved Facts V1 Reviews Approved Facts Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/reviews/metrics": {
+      "get": {
+        "tags": [
+          "Governance"
+        ],
+        "summary": "Get review governance and quality metrics",
+        "description": "Compute review quality metrics across tenant items.",
+        "operationId": "get_metrics_v1_reviews_metrics_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GovernanceMetricsResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          },
+          {
+            "APIKeyHeader": []
+          }
+        ]
+      }
+    },
+    "/v1/reviews/{review_id}": {
+      "get": {
+        "tags": [
+          "Governance"
+        ],
+        "summary": "Fetch review item details and evidence links",
+        "description": "Fetch a single review item within tenant boundary.",
+        "operationId": "get_review_detail_v1_reviews__review_id__get",
+        "security": [
+          {
+            "HTTPBearer": []
+          },
+          {
+            "APIKeyHeader": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "review_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Review Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReviewItemResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/reviews/{review_id}/claim": {
+      "post": {
+        "tags": [
+          "Governance"
+        ],
+        "summary": "Claim a review item",
+        "description": "Claim a review item, transitioning it from pending or needs_evidence to in_review.",
+        "operationId": "claim_review_v1_reviews__review_id__claim_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          },
+          {
+            "APIKeyHeader": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "review_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Review Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ClaimRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReviewItemResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/reviews/{review_id}/decisions": {
+      "post": {
+        "tags": [
+          "Governance"
+        ],
+        "summary": "Submit a reviewer decision (approve, correct, reject, request_evidence)",
+        "description": "Submit a reviewer decision with evidence validation, optimistic locking,\nand single-transaction audit event logging.",
+        "operationId": "submit_decision_v1_reviews__review_id__decisions_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          },
+          {
+            "APIKeyHeader": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "review_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Review Id"
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Idempotency-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DecisionRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DecisionResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/reviews/{review_id}/history": {
+      "get": {
+        "tags": [
+          "Governance"
+        ],
+        "summary": "Read audit history of state transitions",
+        "description": "Retrieve ordered, append-only history of every successful state transition.",
+        "operationId": "get_history_v1_reviews__review_id__history_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          },
+          {
+            "APIKeyHeader": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "review_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Review Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AuditEventResponse"
+                  },
+                  "title": "Response Get History V1 Reviews  Review Id  History Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/reviews/{review_id}/feedback": {
+      "post": {
+        "tags": [
+          "Governance"
+        ],
+        "summary": "Record structured evaluation feedback",
+        "description": "Record structured feedback categorizing extraction quality or reviewer corrections.",
+        "operationId": "submit_feedback_v1_reviews__review_id__feedback_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          },
+          {
+            "APIKeyHeader": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "review_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Review Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FeedbackRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "string"
+                  },
+                  "title": "Response Submit Feedback V1 Reviews  Review Id  Feedback Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/reviews/{review_id}/reopen": {
+      "post": {
+        "tags": [
+          "Governance"
+        ],
+        "summary": "Reopen a completed review under administrative authority",
+        "description": "Reopen an approved, corrected, or rejected item back into active review.",
+        "operationId": "reopen_review_v1_reviews__review_id__reopen_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          },
+          {
+            "APIKeyHeader": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "review_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Review Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReopenRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DecisionResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/stats": {
       "get": {
         "tags": [
@@ -2963,6 +3536,96 @@
         ],
         "title": "AnswerResponse"
       },
+      "AuditEventResponse": {
+        "properties": {
+          "event_id": {
+            "type": "string",
+            "title": "Event Id"
+          },
+          "review_id": {
+            "type": "string",
+            "title": "Review Id"
+          },
+          "sequence": {
+            "type": "integer",
+            "title": "Sequence"
+          },
+          "tenant_id": {
+            "type": "string",
+            "title": "Tenant Id"
+          },
+          "actor_id": {
+            "type": "string",
+            "title": "Actor Id"
+          },
+          "action": {
+            "type": "string",
+            "title": "Action"
+          },
+          "previous_status": {
+            "type": "string",
+            "title": "Previous Status"
+          },
+          "new_status": {
+            "type": "string",
+            "title": "New Status"
+          },
+          "previous_version": {
+            "type": "integer",
+            "title": "Previous Version"
+          },
+          "new_version": {
+            "type": "integer",
+            "title": "New Version"
+          },
+          "rationale": {
+            "type": "string",
+            "title": "Rationale"
+          },
+          "revision_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Revision Id"
+          },
+          "request_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Request Id"
+          },
+          "timestamp": {
+            "type": "string",
+            "title": "Timestamp"
+          }
+        },
+        "type": "object",
+        "required": [
+          "event_id",
+          "review_id",
+          "sequence",
+          "tenant_id",
+          "actor_id",
+          "action",
+          "previous_status",
+          "new_status",
+          "previous_version",
+          "new_version",
+          "rationale",
+          "timestamp"
+        ],
+        "title": "AuditEventResponse"
+      },
       "AutoAnnotateRequest": {
         "properties": {
           "doc_id": {
@@ -3141,6 +3804,21 @@
         ],
         "title": "ChunkResponse"
       },
+      "ClaimRequest": {
+        "properties": {
+          "expected_version": {
+            "type": "integer",
+            "minimum": 1.0,
+            "title": "Expected Version",
+            "description": "Expected version of review item for optimistic locking"
+          }
+        },
+        "type": "object",
+        "required": [
+          "expected_version"
+        ],
+        "title": "ClaimRequest"
+      },
       "CompareDocumentsRequest": {
         "properties": {
           "left_document_id": {
@@ -3267,6 +3945,187 @@
           "corrected_text"
         ],
         "title": "CorrectionCreate"
+      },
+      "DecisionRecordResponse": {
+        "properties": {
+          "decision_id": {
+            "type": "string",
+            "title": "Decision Id"
+          },
+          "review_id": {
+            "type": "string",
+            "title": "Review Id"
+          },
+          "tenant_id": {
+            "type": "string",
+            "title": "Tenant Id"
+          },
+          "actor_id": {
+            "type": "string",
+            "title": "Actor Id"
+          },
+          "action": {
+            "type": "string",
+            "title": "Action"
+          },
+          "from_status": {
+            "type": "string",
+            "title": "From Status"
+          },
+          "to_status": {
+            "type": "string",
+            "title": "To Status"
+          },
+          "version_reviewed": {
+            "type": "integer",
+            "title": "Version Reviewed"
+          },
+          "rationale": {
+            "type": "string",
+            "title": "Rationale"
+          },
+          "evidence_quote": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Evidence Quote"
+          },
+          "idempotency_key": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Idempotency Key"
+          },
+          "created_at": {
+            "type": "string",
+            "title": "Created At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "decision_id",
+          "review_id",
+          "tenant_id",
+          "actor_id",
+          "action",
+          "from_status",
+          "to_status",
+          "version_reviewed",
+          "rationale",
+          "created_at"
+        ],
+        "title": "DecisionRecordResponse"
+      },
+      "DecisionRequest": {
+        "properties": {
+          "action": {
+            "type": "string",
+            "enum": [
+              "approve",
+              "correct",
+              "reject",
+              "request_evidence"
+            ],
+            "title": "Action"
+          },
+          "expected_version": {
+            "type": "integer",
+            "minimum": 1.0,
+            "title": "Expected Version",
+            "description": "Expected version for concurrency verification"
+          },
+          "rationale": {
+            "type": "string",
+            "maxLength": 2000,
+            "minLength": 3,
+            "title": "Rationale",
+            "description": "Reviewer rationale"
+          },
+          "corrected_value": {
+            "anyOf": [
+              {},
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Corrected Value",
+            "description": "Corrected value if action is 'correct'"
+          },
+          "corrected_type": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Corrected Type",
+            "description": "Type descriptor (decimal, string, etc.)"
+          },
+          "unit": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Unit",
+            "description": "Optional unit descriptor"
+          },
+          "evidence_quote": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 5000
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Evidence Quote",
+            "description": "Authoritative evidence quote"
+          }
+        },
+        "type": "object",
+        "required": [
+          "action",
+          "expected_version",
+          "rationale"
+        ],
+        "title": "DecisionRequest"
+      },
+      "DecisionResponse": {
+        "properties": {
+          "item": {
+            "$ref": "#/components/schemas/ReviewItemResponse"
+          },
+          "decision": {
+            "$ref": "#/components/schemas/DecisionRecordResponse"
+          },
+          "audit_event": {
+            "$ref": "#/components/schemas/AuditEventResponse"
+          }
+        },
+        "type": "object",
+        "required": [
+          "item",
+          "decision",
+          "audit_event"
+        ],
+        "title": "DecisionResponse"
       },
       "DiffRequest": {
         "properties": {
@@ -3747,6 +4606,90 @@
           "value_type"
         ],
         "title": "FactModel"
+      },
+      "FeedbackRequest": {
+        "properties": {
+          "category": {
+            "type": "string",
+            "title": "Category",
+            "description": "Feedback category (e.g., wrong_value, bad_evidence)"
+          },
+          "notes": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 2000
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Notes",
+            "default": ""
+          },
+          "corrected_reference": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Corrected Reference"
+          }
+        },
+        "type": "object",
+        "required": [
+          "category"
+        ],
+        "title": "FeedbackRequest"
+      },
+      "GovernanceMetricsResponse": {
+        "properties": {
+          "total_items": {
+            "type": "integer",
+            "title": "Total Items"
+          },
+          "decided_count": {
+            "type": "integer",
+            "title": "Decided Count"
+          },
+          "approval_rate": {
+            "type": "number",
+            "title": "Approval Rate"
+          },
+          "correction_rate": {
+            "type": "number",
+            "title": "Correction Rate"
+          },
+          "rejection_rate": {
+            "type": "number",
+            "title": "Rejection Rate"
+          },
+          "evidence_failure_rate": {
+            "type": "number",
+            "title": "Evidence Failure Rate"
+          },
+          "feedback_categories": {
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "type": "object",
+            "title": "Feedback Categories"
+          }
+        },
+        "type": "object",
+        "required": [
+          "total_items",
+          "decided_count",
+          "approval_rate",
+          "correction_rate",
+          "rejection_rate",
+          "evidence_failure_rate",
+          "feedback_categories"
+        ],
+        "title": "GovernanceMetricsResponse"
       },
       "HTTPValidationError": {
         "properties": {
@@ -4744,6 +5687,136 @@
           "dependencies"
         ],
         "title": "ReadinessResponse"
+      },
+      "ReopenRequest": {
+        "properties": {
+          "expected_version": {
+            "type": "integer",
+            "minimum": 1.0,
+            "title": "Expected Version"
+          },
+          "rationale": {
+            "type": "string",
+            "maxLength": 2000,
+            "minLength": 5,
+            "title": "Rationale",
+            "description": "Administrative reopening justification"
+          }
+        },
+        "type": "object",
+        "required": [
+          "expected_version",
+          "rationale"
+        ],
+        "title": "ReopenRequest"
+      },
+      "ReviewItemResponse": {
+        "properties": {
+          "review_id": {
+            "type": "string",
+            "title": "Review Id"
+          },
+          "tenant_id": {
+            "type": "string",
+            "title": "Tenant Id"
+          },
+          "candidate_id": {
+            "type": "string",
+            "title": "Candidate Id"
+          },
+          "candidate_type": {
+            "type": "string",
+            "title": "Candidate Type"
+          },
+          "document_id": {
+            "type": "string",
+            "title": "Document Id"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "version": {
+            "type": "integer",
+            "title": "Version"
+          },
+          "assigned_to": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Assigned To"
+          },
+          "candidate_data": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Candidate Data"
+          },
+          "current_revision_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Current Revision Id"
+          },
+          "created_at": {
+            "type": "string",
+            "title": "Created At"
+          },
+          "updated_at": {
+            "type": "string",
+            "title": "Updated At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "review_id",
+          "tenant_id",
+          "candidate_id",
+          "candidate_type",
+          "document_id",
+          "status",
+          "version",
+          "candidate_data",
+          "created_at",
+          "updated_at"
+        ],
+        "title": "ReviewItemResponse"
+      },
+      "ReviewQueueResponse": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/ReviewItemResponse"
+            },
+            "type": "array",
+            "title": "Items"
+          },
+          "next_cursor": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Next Cursor"
+          }
+        },
+        "type": "object",
+        "required": [
+          "items"
+        ],
+        "title": "ReviewQueueResponse"
       },
       "SpeechParseRequest": {
         "properties": {

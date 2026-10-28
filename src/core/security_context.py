@@ -15,6 +15,8 @@ from typing import Optional, Set, FrozenSet, Iterable
 # Canonical enterprise roles
 ROLE_VIEWER = "viewer"
 ROLE_EDITOR = "editor"
+ROLE_REVIEWER = "reviewer"
+ROLE_REVIEW_ADMIN = "review_admin"
 ROLE_TENANT_ADMIN = "tenant_admin"
 ROLE_PLATFORM_ADMIN = "platform_admin"
 LEGACY_ADMIN = "admin"
@@ -22,6 +24,8 @@ LEGACY_ADMIN = "admin"
 STANDARD_ROLES: frozenset[str] = frozenset({
     ROLE_VIEWER,
     ROLE_EDITOR,
+    ROLE_REVIEWER,
+    ROLE_REVIEW_ADMIN,
     ROLE_TENANT_ADMIN,
     ROLE_PLATFORM_ADMIN,
     LEGACY_ADMIN,

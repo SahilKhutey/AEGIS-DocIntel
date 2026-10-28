@@ -737,6 +737,8 @@ class ServiceContainer:
         self.decomposer_service = None
         self.math_engine = None
         self.intelligence_service = None
+        self.review_repository = None
+        self.review_service = None
 
     async def startup(self):
         """Initialize all services."""
@@ -810,6 +812,14 @@ class ServiceContainer:
 
         from src.engines.intelligence.service import DocumentIntelligenceService
         self.intelligence_service = DocumentIntelligenceService()
+
+        from src.repositories.review_repository import ReviewRepository
+        from src.engines.governance.review_service import ReviewService
+        self.review_repository = ReviewRepository()
+        self.review_service = ReviewService(
+            repository=self.review_repository,
+            orchestrator=self.rag_engine,
+        )
 
         self._started = True
         log.info("Service container ready")
