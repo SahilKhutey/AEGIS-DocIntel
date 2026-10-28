@@ -2365,6 +2365,275 @@
         }
       }
     },
+    "/v1/documents/{document_id}/extract-facts": {
+      "post": {
+        "tags": [
+          "Intelligence"
+        ],
+        "summary": "Extract structured facts from document passages",
+        "description": "Extract structured, typed facts from document passages or from indexed elements.\nGuarantees exact evidence span grounding and provenance persistence.",
+        "operationId": "extract_facts_v1_documents__document_id__extract_facts_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          },
+          {
+            "APIKeyHeader": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "document_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Document Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ExtractFactsRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExtractionResultResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/documents/{document_id}/facts": {
+      "get": {
+        "tags": [
+          "Intelligence"
+        ],
+        "summary": "Retrieve extracted structured facts for a document",
+        "description": "Retrieve persisted facts for an authorized document within the tenant boundary.",
+        "operationId": "get_document_facts_v1_documents__document_id__facts_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          },
+          {
+            "APIKeyHeader": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "document_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Document Id"
+            }
+          },
+          {
+            "name": "attribute",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Optional attribute filter",
+              "title": "Attribute"
+            },
+            "description": "Optional attribute filter"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FactModel"
+                  },
+                  "title": "Response Get Document Facts V1 Documents  Document Id  Facts Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/intelligence/compare": {
+      "post": {
+        "tags": [
+          "Intelligence"
+        ],
+        "summary": "Compare structured facts between two documents",
+        "description": "Compare structured facts across two documents belonging to the authenticated tenant.\nEnforces tenant boundaries, unit compatibility, and temporal scope alignment.",
+        "operationId": "compare_documents_v1_intelligence_compare_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CompareDocumentsRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DocumentComparisonResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          },
+          {
+            "APIKeyHeader": []
+          }
+        ]
+      }
+    },
+    "/v1/intelligence/conflicts": {
+      "get": {
+        "tags": [
+          "Intelligence"
+        ],
+        "summary": "Detect conflicting facts across documents",
+        "description": "Scan authorized documents for conflicting quantities, dates, and obligations.\nPreserves all conflicting sources without silently choosing one.",
+        "operationId": "get_conflicts_v1_intelligence_conflicts_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          },
+          {
+            "APIKeyHeader": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "document_ids",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Filter by document IDs",
+              "title": "Document Ids"
+            },
+            "description": "Filter by document IDs"
+          },
+          {
+            "name": "subject",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Filter by subject entity",
+              "title": "Subject"
+            },
+            "description": "Filter by subject entity"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ConflictReportModel"
+                  },
+                  "title": "Response Get Conflicts V1 Intelligence Conflicts Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/stats": {
       "get": {
         "tags": [
@@ -2872,6 +3141,86 @@
         ],
         "title": "ChunkResponse"
       },
+      "CompareDocumentsRequest": {
+        "properties": {
+          "left_document_id": {
+            "type": "string",
+            "title": "Left Document Id"
+          },
+          "right_document_id": {
+            "type": "string",
+            "title": "Right Document Id"
+          },
+          "attributes": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Attributes",
+            "description": "Specific attributes to compare"
+          }
+        },
+        "type": "object",
+        "required": [
+          "left_document_id",
+          "right_document_id"
+        ],
+        "title": "CompareDocumentsRequest"
+      },
+      "ConflictReportModel": {
+        "properties": {
+          "tenant_id": {
+            "type": "string",
+            "title": "Tenant Id"
+          },
+          "subject": {
+            "type": "string",
+            "title": "Subject"
+          },
+          "attribute": {
+            "type": "string",
+            "title": "Attribute"
+          },
+          "conflict_type": {
+            "type": "string",
+            "title": "Conflict Type"
+          },
+          "description": {
+            "type": "string",
+            "title": "Description"
+          },
+          "participating_facts": {
+            "items": {
+              "$ref": "#/components/schemas/FactModel"
+            },
+            "type": "array",
+            "title": "Participating Facts"
+          },
+          "conflicting_document_ids": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Conflicting Document Ids"
+          }
+        },
+        "type": "object",
+        "required": [
+          "tenant_id",
+          "subject",
+          "attribute",
+          "conflict_type",
+          "description"
+        ],
+        "title": "ConflictReportModel"
+      },
       "CorrectionCreate": {
         "properties": {
           "doc_id": {
@@ -2938,6 +3287,43 @@
           "v2_document"
         ],
         "title": "DiffRequest"
+      },
+      "DocumentComparisonResponse": {
+        "properties": {
+          "tenant_id": {
+            "type": "string",
+            "title": "Tenant Id"
+          },
+          "left_doc_id": {
+            "type": "string",
+            "title": "Left Doc Id"
+          },
+          "right_doc_id": {
+            "type": "string",
+            "title": "Right Doc Id"
+          },
+          "comparisons": {
+            "items": {
+              "$ref": "#/components/schemas/PairComparisonModel"
+            },
+            "type": "array",
+            "title": "Comparisons"
+          },
+          "summary": {
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "type": "object",
+            "title": "Summary"
+          }
+        },
+        "type": "object",
+        "required": [
+          "tenant_id",
+          "left_doc_id",
+          "right_doc_id"
+        ],
+        "title": "DocumentComparisonResponse"
       },
       "DocumentListResponse": {
         "properties": {
@@ -3075,6 +3461,292 @@
           "documents"
         ],
         "title": "EntityResolveRequest"
+      },
+      "EvidenceSpanModel": {
+        "properties": {
+          "document_id": {
+            "type": "string",
+            "title": "Document Id"
+          },
+          "tenant_id": {
+            "type": "string",
+            "title": "Tenant Id"
+          },
+          "chunk_id": {
+            "type": "string",
+            "title": "Chunk Id"
+          },
+          "page_number": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Page Number"
+          },
+          "start_offset": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Start Offset"
+          },
+          "end_offset": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "End Offset"
+          },
+          "quoted_text": {
+            "type": "string",
+            "title": "Quoted Text",
+            "default": ""
+          }
+        },
+        "type": "object",
+        "required": [
+          "document_id",
+          "tenant_id",
+          "chunk_id"
+        ],
+        "title": "EvidenceSpanModel"
+      },
+      "ExtractFactsRequest": {
+        "properties": {
+          "schema_name": {
+            "type": "string",
+            "title": "Schema Name",
+            "description": "Target extraction schema name",
+            "default": "contract_terms"
+          },
+          "subject": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Subject",
+            "description": "Optional entity subject override"
+          },
+          "custom_schema": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Custom Schema",
+            "description": "Custom ExtractionSchema definition"
+          },
+          "passages": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/PassagePayload"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Passages",
+            "description": "Direct passages to extract facts from"
+          }
+        },
+        "type": "object",
+        "title": "ExtractFactsRequest"
+      },
+      "ExtractionResultResponse": {
+        "properties": {
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "document_id": {
+            "type": "string",
+            "title": "Document Id"
+          },
+          "tenant_id": {
+            "type": "string",
+            "title": "Tenant Id"
+          },
+          "facts": {
+            "items": {
+              "$ref": "#/components/schemas/FactModel"
+            },
+            "type": "array",
+            "title": "Facts"
+          },
+          "errors": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Errors"
+          },
+          "schema_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Schema Name"
+          },
+          "schema_version": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Schema Version"
+          }
+        },
+        "type": "object",
+        "required": [
+          "status",
+          "document_id",
+          "tenant_id"
+        ],
+        "title": "ExtractionResultResponse"
+      },
+      "FactModel": {
+        "properties": {
+          "fact_id": {
+            "type": "string",
+            "title": "Fact Id"
+          },
+          "tenant_id": {
+            "type": "string",
+            "title": "Tenant Id"
+          },
+          "document_id": {
+            "type": "string",
+            "title": "Document Id"
+          },
+          "subject": {
+            "type": "string",
+            "title": "Subject"
+          },
+          "attribute": {
+            "type": "string",
+            "title": "Attribute"
+          },
+          "value": {
+            "title": "Value"
+          },
+          "raw_value": {
+            "type": "string",
+            "title": "Raw Value"
+          },
+          "value_type": {
+            "type": "string",
+            "title": "Value Type"
+          },
+          "unit": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Unit"
+          },
+          "period": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Period"
+          },
+          "valid_from": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Valid From"
+          },
+          "valid_to": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Valid To"
+          },
+          "evidence": {
+            "items": {
+              "$ref": "#/components/schemas/EvidenceSpanModel"
+            },
+            "type": "array",
+            "title": "Evidence"
+          },
+          "confidence": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Confidence"
+          },
+          "metadata": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Metadata"
+          }
+        },
+        "type": "object",
+        "required": [
+          "fact_id",
+          "tenant_id",
+          "document_id",
+          "subject",
+          "attribute",
+          "value",
+          "raw_value",
+          "value_type"
+        ],
+        "title": "FactModel"
       },
       "HTTPValidationError": {
         "properties": {
@@ -3528,6 +4200,98 @@
         },
         "type": "object",
         "title": "PIIScanRequest"
+      },
+      "PairComparisonModel": {
+        "properties": {
+          "subject": {
+            "type": "string",
+            "title": "Subject"
+          },
+          "attribute": {
+            "type": "string",
+            "title": "Attribute"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "left_doc_id": {
+            "type": "string",
+            "title": "Left Doc Id"
+          },
+          "left_fact": {
+            "$ref": "#/components/schemas/FactModel"
+          },
+          "right_doc_id": {
+            "type": "string",
+            "title": "Right Doc Id"
+          },
+          "right_fact": {
+            "$ref": "#/components/schemas/FactModel"
+          },
+          "difference_summary": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Difference Summary"
+          },
+          "details": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Details"
+          }
+        },
+        "type": "object",
+        "required": [
+          "subject",
+          "attribute",
+          "status",
+          "left_doc_id",
+          "left_fact",
+          "right_doc_id",
+          "right_fact"
+        ],
+        "title": "PairComparisonModel"
+      },
+      "PassagePayload": {
+        "properties": {
+          "chunk_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Chunk Id"
+          },
+          "text": {
+            "type": "string",
+            "title": "Text"
+          },
+          "page_number": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Page Number"
+          }
+        },
+        "type": "object",
+        "required": [
+          "text"
+        ],
+        "title": "PassagePayload"
       },
       "PositionSchema": {
         "properties": {

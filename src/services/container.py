@@ -736,6 +736,7 @@ class ServiceContainer:
         self.normalizer_service = None
         self.decomposer_service = None
         self.math_engine = None
+        self.intelligence_service = None
 
     async def startup(self):
         """Initialize all services."""
@@ -806,6 +807,9 @@ class ServiceContainer:
         self.normalizer_service = parse_quantity
         self.decomposer_service = build_query_dag
         self.math_engine = MasterUnifiedMathEngine()
+
+        from src.engines.intelligence.service import DocumentIntelligenceService
+        self.intelligence_service = DocumentIntelligenceService()
 
         self._started = True
         log.info("Service container ready")

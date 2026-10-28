@@ -22,6 +22,7 @@ from evaluation.scripts.evaluate_extraction import evaluate_extraction
 from evaluation.scripts.evaluate_packing import evaluate_packing
 from evaluation.scripts.evaluate_privacy import evaluate_privacy
 from evaluation.scripts.evaluate_retrieval import evaluate_retrieval
+from evaluation.scripts.evaluate_intelligence import evaluate_intelligence
 
 
 def run_all(output_path: Path | str | None = None, fail_under_gates: bool = False) -> Dict[str, Any]:
@@ -53,9 +54,14 @@ def run_all(output_path: Path | str | None = None, fail_under_gates: bool = Fals
     print(f"      Precision: {privacy_res['precision']} | Recall: {privacy_res['recall']} | Leakage: {privacy_res['leakage_rate']}")
 
     # 4. Retrieval evaluation
-    print("[4/4] Running Retrieval & Grounding Evaluation...")
+    print("[4/5] Running Retrieval & Grounding Evaluation...")
     retrieval_res = evaluate_retrieval()
     print(f"      MRR: {retrieval_res['mrr']} | Recall@5: {retrieval_res['recall_at_5']} | Abstention: {retrieval_res['abstention_accuracy']}")
+
+    # 5. Document Intelligence evaluation
+    print("[5/5] Running Document Intelligence Evaluation...")
+    intel_res = evaluate_intelligence()
+    print(f"      Extraction F1: {intel_res['extraction_f1']} | Grounding Fidelity: {intel_res['grounding_fidelity']} | Conflict Recall: {intel_res['conflict_detection_recall']}")
 
     # Gate Verification
     passed_all = True
@@ -99,6 +105,14 @@ def run_all(output_path: Path | str | None = None, fail_under_gates: bool = Fals
         passed_all = False
         gate_failures.append("retrieval.abstention_accuracy below gate")
 
+    # Document intelligence gates
+    if intel_res["extraction_f1"] < 0.85:
+        passed_all = False
+        gate_failures.append("intelligence.extraction_f1 below gate")
+    if intel_res["grounding_fidelity"] < 1.0:
+        passed_all = False
+        gate_failures.append("intelligence.grounding_fidelity below gate")
+
     report: Dict[str, Any] = {
         "benchmark_timestamp": datetime.datetime.now(datetime.timezone.utc).isoformat(),
         "overall_status": "PASSED" if passed_all else "FAILED",
@@ -108,6 +122,7 @@ def run_all(output_path: Path | str | None = None, fail_under_gates: bool = Fals
             "packing": packing_res,
             "privacy": privacy_res,
             "retrieval": retrieval_res,
+            "document_intelligence": intel_res,
         },
         "gates_applied": gates,
     }

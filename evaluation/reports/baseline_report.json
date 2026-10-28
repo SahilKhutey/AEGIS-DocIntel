@@ -1,5 +1,5 @@
 {
-  "benchmark_timestamp": "2026-10-28T03:13:52.502096+00:00",
+  "benchmark_timestamp": "2026-10-28T03:51:17.357759+00:00",
   "overall_status": "PASSED",
   "gate_failures": [],
   "metrics": {
@@ -34,6 +34,15 @@
       "citation_validation_passed": true,
       "queries_evaluated": 20,
       "passed": true
+    },
+    "document_intelligence": {
+      "extraction_precision": 1.0,
+      "extraction_recall": 1.0,
+      "extraction_f1": 1.0,
+      "grounding_fidelity": 1.0,
+      "normalization_accuracy": 1.0,
+      "comparison_accuracy": 1.0,
+      "conflict_detection_recall": 1.0
     }
   },
   "gates_applied": {

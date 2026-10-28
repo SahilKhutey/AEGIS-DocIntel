@@ -1816,3 +1816,51 @@ uff check src tests scripts dashboard: All checks passed.
   - `python scripts/validate_mvp_dataset.py`: PASSED.
   - `ruff check src tests scripts`: All checks passed.
   - `gitleaks detect --verbose`: Scanned with 0 leaks found.
+
+
+### Task P4.30 — MVP 5 Document Intelligence, Fact Extraction & Cross-Document Reasoning Implementation
+- **Time:** 2026-10-28 09:25:00 UTC
+- **Context & Objective:**
+  Deliver MVP 5 Document Intelligence, Advanced Extraction, Structured Data & Cross-Document Reasoning:
+  1. **Structured Fact Extraction Contracts (`src/engines/intelligence/contracts.py`):**
+     - Implemented immutable, slotted dataclasses (`EvidenceSpan`, `ExtractedFact`, `FieldDefinition`, `ExtractionSchema`, `ExtractionResult`, `PairComparison`, `DocumentComparisonResult`, `ConflictReport`).
+     - Enforces exact character offsets, source chunk IDs, verified quoted text, confidence scores, and strict tenant ownership.
+  2. **Exact Evidence Grounding (`src/engines/intelligence/fact_extractor.py`):**
+     - Implemented `verify_quote_in_source` validating that every extracted fact is grounded in source passages with computed character offsets.
+  3. **Untrusted Document Boundary Protection (`src/engines/intelligence/fact_extractor.py`):**
+     - Encapsulated document content within secured JSON envelopes (`build_untrusted_document_envelope`) with SHA-256 payload integrity hashing to prevent prompt injection or boundary escape.
+  4. **Deterministic Normalization (`src/engines/intelligence/normalization.py`):**
+     - Implemented robust normalizers for currency amounts, scale multipliers (thousand, million, billion, k, M, B), durations (calendar days, business days, months), ISO dates (YYYY-MM-DD, quarters, textual months), booleans, and units.
+  5. **Deterministic Entity Resolution (`src/engines/intelligence/entity_resolution.py`):**
+     - Implemented `normalize_entity_label` (NFKC Unicode normalization, case folding, legal entity suffix stripping) and `EntityResolver` providing tenant-isolated alias registries.
+  6. **Deterministic Cross-Document Comparison (`src/engines/intelligence/comparison.py`):**
+     - Implemented `DocumentComparator` aligning facts by canonical subject and attribute, validating unit compatibility, temporal alignment, and strictly rejecting cross-tenant comparisons with `CrossTenantComparisonError`.
+  7. **Multi-Document Conflict Detection (`src/engines/intelligence/conflict_detection.py`):**
+     - Built `ConflictDetector` identifying quantity discrepancies, date mismatches, and opposing contractual obligations across documents, preserving all conflicting sources without silently choosing one.
+  8. **Atomic Fact Store Persistence (`src/engines/intelligence/fact_store.py`):**
+     - Implemented SQLite-backed `FactStore` ensuring atomic replacement of previous extractions for matching versions/schemas and strict tenant-scoped querying.
+  9. **Document Intelligence Service & API (`src/engines/intelligence/service.py`, `src/api/routers/intelligence.py`):**
+     - Created `DocumentIntelligenceService` coordinating extraction, normalization, persistence, comparison, and conflict inspection.
+     - Mounted authenticated REST endpoints (`POST /v1/documents/{document_id}/extract-facts`, `GET /v1/documents/{document_id}/facts`, `POST /v1/intelligence/compare`, `GET /v1/intelligence/conflicts`).
+  10. **Benchmark Evaluation Suite & Quality Gates:**
+      - Created `evaluation/datasets/document_intelligence/extraction_cases.jsonl` and `comparison_cases.jsonl`.
+      - Built `evaluation/scripts/evaluate_intelligence.py` measuring extraction F1, grounding fidelity, normalization accuracy, comparison accuracy, and conflict recall.
+      - Integrated evaluation benchmark slice directly into `evaluation/scripts/run_all.py`.
+  11. **Comprehensive Regression Test Suites:**
+      - `tests/test_mvp5_contracts.py`: Immutability, round-trip serialization, and contract invariants.
+      - `tests/test_mvp5_normalization.py`: Numbers, scales, currencies, units, dates, booleans.
+      - `tests/test_mvp5_entity_resolution.py`: Unicode normalization, corporate suffix stripping, tenant-scoped aliases.
+      - `tests/test_mvp5_extraction.py`: Evidence span quote verification, injection boundaries, financial & custom schemas.
+      - `tests/test_mvp5_comparison.py`: Equality, discrepancy, unit/period compatibility, cross-tenant rejection.
+      - `tests/test_mvp5_conflicts.py`: Quantity discrepancies, date mismatches, obligation conflicts, evidence preservation.
+      - `tests/test_mvp5_persistence.py`: Atomic run replacement, tenant-scoped querying, deletion safety.
+      - `tests/test_mvp5_evaluation.py`: Automated validation against benchmark quality gates.
+      - `tests/test_mvp5_api.py`: FastAPI endpoints, fail-closed authentication guard, attribute filtering, and conflict APIs.
+- **Verification:**
+  - `python evaluation/scripts/evaluate_intelligence.py`: PASSED (F1: 1.0, Grounding: 1.0, Conflict Recall: 1.0).
+  - `python evaluation/scripts/run_all.py --fail-under-gates`: PASSED (All 5 quality gates met).
+  - `python scripts/check_dependency_sync.py`: OK.
+  - `python scripts/check_docs_claims.py`: OK (R1-R6 passed).
+  - `python scripts/validate_mvp_dataset.py`: PASSED.
+  - `ruff check src tests scripts evaluation`: All checks passed.
+  - `gitleaks detect --verbose`: 236 commits scanned, 0 leaks found.
