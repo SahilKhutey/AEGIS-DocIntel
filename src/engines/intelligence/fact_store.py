@@ -236,14 +236,14 @@ class FactStore:
                     SELECT * FROM extracted_facts
                     WHERE tenant_id = ? AND document_id IN ({placeholders}) AND attribute = ?
                     ORDER BY created_at ASC
-                """
+                """  # nosec B608
                 params.append(attribute)
             else:
                 query = f"""
                     SELECT * FROM extracted_facts
                     WHERE tenant_id = ? AND document_id IN ({placeholders})
                     ORDER BY created_at ASC
-                """
+                """  # nosec B608
 
             rows = conn.execute(query, params).fetchall()
             return [self._row_to_fact(r) for r in rows]
