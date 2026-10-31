@@ -395,9 +395,14 @@ class JobRepository:
         *,
         job_id: str,
         worker_id: str,
-        result_reference: Optional[str] = None,
+        result_reference: Optional[Any] = None,
     ) -> bool:
         """Mark job as succeeded and clear lease. Returns False if worker lost lease."""
+        if result_reference is not None and not isinstance(result_reference, str):
+            try:
+                result_reference = json.dumps(result_reference)
+            except Exception:
+                result_reference = str(result_reference)
         conn = self._get_connection()
         now = datetime.now(timezone.utc).isoformat()
         try:

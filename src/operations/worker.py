@@ -118,6 +118,12 @@ class JobWorker:
                 handler(ctx, job),
                 timeout=self.operation_timeout_seconds,
             )
+            if result_ref is not None and not isinstance(result_ref, str):
+                import json
+                try:
+                    result_ref = json.dumps(result_ref)
+                except Exception:
+                    result_ref = str(result_ref)
 
             committed = self.repository.mark_succeeded(
                 job_id=job.job_id,

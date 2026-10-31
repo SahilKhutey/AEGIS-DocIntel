@@ -2005,3 +2005,33 @@ uff check src tests scripts dashboard: All checks passed.
   - `bandit -r src dashboard scripts -ll`: PASSED (0 issues).
   - `ruff check src tests scripts evaluation dashboard`: All checks passed.
   - `gitleaks detect --verbose`: 0 leaks found.
+
+
+### Task P4.34 — MVP Final Verification & Validation Execution, Baseline Remediation & Operational Job Verification Drill
+- **Time:** 2026-10-31 16:35:00 UTC
+- **Context & Objective:**
+  Execute comprehensive final release verification and validation across all gates, checklist items, and background job operations:
+  1. **Historical Baseline Blocker Remediation:**
+     - Added package marker `scripts/__init__.py` resolving test collection module discovery; full test discovery succeeded with zero errors across all 1,541 tests.
+     - Re-verified git history secrets with `gitleaks detect --verbose` across 241 commits (0 leaks found, all historical items confirmed as audited false positives in `.gitleaksignore`).
+  2. **Comprehensive Full Test Suite Execution:**
+     - Executed full test suite (`pytest tests/`) cleanly with exit code 0 (1,538 passed, 3 skipped for optional external dependencies, 0 failed, 0 errors in 10m 23s).
+  3. **Automated Quality Gates & Benchmark Suite:**
+     - Evaluated `evaluation/scripts/run_all.py --fail-under-gates`: all 5 project quality gates met with 100% compliance (Reading-Order Tau 1.0, Table F1 1.0, Budget Violations 0.0, Packing Min Ratio 0.8571, Privacy Precision/Recall 1.0, Privacy Leakage 0.0, Retrieval MRR 1.0, Recall@5 0.9231, Abstention Accuracy 1.0, Citation Validity 100%, Intelligence F1 1.0, Grounding Fidelity 1.0, Conflict Recall 1.0).
+  4. **Live Operational Background Job Verification Drill (`scripts/verify_jobs_run.py`):**
+     - Hardened `JobRepository.mark_succeeded` and `JobWorker.process_job` with automatic JSON serialization for complex handler dictionary outputs.
+     - Executed standalone drill demonstrating real-time asynchronous job submission, worker polling, execution, transient error recovery with exponential backoff (`queued` -> `running` -> `retry_wait` -> `running` -> `succeeded`), monotonic event auditing, and graceful worker shutdown.
+  5. **Master Verification Checklist & Canonical Report:**
+     - Verified all 75 checks in the Master Verification Checklist (Sections A through J).
+     - Formally published canonical report [`docs/release/MVP_FINAL_VERIFICATION.md`](release/MVP_FINAL_VERIFICATION.md).
+     - Issued final release decision: **GO (MVP Release Candidate 1)**.
+- **Verification:**
+  - `python scripts/verify_jobs_run.py`: PASSED (all operational job invariants verified).
+  - `python -m pytest tests/test_mvp8_*.py`: PASSED (all 23 tests passing).
+  - `python evaluation/scripts/run_all.py --fail-under-gates`: PASSED (all quality gates met).
+  - `python scripts/check_dependency_sync.py`: OK.
+  - `python scripts/check_docs_claims.py`: OK (R1-R6 passed).
+  - `python scripts/validate_mvp_dataset.py`: PASSED.
+  - `bandit -r src dashboard scripts -ll`: PASSED (0 issues).
+  - `ruff check src tests scripts evaluation dashboard`: All checks passed.
+  - `gitleaks detect --verbose`: 241 commits scanned, 0 leaks found.
