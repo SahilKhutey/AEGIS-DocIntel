@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import json
 import logging
+import os
 import time
 from collections.abc import Mapping
 from typing import Any
@@ -24,6 +25,26 @@ EVENT_GENERATION_COMPLETED = "generation.completed"
 EVENT_CITATION_VALIDATION_FAILED = "citation.validation_failed"
 EVENT_REQUEST_COMPLETED = "request.completed"
 EVENT_DEPENDENCY_UNAVAILABLE = "dependency.unavailable"
+
+# Background Job Events
+EVENT_JOB_ENQUEUED = "job.enqueued"
+EVENT_JOB_CLAIMED = "job.claimed"
+EVENT_JOB_COMPLETED = "job.completed"
+EVENT_JOB_FAILED = "job.failed"
+EVENT_JOB_RETRIED = "job.retried"
+EVENT_JOB_CANCELLED = "job.cancelled"
+
+
+def configure_logging() -> None:
+    """Configure structured logging based on AEGIS_LOG_LEVEL environment variable."""
+    level_name = os.getenv("AEGIS_LOG_LEVEL", "INFO").upper()
+    level = getattr(logging, level_name, None)
+    if not isinstance(level, int):
+        level = logging.INFO
+    logging.basicConfig(
+        level=level,
+        format="%(asctime)s %(levelname)s %(name)s %(message)s",
+    )
 
 
 def log_event(

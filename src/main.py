@@ -89,6 +89,8 @@ async def lifespan(app: FastAPI) -> AsyncGenerator:
     app.state.runtime_settings = runtime_settings
     app.state.intelligence_service = container.intelligence_service
     app.state.review_service = container.review_service
+    app.state.job_service = container.job_service
+    app.state.job_repository = container.job_repository
 
     # Start observability (Prometheus metrics endpoint)
     if settings.observability.enable_metrics:
@@ -217,6 +219,10 @@ def create_app() -> FastAPI:
     app.include_router(answers.router, prefix="/api/v1/answers", include_in_schema=False)
     app.include_router(answers.router, prefix="/api/v1/ask", include_in_schema=False)
     app.include_router(intelligence_router_mod.router, prefix="/api/v1", include_in_schema=False)
+
+    from src.api.routers import jobs as jobs_router_mod
+    app.include_router(jobs_router_mod.router, prefix="/v1/jobs")
+    app.include_router(jobs_router_mod.router, prefix="/api/v1/jobs", include_in_schema=False)
 
     from src.api.error_handlers import register_error_handlers
     register_error_handlers(app)

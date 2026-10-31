@@ -739,6 +739,10 @@ class ServiceContainer:
         self.intelligence_service = None
         self.review_repository = None
         self.review_service = None
+        self.job_repository = None
+        self.job_service = None
+        self.handler_registry = None
+        self.job_worker = None
 
     async def startup(self):
         """Initialize all services."""
@@ -821,6 +825,20 @@ class ServiceContainer:
             orchestrator=self.rag_engine,
         )
 
+        from src.operations.job_repository import JobRepository
+        from src.operations.job_service import JobService
+        from src.operations.handlers import build_default_handler_registry
+        from src.operations.worker import JobWorker
+
+        self.job_repository = JobRepository()
+        self.job_service = JobService(repository=self.job_repository)
+        self.handler_registry = build_default_handler_registry(container=self)
+        self.job_worker = JobWorker(
+            repository=self.job_repository,
+            registry=self.handler_registry,
+            worker_id="worker-main-1",
+        )
+
         self._started = True
         log.info("Service container ready")
 
@@ -828,6 +846,8 @@ class ServiceContainer:
         """Graceful shutdown of all services."""
         log.info("Shutting down service container")
         self._started = False
+        if self.job_worker:
+            self.job_worker.stop()
         if self.rag_engine:
             try:
                 await self.rag_engine.close()
@@ -867,6 +887,22 @@ class ServiceContainer:
 
         details["memory"] = "ok" if getattr(self, "memory", None) is not None else "degraded"
         details["rag_engine"] = "ok" if self.rag_engine is not None else "missing"
+
+        # Operational jobs database check
+        if getattr(self, "job_repository", None) is not None:
+            job_db_path = getattr(self.job_repository, "db_path", None)
+            if job_db_path and job_db_path != ":memory:":
+                try:
+                    with sqlite3.connect(job_db_path, timeout=3.0) as conn:
+                        cursor = conn.cursor()
+                        cursor.execute("SELECT 1 FROM operation_jobs LIMIT 1")
+                    details["operations_db"] = "ok"
+                except Exception as op_err:
+                    details["operations_db"] = f"unhealthy: {op_err}"
+                    return False, details
+            else:
+                details["operations_db"] = "ok"
+
         return True, details
 
     async def health_check(self) -> dict[str, str]:
@@ -876,6 +912,11 @@ class ServiceContainer:
             "embedding_model": "ok" if self.embedding_model else "unavailable",
             "llm_service": "ok" if self.llm_service else "unavailable",
         }
+
+        if getattr(self, "job_repository", None) is not None:
+            checks["job_repository"] = "ok"
+        if getattr(self, "job_worker", None) is not None:
+            checks["job_worker"] = "ok" if getattr(self.job_worker, "is_running", False) else "stopped"
 
         # Check Redis
         try:

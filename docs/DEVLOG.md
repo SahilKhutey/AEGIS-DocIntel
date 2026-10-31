@@ -1951,3 +1951,57 @@ uff check src tests scripts dashboard: All checks passed.
   - `bandit -r src dashboard scripts -ll`: PASSED (0 issues).
   - `ruff check src tests scripts evaluation dashboard`: All checks passed.
   - `gitleaks detect --verbose`: 239 commits scanned, 0 leaks found.
+
+
+### Task P4.33 — MVP 8 Production Intelligence Operations, Background Jobs, Observability & Reliability Implementation
+- **Time:** 2026-10-31 16:00:00 UTC
+- **Context & Objective:**
+  Deliver MVP 8 Production Intelligence Operations, Background Jobs, Observability, Reliability, and Deployment:
+  1. **Background Job Contracts & State Machine (`src/operations/job_contracts.py`):**
+     - Implemented slotted, immutable job domain models (`JobStatus`, `JobType`, `StandardErrorCode`, `JobRequest`, `JobRecord`, `JobEvent`).
+     - Established explicit state transitions (`queued`, `running`, `retry_wait`, `succeeded`, `failed`, `cancelled`), deterministic SHA-256 input fingerprinting, and audit event sequencing.
+     - Preserves the critical architectural separation between document status (`ready`, `indexing`, `failed`), operational job status (`queued`, `running`, `retry_wait`, `succeeded`), and business intelligence review outcomes.
+  2. **Bounded Retry Policy with Full Jitter (`src/operations/retry_policy.py`):**
+     - Implemented `RetryPolicy` and `RetryDecision` with deterministic exponential backoff, configurable multiplier and ceiling, and full randomized jitter to prevent thundering herds.
+     - Discriminated permanent unrecoverable errors (`PermanentJobError`, validation/not found) from transient retryable failures (`TransientJobError`, timeouts/network disconnects).
+  3. **Transactional SQLite Job Repository (`src/operations/job_repository.py`):**
+     - Implemented SQLite repository managing `operation_jobs` and `operation_job_events` tables.
+     - Guaranteed atomic worker claim with lease acquisition (`claim_next`), automatic stale worker lease-expiry recovery, heartbeat lease renewals (`renew_lease`), optimistic concurrency protection via record versioning, idempotency key verification with fingerprint mismatch detection (`IdempotencyConflictError`), and strict multi-tenant data isolation.
+  4. **Job Handlers & Asynchronous Worker Pool (`src/operations/handlers.py`, `src/operations/worker.py`):**
+     - Created extensible `HandlerRegistry` with standard handlers for document ingestion, indexing, fact extraction, comparison, and report generation.
+     - Implemented `JobWorker` execution loop featuring background heartbeat tasks for lease renewal, execution timeouts, error classification, and graceful cancellation.
+  5. **High-Level Coordination Service (`src/operations/job_service.py`):**
+     - Created `JobService` orchestrating job submissions, status queries, manual retries, user cancellations, and audit event retrieval across tenant boundaries.
+  6. **Production Observability & Low-Cardinality Prometheus Metrics (`src/operations/metrics.py`, `src/core/observability.py`):**
+     - Added standard metrics (`JOBS_SUBMITTED`, `JOBS_COMPLETED`, `JOBS_FAILED`, `JOBS_RETRIED`, `QUEUE_DEPTH`, `QUEUE_WAIT_SECONDS`, `EXECUTION_SECONDS`, `EXPIRED_LEASES`, `HANDLER_ERRORS`).
+     - Adhered strictly to low-cardinality label rules (no tenant IDs, document IDs, or raw errors).
+     - Added unified JSON structured logging setup (`configure_logging`) and standard operational event names.
+  7. **Operations REST API Router (`src/api/routers/jobs.py`):**
+     - Mounted endpoints at `/v1/jobs` and `/api/v1/jobs`:
+       - `POST /v1/jobs`: Enqueues job with HTTP 202 Accepted, returning `Location` status header and Idempotency-Key support.
+       - `GET /v1/jobs` & `GET /v1/jobs/{job_id}`: Tenant-scoped listing and detail inspection.
+       - `POST /v1/jobs/{job_id}/cancel`: User cancellation of pending or running jobs.
+       - `POST /v1/jobs/{job_id}/retry`: Manual rescheduling of failed or cancelled jobs.
+       - `GET /v1/jobs/{job_id}/events`: Ordered timeline of operational audit events.
+  8. **Container & Application Lifespan Integration (`src/services/container.py`, `src/main.py`):**
+     - Registered `JobRepository`, `JobService`, and `JobWorker` into `ServiceContainer` lifecycle and FastAPI application lifespan state.
+     - Added operations database inspection to the `/health/ready` probe.
+  9. **Frontend Workbench Schema Synchronization (`web/src/lib/schemas.ts`):**
+     - Added Zod schemas (`JobStatusSchema`, `JobTypeSchema`, `JobSchema`, `JobListSchema`, `JobEventItemSchema`) and corresponding TypeScript types.
+  10. **Comprehensive Regression Test Suites:**
+      - `tests/test_mvp8_job_contracts.py`: Status invariants, input fingerprinting, request validation, and contract serialization.
+      - `tests/test_mvp8_retry_policy.py`: Transient vs permanent classification, attempt bounds, exponential backoff, and ceiling caps.
+      - `tests/test_mvp8_job_lifecycle.py`: Idempotent enqueue, conflict detection, worker execution, and exponential retry cycles.
+      - `tests/test_mvp8_job_recovery.py`: Worker crash recovery after lease expiry, stale worker completion rejection, and heartbeat renewal.
+      - `tests/test_mvp8_job_tenant_isolation.py`: Cross-tenant boundary verification across get, list, cancel, retry, and events.
+      - `tests/test_mvp8_job_api.py`: FastAPI endpoints, 401 unauthenticated denial, 202 submission, 409 conflict, list/get isolation, cancel, retry, and events.
+      - `tests/test_mvp8_health.py`: Operations database and worker readiness checks.
+- **Verification:**
+  - `python -m pytest tests/test_mvp8_*.py`: PASSED (all 23 tests passing).
+  - `python evaluation/scripts/run_all.py --fail-under-gates`: PASSED (All quality gates met).
+  - `python scripts/check_dependency_sync.py`: OK.
+  - `python scripts/check_docs_claims.py`: OK (R1-R6 passed).
+  - `python scripts/validate_mvp_dataset.py`: PASSED.
+  - `bandit -r src dashboard scripts -ll`: PASSED (0 issues).
+  - `ruff check src tests scripts evaluation dashboard`: All checks passed.
+  - `gitleaks detect --verbose`: 0 leaks found.
