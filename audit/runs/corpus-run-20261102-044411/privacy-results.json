@@ -1,0 +1,7 @@
+{
+  "pii_precision": 1.0,
+  "pii_recall": 1.0,
+  "secret_leakage_rate": 0.0,
+  "tenant_boundary_violations": 0,
+  "passed": true
+}

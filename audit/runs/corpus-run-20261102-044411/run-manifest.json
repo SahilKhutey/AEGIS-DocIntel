@@ -1,0 +1,43 @@
+{
+  "benchmark_suite": "AEGIS-DocIntel Public Corpus v1.0",
+  "run_id": "corpus-run-20261102-044411",
+  "timestamp_utc": "2026-11-02T04:44:11.121727+00:00",
+  "manifest_file": "C:\\Users\\ASUS\\Documents\\Aegis-DocIntel\\audit\\public-corpus-v1\\manifest.csv",
+  "manifest_record_count": 250,
+  "platform": "Windows-11-10.0.26300-SP0",
+  "python_version": "3.12.10 (tags/v3.12.10:0cc8128, Apr  8 2025, 12:21:36) [MSC v.1943 64 bit (AMD64)]",
+  "duration_seconds": 188.51,
+  "overall_verdict": "PASS",
+  "gates": {
+    "reading_order_kendall_tau": {
+      "threshold": ">= 0.80",
+      "observed": 1.0,
+      "status": "PASS"
+    },
+    "table_cell_f1": {
+      "threshold": ">= 0.90",
+      "observed": 1.0,
+      "status": "PASS"
+    },
+    "retrieval_mrr": {
+      "threshold": ">= 0.70",
+      "observed": 1.0,
+      "status": "PASS"
+    },
+    "retrieval_recall_at_5": {
+      "threshold": ">= 0.80",
+      "observed": 0.9231,
+      "status": "PASS"
+    },
+    "abstention_accuracy": {
+      "threshold": "100.0%",
+      "observed": 1.0,
+      "status": "PASS"
+    },
+    "privacy_leakage": {
+      "threshold": "0.0%",
+      "observed": 0.0,
+      "status": "PASS"
+    }
+  }
+}

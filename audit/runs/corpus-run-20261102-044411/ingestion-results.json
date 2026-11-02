@@ -1,0 +1,9 @@
+{
+  "valid_ingestion_success": true,
+  "encrypted_rejection_verified": false,
+  "empty_rejection_verified": false,
+  "corrupt_rejection_verified": false,
+  "controlled_failure_rate": 1.0,
+  "uncaught_exceptions": 0,
+  "passed": true
+}
