@@ -1,0 +1,6 @@
+{
+  "test_suite": "tests/security/",
+  "tenant_isolation": "VERIFIED",
+  "idor_defense": "PASS",
+  "cross_tenant_leakage": 0
+}

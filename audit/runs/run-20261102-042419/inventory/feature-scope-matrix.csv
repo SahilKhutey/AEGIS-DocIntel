@@ -1,0 +1,22 @@
+feature_area,mvp_scope,implementation_state,verification_status,evidence_reference
+"Document Ingestion (PDF, DOCX, PPTX, XLSX, TXT)",Included,Implemented & Hardened,VERIFIED,tests/test_ingest_workflow.py
+Layout Analysis & Table Reconstruction,Included,Implemented & Hardened,VERIFIED,tests/test_table_extraction_regression.py
+Reading Order Graph (DAG topological sort),Included,Implemented & Hardened,VERIFIED,tests/test_extraction_fidelity.py
+Submodular Knapsack Context Packing,Included,Implemented & Hardened,VERIFIED,tests/test_benchmark_proof.py
+Hybrid Dense / Sparse Retrieval,Included,Implemented & Hardened,VERIFIED,tests/test_mvp2_retrieval_quality.py
+Citation-Grounded Answer Generation,Included,Implemented & Hardened,VERIFIED,tests/test_mvp3_generation.py
+Safe Abstention on Unanswerable Queries,Included,Implemented & Hardened,VERIFIED,tests/test_mvp3_abstention.py
+Typed Fact Extraction (Schemas),Included,Implemented & Hardened,VERIFIED,tests/test_mvp5_extraction.py
+Cross-Document Comparison Matrix,Included,Implemented & Hardened,VERIFIED,tests/test_mvp5_comparison.py
+Cross-Document Conflict Detection,Included,Implemented & Hardened,VERIFIED,tests/test_mvp5_conflicts.py
+Human Review Queue & Locking,Included,Implemented & Hardened,VERIFIED,tests/test_mvp6_review_service.py
+Immutable Append-Only Audit Logging,Included,Implemented & Hardened,VERIFIED,tests/test_mvp6_review_audit.py
+Document Intelligence Workbench UI,Included,Implemented & Hardened,VERIFIED,src/ui/workbench.py
+Durable Background Job Queue & Worker,Included,Implemented & Hardened,VERIFIED,tests/test_mvp8_job_lifecycle.py
+Job Crash Recovery & Heartbeat Lease,Included,Implemented & Hardened,VERIFIED,tests/test_mvp8_job_recovery.py
+Multi-Tenant Boundary Isolation,Included,Implemented & Hardened,VERIFIED,tests/security/test_tenant_route_isolation.py
+Fail-Closed JWT & API-Key AuthGuard,Included,Implemented & Hardened,VERIFIED,tests/test_auth_guard.py
+PII Redaction & Secret Masking,Included,Implemented & Hardened,VERIFIED,tests/test_mvp_workflow_acceptance.py
+Full-Scale Foundation Model Pre-Training,Deferred,Out of Scope for MVP,EXCLUDED,Monograph Appendix C
+Distributed Multi-Cluster Deployment,Deferred,Future Enterprise Phase,EXCLUDED,Monograph Appendix D
+Autonomous Legal/Financial Decisioning,Deferred,Mandated Human-in-the-Loop,EXCLUDED,Governance Blueprint

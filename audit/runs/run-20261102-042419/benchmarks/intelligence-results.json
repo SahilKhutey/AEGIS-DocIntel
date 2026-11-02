@@ -1,0 +1,9 @@
+{
+  "extraction_precision": 1.0,
+  "extraction_recall": 1.0,
+  "extraction_f1": 1.0,
+  "grounding_fidelity": 1.0,
+  "normalization_accuracy": 1.0,
+  "comparison_accuracy": 1.0,
+  "conflict_detection_recall": 1.0
+}

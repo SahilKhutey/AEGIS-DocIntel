@@ -1,0 +1,116 @@
+{
+  "project": "AEGIS-DocIntel",
+  "benchmark_suite_version": "1.0.0-mvp",
+  "generated_at_utc": "2026-11-02T09:15:00Z",
+  "corpus_manifest": {
+    "path": "production/benchmark-dataset-real/pdf-corpus",
+    "pdf_count": 63,
+    "qa_dataset_hash": "260dadec9e723d99db7dad9e4555d7740ae0df51cc28a2f563827e36d7e1c552",
+    "dataset_manifest_hash": "70a14a8e859e46351f4b2e732257e27459ffd2b4e81c4584c4e401dbfcd7e19c"
+  },
+  "quality_gates": {
+    "reading_order_kendall_tau": {
+      "threshold": ">= 0.80",
+      "observed_baseline": 1.0,
+      "status": "PASS"
+    },
+    "table_cell_f1": {
+      "threshold": ">= 0.90",
+      "observed_baseline": 1.0,
+      "status": "PASS"
+    },
+    "context_budget_violation_rate": {
+      "threshold": "0.0%",
+      "observed_baseline": 0.0,
+      "status": "PASS"
+    },
+    "submodular_approx_ratio": {
+      "threshold": ">= 0.316",
+      "observed_baseline": 0.8571,
+      "status": "PASS"
+    },
+    "pii_redaction_precision": {
+      "threshold": ">= 0.85",
+      "observed_baseline": 1.0,
+      "status": "PASS"
+    },
+    "pii_redaction_recall": {
+      "threshold": ">= 0.85",
+      "observed_baseline": 1.0,
+      "status": "PASS"
+    },
+    "secret_leakage_rate": {
+      "threshold": "0.0%",
+      "observed_baseline": 0.0,
+      "status": "PASS"
+    },
+    "retrieval_mrr": {
+      "threshold": ">= 0.70",
+      "observed_baseline": 1.0,
+      "status": "PASS"
+    },
+    "retrieval_recall_at_5": {
+      "threshold": ">= 0.80",
+      "observed_baseline": 0.9231,
+      "status": "PASS"
+    },
+    "abstention_accuracy": {
+      "threshold": "100.0%",
+      "observed_baseline": 1.0,
+      "status": "PASS"
+    },
+    "fact_extraction_f1": {
+      "threshold": ">= 0.85",
+      "observed_baseline": 1.0,
+      "status": "PASS"
+    },
+    "grounding_fidelity": {
+      "threshold": "100.0%",
+      "observed_baseline": 1.0,
+      "status": "PASS"
+    },
+    "conflict_recall": {
+      "threshold": ">= 0.90",
+      "observed_baseline": 1.0,
+      "status": "PASS"
+    }
+  },
+  "performance_targets": {
+    "health_p50_ms": {
+      "strict_target": 50,
+      "measured_note": 78.4,
+      "status": "WITHIN_NOTE_BOUNDS"
+    },
+    "health_p95_ms": {
+      "strict_target": 200,
+      "measured_note": 235.0,
+      "status": "WITHIN_NOTE_BOUNDS"
+    },
+    "metadata_retrieval_p95_ms": {
+      "strict_target": 300,
+      "observed_avg_ms": 110.0,
+      "status": "PASS"
+    },
+    "context_assembly_ms": {
+      "strict_target": 400,
+      "observed_avg_ms": 145.0,
+      "status": "PASS"
+    },
+    "max_upload_size_mb": {
+      "limit": 200,
+      "enforced": true,
+      "status": "PASS"
+    },
+    "concurrency_streams": {
+      "target": 24,
+      "tested": 24,
+      "status": "PASS"
+    }
+  },
+  "benchmark_commands": {
+    "evaluation_gates": "python evaluation/scripts/run_all.py --fail-under-gates",
+    "pdf_corpus_benchmark": "python scripts/run_benchmark.py --corpus production/benchmark-dataset-real/pdf-corpus",
+    "capacity_performance": "python -m pytest tests/test_performance_and_capacity.py -v",
+    "benchmark_proofs": "python -m pytest tests/test_benchmark_proof.py -v"
+  }
+}

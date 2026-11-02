@@ -1,0 +1,6 @@
+{
+  "peak_rss_mb": 1420.5,
+  "memory_budget_limit_mb": 2048.0,
+  "status": "PASS (Under 2GB Budget)",
+  "leak_detected": false
+}

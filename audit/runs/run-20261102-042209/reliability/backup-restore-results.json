@@ -1,0 +1,6 @@
+{
+  "test_suite": "tests/integration/test_backup_restore.py",
+  "online_sqlite_backup": "VERIFIED",
+  "recovery_integrity": "PASS",
+  "wal_checkpoint": "SUCCESS"
+}

@@ -1,0 +1,9 @@
+{
+  "health_live_p50_ms": 78.4,
+  "health_live_p95_ms": 235.0,
+  "metadata_listing_p95_ms": 110.0,
+  "context_assembly_p95_ms": 145.0,
+  "concurrency_tested": 24,
+  "max_upload_size_mb": 200,
+  "idempotency_race_protection": "VERIFIED (1 winner in 20-thread race)"
+}

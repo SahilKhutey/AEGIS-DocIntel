@@ -1,0 +1,11 @@
+{
+  "database": "sqlite_wal",
+  "schema_version": "1.0.0",
+  "migrations_applied": [
+    "001_core",
+    "002_intelligence",
+    "003_governance",
+    "004_jobs"
+  ],
+  "status": "CURRENT"
+}

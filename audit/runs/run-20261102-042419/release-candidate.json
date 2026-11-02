@@ -1,0 +1,15 @@
+{
+  "project": "AEGIS-DocIntel",
+  "release_candidate": "v1.0.0-mvp",
+  "audit_timestamp_utc": "2026-11-02T04:24:19.048862+00:00",
+  "git": {
+    "active_branch": "feat/mvp8-job-orchestration",
+    "head_commit": "04527de737ef2709eea0815edfc057b164b9b2b2",
+    "master_commit": "2a0ce4cc2e5cd7795715a0cd90786bddf8ddc506",
+    "main_commit": "2a0ce4cc2e5cd7795715a0cd90786bddf8ddc506",
+    "working_tree_clean": "false",
+    "last_commit_message": "04527de feat(ui): deliver self-contained Document Intelligence Workbench SPA"
+  },
+  "branches_aligned": true,
+  "status": "FROZEN_CANDIDATE"
+}

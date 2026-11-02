@@ -1,0 +1,72 @@
+{
+  "name": "AEGIS-DocIntel Complete MVP Audit Suite",
+  "version": "1.0.0-mvp",
+  "schema_version": "1.0",
+  "description": "Configuration specification for AEGIS-DocIntel multi-phase verification, validation, and release readiness audit.",
+  "profiles": {
+    "quick": {
+      "description": "Fast verification of candidate freeze, dependency sync, core unit tests, linting, dataset contract, and API schema.",
+      "phases": [1, 2, 3, 4, 7],
+      "timeout_multiplier": 1.0
+    },
+    "full": {
+      "description": "Exhaustive end-to-end verification covering all 7 audit phases: candidate freeze, environment, unit tests, quality gates, benchmarks, security/recovery, and build/release.",
+      "phases": [1, 2, 3, 4, 5, 6, 7],
+      "timeout_multiplier": 1.5
+    },
+    "tests": {
+      "description": "Dedicated execution of all unit, integration, property, security, and recovery test suites.",
+      "phases": [3, 6],
+      "timeout_multiplier": 1.5
+    },
+    "benchmarks": {
+      "description": "Dedicated execution of evaluation benchmarks, mathematical knapsack proofs, and capacity latency profiles.",
+      "phases": [5],
+      "timeout_multiplier": 2.0
+    },
+    "security": {
+      "description": "Dedicated execution of dependency audits, SAST, secret scanning, tenant isolation, and security acceptance suites.",
+      "phases": [6],
+      "security_only": true,
+      "timeout_multiplier": 1.5
+    }
+  },
+  "thresholds": {
+    "reading_order_kendall_tau": 0.80,
+    "table_cell_f1": 0.90,
+    "context_budget_violation_rate": 0.0,
+    "submodular_approx_ratio": 0.316,
+    "pii_redaction_precision": 0.85,
+    "pii_redaction_recall": 0.85,
+    "secret_leakage_rate": 0.0,
+    "retrieval_mrr": 0.70,
+    "retrieval_recall_at_5": 0.80,
+    "abstention_accuracy": 1.0,
+    "fact_extraction_f1": 0.85,
+    "grounding_fidelity": 1.0,
+    "conflict_recall": 0.90,
+    "line_coverage_pct": 75.0,
+    "health_p50_ms_bound": 80.0,
+    "health_p95_ms_bound": 250.0
+  },
+  "paths": {
+    "audit_root": "audit",
+    "runs_dir": "audit/runs",
+    "benchmarks_dir": "audit/benchmarks",
+    "security_dir": "audit/security",
+    "reliability_dir": "audit/reliability",
+    "inventory_dir": "audit/inventory",
+    "test_specifications_dir": "audit/test-specifications",
+    "results_dir": "audit/results",
+    "final_dir": "audit/final",
+    "real_corpus_dir": "production/benchmark-dataset-real/pdf-corpus",
+    "eval_reports_dir": "evaluation/reports"
+  },
+  "status_definitions": {
+    "PASS": "The verification check executed successfully and strictly satisfied all defined assertions and thresholds.",
+    "FAIL": "The verification check executed and failed one or more assertions or breached quality thresholds.",
+    "BLOCKED": "The verification check could not execute because an upstream prerequisite or dependency failed.",
+    "NOT RUN": "The verification check was excluded or not scheduled in the selected execution profile.",
+    "NOT APPLICABLE": "The verification check applies only to environments or capabilities outside the evaluated scope."
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "budget_violation_rate": 0.0,
+  "min_approx_ratio": 0.8571,
+  "mean_approx_ratio": 0.9649,
+  "cases_evaluated": 10,
+  "passed": true
+}

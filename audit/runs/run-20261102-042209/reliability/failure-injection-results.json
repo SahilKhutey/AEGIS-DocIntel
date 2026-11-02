@@ -1,0 +1,9 @@
+{
+  "tests": [
+    "transient_provider_timeout",
+    "rate_limit_429",
+    "worker_heartbeat_loss"
+  ],
+  "all_recovered": true,
+  "status": "PASS"
+}

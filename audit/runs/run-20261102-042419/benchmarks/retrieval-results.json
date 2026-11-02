@@ -1,0 +1,9 @@
+{
+  "mrr": 1.0,
+  "recall_at_5": 0.9231,
+  "ndcg_at_5": 0.9276,
+  "abstention_accuracy": 1.0,
+  "citation_validation_passed": true,
+  "queries_evaluated": 20,
+  "passed": true
+}

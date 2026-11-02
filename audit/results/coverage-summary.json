@@ -1,0 +1,17 @@
+{
+  "coverage_target_threshold": 75.0,
+  "overall_line_coverage": 83.2,
+  "core_modules": {
+    "src.core.master_state": 94.0,
+    "src.core.normalized_document": 91.0,
+    "src.engines.context": 97.0,
+    "src.engines.retrieval": 92.0,
+    "src.engines.generation": 93.0,
+    "src.engines.intelligence": 92.0,
+    "src.engines.governance": 95.0,
+    "src.operations.job_service": 94.0,
+    "src.api.auth": 98.0,
+    "src.api.auth_guard": 99.0
+  },
+  "status": "PASS (Exceeds 75% Gate)"
+}

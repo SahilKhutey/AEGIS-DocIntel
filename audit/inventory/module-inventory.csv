@@ -1,0 +1,22 @@
+module_name,description,primary_test_suite
+src.main,"FastAPI application entry point, lifespan, routes, error handlers",tests/test_api_route_integrity.py
+src.config,Global environment configuration and settings loader,tests/test_mvp4_config.py
+src.core.master_state,Canonical document state container and geometric element representation,tests/test_ingest_workflow.py
+src.core.normalized_document,"Text normalization, character offsets, and layout representation",tests/test_mvp5_normalization.py
+src.core.orchestrator,Multi-stage AMDI orchestration engine and pipeline coordinator,tests/test_ingest_workflow.py
+src.core.resilience,"Idempotency store, circuit breakers, and retry policies",tests/test_performance_and_capacity.py
+src.core.settings,Runtime configuration models and environment validation,tests/test_mvp4_config.py
+src.engines.geometry,"2D/3D geometric element parsing, bounding boxes, element types",tests/test_extraction_fidelity.py
+src.engines.graph_reading_order,Topological reading order DAG construction and cycle handling,tests/test_extraction_fidelity.py
+src.engines.context,Context builder and submodular knapsack context packing,tests/test_mvp2_context_budget.py
+src.engines.retrieval,"Hybrid dense/sparse retrieval, rank fusion, and tenant filtering",tests/test_mvp2_retrieval_quality.py
+src.engines.generation,"Grounded answer generator, prompt contracts, and citation validation",tests/test_mvp3_generation.py
+src.engines.intelligence,"Structured fact extraction, entity resolution, comparison, and conflicts",tests/test_mvp5_extraction.py
+src.engines.governance,"Human-in-the-loop review service, policy, feedback, and audit logging",tests/test_mvp6_review_service.py
+src.operations,"Durable background job queue, worker lease coordination, crash recovery",tests/test_mvp8_job_lifecycle.py
+src.repositories,"SQLite/Postgres repositories for documents, facts, reviews, and jobs",tests/integration/test_restart_persistence.py
+src.services,Document service and dependency injection service container,tests/integration/test_document_workflow.py
+src.api.auth,"JWT RS256 token verification, API key hashing, and RBAC tenant context",tests/security/test_auth_acceptance.py
+src.api.auth_guard,Fail-closed deny-by-default ASGI security middleware,tests/test_auth_guard.py
+src.api.routers,"REST API endpoints for documents, query, answers, intelligence, reviews, jobs",tests/test_api_route_integrity.py
+src.ui.workbench,Self-contained Single-Page Document Intelligence Workbench SPA,tests/test_auth_guard.py
