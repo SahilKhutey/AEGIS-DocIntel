@@ -18,7 +18,7 @@ import json
 import os
 import sys
 from pathlib import Path
-from typing import Any, Dict, List, Tuple
+from typing import Any, Dict, List, Optional, Tuple
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
@@ -45,67 +45,82 @@ def find_target_dir(specified_dir: str | None) -> Path:
 class ArtifactValidator:
     def __init__(self, target_dir: Path):
         self.target_dir = target_dir
+        self.audit_root = ROOT / "audit"
         self.errors: List[str] = []
         self.warnings: List[str] = []
         self.checks_passed: int = 0
 
-    def assert_file_exists(self, rel_path: str, min_bytes: int = 10) -> bool:
+    def assert_file_exists(self, rel_path: str, min_bytes: int = 10, base_dir: Optional[Path] = None) -> bool:
         """Verify file presence and non-trivial content length."""
-        p = self.target_dir / rel_path
+        root = base_dir or self.target_dir
+        p = root / rel_path
         if not p.is_file():
-            self.errors.append(f"Missing mandatory artifact: {rel_path}")
+            self.errors.append(f"Missing mandatory artifact: {rel_path} in {root}")
             return False
         size = p.stat().st_size
         if size < min_bytes:
-            self.errors.append(f"Artifact {rel_path} is unexpectedly small ({size} bytes)")
+            self.errors.append(f"Artifact {rel_path} is unexpectedly small ({size} bytes) in {root}")
             return False
         self.checks_passed += 1
         return True
 
-    def assert_valid_json(self, rel_path: str, required_keys: List[str] | None = None) -> Dict[str, Any] | None:
+    def assert_valid_json(
+        self,
+        rel_path: str,
+        required_keys: List[str] | None = None,
+        base_dir: Optional[Path] = None,
+    ) -> Dict[str, Any] | None:
         """Verify file is valid JSON and contains required keys."""
-        if not self.assert_file_exists(rel_path):
+        root = base_dir or self.target_dir
+        if not self.assert_file_exists(rel_path, base_dir=root):
             return None
-        p = self.target_dir / rel_path
+        p = root / rel_path
         try:
             with open(p, "r", encoding="utf-8") as f:
                 data = json.load(f)
             if required_keys:
                 missing = [k for k in required_keys if k not in data]
                 if missing:
-                    self.errors.append(f"{rel_path} missing required JSON keys: {missing}")
+                    self.errors.append(f"{rel_path} in {root} missing required JSON keys: {missing}")
                     return None
             self.checks_passed += 1
             return data
         except Exception as e:
-            self.errors.append(f"{rel_path} is invalid JSON: {e}")
+            self.errors.append(f"{rel_path} in {root} is invalid JSON: {e}")
             return None
 
-    def assert_valid_csv(self, rel_path: str, min_rows: int = 1, required_columns: List[str] | None = None) -> bool:
+    def assert_valid_csv(
+        self,
+        rel_path: str,
+        min_rows: int = 1,
+        required_columns: List[str] | None = None,
+        base_dir: Optional[Path] = None,
+    ) -> bool:
         """Verify file is a valid CSV with headers and minimum rows."""
-        if not self.assert_file_exists(rel_path):
+        root = base_dir or self.target_dir
+        if not self.assert_file_exists(rel_path, base_dir=root):
             return False
-        p = self.target_dir / rel_path
+        p = root / rel_path
         try:
             with open(p, "r", encoding="utf-8") as f:
                 reader = csv.reader(f)
                 header = next(reader, None)
                 if not header:
-                    self.errors.append(f"{rel_path} is empty or has no CSV header")
+                    self.errors.append(f"{rel_path} in {root} is empty or has no CSV header")
                     return False
                 if required_columns:
                     missing = [c for c in required_columns if c not in header]
                     if missing:
-                        self.errors.append(f"{rel_path} missing required CSV columns: {missing}")
+                        self.errors.append(f"{rel_path} in {root} missing required CSV columns: {missing}")
                         return False
                 rows = list(reader)
                 if len(rows) < min_rows:
-                    self.errors.append(f"{rel_path} has only {len(rows)} data rows (expected >= {min_rows})")
+                    self.errors.append(f"{rel_path} in {root} has only {len(rows)} data rows (expected >= {min_rows})")
                     return False
             self.checks_passed += 1
             return True
         except Exception as e:
-            self.errors.append(f"{rel_path} is malformed CSV: {e}")
+            self.errors.append(f"{rel_path} in {root} is malformed CSV: {e}")
             return False
 
     def validate(self) -> bool:
@@ -176,6 +191,34 @@ class ArtifactValidator:
                         self.errors.append(f"Manifest inconsistency: gate {gid} failed but overall_status is PASS!")
             except Exception as e:
                 self.errors.append(f"Failed verifying manifest gate records: {e}")
+
+        # 8. Baseline & Audit Infrastructure (WP-01 & WP-02)
+        print("Validating baseline and audit infrastructure specifications...")
+        # 8a. Baseline (audit/baseline/)
+        self.assert_valid_json("baseline/repository-manifest.json", ["project", "release_candidate", "git", "runtime", "lockfiles"], base_dir=self.audit_root)
+        self.assert_valid_json("baseline/git-state.json", ["head_commit", "master_commit", "main_commit", "branches_aligned", "working_tree_clean"], base_dir=self.audit_root)
+        self.assert_valid_json("baseline/dependency-inventory.json", ["python_runtime", "packages", "lockfiles"], base_dir=self.audit_root)
+        self.assert_valid_json("baseline/environment.json", ["os_platform", "python_io_encoding", "system_environment_vars"], base_dir=self.audit_root)
+        self.assert_valid_json("baseline/ci-baseline.json", ["ci_provider", "workflows"], base_dir=self.audit_root)
+        self.assert_valid_csv("baseline/source-classification.csv", min_rows=15, required_columns=["path", "classification", "audit_treatment"], base_dir=self.audit_root)
+        self.assert_valid_csv("baseline/capability-inventory.csv", min_rows=10, required_columns=["capability_id", "mvp_phase", "feature", "current_status"], base_dir=self.audit_root)
+
+        # 8b. Config (audit/config/)
+        self.assert_valid_json("config/audit_config.json", ["name", "profiles", "thresholds"], base_dir=self.audit_root)
+        self.assert_valid_json("config/quality_gates.json", ["quality_gates"], base_dir=self.audit_root)
+        self.assert_file_exists("config/capability_map.yaml", min_bytes=100, base_dir=self.audit_root)
+
+        # 8c. Corpus (audit/corpus/)
+        self.assert_valid_csv("corpus/manifest.csv", min_rows=200, required_columns=["doc_id", "category", "source_repository", "checksum_sha256"], base_dir=self.audit_root)
+        self.assert_valid_csv("corpus/source-register.csv", min_rows=5, required_columns=["source_id", "source_name", "provider"], base_dir=self.audit_root)
+        self.assert_valid_csv("corpus/licence-register.csv", min_rows=5, required_columns=["licence_id", "name", "spdx_identifier"], base_dir=self.audit_root)
+        self.assert_file_exists("corpus/checksums.sha256", min_bytes=1000, base_dir=self.audit_root)
+
+        # 8d. Specifications (audit/specifications/)
+        self.assert_valid_csv("specifications/function-inventory.csv", min_rows=10, required_columns=["function_id", "module", "symbol", "result"], base_dir=self.audit_root)
+        self.assert_valid_csv("specifications/test_matrix.csv", min_rows=20, required_columns=["test_id", "category", "status"], base_dir=self.audit_root)
+        self.assert_valid_csv("specifications/acceptance-scenarios.csv", min_rows=5, required_columns=["scenario_id", "category", "status"], base_dir=self.audit_root)
+        self.assert_file_exists("specifications/security-test-plan.md", min_bytes=500, base_dir=self.audit_root)
 
         # Summary output
         print("-" * 60)

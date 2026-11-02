@@ -1,0 +1,8 @@
+{
+  "mrr": 1.0,
+  "recall_at_5": 0.9231,
+  "abstention_accuracy": 1.0,
+  "grounding_fidelity": 1.0,
+  "hallucination_rate": 0.0,
+  "passed": true
+}

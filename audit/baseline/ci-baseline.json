@@ -1,0 +1,19 @@
+{
+  "ci_provider": "GitHub Actions",
+  "workflows": {
+    "ci.yml": {
+      "sha256": "44b5a2a843eaf226f761801e33508ba7d8a6c23803b07590f1f6064924a66ac1",
+      "size_bytes": 5450
+    },
+    "maintenance.yml": {
+      "sha256": "71cf21d2866d5fa3b08c22f6bbbb2e1ddaca355be7c6c9f3cd886f8ebb752b6c",
+      "size_bytes": 4718
+    }
+  },
+  "latest_known_run": "CI run #120 (success)",
+  "canonical_ci_branches": [
+    "master",
+    "main"
+  ],
+  "timestamp_utc": "2026-11-02T05:19:46.769142+00:00"
+}

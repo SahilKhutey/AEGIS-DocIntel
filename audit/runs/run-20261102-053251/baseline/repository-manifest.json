@@ -1,0 +1,76 @@
+{
+  "project": "AEGIS-DocIntel",
+  "release_candidate": "v1.0.0-mvp9",
+  "classification": "Alpha / Experimental (MVP Evaluation Baseline)",
+  "baseline_timestamp_utc": "2026-11-02T05:19:45.661583+00:00",
+  "git": {
+    "active_branch": "feat/mvp8-job-orchestration",
+    "head_commit": "32dfcb977344805d2932052df3bd58ce3f73dd18",
+    "master_commit": "32dfcb977344805d2932052df3bd58ce3f73dd18",
+    "main_commit": "32dfcb977344805d2932052df3bd58ce3f73dd18",
+    "branches_aligned": true,
+    "working_tree_clean": false,
+    "remote_origin": "https://github.com/SahilKhutey/AEGIS-DocIntel.git",
+    "recent_commits": [
+      {
+        "short_sha": "32dfcb9",
+        "commit_sha": "32dfcb977344805d2932052df3bd58ce3f73dd18",
+        "date": "2026-11-02",
+        "message": "feat(corpus): integrate public document corpus v1.0, 250-record manifest, and automated benchmark runner"
+      },
+      {
+        "short_sha": "fdb4122",
+        "commit_sha": "fdb41226ccc7c345b411c71e0b15aec1dbadcc05",
+        "date": "2026-11-02",
+        "message": "feat(audit): deliver complete MVP audit suite, orchestrator, and verification artifacts"
+      },
+      {
+        "short_sha": "04527de",
+        "commit_sha": "04527de737ef2709eea0815edfc057b164b9b2b2",
+        "date": "2026-11-02",
+        "message": "feat(ui): deliver self-contained Document Intelligence Workbench SPA"
+      },
+      {
+        "short_sha": "2a0ce4c",
+        "commit_sha": "2a0ce4cc2e5cd7795715a0cd90786bddf8ddc506",
+        "date": "2026-10-31",
+        "message": "feat(operations): add job verification drill and harden handler result serialization"
+      },
+      {
+        "short_sha": "e72ae0c",
+        "commit_sha": "e72ae0cc9d8a2369b49a5587c6c0f6d1542086e8",
+        "date": "2026-10-31",
+        "message": "docs(release): add MVP final verification and validation report"
+      }
+    ],
+    "timestamp_utc": "2026-11-02T05:19:45.661583+00:00"
+  },
+  "runtime": {
+    "version": "3.12.10",
+    "executable": "C:\\Users\\ASUS\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+    "platform": "Windows-11-10.0.26300-SP0",
+    "architecture": "64bit"
+  },
+  "lockfiles": {
+    "requirements-core.lock.txt": {
+      "sha256": "838fff8d275bbc511947c67b92ba9dac18df0e7ad9b23fd948669928eae72de7",
+      "size_bytes": 1235
+    },
+    "requirements-ml.lock.txt": {
+      "sha256": "c11d2b9db9138308703760991023f5c4c2de7656ed44f805f451542f92aa2d99",
+      "size_bytes": 608
+    }
+  },
+  "ci_workflows": {
+    "ci.yml": {
+      "sha256": "44b5a2a843eaf226f761801e33508ba7d8a6c23803b07590f1f6064924a66ac1",
+      "size_bytes": 5450
+    },
+    "maintenance.yml": {
+      "sha256": "71cf21d2866d5fa3b08c22f6bbbb2e1ddaca355be7c6c9f3cd886f8ebb752b6c",
+      "size_bytes": 4718
+    }
+  },
+  "dataset_manifest_sha256": "70a14a8e859e46351f4b2e732257e27459ffd2b4e81c4584c4e401dbfcd7e19c",
+  "public_corpus_manifest_sha256": "5497e4fe45fe9fbb033325b8b4d1d9341e837c6f9d78f51e778351d86e401679"
+}

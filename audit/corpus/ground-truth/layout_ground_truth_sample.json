@@ -1,0 +1,84 @@
+{
+  "dataset": "DocLayNet-Sample",
+  "version": "1.1",
+  "annotation_standard": "COCO-Format Bounding Boxes",
+  "classes": [
+    "Text",
+    "Title",
+    "Section-header",
+    "Table",
+    "Picture",
+    "Caption",
+    "Footnote",
+    "Formula",
+    "List-item",
+    "Page-header",
+    "Page-footer"
+  ],
+  "sample_pages": [
+    {
+      "page_id": "PUB-001-P01",
+      "width": 612.0,
+      "height": 792.0,
+      "reading_order": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "annotations": [
+        {
+          "id": 1,
+          "category": "Page-header",
+          "bbox": [
+            54.0,
+            36.0,
+            504.0,
+            18.0
+          ]
+        },
+        {
+          "id": 2,
+          "category": "Title",
+          "bbox": [
+            54.0,
+            72.0,
+            504.0,
+            36.0
+          ]
+        },
+        {
+          "id": 3,
+          "category": "Text",
+          "bbox": [
+            54.0,
+            120.0,
+            240.0,
+            300.0
+          ]
+        },
+        {
+          "id": 4,
+          "category": "Text",
+          "bbox": [
+            306.0,
+            120.0,
+            240.0,
+            300.0
+          ]
+        },
+        {
+          "id": 5,
+          "category": "Page-footer",
+          "bbox": [
+            54.0,
+            740.0,
+            504.0,
+            18.0
+          ]
+        }
+      ]
+    }
+  ]
+}

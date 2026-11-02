@@ -45,6 +45,11 @@
       "min_recall_at_5": 0.80,
       "min_abstention_accuracy": 1.0,
       "min_citation_precision": 0.90
+    },
+    "document_intelligence": {
+      "min_extraction_f1": 0.85,
+      "min_grounding_fidelity": 1.0,
+      "min_conflict_recall": 0.90
     }
   }
 }

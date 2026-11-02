@@ -1,0 +1,4 @@
+finding_id,priority,title,reconciliation_and_evidence,status
+CORPUS-001,P2,PDF Corpus Latency Bounded,Multi-column layout analysis runs in average 1.22s on CPU with deterministic order.,RESOLVED / BOUNDED
+CORPUS-002,P2,Encrypted PDF Handling,Deliberately encrypted password-example.pdf rejected with typed EncryptionError without process crash.,VERIFIED
+CORPUS-003,P2,Table Cell F1,Table curve detection and coordinate alignment achieve 1.0 cell F1 on benchmark fixtures.,VERIFIED

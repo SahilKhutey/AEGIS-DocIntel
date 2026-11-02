@@ -1,0 +1,41 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "AEGIS-DocIntel Quality Gates Specification",
+  "version": "1.0.0",
+  "description": "Canonical quantitative release gates for document processing, retrieval, intelligence, privacy, and performance.",
+  "quality_gates": {
+    "extraction": {
+      "min_reading_order_kendall_tau": 0.80,
+      "min_table_cell_f1": 0.90
+    },
+    "packing": {
+      "max_budget_violation_rate": 0.0,
+      "min_approx_ratio": 0.316
+    },
+    "privacy": {
+      "min_precision": 0.85,
+      "min_recall": 0.85,
+      "max_leakage_rate": 0.0
+    },
+    "retrieval": {
+      "min_mrr": 0.70,
+      "min_recall_at_5": 0.80,
+      "min_abstention_accuracy": 1.0,
+      "min_citation_precision": 0.90,
+      "min_citation_page_correctness": 0.95
+    },
+    "document_intelligence": {
+      "min_extraction_f1": 0.85,
+      "min_grounding_fidelity": 1.0,
+      "min_conflict_recall": 0.90
+    },
+    "performance": {
+      "max_health_p50_ms": 80.0,
+      "max_health_p95_ms": 250.0,
+      "max_upload_size_mb": 200
+    },
+    "coverage": {
+      "min_line_coverage_pct": 75.0
+    }
+  }
+}

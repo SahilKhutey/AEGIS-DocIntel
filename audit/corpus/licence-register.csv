@@ -1,0 +1,9 @@
+licence_id,name,spdx_identifier,source_datasets,commercial_use_permitted,redistribution_permitted,attribution_required,audit_usage_guidelines
+LIC-001,Community Data License Agreement - Permissive 1.0,CDLA-Permissive-1.0,"DocLayNet, PubLayNet, PubTabNet",Yes,Yes,Yes,Permits broad use and redistribution; requires retaining notices and attribution in manifest.
+LIC-002,Creative Commons Attribution 4.0 International,CC-BY-4.0,World Bank Documents & Reports,Yes,Yes,Yes,Permits commercial use and adaptation; requires appropriate credit and link to license.
+LIC-003,United States Government Work / Public Domain,Public-Domain-USGov,SEC EDGAR Filings,Yes,Yes,No,Unrestricted worldwide public domain; no copyright protection under 17 U.S.C. § 105.
+LIC-004,Government Open Data License - India,GODL-India,Open Government Data (data.gov.in),Yes,Yes,Yes,Permits sharing and adaptation; requires attribution to Ministry/Department and data.gov.in.
+LIC-005,Academic Evaluation License / FUNSD,Academic-Evaluation,FUNSD Dataset,No,No,Yes,Research and benchmarking use; source documents not for standalone commercial distribution.
+LIC-006,DocVQA Challenge Terms of Use,DocVQA-Challenge,DocVQA Dataset,No,No,Yes,Non-commercial scientific evaluation only; direct download via challenge registration.
+LIC-007,arXiv Non-Exclusive / CC-BY,arXiv-OpenAccess,arXiv.org Research Papers,Yes,Yes,Yes,Authors retain copyright; open access distribution permitted under individual paper CC terms.
+LIC-008,MIT License,MIT,pdfplumber Real PDF Corpus,Yes,Yes,Yes,Permissive open-source license; requires copyright notice and permission notice.

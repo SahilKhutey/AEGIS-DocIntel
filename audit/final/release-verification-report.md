@@ -1,11 +1,11 @@
 # AEGIS-DocIntel — MVP Release Verification & Validation Report
 
 **Release Candidate:** `v1.0.0-mvp`  
-**Run ID:** `run-20261102-042419`  
-**Profile:** `full`  
-**Inspected Commit SHA:** `04527de737ef2709eea0815edfc057b164b9b2b2`  
+**Run ID:** `run-20261102-053251`  
+**Profile:** `quick`  
+**Inspected Commit SHA:** `32dfcb977344805d2932052df3bd58ce3f73dd18`  
 **Inspected Branch:** `feat/mvp8-job-orchestration`  
-**Audit Timestamp:** `2026-11-02 04:28:32 UTC`  
+**Audit Timestamp:** `2026-11-02 05:33:45 UTC`  
 **Platform:** `Windows-11-10.0.26300-SP0`  
 **Python Runtime:** `3.12.10`  
 
@@ -13,7 +13,7 @@
 
 ## 1. Executive Summary
 
-AEGIS-DocIntel has completed a release verification audit under execution profile `full`. The repository is confirmed in an **Alpha / Experimental** baseline state: **it is not production-ready**. Core capabilities (multi-format ingestion, layout geometry, topological reading order, submodular context packing, hybrid retrieval, citation-grounded generation, structured fact extraction, cross-document comparison, human-in-the-loop governance, background jobs, and the self-contained workbench UI) have been evaluated with automated test suites and reproducible evaluation benchmarks.
+AEGIS-DocIntel has completed a release verification audit under execution profile `quick`. The repository is confirmed in an **Alpha / Experimental** baseline state: **it is not production-ready**. Core capabilities (multi-format ingestion, layout geometry, topological reading order, submodular context packing, hybrid retrieval, citation-grounded generation, structured fact extraction, cross-document comparison, human-in-the-loop governance, background jobs, and the self-contained workbench UI) have been evaluated with automated test suites and reproducible evaluation benchmarks.
 
 ---
 
@@ -25,12 +25,12 @@ AEGIS-DocIntel has completed a release verification audit under execution profil
 | **Phase 2** | Environment & Dependency Lock Synchronization | **PASS** |
 | **Phase 3** | Unit & Property Test Suites (Ingest, Extraction, Gen, Jobs) | **PASS** |
 | **Phase 4** | Coverage, Quality Gates, Ruff Lint & Dataset Contract | **PASS** |
-| **Phase 5** | Evaluation Benchmarks (Tau, F1, PII, Retrieval, Approx Ratio) | **PASS** |
-| **Phase 6** | Security Acceptance, Isolation & Fault Recovery | **PASS** |
+| **Phase 5** | Evaluation Benchmarks (Tau, F1, PII, Retrieval, Approx Ratio) | **NOT RUN** |
+| **Phase 6** | Security Acceptance, Isolation & Fault Recovery | **NOT RUN** |
 | **Phase 7** | Build Smoke Validation & OpenAPI Zero-Diff Invariant | **PASS** |
 
 **Execution Gate Outcome:** **PASS (ALL EVALUATED GATES GREEN)**  
-**Release Determination:** **GO (ALPHA_QUALIFIED)**  
+**Release Determination:** **INCOMPLETE (PROFILE: QUICK - REQUIRES FULL AUDIT FOR RELEASE)**  
 
 ---
 
@@ -56,4 +56,4 @@ AEGIS-DocIntel has completed a release verification audit under execution profil
 
 ## 5. Artifact Directory References
 
-Run evidence artifacts are preserved under [`audit/runs/run-20261102-042419/`](file:///c:/Users/ASUS/Documents/Aegis-DocIntel/audit/runs/run-20261102-042419/).
+Run evidence artifacts are preserved under [`audit/runs/run-20261102-053251/`](file:///c:/Users/ASUS/Documents/Aegis-DocIntel/audit/runs/run-20261102-053251/).

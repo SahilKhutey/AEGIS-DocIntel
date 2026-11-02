@@ -118,18 +118,21 @@ def evaluate_retrieval(dataset_path: Path | str | None = None) -> Dict[str, Any]
     res_fake = validate_citations(fake_citation, evidence_pool)
 
     citation_validity_passed = (res_valid.is_valid and not res_fake.is_valid)
+    citation_precision = 1.0 if citation_validity_passed else 0.0
 
     return {
         "mrr": round(mean_mrr, 4),
         "recall_at_5": round(mean_recall, 4),
         "ndcg_at_5": round(mean_ndcg, 4),
         "abstention_accuracy": round(abstention_accuracy, 4),
+        "citation_precision": round(citation_precision, 4),
         "citation_validation_passed": citation_validity_passed,
         "queries_evaluated": len(retrieval_cases),
         "passed": (
             mean_mrr >= 0.70
             and mean_recall >= 0.80
             and abstention_accuracy == 1.0
+            and citation_precision >= 0.90
             and citation_validity_passed
         ),
     }

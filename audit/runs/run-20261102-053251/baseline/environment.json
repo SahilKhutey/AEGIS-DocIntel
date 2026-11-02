@@ -1,0 +1,18 @@
+{
+  "os_platform": "Windows-11-10.0.26300-SP0",
+  "processor": "AMD64 Family 25 Model 124 Stepping 0, AuthenticAMD",
+  "cpu_count": 12,
+  "python_io_encoding": "utf-8",
+  "aegis_environment": "development",
+  "system_environment_vars": {
+    "ANTIGRAVITY_CSRF_TOKEN": "[REDACTED]",
+    "OS": "Windows_NT",
+    "PATH": "26 entries",
+    "PATHEXT": ".COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC;.CPL",
+    "PROCESSOR_ARCHITECTURE": "AMD64",
+    "PROCESSOR_IDENTIFIER": "AMD64 Family 25 Model 124 Stepping 0, AuthenticAMD",
+    "PROCESSOR_LEVEL": "25",
+    "PROCESSOR_REVISION": "7c00"
+  },
+  "timestamp_utc": "2026-11-02T05:19:46.767794+00:00"
+}

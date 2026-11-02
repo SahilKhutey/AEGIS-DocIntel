@@ -1,0 +1,7 @@
+{
+  "kendall_tau": 1.0,
+  "threshold": 0.8,
+  "reading_order_passed": true,
+  "ordering_errors": 0,
+  "cases_evaluated": 4
+}

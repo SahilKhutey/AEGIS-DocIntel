@@ -1,0 +1,33 @@
+{
+  "dataset": "PubTabNet-Sample",
+  "version": "1.0",
+  "sample_tables": [
+    {
+      "table_id": "PUB-056-T01",
+      "rows": 4,
+      "cols": 3,
+      "headers": [
+        "Fiscal Year",
+        "Revenue ($M)",
+        "Operating Margin"
+      ],
+      "data": [
+        [
+          "2022",
+          "394,328",
+          "30.3%"
+        ],
+        [
+          "2023",
+          "383,285",
+          "29.8%"
+        ],
+        [
+          "2024",
+          "391,035",
+          "30.5%"
+        ]
+      ]
+    }
+  ]
+}

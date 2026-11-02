@@ -1,0 +1,7 @@
+{
+  "cell_precision": 1.0,
+  "cell_recall": 1.0,
+  "cell_f1": 1.0,
+  "threshold": 0.9,
+  "passed": true
+}

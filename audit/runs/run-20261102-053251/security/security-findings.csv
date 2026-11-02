@@ -1,0 +1,3 @@
+finding_id,severity,target,description,remediation,status
+SEC-001,CRITICAL,API Routing,Deny-by-default AuthGuard missing on new routes,AuthGuard pure ASGI middleware intercepts all routes before dispatch,REMEDIATED
+SEC-002,HIGH,Chunk Element Type,Invalid block_type validation on custom elements,Mapped layout element types to BlockTypeEnum cleanly,REMEDIATED

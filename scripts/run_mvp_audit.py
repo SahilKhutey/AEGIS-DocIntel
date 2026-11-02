@@ -107,7 +107,9 @@ class AuditRunner:
         self.gate_records: List[Dict[str, Any]] = []
 
     def _load_config(self) -> Dict[str, Any]:
-        cfg_path = ROOT / "audit" / "audit_config.json"
+        cfg_path = ROOT / "audit" / "config" / "audit_config.json"
+        if not cfg_path.is_file():
+            cfg_path = ROOT / "audit" / "audit_config.json"
         if cfg_path.is_file():
             try:
                 with open(cfg_path, "r", encoding="utf-8") as f:
@@ -119,6 +121,10 @@ class AuditRunner:
     def _init_run_directory(self):
         """Create structured run directory and copy base audit specifications."""
         subdirs = [
+            "baseline",
+            "config",
+            "corpus",
+            "specifications",
             "inventory",
             "test-specifications",
             "benchmarks",

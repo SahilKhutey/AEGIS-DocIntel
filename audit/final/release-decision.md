@@ -1,11 +1,11 @@
 # AEGIS-DocIntel — Formal Release Decision
 
-**Determination:** **GO (ALPHA_QUALIFIED)**  
+**Determination:** **INCOMPLETE (PROFILE: QUICK - REQUIRES FULL AUDIT FOR RELEASE)**  
 **Release Target:** Alpha / Experimental (Evaluation Baseline — Not Production-Ready)  
-**Run ID:** `run-20261102-042419`  
-**Profile:** `full`  
-**Candidate SHA:** `04527de737ef2709eea0815edfc057b164b9b2b2`  
-**Decision Timestamp:** `2026-11-02 04:28:32 UTC`  
+**Run ID:** `run-20261102-053251`  
+**Profile:** `quick`  
+**Candidate SHA:** `32dfcb977344805d2932052df3bd58ce3f73dd18`  
+**Decision Timestamp:** `2026-11-02 05:33:45 UTC`  
 
 ---
 

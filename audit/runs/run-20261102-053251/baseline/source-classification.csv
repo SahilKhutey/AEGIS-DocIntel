@@ -1,0 +1,22 @@
+path,classification,audit_treatment,description
+src/core,Core production-intended,Mandatory audit,"Document normalization, MasterState, AMDIOrchestrator pipeline"
+src/engines/geometry,Core production-intended,Mandatory audit,"2D/3D spatial geometry, bounding boxes, element types"
+src/engines/graph_reading_order,Core production-intended,Mandatory audit,Topological DAG reading order and column disambiguation
+src/engines/context,Core production-intended,Mandatory audit,Context builder and submodular knapsack packing algorithm
+src/engines/retrieval,Core production-intended,Mandatory audit,Hybrid dense/sparse retrieval and rank fusion
+src/engines/generation,Core production-intended,Mandatory audit,Citation-grounded generation and safe abstention contracts
+src/engines/intelligence,Core production-intended,Mandatory audit,"Structured typed fact extraction, comparison, and conflict detection"
+src/engines/governance,Core production-intended,Mandatory audit,"Human-in-the-loop review queue, locking, and audit log"
+src/operations,Core production-intended,Mandatory audit,"Durable background job queue, worker lease, and crash recovery"
+src/repositories,Core production-intended,Mandatory audit,SQLite WAL and PostgreSQL data access abstractions
+src/services,Core production-intended,Mandatory audit,"Business services, document service, service container"
+src/api,Core production-intended,Mandatory audit,"FastAPI routers, JWT/API-key auth, and fail-closed AuthGuard"
+src/ui,Core production-intended,Mandatory audit,Self-contained Document Intelligence Workbench SPA
+aegis-docprep,Supporting packages and SDK,Mandatory integration audit,Standalone document preparation primitives and CLI tool
+scripts,Supporting packages and SDK,Mandatory integration audit,"Audit runner, validation tooling, benchmarks, verification drills"
+src/engines/topology,Experimental engines,Separate experimental audit,Topological persistent homology and Betti prototype layers
+tests,Tests and fixtures,Verify relevance and coverage,"Automated unit, integration, and security test suites"
+evaluation,Tests and fixtures,Verify relevance and coverage,"Quality benchmark datasets, evaluation runners, and baselines"
+production/benchmark-dataset-real,Benchmark artifacts,Verify provenance and consistency,Authentic 62-PDF real-world evaluation dataset
+audit,Generated reports and benchmark artifacts,Verify provenance and consistency,"Audited verification evidence, manifests, and run logs"
+_unverified_archive,Archived source,Excluded from active product inventory,Pre-rename historical snapshots quarantined from build

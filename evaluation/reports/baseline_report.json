@@ -1,5 +1,5 @@
 {
-  "benchmark_timestamp": "2026-11-02T04:25:08.016932+00:00",
+  "benchmark_timestamp": "2026-11-02T05:24:27.921968+00:00",
   "overall_status": "PASSED",
   "gate_failures": [],
   "metrics": {
@@ -31,6 +31,7 @@
       "recall_at_5": 0.9231,
       "ndcg_at_5": 0.9276,
       "abstention_accuracy": 1.0,
+      "citation_precision": 1.0,
       "citation_validation_passed": true,
       "queries_evaluated": 20,
       "passed": true
@@ -64,6 +65,11 @@
       "min_recall_at_5": 0.8,
       "min_abstention_accuracy": 1.0,
       "min_citation_precision": 0.9
+    },
+    "document_intelligence": {
+      "min_extraction_f1": 0.85,
+      "min_grounding_fidelity": 1.0,
+      "min_conflict_recall": 0.9
     }
   }
 }

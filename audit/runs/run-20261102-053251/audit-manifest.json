@@ -1,0 +1,178 @@
+{
+  "project": "AEGIS-DocIntel",
+  "release_candidate": "v1.0.0-mvp",
+  "run_id": "run-20261102-053251",
+  "profile": "quick",
+  "target_phase": null,
+  "commit_sha": "32dfcb977344805d2932052df3bd58ce3f73dd18",
+  "branch": "feat/mvp8-job-orchestration",
+  "audit_timestamp_utc": "2026-11-02T05:33:45.058847+00:00",
+  "python_version": "3.12.10",
+  "operating_system": "Windows-11-10.0.26300-SP0",
+  "dependency_lock_hash": "838fff8d275bbc511947c67b92ba9dac18df0e7ad9b23fd948669928eae72de7",
+  "dataset_manifest_hash": "1fddcb3d1eaebad852091a1716ba1d7ca0e47f0cd4fc0cfe519440f72fb3a818",
+  "phase_results": {
+    "phase_1_candidate_freeze": "PASS",
+    "phase_2_environment": "PASS",
+    "phase_3_unit_tests": "PASS",
+    "phase_4_quality_gates": "PASS",
+    "phase_5_benchmarks": "NOT RUN",
+    "phase_6_security_and_integration": "NOT RUN",
+    "phase_7_build_and_release": "PASS"
+  },
+  "overall_status": "INCOMPLETE",
+  "release_decision": "INCOMPLETE (PROFILE: QUICK - REQUIRES FULL AUDIT FOR RELEASE)",
+  "execution_duration_seconds": 54.05,
+  "gate_records": [
+    {
+      "gate_id": "GATE-CANDIDATE",
+      "title": "Release Candidate Freeze & Branch Alignment",
+      "command": "git rev-parse HEAD",
+      "status": "PASS",
+      "passed": true,
+      "duration_seconds": 0.05,
+      "summary": "Branch aligned: True",
+      "output_excerpt": ""
+    },
+    {
+      "gate_id": "GATE-DEP-01",
+      "title": "Dependency Lock Sync Check",
+      "command": "C:\\Users\\ASUS\\AppData\\Local\\Programs\\Python\\Python312\\python.exe scripts/check_dependency_sync.py",
+      "status": "PASS",
+      "passed": true,
+      "duration_seconds": 0.08,
+      "summary": "OK \u2014 6 requirements files match pyproject.toml",
+      "output_excerpt": "OK \u2014 6 requirements files match pyproject.toml"
+    },
+    {
+      "gate_id": "UNIT-INGEST",
+      "title": "Document Ingestion Workflow",
+      "command": "C:\\Users\\ASUS\\AppData\\Local\\Programs\\Python\\Python312\\python.exe -m pytest tests/test_ingest_workflow.py -q",
+      "status": "PASS",
+      "passed": true,
+      "duration_seconds": 16.96,
+      "summary": "8 passed in 14.35s",
+      "output_excerpt": "........                                                                 [100%]\n8 passed in 14.35s"
+    },
+    {
+      "gate_id": "UNIT-EXTRACTION",
+      "title": "Extraction Fidelity & Geometry",
+      "command": "C:\\Users\\ASUS\\AppData\\Local\\Programs\\Python\\Python312\\python.exe -m pytest tests/test_extraction_fidelity.py -q",
+      "status": "PASS",
+      "passed": true,
+      "duration_seconds": 9.02,
+      "summary": "5 passed in 6.72s",
+      "output_excerpt": ".....                                                                    [100%]\n5 passed in 6.72s"
+    },
+    {
+      "gate_id": "UNIT-BUDGET",
+      "title": "Context Budget & Packing",
+      "command": "C:\\Users\\ASUS\\AppData\\Local\\Programs\\Python\\Python312\\python.exe -m pytest tests/test_mvp2_context_budget.py -q",
+      "status": "PASS",
+      "passed": true,
+      "duration_seconds": 3.89,
+      "summary": "3 passed in 2.25s",
+      "output_excerpt": "...                                                                      [100%]\n3 passed in 2.25s"
+    },
+    {
+      "gate_id": "UNIT-GEN",
+      "title": "Grounded Generation & Abstention",
+      "command": "C:\\Users\\ASUS\\AppData\\Local\\Programs\\Python\\Python312\\python.exe -m pytest tests/test_mvp3_generation.py tests/test_mvp3_abstention.py -q",
+      "status": "PASS",
+      "passed": true,
+      "duration_seconds": 3.56,
+      "summary": "7 passed in 2.00s",
+      "output_excerpt": ".......                                                                  [100%]\n7 passed in 2.00s"
+    },
+    {
+      "gate_id": "UNIT-INTEL",
+      "title": "Fact Extraction, Comparison & Conflicts",
+      "command": "C:\\Users\\ASUS\\AppData\\Local\\Programs\\Python\\Python312\\python.exe -m pytest tests/test_mvp5_extraction.py tests/test_mvp5_comparison.py tests/test_mvp5_conflicts.py -q",
+      "status": "PASS",
+      "passed": true,
+      "duration_seconds": 3.58,
+      "summary": "9 passed in 2.05s",
+      "output_excerpt": ".........                                                                [100%]\n9 passed in 2.05s"
+    },
+    {
+      "gate_id": "UNIT-GOV",
+      "title": "Review Governance & Audit Trail",
+      "command": "C:\\Users\\ASUS\\AppData\\Local\\Programs\\Python\\Python312\\python.exe -m pytest tests/test_mvp6_review_service.py tests/test_mvp6_review_audit.py -q",
+      "status": "PASS",
+      "passed": true,
+      "duration_seconds": 3.74,
+      "summary": "3 passed in 2.22s",
+      "output_excerpt": "...                                                                      [100%]\n3 passed in 2.22s"
+    },
+    {
+      "gate_id": "UNIT-JOBS",
+      "title": "Job Lifecycle & Worker Recovery",
+      "command": "C:\\Users\\ASUS\\AppData\\Local\\Programs\\Python\\Python312\\python.exe -m pytest tests/test_mvp8_job_lifecycle.py tests/test_mvp8_job_recovery.py -q",
+      "status": "PASS",
+      "passed": true,
+      "duration_seconds": 1.95,
+      "summary": "7 passed in 0.74s",
+      "output_excerpt": ".......                                                                  [100%]\n7 passed in 0.74s"
+    },
+    {
+      "gate_id": "GATE-DOCS",
+      "title": "Documentation Claims Verification",
+      "command": "C:\\Users\\ASUS\\AppData\\Local\\Programs\\Python\\Python312\\python.exe scripts/check_docs_claims.py",
+      "status": "PASS",
+      "passed": true,
+      "duration_seconds": 0.51,
+      "summary": "OK \u2014 docs claims check passed (R1 cold-start, R2 links, R3 counts, R4 pilots, R5 readiness, R6 env-vars)",
+      "output_excerpt": "OK \u2014 docs claims check passed (R1 cold-start, R2 links, R3 counts, R4 pilots, R5 readiness, R6 env-vars)"
+    },
+    {
+      "gate_id": "GATE-DATASET",
+      "title": "MVP Evaluation Dataset Contract",
+      "command": "C:\\Users\\ASUS\\AppData\\Local\\Programs\\Python\\Python312\\python.exe scripts/validate_mvp_dataset.py",
+      "status": "PASS",
+      "passed": true,
+      "duration_seconds": 0.07,
+      "summary": "========================================================================",
+      "output_excerpt": "========================================================================\nAEGIS-DocIntel \u2014 Evaluation Dataset Contract Validator\nManifest: C:\\Users\\ASUS\\Documents\\Aegis-DocIntel\\evaluation\\datasets\\manifest.json\nDataset:  C:\\Users\\ASUS\\Documents\\Aegis-DocIntel\\evaluation\\datasets\\qa_eval_dataset.json\n========================================================================\n[OK] All declared slices, counts, and case schemas match.\nMVP DATASET CONTRACT: PASSED\n========================================================================"
+    },
+    {
+      "gate_id": "GATE-LINT",
+      "title": "Ruff Linter on Core Packages",
+      "command": "C:\\Users\\ASUS\\AppData\\Local\\Programs\\Python\\Python312\\python.exe -m ruff check src tests scripts",
+      "status": "PASS",
+      "passed": true,
+      "duration_seconds": 0.14,
+      "summary": "All checks passed!",
+      "output_excerpt": "All checks passed!"
+    },
+    {
+      "gate_id": "GATE-CONFIG",
+      "title": "Release Runtime Config Validation",
+      "command": "C:\\Users\\ASUS\\AppData\\Local\\Programs\\Python\\Python312\\python.exe scripts/validate_release_config.py --env development",
+      "status": "PASS",
+      "passed": true,
+      "duration_seconds": 2.16,
+      "summary": "============================================================",
+      "output_excerpt": "============================================================\nAEGIS-DocIntel Release Configuration Validation: [DEVELOPMENT]\n============================================================\n[PASS]         production_settings_load: Configuration loaded successfully for environment 'development'\n[PASS]         database_persistence: Database file path configured: 'data/documents.db' (directory writable: True)\n[PASS]         cors_wildcard_forbidden: CORS origins restricted to: ['http://localhost:3000', 'http://localhost:8080']\n[PASS]         auth_provider_configured: Active authentication mechanisms: \n[PASS]         llm_provider_policy: LLM provider 'mock' conforms to data transfer policy\n[PASS]         upload_limit_safety: Max upload limit safely bounded: 200 MB\n[PASS]         telemetry_privacy: Pseudonymize telemetry: True\n------------------------------------------------------------\nResult: PASS (7/7 checks passed)\n============================================================"
+    },
+    {
+      "gate_id": "GATE-SMOKE",
+      "title": "FastAPI App Import Smoke Test",
+      "command": "C:\\Users\\ASUS\\AppData\\Local\\Programs\\Python\\Python312\\python.exe -c from src.main import app; print('App title:', app.title)",
+      "status": "PASS",
+      "passed": true,
+      "duration_seconds": 3.68,
+      "summary": "App title: AEGIS-DocIntel",
+      "output_excerpt": "App title: AEGIS-DocIntel"
+    },
+    {
+      "gate_id": "GATE-OPENAPI",
+      "title": "OpenAPI Schema Zero-Diff Invariant",
+      "command": "C:\\Users\\ASUS\\AppData\\Local\\Programs\\Python\\Python312\\python.exe -c from src.main import app; import json; live=json.loads(json.dumps(app.openapi(), sort_keys=True)); disk=json.loads(open('openapi.json', encoding='utf-8').read()); assert live == disk, 'OpenAPI schema mismatch!'; print('OpenAPI matches disk exact.')",
+      "status": "PASS",
+      "passed": true,
+      "duration_seconds": 4.26,
+      "summary": "OpenAPI matches disk exact.",
+      "output_excerpt": "OpenAPI matches disk exact."
+    }
+  ]
+}

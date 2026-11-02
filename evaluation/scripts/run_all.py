@@ -39,24 +39,24 @@ def run_all(output_path: Path | str | None = None, fail_under_gates: bool = Fals
     print("=" * 60)
 
     # 1. Extraction evaluation
-    print("[1/4] Running Document Extraction Fidelity Evaluation...")
+    print("[1/5] Running Document Extraction Fidelity Evaluation...")
     extraction_res = evaluate_extraction()
     print(f"      Reading Order Tau: {extraction_res['reading_order_kendall_tau']} | Table Cell F1: {extraction_res['table_cell_f1']}")
 
     # 2. Packing evaluation
-    print("[2/4] Running Context Packing Invariants Evaluation...")
+    print("[2/5] Running Context Packing Invariants Evaluation...")
     packing_res = evaluate_packing()
     print(f"      Budget Violations: {packing_res['budget_violation_rate']} | Min Approx Ratio: {packing_res['min_approx_ratio']}")
 
     # 3. Privacy evaluation
-    print("[3/4] Running Privacy & PII Redaction Evaluation...")
+    print("[3/5] Running Privacy & PII Redaction Evaluation...")
     privacy_res = evaluate_privacy()
     print(f"      Precision: {privacy_res['precision']} | Recall: {privacy_res['recall']} | Leakage: {privacy_res['leakage_rate']}")
 
     # 4. Retrieval evaluation
     print("[4/5] Running Retrieval & Grounding Evaluation...")
     retrieval_res = evaluate_retrieval()
-    print(f"      MRR: {retrieval_res['mrr']} | Recall@5: {retrieval_res['recall_at_5']} | Abstention: {retrieval_res['abstention_accuracy']}")
+    print(f"      MRR: {retrieval_res['mrr']} | Recall@5: {retrieval_res['recall_at_5']} | Citation Prec: {retrieval_res['citation_precision']} | Abstention: {retrieval_res['abstention_accuracy']}")
 
     # 5. Document Intelligence evaluation
     print("[5/5] Running Document Intelligence Evaluation...")
@@ -104,14 +104,21 @@ def run_all(output_path: Path | str | None = None, fail_under_gates: bool = Fals
     if retrieval_res["abstention_accuracy"] < gates.get("retrieval", {}).get("min_abstention_accuracy", 1.0):
         passed_all = False
         gate_failures.append("retrieval.abstention_accuracy below gate")
+    if retrieval_res.get("citation_precision", 0.0) < gates.get("retrieval", {}).get("min_citation_precision", 0.90):
+        passed_all = False
+        gate_failures.append("retrieval.citation_precision below gate")
 
-    # Document intelligence gates
-    if intel_res["extraction_f1"] < 0.85:
+    # Document intelligence gates (manifest-driven)
+    intel_gates = gates.get("document_intelligence", {})
+    if intel_res["extraction_f1"] < intel_gates.get("min_extraction_f1", 0.85):
         passed_all = False
         gate_failures.append("intelligence.extraction_f1 below gate")
-    if intel_res["grounding_fidelity"] < 1.0:
+    if intel_res["grounding_fidelity"] < intel_gates.get("min_grounding_fidelity", 1.0):
         passed_all = False
         gate_failures.append("intelligence.grounding_fidelity below gate")
+    if intel_res.get("conflict_detection_recall", 0.0) < intel_gates.get("min_conflict_recall", 0.90):
+        passed_all = False
+        gate_failures.append("intelligence.conflict_recall below gate")
 
     report: Dict[str, Any] = {
         "benchmark_timestamp": datetime.datetime.now(datetime.timezone.utc).isoformat(),

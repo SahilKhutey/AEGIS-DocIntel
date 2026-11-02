@@ -1,0 +1,42 @@
+{
+  "active_branch": "feat/mvp8-job-orchestration",
+  "head_commit": "32dfcb977344805d2932052df3bd58ce3f73dd18",
+  "master_commit": "32dfcb977344805d2932052df3bd58ce3f73dd18",
+  "main_commit": "32dfcb977344805d2932052df3bd58ce3f73dd18",
+  "branches_aligned": true,
+  "working_tree_clean": false,
+  "remote_origin": "https://github.com/SahilKhutey/AEGIS-DocIntel.git",
+  "recent_commits": [
+    {
+      "short_sha": "32dfcb9",
+      "commit_sha": "32dfcb977344805d2932052df3bd58ce3f73dd18",
+      "date": "2026-11-02",
+      "message": "feat(corpus): integrate public document corpus v1.0, 250-record manifest, and automated benchmark runner"
+    },
+    {
+      "short_sha": "fdb4122",
+      "commit_sha": "fdb41226ccc7c345b411c71e0b15aec1dbadcc05",
+      "date": "2026-11-02",
+      "message": "feat(audit): deliver complete MVP audit suite, orchestrator, and verification artifacts"
+    },
+    {
+      "short_sha": "04527de",
+      "commit_sha": "04527de737ef2709eea0815edfc057b164b9b2b2",
+      "date": "2026-11-02",
+      "message": "feat(ui): deliver self-contained Document Intelligence Workbench SPA"
+    },
+    {
+      "short_sha": "2a0ce4c",
+      "commit_sha": "2a0ce4cc2e5cd7795715a0cd90786bddf8ddc506",
+      "date": "2026-10-31",
+      "message": "feat(operations): add job verification drill and harden handler result serialization"
+    },
+    {
+      "short_sha": "e72ae0c",
+      "commit_sha": "e72ae0cc9d8a2369b49a5587c6c0f6d1542086e8",
+      "date": "2026-10-31",
+      "message": "docs(release): add MVP final verification and validation report"
+    }
+  ],
+  "timestamp_utc": "2026-11-02T05:19:45.661583+00:00"
+}

@@ -1,0 +1,72 @@
+{
+  "quality_gates": {
+    "reading_order_kendall_tau": {
+      "threshold": ">= 0.80",
+      "target": 1.0,
+      "status": "PASS"
+    },
+    "table_cell_f1": {
+      "threshold": ">= 0.90",
+      "target": 1.0,
+      "status": "PASS"
+    },
+    "context_budget_violation_rate": {
+      "threshold": "0.0%",
+      "target": 0.0,
+      "status": "PASS"
+    },
+    "submodular_approx_ratio": {
+      "threshold": ">= 0.316",
+      "target": 0.8571,
+      "status": "PASS"
+    },
+    "pii_redaction_precision": {
+      "threshold": ">= 0.85",
+      "target": 1.0,
+      "status": "PASS"
+    },
+    "pii_redaction_recall": {
+      "threshold": ">= 0.85",
+      "target": 1.0,
+      "status": "PASS"
+    },
+    "secret_leakage_rate": {
+      "threshold": "0.0%",
+      "target": 0.0,
+      "status": "PASS"
+    },
+    "retrieval_mrr": {
+      "threshold": ">= 0.70",
+      "target": 1.0,
+      "status": "PASS"
+    },
+    "retrieval_recall_at_5": {
+      "threshold": ">= 0.80",
+      "target": 0.9231,
+      "status": "PASS"
+    },
+    "abstention_accuracy": {
+      "threshold": "100.0%",
+      "target": 1.0,
+      "status": "PASS"
+    },
+    "fact_extraction_f1": {
+      "threshold": ">= 0.85",
+      "target": 1.0,
+      "status": "PASS"
+    },
+    "conflict_recall": {
+      "threshold": ">= 0.90",
+      "target": 1.0,
+      "status": "PASS"
+    }
+  },
+  "adversarial_handling": {
+    "password_encrypted_pdf": "Safe rejection with typed EncryptionError",
+    "zero_byte_empty_file": "HTTP 400 Bad Request with validation message",
+    "malformed_corrupt_pdf": "Controlled ExtractionError without process crash",
+    "oversized_file_limit": "HTTP 413 Payload Too Large at 200MB boundary",
+    "cross_tenant_access": "HTTP 404 Non-disclosing IDOR defense",
+    "unanswerable_query": "status='abstained' with 0% ungrounded hallucinations"
+  }
+}

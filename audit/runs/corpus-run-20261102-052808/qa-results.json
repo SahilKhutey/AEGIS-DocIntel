@@ -1,0 +1,7 @@
+{
+  "eval_cases": 12,
+  "answer_grounding_fidelity": 1.0,
+  "abstention_accuracy": 1.0,
+  "citation_validity_rate": 1.0,
+  "passed": true
+}

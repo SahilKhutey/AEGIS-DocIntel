@@ -1,0 +1,105 @@
+version: "1.0.0"
+project: "AEGIS-DocIntel"
+description: "Mapping of MVP capabilities to source modules, interfaces, and test suites."
+
+capabilities:
+  - id: "CAP-INGESTION"
+    name: "Multi-Format Document Ingestion"
+    modules:
+      - "src.core.normalized_document"
+      - "src.core.orchestrator"
+    interfaces:
+      - "NormalizedDocument.normalize"
+      - "AMDIOrchestrator.ingest"
+    test_suites:
+      - "tests/test_ingest_workflow.py"
+      - "tests/integration/test_document_workflow.py"
+    gate: "GATE-02"
+
+  - id: "CAP-LAYOUT"
+    name: "Geometric Layout & Reading Order"
+    modules:
+      - "src.engines.geometry"
+      - "src.engines.graph_reading_order"
+    interfaces:
+      - "GeometryEngine.parse"
+      - "ReadingOrderGraph.compute_order"
+    test_suites:
+      - "tests/test_extraction_fidelity.py"
+      - "tests/test_table_extraction_regression.py"
+    gate: "GATE-02"
+
+  - id: "CAP-PACKING"
+    name: "Submodular Context Budget Packing"
+    modules:
+      - "src.engines.context.context_builder"
+      - "src.engines.context.submodular_packer"
+    interfaces:
+      - "ContextBuilder.build_context"
+      - "SubmodularPacker.select_elements"
+    test_suites:
+      - "tests/test_mvp2_context_budget.py"
+      - "tests/test_benchmark_proof.py"
+    gate: "GATE-03"
+
+  - id: "CAP-RETRIEVAL"
+    name: "Hybrid Retrieval & Grounded Generation"
+    modules:
+      - "src.engines.retrieval"
+      - "src.engines.generation"
+    interfaces:
+      - "HybridRetriever.retrieve"
+      - "AnswerGenerator.generate_answer"
+    test_suites:
+      - "tests/test_mvp2_retrieval_quality.py"
+      - "tests/test_mvp3_generation.py"
+      - "tests/test_mvp3_abstention.py"
+    gate: "GATE-04"
+
+  - id: "CAP-INTELLIGENCE"
+    name: "Structured Fact Extraction & Conflicts"
+    modules:
+      - "src.engines.intelligence"
+    interfaces:
+      - "DocumentIntelligenceService.extract_facts"
+      - "DocumentIntelligenceService.detect_conflicts"
+    test_suites:
+      - "tests/test_mvp5_extraction.py"
+      - "tests/test_mvp5_conflicts.py"
+    gate: "GATE-05"
+
+  - id: "CAP-GOVERNANCE"
+    name: "Review Queue & Immutable Audit"
+    modules:
+      - "src.engines.governance"
+    interfaces:
+      - "ReviewService.claim"
+      - "ReviewService.decide"
+    test_suites:
+      - "tests/test_mvp6_review_service.py"
+      - "tests/test_mvp6_review_audit.py"
+    gate: "GATE-06"
+
+  - id: "CAP-OPERATIONS"
+    name: "Durable Background Jobs & Worker Recovery"
+    modules:
+      - "src.operations.job_service"
+      - "src.operations.job_worker"
+    interfaces:
+      - "JobService.submit_job"
+      - "JobWorker.reclaim_expired_leases"
+    test_suites:
+      - "tests/test_mvp8_job_lifecycle.py"
+      - "tests/test_mvp8_job_recovery.py"
+    gate: "GATE-08"
+
+  - id: "CAP-WORKBENCH"
+    name: "Document Intelligence Workbench SPA"
+    modules:
+      - "src.ui.workbench"
+    interfaces:
+      - "get_workbench_html"
+    test_suites:
+      - "tests/test_auth_guard.py"
+      - "tests/test_mvp7_integration.py"
+    gate: "GATE-10"
