@@ -61,7 +61,7 @@ def test_every_non_public_operation_rejects_anonymous_requests(production):
 def test_public_allowlist_is_minimal_and_explicit():
     # Changing this set is a security decision: it must show up in review as a test diff.
     assert PUBLIC_PATHS == frozenset(
-        {"/health", "/health/live", "/health/ready", "/readiness", "/docs", "/docs/oauth2-redirect", "/redoc", "/openapi.json"}
+        {"/", "/ui", "/health", "/health/live", "/health/ready", "/readiness", "/docs", "/docs/oauth2-redirect", "/redoc", "/openapi.json"}
     )
     assert PUBLIC_PREFIXES == ("/metrics",)
 
@@ -105,7 +105,9 @@ def test_new_unprotected_route_is_protected_automatically(development):
         ("/metrics-private", False),
         ("/docs/../v1/documents", False),
         ("/v1/health", False),
-        ("/", False),
+        ("/", True),
+        ("/ui", True),
+        ("/ui/", True),
         ("/v1/documents", False),
         ("/v1/admin/stats", False),
     ],

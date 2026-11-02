@@ -696,7 +696,13 @@ class RealDocumentService:
                 self.page_start = e.page
                 self.page_end = e.page
                 self.section = e.section
-                self.block_type = e.type.value if hasattr(e.type, "value") else str(e.type)
+                raw_type = (e.type.value if hasattr(e.type, "value") else str(e.type)).lower()
+                if raw_type in ("heading", "title"):
+                    self.block_type = "header"
+                elif raw_type in ("text", "table", "figure", "equation", "header", "footer"):
+                    self.block_type = raw_type
+                else:
+                    self.block_type = "text"
                 self.text = e.content
                 self.token_count = e.token_count if hasattr(e, "token_count") else max(1, len(e.content.split()))
 

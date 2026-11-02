@@ -28,7 +28,8 @@ from fastapi import (
 )
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.gzip import GZipMiddleware
-from fastapi.responses import JSONResponse, StreamingResponse
+from fastapi.responses import HTMLResponse, JSONResponse, StreamingResponse
+from src.ui.workbench import get_workbench_html
 from prometheus_client import make_asgi_app
 
 from src.api.auth_guard import AuthGuardMiddleware
@@ -226,6 +227,13 @@ def create_app() -> FastAPI:
 
     from src.api.error_handlers import register_error_handlers
     register_error_handlers(app)
+
+    # ── Workbench UI ───────────────────────────────────────────
+    @app.get("/", response_class=HTMLResponse, include_in_schema=False)
+    @app.get("/ui", response_class=HTMLResponse, include_in_schema=False)
+    async def serve_workbench(request: Request):
+        """Serve self-contained single-page Document Intelligence Workbench."""
+        return HTMLResponse(content=get_workbench_html())
 
     # ── Stats endpoint ──────────────────────────────────────────
     @app.get("/v1/stats", tags=["System"])

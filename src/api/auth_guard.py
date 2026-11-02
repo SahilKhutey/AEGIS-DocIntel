@@ -40,6 +40,8 @@ from starlette.types import ASGIApp, Receive, Scope, Send
 #       settings.app.env == "production")
 PUBLIC_PATHS: frozenset[str] = frozenset(
     {
+        "/",
+        "/ui",
         "/health",
         "/health/live",
         "/health/ready",
