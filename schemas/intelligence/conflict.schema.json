@@ -1,0 +1,55 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "AEGIS Conflict Record Schema",
+  "type": "object",
+  "required": [
+    "conflict_id",
+    "subject",
+    "predicate",
+    "facts",
+    "classification",
+    "reason",
+    "resolution_status"
+  ],
+  "properties": {
+    "conflict_id": { "type": "string" },
+    "subject": { "type": "string" },
+    "predicate": { "type": "string" },
+    "facts": {
+      "type": "array",
+      "minItems": 2,
+      "items": {
+        "type": "object",
+        "required": ["fact_id", "value", "document_id"],
+        "properties": {
+          "fact_id": { "type": "string" },
+          "value": { "type": ["string", "number", "boolean"] },
+          "raw_value": { "type": "string" },
+          "unit": { "type": ["string", "null"] },
+          "period": { "type": ["string", "null"] },
+          "document_id": { "type": "string" },
+          "page_number": { "type": ["integer", "null"] }
+        }
+      }
+    },
+    "classification": {
+      "type": "string",
+      "enum": [
+        "NO_CONFLICT",
+        "POTENTIAL_CONFLICT",
+        "DIRECT_CONFLICT",
+        "SCOPE_DIFFERENCE",
+        "TEMPORAL_DIFFERENCE",
+        "UNIT_DIFFERENCE",
+        "VERSION_DIFFERENCE",
+        "DEFINITION_DIFFERENCE",
+        "INSUFFICIENT_EVIDENCE"
+      ]
+    },
+    "reason": { "type": "string" },
+    "resolution_status": {
+      "type": "string",
+      "enum": ["UNRESOLVED", "RESOLVED_SUPERSEDED", "RESOLVED_DIFFERENT_SCOPE", "NEEDS_HUMAN_REVIEW"]
+    }
+  }
+}

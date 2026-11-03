@@ -1,0 +1,49 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "AEGIS Intelligence Benchmark Record Schema",
+  "type": "object",
+  "required": [
+    "benchmark_id",
+    "run_id",
+    "work_package",
+    "capability",
+    "dataset_id",
+    "dataset_version",
+    "pipeline_version",
+    "configuration_hash",
+    "metrics",
+    "resource_metrics",
+    "execution_status"
+  ],
+  "properties": {
+    "benchmark_id": { "type": "string" },
+    "run_id": { "type": "string" },
+    "work_package": { "type": "string", "enum": ["WP-06"] },
+    "capability": {
+      "type": "string",
+      "enum": [
+        "retrieval",
+        "golden_questions",
+        "citation_correctness",
+        "unanswerable",
+        "fact_extraction",
+        "conflict_detection",
+        "report_generation"
+      ]
+    },
+    "dataset_id": { "type": "string" },
+    "dataset_version": { "type": "string" },
+    "partition_id": { "type": "string" },
+    "manifest_id": { "type": "string" },
+    "pipeline_version": { "type": "string" },
+    "configuration_hash": { "type": "string" },
+    "software_versions": { "type": "object" },
+    "metrics": { "type": "object" },
+    "resource_metrics": { "type": "object" },
+    "errors": { "type": "array" },
+    "execution_status": {
+      "type": "string",
+      "enum": ["COMPLETED", "FAILED"]
+    }
+  }
+}
