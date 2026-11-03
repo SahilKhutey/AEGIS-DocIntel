@@ -1,0 +1,30 @@
+{
+  "report_version": "1.0.0",
+  "audited_at_utc": "2026-11-03T05:00:20.185995+00:00",
+  "overall_status": "PASS",
+  "datasets_audited": {
+    "DS-DOCLAYNET-01": {
+      "dataset_id": "DS-DOCLAYNET-01",
+      "total_pages_or_samples": 1,
+      "total_annotations": 5,
+      "label_distribution": {
+        "Page-header": 1,
+        "Title": 1,
+        "Text": 2,
+        "Page-footer": 1
+      },
+      "missing_labels_count": 0,
+      "corrupt_count": 0,
+      "quality_status": "PASS"
+    },
+    "DS-PUBTABNET-01": {
+      "dataset_id": "DS-PUBTABNET-01",
+      "total_pages_or_samples": 1,
+      "total_annotations": 0,
+      "label_distribution": {},
+      "missing_labels_count": 0,
+      "corrupt_count": 0,
+      "quality_status": "PASS"
+    }
+  }
+}

@@ -1,0 +1,78 @@
+{
+  "catalog_version": "1.0.0",
+  "datasets": [
+    {
+      "dataset_id": "DS-DOCLAYNET-01",
+      "name": "DocLayNet Document Layout Benchmark",
+      "source_id": "SRC-DOCLAYNET-001",
+      "version": "1.1",
+      "primary_tasks": [
+        "layout_detection"
+      ],
+      "document_count": 40,
+      "annotation_format": "coco_json",
+      "licence_id": "LIC-CDLA-PERMISSIVE-001",
+      "status": "APPROVED",
+      "sample_annotations_path": "audit/corpus/ground-truth/layout_ground_truth_sample.json"
+    },
+    {
+      "dataset_id": "DS-PUBTABNET-01",
+      "name": "PubTabNet Table Reconstruction Benchmark",
+      "source_id": "SRC-PUBTABNET-001",
+      "version": "1.0",
+      "primary_tasks": [
+        "table_extraction"
+      ],
+      "document_count": 15,
+      "annotation_format": "html_table_json",
+      "licence_id": "LIC-CDLA-PERMISSIVE-001",
+      "status": "APPROVED",
+      "sample_annotations_path": "audit/corpus/ground-truth/table_ground_truth_sample.json"
+    },
+    {
+      "dataset_id": "DS-FUNSD-01",
+      "name": "FUNSD Form Entity & Key-Value Benchmark",
+      "source_id": "SRC-FUNSD-001",
+      "version": "1.0",
+      "primary_tasks": [
+        "entity_extraction",
+        "ocr_evaluation"
+      ],
+      "document_count": 15,
+      "annotation_format": "funsd_spatial_json",
+      "licence_id": "LIC-FUNSD-ACAD-001",
+      "status": "CONDITIONAL",
+      "sample_annotations_path": null
+    },
+    {
+      "dataset_id": "DS-DOCVQA-01",
+      "name": "DocVQA Document Question Answering Benchmark",
+      "source_id": "SRC-DOCVQA-001",
+      "version": "1.0",
+      "primary_tasks": [
+        "question_answering",
+        "citation_validation"
+      ],
+      "document_count": 15,
+      "annotation_format": "qa_evidence_json",
+      "licence_id": "LIC-DOCVQA-CHALLENGE-001",
+      "status": "CONDITIONAL",
+      "sample_annotations_path": null
+    },
+    {
+      "dataset_id": "DS-AEGIS-INTEL-01",
+      "name": "AEGIS Document Intelligence Grounding & Conflict Benchmark",
+      "source_id": "SRC-AEGIS-ADV-001",
+      "version": "1.0",
+      "primary_tasks": [
+        "citation_validation",
+        "cross_document_analysis"
+      ],
+      "document_count": 10,
+      "annotation_format": "jsonl",
+      "licence_id": "LIC-APACHE-2-001",
+      "status": "APPROVED",
+      "sample_annotations_path": "evaluation/datasets/document_intelligence/extraction_cases.jsonl"
+    }
+  ]
+}
