@@ -1,0 +1,34 @@
+{
+  "benchmark_id": "WP06-FACT-001",
+  "run_id": "RUN-20261103-FACT-BENCH",
+  "work_package": "WP-06",
+  "capability": "fact_extraction",
+  "dataset_id": "FACT-EVAL-CORPUS-V1.0",
+  "dataset_version": "1.0",
+  "partition_id": "WP04-VALIDATION-001",
+  "manifest_id": "MANIFEST-20261103",
+  "pipeline_version": "1.0.0",
+  "configuration_hash": "0993e47087612f0f8705007ee23ea0305f2479e0",
+  "software_versions": {
+    "fact_extractor": "1.0.0"
+  },
+  "metrics": {
+    "total_facts_extracted": 3,
+    "predicate_extraction_accuracy": 1.0,
+    "entity_detection_precision": 1.0,
+    "entity_detection_recall": 1.0,
+    "entity_detection_f1": 1.0,
+    "numeric_normalization_accuracy": 1.0,
+    "evidence_support_rate": 1.0,
+    "raw_value_preservation_ratio": 1.0
+  },
+  "resource_metrics": {
+    "extracted_predicates": [
+      "reported_budget",
+      "measured_rate",
+      "headcount"
+    ]
+  },
+  "errors": [],
+  "execution_status": "COMPLETED"
+}
