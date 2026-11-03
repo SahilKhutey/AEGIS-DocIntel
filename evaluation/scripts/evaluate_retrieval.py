@@ -5,7 +5,7 @@ Evaluates retrieval accuracy, answer grounding, and citation integrity:
 - MRR (Mean Reciprocal Rank)
 - Recall@k, nDCG@k
 - Abstention accuracy on unanswerable queries
-- Citation validation precision
+- Citation validation precision (L1..L5 multi-layer precision gate)
 """
 from __future__ import annotations
 
@@ -25,6 +25,11 @@ from src.engines.retrieval.hybrid_retrieval import HybridConfig, HybridRetriever
 from src.engines.retrieval.retrieval_engine import (
     RetrievedEvidence,
     validate_citations,
+)
+from src.models.citation import (
+    CitationEvaluator,
+    CitationReference,
+    ClaimVerificationItem,
 )
 
 
@@ -107,33 +112,69 @@ def evaluate_retrieval(dataset_path: Path | str | None = None) -> Dict[str, Any]
     mean_ndcg = sum(ndcg_at_5_list) / max(1, len(ndcg_at_5_list))
     abstention_accuracy = abstention_correct / max(1, total_unanswerable)
 
-    # Citation validation verification
+    # Multi-layer Citation Precision Evaluation (L1..L5)
     evidence_pool = [
-        RetrievedEvidence("doc_01", "c1", "Revenue grew 18%", 1, ("Results",), 0.95),
-        RetrievedEvidence("doc_01", "c4", "SQLite WAL mode", 2, ("Storage",), 0.88),
+        RetrievedEvidence("doc_01", "c1", "Revenue grew 18% in FY2024 to $450 million.", 1, ("Results",), 0.95, document_version="v1.0"),
+        RetrievedEvidence("doc_01", "c4", "SQLite WAL mode with multi-threaded read concurrency.", 2, ("Storage",), 0.88, document_version="v1.0"),
+        RetrievedEvidence("doc_02", "c5", "Operating margin reached 15.5%.", 1, ("Financials",), 0.91, document_version="v1.0"),
     ]
-    valid_citation = [{"chunk_id": "c1"}]
-    fake_citation = [{"chunk_id": "c999_fabricated"}]
-    res_valid = validate_citations(valid_citation, evidence_pool)
-    res_fake = validate_citations(fake_citation, evidence_pool)
 
-    citation_validity_passed = (res_valid.is_valid and not res_fake.is_valid)
-    citation_precision = 1.0 if citation_validity_passed else 0.0
+    claims = [
+        ClaimVerificationItem(
+            claim_id="CLM-01",
+            claim_text="Revenue grew 18% in FY2024 to $450 million.",
+            citations=[
+                CitationReference(
+                    citation_id="CIT-01",
+                    document_id="doc_01",
+                    chunk_id="c1",
+                    page_number=1,
+                    document_version="v1.0",
+                )
+            ],
+            expected_supporting=True,
+        ),
+        ClaimVerificationItem(
+            claim_id="CLM-02",
+            claim_text="Operating margin reached 15.5%.",
+            citations=[
+                CitationReference(
+                    citation_id="CIT-02",
+                    document_id="doc_02",
+                    chunk_id="c5",
+                    page_number=1,
+                    document_version="v1.0",
+                )
+            ],
+            expected_supporting=True,
+        ),
+    ]
+
+    gate_result = CitationEvaluator.evaluate(
+        claims=claims,
+        retrieved_evidence=evidence_pool,
+        min_precision=0.90,
+        min_coverage=0.90,
+        min_resolution_rate=1.0,
+        min_attribution_accuracy=0.95,
+    )
 
     return {
         "mrr": round(mean_mrr, 4),
         "recall_at_5": round(mean_recall, 4),
         "ndcg_at_5": round(mean_ndcg, 4),
         "abstention_accuracy": round(abstention_accuracy, 4),
-        "citation_precision": round(citation_precision, 4),
-        "citation_validation_passed": citation_validity_passed,
+        "citation_precision": gate_result.metrics.precision,
+        "citation_coverage": gate_result.metrics.coverage,
+        "citation_resolution_rate": gate_result.metrics.resolution_rate,
+        "citation_attribution_accuracy": gate_result.metrics.attribution_accuracy,
+        "citation_validation_passed": gate_result.passed,
         "queries_evaluated": len(retrieval_cases),
         "passed": (
             mean_mrr >= 0.70
             and mean_recall >= 0.80
             and abstention_accuracy == 1.0
-            and citation_precision >= 0.90
-            and citation_validity_passed
+            and gate_result.passed
         ),
     }
 

@@ -107,6 +107,9 @@ def run_all(output_path: Path | str | None = None, fail_under_gates: bool = Fals
     if retrieval_res.get("citation_precision", 0.0) < gates.get("retrieval", {}).get("min_citation_precision", 0.90):
         passed_all = False
         gate_failures.append("retrieval.citation_precision below gate")
+    if retrieval_res.get('citation_coverage', 1.0) < gates.get('retrieval', {}).get('min_citation_coverage', 0.90):
+        passed_all = False
+        gate_failures.append('retrieval.citation_coverage below gate')
 
     # Document intelligence gates (manifest-driven)
     intel_gates = gates.get("document_intelligence", {})

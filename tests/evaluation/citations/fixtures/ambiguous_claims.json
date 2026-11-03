@@ -1,0 +1,17 @@
+[
+  {
+    "claim_id": "CLM-AMB-001",
+    "claim_text": "The company expects future market growth in unexpected sectors.",
+    "citations": [
+      {
+        "citation_id": "CIT-AMB-001",
+        "document_id": "doc_annual_report_2024",
+        "document_version": "v1.0",
+        "page_number": 1,
+        "chunk_id": "c1",
+        "claim_id": "CLM-AMB-001"
+      }
+    ],
+    "expected_supporting": false
+  }
+]

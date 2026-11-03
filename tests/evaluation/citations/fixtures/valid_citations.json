@@ -1,0 +1,32 @@
+[
+  {
+    "claim_id": "CLM-001",
+    "claim_text": "In fiscal year 2024, consolidated revenue grew by 18% to $450 million.",
+    "citations": [
+      {
+        "citation_id": "CIT-001",
+        "document_id": "doc_annual_report_2024",
+        "document_version": "v1.0",
+        "page_number": 1,
+        "chunk_id": "c1",
+        "claim_id": "CLM-001"
+      }
+    ],
+    "expected_supporting": true
+  },
+  {
+    "claim_id": "CLM-002",
+    "claim_text": "Operating margin improved from 12% to 15.5% over the same fiscal period.",
+    "citations": [
+      {
+        "citation_id": "CIT-002",
+        "document_id": "doc_annual_report_2024",
+        "document_version": "v1.0",
+        "page_number": 2,
+        "chunk_id": "c2",
+        "claim_id": "CLM-002"
+      }
+    ],
+    "expected_supporting": true
+  }
+]
