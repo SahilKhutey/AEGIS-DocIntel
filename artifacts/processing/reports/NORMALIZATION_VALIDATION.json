@@ -1,0 +1,28 @@
+{
+  "benchmark_id": "WP05-NORM-001",
+  "run_id": "RUN-20261103-NORM-BENCH",
+  "work_package": "WP-05",
+  "capability": "normalization",
+  "dataset_id": "CANONICAL-FIELDS-SAMPLE",
+  "dataset_version": "1.0",
+  "partition_id": "WP04-VALIDATION-001",
+  "manifest_id": "MANIFEST-20261103",
+  "pipeline_version": "1.0.0",
+  "configuration_hash": "b6f03e08544c922880775d7b5b54a613cfcfc382",
+  "software_versions": {
+    "Normalizer": "1.0.0"
+  },
+  "metrics": {
+    "date_rule_success_rate": 1.0,
+    "ambiguous_date_detection_rate": 1.0,
+    "financial_numeric_accuracy": 1.0,
+    "unicode_nfc_compliance": 1.0,
+    "raw_value_retention_ratio": 1.0,
+    "transformation_error_rate": 0.0
+  },
+  "resource_metrics": {
+    "elapsed_seconds": 0.005
+  },
+  "errors": [],
+  "execution_status": "COMPLETED"
+}

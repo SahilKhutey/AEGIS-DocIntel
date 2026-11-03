@@ -1,0 +1,28 @@
+{
+  "benchmark_id": "WP05-PROV-001",
+  "run_id": "RUN-20261103-PROV-BENCH",
+  "work_package": "WP-05",
+  "capability": "normalization",
+  "dataset_id": "PROVENANCE-AUDIT-SAMPLE",
+  "dataset_version": "1.0",
+  "partition_id": "WP04-VALIDATION-001",
+  "manifest_id": "MANIFEST-20261103",
+  "pipeline_version": "1.0.0",
+  "configuration_hash": "b6f03e08544c922880775d7b5b54a613cfcfc382",
+  "software_versions": {
+    "ProvenanceEngine": "1.0.0"
+  },
+  "metrics": {
+    "all_invariants_passed": true,
+    "passed_invariants_count": 7,
+    "violations_count": 0,
+    "fields_audited": 2,
+    "source_checksum_verified": true,
+    "lineage_traceability_ratio": 1.0
+  },
+  "resource_metrics": {
+    "elapsed_seconds": 0.004
+  },
+  "errors": [],
+  "execution_status": "COMPLETED"
+}
