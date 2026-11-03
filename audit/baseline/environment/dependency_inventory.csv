@@ -1,0 +1,81 @@
+package_name,installed_version,required_version,dependency_category,dependency_type,associated_module,license,security_status,upgrade_requirement
+anthropic,NOT_INSTALLED,>=0.25.0,Core,Direct,"src.intelligence, src.generation",Verified (Permissive/OpenSource),Audited,None / Baseline Frozen
+bandit,1.9.4,>=1.7.8,Development / Testing,Direct,security (AST Vulnerability Scanner),Verified (Permissive/OpenSource),Audited,None / Baseline Frozen
+bcrypt,5.0.0,>=4.1.0,Core,Direct,backend.security (Password Auth),Verified (Permissive/OpenSource),Audited,None / Baseline Frozen
+faiss-cpu,NOT_INSTALLED,>=1.7.4,AI/ML,Direct,src.retrieval.vector_index,Verified (Permissive/OpenSource),Audited,None / Baseline Frozen
+fastapi,0.141.1,>=0.110.0,Core,Direct,backend.api (REST Endpoints),Verified (Permissive/OpenSource),Audited,None / Baseline Frozen
+httpx,0.28.1,>=0.27.0,Core,Direct,"backend.clients, evaluation.scripts",Verified (Permissive/OpenSource),Audited,None / Baseline Frozen
+hypothesis,6.156.6,>=6.98.0,Development / Testing,Direct,tests (Property-Based Testing),Verified (Permissive/OpenSource),Audited,None / Baseline Frozen
+loguru,NOT_INSTALLED,>=0.7.2,Core,Direct,src.observability (Logging),Verified (Permissive/OpenSource),Audited,None / Baseline Frozen
+mypy,2.4.0,>=1.11.0,Development / Testing,Direct,linter (Static Type Checking),Verified (Permissive/OpenSource),Audited,None / Baseline Frozen
+networkx,3.4.2,>=3.2,Core,Direct,src.graph (Topological DAG),Verified (Permissive/OpenSource),Audited,None / Baseline Frozen
+numpy,1.26.4,>=1.26.0,Core,Direct,"src.math, aegis-docprep.packing",Verified (Permissive/OpenSource),Audited,None / Baseline Frozen
+openai,2.20.0,>=1.30.0,Core,Direct,"src.intelligence, src.generation",Verified (Permissive/OpenSource),Audited,None / Baseline Frozen
+openpyxl,3.1.5,>=3.1.2,Core,Direct,src.ingestion.xlsx,Verified (Permissive/OpenSource),Audited,None / Baseline Frozen
+opentelemetry-api,1.44.0,>=1.24.0,Infrastructure,Direct,backend.observability.telemetry,Verified (Permissive/OpenSource),Audited,None / Baseline Frozen
+opentelemetry-sdk,1.44.0,>=1.24.0,Infrastructure,Direct,backend.observability.telemetry,Verified (Permissive/OpenSource),Audited,None / Baseline Frozen
+passlib,1.7.4,>=1.7.4,Core,Direct,backend.security (Hashing),Verified (Permissive/OpenSource),Audited,None / Baseline Frozen
+pdfplumber,0.11.10,>=0.10.0,Core,Direct,src.ingestion.tables,Verified (Permissive/OpenSource),Audited,None / Baseline Frozen
+pillow,12.1.1,>=10.2.0,Core,Direct,src.ingestion.image,Verified (Permissive/OpenSource),Audited,None / Baseline Frozen
+pip-audit,2.10.1,>=2.7.0,Development / Testing,Direct,security (CVE Dependency Scanner),Verified (Permissive/OpenSource),Audited,None / Baseline Frozen
+prometheus-client,0.25.0,>=0.20.0,Core,Direct,src.observability (Metrics),Verified (Permissive/OpenSource),Audited,None / Baseline Frozen
+pydantic,2.12.5,>=2.6.0,Core,Direct,"src.core (Master State, Schemas)",Verified (Permissive/OpenSource),Audited,None / Baseline Frozen
+pydantic-settings,2.14.2,>=2.2.0,Core,Direct,src.core (Configuration),Verified (Permissive/OpenSource),Audited,None / Baseline Frozen
+pyjwt,2.13.0,>=2.9.0,Core,Direct,backend.security (JWT Auth),Verified (Permissive/OpenSource),Audited,None / Baseline Frozen
+pymupdf,1.28.0,>=1.24.0,Core,Direct,"src.ingestion, aegis-docprep.spatial",Verified (Permissive/OpenSource),Audited,None / Baseline Frozen
+pytesseract,0.3.13,>=0.3.10,Document Processing; Development / Testing,Direct,src.ingestion.ocr,Verified (Permissive/OpenSource),Audited,None / Baseline Frozen
+pytest,9.1.1,>=8.0.0,Development / Testing,Direct,tests (Test Framework),Verified (Permissive/OpenSource),Audited,None / Baseline Frozen
+pytest-asyncio,1.4.0,>=0.24.0,Development / Testing,Direct,tests (Async Testing),Verified (Permissive/OpenSource),Audited,None / Baseline Frozen
+pytest-cov,7.1.0,>=5.0.0,Development / Testing,Direct,tests (Coverage Reporting),Verified (Permissive/OpenSource),Audited,None / Baseline Frozen
+python-docx,1.2.0,>=1.1.0,Core,Direct,src.ingestion.docx,Verified (Permissive/OpenSource),Audited,None / Baseline Frozen
+python-multipart,0.0.32,>=0.0.9,Core,Direct,backend.api (File Uploads),Verified (Permissive/OpenSource),Audited,None / Baseline Frozen
+python-pptx,1.0.2,>=0.6.23,Core,Direct,src.ingestion.pptx,Verified (Permissive/OpenSource),Audited,None / Baseline Frozen
+pyyaml,6.0.3,>=6.0.1,Core,Direct,General / Shared,Verified (Permissive/OpenSource),Audited,None / Baseline Frozen
+redis,5.3.1,>=5.0.0,Infrastructure,Direct,backend.infrastructure.cache,Verified (Permissive/OpenSource),Audited,None / Baseline Frozen
+requests,2.32.5,>=2.31.0,Optional / UI,Direct,General / Shared,Verified (Permissive/OpenSource),Audited,None / Baseline Frozen
+ruff,0.16.4,>=0.6.0,Development / Testing,Direct,linter (Static Code Analysis),Verified (Permissive/OpenSource),Audited,None / Baseline Frozen
+scikit-learn,1.9.0,>=1.4.0,Core,Direct,"src.retrieval, src.intelligence",Verified (Permissive/OpenSource),Audited,None / Baseline Frozen
+scipy,1.15.3,>=1.12.0,Core,Direct,src.math (Optimization),Verified (Permissive/OpenSource),Audited,None / Baseline Frozen
+sentence-transformers,5.6.1,>=2.7.0,AI/ML,Direct,src.retrieval.embeddings,Verified (Permissive/OpenSource),Audited,None / Baseline Frozen
+starlette,1.6.0,>=0.36.0,Core,Direct,backend.api (ASGI Framework),Verified (Permissive/OpenSource),Audited,None / Baseline Frozen
+streamlit,1.54.0,>=1.30.0,Optional / UI,Direct,ui.streamlit (Visualization),Verified (Permissive/OpenSource),Audited,None / Baseline Frozen
+structlog,26.1.0,>=24.1.0,Core,Direct,src.observability (Logging),Verified (Permissive/OpenSource),Audited,None / Baseline Frozen
+tiktoken,0.12.0,>=0.6.0,Core,Direct,src.packing (Token Knapsack),Verified (Permissive/OpenSource),Audited,None / Baseline Frozen
+uvicorn,0.49.0,>=0.27.0,Core,Direct,backend.main (Server Runtime),Verified (Permissive/OpenSource),Audited,None / Baseline Frozen
+annotated-doc,0.0.4,==0.0.5,Transitive / Core Runtime,Transitive,Runtime Sub-dependency,Permissive,Locked,None / Frozen
+annotated-types,0.7.0,==0.8.0,Transitive / Core Runtime,Transitive,Runtime Sub-dependency,Permissive,Locked,None / Frozen
+anyio,4.12.1,==4.15.1,Transitive / Core Runtime,Transitive,Runtime Sub-dependency,Permissive,Locked,None / Frozen
+certifi,2026.1.4,==2026.7.22,Transitive / Core Runtime,Transitive,Runtime Sub-dependency,Permissive,Locked,None / Frozen
+cffi,2.0.0,==2.1.1,Transitive / Core Runtime,Transitive,Runtime Sub-dependency,Permissive,Locked,None / Frozen
+charset-normalizer,3.4.4,==3.5.2,Transitive / Core Runtime,Transitive,Runtime Sub-dependency,Permissive,Locked,None / Frozen
+click,8.5.0,==8.5.0,Transitive / Core Runtime,Transitive,Runtime Sub-dependency,Permissive,Locked,None / Frozen
+cloudpickle,NOT_INSTALLED,==3.1.2,Transitive / Core Runtime,Transitive,Runtime Sub-dependency,Permissive,Locked,None / Frozen
+cryptography,49.0.0,==50.0.2,Transitive / Core Runtime,Transitive,Runtime Sub-dependency,Permissive,Locked,None / Frozen
+docstring-parser,NOT_INSTALLED,==0.18.0,Transitive / Core Runtime,Transitive,Runtime Sub-dependency,Permissive,Locked,None / Frozen
+et-xmlfile,2.0.0,==2.0.0,Transitive / Core Runtime,Transitive,Runtime Sub-dependency,Permissive,Locked,None / Frozen
+h11,0.16.0,==0.16.0,Transitive / Core Runtime,Transitive,Runtime Sub-dependency,Permissive,Locked,None / Frozen
+httpcore,1.0.9,==1.0.9,Transitive / Core Runtime,Transitive,Runtime Sub-dependency,Permissive,Locked,None / Frozen
+httpcore2,2.5.0,==2.13.1,Transitive / Core Runtime,Transitive,Runtime Sub-dependency,Permissive,Locked,None / Frozen
+httptools,0.8.0,==0.9.0,Transitive / Core Runtime,Transitive,Runtime Sub-dependency,Permissive,Locked,None / Frozen
+httpx2,2.5.0,==2.13.1,Transitive / Core Runtime,Transitive,Runtime Sub-dependency,Permissive,Locked,None / Frozen
+idna,3.20,==3.20,Transitive / Core Runtime,Transitive,Runtime Sub-dependency,Permissive,Locked,None / Frozen
+jiter,0.13.0,==0.17.0,Transitive / Core Runtime,Transitive,Runtime Sub-dependency,Permissive,Locked,None / Frozen
+joblib,1.5.3,==1.6.0,Transitive / Core Runtime,Transitive,Runtime Sub-dependency,Permissive,Locked,None / Frozen
+lxml,6.1.1,==6.1.3,Transitive / Core Runtime,Transitive,Runtime Sub-dependency,Permissive,Locked,None / Frozen
+narwhals,2.16.0,==2.27.1,Transitive / Core Runtime,Transitive,Runtime Sub-dependency,Permissive,Locked,None / Frozen
+pdfminer.six,20260107,==20260107,Transitive / Core Runtime,Transitive,Runtime Sub-dependency,Permissive,Locked,None / Frozen
+pycparser,3.0,==3.11,Transitive / Core Runtime,Transitive,Runtime Sub-dependency,Permissive,Locked,None / Frozen
+pydantic-core,2.41.5,==2.50.1,Transitive / Core Runtime,Transitive,Runtime Sub-dependency,Permissive,Locked,None / Frozen
+pypdfium2,5.12.1,==5.14.0,Transitive / Core Runtime,Transitive,Runtime Sub-dependency,Permissive,Locked,None / Frozen
+python-dotenv,1.2.1,==1.2.4,Transitive / Core Runtime,Transitive,Runtime Sub-dependency,Permissive,Locked,None / Frozen
+regex,2026.1.15,==2026.9.29,Transitive / Core Runtime,Transitive,Runtime Sub-dependency,Permissive,Locked,None / Frozen
+sniffio,1.3.1,==1.3.1,Transitive / Core Runtime,Transitive,Runtime Sub-dependency,Permissive,Locked,None / Frozen
+threadpoolctl,3.6.0,==3.7.0,Transitive / Core Runtime,Transitive,Runtime Sub-dependency,Permissive,Locked,None / Frozen
+truststore,0.10.4,==0.10.5,Transitive / Core Runtime,Transitive,Runtime Sub-dependency,Permissive,Locked,None / Frozen
+typing-extensions,4.15.0,==4.16.0,Transitive / Core Runtime,Transitive,Runtime Sub-dependency,Permissive,Locked,None / Frozen
+typing-inspection,0.4.2,==0.4.4,Transitive / Core Runtime,Transitive,Runtime Sub-dependency,Permissive,Locked,None / Frozen
+urllib3,2.6.3,==2.8.0,Transitive / Core Runtime,Transitive,Runtime Sub-dependency,Permissive,Locked,None / Frozen
+uvloop,NOT_INSTALLED,==0.23.0,Transitive / Core Runtime,Transitive,Runtime Sub-dependency,Permissive,Locked,None / Frozen
+watchfiles,1.1.1,==1.3.0,Transitive / Core Runtime,Transitive,Runtime Sub-dependency,Permissive,Locked,None / Frozen
+websockets,16.0,==17.2,Transitive / Core Runtime,Transitive,Runtime Sub-dependency,Permissive,Locked,None / Frozen
+xlsxwriter,3.2.9,==3.2.9,Transitive / Core Runtime,Transitive,Runtime Sub-dependency,Permissive,Locked,None / Frozen
