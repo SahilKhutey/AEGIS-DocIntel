@@ -31,6 +31,10 @@ audit:
       enabled: true
       required: true
       timeout_seconds: 180
+    - id: "processing"
+      enabled: true
+      required: true
+      timeout_seconds: 180
   evidence:
     enabled: true
     format: "json"
