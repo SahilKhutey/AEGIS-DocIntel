@@ -1,5 +1,5 @@
 {
-  "benchmark_timestamp": "2026-11-03T04:07:01.808779+00:00",
+  "benchmark_timestamp": "2026-11-03T04:48:53.741940+00:00",
   "overall_status": "PASSED",
   "gate_failures": [],
   "metrics": {
@@ -46,7 +46,23 @@
       "grounding_fidelity": 1.0,
       "normalization_accuracy": 1.0,
       "comparison_accuracy": 1.0,
-      "conflict_detection_recall": 1.0
+      "conflict_detection_recall": 1.0,
+      "manifest_id": "eval-manifest-intelligence-v1",
+      "quality_gates_passed": true,
+      "gate_details": {
+        "extraction_f1": {
+          "value": 1.0,
+          "passed": true
+        },
+        "grounding_fidelity": {
+          "value": 1.0,
+          "passed": true
+        },
+        "conflict_detection_recall": {
+          "value": 1.0,
+          "passed": true
+        }
+      }
     }
   },
   "gates_applied": {
