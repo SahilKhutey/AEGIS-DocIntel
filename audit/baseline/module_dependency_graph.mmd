@@ -1,0 +1,54 @@
+flowchart TD
+    %% AEGIS-DocIntel Verified Module Dependency Graph
+    subgraph Ingestion_Layer["1. Ingestion & Pre-Processing"]
+        ING[src.ingestion / Raw Parsers]
+        GEO[src.engines.geometry / Bounding Boxes]
+        DAG[src.engines.graph_reading_order / Topological DAG]
+        RED[aegis_docprep.redaction / PII Masking]
+    end
+
+    subgraph Core_State["2. Canonical Master State Tuple"]
+        STATE["src.core.master_state: D = (P,S,G,R,F,M,T,X,H,E)"]
+        NORM["src.core.normalized_document"]
+    end
+
+    subgraph Intelligence_Layer["3. Compilation & Intelligence"]
+        PACK["src.engines.context / Submodular Knapsack"]
+        RET["src.engines.retrieval / Dense & Sparse"]
+        GEN["src.engines.generation / Grounded QA"]
+        INTEL["src.engines.intelligence / Facts & Conflicts"]
+    end
+
+    subgraph Governance_Operations["4. Governance & Operations"]
+        GOV["src.engines.governance / Review Queues"]
+        OPS["src.operations / Durable Job Queue"]
+        REPO["src.repositories / Persistence Store"]
+    end
+
+    subgraph Delivery_Surfaces["5. Application & User Interfaces"]
+        API["src.main / FastAPI Application"]
+        GUARD["src.api.auth_guard / Fail-Closed Guard"]
+        UI["src.ui.workbench / HTML5 SPA"]
+        EXT["aegis_docprep / LangChain & LlamaIndex"]
+    end
+
+    ING --> GEO
+    ING --> STATE
+    GEO --> DAG
+    DAG --> STATE
+    RED --> STATE
+    STATE --> NORM
+    NORM --> PACK
+    NORM --> RET
+    RET --> GEN
+    PACK --> GEN
+    NORM --> INTEL
+    INTEL --> GOV
+    GOV --> REPO
+    OPS --> REPO
+    API --> GUARD
+    API --> UI
+    API --> OPS
+    API --> STATE
+    PACK -.-> EXT
+    DAG -.-> EXT

@@ -1,0 +1,12 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "AEGIS Audit Configuration Snapshot Schema v1",
+  "type": "object",
+  "required": ["profile", "sha256", "resolved_at"],
+  "properties": {
+    "profile": {"type": "string"},
+    "schema_version": {"type": "string"},
+    "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "resolved_at": {"type": "string"}
+  }
+}

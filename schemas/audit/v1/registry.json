@@ -1,0 +1,14 @@
+{
+  "version": "1.0",
+  "namespace": "aegis.audit.v1",
+  "schemas": {
+    "run": "schemas/audit/v1/run.schema.json",
+    "suite": "schemas/audit/v1/suite.schema.json",
+    "finding": "schemas/audit/v1/finding.schema.json",
+    "artifact": "schemas/audit/v1/artifact.schema.json",
+    "environment": "schemas/audit/v1/environment.schema.json",
+    "commit": "schemas/audit/v1/commit.schema.json",
+    "configuration": "schemas/audit/v1/configuration.schema.json",
+    "summary": "schemas/audit/v1/summary.schema.json"
+  }
+}

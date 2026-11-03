@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "AEGIS Audit Commit Schema v1",
+  "type": "object",
+  "required": ["repository", "branch", "commit_sha", "working_tree_clean"],
+  "properties": {
+    "repository": {"type": "string"},
+    "remote_url": {"type": "string"},
+    "branch": {"type": ["string", "null"]},
+    "commit_sha": {"type": "string", "pattern": "^[a-f0-9]{40}$"},
+    "commit_timestamp": {"type": "string"},
+    "working_tree_clean": {"type": "boolean"},
+    "modified_files_count": {"type": "integer", "minimum": 0},
+    "untracked_files_count": {"type": "integer", "minimum": 0}
+  }
+}

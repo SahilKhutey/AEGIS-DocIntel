@@ -73,3 +73,5 @@ Retrack/
 
 .next/
 out/
+
+artifacts/audits/

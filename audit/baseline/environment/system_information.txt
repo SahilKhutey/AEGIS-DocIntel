@@ -1,0 +1,9 @@
+os_name: Windows
+os_release: 11
+os_version: 10.0.26300
+platform: Windows-11-10.0.26300-SP0
+architecture: 64bit
+processor: AMD64 Family 25 Model 124 Stepping 0, AuthenticAMD
+machine: AMD64
+cpu_name: AMD Ryzen 7 7445HS w/ Radeon 740M Graphics
+total_ram_gb: 16 GB

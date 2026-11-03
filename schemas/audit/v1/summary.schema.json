@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "AEGIS Audit Summary Schema v1",
+  "type": "object",
+  "required": [
+    "run_id", "status", "started_at", "completed_at", "duration_seconds",
+    "planned_suites", "executed_suites", "passed_suites", "failed_suites",
+    "completion_ratio", "total_findings", "critical_findings", "high_findings"
+  ],
+  "properties": {
+    "run_id": {"type": "string"},
+    "status": {"type": "string", "enum": ["PASSED", "FAILED", "ERROR", "TIMEOUT", "PARTIAL", "BLOCKED", "CANCELLED"]},
+    "started_at": {"type": "string"},
+    "completed_at": {"type": "string"},
+    "duration_seconds": {"type": "number", "minimum": 0},
+    "planned_suites": {"type": "integer", "minimum": 0},
+    "executed_suites": {"type": "integer", "minimum": 0},
+    "passed_suites": {"type": "integer", "minimum": 0},
+    "failed_suites": {"type": "integer", "minimum": 0},
+    "completion_ratio": {"type": "number", "minimum": 0, "maximum": 100},
+    "total_findings": {"type": "integer", "minimum": 0},
+    "critical_findings": {"type": "integer", "minimum": 0},
+    "high_findings": {"type": "integer", "minimum": 0}
+  }
+}
