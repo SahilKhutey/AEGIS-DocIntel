@@ -1,0 +1,26 @@
+schema_version: "1.0.0"
+release:
+  project: "aegis-docintel"
+  version: "0.1.0-alpha.1"
+  stage: "alpha"
+  canonical_baseline:
+    commit_sha: "7c05522643e503396795d99e381d201268ebe7fe"
+    tag: "aegis-baseline-001"
+    branch: "master"
+  maturity_level: "MVP"
+  release_date: "2026-11-03"
+  licenses:
+    core:
+      package: "aegis-docprep"
+      license: "Apache-2.0"
+      scope: "open-core"
+    platform:
+      package: "aegis-docintel"
+      license: "Proprietary"
+      scope: "full-platform"
+  release_gates:
+    wp01_baseline: "PASS"
+    wp02_audit_infrastructure: "PASS"
+    wp03_remediation: "PASS"
+    quality_benchmarks: "PASS"
+    security_scans: "PASS"

@@ -1,15 +1,19 @@
 {
   "project": "AEGIS-DocIntel",
-  "release_candidate": "v1.0.0-mvp",
-  "audit_timestamp_utc": "2026-11-02T05:32:51.368498+00:00",
+  "release_candidate": "0.1.0-alpha.1",
+  "audit_timestamp_utc": "2026-11-03T09:00:00Z",
   "git": {
-    "active_branch": "feat/mvp8-job-orchestration",
-    "head_commit": "32dfcb977344805d2932052df3bd58ce3f73dd18",
-    "master_commit": "32dfcb977344805d2932052df3bd58ce3f73dd18",
-    "main_commit": "32dfcb977344805d2932052df3bd58ce3f73dd18",
-    "working_tree_clean": "false",
-    "last_commit_message": "32dfcb9 feat(corpus): integrate public document corpus v1.0, 250-record manifest, and automated benchmark runner"
+    "canonical_branch": "master",
+    "canonical_commit": "7c05522643e503396795d99e381d201268ebe7fe",
+    "canonical_tag": "aegis-baseline-001",
+    "comparison_branch": "main",
+    "divergent_production_branch": "origin/feature/v0.3.0-full-production-hardening",
+    "production_branch_status": "QUARANTINED",
+    "baseline_verified": true
   },
-  "branches_aligned": true,
-  "status": "FROZEN_CANDIDATE"
+  "licenses": {
+    "open_core": "Apache-2.0",
+    "platform": "Proprietary"
+  },
+  "status": "FROZEN_BASELINE"
 }

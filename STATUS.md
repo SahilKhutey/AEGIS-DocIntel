@@ -1,6 +1,6 @@
 # Project Status — Evidence-Linked
 
-_Last verified: 2026-10-10 against `master` @ `5bec766` plus the Phase 0 changes (see [CHANGELOG.md](CHANGELOG.md))._
+_Last verified: 2026-11-03 against canonical baseline `master` @ `7c05522` (tag `aegis-baseline-001`) for release `0.1.0-alpha.1`._
 
 **One rule governs this file: a capability is listed as working only if a test, CI job or script in this repository re-checks it.** Numbers that rot (test counts, coverage) are not hard-coded — the CI badge in the [README](README.md) is the source of truth. Anything not re-verified is labelled as such.
 
