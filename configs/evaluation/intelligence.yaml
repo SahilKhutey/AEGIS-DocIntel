@@ -1,0 +1,45 @@
+schema_version: "1.0.0"
+manifest_id: "eval-manifest-intelligence-v1"
+name: "Document Intelligence Benchmarking Suite"
+target_domain: "document_intelligence"
+description: "Manifest-driven evaluation config for fact extraction, cross-document comparison, and conflict detection."
+
+datasets:
+  extraction:
+    path: "evaluation/datasets/document_intelligence/extraction_cases.jsonl"
+    sha256: "22d4651d2a75733dd33c1d04d20417b07b4994444523d5db4405efb89781549b"
+    format: "jsonl"
+    item_count: 5
+  comparison:
+    path: "evaluation/datasets/document_intelligence/comparison_cases.jsonl"
+    sha256: "b84e480618a032162cdd116638854c63e069549d489b5cceb62a66777e0fb3ba"
+    format: "jsonl"
+    item_count: 2
+
+tasks:
+  fact_extraction:
+    dataset: "extraction"
+    engine: "FactExtractor"
+    metrics:
+      - "extraction_precision"
+      - "extraction_recall"
+      - "extraction_f1"
+      - "grounding_fidelity"
+  conflict_reasoning:
+    dataset: "comparison"
+    engine: "ConflictDetector"
+    metrics:
+      - "conflict_detection_precision"
+      - "conflict_detection_recall"
+      - "conflict_detection_f1"
+
+quality_gates:
+  extraction_f1:
+    min_value: 0.85
+    strict: true
+  grounding_fidelity:
+    min_value: 1.00
+    strict: true
+  conflict_detection_recall:
+    min_value: 0.90
+    strict: true

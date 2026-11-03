@@ -3,38 +3,60 @@ evaluation/scripts/evaluate_intelligence.py
 ===========================================
 Benchmark evaluation suite for Document Intelligence, Fact Extraction,
 Deterministic Normalization, and Cross-Document Conflict Reasoning.
+Manifest-driven execution and dataset integrity verification.
 """
 
 from __future__ import annotations
 
+import argparse
 import json
 import math
 import sys
 from pathlib import Path
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional
 
 REPO_ROOT = Path(__file__).resolve().parent.parent.parent
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
+from aegis.evaluation.manifest.loader import ManifestLoader
+from aegis.evaluation.manifest.models import EvaluationManifest
 from src.engines.intelligence.comparison import DocumentComparator
 from src.engines.intelligence.conflict_detection import ConflictDetector
 from src.engines.intelligence.fact_extractor import FactExtractor, verify_quote_in_source
 
 
-def evaluate_intelligence(data_dir: Path | str | None = None) -> Dict[str, Any]:
-    base_dir = (
-        Path(data_dir)
-        if data_dir
-        else Path(__file__).resolve().parent.parent / "datasets" / "document_intelligence"
-    )
+def evaluate_intelligence(
+    manifest_path: Path | str | None = None,
+    data_dir: Path | str | None = None,
+) -> Dict[str, Any]:
+    manifest: Optional[EvaluationManifest] = None
+
+    if manifest_path is not None:
+        m_path = Path(manifest_path)
+        manifest = ManifestLoader.load(m_path, repo_root=REPO_ROOT, verify_integrity=True)
+    elif data_dir is None:
+        default_manifest = REPO_ROOT / "configs" / "evaluation" / "intelligence.yaml"
+        if default_manifest.exists():
+            manifest = ManifestLoader.load(default_manifest, repo_root=REPO_ROOT, verify_integrity=True)
+
+    if manifest:
+        extract_file = REPO_ROOT / manifest.datasets["extraction"].path
+        compare_file = REPO_ROOT / manifest.datasets["comparison"].path
+    else:
+        base_dir = (
+            Path(data_dir)
+            if data_dir
+            else Path(__file__).resolve().parent.parent / "datasets" / "document_intelligence"
+        )
+        extract_file = base_dir / "extraction_cases.jsonl"
+        compare_file = base_dir / "comparison_cases.jsonl"
 
     extractor = FactExtractor()
     comparator = DocumentComparator()
     conflict_detector = ConflictDetector()
 
     # 1. Extraction Evaluation
-    extract_file = base_dir / "extraction_cases.jsonl"
     total_expected = 0
     total_extracted = 0
     correctly_extracted = 0
@@ -60,7 +82,6 @@ def evaluate_intelligence(data_dir: Path | str | None = None) -> Dict[str, Any]:
                 # Check evidence grounding for all extracted facts
                 for fact in res.facts:
                     for ev in fact.evidence:
-                        # Find passage source text
                         passage_text = ""
                         for p in case["passages"]:
                             if p["chunk_id"] == ev.chunk_id:
@@ -80,7 +101,6 @@ def evaluate_intelligence(data_dir: Path | str | None = None) -> Dict[str, Any]:
                     attr = exp["attribute"]
                     if attr in extracted_by_attr:
                         fact = extracted_by_attr[attr]
-                        # Check value equivalence
                         val = fact.value
                         exp_val = exp["expected_value"]
 
@@ -113,7 +133,6 @@ def evaluate_intelligence(data_dir: Path | str | None = None) -> Dict[str, Any]:
     )
 
     # 2. Comparison & Conflict Detection Evaluation
-    compare_file = base_dir / "comparison_cases.jsonl"
     total_expected_comparisons = 0
     correct_comparisons = 0
     total_expected_conflicts = 0
@@ -177,7 +196,7 @@ def evaluate_intelligence(data_dir: Path | str | None = None) -> Dict[str, Any]:
         else 1.0
     )
 
-    return {
+    results: Dict[str, Any] = {
         "extraction_precision": round(precision, 4),
         "extraction_recall": round(recall, 4),
         "extraction_f1": round(f1, 4),
@@ -187,9 +206,33 @@ def evaluate_intelligence(data_dir: Path | str | None = None) -> Dict[str, Any]:
         "conflict_detection_recall": round(conflict_recall, 4),
     }
 
+    if manifest:
+        results["manifest_id"] = manifest.manifest_id
+        passed_gates = True
+        gate_details = {}
+        for g_name, gate in manifest.quality_gates.items():
+            val = results.get(g_name, 0.0)
+            passed = True
+            if gate.min_value is not None and val < gate.min_value:
+                passed = False
+            if gate.max_value is not None and val > gate.max_value:
+                passed = False
+            gate_details[g_name] = {"value": val, "passed": passed}
+            if not passed and gate.strict:
+                passed_gates = False
+        results["quality_gates_passed"] = passed_gates
+        results["gate_details"] = gate_details
+
+    return results
+
 
 if __name__ == "__main__":
-    results = evaluate_intelligence()
+    parser = argparse.ArgumentParser(description="Run AEGIS Document Intelligence Benchmark")
+    parser.add_argument("--manifest", type=str, default=None, help="Path to evaluation manifest YAML")
+    parser.add_argument("--data-dir", type=str, default=None, help="Fallback data directory")
+    args = parser.parse_args()
+
+    results = evaluate_intelligence(manifest_path=args.manifest, data_dir=args.data_dir)
     print("=" * 60)
     print("Document Intelligence Benchmark Results")
     print("=" * 60)
