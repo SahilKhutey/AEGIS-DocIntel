@@ -1,0 +1,41 @@
+{
+  "benchmark_id": "WP06-CIT-001",
+  "run_id": "RUN-20261103-CITATION-BENCH",
+  "work_package": "WP-06",
+  "capability": "citation_correctness",
+  "dataset_id": "CITATION-CORRECTNESS-SUITE-V1.0",
+  "dataset_version": "1.0",
+  "partition_id": "WP04-VALIDATION-001",
+  "manifest_id": "MANIFEST-20261103",
+  "pipeline_version": "1.0.0",
+  "configuration_hash": "0993e47087612f0f8705007ee23ea0305f2479e0",
+  "software_versions": {
+    "claim_extractor": "1.0.0",
+    "citation_resolver": "1.0.0",
+    "support_evaluator": "1.0.0"
+  },
+  "metrics": {
+    "test_vectors_evaluated": 8,
+    "label_classification_accuracy": 1.0,
+    "citation_precision": 1.0,
+    "claim_support_rate": 1.0,
+    "citation_coverage": 1.0,
+    "unsupported_claim_rate": 0.0,
+    "supported_citations_count": 1,
+    "contradicted_citations_count": 0
+  },
+  "resource_metrics": {
+    "supported_labels": [
+      "SUPPORTS",
+      "PARTIALLY_SUPPORTS",
+      "CONTRADICTS",
+      "RELATED_ONLY",
+      "IRRELEVANT",
+      "INVALID_REFERENCE",
+      "INSUFFICIENT_CONTEXT"
+    ],
+    "total_claims_evaluated": 2
+  },
+  "errors": [],
+  "execution_status": "COMPLETED"
+}
