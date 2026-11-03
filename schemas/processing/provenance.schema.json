@@ -1,0 +1,45 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "AEGIS Field-Level Provenance Schema",
+  "type": "object",
+  "required": [
+    "field_id",
+    "field_name",
+    "raw_value",
+    "normalized_value",
+    "normalization_rule",
+    "document_id",
+    "page_number",
+    "processing_run_id",
+    "normalization_status"
+  ],
+  "properties": {
+    "field_id": { "type": "string" },
+    "field_name": { "type": "string" },
+    "raw_value": { "type": "string" },
+    "normalized_value": {},
+    "normalization_rule": { "type": "string" },
+    "document_id": { "type": "string" },
+    "page_number": { "type": "integer", "minimum": 1 },
+    "region_id": { "type": ["string", "null"] },
+    "text_block_id": { "type": ["string", "null"] },
+    "bbox": {
+      "type": ["array", "null"],
+      "items": { "type": "number" },
+      "minItems": 4,
+      "maxItems": 4
+    },
+    "source_span": {
+      "type": "object",
+      "properties": {
+        "start": { "type": ["integer", "null"] },
+        "end": { "type": ["integer", "null"] }
+      }
+    },
+    "processing_run_id": { "type": "string" },
+    "normalization_status": {
+      "type": "string",
+      "enum": ["SUCCESS", "AMBIGUOUS", "FAILED"]
+    }
+  }
+}
