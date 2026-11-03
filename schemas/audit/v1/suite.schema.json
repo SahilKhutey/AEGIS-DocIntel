@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "AEGIS Audit Suite Result Schema v1",
+  "type": "object",
+  "required": [
+    "suite_id", "suite_version", "status", "started_at",
+    "completed_at", "duration_seconds", "statistics", "findings", "artifacts"
+  ],
+  "properties": {
+    "suite_id": {"type": "string"},
+    "suite_version": {"type": "string"},
+    "status": {"type": "string", "enum": ["PENDING", "RUNNING", "PASSED", "FAILED", "ERROR", "TIMEOUT", "SKIPPED", "BLOCKED", "CANCELLED"]},
+    "started_at": {"type": "string"},
+    "completed_at": {"type": "string"},
+    "duration_seconds": {"type": "number", "minimum": 0},
+    "statistics": {
+      "type": "object",
+      "required": ["total", "passed", "failed", "skipped", "errors"],
+      "properties": {
+        "total": {"type": "integer", "minimum": 0},
+        "passed": {"type": "integer", "minimum": 0},
+        "failed": {"type": "integer", "minimum": 0},
+        "skipped": {"type": "integer", "minimum": 0},
+        "errors": {"type": "integer", "minimum": 0}
+      }
+    },
+    "findings": {"type": "array"},
+    "artifacts": {"type": "array"}
+  }
+}

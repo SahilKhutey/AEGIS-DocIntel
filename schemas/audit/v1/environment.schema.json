@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "AEGIS Audit Environment Schema v1",
+  "type": "object",
+  "required": ["os", "architecture", "python_version", "runner_version"],
+  "properties": {
+    "os": {"type": "string"},
+    "architecture": {"type": "string"},
+    "python_version": {"type": "string"},
+    "python_implementation": {"type": "string"},
+    "runner_version": {"type": "string"},
+    "dependency_lock_hash": {"type": "string"},
+    "platform_identifier": {"type": "string"}
+  }
+}

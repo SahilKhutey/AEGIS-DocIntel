@@ -1,0 +1,46 @@
+version: "1.0"
+audit:
+  name: "AEGIS-DocIntel Strict Release Gate Audit"
+  enabled: true
+  execution:
+    mode: "sequential"
+    fail_fast: false
+    strict: true
+    timeout_seconds: 900
+    suite_timeout_seconds: 300
+    retries: 0
+    max_parallel_suites: 1
+  suites:
+    - id: "unit"
+      enabled: true
+      required: true
+      timeout_seconds: 180
+    - id: "integration"
+      enabled: true
+      required: true
+      timeout_seconds: 240
+    - id: "security"
+      enabled: true
+      required: true
+      timeout_seconds: 240
+    - id: "performance"
+      enabled: true
+      required: true
+      timeout_seconds: 240
+  evidence:
+    enabled: true
+    format: "json"
+    validate: true
+    retain_artifacts: true
+  traceability:
+    capture_commit: true
+    capture_branch: true
+    capture_environment: true
+    capture_configuration_hash: true
+  reporting:
+    generate_json: true
+    generate_markdown: true
+    include_findings: true
+  security:
+    redact_secrets: true
+    include_environment_values: false

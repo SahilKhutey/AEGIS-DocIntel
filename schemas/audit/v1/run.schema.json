@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "AEGIS Audit Run Schema v1",
+  "type": "object",
+  "required": [
+    "schema_version", "run_id", "baseline_id", "project",
+    "execution", "source", "configuration", "environment",
+    "suites", "findings", "artifacts"
+  ],
+  "properties": {
+    "schema_version": {"type": "string", "enum": ["1.0", "1.0.0"]},
+    "run_id": {"type": "string", "pattern": "^AG-[0-9]{8}-[0-9]{6}-[A-Za-z0-9]+$"},
+    "baseline_id": {"type": "string"},
+    "project": {"type": "string"},
+    "execution": {
+      "type": "object",
+      "required": ["status", "started_at"],
+      "properties": {
+        "status": {"type": "string", "enum": ["PENDING", "RUNNING", "PASSED", "FAILED", "ERROR", "TIMEOUT", "SKIPPED", "BLOCKED", "CANCELLED"]},
+        "started_at": {"type": "string"},
+        "completed_at": {"type": ["string", "null"]},
+        "duration_seconds": {"type": ["number", "null"]},
+        "trigger": {"type": "string"}
+      }
+    },
+    "source": {
+      "type": "object",
+      "required": ["branch", "commit_sha", "working_tree"],
+      "properties": {
+        "branch": {"type": ["string", "null"]},
+        "commit_sha": {"type": "string"},
+        "working_tree": {"type": "string", "enum": ["CLEAN", "MODIFIED", "UNKNOWN"]}
+      }
+    },
+    "configuration": {
+      "type": "object",
+      "required": ["profile", "hash"],
+      "properties": {
+        "profile": {"type": "string"},
+        "hash": {"type": "string"}
+      }
+    },
+    "environment": {
+      "type": "object",
+      "required": ["python_version", "platform"],
+      "properties": {
+        "python_version": {"type": "string"},
+        "platform": {"type": "string"}
+      }
+    },
+    "suites": {"type": "array"},
+    "findings": {"type": "array"},
+    "artifacts": {"type": "array"}
+  }
+}
