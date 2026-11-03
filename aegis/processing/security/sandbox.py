@@ -7,6 +7,7 @@ Isolated execution environment enforcing timeouts, memory guards, and error boun
 from __future__ import annotations
 
 import concurrent.futures
+import inspect
 import time
 from pathlib import Path
 from typing import Any, Callable, Dict, List, Optional
@@ -39,6 +40,16 @@ class ProcessingSandbox:
         start_t = time.perf_counter()
         completed_stages: List[str] = []
         failed_stages: List[str] = []
+
+        # Automatically bind document_id and processing_run_id if expected by task_fn
+        try:
+            sig = inspect.signature(task_fn)
+            if "document_id" in sig.parameters and "document_id" not in kwargs:
+                kwargs["document_id"] = document_id
+            if "processing_run_id" in sig.parameters and "processing_run_id" not in kwargs:
+                kwargs["processing_run_id"] = processing_run_id
+        except Exception:
+            pass
 
         with concurrent.futures.ThreadPoolExecutor(max_workers=1) as executor:
             future = executor.submit(task_fn, *args, **kwargs)

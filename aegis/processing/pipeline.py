@@ -83,8 +83,6 @@ class DocumentProcessingPipeline:
             doc_id,
             run_id,
             file_path=p,
-            document_id=doc_id,
-            processing_run_id=run_id,
             page_count=val_res.page_count,
         )
 
