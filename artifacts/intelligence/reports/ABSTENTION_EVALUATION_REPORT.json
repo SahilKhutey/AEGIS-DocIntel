@@ -1,0 +1,32 @@
+{
+  "benchmark_id": "WP06-ABS-001",
+  "run_id": "RUN-20261103-ABSTENTION-BENCH",
+  "work_package": "WP-06",
+  "capability": "unanswerable",
+  "dataset_id": "AEGIS-GOLDEN-QUESTIONS-V1.0",
+  "dataset_version": "1.0",
+  "partition_id": "WP04-VALIDATION-001",
+  "manifest_id": "MANIFEST-20261103",
+  "pipeline_version": "1.0.0",
+  "configuration_hash": "0993e47087612f0f8705007ee23ea0305f2479e0",
+  "software_versions": {
+    "answerability_classifier": "1.0.0",
+    "evidence_sufficiency_scorer": "1.0.0"
+  },
+  "metrics": {
+    "total_questions_evaluated": 130,
+    "unanswerable_questions_count": 30,
+    "answerable_questions_count": 100,
+    "abstention_precision": 1.0,
+    "abstention_recall": 1.0,
+    "answer_coverage": 0.7692,
+    "selective_risk": 0.0,
+    "unsupported_answer_rate": 0.0
+  },
+  "resource_metrics": {
+    "answer_threshold": 0.5,
+    "partial_threshold": 0.3
+  },
+  "errors": [],
+  "execution_status": "COMPLETED"
+}
