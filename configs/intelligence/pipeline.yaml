@@ -1,0 +1,33 @@
+version: "1.0.0"
+pipeline:
+  name: "aegis-document-intelligence-pipeline"
+  retrieval:
+    lexical:
+      algorithm: "bm25"
+      k1: 1.5
+      b: 0.75
+    semantic:
+      metric: "cosine"
+      min_similarity: 0.50
+    hybrid:
+      fusion: "rrf"
+      rrf_k0: 60
+    default_top_k: 5
+  citations:
+    min_precision: 0.90
+    min_claim_support_rate: 0.90
+    min_label_accuracy: 0.95
+    strict_provenance: true
+  abstention:
+    min_precision: 0.90
+    min_recall: 0.90
+    max_unsupported_answer_rate: 0.05
+    min_confidence_threshold: 0.60
+  facts_and_conflicts:
+    min_fact_accuracy: 0.90
+    min_conflict_accuracy: 0.90
+    preserve_raw_expressions: true
+  reporting:
+    enforce_pre_render_validation: true
+    preserve_unresolved_conflicts: true
+    formats: ["markdown", "html", "json"]

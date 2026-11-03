@@ -27,6 +27,7 @@ from aegis.audit.runner.executor import AuditExecutor
 from aegis.audit.runner.planner import AuditPlanner, PlannedSuite
 from aegis.audit.runner.registry import AuditRegistry
 from aegis.audit.suites.corpus import CorpusAuditSuite
+from aegis.audit.suites.intelligence import IntelligenceAuditSuite
 from aegis.audit.suites.integration import IntegrationAuditSuite
 from aegis.audit.suites.performance import PerformanceAuditSuite
 from aegis.audit.suites.processing import ProcessingAuditSuite
@@ -100,7 +101,15 @@ class AuditRunner:
 
     def _register_default_suites(self) -> None:
         """Register built-in suites if not already present."""
-        for suite_cls in [UnitAuditSuite, IntegrationAuditSuite, SecurityAuditSuite, PerformanceAuditSuite, CorpusAuditSuite, ProcessingAuditSuite]:
+        for suite_cls in [
+            UnitAuditSuite,
+            IntegrationAuditSuite,
+            SecurityAuditSuite,
+            PerformanceAuditSuite,
+            CorpusAuditSuite,
+            ProcessingAuditSuite,
+            IntelligenceAuditSuite,
+        ]:
             instance = suite_cls()
             if not self.registry.has(instance.suite_id):
                 self.registry.register(instance)
