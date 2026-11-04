@@ -1,0 +1,253 @@
+{
+  "benchmark_id": "BENCH-SEC-TENANT-001",
+  "run_id": "RUN-20261104-034532",
+  "work_package": "WP-07",
+  "capability": "tenant_isolation",
+  "pipeline_version": "1.0.0",
+  "configuration_hash": "cfg-sec-policy-v1",
+  "software_versions": {},
+  "metrics": {
+    "total_attack_scenarios": 12,
+    "passed_scenarios": 12,
+    "failed_scenarios": 0,
+    "cross_tenant_disclosures": 0,
+    "cross_tenant_modifications": 0,
+    "isolation_pass_rate": 1.0
+  },
+  "resource_metrics": {
+    "execution_duration_ms": 0.09
+  },
+  "test_cases": [
+    {
+      "test_id": "TENANT-001",
+      "work_package": "WP-07",
+      "category": "TENANT_ISOLATION",
+      "test_name": "Cross-tenant document ID retrieval",
+      "environment": "isolated-test",
+      "test_version": "1.0",
+      "timestamp": "2026-11-04T03:45:32.197645+00:00",
+      "result": "PASS",
+      "expected": "Access denied (404 Not Found)",
+      "actual": "Status 404 - Document not found",
+      "severity": "CRITICAL",
+      "evidence": [
+        {
+          "status_code": 404
+        }
+      ],
+      "failure_reason": null
+    },
+    {
+      "test_id": "TENANT-002",
+      "work_package": "WP-07",
+      "category": "TENANT_ISOLATION",
+      "test_name": "Cross-tenant file download",
+      "environment": "isolated-test",
+      "test_version": "1.0",
+      "timestamp": "2026-11-04T03:45:32.197645+00:00",
+      "result": "PASS",
+      "expected": "Access denied (404 Not Found)",
+      "actual": "Status 404 - Document not found",
+      "severity": "CRITICAL",
+      "evidence": [
+        {
+          "status_code": 404
+        }
+      ],
+      "failure_reason": null
+    },
+    {
+      "test_id": "TENANT-003",
+      "work_package": "WP-07",
+      "category": "TENANT_ISOLATION",
+      "test_name": "Search query for foreign tenant marker",
+      "environment": "isolated-test",
+      "test_version": "1.0",
+      "timestamp": "2026-11-04T03:45:32.197645+00:00",
+      "result": "PASS",
+      "expected": "Zero results returned",
+      "actual": "0 results returned",
+      "severity": "CRITICAL",
+      "evidence": [
+        {
+          "hits": 0
+        }
+      ],
+      "failure_reason": null
+    },
+    {
+      "test_id": "TENANT-004",
+      "work_package": "WP-07",
+      "category": "TENANT_ISOLATION",
+      "test_name": "Vector similarity pre-filtering isolation",
+      "environment": "isolated-test",
+      "test_version": "1.0",
+      "timestamp": "2026-11-04T03:45:32.197645+00:00",
+      "result": "PASS",
+      "expected": "Zero cross-tenant vector matches",
+      "actual": "0 foreign vectors returned",
+      "severity": "CRITICAL",
+      "evidence": [
+        {
+          "foreign_vectors": 0
+        }
+      ],
+      "failure_reason": null
+    },
+    {
+      "test_id": "TENANT-005",
+      "work_package": "WP-07",
+      "category": "TENANT_ISOLATION",
+      "test_name": "Cross-tenant report access",
+      "environment": "isolated-test",
+      "test_version": "1.0",
+      "timestamp": "2026-11-04T03:45:32.197645+00:00",
+      "result": "PASS",
+      "expected": "Access denied (404 Not Found)",
+      "actual": "Status 404 - Report not found",
+      "severity": "HIGH",
+      "evidence": [
+        {
+          "status_code": 404
+        }
+      ],
+      "failure_reason": null
+    },
+    {
+      "test_id": "TENANT-006",
+      "work_package": "WP-07",
+      "category": "TENANT_ISOLATION",
+      "test_name": "Cross-tenant document deletion",
+      "environment": "isolated-test",
+      "test_version": "1.0",
+      "timestamp": "2026-11-04T03:45:32.197645+00:00",
+      "result": "PASS",
+      "expected": "Deletion denied; resource unchanged",
+      "actual": "Status 404 - Document not found; Target doc intact: True",
+      "severity": "CRITICAL",
+      "evidence": [
+        {
+          "deletion_succeeded": false,
+          "document_intact": true
+        }
+      ],
+      "failure_reason": null
+    },
+    {
+      "test_id": "TENANT-007",
+      "work_package": "WP-07",
+      "category": "TENANT_ISOLATION",
+      "test_name": "Cross-tenant job status query",
+      "environment": "isolated-test",
+      "test_version": "1.0",
+      "timestamp": "2026-11-04T03:45:32.197645+00:00",
+      "result": "PASS",
+      "expected": "Access denied (404 Not Found)",
+      "actual": "Status 404 - Job not found",
+      "severity": "HIGH",
+      "evidence": [
+        {
+          "status_code": 404
+        }
+      ],
+      "failure_reason": null
+    },
+    {
+      "test_id": "TENANT-008",
+      "work_package": "WP-07",
+      "category": "TENANT_ISOLATION",
+      "test_name": "Cross-tenant audit event scoping",
+      "environment": "isolated-test",
+      "test_version": "1.0",
+      "timestamp": "2026-11-04T03:45:32.197645+00:00",
+      "result": "PASS",
+      "expected": "Zero foreign audit events exposed",
+      "actual": "0 foreign events returned",
+      "severity": "HIGH",
+      "evidence": [
+        {
+          "foreign_events": 0
+        }
+      ],
+      "failure_reason": null
+    },
+    {
+      "test_id": "TENANT-009",
+      "work_package": "WP-07",
+      "category": "TENANT_ISOLATION",
+      "test_name": "Request body tenant ID override rejection",
+      "environment": "isolated-test",
+      "test_version": "1.0",
+      "timestamp": "2026-11-04T03:45:32.197645+00:00",
+      "result": "PASS",
+      "expected": "Client body tenant override ignored/denied",
+      "actual": "Enforced server context tenant_alpha (404 Not Found)",
+      "severity": "CRITICAL",
+      "evidence": [
+        {
+          "status_code": 404
+        }
+      ],
+      "failure_reason": null
+    },
+    {
+      "test_id": "TENANT-010",
+      "work_package": "WP-07",
+      "category": "TENANT_ISOLATION",
+      "test_name": "Semantic cache tenant isolation",
+      "environment": "isolated-test",
+      "test_version": "1.0",
+      "timestamp": "2026-11-04T03:45:32.197645+00:00",
+      "result": "PASS",
+      "expected": "Cache miss (None)",
+      "actual": "Cache miss",
+      "severity": "HIGH",
+      "evidence": [
+        {
+          "cache_hit": false
+        }
+      ],
+      "failure_reason": null
+    },
+    {
+      "test_id": "TENANT-011",
+      "work_package": "WP-07",
+      "category": "TENANT_ISOLATION",
+      "test_name": "Citation resolution cross-tenant containment",
+      "environment": "isolated-test",
+      "test_version": "1.0",
+      "timestamp": "2026-11-04T03:45:32.197645+00:00",
+      "result": "PASS",
+      "expected": "Citation to foreign tenant rejected",
+      "actual": "Citation target document not found in tenant scope",
+      "severity": "CRITICAL",
+      "evidence": [
+        {
+          "citation_resolved": false
+        }
+      ],
+      "failure_reason": null
+    },
+    {
+      "test_id": "TENANT-012",
+      "work_package": "WP-07",
+      "category": "TENANT_ISOLATION",
+      "test_name": "Worker job tenant context mismatch rejection",
+      "environment": "isolated-test",
+      "test_version": "1.0",
+      "timestamp": "2026-11-04T03:45:32.197645+00:00",
+      "result": "PASS",
+      "expected": "Worker rejects foreign tenant job",
+      "actual": "Security violation: Worker tenant context does not match job tenant scope",
+      "severity": "CRITICAL",
+      "evidence": [
+        {
+          "job_executed": false
+        }
+      ],
+      "failure_reason": null
+    }
+  ],
+  "errors": [],
+  "execution_status": "COMPLETED"
+}

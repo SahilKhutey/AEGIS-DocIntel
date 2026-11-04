@@ -1,0 +1,15 @@
+resource,tenant_alpha_access,tenant_beta_access,cross_tenant_allowed,enforcement_level
+tenant_alpha_documents,ALLOW,DENY,FALSE,Database Query & Service Layer
+tenant_beta_documents,DENY,ALLOW,FALSE,Database Query & Service Layer
+tenant_alpha_files,ALLOW,DENY,FALSE,Object Storage Partitioning
+tenant_beta_files,DENY,ALLOW,FALSE,Object Storage Partitioning
+tenant_alpha_vectors,ALLOW,DENY,FALSE,Vector Index Pre-Filter
+tenant_beta_vectors,DENY,ALLOW,FALSE,Vector Index Pre-Filter
+tenant_alpha_cache,ALLOW,DENY,FALSE,Namespaced Cache Keys
+tenant_beta_cache,DENY,ALLOW,FALSE,Namespaced Cache Keys
+tenant_alpha_jobs,ALLOW,DENY,FALSE,Worker Job State Machine
+tenant_beta_jobs,DENY,ALLOW,FALSE,Worker Job State Machine
+tenant_alpha_reports,ALLOW,DENY,FALSE,Report Scope Invariant
+tenant_beta_reports,DENY,ALLOW,FALSE,Report Scope Invariant
+tenant_alpha_audit_events,ALLOW,DENY,FALSE,Audit Query Scoping
+tenant_beta_audit_events,DENY,ALLOW,FALSE,Audit Query Scoping

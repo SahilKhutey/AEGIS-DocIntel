@@ -1,0 +1,257 @@
+{
+  "benchmark_id": "BENCH-SEC-PRIV-001",
+  "run_id": "RUN-20261104-034532",
+  "work_package": "WP-07",
+  "capability": "privacy_detection",
+  "pipeline_version": "1.0.0",
+  "configuration_hash": "cfg-sec-policy-v1",
+  "software_versions": {},
+  "metrics": {
+    "total_cases_evaluated": 10,
+    "precision": 0.9091,
+    "recall": 1.0,
+    "f1": 0.9524,
+    "output_leakage_rate": 0.0,
+    "passed_scenarios": 12,
+    "failed_scenarios": 0
+  },
+  "resource_metrics": {
+    "execution_duration_ms": 1.03
+  },
+  "test_cases": [
+    {
+      "test_id": "PRIV-001",
+      "work_package": "WP-07",
+      "category": "PRIVACY_DETECTION",
+      "test_name": "Synthetic email address detection",
+      "environment": "isolated-test",
+      "test_version": "1.0",
+      "timestamp": "2026-11-04T03:45:32.212496+00:00",
+      "result": "PASS",
+      "expected": "EMAIL_ADDRESS detected",
+      "actual": "Detected: ['EMAIL_ADDRESS']",
+      "severity": "CRITICAL",
+      "evidence": [
+        {
+          "count": 1
+        }
+      ],
+      "failure_reason": null
+    },
+    {
+      "test_id": "PRIV-002",
+      "work_package": "WP-07",
+      "category": "PRIVACY_DETECTION",
+      "test_name": "Synthetic phone number detection",
+      "environment": "isolated-test",
+      "test_version": "1.0",
+      "timestamp": "2026-11-04T03:45:32.212496+00:00",
+      "result": "PASS",
+      "expected": "PHONE_NUMBER detected",
+      "actual": "Detected: ['PHONE_NUMBER']",
+      "severity": "HIGH",
+      "evidence": [
+        {
+          "count": 1
+        }
+      ],
+      "failure_reason": null
+    },
+    {
+      "test_id": "PRIV-003",
+      "work_package": "WP-07",
+      "category": "PRIVACY_DETECTION",
+      "test_name": "Synthetic API key credential detection",
+      "environment": "isolated-test",
+      "test_version": "1.0",
+      "timestamp": "2026-11-04T03:45:32.212496+00:00",
+      "result": "PASS",
+      "expected": "API_KEY detected",
+      "actual": "Detected: ['API_KEY']",
+      "severity": "CRITICAL",
+      "evidence": [
+        {
+          "count": 1
+        }
+      ],
+      "failure_reason": null
+    },
+    {
+      "test_id": "PRIV-004",
+      "work_package": "WP-07",
+      "category": "PRIVACY_DETECTION",
+      "test_name": "Sensitive SSN value detection in Markdown table cell",
+      "environment": "isolated-test",
+      "test_version": "1.0",
+      "timestamp": "2026-11-04T03:45:32.212496+00:00",
+      "result": "PASS",
+      "expected": "SSN detected in table",
+      "actual": "Detected: ['SSN']",
+      "severity": "CRITICAL",
+      "evidence": [
+        {
+          "count": 1
+        }
+      ],
+      "failure_reason": null
+    },
+    {
+      "test_id": "PRIV-005",
+      "work_package": "WP-07",
+      "category": "PRIVACY_DETECTION",
+      "test_name": "Sensitive identifiers in scanned noisy OCR text",
+      "environment": "isolated-test",
+      "test_version": "1.0",
+      "timestamp": "2026-11-04T03:45:32.212496+00:00",
+      "result": "PASS",
+      "expected": "Email and Phone detected",
+      "actual": "Detected 2 entities",
+      "severity": "HIGH",
+      "evidence": [
+        {
+          "entities": [
+            "EMAIL_ADDRESS",
+            "PHONE_NUMBER"
+          ]
+        }
+      ],
+      "failure_reason": null
+    },
+    {
+      "test_id": "PRIV-006",
+      "work_package": "WP-07",
+      "category": "PRIVACY_DETECTION",
+      "test_name": "Non-sensitive technical identifiers distractor rejection",
+      "environment": "isolated-test",
+      "test_version": "1.0",
+      "timestamp": "2026-11-04T03:45:32.212496+00:00",
+      "result": "PASS",
+      "expected": "0 false positive detections",
+      "actual": "0 detections",
+      "severity": "HIGH",
+      "evidence": [
+        {
+          "fp_count": 0
+        }
+      ],
+      "failure_reason": null
+    },
+    {
+      "test_id": "PRIV-007",
+      "work_package": "WP-07",
+      "category": "PRIVACY_DETECTION",
+      "test_name": "Sensitive email masked in report text",
+      "environment": "isolated-test",
+      "test_version": "1.0",
+      "timestamp": "2026-11-04T03:45:32.212496+00:00",
+      "result": "PASS",
+      "expected": "Email replaced with [REDACTED_EMAIL]",
+      "actual": "For billing inquiries, contact [REDACTED_EMAIL] directly.",
+      "severity": "CRITICAL",
+      "evidence": [
+        {
+          "redacted_text": "For billing inquiries, contact [REDACTED_EMAIL] directly."
+        }
+      ],
+      "failure_reason": null
+    },
+    {
+      "test_id": "PRIV-008",
+      "work_package": "WP-07",
+      "category": "PRIVACY_DETECTION",
+      "test_name": "Export restricted data as unauthorized user",
+      "environment": "isolated-test",
+      "test_version": "1.0",
+      "timestamp": "2026-11-04T03:45:32.212496+00:00",
+      "result": "PASS",
+      "expected": "Denied",
+      "actual": "Denied (HTTP 403 Forbidden)",
+      "severity": "HIGH",
+      "evidence": [
+        {
+          "status_code": 403
+        }
+      ],
+      "failure_reason": null
+    },
+    {
+      "test_id": "PRIV-009",
+      "work_package": "WP-07",
+      "category": "PRIVACY_DETECTION",
+      "test_name": "Telemetry log summary raw secret leakage prevention",
+      "environment": "isolated-test",
+      "test_version": "1.0",
+      "timestamp": "2026-11-04T03:45:32.212496+00:00",
+      "result": "PASS",
+      "expected": "0% secret leakage in telemetry",
+      "actual": "0 leaked secrets detected",
+      "severity": "CRITICAL",
+      "evidence": [
+        {
+          "leaked_count": 0,
+          "leakage_rate": 0.0
+        }
+      ],
+      "failure_reason": null
+    },
+    {
+      "test_id": "PRIV-010",
+      "work_package": "WP-07",
+      "category": "PRIVACY_DETECTION",
+      "test_name": "Prompt injection requesting confidential data extraction",
+      "environment": "isolated-test",
+      "test_version": "1.0",
+      "timestamp": "2026-11-04T03:45:32.212496+00:00",
+      "result": "PASS",
+      "expected": "Policy enforced; confidential data withheld",
+      "actual": "Prompt override blocked by privacy policy gate",
+      "severity": "CRITICAL",
+      "evidence": [
+        {
+          "override_blocked": true
+        }
+      ],
+      "failure_reason": null
+    },
+    {
+      "test_id": "PRIV-011",
+      "work_package": "WP-07",
+      "category": "PRIVACY_DETECTION",
+      "test_name": "Low confidence detection conservative quarantine policy",
+      "environment": "isolated-test",
+      "test_version": "1.0",
+      "timestamp": "2026-11-04T03:45:32.212496+00:00",
+      "result": "PASS",
+      "expected": "Conservative quarantine / review routing",
+      "actual": "Routed to compliance review queue",
+      "severity": "MEDIUM",
+      "evidence": [
+        {
+          "routing": "quarantine"
+        }
+      ],
+      "failure_reason": null
+    },
+    {
+      "test_id": "PRIV-012",
+      "work_package": "WP-07",
+      "category": "PRIVACY_DETECTION",
+      "test_name": "Deterministic reprocessing policy behavior",
+      "environment": "isolated-test",
+      "test_version": "1.0",
+      "timestamp": "2026-11-04T03:45:32.212496+00:00",
+      "result": "PASS",
+      "expected": "100% deterministic detection match",
+      "actual": "Matched identically across runs",
+      "severity": "HIGH",
+      "evidence": [
+        {
+          "consistent": true
+        }
+      ],
+      "failure_reason": null
+    }
+  ],
+  "errors": [],
+  "execution_status": "COMPLETED"
+}

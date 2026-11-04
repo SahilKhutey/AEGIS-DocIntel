@@ -1,0 +1,8 @@
+target_id,target_name,subsystem,required,idempotent_cleanup,failure_action
+TARGET-DB,database_metadata,SQLite Database,TRUE,TRUE,FAIL_CLOSED_RETRY
+TARGET-OBJ,object_storage,Local/S3 Object Storage,TRUE,TRUE,FAIL_CLOSED_RETRY
+TARGET-DER,extracted_text,Processing Derived Storage,TRUE,TRUE,FAIL_CLOSED_RETRY
+TARGET-VEC,vector_index,FAISS Vector Database,TRUE,TRUE,FAIL_CLOSED_RETRY
+TARGET-LEX,search_index,BM25 Lexical Index,TRUE,TRUE,FAIL_CLOSED_RETRY
+TARGET-CCH,semantic_cache,In-Memory / Redis Cache,TRUE,TRUE,FAIL_CLOSED_RETRY
+TARGET-QUE,job_queue,Job Execution State Machine,TRUE,TRUE,CANCEL_IN_FLIGHT

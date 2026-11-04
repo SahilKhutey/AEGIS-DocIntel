@@ -1,0 +1,214 @@
+{
+  "benchmark_id": "BENCH-SEC-RBAC-001",
+  "run_id": "RUN-20261104-034532",
+  "work_package": "WP-07",
+  "capability": "authorization",
+  "pipeline_version": "1.0.0",
+  "configuration_hash": "cfg-sec-policy-v1",
+  "software_versions": {},
+  "metrics": {
+    "total_scenarios_evaluated": 10,
+    "passed_scenarios": 10,
+    "failed_scenarios": 0,
+    "authorization_pass_rate": 1.0,
+    "privilege_escalation_blocked": true,
+    "deny_by_default_enforced": true
+  },
+  "resource_metrics": {
+    "execution_duration_ms": 0.1
+  },
+  "test_cases": [
+    {
+      "test_id": "RBAC-001",
+      "work_package": "WP-07",
+      "category": "AUTHORIZATION",
+      "test_name": "User accesses admin endpoint",
+      "environment": "isolated-test",
+      "test_version": "1.0",
+      "timestamp": "2026-11-04T03:45:32.180380+00:00",
+      "result": "PASS",
+      "expected": "Denied (403)",
+      "actual": "Denied (403) - Operation 'manage_tenant_users' not permitted for assigned roles ['viewer']",
+      "severity": "CRITICAL",
+      "evidence": [
+        {
+          "status_code": 403
+        }
+      ],
+      "failure_reason": null
+    },
+    {
+      "test_id": "RBAC-002",
+      "work_package": "WP-07",
+      "category": "AUTHORIZATION",
+      "test_name": "User changes another user's record",
+      "environment": "isolated-test",
+      "test_version": "1.0",
+      "timestamp": "2026-11-04T03:45:32.180380+00:00",
+      "result": "PASS",
+      "expected": "Denied",
+      "actual": "Denied (403) - Operation 'delete_own_documents' not permitted for assigned roles ['viewer']",
+      "severity": "CRITICAL",
+      "evidence": [
+        {
+          "status_code": 403
+        }
+      ],
+      "failure_reason": null
+    },
+    {
+      "test_id": "RBAC-003",
+      "work_package": "WP-07",
+      "category": "AUTHORIZATION",
+      "test_name": "Permitted role accesses authorized analysis",
+      "environment": "isolated-test",
+      "test_version": "1.0",
+      "timestamp": "2026-11-04T03:45:32.180380+00:00",
+      "result": "PASS",
+      "expected": "Allowed (200)",
+      "actual": "Allowed (200)",
+      "severity": "HIGH",
+      "evidence": [
+        {
+          "status_code": 200
+        }
+      ],
+      "failure_reason": null
+    },
+    {
+      "test_id": "RBAC-004",
+      "work_package": "WP-07",
+      "category": "AUTHORIZATION",
+      "test_name": "Privilege escalation via request payload role injection",
+      "environment": "isolated-test",
+      "test_version": "1.0",
+      "timestamp": "2026-11-04T03:45:32.180380+00:00",
+      "result": "PASS",
+      "expected": "Denied (Privilege escalation detected)",
+      "actual": "Denied (403) - Privilege escalation attempt detected in request payload",
+      "severity": "CRITICAL",
+      "evidence": [
+        {
+          "reason": "Privilege escalation attempt detected in request payload"
+        }
+      ],
+      "failure_reason": null
+    },
+    {
+      "test_id": "RBAC-005",
+      "work_package": "WP-07",
+      "category": "AUTHORIZATION",
+      "test_name": "User changes resource ID to another user document",
+      "environment": "isolated-test",
+      "test_version": "1.0",
+      "timestamp": "2026-11-04T03:45:32.180380+00:00",
+      "result": "PASS",
+      "expected": "Denied",
+      "actual": "Denied (403) - Access to other user's resource denied",
+      "severity": "HIGH",
+      "evidence": [
+        {
+          "status_code": 403
+        }
+      ],
+      "failure_reason": null
+    },
+    {
+      "test_id": "RBAC-006",
+      "work_package": "WP-07",
+      "category": "AUTHORIZATION",
+      "test_name": "Viewer accesses unauthorized tenant audit logs",
+      "environment": "isolated-test",
+      "test_version": "1.0",
+      "timestamp": "2026-11-04T03:45:32.180380+00:00",
+      "result": "PASS",
+      "expected": "Denied (403)",
+      "actual": "Denied (403) - Operation 'view_tenant_audit_logs' not permitted for assigned roles ['viewer']",
+      "severity": "HIGH",
+      "evidence": [
+        {
+          "status_code": 403
+        }
+      ],
+      "failure_reason": null
+    },
+    {
+      "test_id": "RBAC-007",
+      "work_package": "WP-07",
+      "category": "AUTHORIZATION",
+      "test_name": "API key used outside its assigned scope",
+      "environment": "isolated-test",
+      "test_version": "1.0",
+      "timestamp": "2026-11-04T03:45:32.180380+00:00",
+      "result": "PASS",
+      "expected": "Denied (403)",
+      "actual": "Denied (403) - Operation 'upload_documents' not permitted for assigned roles ['viewer']",
+      "severity": "HIGH",
+      "evidence": [
+        {
+          "status_code": 403
+        }
+      ],
+      "failure_reason": null
+    },
+    {
+      "test_id": "RBAC-008",
+      "work_package": "WP-07",
+      "category": "AUTHORIZATION",
+      "test_name": "Permission revoked reflected in subsequent requests",
+      "environment": "isolated-test",
+      "test_version": "1.0",
+      "timestamp": "2026-11-04T03:45:32.180380+00:00",
+      "result": "PASS",
+      "expected": "Denied (403)",
+      "actual": "Denied (403) - Operation 'upload_documents' not permitted for assigned roles ['viewer']",
+      "severity": "HIGH",
+      "evidence": [
+        {
+          "status_code": 403
+        }
+      ],
+      "failure_reason": null
+    },
+    {
+      "test_id": "RBAC-009",
+      "work_package": "WP-07",
+      "category": "AUTHORIZATION",
+      "test_name": "Direct invocation without authorization context",
+      "environment": "isolated-test",
+      "test_version": "1.0",
+      "timestamp": "2026-11-04T03:45:32.180380+00:00",
+      "result": "PASS",
+      "expected": "Denied (Anonymous access blocked)",
+      "actual": "Denied (403) - Operation 'upload_documents' not permitted for assigned roles []",
+      "severity": "CRITICAL",
+      "evidence": [
+        {
+          "status_code": 403
+        }
+      ],
+      "failure_reason": null
+    },
+    {
+      "test_id": "RBAC-010",
+      "work_package": "WP-07",
+      "category": "AUTHORIZATION",
+      "test_name": "Missing permission configuration (Deny by default)",
+      "environment": "isolated-test",
+      "test_version": "1.0",
+      "timestamp": "2026-11-04T03:45:32.180380+00:00",
+      "result": "PASS",
+      "expected": "Denied (Deny by default)",
+      "actual": "Denied (403) - Operation 'undefined_custom_action_xyz' not permitted for assigned roles ['viewer']",
+      "severity": "HIGH",
+      "evidence": [
+        {
+          "status_code": 403
+        }
+      ],
+      "failure_reason": null
+    }
+  ],
+  "errors": [],
+  "execution_status": "COMPLETED"
+}

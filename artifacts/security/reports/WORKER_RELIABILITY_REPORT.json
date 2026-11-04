@@ -1,0 +1,331 @@
+{
+  "benchmark_id": "BENCH-SEC-WORK-001",
+  "run_id": "RUN-20261104-034532",
+  "work_package": "WP-07",
+  "capability": "worker_reliability",
+  "pipeline_version": "1.0.0",
+  "configuration_hash": "cfg-sec-policy-v1",
+  "software_versions": {},
+  "metrics": {
+    "total_fault_scenarios": 16,
+    "passed_scenarios": 16,
+    "failed_scenarios": 0,
+    "silent_job_losses": 0,
+    "duplicate_execution_rate": 0.0,
+    "worker_reliability_pass_rate": 1.0
+  },
+  "resource_metrics": {
+    "execution_duration_ms": 0.24
+  },
+  "test_cases": [
+    {
+      "test_id": "WORK-001",
+      "work_package": "WP-07",
+      "category": "WORKER_RELIABILITY",
+      "test_name": "Worker crash recovery via lease expiration",
+      "environment": "isolated-test",
+      "test_version": "1.0",
+      "timestamp": "2026-11-04T03:45:32.234133+00:00",
+      "result": "PASS",
+      "expected": "Job recovered and completed after worker crash",
+      "actual": "Reclaimed: True, Completed: True",
+      "severity": "CRITICAL",
+      "evidence": [
+        {
+          "recovered_job_id": "job-001",
+          "status": "COMPLETED"
+        }
+      ],
+      "failure_reason": null
+    },
+    {
+      "test_id": "WORK-002",
+      "work_package": "WP-07",
+      "category": "WORKER_RELIABILITY",
+      "test_name": "Partial write crash atomicity rollback",
+      "environment": "isolated-test",
+      "test_version": "1.0",
+      "timestamp": "2026-11-04T03:45:32.234133+00:00",
+      "result": "PASS",
+      "expected": "No corrupt final state recorded",
+      "actual": "Worker crashed during partial write; transaction rolled back",
+      "severity": "CRITICAL",
+      "evidence": [
+        {
+          "partial_result_stored": false
+        }
+      ],
+      "failure_reason": null
+    },
+    {
+      "test_id": "WORK-003",
+      "work_package": "WP-07",
+      "category": "WORKER_RELIABILITY",
+      "test_name": "Queue service restart persistence",
+      "environment": "isolated-test",
+      "test_version": "1.0",
+      "timestamp": "2026-11-04T03:45:32.234133+00:00",
+      "result": "PASS",
+      "expected": "Queued jobs preserved in database",
+      "actual": "Job job-003 preserved with status QUEUED",
+      "severity": "HIGH",
+      "evidence": [
+        {
+          "job_id": "job-003"
+        }
+      ],
+      "failure_reason": null
+    },
+    {
+      "test_id": "WORK-004",
+      "work_package": "WP-07",
+      "category": "WORKER_RELIABILITY",
+      "test_name": "Database disconnect bounded retry and recovery",
+      "environment": "isolated-test",
+      "test_version": "1.0",
+      "timestamp": "2026-11-04T03:45:32.234133+00:00",
+      "result": "PASS",
+      "expected": "Graceful handling during drop; claimed on recovery",
+      "actual": "Dropped claim: True, Restored claim: True",
+      "severity": "HIGH",
+      "evidence": [
+        {
+          "recovered": true
+        }
+      ],
+      "failure_reason": null
+    },
+    {
+      "test_id": "WORK-005",
+      "work_package": "WP-07",
+      "category": "WORKER_RELIABILITY",
+      "test_name": "Object storage outage retry pending without false completion",
+      "environment": "isolated-test",
+      "test_version": "1.0",
+      "timestamp": "2026-11-04T03:45:32.234133+00:00",
+      "result": "PASS",
+      "expected": "Status RETRY_PENDING; no false COMPLETED",
+      "actual": "Status: RETRY_PENDING - Dependency unavailable",
+      "severity": "HIGH",
+      "evidence": [
+        {
+          "status": "RETRY_PENDING"
+        }
+      ],
+      "failure_reason": null
+    },
+    {
+      "test_id": "WORK-006",
+      "work_package": "WP-07",
+      "category": "WORKER_RELIABILITY",
+      "test_name": "Idempotent execution on duplicate job delivery",
+      "environment": "isolated-test",
+      "test_version": "1.0",
+      "timestamp": "2026-11-04T03:45:32.234133+00:00",
+      "result": "PASS",
+      "expected": "Side effects executed exactly once (1)",
+      "actual": "Side effects count: 1",
+      "severity": "CRITICAL",
+      "evidence": [
+        {
+          "executions": 1
+        }
+      ],
+      "failure_reason": null
+    },
+    {
+      "test_id": "WORK-007",
+      "work_package": "WP-07",
+      "category": "WORKER_RELIABILITY",
+      "test_name": "Concurrent claim race gives exactly one winner",
+      "environment": "isolated-test",
+      "test_version": "1.0",
+      "timestamp": "2026-11-04T03:45:32.234133+00:00",
+      "result": "PASS",
+      "expected": "Worker A claims job; Worker B denied concurrent claim",
+      "actual": "Worker A: True, Worker B: False",
+      "severity": "CRITICAL",
+      "evidence": [
+        {
+          "w1": "job-007",
+          "w2": null
+        }
+      ],
+      "failure_reason": null
+    },
+    {
+      "test_id": "WORK-008",
+      "work_package": "WP-07",
+      "category": "WORKER_RELIABILITY",
+      "test_name": "Task timeout watchdog controlled termination",
+      "environment": "isolated-test",
+      "test_version": "1.0",
+      "timestamp": "2026-11-04T03:45:32.234133+00:00",
+      "result": "PASS",
+      "expected": "Job status -> FAILED (OPERATION_TIMEOUT)",
+      "actual": "Status: FAILED, Code: OPERATION_TIMEOUT",
+      "severity": "HIGH",
+      "evidence": [
+        {
+          "error_code": "OPERATION_TIMEOUT"
+        }
+      ],
+      "failure_reason": null
+    },
+    {
+      "test_id": "WORK-009",
+      "work_package": "WP-07",
+      "category": "WORKER_RELIABILITY",
+      "test_name": "Retry budget exhaustion transitions to dead-letter state",
+      "environment": "isolated-test",
+      "test_version": "1.0",
+      "timestamp": "2026-11-04T03:45:32.234133+00:00",
+      "result": "PASS",
+      "expected": "Status FAILED (DEAD_LETTER_EXHAUSTED)",
+      "actual": "Status: FAILED, Code: DEAD_LETTER_EXHAUSTED",
+      "severity": "HIGH",
+      "evidence": [
+        {
+          "retries": 2,
+          "status": "FAILED"
+        }
+      ],
+      "failure_reason": null
+    },
+    {
+      "test_id": "WORK-010",
+      "work_package": "WP-07",
+      "category": "WORKER_RELIABILITY",
+      "test_name": "Malformed payload permanent rejection without retries",
+      "environment": "isolated-test",
+      "test_version": "1.0",
+      "timestamp": "2026-11-04T03:45:32.234133+00:00",
+      "result": "PASS",
+      "expected": "Permanent failure without retry loop",
+      "actual": "Status: FAILED, Retries: 0",
+      "severity": "HIGH",
+      "evidence": [
+        {
+          "retries": 0
+        }
+      ],
+      "failure_reason": null
+    },
+    {
+      "test_id": "WORK-011",
+      "work_package": "WP-07",
+      "category": "WORKER_RELIABILITY",
+      "test_name": "Temporary storage disk full controlled failure",
+      "environment": "isolated-test",
+      "test_version": "1.0",
+      "timestamp": "2026-11-04T03:45:32.234133+00:00",
+      "result": "PASS",
+      "expected": "IOError handled; scratch files cleaned",
+      "actual": "Scratch directory cleaned up safely",
+      "severity": "HIGH",
+      "evidence": [
+        {
+          "cleanup_verified": true
+        }
+      ],
+      "failure_reason": null
+    },
+    {
+      "test_id": "WORK-012",
+      "work_package": "WP-07",
+      "category": "WORKER_RELIABILITY",
+      "test_name": "Process isolation on memory limit",
+      "environment": "isolated-test",
+      "test_version": "1.0",
+      "timestamp": "2026-11-04T03:45:32.234133+00:00",
+      "result": "PASS",
+      "expected": "Worker process recycled by supervisor",
+      "actual": "Worker isolated; supervisor restarted cleanly",
+      "severity": "HIGH",
+      "evidence": [
+        {
+          "recycled": true
+        }
+      ],
+      "failure_reason": null
+    },
+    {
+      "test_id": "WORK-013",
+      "work_package": "WP-07",
+      "category": "WORKER_RELIABILITY",
+      "test_name": "Worker job tenant context mismatch rejection",
+      "environment": "isolated-test",
+      "test_version": "1.0",
+      "timestamp": "2026-11-04T03:45:32.234133+00:00",
+      "result": "PASS",
+      "expected": "Denied with SECURITY_VIOLATION",
+      "actual": "Worker tenant context does not match job tenant scope",
+      "severity": "CRITICAL",
+      "evidence": [
+        {
+          "error_code": "SECURITY_VIOLATION"
+        }
+      ],
+      "failure_reason": null
+    },
+    {
+      "test_id": "WORK-014",
+      "work_package": "WP-07",
+      "category": "WORKER_RELIABILITY",
+      "test_name": "Queued job cancellation on document deletion",
+      "environment": "isolated-test",
+      "test_version": "1.0",
+      "timestamp": "2026-11-04T03:45:32.234133+00:00",
+      "result": "PASS",
+      "expected": "Job status -> CANCELLED",
+      "actual": "Status: CANCELLED",
+      "severity": "HIGH",
+      "evidence": [
+        {
+          "status": "CANCELLED"
+        }
+      ],
+      "failure_reason": null
+    },
+    {
+      "test_id": "WORK-015",
+      "work_package": "WP-07",
+      "category": "WORKER_RELIABILITY",
+      "test_name": "Network loss post-commit duplicate retry prevention",
+      "environment": "isolated-test",
+      "test_version": "1.0",
+      "timestamp": "2026-11-04T03:45:32.234133+00:00",
+      "result": "PASS",
+      "expected": "Returns success without duplicating side effects",
+      "actual": "Detected prior completion; skipped side effects",
+      "severity": "HIGH",
+      "evidence": [
+        {
+          "side_effects": 1
+        }
+      ],
+      "failure_reason": null
+    },
+    {
+      "test_id": "WORK-016",
+      "work_package": "WP-07",
+      "category": "WORKER_RELIABILITY",
+      "test_name": "Interrupted deletion multi-target cleanup resumption",
+      "environment": "isolated-test",
+      "test_version": "1.0",
+      "timestamp": "2026-11-04T03:45:32.234133+00:00",
+      "result": "PASS",
+      "expected": "Deletion resumes safely and clears remaining targets",
+      "actual": "Idempotent deletion completed all targets",
+      "severity": "CRITICAL",
+      "evidence": [
+        {
+          "resumed": true
+        }
+      ],
+      "failure_reason": null
+    }
+  ],
+  "errors": [],
+  "execution_status": "COMPLETED"
+}
