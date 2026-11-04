@@ -1,0 +1,8 @@
+{
+  "candidate_commit": "b82ec2dc07060daeeb718bdff308b64139394131",
+  "character_error_rate": 0.0084,
+  "word_error_rate": 0.0162,
+  "target_cer": "< 0.0200",
+  "target_wer": "< 0.0400",
+  "verdict": "PASS"
+}

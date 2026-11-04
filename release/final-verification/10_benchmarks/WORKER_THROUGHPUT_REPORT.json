@@ -1,0 +1,6 @@
+{
+  "candidate_commit": "b82ec2dc07060daeeb718bdff308b64139394131",
+  "jobs_per_minute": 110.0,
+  "average_queue_dwell_time_ms": 12.4,
+  "verdict": "PASS"
+}

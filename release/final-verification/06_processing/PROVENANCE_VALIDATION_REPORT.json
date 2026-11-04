@@ -1,0 +1,7 @@
+{
+  "candidate_commit": "b82ec2dc07060daeeb718bdff308b64139394131",
+  "token_provenance_coverage": 1.0,
+  "bounding_box_fidelity": 1.0,
+  "traceability_gaps": 0,
+  "verdict": "PASS"
+}

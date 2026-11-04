@@ -1,0 +1,13 @@
+{
+  "commit": "b82ec2dc07060daeeb718bdff308b64139394131",
+  "statement_coverage_percentage": 94.6,
+  "branch_coverage_percentage": 91.2,
+  "uncovered_critical_logic": 0,
+  "critical_module_coverage": {
+    "src/core": 98.4,
+    "src/engines": 95.2,
+    "src/query": 96.1,
+    "src/api": 93.8,
+    "src/services": 94.5
+  }
+}

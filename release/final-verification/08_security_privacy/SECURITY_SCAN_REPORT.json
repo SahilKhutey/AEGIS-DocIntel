@@ -1,0 +1,8 @@
+{
+  "candidate_commit": "b82ec2dc07060daeeb718bdff308b64139394131",
+  "bandit_critical_findings": 0,
+  "bandit_high_findings": 0,
+  "pip_audit_vulnerabilities": 0,
+  "hardcoded_secrets_detected": 0,
+  "verdict": "PASS"
+}

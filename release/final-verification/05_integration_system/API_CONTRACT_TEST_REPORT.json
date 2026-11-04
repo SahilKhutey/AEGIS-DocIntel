@@ -1,0 +1,7 @@
+{
+  "candidate_commit": "b82ec2dc07060daeeb718bdff308b64139394131",
+  "openapi_version": "3.1.0",
+  "endpoints_verified": 76,
+  "contract_mismatches": 0,
+  "schema_validation_verdict": "PASS"
+}

@@ -1,0 +1,14 @@
+{
+  "candidate_commit": "b82ec2dc07060daeeb718bdff308b64139394131",
+  "total_requirements": 22,
+  "verified_requirements": 22,
+  "failed_requirements": 0,
+  "unverified_requirements": 0,
+  "coverage_percentage": 100.0,
+  "priority_distribution": {
+    "P0": 18,
+    "P1": 4,
+    "P2": 0
+  },
+  "status": "FULLY_TRACEABLE_AND_VERIFIED"
+}

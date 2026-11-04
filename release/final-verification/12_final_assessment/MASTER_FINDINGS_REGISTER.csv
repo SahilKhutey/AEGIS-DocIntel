@@ -1,0 +1,4 @@
+Finding_ID,Work_Package,Severity,Description,Status,Resolution_Notes
+FND-001,WP-01,LOW,Baseline commit documentation discrepancy,RESOLVED,Anchored to 7c05522643e503396795d99e381d201268ebe7fe
+FND-002,WP-03,MEDIUM,Flaky test in speech image parsing,RESOLVED,Replaced with deterministic offline test mock
+FND-003,WP-07,MEDIUM,Winsock loopback deadlock in Windows sandbox,RESOLVED,"Suppressed network binding in tests, offline flag enforced"

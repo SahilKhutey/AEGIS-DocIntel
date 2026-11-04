@@ -1,0 +1,8 @@
+{
+  "candidate_commit": "b82ec2dc07060daeeb718bdff308b64139394131",
+  "malformed_samples_tested": 32,
+  "uncontrolled_crashes": 0,
+  "safe_rejections": 32,
+  "rejection_rate": 100.0,
+  "verdict": "PASS"
+}

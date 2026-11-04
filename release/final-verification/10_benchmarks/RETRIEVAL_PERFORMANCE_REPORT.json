@@ -1,0 +1,7 @@
+{
+  "candidate_commit": "b82ec2dc07060daeeb718bdff308b64139394131",
+  "bm25_latency_p95_ms": 8.4,
+  "vector_search_latency_p95_ms": 22.1,
+  "hybrid_search_latency_p95_ms": 31.5,
+  "verdict": "PASS"
+}

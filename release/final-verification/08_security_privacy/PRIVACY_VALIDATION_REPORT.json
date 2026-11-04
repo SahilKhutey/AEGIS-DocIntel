@@ -1,0 +1,13 @@
+{
+  "candidate_commit": "b82ec2dc07060daeeb718bdff308b64139394131",
+  "pii_patterns_tested": [
+    "email",
+    "phone",
+    "ssn",
+    "credit_card",
+    "api_key"
+  ],
+  "detection_rate": 1.0,
+  "telemetry_leakage": 0.0,
+  "verdict": "PASS"
+}

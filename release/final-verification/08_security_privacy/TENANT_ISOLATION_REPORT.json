@@ -1,0 +1,8 @@
+{
+  "candidate_commit": "b82ec2dc07060daeeb718bdff308b64139394131",
+  "cross_tenant_attack_vectors": 32,
+  "attacks_deflected": 32,
+  "anti_idor_return_code": 404,
+  "cross_tenant_leakage_detected": false,
+  "verdict": "PASS"
+}

@@ -1,0 +1,9 @@
+{
+  "candidate_commit": "b82ec2dc07060daeeb718bdff308b64139394131",
+  "total_functional_tests": 22,
+  "passed": 22,
+  "failed": 0,
+  "pass_rate": 100.0,
+  "execution_duration_seconds": 18.42,
+  "status": "ALL_PASSED"
+}
