@@ -31,38 +31,41 @@ def make_document(
     )
 
 
-@pytest.mark.asyncio
-async def test_orchestrator_cross_tenant_isolation():
+def test_orchestrator_cross_tenant_isolation():
     """Verify that AMDIOrchestrator prevents cross-tenant access at engine level."""
-    orch = AMDIOrchestrator()
-    try:
-        doc_a = await orch.ingest(
-            make_document(tenant_id="tenant-alpha", filename="doc_a.txt", content="Alpha confidential earnings")
-        )
-        doc_b = await orch.ingest(
-            make_document(tenant_id="tenant-bravo", filename="doc_b.txt", content="Bravo confidential roadmap")
-        )
+    async def _run():
+        orch = AMDIOrchestrator()
+        try:
+            doc_a = await orch.ingest(
+                make_document(tenant_id="tenant-alpha", filename="doc_a.txt", content="Alpha confidential earnings")
+            )
+            doc_b = await orch.ingest(
+                make_document(tenant_id="tenant-bravo", filename="doc_b.txt", content="Bravo confidential roadmap")
+            )
 
-        # Cross-tenant query by doc_id must raise PermissionError
-        with pytest.raises(PermissionError):
-            await orch.query("earnings report", tenant_id="tenant-alpha", doc_id=doc_b.doc_id)
+            # Cross-tenant query by doc_id must raise PermissionError
+            with pytest.raises(PermissionError):
+                await orch.query("earnings report", tenant_id="tenant-alpha", doc_id=doc_b.doc_id)
 
-        # Direct accessor calls must raise PermissionError
-        with pytest.raises(PermissionError):
-            orch.get_document_elements(doc_b.doc_id, tenant_id="tenant-alpha")
+            # Direct accessor calls must raise PermissionError
+            with pytest.raises(PermissionError):
+                orch.get_document_elements(doc_b.doc_id, tenant_id="tenant-alpha")
 
-        with pytest.raises(PermissionError):
-            orch.get_document_tables(doc_b.doc_id, tenant_id="tenant-alpha")
+            with pytest.raises(PermissionError):
+                orch.get_document_tables(doc_b.doc_id, tenant_id="tenant-alpha")
 
-        with pytest.raises(PermissionError):
-            orch.get_master_state(doc_b.doc_id, tenant_id="tenant-alpha")
+            with pytest.raises(PermissionError):
+                orch.get_master_state(doc_b.doc_id, tenant_id="tenant-alpha")
 
-        # Owner can access their own document
-        state_a = orch.get_master_state(doc_a.doc_id, tenant_id="tenant-alpha")
-        assert state_a is not None
-        assert state_a.doc_id == doc_a.doc_id
-    finally:
-        await orch.close()
+            # Owner can access their own document
+            state_a = orch.get_master_state(doc_a.doc_id, tenant_id="tenant-alpha")
+            assert state_a is not None
+            assert state_a.doc_id == doc_a.doc_id
+        finally:
+            await orch.close()
+
+    import asyncio
+    asyncio.run(_run())
 
 
 def test_http_api_cross_tenant_lifecycle_idor_defense(monkeypatch):
