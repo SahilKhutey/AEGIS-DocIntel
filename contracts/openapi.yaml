@@ -1,0 +1,4318 @@
+openapi: 3.1.0
+info:
+  title: AEGIS-DocIntel
+  description: Production-grade Multimodal Document Intelligence Platform. Reverse-engineered
+    architecture of ChatGPT/Gemini/Claude document pipelines.
+  version: 1.0.0
+paths:
+  /v1/documents/upload:
+    post:
+      tags:
+      - Documents
+      summary: Upload a document for indexing
+      description: 'Upload a document for ingestion and indexing.
+
+        Returns immediately with doc_id and status=pending.
+
+        Use GET /documents/{doc_id} to poll indexing status.'
+      operationId: upload_document_v1_documents_upload_post
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Body_upload_document_v1_documents_upload_post'
+        required: true
+      responses:
+        '202':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DocumentResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - HTTPBearer: []
+      - APIKeyHeader: []
+  /v1/documents/{doc_id}:
+    get:
+      tags:
+      - Documents
+      summary: Get document status
+      description: Get document metadata and indexing status.
+      operationId: get_document_v1_documents__doc_id__get
+      security:
+      - HTTPBearer: []
+      - APIKeyHeader: []
+      parameters:
+      - name: doc_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Doc Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DocumentResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    delete:
+      tags:
+      - Documents
+      summary: Delete a document
+      description: Delete a document and all its associated chunks, vectors, and cache
+        entries.
+      operationId: delete_document_v1_documents__doc_id__delete
+      security:
+      - HTTPBearer: []
+      - APIKeyHeader: []
+      parameters:
+      - name: doc_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Doc Id
+      responses:
+        '204':
+          description: Successful Response
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/documents/{doc_id}/status:
+    get:
+      tags:
+      - Documents
+      summary: Get detailed indexing progress
+      description: Get detailed indexing pipeline progress.
+      operationId: get_indexing_status_v1_documents__doc_id__status_get
+      security:
+      - HTTPBearer: []
+      - APIKeyHeader: []
+      parameters:
+      - name: doc_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Doc Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IngestionStatusResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/documents:
+    get:
+      tags:
+      - Documents
+      summary: List all documents
+      description: List all documents for the tenant with optional status filter.
+      operationId: list_documents_v1_documents_get
+      security:
+      - HTTPBearer: []
+      - APIKeyHeader: []
+      parameters:
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          default: 1
+          title: Page
+      - name: page_size
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 100
+          minimum: 1
+          default: 20
+          title: Page Size
+      - name: status
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - $ref: '#/components/schemas/DocumentStatus'
+          - type: 'null'
+          title: Status
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DocumentListResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/documents/{doc_id}/reindex:
+    post:
+      tags:
+      - Documents
+      summary: Trigger document re-indexing
+      description: Force re-indexing of a document. Invalidates all caches.
+      operationId: reindex_document_v1_documents__doc_id__reindex_post
+      security:
+      - HTTPBearer: []
+      - APIKeyHeader: []
+      parameters:
+      - name: doc_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Doc Id
+      responses:
+        '202':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IngestionStatusResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/documents/{doc_id}/chunks:
+    get:
+      tags:
+      - Documents
+      summary: List document chunks
+      description: List all chunks for a document (for debugging and inspection).
+      operationId: list_chunks_v1_documents__doc_id__chunks_get
+      security:
+      - HTTPBearer: []
+      - APIKeyHeader: []
+      parameters:
+      - name: doc_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Doc Id
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          default: 1
+          title: Page
+      - name: page_size
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 200
+          minimum: 1
+          default: 50
+          title: Page Size
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChunkListResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/documents/batch:
+    post:
+      tags:
+      - Documents
+      summary: Batch upload from S3 manifest
+      description: Queue a batch of S3 documents for indexing.
+      operationId: batch_upload_v1_documents_batch_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BatchUploadRequest'
+        required: true
+      responses:
+        '202':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BatchUploadResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - HTTPBearer: []
+      - APIKeyHeader: []
+  /v1/documents/{doc_id}/elements:
+    get:
+      tags:
+      - Documents
+      summary: Get document elements
+      description: Return all geometric elements belonging to a specific document
+        (for 3D layout visualization).
+      operationId: get_elements_v1_documents__doc_id__elements_get
+      security:
+      - HTTPBearer: []
+      - APIKeyHeader: []
+      parameters:
+      - name: doc_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Doc Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/query:
+    post:
+      tags:
+      - Query
+      summary: Query documents with RAG
+      description: 'Submit a natural language question against indexed documents.
+
+
+        The system will:
+
+        1. Check semantic cache (cosine ≥ 0.95 → instant response)
+
+        2. Run hybrid BM25 + dense retrieval
+
+        3. Cross-encoder reranking
+
+        4. Build token-budget-aware context
+
+        5. Query LLM with citations
+
+        6. Return structured answer with source citations'
+      operationId: query_documents_v1_query_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/QueryRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QueryResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - HTTPBearer: []
+      - APIKeyHeader: []
+  /v1/answers:
+    post:
+      tags:
+      - Answers
+      summary: Generate evidence-grounded answer with validated citations
+      description: 'Generate a strictly source-grounded answer for the authenticated
+        tenant.
+
+
+        Workflow:
+
+        1. Validate query format, tenant identity, and document filter boundaries.
+
+        2. Retrieve authorized evidence chunks scoped to the tenant.
+
+        3. Invoke the generation service with untrusted-evidence boundaries.
+
+        4. Validate citation membership and claim grounding.
+
+        5. Safely abstain on insufficient or conflicting evidence.'
+      operationId: create_answer_v1_answers_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AnswerRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AnswerResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - HTTPBearer: []
+      - APIKeyHeader: []
+  /v1/admin/stats:
+    get:
+      tags:
+      - Admin
+      summary: Get tenant operational statistics
+      description: Retrieve usage and aggregate index statistics for the calling tenant.
+      operationId: get_stats_v1_admin_stats_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TenantStats'
+      security:
+      - HTTPBearer: []
+      - APIKeyHeader: []
+  /v1/admin/token-usage:
+    get:
+      tags:
+      - Admin
+      summary: Get token usage breakdown
+      description: Retrieve token consumption breakdown across model calls.
+      operationId: get_token_usage_v1_admin_token_usage_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenUsageResponse'
+      security:
+      - HTTPBearer: []
+      - APIKeyHeader: []
+  /v1/webhooks/subscriptions:
+    get:
+      tags:
+      - Webhooks
+      summary: List Subscriptions
+      operationId: list_subscriptions_v1_webhooks_subscriptions_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      security:
+      - HTTPBearer: []
+      - APIKeyHeader: []
+    post:
+      tags:
+      - Webhooks
+      summary: Create Subscription
+      operationId: create_subscription_v1_webhooks_subscriptions_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WebhookCreate'
+        required: true
+      responses:
+        '201':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - HTTPBearer: []
+      - APIKeyHeader: []
+  /v1/webhooks/subscriptions/{subscription_id}:
+    delete:
+      tags:
+      - Webhooks
+      summary: Delete Subscription
+      operationId: delete_subscription_v1_webhooks_subscriptions__subscription_id__delete
+      security:
+      - HTTPBearer: []
+      - APIKeyHeader: []
+      parameters:
+      - name: subscription_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Subscription Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/webhooks/ingest-complete:
+    post:
+      tags:
+      - Webhooks
+      summary: Ingest Complete Webhook
+      operationId: ingest_complete_webhook_v1_webhooks_ingest_complete_post
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+  /v1/annotations/:
+    post:
+      tags:
+      - annotations
+      summary: Create Generic Annotation
+      description: Create a generic annotation.
+      operationId: create_generic_annotation_v1_annotations__post
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AnnotationCreate'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    get:
+      tags:
+      - annotations
+      summary: List Annotations
+      description: List annotations with filters.
+      operationId: list_annotations_v1_annotations__get
+      parameters:
+      - name: doc_id
+        in: query
+        required: true
+        schema:
+          type: string
+          title: Doc Id
+      - name: page
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Page
+      - name: type
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - $ref: '#/components/schemas/AnnotationType'
+          - type: 'null'
+          title: Type
+      - name: user_id
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: User Id
+      - name: status
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - $ref: '#/components/schemas/AnnotationStatus'
+          - type: 'null'
+          title: Status
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 10000
+          default: 1000
+          title: Limit
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/annotations/highlight:
+    post:
+      tags:
+      - annotations
+      summary: Create Highlight
+      description: Create a highlight annotation.
+      operationId: create_highlight_v1_annotations_highlight_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/HighlightCreate'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/annotations/note:
+    post:
+      tags:
+      - annotations
+      summary: Create Note
+      description: Create a note annotation.
+      operationId: create_note_v1_annotations_note_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NoteCreate'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/annotations/correction:
+    post:
+      tags:
+      - annotations
+      summary: Create Correction
+      description: Create a correction annotation.
+      operationId: create_correction_v1_annotations_correction_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CorrectionCreate'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/annotations/verify:
+    post:
+      tags:
+      - annotations
+      summary: Create Verification
+      description: Create a verification annotation.
+      operationId: create_verification_v1_annotations_verify_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VerificationCreate'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/annotations/{annotation_id}:
+    get:
+      tags:
+      - annotations
+      summary: Get Annotation
+      description: Get an annotation by ID.
+      operationId: get_annotation_v1_annotations__annotation_id__get
+      parameters:
+      - name: annotation_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Annotation Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    patch:
+      tags:
+      - annotations
+      summary: Update Annotation
+      description: Update an annotation.
+      operationId: update_annotation_v1_annotations__annotation_id__patch
+      parameters:
+      - name: annotation_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Annotation Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AnnotationUpdate'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    delete:
+      tags:
+      - annotations
+      summary: Delete Annotation
+      description: Delete an annotation.
+      operationId: delete_annotation_v1_annotations__annotation_id__delete
+      parameters:
+      - name: annotation_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Annotation Id
+      - name: soft
+        in: query
+        required: false
+        schema:
+          type: boolean
+          default: true
+          title: Soft
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/annotations/search/:
+    get:
+      tags:
+      - annotations
+      summary: Search Annotations
+      description: Search annotations.
+      operationId: search_annotations_v1_annotations_search__get
+      parameters:
+      - name: doc_id
+        in: query
+        required: true
+        schema:
+          type: string
+          title: Doc Id
+      - name: q
+        in: query
+        required: true
+        schema:
+          type: string
+          title: Q
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/annotations/{annotation_id}/resolve:
+    post:
+      tags:
+      - annotations
+      summary: Resolve Annotation
+      description: Mark annotation as resolved.
+      operationId: resolve_annotation_v1_annotations__annotation_id__resolve_post
+      parameters:
+      - name: annotation_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Annotation Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/annotations/statistics/{doc_id}:
+    get:
+      tags:
+      - annotations
+      summary: Get Statistics
+      description: Get annotation statistics for a document.
+      operationId: get_statistics_v1_annotations_statistics__doc_id__get
+      parameters:
+      - name: doc_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Doc Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/annotations/auto-annotate:
+    post:
+      tags:
+      - annotations
+      summary: Auto Annotate
+      description: Automatically generate AI annotations for document elements.
+      operationId: auto_annotate_v1_annotations_auto_annotate_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AutoAnnotateRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/annotations/export/{doc_id}:
+    get:
+      tags:
+      - annotations
+      summary: Export Annotations
+      description: Export annotations to JSON string.
+      operationId: export_annotations_v1_annotations_export__doc_id__get
+      parameters:
+      - name: doc_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Doc Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/annotations/import/{doc_id}:
+    post:
+      tags:
+      - annotations
+      summary: Import Annotations
+      description: Import annotations from JSON string.
+      operationId: import_annotations_v1_annotations_import__doc_id__post
+      parameters:
+      - name: doc_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Doc Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ImportRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/document:
+    delete:
+      summary: Clear Document
+      operationId: clear_document_v1_document_delete
+      responses:
+        '204':
+          description: Successful Response
+  /v1/ingest:
+    post:
+      summary: Ingest
+      operationId: ingest_v1_ingest_post
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Body_ingest_v1_ingest_post'
+        required: true
+      responses:
+        '201':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IngestResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - HTTPBearer: []
+      - APIKeyHeader: []
+  /v1/query/stream:
+    get:
+      summary: Query Stream
+      operationId: query_stream_v1_query_stream_get
+      parameters:
+      - name: question
+        in: query
+        required: true
+        schema:
+          type: string
+          title: Question
+      - name: doc_id
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Doc Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/documents/{doc_id}/explain:
+    get:
+      summary: Explain
+      operationId: explain_v1_documents__doc_id__explain_get
+      parameters:
+      - name: doc_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Doc Id
+      - name: question
+        in: query
+        required: true
+        schema:
+          type: string
+          title: Question
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/documents/{doc_id}/export:
+    get:
+      summary: Export Document
+      description: Compiles and downloads the Universal Export Object (UEO) for a
+        document.
+      operationId: export_document_v1_documents__doc_id__export_get
+      security:
+      - HTTPBearer: []
+      - APIKeyHeader: []
+      parameters:
+      - name: doc_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Doc Id
+      - name: format
+        in: query
+        required: false
+        schema:
+          type: string
+          default: json
+          title: Format
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/advanced/compliance/pii-scan:
+    post:
+      tags:
+      - Advanced Systems & Pre-LLM
+      summary: Scan And Redact Pii
+      operationId: scan_and_redact_pii_v1_advanced_compliance_pii_scan_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PIIScanRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                additionalProperties: true
+                type: object
+                title: Response Scan And Redact Pii V1 Advanced Compliance Pii Scan
+                  Post
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/advanced/entity/resolve:
+    post:
+      tags:
+      - Advanced Systems & Pre-LLM
+      summary: Resolve Entities
+      operationId: resolve_entities_v1_advanced_entity_resolve_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EntityResolveRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                additionalProperties: true
+                type: object
+                title: Response Resolve Entities V1 Advanced Entity Resolve Post
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/advanced/versioning/diff:
+    post:
+      tags:
+      - Advanced Systems & Pre-LLM
+      summary: Diff Document Versions
+      operationId: diff_document_versions_v1_advanced_versioning_diff_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DiffRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                additionalProperties: true
+                type: object
+                title: Response Diff Document Versions V1 Advanced Versioning Diff
+                  Post
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/advanced/ingestion/anomaly-check:
+    post:
+      tags:
+      - Advanced Systems & Pre-LLM
+      summary: Scan Ingestion Anomalies
+      operationId: scan_ingestion_anomalies_v1_advanced_ingestion_anomaly_check_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AnomalyScanRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                additionalProperties: true
+                type: object
+                title: Response Scan Ingestion Anomalies V1 Advanced Ingestion Anomaly
+                  Check Post
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/advanced/compliance/pii-detect:
+    post:
+      tags:
+      - Advanced Systems & Pre-LLM
+      summary: Scan Pii Entities
+      operationId: scan_pii_entities_v1_advanced_compliance_pii_detect_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PIIScanRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                additionalProperties: true
+                type: object
+                title: Response Scan Pii Entities V1 Advanced Compliance Pii Detect
+                  Post
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/advanced/compliance/redact:
+    post:
+      tags:
+      - Advanced Systems & Pre-LLM
+      summary: Redact Pii Entities
+      operationId: redact_pii_entities_v1_advanced_compliance_redact_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PIIRedactRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                additionalProperties: true
+                type: object
+                title: Response Redact Pii Entities V1 Advanced Compliance Redact
+                  Post
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/advanced/matrix/normalize-quantity:
+    post:
+      tags:
+      - Advanced Systems & Pre-LLM
+      summary: Normalize Cell Quantity
+      operationId: normalize_cell_quantity_v1_advanced_matrix_normalize_quantity_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/QuantityNormalizeRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                additionalProperties: true
+                type: object
+                title: Response Normalize Cell Quantity V1 Advanced Matrix Normalize
+                  Quantity Post
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/advanced/query/decompose:
+    post:
+      tags:
+      - Advanced Systems & Pre-LLM
+      summary: Decompose Query
+      operationId: decompose_query_v1_advanced_query_decompose_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/QueryDecomposeRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                additionalProperties: true
+                type: object
+                title: Response Decompose Query V1 Advanced Query Decompose Post
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/advanced/topology/percolation-check:
+    get:
+      tags:
+      - Advanced Systems & Pre-LLM
+      summary: Estimate Resilience
+      operationId: estimate_resilience_v1_advanced_topology_percolation_check_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                additionalProperties: true
+                type: object
+                title: Response Estimate Resilience V1 Advanced Topology Percolation
+                  Check Get
+  /v1/advanced/optimization/ising-anneal:
+    post:
+      tags:
+      - Advanced Systems & Pre-LLM
+      summary: Anneal Master Objective
+      operationId: anneal_master_objective_v1_advanced_optimization_ising_anneal_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IsingAnnealRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                additionalProperties: true
+                type: object
+                title: Response Anneal Master Objective V1 Advanced Optimization Ising
+                  Anneal Post
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/advanced/math/unified-evaluation:
+    post:
+      tags:
+      - Advanced Systems & Pre-LLM
+      summary: Evaluate Unified Math
+      operationId: evaluate_unified_math_v1_advanced_math_unified_evaluation_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UnifiedMathRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                additionalProperties: true
+                type: object
+                title: Response Evaluate Unified Math V1 Advanced Math Unified Evaluation
+                  Post
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/advanced/ingestion/parse-speech:
+    post:
+      tags:
+      - Advanced Systems & Pre-LLM
+      summary: Parse Speech Audio
+      operationId: parse_speech_audio_v1_advanced_ingestion_parse_speech_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SpeechParseRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                additionalProperties: true
+                type: object
+                title: Response Parse Speech Audio V1 Advanced Ingestion Parse Speech
+                  Post
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/advanced/ingestion/parse-image-layout:
+    post:
+      tags:
+      - Advanced Systems & Pre-LLM
+      summary: Parse Image Layout
+      operationId: parse_image_layout_v1_advanced_ingestion_parse_image_layout_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ImageLayoutParseRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                additionalProperties: true
+                type: object
+                title: Response Parse Image Layout V1 Advanced Ingestion Parse Image
+                  Layout Post
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/advanced/export/llm-optimized:
+    post:
+      tags:
+      - Advanced Systems & Pre-LLM
+      summary: Export Llm Optimized
+      operationId: export_llm_optimized_v1_advanced_export_llm_optimized_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LLMExportRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                additionalProperties: true
+                type: object
+                title: Response Export Llm Optimized V1 Advanced Export Llm Optimized
+                  Post
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /health/live:
+    get:
+      tags:
+      - Health
+      summary: Liveness probe
+      description: Verifies process is active and responsive without calling external
+        dependencies.
+      operationId: liveness_health_live_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/src__api__routers__health__HealthResponse'
+  /health/ready:
+    get:
+      tags:
+      - Health
+      summary: Readiness probe
+      description: Verifies internal services and database storage can accept traffic.
+      operationId: readiness_health_ready_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReadinessResponse'
+  /v1/documents/{document_id}/extract-facts:
+    post:
+      tags:
+      - Intelligence
+      summary: Extract structured facts from document passages
+      description: 'Extract structured, typed facts from document passages or from
+        indexed elements.
+
+        Guarantees exact evidence span grounding and provenance persistence.'
+      operationId: extract_facts_v1_documents__document_id__extract_facts_post
+      security:
+      - HTTPBearer: []
+      - APIKeyHeader: []
+      parameters:
+      - name: document_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Document Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExtractFactsRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExtractionResultResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/documents/{document_id}/facts:
+    get:
+      tags:
+      - Intelligence
+      summary: Retrieve extracted structured facts for a document
+      description: Retrieve persisted facts for an authorized document within the
+        tenant boundary.
+      operationId: get_document_facts_v1_documents__document_id__facts_get
+      security:
+      - HTTPBearer: []
+      - APIKeyHeader: []
+      parameters:
+      - name: document_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Document Id
+      - name: attribute
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Optional attribute filter
+          title: Attribute
+        description: Optional attribute filter
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FactModel'
+                title: Response Get Document Facts V1 Documents  Document Id  Facts
+                  Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/intelligence/compare:
+    post:
+      tags:
+      - Intelligence
+      summary: Compare structured facts between two documents
+      description: 'Compare structured facts across two documents belonging to the
+        authenticated tenant.
+
+        Enforces tenant boundaries, unit compatibility, and temporal scope alignment.'
+      operationId: compare_documents_v1_intelligence_compare_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CompareDocumentsRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DocumentComparisonResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - HTTPBearer: []
+      - APIKeyHeader: []
+  /v1/intelligence/conflicts:
+    get:
+      tags:
+      - Intelligence
+      summary: Detect conflicting facts across documents
+      description: 'Scan authorized documents for conflicting quantities, dates, and
+        obligations.
+
+        Preserves all conflicting sources without silently choosing one.'
+      operationId: get_conflicts_v1_intelligence_conflicts_get
+      security:
+      - HTTPBearer: []
+      - APIKeyHeader: []
+      parameters:
+      - name: document_ids
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: array
+            items:
+              type: string
+          - type: 'null'
+          description: Filter by document IDs
+          title: Document Ids
+        description: Filter by document IDs
+      - name: subject
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Filter by subject entity
+          title: Subject
+        description: Filter by subject entity
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ConflictReportModel'
+                title: Response Get Conflicts V1 Intelligence Conflicts Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/reviews:
+    get:
+      tags:
+      - Governance
+      summary: List tenant review queue items
+      description: Retrieve review items for the authenticated tenant with cursor
+        pagination.
+      operationId: list_reviews_v1_reviews_get
+      security:
+      - HTTPBearer: []
+      - APIKeyHeader: []
+      parameters:
+      - name: status
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Filter by status
+          title: Status
+        description: Filter by status
+      - name: assigned_to
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Filter by assigned reviewer ID
+          title: Assigned To
+        description: Filter by assigned reviewer ID
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 100
+          minimum: 1
+          default: 50
+          title: Limit
+      - name: cursor
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Cursor for pagination
+          title: Cursor
+        description: Cursor for pagination
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReviewQueueResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/reviews/approved-facts:
+    get:
+      tags:
+      - Governance
+      summary: Retrieve approved facts for report generation
+      description: Fetch approved and corrected facts only. Pending and rejected facts
+        are excluded.
+      operationId: get_approved_facts_v1_reviews_approved_facts_get
+      security:
+      - HTTPBearer: []
+      - APIKeyHeader: []
+      parameters:
+      - name: document_id
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Optional document filter
+          title: Document Id
+        description: Optional document filter
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  additionalProperties: true
+                title: Response Get Approved Facts V1 Reviews Approved Facts Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/reviews/metrics:
+    get:
+      tags:
+      - Governance
+      summary: Get review governance and quality metrics
+      description: Compute review quality metrics across tenant items.
+      operationId: get_metrics_v1_reviews_metrics_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GovernanceMetricsResponse'
+      security:
+      - HTTPBearer: []
+      - APIKeyHeader: []
+  /v1/reviews/{review_id}:
+    get:
+      tags:
+      - Governance
+      summary: Fetch review item details and evidence links
+      description: Fetch a single review item within tenant boundary.
+      operationId: get_review_detail_v1_reviews__review_id__get
+      security:
+      - HTTPBearer: []
+      - APIKeyHeader: []
+      parameters:
+      - name: review_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Review Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReviewItemResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/reviews/{review_id}/claim:
+    post:
+      tags:
+      - Governance
+      summary: Claim a review item
+      description: Claim a review item, transitioning it from pending or needs_evidence
+        to in_review.
+      operationId: claim_review_v1_reviews__review_id__claim_post
+      security:
+      - HTTPBearer: []
+      - APIKeyHeader: []
+      parameters:
+      - name: review_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Review Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ClaimRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReviewItemResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/reviews/{review_id}/decisions:
+    post:
+      tags:
+      - Governance
+      summary: Submit a reviewer decision (approve, correct, reject, request_evidence)
+      description: 'Submit a reviewer decision with evidence validation, optimistic
+        locking,
+
+        and single-transaction audit event logging.'
+      operationId: submit_decision_v1_reviews__review_id__decisions_post
+      security:
+      - HTTPBearer: []
+      - APIKeyHeader: []
+      parameters:
+      - name: review_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Review Id
+      - name: Idempotency-Key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Idempotency-Key
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DecisionRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DecisionResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/reviews/{review_id}/history:
+    get:
+      tags:
+      - Governance
+      summary: Read audit history of state transitions
+      description: Retrieve ordered, append-only history of every successful state
+        transition.
+      operationId: get_history_v1_reviews__review_id__history_get
+      security:
+      - HTTPBearer: []
+      - APIKeyHeader: []
+      parameters:
+      - name: review_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Review Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AuditEventResponse'
+                title: Response Get History V1 Reviews  Review Id  History Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/reviews/{review_id}/feedback:
+    post:
+      tags:
+      - Governance
+      summary: Record structured evaluation feedback
+      description: Record structured feedback categorizing extraction quality or reviewer
+        corrections.
+      operationId: submit_feedback_v1_reviews__review_id__feedback_post
+      security:
+      - HTTPBearer: []
+      - APIKeyHeader: []
+      parameters:
+      - name: review_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Review Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FeedbackRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: string
+                title: Response Submit Feedback V1 Reviews  Review Id  Feedback Post
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/reviews/{review_id}/reopen:
+    post:
+      tags:
+      - Governance
+      summary: Reopen a completed review under administrative authority
+      description: Reopen an approved, corrected, or rejected item back into active
+        review.
+      operationId: reopen_review_v1_reviews__review_id__reopen_post
+      security:
+      - HTTPBearer: []
+      - APIKeyHeader: []
+      parameters:
+      - name: review_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Review Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReopenRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DecisionResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/jobs:
+    post:
+      tags:
+      - Jobs
+      summary: Submit a background processing job
+      description: 'Durably enqueue a background operation for execution by worker
+        pool.
+
+        Guarantees idempotent deduplication via Idempotency-Key and payload fingerprint.'
+      operationId: submit_job_v1_jobs_post
+      security:
+      - HTTPBearer: []
+      - APIKeyHeader: []
+      parameters:
+      - name: Idempotency-Key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Idempotency-Key
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubmitJobRequest'
+      responses:
+        '202':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JobResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    get:
+      tags:
+      - Jobs
+      summary: List background jobs for authenticated tenant
+      description: List jobs visible to caller within strict tenant isolation boundary.
+      operationId: list_jobs_v1_jobs_get
+      security:
+      - HTTPBearer: []
+      - APIKeyHeader: []
+      parameters:
+      - name: status
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Filter by status
+          title: Status
+        description: Filter by status
+      - name: job_type
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Filter by job type
+          title: Job Type
+        description: Filter by job type
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 100
+          minimum: 1
+          default: 50
+          title: Limit
+      - name: cursor
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Cursor timestamp for pagination
+          title: Cursor
+        description: Cursor timestamp for pagination
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JobListResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/jobs/{job_id}:
+    get:
+      tags:
+      - Jobs
+      summary: Get background job status and progress metadata
+      description: Fetch status and result metadata for a specific job within tenant
+        boundary.
+      operationId: get_job_v1_jobs__job_id__get
+      security:
+      - HTTPBearer: []
+      - APIKeyHeader: []
+      parameters:
+      - name: job_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Job Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JobResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/jobs/{job_id}/cancel:
+    post:
+      tags:
+      - Jobs
+      summary: Cancel an active or pending background job
+      description: Request safe cancellation of an active or pending job.
+      operationId: cancel_job_v1_jobs__job_id__cancel_post
+      security:
+      - HTTPBearer: []
+      - APIKeyHeader: []
+      parameters:
+      - name: job_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Job Id
+      requestBody:
+        content:
+          application/json:
+            schema:
+              anyOf:
+              - $ref: '#/components/schemas/CancelJobRequest'
+              - type: 'null'
+              title: Body
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JobResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/jobs/{job_id}/retry:
+    post:
+      tags:
+      - Jobs
+      summary: Manually reschedule a failed or cancelled background job
+      description: Manually reschedule a failed or cancelled job for execution.
+      operationId: retry_job_v1_jobs__job_id__retry_post
+      security:
+      - HTTPBearer: []
+      - APIKeyHeader: []
+      parameters:
+      - name: job_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Job Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JobResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/jobs/{job_id}/events:
+    get:
+      tags:
+      - Jobs
+      summary: Read operational audit events and attempt history for a job
+      description: Fetch ordered transition history and worker execution attempts.
+      operationId: get_job_events_v1_jobs__job_id__events_get
+      security:
+      - HTTPBearer: []
+      - APIKeyHeader: []
+      parameters:
+      - name: job_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Job Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/JobEventResponse'
+                title: Response Get Job Events V1 Jobs  Job Id  Events Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /stats:
+    get:
+      tags:
+      - System
+      summary: Get Stats
+      operationId: get_stats_stats_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+  /v1/stats:
+    get:
+      tags:
+      - System
+      summary: Get Stats
+      operationId: get_stats_v1_stats_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+  /health:
+    get:
+      tags:
+      - System
+      summary: Health Check
+      description: 'Liveness probe: verifies process is alive and responsive.'
+      operationId: health_check_health_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/src__api__models__HealthResponse'
+  /readiness:
+    get:
+      tags:
+      - System
+      summary: Readiness
+      description: 'Readiness probe: verifies persistent storage and dependencies
+        can serve traffic.'
+      operationId: readiness_readiness_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+components:
+  schemas:
+    AnnotationCreate:
+      properties:
+        doc_id:
+          type: string
+          title: Doc Id
+        type:
+          $ref: '#/components/schemas/AnnotationType'
+          default: note
+        position:
+          $ref: '#/components/schemas/PositionSchema'
+        content:
+          type: string
+          title: Content
+        color:
+          type: string
+          title: Color
+          default: '#fbbf24'
+        tags:
+          items:
+            type: string
+          type: array
+          title: Tags
+        metadata:
+          additionalProperties: true
+          type: object
+          title: Metadata
+        user_id:
+          type: string
+          title: User Id
+          default: default
+      type: object
+      required:
+      - doc_id
+      - position
+      - content
+      title: AnnotationCreate
+    AnnotationStatus:
+      type: string
+      enum:
+      - draft
+      - active
+      - resolved
+      - archived
+      - deleted
+      title: AnnotationStatus
+      description: Status of an annotation.
+    AnnotationType:
+      type: string
+      enum:
+      - highlight
+      - note
+      - correction
+      - tag
+      - question
+      - verification
+      - rating
+      - marker
+      - comment
+      - bookmark
+      title: AnnotationType
+      description: Types of annotations.
+    AnnotationUpdate:
+      properties:
+        content:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Content
+        status:
+          anyOf:
+          - $ref: '#/components/schemas/AnnotationStatus'
+          - type: 'null'
+        color:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Color
+        tags:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Tags
+        metadata:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Metadata
+      type: object
+      title: AnnotationUpdate
+    AnomalyScanRequest:
+      properties:
+        document:
+          additionalProperties: true
+          type: object
+          title: Document
+      type: object
+      required:
+      - document
+      title: AnomalyScanRequest
+    AnswerCitation:
+      properties:
+        evidence_id:
+          type: string
+          title: Evidence Id
+        document_id:
+          type: string
+          title: Document Id
+        page_number:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Page Number
+        section_path:
+          items:
+            type: string
+          type: array
+          title: Section Path
+      type: object
+      required:
+      - evidence_id
+      - document_id
+      title: AnswerCitation
+    AnswerRequest:
+      properties:
+        question:
+          type: string
+          maxLength: 4000
+          minLength: 1
+          title: Question
+        document_ids:
+          items:
+            type: string
+          type: array
+          maxItems: 1000
+          title: Document Ids
+      type: object
+      required:
+      - question
+      title: AnswerRequest
+    AnswerResponse:
+      properties:
+        status:
+          type: string
+          title: Status
+        answer:
+          type: string
+          title: Answer
+        citations:
+          items:
+            $ref: '#/components/schemas/AnswerCitation'
+          type: array
+          title: Citations
+        warnings:
+          items:
+            type: string
+          type: array
+          title: Warnings
+      type: object
+      required:
+      - status
+      - answer
+      title: AnswerResponse
+    AuditEventResponse:
+      properties:
+        event_id:
+          type: string
+          title: Event Id
+        review_id:
+          type: string
+          title: Review Id
+        sequence:
+          type: integer
+          title: Sequence
+        tenant_id:
+          type: string
+          title: Tenant Id
+        actor_id:
+          type: string
+          title: Actor Id
+        action:
+          type: string
+          title: Action
+        previous_status:
+          type: string
+          title: Previous Status
+        new_status:
+          type: string
+          title: New Status
+        previous_version:
+          type: integer
+          title: Previous Version
+        new_version:
+          type: integer
+          title: New Version
+        rationale:
+          type: string
+          title: Rationale
+        revision_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Revision Id
+        request_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Request Id
+        timestamp:
+          type: string
+          title: Timestamp
+      type: object
+      required:
+      - event_id
+      - review_id
+      - sequence
+      - tenant_id
+      - actor_id
+      - action
+      - previous_status
+      - new_status
+      - previous_version
+      - new_version
+      - rationale
+      - timestamp
+      title: AuditEventResponse
+    AutoAnnotateRequest:
+      properties:
+        doc_id:
+          type: string
+          title: Doc Id
+        enable_insights:
+          type: boolean
+          title: Enable Insights
+          default: false
+      type: object
+      required:
+      - doc_id
+      title: AutoAnnotateRequest
+    BatchUploadRequest:
+      properties:
+        documents:
+          items:
+            additionalProperties:
+              type: string
+            type: object
+          type: array
+          maxItems: 10000
+          title: Documents
+          description: List of {s3_uri, doc_id?, priority} entries
+      type: object
+      required:
+      - documents
+      title: BatchUploadRequest
+    BatchUploadResponse:
+      properties:
+        job_id:
+          type: string
+          format: uuid
+          title: Job Id
+        doc_count:
+          type: integer
+          title: Doc Count
+        status:
+          type: string
+          title: Status
+          default: queued
+      type: object
+      required:
+      - job_id
+      - doc_count
+      title: BatchUploadResponse
+    BlockTypeEnum:
+      type: string
+      enum:
+      - text
+      - table
+      - figure
+      - equation
+      - header
+      - footer
+      title: BlockTypeEnum
+    Body_ingest_v1_ingest_post:
+      properties:
+        file:
+          type: string
+          contentMediaType: application/octet-stream
+          title: File
+      type: object
+      required:
+      - file
+      title: Body_ingest_v1_ingest_post
+    Body_upload_document_v1_documents_upload_post:
+      properties:
+        file:
+          type: string
+          contentMediaType: application/octet-stream
+          title: File
+          description: PDF, DOCX, PPTX, or HTML file
+      type: object
+      required:
+      - file
+      title: Body_upload_document_v1_documents_upload_post
+    CancelJobRequest:
+      properties:
+        reason:
+          type: string
+          maxLength: 500
+          title: Reason
+          default: User requested cancellation
+      type: object
+      title: CancelJobRequest
+    ChunkListResponse:
+      properties:
+        items:
+          items:
+            $ref: '#/components/schemas/ChunkResponse'
+          type: array
+          title: Items
+        total:
+          type: integer
+          title: Total
+      type: object
+      required:
+      - items
+      - total
+      title: ChunkListResponse
+    ChunkResponse:
+      properties:
+        chunk_id:
+          type: string
+          title: Chunk Id
+        doc_id:
+          type: string
+          title: Doc Id
+        page_start:
+          type: integer
+          title: Page Start
+        page_end:
+          type: integer
+          title: Page End
+        section:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Section
+        block_type:
+          $ref: '#/components/schemas/BlockTypeEnum'
+        text:
+          type: string
+          title: Text
+        token_count:
+          type: integer
+          title: Token Count
+      type: object
+      required:
+      - chunk_id
+      - doc_id
+      - page_start
+      - page_end
+      - block_type
+      - text
+      - token_count
+      title: ChunkResponse
+    ClaimRequest:
+      properties:
+        expected_version:
+          type: integer
+          minimum: 1.0
+          title: Expected Version
+          description: Expected version of review item for optimistic locking
+      type: object
+      required:
+      - expected_version
+      title: ClaimRequest
+    CompareDocumentsRequest:
+      properties:
+        left_document_id:
+          type: string
+          title: Left Document Id
+        right_document_id:
+          type: string
+          title: Right Document Id
+        attributes:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Attributes
+          description: Specific attributes to compare
+      type: object
+      required:
+      - left_document_id
+      - right_document_id
+      title: CompareDocumentsRequest
+    ConflictReportModel:
+      properties:
+        tenant_id:
+          type: string
+          title: Tenant Id
+        subject:
+          type: string
+          title: Subject
+        attribute:
+          type: string
+          title: Attribute
+        conflict_type:
+          type: string
+          title: Conflict Type
+        description:
+          type: string
+          title: Description
+        participating_facts:
+          items:
+            $ref: '#/components/schemas/FactModel'
+          type: array
+          title: Participating Facts
+        conflicting_document_ids:
+          items:
+            type: string
+          type: array
+          title: Conflicting Document Ids
+      type: object
+      required:
+      - tenant_id
+      - subject
+      - attribute
+      - conflict_type
+      - description
+      title: ConflictReportModel
+    CorrectionCreate:
+      properties:
+        doc_id:
+          type: string
+          title: Doc Id
+        page:
+          type: integer
+          title: Page
+        original_text:
+          type: string
+          title: Original Text
+        corrected_text:
+          type: string
+          title: Corrected Text
+        bbox:
+          anyOf:
+          - items:
+              type: number
+            type: array
+          - type: 'null'
+          title: Bbox
+        user_id:
+          type: string
+          title: User Id
+          default: default
+      type: object
+      required:
+      - doc_id
+      - page
+      - original_text
+      - corrected_text
+      title: CorrectionCreate
+    DecisionRecordResponse:
+      properties:
+        decision_id:
+          type: string
+          title: Decision Id
+        review_id:
+          type: string
+          title: Review Id
+        tenant_id:
+          type: string
+          title: Tenant Id
+        actor_id:
+          type: string
+          title: Actor Id
+        action:
+          type: string
+          title: Action
+        from_status:
+          type: string
+          title: From Status
+        to_status:
+          type: string
+          title: To Status
+        version_reviewed:
+          type: integer
+          title: Version Reviewed
+        rationale:
+          type: string
+          title: Rationale
+        evidence_quote:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Evidence Quote
+        idempotency_key:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Idempotency Key
+        created_at:
+          type: string
+          title: Created At
+      type: object
+      required:
+      - decision_id
+      - review_id
+      - tenant_id
+      - actor_id
+      - action
+      - from_status
+      - to_status
+      - version_reviewed
+      - rationale
+      - created_at
+      title: DecisionRecordResponse
+    DecisionRequest:
+      properties:
+        action:
+          type: string
+          enum:
+          - approve
+          - correct
+          - reject
+          - request_evidence
+          title: Action
+        expected_version:
+          type: integer
+          minimum: 1.0
+          title: Expected Version
+          description: Expected version for concurrency verification
+        rationale:
+          type: string
+          maxLength: 2000
+          minLength: 3
+          title: Rationale
+          description: Reviewer rationale
+        corrected_value:
+          anyOf:
+          - {}
+          - type: 'null'
+          title: Corrected Value
+          description: Corrected value if action is 'correct'
+        corrected_type:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Corrected Type
+          description: Type descriptor (decimal, string, etc.)
+        unit:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Unit
+          description: Optional unit descriptor
+        evidence_quote:
+          anyOf:
+          - type: string
+            maxLength: 5000
+          - type: 'null'
+          title: Evidence Quote
+          description: Authoritative evidence quote
+      type: object
+      required:
+      - action
+      - expected_version
+      - rationale
+      title: DecisionRequest
+    DecisionResponse:
+      properties:
+        item:
+          $ref: '#/components/schemas/ReviewItemResponse'
+        decision:
+          $ref: '#/components/schemas/DecisionRecordResponse'
+        audit_event:
+          $ref: '#/components/schemas/AuditEventResponse'
+      type: object
+      required:
+      - item
+      - decision
+      - audit_event
+      title: DecisionResponse
+    DiffRequest:
+      properties:
+        v1_document:
+          additionalProperties: true
+          type: object
+          title: V1 Document
+        v2_document:
+          additionalProperties: true
+          type: object
+          title: V2 Document
+      type: object
+      required:
+      - v1_document
+      - v2_document
+      title: DiffRequest
+    DocumentComparisonResponse:
+      properties:
+        tenant_id:
+          type: string
+          title: Tenant Id
+        left_doc_id:
+          type: string
+          title: Left Doc Id
+        right_doc_id:
+          type: string
+          title: Right Doc Id
+        comparisons:
+          items:
+            $ref: '#/components/schemas/PairComparisonModel'
+          type: array
+          title: Comparisons
+        summary:
+          additionalProperties:
+            type: integer
+          type: object
+          title: Summary
+      type: object
+      required:
+      - tenant_id
+      - left_doc_id
+      - right_doc_id
+      title: DocumentComparisonResponse
+    DocumentListResponse:
+      properties:
+        items:
+          items:
+            $ref: '#/components/schemas/DocumentResponse'
+          type: array
+          title: Items
+        total:
+          type: integer
+          title: Total
+        page:
+          type: integer
+          title: Page
+        page_size:
+          type: integer
+          title: Page Size
+      type: object
+      required:
+      - items
+      - total
+      - page
+      - page_size
+      title: DocumentListResponse
+    DocumentResponse:
+      properties:
+        doc_id:
+          type: string
+          format: uuid
+          title: Doc Id
+        tenant_id:
+          type: string
+          title: Tenant Id
+        filename:
+          type: string
+          title: Filename
+        status:
+          $ref: '#/components/schemas/DocumentStatus'
+        page_count:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Page Count
+        chunk_count:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Chunk Count
+        is_scanned:
+          type: boolean
+          title: Is Scanned
+          default: false
+        language:
+          type: string
+          title: Language
+          default: en
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+        indexed_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Indexed At
+      type: object
+      required:
+      - doc_id
+      - tenant_id
+      - filename
+      - status
+      - created_at
+      title: DocumentResponse
+    DocumentStatus:
+      type: string
+      enum:
+      - pending
+      - indexing
+      - ready
+      - failed
+      - reindexing
+      title: DocumentStatus
+    EntityResolveRequest:
+      properties:
+        documents:
+          items:
+            additionalProperties: true
+            type: object
+          type: array
+          title: Documents
+      type: object
+      required:
+      - documents
+      title: EntityResolveRequest
+    EvidenceSpanModel:
+      properties:
+        document_id:
+          type: string
+          title: Document Id
+        tenant_id:
+          type: string
+          title: Tenant Id
+        chunk_id:
+          type: string
+          title: Chunk Id
+        page_number:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Page Number
+        start_offset:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Start Offset
+        end_offset:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: End Offset
+        quoted_text:
+          type: string
+          title: Quoted Text
+          default: ''
+      type: object
+      required:
+      - document_id
+      - tenant_id
+      - chunk_id
+      title: EvidenceSpanModel
+    ExtractFactsRequest:
+      properties:
+        schema_name:
+          type: string
+          title: Schema Name
+          description: Target extraction schema name
+          default: contract_terms
+        subject:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Subject
+          description: Optional entity subject override
+        custom_schema:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Custom Schema
+          description: Custom ExtractionSchema definition
+        passages:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/PassagePayload'
+            type: array
+          - type: 'null'
+          title: Passages
+          description: Direct passages to extract facts from
+      type: object
+      title: ExtractFactsRequest
+    ExtractionResultResponse:
+      properties:
+        status:
+          type: string
+          title: Status
+        document_id:
+          type: string
+          title: Document Id
+        tenant_id:
+          type: string
+          title: Tenant Id
+        facts:
+          items:
+            $ref: '#/components/schemas/FactModel'
+          type: array
+          title: Facts
+        errors:
+          items:
+            type: string
+          type: array
+          title: Errors
+        schema_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Schema Name
+        schema_version:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Schema Version
+      type: object
+      required:
+      - status
+      - document_id
+      - tenant_id
+      title: ExtractionResultResponse
+    FactModel:
+      properties:
+        fact_id:
+          type: string
+          title: Fact Id
+        tenant_id:
+          type: string
+          title: Tenant Id
+        document_id:
+          type: string
+          title: Document Id
+        subject:
+          type: string
+          title: Subject
+        attribute:
+          type: string
+          title: Attribute
+        value:
+          title: Value
+        raw_value:
+          type: string
+          title: Raw Value
+        value_type:
+          type: string
+          title: Value Type
+        unit:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Unit
+        period:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Period
+        valid_from:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Valid From
+        valid_to:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Valid To
+        evidence:
+          items:
+            $ref: '#/components/schemas/EvidenceSpanModel'
+          type: array
+          title: Evidence
+        confidence:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Confidence
+        metadata:
+          additionalProperties: true
+          type: object
+          title: Metadata
+      type: object
+      required:
+      - fact_id
+      - tenant_id
+      - document_id
+      - subject
+      - attribute
+      - value
+      - raw_value
+      - value_type
+      title: FactModel
+    FeedbackRequest:
+      properties:
+        category:
+          type: string
+          title: Category
+          description: Feedback category (e.g., wrong_value, bad_evidence)
+        notes:
+          anyOf:
+          - type: string
+            maxLength: 2000
+          - type: 'null'
+          title: Notes
+          default: ''
+        corrected_reference:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Corrected Reference
+      type: object
+      required:
+      - category
+      title: FeedbackRequest
+    GovernanceMetricsResponse:
+      properties:
+        total_items:
+          type: integer
+          title: Total Items
+        decided_count:
+          type: integer
+          title: Decided Count
+        approval_rate:
+          type: number
+          title: Approval Rate
+        correction_rate:
+          type: number
+          title: Correction Rate
+        rejection_rate:
+          type: number
+          title: Rejection Rate
+        evidence_failure_rate:
+          type: number
+          title: Evidence Failure Rate
+        feedback_categories:
+          additionalProperties:
+            type: integer
+          type: object
+          title: Feedback Categories
+      type: object
+      required:
+      - total_items
+      - decided_count
+      - approval_rate
+      - correction_rate
+      - rejection_rate
+      - evidence_failure_rate
+      - feedback_categories
+      title: GovernanceMetricsResponse
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    HighlightCreate:
+      properties:
+        doc_id:
+          type: string
+          title: Doc Id
+        page:
+          type: integer
+          title: Page
+        bbox:
+          items:
+            type: number
+          type: array
+          title: Bbox
+        text:
+          type: string
+          title: Text
+          default: ''
+        color:
+          type: string
+          title: Color
+          default: '#fde047'
+        element_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Element Id
+        user_id:
+          type: string
+          title: User Id
+          default: default
+      type: object
+      required:
+      - doc_id
+      - page
+      - bbox
+      title: HighlightCreate
+    ImageLayoutParseRequest:
+      properties:
+        filename:
+          type: string
+          title: Filename
+          default: document_page.png
+        blur_threshold:
+          type: number
+          title: Blur Threshold
+          default: 100.0
+      type: object
+      title: ImageLayoutParseRequest
+    ImportRequest:
+      properties:
+        json_data:
+          type: string
+          title: Json Data
+      type: object
+      required:
+      - json_data
+      title: ImportRequest
+    IngestResponse:
+      properties:
+        doc_id:
+          type: string
+          title: Doc Id
+        filename:
+          type: string
+          title: Filename
+        pages:
+          type: integer
+          title: Pages
+        elements:
+          type: integer
+          title: Elements
+        tables:
+          type: integer
+          title: Tables
+        templates:
+          type: integer
+          title: Templates
+        ingestion_ms:
+          type: number
+          title: Ingestion Ms
+        compression_pct:
+          type: number
+          title: Compression Pct
+        status:
+          type: string
+          title: Status
+          default: ok
+      type: object
+      required:
+      - doc_id
+      - filename
+      - pages
+      - elements
+      - tables
+      - templates
+      - ingestion_ms
+      - compression_pct
+      title: IngestResponse
+    IngestionStatusResponse:
+      properties:
+        doc_id:
+          type: string
+          format: uuid
+          title: Doc Id
+        status:
+          $ref: '#/components/schemas/DocumentStatus'
+        progress_percent:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Progress Percent
+        stage:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Stage
+        error:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Error
+        chunks_indexed:
+          type: integer
+          title: Chunks Indexed
+          default: 0
+      type: object
+      required:
+      - doc_id
+      - status
+      title: IngestionStatusResponse
+    IsingAnnealRequest:
+      properties:
+        dimension:
+          type: integer
+          title: Dimension
+          default: 4
+      type: object
+      title: IsingAnnealRequest
+    JobEventResponse:
+      properties:
+        event_id:
+          type: string
+          title: Event Id
+        job_id:
+          type: string
+          title: Job Id
+        sequence:
+          type: integer
+          title: Sequence
+        tenant_id:
+          type: string
+          title: Tenant Id
+        from_status:
+          type: string
+          title: From Status
+        to_status:
+          type: string
+          title: To Status
+        attempt:
+          type: integer
+          title: Attempt
+        worker_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Worker Id
+        error_code:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Error Code
+        message:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Message
+        timestamp:
+          type: string
+          title: Timestamp
+      type: object
+      required:
+      - event_id
+      - job_id
+      - sequence
+      - tenant_id
+      - from_status
+      - to_status
+      - attempt
+      - timestamp
+      title: JobEventResponse
+    JobListResponse:
+      properties:
+        items:
+          items:
+            $ref: '#/components/schemas/JobResponse'
+          type: array
+          title: Items
+        next_cursor:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Next Cursor
+      type: object
+      required:
+      - items
+      title: JobListResponse
+    JobResponse:
+      properties:
+        job_id:
+          type: string
+          title: Job Id
+        tenant_id:
+          type: string
+          title: Tenant Id
+        job_type:
+          type: string
+          title: Job Type
+        resource_id:
+          type: string
+          title: Resource Id
+        status:
+          type: string
+          title: Status
+        attempt:
+          type: integer
+          title: Attempt
+        max_attempts:
+          type: integer
+          title: Max Attempts
+        version:
+          type: integer
+          title: Version
+        idempotency_key:
+          type: string
+          title: Idempotency Key
+        input_fingerprint:
+          type: string
+          title: Input Fingerprint
+        requested_by:
+          type: string
+          title: Requested By
+        lease_owner:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Lease Owner
+        lease_expires_at:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Lease Expires At
+        next_attempt_at:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Next Attempt At
+        result_reference:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Result Reference
+        error_code:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Error Code
+        payload:
+          additionalProperties: true
+          type: object
+          title: Payload
+        created_at:
+          type: string
+          title: Created At
+        updated_at:
+          type: string
+          title: Updated At
+        status_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Status Url
+      type: object
+      required:
+      - job_id
+      - tenant_id
+      - job_type
+      - resource_id
+      - status
+      - attempt
+      - max_attempts
+      - version
+      - idempotency_key
+      - input_fingerprint
+      - requested_by
+      - created_at
+      - updated_at
+      title: JobResponse
+    LLMExportRequest:
+      properties:
+        system_prompt:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: System Prompt
+          default: You are a financial analysis AI assistant.
+        context_text:
+          type: string
+          title: Context Text
+        summary_text:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Summary Text
+        max_tokens:
+          type: integer
+          title: Max Tokens
+          default: 4000
+        format_type:
+          type: string
+          title: Format Type
+          default: markdown
+        compact_keys:
+          type: boolean
+          title: Compact Keys
+          default: true
+      type: object
+      required:
+      - context_text
+      title: LLMExportRequest
+    NoteCreate:
+      properties:
+        doc_id:
+          type: string
+          title: Doc Id
+        page:
+          type: integer
+          title: Page
+        content:
+          type: string
+          title: Content
+        bbox:
+          anyOf:
+          - items:
+              type: number
+            type: array
+          - type: 'null'
+          title: Bbox
+        color:
+          type: string
+          title: Color
+          default: '#fbbf24'
+        element_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Element Id
+        tags:
+          items:
+            type: string
+          type: array
+          title: Tags
+        user_id:
+          type: string
+          title: User Id
+          default: default
+      type: object
+      required:
+      - doc_id
+      - page
+      - content
+      title: NoteCreate
+    PIIRedactRequest:
+      properties:
+        elements:
+          items:
+            additionalProperties: true
+            type: object
+          type: array
+          title: Elements
+        policy_actions:
+          anyOf:
+          - additionalProperties:
+              type: string
+            type: object
+          - type: 'null'
+          title: Policy Actions
+      type: object
+      required:
+      - elements
+      title: PIIRedactRequest
+    PIIScanRequest:
+      properties:
+        element_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Element Id
+          default: e1
+        text:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Text
+        redact_ssn:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Redact Ssn
+          default: true
+        redact_credit_card:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Redact Credit Card
+          default: true
+        redact_phone:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Redact Phone
+          default: true
+        redact_person:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Redact Person
+          default: true
+        elements:
+          anyOf:
+          - items:
+              additionalProperties: true
+              type: object
+            type: array
+          - type: 'null'
+          title: Elements
+      type: object
+      title: PIIScanRequest
+    PairComparisonModel:
+      properties:
+        subject:
+          type: string
+          title: Subject
+        attribute:
+          type: string
+          title: Attribute
+        status:
+          type: string
+          title: Status
+        left_doc_id:
+          type: string
+          title: Left Doc Id
+        left_fact:
+          $ref: '#/components/schemas/FactModel'
+        right_doc_id:
+          type: string
+          title: Right Doc Id
+        right_fact:
+          $ref: '#/components/schemas/FactModel'
+        difference_summary:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Difference Summary
+        details:
+          additionalProperties: true
+          type: object
+          title: Details
+      type: object
+      required:
+      - subject
+      - attribute
+      - status
+      - left_doc_id
+      - left_fact
+      - right_doc_id
+      - right_fact
+      title: PairComparisonModel
+    PassagePayload:
+      properties:
+        chunk_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Chunk Id
+        text:
+          type: string
+          title: Text
+        page_number:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Page Number
+      type: object
+      required:
+      - text
+      title: PassagePayload
+    PositionSchema:
+      properties:
+        page:
+          type: integer
+          title: Page
+        bbox:
+          anyOf:
+          - items:
+              type: number
+            type: array
+          - type: 'null'
+          title: Bbox
+        char_start:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Char Start
+        char_end:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Char End
+        section:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Section
+        element_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Element Id
+      type: object
+      required:
+      - page
+      title: PositionSchema
+    QuantityNormalizeRequest:
+      properties:
+        cell_text:
+          type: string
+          title: Cell Text
+        target_currency:
+          type: string
+          title: Target Currency
+          default: USD
+        exchange_rate:
+          type: number
+          title: Exchange Rate
+          default: 1.0
+      type: object
+      required:
+      - cell_text
+      title: QuantityNormalizeRequest
+    QueryDecomposeRequest:
+      properties:
+        query:
+          type: string
+          title: Query
+      type: object
+      required:
+      - query
+      title: QueryDecomposeRequest
+    QueryRequest:
+      properties:
+        question:
+          type: string
+          maxLength: 4000
+          minLength: 1
+          title: Question
+        doc_ids:
+          anyOf:
+          - items:
+              type: string
+              format: uuid
+            type: array
+          - type: 'null'
+          title: Doc Ids
+          description: Filter to specific documents. None = all tenant docs.
+        doc_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Doc Id
+          description: Single document ID alias (supports AEL workflows).
+        top_k:
+          anyOf:
+          - type: integer
+            maximum: 50.0
+            minimum: 1.0
+          - type: 'null'
+          title: Top K
+        session_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Session Id
+        include_citations:
+          type: boolean
+          title: Include Citations
+          default: true
+        stream:
+          type: boolean
+          title: Stream
+          default: false
+        block_types:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/BlockTypeEnum'
+            type: array
+          - type: 'null'
+          title: Block Types
+        language:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Language
+        export_agent:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Export Agent
+        export_format:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Export Format
+          default: json
+        api_key:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Api Key
+        model:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Model
+      type: object
+      required:
+      - question
+      title: QueryRequest
+    QueryResponse:
+      properties:
+        answer:
+          type: string
+          title: Answer
+        citations:
+          items: {}
+          type: array
+          title: Citations
+          default: []
+        confidence:
+          title: Confidence
+        confidence_score:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Confidence Score
+        session_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Session Id
+        tokens_used:
+          anyOf:
+          - additionalProperties:
+              type: integer
+            type: object
+          - type: integer
+          title: Tokens Used
+        retrieval_latency_ms:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Retrieval Latency Ms
+        total_latency_ms:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Total Latency Ms
+        cached:
+          type: boolean
+          title: Cached
+          default: false
+        model:
+          type: string
+          title: Model
+        question:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Question
+        grounded:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Grounded
+        confidence_label:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Confidence Label
+        query_type:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Query Type
+        weights_used:
+          anyOf:
+          - additionalProperties:
+              type: number
+            type: object
+          - type: 'null'
+          title: Weights Used
+        table_direct:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Table Direct
+        latency_ms:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Latency Ms
+      type: object
+      required:
+      - answer
+      - confidence
+      - tokens_used
+      - model
+      title: QueryResponse
+    ReadinessResponse:
+      properties:
+        status:
+          type: string
+          title: Status
+        dependencies:
+          additionalProperties:
+            type: string
+          type: object
+          title: Dependencies
+      type: object
+      required:
+      - status
+      - dependencies
+      title: ReadinessResponse
+    ReopenRequest:
+      properties:
+        expected_version:
+          type: integer
+          minimum: 1.0
+          title: Expected Version
+        rationale:
+          type: string
+          maxLength: 2000
+          minLength: 5
+          title: Rationale
+          description: Administrative reopening justification
+      type: object
+      required:
+      - expected_version
+      - rationale
+      title: ReopenRequest
+    ReviewItemResponse:
+      properties:
+        review_id:
+          type: string
+          title: Review Id
+        tenant_id:
+          type: string
+          title: Tenant Id
+        candidate_id:
+          type: string
+          title: Candidate Id
+        candidate_type:
+          type: string
+          title: Candidate Type
+        document_id:
+          type: string
+          title: Document Id
+        status:
+          type: string
+          title: Status
+        version:
+          type: integer
+          title: Version
+        assigned_to:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Assigned To
+        candidate_data:
+          additionalProperties: true
+          type: object
+          title: Candidate Data
+        current_revision_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Current Revision Id
+        created_at:
+          type: string
+          title: Created At
+        updated_at:
+          type: string
+          title: Updated At
+      type: object
+      required:
+      - review_id
+      - tenant_id
+      - candidate_id
+      - candidate_type
+      - document_id
+      - status
+      - version
+      - candidate_data
+      - created_at
+      - updated_at
+      title: ReviewItemResponse
+    ReviewQueueResponse:
+      properties:
+        items:
+          items:
+            $ref: '#/components/schemas/ReviewItemResponse'
+          type: array
+          title: Items
+        next_cursor:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Next Cursor
+      type: object
+      required:
+      - items
+      title: ReviewQueueResponse
+    SpeechParseRequest:
+      properties:
+        filename:
+          type: string
+          title: Filename
+          default: audio_sample.wav
+        audio_base64:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Audio Base64
+      type: object
+      title: SpeechParseRequest
+    SubmitJobRequest:
+      properties:
+        job_type:
+          type: string
+          title: Job Type
+          description: Operation type (ingest_document, index_document, extract_facts,
+            compare_documents, generate_report)
+        resource_id:
+          type: string
+          maxLength: 500
+          minLength: 1
+          title: Resource Id
+          description: Target document or resource ID
+        payload:
+          additionalProperties: true
+          type: object
+          title: Payload
+          description: Safe input parameters
+      type: object
+      required:
+      - job_type
+      - resource_id
+      title: SubmitJobRequest
+    TenantStats:
+      properties:
+        tenant_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: string
+          title: Tenant Id
+        doc_count:
+          type: integer
+          title: Doc Count
+        chunk_count:
+          type: integer
+          title: Chunk Count
+        total_tokens_used:
+          type: integer
+          title: Total Tokens Used
+        total_cost_usd:
+          type: number
+          title: Total Cost Usd
+        cache_hit_rate:
+          type: number
+          title: Cache Hit Rate
+        avg_query_latency_ms:
+          type: number
+          title: Avg Query Latency Ms
+      type: object
+      required:
+      - tenant_id
+      - doc_count
+      - chunk_count
+      - total_tokens_used
+      - total_cost_usd
+      - cache_hit_rate
+      - avg_query_latency_ms
+      title: TenantStats
+    TokenUsageResponse:
+      properties:
+        period:
+          type: string
+          title: Period
+        total_in_tokens:
+          type: integer
+          title: Total In Tokens
+        total_out_tokens:
+          type: integer
+          title: Total Out Tokens
+        total_cost_usd:
+          type: number
+          title: Total Cost Usd
+        query_count:
+          type: integer
+          title: Query Count
+        cache_hits:
+          type: integer
+          title: Cache Hits
+        avg_latency_ms:
+          type: number
+          title: Avg Latency Ms
+      type: object
+      required:
+      - period
+      - total_in_tokens
+      - total_out_tokens
+      - total_cost_usd
+      - query_count
+      - cache_hits
+      - avg_latency_ms
+      title: TokenUsageResponse
+    UnifiedMathRequest:
+      properties:
+        document:
+          additionalProperties: true
+          type: object
+          title: Document
+      type: object
+      required:
+      - document
+      title: UnifiedMathRequest
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    VerificationCreate:
+      properties:
+        doc_id:
+          type: string
+          title: Doc Id
+        page:
+          type: integer
+          title: Page
+        claim:
+          type: string
+          title: Claim
+        is_correct:
+          type: boolean
+          title: Is Correct
+        element_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Element Id
+        user_id:
+          type: string
+          title: User Id
+          default: default
+      type: object
+      required:
+      - doc_id
+      - page
+      - claim
+      - is_correct
+      title: VerificationCreate
+    WebhookCreate:
+      properties:
+        url:
+          type: string
+          title: Url
+        secret_token:
+          type: string
+          title: Secret Token
+        topic_pattern:
+          type: string
+          title: Topic Pattern
+          default: document.*
+      type: object
+      required:
+      - url
+      - secret_token
+      title: WebhookCreate
+    src__api__models__HealthResponse:
+      properties:
+        status:
+          type: string
+          title: Status
+        checks:
+          additionalProperties:
+            type: string
+          type: object
+          title: Checks
+      type: object
+      required:
+      - status
+      - checks
+      title: HealthResponse
+    src__api__routers__health__HealthResponse:
+      properties:
+        status:
+          type: string
+          title: Status
+      type: object
+      required:
+      - status
+      title: HealthResponse
+  securitySchemes:
+    HTTPBearer:
+      type: http
+      scheme: bearer
+    APIKeyHeader:
+      type: apiKey
+      in: header
+      name: X-API-Key

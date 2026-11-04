@@ -1,0 +1,21 @@
+{
+  "framework": "Next.js 16.4.3 (Turbopack)",
+  "node_version": "20.x",
+  "react_version": "19.3.0",
+  "routes": [
+    "/",
+    "/_not-found",
+    "/ask",
+    "/compare",
+    "/documents",
+    "/documents/[documentId]",
+    "/reviews",
+    "/reviews/[reviewId]"
+  ],
+  "static_routes": 6,
+  "partial_prerender_routes": 2,
+  "build_status": "SUCCESS",
+  "typescript_errors": 0,
+  "eslint_errors": 0,
+  "eslint_warnings": 0
+}

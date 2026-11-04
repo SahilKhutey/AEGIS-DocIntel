@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, use, useRef } from "react";
+import React, { useState, useEffect, useCallback, use, useRef } from "react";
 import Link from "next/link";
 import {
   ReviewItemSchema,
@@ -53,7 +53,7 @@ function ReviewDetailContent({ params }: PageProps) {
   const [reopenRationale, setReopenRationale] = useState("");
   const [isReopening, setIsReopening] = useState(false);
 
-  async function loadReview() {
+  const loadReview = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
@@ -79,11 +79,11 @@ function ReviewDetailContent({ params }: PageProps) {
     } finally {
       setLoading(false);
     }
-  }
+  }, [reviewId]);
 
   useEffect(() => {
     loadReview();
-  }, [reviewId]);
+  }, [loadReview]);
 
   async function handleClaim() {
     if (!item) return;

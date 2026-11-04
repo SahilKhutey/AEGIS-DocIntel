@@ -1,0 +1,24 @@
+{
+  "status": "PASS",
+  "compatibility_rate": 1.0,
+  "checks": [
+    {
+      "schema": "DocumentResponse",
+      "frontend_target": "DocumentSchema",
+      "compatible": true,
+      "missing_fields": []
+    },
+    {
+      "schema": "AnswerResponse",
+      "frontend_target": "AnswerSchema",
+      "compatible": true,
+      "missing_fields": []
+    },
+    {
+      "schema": "QueryResponse",
+      "frontend_target": "QueryResponseSchema",
+      "compatible": true,
+      "missing_fields": []
+    }
+  ]
+}

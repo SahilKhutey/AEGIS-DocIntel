@@ -1,8 +1,8 @@
 name: Frontend CI Pipeline
 
-'on':
+on:
   push:
-    branches: [ master, main, remediation/*, feature/* ]
+    branches: [ master, main, remediation/*, feature/*, wp-* ]
     paths:
       - 'web/**'
       - '.github/workflows/frontend-ci.yml'
@@ -16,9 +16,13 @@ name: Frontend CI Pipeline
 permissions:
   contents: read
 
+concurrency:
+  group: frontend-ci-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   frontend-quality:
-    name: Frontend Quality Gate (TypeScript, Vitest, Build)
+    name: Frontend Quality Gate (Lint, TypeScript, Vitest, Build)
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -31,12 +35,15 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: "20"
           cache: "npm"
           cache-dependency-path: web/package-lock.json
 
       - name: Install dependencies
         run: npm ci
+
+      - name: Lint check
+        run: npm run lint
 
       - name: TypeScript typecheck
         run: npx tsc --noEmit
