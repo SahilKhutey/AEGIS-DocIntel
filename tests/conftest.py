@@ -1,4 +1,11 @@
 import os
+
+# Enforce offline mode across all test suites to prevent network hangs on Windows
+os.environ["AEGIS_OFFLINE"] = "1"
+os.environ["HF_HUB_OFFLINE"] = "1"
+os.environ["TRANSFORMERS_OFFLINE"] = "1"
+os.environ["TOKENIZERS_PARALLELISM"] = "false"
+
 import sys
 from pathlib import Path
 

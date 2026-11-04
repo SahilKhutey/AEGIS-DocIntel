@@ -768,6 +768,8 @@ class ServiceContainer:
 
         # ── Embedding Model ──────────────────────────────────────────────
         try:
+            if os.environ.get("PYTEST_CURRENT_TEST") or os.environ.get("AEGIS_OFFLINE", "1") == "1":
+                raise RuntimeError("Offline test mode: bypassing SentenceTransformer download")
             from sentence_transformers import SentenceTransformer
             self.embedding_model = SentenceTransformer(
                 self.settings.embeddings.text_model,
