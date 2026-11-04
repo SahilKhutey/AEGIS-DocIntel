@@ -1,0 +1,3 @@
+condition_id,finding_id,description,severity,scope,mitigation,owner,deadline,release_restriction,verification,status,approver
+COND-001,AEGIS-FIND-010,Air-gapped deployments must use pre-cached Whisper weights or local deterministic VAD segmenter,LOW,Air-gapped speech ingestion only,Fallback deterministic VAD segmenter active by default,ML Platform Lead,v1.1.0,None for standard deployments; air-gapped documented,test_speech_loader_direct,CONTROLLED,Release Owner
+COND-002,N/A,Production database encryption keys and JWT secrets must be injected via secure KMS,LOW,Production deployment environment,Environment variable validation enforced on startup,DevOps Lead,Launch Day,Production validation flag enforced,test_runtime_configuration,CONTROLLED,Security Lead

@@ -43,6 +43,10 @@ audit:
       enabled: true
       required: true
       timeout_seconds: 180
+    - id: "release_audit"
+      enabled: true
+      required: true
+      timeout_seconds: 180
   evidence:
     enabled: true
     format: "json"

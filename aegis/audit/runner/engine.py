@@ -34,6 +34,7 @@ from aegis.audit.suites.processing import ProcessingAuditSuite
 from aegis.audit.suites.security import SecurityAuditSuite
 from aegis.audit.suites.security_reliability import SecurityReliabilityAuditSuite
 from aegis.audit.suites.unit import UnitAuditSuite
+from aegis.audit.suites.release_audit import ReleaseAuditSuite
 from aegis.audit.traceability.environment_collector import EnvironmentCollector
 from aegis.audit.traceability.git_collector import GitCollector
 from aegis.audit.traceability.provenance_builder import ProvenanceBuilder
@@ -111,6 +112,7 @@ class AuditRunner:
             ProcessingAuditSuite,
             IntelligenceAuditSuite,
             SecurityReliabilityAuditSuite,
+            ReleaseAuditSuite,
         ]:
             instance = suite_cls()
             if not self.registry.has(instance.suite_id):

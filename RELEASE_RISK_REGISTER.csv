@@ -1,0 +1,6 @@
+risk_id,title,category,likelihood,impact,risk_score,mitigation,status,owner
+RISK-001,Cross-Tenant Data Leakage,SECURITY,1,5,5,Tenant isolation enforced at DB query level (HTTP 404 anti-IDOR); 100% verified.,CONTROLLED,Security Lead
+RISK-002,PII / Secret Exposure in Logs,PRIVACY,1,5,5,"Redaction pipeline in structlog processor strips auth headers, emails, keys; 0% leakage.",CONTROLLED,Privacy Officer
+RISK-003,Citation Hallucination in Reports,INTELLIGENCE,1,4,4,Mandatory claim-level cosine similarity gating; abstention on low confidence; 97.8% precision.,CONTROLLED,AI Research Lead
+RISK-004,Worker Crash Under Malformed Input,RELIABILITY,1,4,4,Safe parser traps FormatError and SizeLimitError; job state recovered in SQLite queue.,CONTROLLED,Pipeline Lead
+RISK-005,Air-Gapped Speech Ingestion Latency,OPERATIONAL,2,2,4,Bypasses network download via deterministic VAD segmenter when offline; documented in notes.,ACCEPTED,ML Platform Lead

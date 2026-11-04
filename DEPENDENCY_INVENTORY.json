@@ -1,0 +1,348 @@
+{
+  "product": "AEGIS-DocIntel",
+  "release_version": "1.0.0-rc.1",
+  "python_runtime": "3.12.10",
+  "node_runtime": "20.x / 22.x",
+  "python_packages_count": 41,
+  "node_packages_count": 18,
+  "python_packages": [
+    {
+      "name": "pydantic",
+      "version": "2.6.0",
+      "constraint": "pydantic>=2.6.0",
+      "source_file": "requirements-core.txt"
+    },
+    {
+      "name": "pydantic-settings",
+      "version": "2.2.0",
+      "constraint": "pydantic-settings>=2.2.0",
+      "source_file": "requirements-core.txt"
+    },
+    {
+      "name": "pyyaml",
+      "version": "6.0.1",
+      "constraint": "pyyaml>=6.0.1",
+      "source_file": "requirements-core.txt"
+    },
+    {
+      "name": "fastapi",
+      "version": "0.110.0",
+      "constraint": "fastapi>=0.110.0",
+      "source_file": "requirements-core.txt"
+    },
+    {
+      "name": "starlette",
+      "version": "0.36.0",
+      "constraint": "starlette>=0.36.0",
+      "source_file": "requirements-core.txt"
+    },
+    {
+      "name": "uvicorn",
+      "version": "0.27.0",
+      "constraint": "uvicorn[standard]>=0.27.0",
+      "source_file": "requirements-core.txt"
+    },
+    {
+      "name": "python-multipart",
+      "version": "0.0.9",
+      "constraint": "python-multipart>=0.0.9",
+      "source_file": "requirements-core.txt"
+    },
+    {
+      "name": "httpx",
+      "version": "0.27.0",
+      "constraint": "httpx>=0.27.0",
+      "source_file": "requirements-core.txt"
+    },
+    {
+      "name": "pymupdf",
+      "version": "1.24.0",
+      "constraint": "pymupdf>=1.24.0",
+      "source_file": "requirements-core.txt"
+    },
+    {
+      "name": "pdfplumber",
+      "version": "0.10.0",
+      "constraint": "pdfplumber>=0.10.0",
+      "source_file": "requirements-core.txt"
+    },
+    {
+      "name": "pillow",
+      "version": "10.2.0",
+      "constraint": "pillow>=10.2.0",
+      "source_file": "requirements-core.txt"
+    },
+    {
+      "name": "python-docx",
+      "version": "1.1.0",
+      "constraint": "python-docx>=1.1.0",
+      "source_file": "requirements-core.txt"
+    },
+    {
+      "name": "python-pptx",
+      "version": "0.6.23",
+      "constraint": "python-pptx>=0.6.23",
+      "source_file": "requirements-core.txt"
+    },
+    {
+      "name": "openpyxl",
+      "version": "3.1.2",
+      "constraint": "openpyxl>=3.1.2",
+      "source_file": "requirements-core.txt"
+    },
+    {
+      "name": "openai",
+      "version": "1.30.0",
+      "constraint": "openai>=1.30.0",
+      "source_file": "requirements-core.txt"
+    },
+    {
+      "name": "anthropic",
+      "version": "0.25.0",
+      "constraint": "anthropic>=0.25.0",
+      "source_file": "requirements-core.txt"
+    },
+    {
+      "name": "numpy",
+      "version": "1.26.0",
+      "constraint": "numpy>=1.26.0",
+      "source_file": "requirements-core.txt"
+    },
+    {
+      "name": "scipy",
+      "version": "1.12.0",
+      "constraint": "scipy>=1.12.0",
+      "source_file": "requirements-core.txt"
+    },
+    {
+      "name": "networkx",
+      "version": "3.2",
+      "constraint": "networkx>=3.2",
+      "source_file": "requirements-core.txt"
+    },
+    {
+      "name": "scikit-learn",
+      "version": "1.4.0",
+      "constraint": "scikit-learn>=1.4.0",
+      "source_file": "requirements-core.txt"
+    },
+    {
+      "name": "prometheus-client",
+      "version": "0.20.0",
+      "constraint": "prometheus-client>=0.20.0",
+      "source_file": "requirements-core.txt"
+    },
+    {
+      "name": "structlog",
+      "version": "24.1.0",
+      "constraint": "structlog>=24.1.0",
+      "source_file": "requirements-core.txt"
+    },
+    {
+      "name": "loguru",
+      "version": "0.7.2",
+      "constraint": "loguru>=0.7.2",
+      "source_file": "requirements-core.txt"
+    },
+    {
+      "name": "pyjwt",
+      "version": "2.9.0",
+      "constraint": "PyJWT[crypto]>=2.9.0",
+      "source_file": "requirements-core.txt"
+    },
+    {
+      "name": "passlib",
+      "version": "1.7.4",
+      "constraint": "passlib[bcrypt]>=1.7.4",
+      "source_file": "requirements-core.txt"
+    },
+    {
+      "name": "bcrypt",
+      "version": "4.1.0",
+      "constraint": "bcrypt>=4.1.0",
+      "source_file": "requirements-core.txt"
+    },
+    {
+      "name": "tiktoken",
+      "version": "0.6.0",
+      "constraint": "tiktoken>=0.6.0",
+      "source_file": "requirements-core.txt"
+    },
+    {
+      "name": "pytest",
+      "version": "8.0.0",
+      "constraint": "pytest>=8.0.0",
+      "source_file": "requirements-dev.txt"
+    },
+    {
+      "name": "pytest-asyncio",
+      "version": "0.24.0",
+      "constraint": "pytest-asyncio>=0.24.0",
+      "source_file": "requirements-dev.txt"
+    },
+    {
+      "name": "pytest-cov",
+      "version": "5.0.0",
+      "constraint": "pytest-cov>=5.0.0",
+      "source_file": "requirements-dev.txt"
+    },
+    {
+      "name": "hypothesis",
+      "version": "6.98.0",
+      "constraint": "hypothesis>=6.98.0",
+      "source_file": "requirements-dev.txt"
+    },
+    {
+      "name": "ruff",
+      "version": "0.6.0",
+      "constraint": "ruff>=0.6.0",
+      "source_file": "requirements-dev.txt"
+    },
+    {
+      "name": "mypy",
+      "version": "1.11.0",
+      "constraint": "mypy>=1.11.0",
+      "source_file": "requirements-dev.txt"
+    },
+    {
+      "name": "bandit",
+      "version": "1.7.8",
+      "constraint": "bandit>=1.7.8",
+      "source_file": "requirements-dev.txt"
+    },
+    {
+      "name": "pip-audit",
+      "version": "2.7.0",
+      "constraint": "pip-audit>=2.7.0",
+      "source_file": "requirements-dev.txt"
+    },
+    {
+      "name": "pytesseract",
+      "version": "0.3.10",
+      "constraint": "pytesseract>=0.3.10",
+      "source_file": "requirements-dev.txt"
+    },
+    {
+      "name": "sentence-transformers",
+      "version": "2.7.0",
+      "constraint": "sentence-transformers>=2.7.0",
+      "source_file": "requirements-ml.txt"
+    },
+    {
+      "name": "faiss-cpu",
+      "version": "1.7.4",
+      "constraint": "faiss-cpu>=1.7.4",
+      "source_file": "requirements-ml.txt"
+    },
+    {
+      "name": "redis",
+      "version": "5.0.0",
+      "constraint": "redis>=5.0.0",
+      "source_file": "requirements-infra.txt"
+    },
+    {
+      "name": "opentelemetry-api",
+      "version": "1.24.0",
+      "constraint": "opentelemetry-api>=1.24.0",
+      "source_file": "requirements-infra.txt"
+    },
+    {
+      "name": "opentelemetry-sdk",
+      "version": "1.24.0",
+      "constraint": "opentelemetry-sdk>=1.24.0",
+      "source_file": "requirements-infra.txt"
+    }
+  ],
+  "node_packages": [
+    {
+      "name": "next",
+      "version": "16.4.3",
+      "type": "production"
+    },
+    {
+      "name": "react",
+      "version": "19.3.0",
+      "type": "production"
+    },
+    {
+      "name": "react-dom",
+      "version": "19.3.0",
+      "type": "production"
+    },
+    {
+      "name": "zod",
+      "version": "^4.6.7",
+      "type": "production"
+    },
+    {
+      "name": "@playwright/test",
+      "version": "^1.64.1",
+      "type": "development"
+    },
+    {
+      "name": "@tailwindcss/turbopack",
+      "version": "^4",
+      "type": "development"
+    },
+    {
+      "name": "@testing-library/dom",
+      "version": "^10.4.2",
+      "type": "development"
+    },
+    {
+      "name": "@testing-library/jest-dom",
+      "version": "^7.0.1",
+      "type": "development"
+    },
+    {
+      "name": "@testing-library/react",
+      "version": "^16.3.3",
+      "type": "development"
+    },
+    {
+      "name": "@types/node",
+      "version": "^22.20.5",
+      "type": "development"
+    },
+    {
+      "name": "@types/react",
+      "version": "^19",
+      "type": "development"
+    },
+    {
+      "name": "@types/react-dom",
+      "version": "^19",
+      "type": "development"
+    },
+    {
+      "name": "eslint",
+      "version": "^9",
+      "type": "development"
+    },
+    {
+      "name": "eslint-config-next",
+      "version": "16.4.3",
+      "type": "development"
+    },
+    {
+      "name": "jsdom",
+      "version": "^30.1.3",
+      "type": "development"
+    },
+    {
+      "name": "tailwindcss",
+      "version": "^4",
+      "type": "development"
+    },
+    {
+      "name": "typescript",
+      "version": "^5",
+      "type": "development"
+    },
+    {
+      "name": "vitest",
+      "version": "^5.0.5",
+      "type": "development"
+    }
+  ]
+}

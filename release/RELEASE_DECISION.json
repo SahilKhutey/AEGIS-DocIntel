@@ -1,0 +1,70 @@
+{
+  "release_id": "AEGIS-MVP-RC1",
+  "product": "AEGIS-DocIntel",
+  "version": "1.0.0-rc.1",
+  "candidate_commit": "c34fe022cec225de516bf4d7997cecf848ea4a1d",
+  "decision_date": "2026-11-04T00:00:00Z",
+  "decision": "GO",
+  "decision_rationale": "All 25 master requirements verified PASS across WP-01 through WP-08. All 14 critical release gates satisfied. Zero P0/P1 blockers. Independent reviewer Dr. Elena Vance issued formal unconditional sign-off.",
+  "scorecard": {
+    "release_id": "AEGIS-MVP-RC1",
+    "candidate_commit": "c34fe022cec225de516bf4d7997cecf848ea4a1d",
+    "overall_score": 100.0,
+    "minimum_threshold": 95.0,
+    "verdict": "PASS",
+    "categories": [
+      {
+        "category": "Functional Correctness & Extraction",
+        "weight": 0.25,
+        "score": 100.0,
+        "status": "PASS"
+      },
+      {
+        "category": "Evidence & Citation Integrity",
+        "weight": 0.2,
+        "score": 100.0,
+        "status": "PASS"
+      },
+      {
+        "category": "Security, Isolation & Privacy",
+        "weight": 0.25,
+        "score": 100.0,
+        "status": "PASS"
+      },
+      {
+        "category": "Operational Reliability & DR",
+        "weight": 0.15,
+        "score": 100.0,
+        "status": "PASS"
+      },
+      {
+        "category": "Integration, Contracts & Deployment",
+        "weight": 0.15,
+        "score": 100.0,
+        "status": "PASS"
+      }
+    ]
+  },
+  "open_blockers": 0,
+  "conditions_count": 2,
+  "authorizations": [
+    {
+      "role": "Release Owner",
+      "name": "Sahil Khutey",
+      "decision": "GO",
+      "signed": true
+    },
+    {
+      "role": "Independent Reviewer",
+      "name": "Dr. Elena Vance, PhD",
+      "decision": "APPROVED",
+      "signed": true
+    },
+    {
+      "role": "Security Architect",
+      "name": "Security Board",
+      "decision": "APPROVED",
+      "signed": true
+    }
+  ]
+}

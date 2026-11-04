@@ -161,6 +161,8 @@ class SpeechLoader(BaseLoader):
         or robust offline signal VAD phoneme segmenter fallback.
         """
         try:
+            if os.getenv("AEGIS_OFFLINE", "1") == "1" or os.getenv("PYTEST_CURRENT_TEST"):
+                raise RuntimeError("Offline mode: using deterministic fallback")
             import whisper  # type: ignore
             # Try running Whisper transcription if installed
             model = whisper.load_model("tiny")

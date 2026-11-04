@@ -1,0 +1,76 @@
+{
+  "register_version": "1.0.0",
+  "release_id": "AEGIS-MVP-RC1",
+  "created_at": "2026-11-04T00:00:00Z",
+  "holdout_compromised": false,
+  "holdout_integrity_verified": true,
+  "datasets": [
+    {
+      "dataset_id": "wp04_corpus_v1",
+      "name": "AEGIS Public Corpus v1",
+      "version": "1.0.0",
+      "path": "audit/public-corpus-v1/manifest.csv",
+      "sha256": "5497e4fe45fe9fbb033325b8b4d1d9341e837c6f9d78f51e778351d86e401679",
+      "type": "PUBLIC_CORPUS",
+      "records_count": 120,
+      "licence_verified": true,
+      "source_verified": true
+    },
+    {
+      "dataset_id": "wp04_checksum_manifest",
+      "name": "Corpus Checksum Manifest",
+      "version": "1.0.0",
+      "path": "artifacts/corpus/manifests/checksum_manifest.json",
+      "sha256": "c3f61c097f4a6a55ffae7aabe8cabb976216d0f5a108b89e11076e17918a6a1b",
+      "type": "CHECKSUM_MANIFEST",
+      "licence_verified": true
+    },
+    {
+      "dataset_id": "wp04_partition_manifest",
+      "name": "Corpus Train/Val/Holdout Partition Manifest",
+      "version": "1.0.0",
+      "path": "artifacts/corpus/manifests/partition_manifest.json",
+      "sha256": "0d200fe203d26529ed7b873d543e5b360e67ce153bc82ec2200a1dd79c52ef30",
+      "type": "PARTITION_MANIFEST",
+      "holdout_partition_id": "HOLDOUT-SET-001",
+      "leakage_checked": true
+    },
+    {
+      "dataset_id": "golden_questions",
+      "name": "WP-06 Golden Questions & Citations Dataset",
+      "version": "1.0.0",
+      "path": "data/intelligence/golden_questions.jsonl",
+      "sha256": "647784754ebc6ddd1408c7826934b96a550d4bbf4964c1b57a44dbcfab7092d4",
+      "type": "GOLDEN_QA",
+      "records_count": 45,
+      "human_verified": true
+    },
+    {
+      "dataset_id": "intelligence_eval_manifest",
+      "name": "Intelligence Evaluation Manifest",
+      "version": "1.0.0",
+      "path": "evaluation/mvp-golden/manifest.json",
+      "sha256": "5b3dbb7bd8c2a71c452b68753b99e39957861e87fe1a4f81ab6425b938f5aeab",
+      "type": "EVALUATION_MANIFEST"
+    },
+    {
+      "dataset_id": "privacy_golden_dataset",
+      "name": "WP-07 Privacy Redaction Golden Fixtures",
+      "version": "1.0.0",
+      "path": "data/security/privacy_golden_dataset.jsonl",
+      "sha256": "0c0d698cde7d4a896689e8f95528b8fd5199e270588bb96fbda22cc057064831",
+      "type": "SECURITY_PRIVACY_FIXTURE",
+      "records_count": 25,
+      "synthetic": true
+    },
+    {
+      "dataset_id": "e2e_workflow_corpus",
+      "name": "WP-08 End-to-End Test Corpus",
+      "version": "1.0.0",
+      "path": "WP08_END_TO_END_TEST_CORPUS.md",
+      "sha256": "1aa25ee71e078f3bd6afe67214baf40036a9f2fa7143d5d4b8986fc923463397",
+      "type": "INTEGRATION_E2E_CORPUS",
+      "scenarios_count": 10
+    }
+  ]
+}

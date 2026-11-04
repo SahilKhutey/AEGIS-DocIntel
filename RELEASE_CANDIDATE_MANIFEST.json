@@ -1,0 +1,40 @@
+{
+  "release_id": "AEGIS-MVP-RC1",
+  "product": "AEGIS-DocIntel",
+  "version": "1.0.0-rc.1",
+  "git": {
+    "repository": "SahilKhutey/AEGIS-DocIntel",
+    "commit_sha": "c34fe022cec225de516bf4d7997cecf848ea4a1d",
+    "branch": "wp-09-release-audit",
+    "baseline_anchor": "7c05522643e503396795d99e381d201268ebe7fe",
+    "working_tree_clean": true
+  },
+  "frontend": {
+    "framework": "Next.js 16.0.7 / React 19",
+    "version": "0.1.0",
+    "build_id": "prod-build-20261104-01",
+    "build_status": "PASS",
+    "routes_count": 10
+  },
+  "backend": {
+    "framework": "FastAPI / Python 3.12.10",
+    "version": "0.1.0-alpha.1",
+    "endpoints_count": 76,
+    "openapi_version": "3.1.0"
+  },
+  "database": {
+    "schema_version": "v1.4.0-mvp",
+    "engine": "SQLite / WAL mode",
+    "migration_status": "APPLIED"
+  },
+  "datasets": {
+    "corpus_version": "wp04-corpus-v1",
+    "golden_questions_version": "wp06-golden-qa-v1",
+    "evaluation_manifest": "eval-manifest-v1.0.0",
+    "holdout_partition_id": "HOLDOUT-SET-001",
+    "holdout_compromised": false
+  },
+  "configuration_hash": "e47ef07f63e6000a720ee053466d839bc49f8a09b150b4d45ba4438738cda976",
+  "created_at": "2026-11-04T00:00:00Z",
+  "status": "FROZEN"
+}

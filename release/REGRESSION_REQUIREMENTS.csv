@@ -1,0 +1,7 @@
+finding_id,original_severity,fix_commit,regression_test,candidate_result,evidence,reviewer
+AEGIS-SEC-001,P0,c34fe022cec225de516bf4d7997cecf848ea4a1d,tests/security/test_tenant_route_isolation.py::test_cross_tenant_document_access_returns_404,PASS,WP-07-Security-Reliability-Acceptance.md,Security Lead
+AEGIS-PRIV-002,P0,c34fe022cec225de516bf4d7997cecf848ea4a1d,tests/security/test_privacy_redaction.py::test_zero_output_leakage_on_fixtures,PASS,WP-07-Security-Reliability-Acceptance.md,Privacy Officer
+AEGIS-UX-003,P1,c34fe022cec225de516bf4d7997cecf848ea4a1d,tests/integration/frontend_ci/test_frontend_ci_suite.py::test_frontend_linter_and_typecheck,PASS,artifacts/integration/frontend_ci/FRONTEND_CI_TEST_REPORT.json,Frontend Lead
+AEGIS-API-004,P1,c34fe022cec225de516bf4d7997cecf848ea4a1d,tests/integration/api_contract/test_api_contract_suite.py::test_openapi_spec_against_contract,PASS,artifacts/integration/api_contract/API_CONTRACT_TEST_REPORT.json,API Architect
+AEGIS-MATH-005,P1,c34fe022cec225de516bf4d7997cecf848ea4a1d,tests/test_master_unified_math_engine.py::test_division_by_zero_and_singular_matrices,PASS,WP-03-Remediation-Acceptance.md,Math Lead
+AEGIS-CORP-006,P0,c34fe022cec225de516bf4d7997cecf848ea4a1d,tests/corpus/test_leakage.py::test_holdout_contamination_guard,PASS,artifacts/corpus/reports/holdout_leakage_report.json,Data Governance

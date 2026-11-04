@@ -1,0 +1,141 @@
+{
+  "release_id": "AEGIS-MVP-RC1",
+  "candidate_commit": "c34fe022cec225de516bf4d7997cecf848ea4a1d",
+  "manifest_version": "1.0",
+  "total_evidence_files": 19,
+  "evidence": [
+    {
+      "evidence_id": "EV-RELEASE_SCOPE_MD",
+      "file": "RELEASE_SCOPE.md",
+      "sha256": "56c32dc3ab82f54d3a83bba3051b4933f41008eaeaf8827a30ffe259ab2a9972",
+      "result": "PASS",
+      "verified": true
+    },
+    {
+      "evidence_id": "EV-RELEASE_CANDIDATE_MANIFEST_JSON",
+      "file": "RELEASE_CANDIDATE_MANIFEST.json",
+      "sha256": "b4c1a8a87cf7addf48ad21d301b23f33ce8b5ea1f39f591c1405dc41e5075464",
+      "result": "PASS",
+      "verified": true
+    },
+    {
+      "evidence_id": "EV-DEPENDENCY_INVENTORY_JSON",
+      "file": "DEPENDENCY_INVENTORY.json",
+      "sha256": "83eda6b5e703570b3320e61d434fba4db9db95f73a673869332b726510731f3c",
+      "result": "PASS",
+      "verified": true
+    },
+    {
+      "evidence_id": "EV-SBOM_JSON",
+      "file": "SBOM.json",
+      "sha256": "bb75b2dd50d087ec74a2d143cb58123c6eafeaf28f3bebe4cf0685bc71ecf448",
+      "result": "PASS",
+      "verified": true
+    },
+    {
+      "evidence_id": "EV-RELEASE_FREEZE_REPORT_MD",
+      "file": "RELEASE_FREEZE_REPORT.md",
+      "sha256": "bc04454869c6ac1d6b4b1a15a9892b210452662428e36cbac9fd61d340f5c152",
+      "result": "PASS",
+      "verified": true
+    },
+    {
+      "evidence_id": "EV-RELEASE_CONFIGURATION_REGISTER_MD",
+      "file": "RELEASE_CONFIGURATION_REGISTER.md",
+      "sha256": "d50a172f87e068fff8fc8aa85580d146b6ad65fb6c146a06f6f6b71e152f5915",
+      "result": "PASS",
+      "verified": true
+    },
+    {
+      "evidence_id": "EV-DATASET_VERSION_REGISTER_JSON",
+      "file": "DATASET_VERSION_REGISTER.json",
+      "sha256": "834035f1436f5cf1e679eb255011439e3013180cc08e422d0787c707bfd23d92",
+      "result": "PASS",
+      "verified": true
+    },
+    {
+      "evidence_id": "EV-FINAL_VERIFICATION_MATRIX_CSV",
+      "file": "FINAL_VERIFICATION_MATRIX.csv",
+      "sha256": "5064eac89ec994fa4bfcf28d1d5a15472a53fdd9f015cef5614bb9c95a1ffb1f",
+      "result": "PASS",
+      "verified": true
+    },
+    {
+      "evidence_id": "EV-COMPLETE_VERIFICATION_REPORT_JSON",
+      "file": "COMPLETE_VERIFICATION_REPORT.json",
+      "sha256": "7bf3fa1413cf1a344512511f33c340897c3ffa39d16c44e2656b952f91f4373b",
+      "result": "PASS",
+      "verified": true
+    },
+    {
+      "evidence_id": "EV-REGRESSION_REQUIREMENTS_CSV",
+      "file": "REGRESSION_REQUIREMENTS.csv",
+      "sha256": "fdc8bbb18dfd8fd32969b3957d0bf7d1b523209c171db3e9666bfc039bcc616c",
+      "result": "PASS",
+      "verified": true
+    },
+    {
+      "evidence_id": "EV-TEST_COVERAGE_REPORT_JSON",
+      "file": "TEST_COVERAGE_REPORT.json",
+      "sha256": "b256f68c0014ffdd98e9ff973dcf9661390a34699b7d24ffc8fa2c1da8a3e9d7",
+      "result": "PASS",
+      "verified": true
+    },
+    {
+      "evidence_id": "EV-REPRODUCIBILITY_REPORT_MD",
+      "file": "REPRODUCIBILITY_REPORT.md",
+      "sha256": "29bbe400d4db23afa3f22faf3813413717a3c69f94c67208e4376aacb7606980",
+      "result": "PASS",
+      "verified": true
+    },
+    {
+      "evidence_id": "EV-WP09_VERIFICATION_SUMMARY_MD",
+      "file": "WP09_VERIFICATION_SUMMARY.md",
+      "sha256": "2d0b359ed9c03294a102a8519c01cf833d7c27c799fda09848cb2937035da1b6",
+      "result": "PASS",
+      "verified": true
+    },
+    {
+      "evidence_id": "EV-MASTER_FINDINGS_REGISTER_CSV",
+      "file": "MASTER_FINDINGS_REGISTER.csv",
+      "sha256": "467fb8c80a2c4bd07db2924b1edac0f727eff0fc787d45fba603bcc08299939d",
+      "result": "PASS",
+      "verified": true
+    },
+    {
+      "evidence_id": "EV-RELEASE_RISK_REGISTER_CSV",
+      "file": "RELEASE_RISK_REGISTER.csv",
+      "sha256": "d1d99870378b7c80737379d37a23109ee96d5a6ade642c865e8be160c888c42f",
+      "result": "PASS",
+      "verified": true
+    },
+    {
+      "evidence_id": "EV-CRITICAL_FINDINGS_ANALYSIS_MD",
+      "file": "CRITICAL_FINDINGS_ANALYSIS.md",
+      "sha256": "6a91f4c3e7de91fbeed96b5a0f7ba701a12952d8acd46f47b2e0b736c5c7575b",
+      "result": "PASS",
+      "verified": true
+    },
+    {
+      "evidence_id": "EV-FINDINGS_CLOSURE_REPORT_JSON",
+      "file": "FINDINGS_CLOSURE_REPORT.json",
+      "sha256": "35e091a97718a5f6028a88c23d87fead28b5ba60c5a88416b7e1424837dff0fb",
+      "result": "PASS",
+      "verified": true
+    },
+    {
+      "evidence_id": "EV-ACCEPTED_RISKS_REGISTER_MD",
+      "file": "ACCEPTED_RISKS_REGISTER.md",
+      "sha256": "187bef0cb11ca9701ead8aa3d80d04267727e0fa7fd53d4f85f65398cc39671a",
+      "result": "PASS",
+      "verified": true
+    },
+    {
+      "evidence_id": "EV-REQUIREMENTS_TRACEABILITY_CSV",
+      "file": "REQUIREMENTS_TRACEABILITY.csv",
+      "sha256": "dd2c86b6e0b2528082248a4d21d99147fbba88a12843439b368289574c4485fc",
+      "result": "PASS",
+      "verified": true
+    }
+  ]
+}
