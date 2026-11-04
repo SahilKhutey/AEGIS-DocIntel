@@ -175,40 +175,46 @@ def test_unsupported_role_rejected(rsa_keypair):
             assert "Unsupported role" in res.json().get("detail", "")
 
 
-@pytest.mark.asyncio
-async def test_websocket_auth_rejects_missing_credentials():
+def test_websocket_auth_rejects_missing_credentials():
     """WebSocket connection without token or api_key fails with HTTP 401."""
-    from unittest.mock import AsyncMock, MagicMock
-    from fastapi import HTTPException
-    from src.api.auth import get_current_tenant_ws
+    async def _run():
+        from unittest.mock import AsyncMock, MagicMock
+        from fastapi import HTTPException
+        from src.api.auth import get_current_tenant_ws
 
-    mock_ws = MagicMock()
-    mock_ws.headers = {}
-    mock_ws.close = AsyncMock()
+        mock_ws = MagicMock()
+        mock_ws.headers = {}
+        mock_ws.close = AsyncMock()
 
-    with pytest.raises(HTTPException) as exc_info:
-        await get_current_tenant_ws(websocket=mock_ws)
+        with pytest.raises(HTTPException) as exc_info:
+            await get_current_tenant_ws(websocket=mock_ws)
 
-    assert exc_info.value.status_code == 401
-    assert "WebSocket authentication required" in exc_info.value.detail
-    mock_ws.close.assert_awaited_once()
+        assert exc_info.value.status_code == 401
+        assert "WebSocket authentication required" in exc_info.value.detail
+        mock_ws.close.assert_awaited_once()
+
+    import asyncio
+    asyncio.run(_run())
 
 
-@pytest.mark.asyncio
-async def test_websocket_auth_accepts_valid_credentials():
+def test_websocket_auth_accepts_valid_credentials():
     """WebSocket connection with valid credentials authenticates successfully."""
-    from unittest.mock import AsyncMock, MagicMock
-    from src.api.auth import get_current_tenant_ws
+    async def _run():
+        from unittest.mock import AsyncMock, MagicMock
+        from src.api.auth import get_current_tenant_ws
 
-    mock_ws = MagicMock()
-    mock_ws.headers = {"authorization": "Bearer dev-tenant-finance"}
-    mock_ws.close = AsyncMock()
+        mock_ws = MagicMock()
+        mock_ws.headers = {"authorization": "Bearer dev-tenant-finance"}
+        mock_ws.close = AsyncMock()
 
-    with patch.dict(os.environ, {"AEGIS_ENVIRONMENT": "development"}):
-        ctx = await get_current_tenant_ws(websocket=mock_ws)
-        assert ctx.tenant_id == "tenant-finance"
-        assert "admin" in ctx.roles or "editor" in ctx.roles
-        mock_ws.close.assert_not_called()
+        with patch.dict(os.environ, {"AEGIS_ENVIRONMENT": "development"}):
+            ctx = await get_current_tenant_ws(websocket=mock_ws)
+            assert ctx.tenant_id == "tenant-finance"
+            assert "admin" in ctx.roles or "editor" in ctx.roles
+            mock_ws.close.assert_not_called()
+
+    import asyncio
+    asyncio.run(_run())
 
 
 def test_tenant_admin_cannot_access_foreign_tenant_stats(rsa_keypair):

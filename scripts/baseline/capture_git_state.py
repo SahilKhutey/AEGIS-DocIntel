@@ -66,7 +66,7 @@ def main() -> int:
         
         summary = run_git(["show", "--stat", "--oneline", master_commit])
         (BASELINE_DIR / "canonical_commit_summary.txt").write_text(summary + "\n", encoding="utf-8")
-        print(f"[OK] Wrote canonical commit text references")
+        print("[OK] Wrote canonical commit text references")
 
         return 0
     except Exception as e:

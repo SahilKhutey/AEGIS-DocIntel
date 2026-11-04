@@ -32,7 +32,7 @@ def test_del_001_authorized_cascading_deletion(orchestrator):
     assert "test-doc-1" not in orchestrator.search_index
     assert "test-doc-1" not in orchestrator.vector_index
     assert "test-doc-1" not in orchestrator.semantic_cache
-    assert f"storage/tenant_alpha/test-doc-1.pdf" not in orchestrator.object_storage
+    assert "storage/tenant_alpha/test-doc-1.pdf" not in orchestrator.object_storage
 
     # Assert in-flight job cancelled
     assert orchestrator.job_queue["job-1"]["status"] == "CANCELLED"
