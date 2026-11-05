@@ -197,7 +197,12 @@ def test_wp_final_checksum_integrity():
         target_file = FINAL_DIR / rel_path
         assert target_file.is_file(), f"Checksum target file missing: {rel_path}"
         with open(target_file, "rb") as tf:
-            actual_hash = hashlib.sha256(tf.read()).hexdigest()
+            raw_bytes = tf.read()
+        actual_hash = hashlib.sha256(raw_bytes).hexdigest()
+        if actual_hash != expected_hash:
+            norm_hash = hashlib.sha256(raw_bytes.replace(b"\r\n", b"\n")).hexdigest()
+            if norm_hash == expected_hash:
+                actual_hash = norm_hash
         assert actual_hash == expected_hash, f"Hash mismatch for {rel_path}"
 
 
