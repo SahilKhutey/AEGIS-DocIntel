@@ -1,0 +1,18 @@
+Module,Domain,Description,Status,Lines_of_Code,Test_Reference
+src.api,Backend,"FastAPI routes, endpoints, middlewares, exception handlers",IMPLEMENTED,1420,tests/api
+src.core,Backend,"Document models, context compiler, tensor representations",IMPLEMENTED,2150,tests/unit
+src.engines,Backend,"OCR, text extraction, layout analysis, table reconstruction",IMPLEMENTED,3420,tests/processing
+src.llm_service,Backend,"Grounded generation, claim verification, prompt packaging",IMPLEMENTED,1890,tests/intelligence
+src.query,Backend,"BM25, vector search, hybrid retrieval, metadata filtering",IMPLEMENTED,1650,tests/intelligence
+src.services,Backend,"Dependency injection container, document service, report service",IMPLEMENTED,2210,tests/integration
+src.observability,Backend,"OpenTelemetry, Prometheus metrics, structured audit logging",IMPLEMENTED,890,tests/security
+src.repositories,Backend,"SQLite WAL persistent repositories, job queue, tenant storage",IMPLEMENTED,1540,tests/reliability
+web.src,Frontend,"Next.js 16 App router, React 19 workbench, dashboard, viewer",IMPLEMENTED,4820,tests/frontend_ci
+aegis.audit,Audit,Authoritative central audit runner and verification framework,IMPLEMENTED,3850,tests/audit_infrastructure
+aegis.corpus,Audit,"WP-04 Public corpus loader, checksums, and holdout partition",IMPLEMENTED,1120,tests/corpus
+aegis.processing,Audit,"WP-05 OCR, layout, reading order, and table verification engine",IMPLEMENTED,2410,tests/processing
+aegis.intelligence,Audit,"WP-06 Retrieval, QA, citation, fact, and conflict verification",IMPLEMENTED,2890,tests/intelligence
+aegis.security,Audit,"WP-07 Authentication, RBAC, tenant isolation, and privacy verification",IMPLEMENTED,2640,tests/security
+aegis.reliability,Audit,"WP-07 Worker crash recovery, queue consistency, backup verification",IMPLEMENTED,2310,tests/reliability
+aegis.release,Audit,"WP-09 Release candidate freeze, matrix, and decision engine",IMPLEMENTED,1780,tests/release
+_unverified_archive,Archive,Superseded exploratory prototypes and legacy scripts,DEPRECATED,12400,N/A

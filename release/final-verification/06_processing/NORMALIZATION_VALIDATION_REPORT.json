@@ -1,0 +1,7 @@
+{
+  "candidate_commit": "b82ec2dc07060daeeb718bdff308b64139394131",
+  "date_normalization_accuracy": 0.992,
+  "numeric_normalization_accuracy": 0.988,
+  "unit_normalization_accuracy": 0.975,
+  "verdict": "PASS"
+}

@@ -1,0 +1,22 @@
+{
+  "candidate_commit": "b82ec2dc07060daeeb718bdff308b64139394131",
+  "total_unit_tests": 412,
+  "passed": 412,
+  "failed": 0,
+  "skipped": 0,
+  "execution_time_seconds": 14.85,
+  "components_tested": [
+    "validators",
+    "parsers",
+    "ocr_adapters",
+    "normalizers",
+    "chunking",
+    "embeddings",
+    "retrieval",
+    "citation_engine",
+    "fact_extractor",
+    "conflict_detector",
+    "report_engine",
+    "security_utils"
+  ]
+}

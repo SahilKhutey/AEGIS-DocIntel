@@ -1,0 +1,12 @@
+{
+  "candidate_commit": "b82ec2dc07060daeeb718bdff308b64139394131",
+  "reports_validated": 24,
+  "structural_integrity": 1.0,
+  "citation_entailment": 1.0,
+  "export_formats_valid": [
+    "JSON",
+    "MARKDOWN",
+    "PDF"
+  ],
+  "verdict": "PASS"
+}

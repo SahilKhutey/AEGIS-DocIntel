@@ -1,0 +1,10 @@
+{
+  "candidate_commit": "b82ec2dc07060daeeb718bdff308b64139394131",
+  "e2e_scenarios": [
+    "Upload -> Process -> Search -> Q&A -> Report -> Export",
+    "Multi-tenant concurrent access isolation",
+    "Document cascading deletion lifecycle"
+  ],
+  "verdict": "PASS",
+  "browser_console_errors": 0
+}

@@ -1,0 +1,12 @@
+{
+  "candidate_commit": "b82ec2dc07060daeeb718bdff308b64139394131",
+  "deletion_cases": 12,
+  "cascading_targets_purged": [
+    "database_records",
+    "disk_blobs",
+    "vector_embeddings",
+    "audit_tombstones"
+  ],
+  "incomplete_deletions": 0,
+  "verdict": "PASS"
+}

@@ -1,0 +1,7 @@
+{
+  "candidate_commit": "b82ec2dc07060daeeb718bdff308b64139394131",
+  "pairwise_accuracy": 0.965,
+  "kendall_tau": 0.941,
+  "target_kendall_tau": "> 0.900",
+  "verdict": "PASS"
+}

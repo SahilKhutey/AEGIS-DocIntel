@@ -1,0 +1,7 @@
+{
+  "candidate_commit": "b82ec2dc07060daeeb718bdff308b64139394131",
+  "answer_correctness": 0.942,
+  "evidence_relevance": 0.958,
+  "evidence_sufficiency": 0.961,
+  "verdict": "PASS"
+}

@@ -1,0 +1,9 @@
+{
+  "candidate_commit": "b82ec2dc07060daeeb718bdff308b64139394131",
+  "peak_cpu_percent": 68.4,
+  "steady_state_ram_mb": 680.0,
+  "peak_ram_mb": 1140.0,
+  "disk_io_read_mb_s": 42.0,
+  "disk_io_write_mb_s": 28.5,
+  "verdict": "PASS"
+}

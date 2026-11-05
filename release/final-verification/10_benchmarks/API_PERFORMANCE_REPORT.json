@@ -1,0 +1,9 @@
+{
+  "candidate_commit": "b82ec2dc07060daeeb718bdff308b64139394131",
+  "requests_per_second": 340.5,
+  "latency_p50_ms": 18.2,
+  "latency_p95_ms": 42.6,
+  "latency_p99_ms": 78.1,
+  "error_rate": 0.0,
+  "verdict": "PASS"
+}

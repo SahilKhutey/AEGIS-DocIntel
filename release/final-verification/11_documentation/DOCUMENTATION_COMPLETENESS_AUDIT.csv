@@ -1,0 +1,44 @@
+Document_Path,Category,Description,Status,Last_Reviewed,Reviewer
+docs/PRODUCT_OVERVIEW.md,Product,Complete product capabilities and target user profiles,COMPLETE,2026-11-04,Dr. Elena Vance
+docs/FEATURES.md,Product,Feature registry and capability catalog,COMPLETE,2026-11-04,Dr. Elena Vance
+docs/USER_GUIDE.md,User,End-to-end user workflows and document workbench guide,COMPLETE,2026-11-04,Dr. Elena Vance
+docs/ADMIN_GUIDE.md,Operations,"System configuration, tenant onboarding, and user management",COMPLETE,2026-11-04,Dr. Elena Vance
+docs/LIMITATIONS.md,Technical,Documented boundary limitations and unsupported formats,COMPLETE,2026-11-04,Dr. Elena Vance
+docs/FAQ.md,User,Frequently asked questions and operational troubleshooting,COMPLETE,2026-11-04,Dr. Elena Vance
+docs/architecture/SYSTEM_ARCHITECTURE.md,Architecture,"Micro-kernel architecture, layers, and subsystem topology",COMPLETE,2026-11-04,Dr. Elena Vance
+docs/architecture/COMPONENT_ARCHITECTURE.md,Architecture,Detailed breakdown of internal component interactions,COMPLETE,2026-11-04,Dr. Elena Vance
+docs/architecture/DATA_FLOW.md,Architecture,End-to-end data lifecycle and stream diagrams,COMPLETE,2026-11-04,Dr. Elena Vance
+docs/architecture/PROCESSING_ARCHITECTURE.md,Architecture,"OCR, layout, reading order, and table processing mechanics",COMPLETE,2026-11-04,Dr. Elena Vance
+docs/architecture/INTELLIGENCE_ARCHITECTURE.md,Architecture,"Hybrid retrieval, context compiler, and grounding pipeline",COMPLETE,2026-11-04,Dr. Elena Vance
+docs/architecture/DATABASE_SCHEMA.md,Architecture,"Relational database schema, indexes, and migration log",COMPLETE,2026-11-04,Dr. Elena Vance
+docs/architecture/API_ARCHITECTURE.md,Architecture,"REST endpoints, auth middleware, and error schemas",COMPLETE,2026-11-04,Dr. Elena Vance
+docs/architecture/SECURITY_ARCHITECTURE.md,Security,"RBAC model, tenant isolation boundaries, and audit logging",COMPLETE,2026-11-04,Dr. Elena Vance
+docs/architecture/DEPLOYMENT_ARCHITECTURE.md,Operations,Docker Compose and bare-metal deployment models,COMPLETE,2026-11-04,Dr. Elena Vance
+docs/development/DEVELOPMENT_SETUP.md,Developer,"Local dev environment setup, virtual environments, toolchains",COMPLETE,2026-11-04,Dr. Elena Vance
+docs/development/LOCAL_ENVIRONMENT.md,Developer,"Environment variables, port configurations, and test runners",COMPLETE,2026-11-04,Dr. Elena Vance
+docs/development/DEPENDENCY_MANAGEMENT.md,Developer,Python pyproject.toml and Node package management,COMPLETE,2026-11-04,Dr. Elena Vance
+docs/development/CODE_STANDARDS.md,Developer,"PEP 8, Ruff formatting, mypy typing, and naming conventions",COMPLETE,2026-11-04,Dr. Elena Vance
+docs/development/TESTING_GUIDE.md,Developer,"Pytest conventions, fixtures, mocks, and offline execution rules",COMPLETE,2026-11-04,Dr. Elena Vance
+docs/development/DEBUGGING_GUIDE.md,Developer,"Tracing, structured logging, and troubleshooting techniques",COMPLETE,2026-11-04,Dr. Elena Vance
+docs/development/CONTRIBUTING.md,Developer,"Contribution guidelines, PR templates, and commit format",COMPLETE,2026-11-04,Dr. Elena Vance
+docs/development/BRANCHING_AND_RELEASE.md,Developer,"Git workflow, release tagging, and freeze procedures",COMPLETE,2026-11-04,Dr. Elena Vance
+docs/api/OPENAPI_SPECIFICATION.md,API,OpenAPI 3.1.0 specification and endpoint contracts,COMPLETE,2026-11-04,Dr. Elena Vance
+docs/api/ENDPOINT_REFERENCE.md,API,"Detailed endpoint parameters, request bodies, and responses",COMPLETE,2026-11-04,Dr. Elena Vance
+docs/security/THREAT_MODEL.md,Security,STRIDE threat model and risk mitigation register,COMPLETE,2026-11-04,Dr. Elena Vance
+docs/security/SECURITY_CONTROLS.md,Security,"Technical security controls, encryption, and hashing",COMPLETE,2026-11-04,Dr. Elena Vance
+docs/security/PRIVACY_POLICY_TECHNICAL.md,Security,"PII redaction rules, token sanitization, and data handling",COMPLETE,2026-11-04,Dr. Elena Vance
+docs/security/DATA_RETENTION_AND_DELETION.md,Security,"Data retention policies, tombstones, and deletion guarantees",COMPLETE,2026-11-04,Dr. Elena Vance
+docs/operations/BACKUP_AND_RESTORE.md,Operations,"Online backup procedure, restore drill, and verification",COMPLETE,2026-11-04,Dr. Elena Vance
+docs/operations/INCIDENT_RESPONSE.md,Operations,Security and reliability incident response playbook,COMPLETE,2026-11-04,Dr. Elena Vance
+docs/operations/MONITORING_AND_LOGGING.md,Operations,"Prometheus metrics, OpenTelemetry, and audit logging",COMPLETE,2026-11-04,Dr. Elena Vance
+docs/operations/DEPLOYMENT_RUNBOOK.md,Operations,Step-by-step production deployment and rollback runbook,COMPLETE,2026-11-04,Dr. Elena Vance
+docs/operations/DISASTER_RECOVERY.md,Operations,"Disaster recovery scenarios, RPO/RTO targets, and drills",COMPLETE,2026-11-04,Dr. Elena Vance
+docs/testing/VALIDATION_METHODOLOGY.md,Testing,Comprehensive V&V methodology across WP-01 to WP-FINAL,COMPLETE,2026-11-04,Dr. Elena Vance
+docs/testing/TEST_STRATEGY.md,Testing,"Testing pyramid, quality gates, and automated test hierarchy",COMPLETE,2026-11-04,Dr. Elena Vance
+docs/testing/BENCHMARK_METHODOLOGY.md,Testing,"Benchmarking standards, statistical significance, and profiles",COMPLETE,2026-11-04,Dr. Elena Vance
+docs/testing/DATASET_CARD.md,Testing,"Corpus provenance, label schema, and holdout partition card",COMPLETE,2026-11-04,Dr. Elena Vance
+docs/testing/MODEL_CARD.md,Testing,"Context compiler, embedding model, and LLM interface specifications",COMPLETE,2026-11-04,Dr. Elena Vance
+docs/testing/PROCESSING_ACCURACY_REPORT.md,Testing,Detailed WP-05 processing accuracy analysis and metrics,COMPLETE,2026-11-04,Dr. Elena Vance
+docs/testing/INTELLIGENCE_EVALUATION_REPORT.md,Testing,Detailed WP-06 intelligence evaluation results and analysis,COMPLETE,2026-11-04,Dr. Elena Vance
+docs/testing/KNOWN_FAILURE_MODES.md,Testing,"Catalog of tested edge cases, error codes, and graceful failures",COMPLETE,2026-11-04,Dr. Elena Vance
+docs/testing/FINAL_SYSTEM_VALIDATION_REPORT.md,Testing,Consolidated system validation summary and readiness findings,COMPLETE,2026-11-04,Dr. Elena Vance

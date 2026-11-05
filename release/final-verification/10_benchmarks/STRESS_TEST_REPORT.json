@@ -1,0 +1,7 @@
+{
+  "candidate_commit": "b82ec2dc07060daeeb718bdff308b64139394131",
+  "concurrency_limit_tested": 100,
+  "graceful_queueing_confirmed": true,
+  "service_crashes": 0,
+  "verdict": "PASS"
+}

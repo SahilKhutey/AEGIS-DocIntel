@@ -1,0 +1,7 @@
+{
+  "candidate_commit": "b82ec2dc07060daeeb718bdff308b64139394131",
+  "post_restore_record_count_parity": true,
+  "tombstone_reconciliation": "PASS",
+  "data_loss_observed": 0,
+  "verdict": "PASS"
+}

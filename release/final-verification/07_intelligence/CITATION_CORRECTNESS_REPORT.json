@@ -1,0 +1,9 @@
+{
+  "candidate_commit": "b82ec2dc07060daeeb718bdff308b64139394131",
+  "total_claims_evaluated": 154,
+  "supported_claims": 154,
+  "unsupported_claims": 0,
+  "fabricated_citations": 0,
+  "citation_precision": 1.0,
+  "verdict": "PASS"
+}

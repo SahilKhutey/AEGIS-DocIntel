@@ -1,0 +1,7 @@
+{
+  "candidate_commit": "b82ec2dc07060daeeb718bdff308b64139394131",
+  "soak_duration_hours": 4,
+  "memory_leak_detected": false,
+  "connection_leak_detected": false,
+  "verdict": "PASS"
+}

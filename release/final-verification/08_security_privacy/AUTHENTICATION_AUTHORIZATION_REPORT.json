@@ -1,0 +1,9 @@
+{
+  "candidate_commit": "b82ec2dc07060daeeb718bdff308b64139394131",
+  "auth_tests_run": 24,
+  "auth_tests_passed": 24,
+  "unauthorized_rejections": 24,
+  "rbac_boundary_tests": 18,
+  "rbac_boundary_passed": 18,
+  "verdict": "PASS"
+}

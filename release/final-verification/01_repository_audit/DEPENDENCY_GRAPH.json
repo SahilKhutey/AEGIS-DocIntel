@@ -1,0 +1,88 @@
+{
+  "project": "AEGIS-DocIntel",
+  "commit": "b82ec2dc07060daeeb718bdff308b64139394131",
+  "nodes": [
+    {
+      "id": "api",
+      "type": "backend_entry",
+      "path": "src/api"
+    },
+    {
+      "id": "services",
+      "type": "backend_service",
+      "path": "src/services"
+    },
+    {
+      "id": "engines",
+      "type": "backend_engine",
+      "path": "src/engines"
+    },
+    {
+      "id": "repositories",
+      "type": "backend_storage",
+      "path": "src/repositories"
+    },
+    {
+      "id": "query",
+      "type": "backend_retrieval",
+      "path": "src/query"
+    },
+    {
+      "id": "llm_service",
+      "type": "backend_intelligence",
+      "path": "src/llm_service"
+    },
+    {
+      "id": "web",
+      "type": "frontend_app",
+      "path": "web/src"
+    },
+    {
+      "id": "audit",
+      "type": "audit_runner",
+      "path": "aegis/audit"
+    }
+  ],
+  "edges": [
+    {
+      "source": "web",
+      "target": "api",
+      "protocol": "HTTP/REST"
+    },
+    {
+      "source": "api",
+      "target": "services",
+      "call": "direct"
+    },
+    {
+      "source": "services",
+      "target": "engines",
+      "call": "pipeline"
+    },
+    {
+      "source": "services",
+      "target": "repositories",
+      "call": "orm/sql"
+    },
+    {
+      "source": "services",
+      "target": "query",
+      "call": "retrieval"
+    },
+    {
+      "source": "services",
+      "target": "llm_service",
+      "call": "inference"
+    },
+    {
+      "source": "audit",
+      "target": "services",
+      "call": "verification"
+    },
+    {
+      "source": "audit",
+      "target": "engines",
+      "call": "benchmarking"
+    }
+  ]
+}

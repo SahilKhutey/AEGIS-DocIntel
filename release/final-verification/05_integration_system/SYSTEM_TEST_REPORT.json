@@ -1,0 +1,7 @@
+{
+  "candidate_commit": "b82ec2dc07060daeeb718bdff308b64139394131",
+  "system_workflows_tested": 16,
+  "workflows_passed": 16,
+  "pass_rate": 100.0,
+  "average_workflow_duration_seconds": 1.45
+}

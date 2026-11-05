@@ -1,0 +1,7 @@
+{
+  "candidate_commit": "b82ec2dc07060daeeb718bdff308b64139394131",
+  "abstention_precision": 0.968,
+  "abstention_recall": 0.95,
+  "hallucinations_on_unanswerable": 0,
+  "verdict": "PASS"
+}

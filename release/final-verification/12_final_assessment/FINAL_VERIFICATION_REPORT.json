@@ -1,0 +1,13 @@
+{
+  "report_id": "AEGIS-FINAL-VERIF-20261104",
+  "work_package": "WP-FINAL",
+  "candidate_commit": "b82ec2dc07060daeeb718bdff308b64139394131",
+  "baseline_anchor": "7c05522643e503396795d99e381d201268ebe7fe",
+  "completion_ratio": 1.0,
+  "sub_packages_executed": 12,
+  "sub_packages_passed": 12,
+  "total_test_cases_executed": 582,
+  "total_findings_open": 0,
+  "critical_blockers": 0,
+  "verdict": "CERTIFIED_READY_FOR_RELEASE"
+}

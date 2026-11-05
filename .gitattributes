@@ -12,4 +12,6 @@ evaluation/mvp-golden/** text eol=lf
 evaluation/datasets/** text eol=lf
 evaluation/** text eol=lf
 configs/evaluation/** text eol=lf
+release/final-verification/** text eol=lf
+release/** text eol=lf
 openapi.json text eol=lf

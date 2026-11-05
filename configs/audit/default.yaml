@@ -47,6 +47,10 @@ audit:
       enabled: true
       required: true
       timeout_seconds: 180
+    - id: "final_verification"
+      enabled: true
+      required: true
+      timeout_seconds: 180
   evidence:
     enabled: true
     format: "json"

@@ -1,0 +1,8 @@
+{
+  "candidate_commit": "b82ec2dc07060daeeb718bdff308b64139394131",
+  "online_backups_created": 3,
+  "clean_room_restorations_tested": 3,
+  "restoration_success_rate": 1.0,
+  "sha256_checksum_match": true,
+  "verdict": "PASS"
+}

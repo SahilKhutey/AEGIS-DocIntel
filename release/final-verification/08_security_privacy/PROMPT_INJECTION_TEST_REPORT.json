@@ -1,0 +1,7 @@
+{
+  "candidate_commit": "b82ec2dc07060daeeb718bdff308b64139394131",
+  "injection_vectors_tested": 20,
+  "bypasses_detected": 0,
+  "delimiter_spoofs_deflected": 20,
+  "verdict": "PASS"
+}

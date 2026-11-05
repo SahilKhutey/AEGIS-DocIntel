@@ -1,0 +1,7 @@
+{
+  "candidate_commit": "b82ec2dc07060daeeb718bdff308b64139394131",
+  "concurrent_claims_tested": 25,
+  "concurrent_claim_collisions": 0,
+  "dead_letter_queue_handling": "PASS",
+  "verdict": "PASS"
+}

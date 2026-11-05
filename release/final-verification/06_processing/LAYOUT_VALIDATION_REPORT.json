@@ -1,0 +1,8 @@
+{
+  "candidate_commit": "b82ec2dc07060daeeb718bdff308b64139394131",
+  "region_iou": 0.887,
+  "layout_precision": 0.942,
+  "layout_recall": 0.926,
+  "layout_f1": 0.934,
+  "verdict": "PASS"
+}

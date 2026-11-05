@@ -1,0 +1,8 @@
+{
+  "candidate_commit": "b82ec2dc07060daeeb718bdff308b64139394131",
+  "os": "Windows 11 Enterprise (win32)",
+  "python_version": "3.12.10",
+  "cpu": "Multi-core x86_64",
+  "ram_gb": 16.0,
+  "offline_mode_enforced": true
+}

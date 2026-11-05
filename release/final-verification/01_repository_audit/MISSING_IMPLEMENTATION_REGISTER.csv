@@ -1,0 +1,3 @@
+Register_ID,Feature_Item,Description,Severity,Disposition,Justification
+REG-001,Distributed Celery Broker,Single-node supervisor with SQLite WAL queue preferred for deterministic release candidate,LOW,DEFERRED,By Design
+REG-002,External PostgreSQL Cluster,Embedded SQLite WAL mode verified for standalone offline deployment,LOW,DEFERRED,By Design

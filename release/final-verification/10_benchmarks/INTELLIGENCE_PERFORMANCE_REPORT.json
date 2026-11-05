@@ -1,0 +1,7 @@
+{
+  "candidate_commit": "b82ec2dc07060daeeb718bdff308b64139394131",
+  "context_compiler_latency_p95_ms": 45.2,
+  "answer_generation_latency_p95_ms": 185.0,
+  "citation_verification_latency_p95_ms": 24.6,
+  "verdict": "PASS"
+}

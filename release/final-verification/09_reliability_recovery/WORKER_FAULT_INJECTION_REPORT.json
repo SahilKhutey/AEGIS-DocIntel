@@ -1,0 +1,8 @@
+{
+  "candidate_commit": "b82ec2dc07060daeeb718bdff308b64139394131",
+  "worker_crashes_simulated": 15,
+  "jobs_recovered_via_lease": 15,
+  "duplicate_delivery_idempotent": true,
+  "recovery_success_rate": 1.0,
+  "verdict": "PASS"
+}
