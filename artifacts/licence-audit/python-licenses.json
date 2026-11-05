@@ -32,6 +32,14 @@
     "compliance_status": "APPROVED"
   },
   {
+    "package_name": "attrs",
+    "version": "25.4.0",
+    "license_declared": "MIT",
+    "classification": "PERMISSIVE",
+    "ecosystem": "python",
+    "compliance_status": "APPROVED"
+  },
+  {
     "package_name": "bcrypt",
     "version": "5.0.0",
     "license_declared": "Apache-2.0",
@@ -179,6 +187,22 @@
     "package_name": "joblib",
     "version": "1.6.0",
     "license_declared": "BSD-3-Clause",
+    "classification": "PERMISSIVE",
+    "ecosystem": "python",
+    "compliance_status": "APPROVED"
+  },
+  {
+    "package_name": "jsonschema",
+    "version": "4.26.0",
+    "license_declared": "MIT",
+    "classification": "PERMISSIVE",
+    "ecosystem": "python",
+    "compliance_status": "APPROVED"
+  },
+  {
+    "package_name": "jsonschema-specifications",
+    "version": "2025.9.1",
+    "license_declared": "MIT",
     "classification": "PERMISSIVE",
     "ecosystem": "python",
     "compliance_status": "APPROVED"
@@ -384,6 +408,14 @@
     "compliance_status": "APPROVED"
   },
   {
+    "package_name": "referencing",
+    "version": "0.37.0",
+    "license_declared": "MIT",
+    "classification": "PERMISSIVE",
+    "ecosystem": "python",
+    "compliance_status": "APPROVED"
+  },
+  {
     "package_name": "regex",
     "version": "2026.9.29",
     "license_declared": "Apache-2.0 AND CNRI-Python",
@@ -395,6 +427,14 @@
     "package_name": "requests",
     "version": "2.34.2",
     "license_declared": "Apache-2.0",
+    "classification": "PERMISSIVE",
+    "ecosystem": "python",
+    "compliance_status": "APPROVED"
+  },
+  {
+    "package_name": "rpds-py",
+    "version": "0.30.0",
+    "license_declared": "MIT",
     "classification": "PERMISSIVE",
     "ecosystem": "python",
     "compliance_status": "APPROVED"
