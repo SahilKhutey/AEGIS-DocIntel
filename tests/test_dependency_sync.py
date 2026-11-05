@@ -24,7 +24,7 @@ def test_test_time_dependencies_are_declared():
     """Anything the suite imports at collection time must be installable from requirements-dev/core."""
     core = (ROOT / "requirements-core.txt").read_text().lower()
     dev = (ROOT / "requirements-dev.txt").read_text().lower()
-    for pkg in ("python-docx", "python-pptx", "openpyxl"):
+    for pkg in ("python-docx", "python-pptx", "openpyxl", "jsonschema"):
         assert pkg in core, f"{pkg} is imported by the DOCX/PPTX/XLSX loaders but not in requirements-core.txt"
     assert "hypothesis" in dev, "hypothesis is imported by tests/test_theorem_properties.py"
     assert "pytest-asyncio" in dev
