@@ -86,11 +86,14 @@ def test_fci_006_tsconfig_valid():
     assert "compilerOptions" in data
 
 
-@pytest.mark.skipif(shutil.which("npm") is None, reason="npm not installed on system")
+@pytest.mark.skipif(
+    shutil.which("npm") is None or not (WEB_DIR / "node_modules").is_dir(),
+    reason="npm not installed or node_modules missing",
+)
 def test_fci_007_local_typecheck_clean():
     """FCI-007: Local TypeScript check passes with exit code 0."""
     result = subprocess.run(
-        ["npx", "tsc", "--noEmit"],
+        "npx tsc --noEmit",
         cwd=str(WEB_DIR),
         capture_output=True,
         text=True,
@@ -99,11 +102,14 @@ def test_fci_007_local_typecheck_clean():
     assert result.returncode == 0, f"TypeScript check failed: {result.stderr or result.stdout}"
 
 
-@pytest.mark.skipif(shutil.which("npm") is None, reason="npm not installed on system")
+@pytest.mark.skipif(
+    shutil.which("npm") is None or not (WEB_DIR / "node_modules").is_dir(),
+    reason="npm not installed or node_modules missing",
+)
 def test_fci_008_local_test_suite_passes():
     """FCI-008: Local Vitest test suite runs and passes all tests."""
     result = subprocess.run(
-        ["npm", "test"],
+        "npm test",
         cwd=str(WEB_DIR),
         capture_output=True,
         text=True,

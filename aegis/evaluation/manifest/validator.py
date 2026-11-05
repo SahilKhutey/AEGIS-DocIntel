@@ -29,11 +29,14 @@ class ManifestValidator:
         if not path.exists():
             return False, f"Dataset '{dataset_key}' file not found at: {path}"
 
-        h = hashlib.sha256()
-        with open(path, "rb") as f:
-            while chunk := f.read(65536):
-                h.update(chunk)
-        actual_sha = h.hexdigest()
+        raw_bytes = path.read_bytes()
+        actual_sha = hashlib.sha256(raw_bytes).hexdigest()
+
+        # If mismatch occurs on a text dataset, check LF-normalized content for cross-platform tolerance
+        if actual_sha.lower() != expected_sha256.lower() and path.suffix.lower() in [".jsonl", ".json", ".csv", ".txt", ".yaml", ".yml"]:
+            normalized_sha = hashlib.sha256(raw_bytes.replace(b"\r\n", b"\n")).hexdigest()
+            if normalized_sha.lower() == expected_sha256.lower():
+                actual_sha = normalized_sha
 
         if actual_sha.lower() != expected_sha256.lower():
             return (

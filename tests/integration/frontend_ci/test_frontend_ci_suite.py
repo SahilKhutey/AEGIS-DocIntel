@@ -9,11 +9,16 @@ from pathlib import Path
 import pytest
 from aegis.integration.frontend_ci.runner import FrontendCIRunner
 
+ROOT = Path(__file__).resolve().parents[3]
+NODE_MODULES = ROOT / "web" / "node_modules"
+
+if not NODE_MODULES.is_dir():
+    pytest.skip("web/node_modules not installed; skipping frontend CI suite", allow_module_level=True)
+
 
 @pytest.fixture
 def runner():
-    root = Path(__file__).resolve().parents[3]
-    return FrontendCIRunner(root_dir=root)
+    return FrontendCIRunner(root_dir=ROOT)
 
 
 def test_fe_ci_001_valid_frontend_pipeline(runner):

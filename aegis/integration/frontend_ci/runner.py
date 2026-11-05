@@ -127,7 +127,7 @@ class FrontendCIRunner:
         start = time.perf_counter()
         try:
             res = subprocess.run(
-                ["npm", "--prefix", "web", "test"],
+                "npm --prefix web test",
                 cwd=str(self.root_dir),
                 capture_output=True,
                 text=True,
@@ -151,7 +151,7 @@ class FrontendCIRunner:
         start = time.perf_counter()
         try:
             res = subprocess.run(
-                ["npm", "--prefix", "web", "run", "build"],
+                "npm --prefix web run build",
                 cwd=str(self.root_dir),
                 capture_output=True,
                 text=True,

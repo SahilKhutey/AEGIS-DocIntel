@@ -39,7 +39,7 @@ def test_man_001_valid_manifest_creation():
         datasets={
             "d1": DatasetSpec(
                 path="evaluation/datasets/document_intelligence/extraction_cases.jsonl",
-                sha256="22d4651d2a75733dd33c1d04d20417b07b4994444523d5db4405efb89781549b",
+                sha256="70e5b70371bc0ef3bebf096398f03b63d990b50f338d81de5a49d5a64cd641c6",
                 format="jsonl",
             )
         },

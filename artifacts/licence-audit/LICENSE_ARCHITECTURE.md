@@ -5,10 +5,10 @@
 - **Full Platform Engine (`aegis-docintel` / AMDI-OS)**: Proprietary Evaluation/Research License.
 
 ## 2. Dependency Compliance Summary
-- Total packages audited: 84
-- Python packages: 66
+- Total packages audited: 89
+- Python packages: 71
 - NPM packages: 18
-- Approved Permissive packages: 83
+- Approved Permissive packages: 88
 - Conditional Dual-Licensed packages: 1 (PyMuPDF)
 - Prohibited/Viral Copyleft packages: 0
 - Overall status: **COMPLIANT**

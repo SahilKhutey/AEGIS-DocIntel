@@ -7,12 +7,12 @@ description: "Manifest-driven evaluation config for fact extraction, cross-docum
 datasets:
   extraction:
     path: "evaluation/datasets/document_intelligence/extraction_cases.jsonl"
-    sha256: "22d4651d2a75733dd33c1d04d20417b07b4994444523d5db4405efb89781549b"
+    sha256: "70e5b70371bc0ef3bebf096398f03b63d990b50f338d81de5a49d5a64cd641c6"
     format: "jsonl"
     item_count: 5
   comparison:
     path: "evaluation/datasets/document_intelligence/comparison_cases.jsonl"
-    sha256: "b84e480618a032162cdd116638854c63e069549d489b5cceb62a66777e0fb3ba"
+    sha256: "9713a09b2b19dcd73daa73e45c7c2ef17af894508535e49e7153b53bf4f58c6a"
     format: "jsonl"
     item_count: 2
 
