@@ -67,8 +67,8 @@
       "last_modified": "2026-11-04T05:49:47.315861+00:00"
     },
     "03_functional/FUNCTIONAL_TEST_CASES.jsonl": {
-      "sha256": "92559227ac4d6f2257cfba9d8d2e978501b34c301e6b7000350750f443974f2f",
-      "size_bytes": 10772,
+      "sha256": "b6d804939ea487a21358562ae831b17c292cca8e709d070289f307579dd8f51c",
+      "size_bytes": 10750,
       "last_modified": "2026-11-04T05:49:47.313827+00:00"
     },
     "03_functional/FUNCTIONAL_TEST_PLAN.md": {
@@ -202,8 +202,8 @@
       "last_modified": "2026-11-04T05:49:47.332255+00:00"
     },
     "07_intelligence/GOLDEN_QUESTION_DATASET.jsonl": {
-      "sha256": "b1a0b99217590b4b3474b0d6dd5c4107176faeca43e3c46c5d35073cc1de4617",
-      "size_bytes": 1250,
+      "sha256": "fa3d4beda9603f4d228c52f4ec9c361b1215af65f9d14ff00371b9b222c316ef",
+      "size_bytes": 1245,
       "last_modified": "2026-11-04T05:49:47.328578+00:00"
     },
     "07_intelligence/INTELLIGENCE_VALIDATION_PLAN.md": {
