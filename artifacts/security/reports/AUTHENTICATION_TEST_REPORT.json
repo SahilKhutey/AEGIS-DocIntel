@@ -1,0 +1,258 @@
+{
+  "benchmark_id": "BENCH-SEC-AUTH-001",
+  "run_id": "RUN-20261104-061444",
+  "work_package": "WP-07",
+  "capability": "authentication",
+  "pipeline_version": "1.0.0",
+  "configuration_hash": "cfg-sec-policy-v1",
+  "software_versions": {
+    "pyjwt": "2.13.0"
+  },
+  "metrics": {
+    "total_scenarios_evaluated": 12,
+    "passed_scenarios": 12,
+    "failed_scenarios": 0,
+    "authentication_pass_rate": 1.0,
+    "lockout_enforced": true,
+    "signature_verification_enforced": true
+  },
+  "resource_metrics": {
+    "execution_duration_ms": 3.86
+  },
+  "test_cases": [
+    {
+      "test_id": "AUTH-001",
+      "work_package": "WP-07",
+      "category": "AUTHENTICATION",
+      "test_name": "Access protected API without credentials",
+      "environment": "isolated-test",
+      "test_version": "1.0",
+      "timestamp": "2026-11-04T06:14:44.521684+00:00",
+      "result": "PASS",
+      "expected": "Denied",
+      "actual": "Missing authentication credentials",
+      "severity": "CRITICAL",
+      "evidence": [
+        {
+          "status_code": 401,
+          "reason": "Missing authentication credentials"
+        }
+      ],
+      "failure_reason": null
+    },
+    {
+      "test_id": "AUTH-002",
+      "work_package": "WP-07",
+      "category": "AUTHENTICATION",
+      "test_name": "Login with valid credentials",
+      "environment": "isolated-test",
+      "test_version": "1.0",
+      "timestamp": "2026-11-04T06:14:44.521684+00:00",
+      "result": "PASS",
+      "expected": "Success",
+      "actual": "Authenticated",
+      "severity": "CRITICAL",
+      "evidence": [
+        {
+          "principal_id": "user-01"
+        }
+      ],
+      "failure_reason": null
+    },
+    {
+      "test_id": "AUTH-003",
+      "work_package": "WP-07",
+      "category": "AUTHENTICATION",
+      "test_name": "Login with invalid credentials",
+      "environment": "isolated-test",
+      "test_version": "1.0",
+      "timestamp": "2026-11-04T06:14:44.521684+00:00",
+      "result": "PASS",
+      "expected": "Denied",
+      "actual": "Invalid API key",
+      "severity": "CRITICAL",
+      "evidence": [
+        {
+          "status_code": 401,
+          "reason": "Invalid API key"
+        }
+      ],
+      "failure_reason": null
+    },
+    {
+      "test_id": "AUTH-004",
+      "work_package": "WP-07",
+      "category": "AUTHENTICATION",
+      "test_name": "Expired access token",
+      "environment": "isolated-test",
+      "test_version": "1.0",
+      "timestamp": "2026-11-04T06:14:44.521684+00:00",
+      "result": "PASS",
+      "expected": "Denied (Token has expired)",
+      "actual": "Token has expired",
+      "severity": "HIGH",
+      "evidence": [
+        {
+          "reason": "Token has expired"
+        }
+      ],
+      "failure_reason": null
+    },
+    {
+      "test_id": "AUTH-005",
+      "work_package": "WP-07",
+      "category": "AUTHENTICATION",
+      "test_name": "Tampered token detection",
+      "environment": "isolated-test",
+      "test_version": "1.0",
+      "timestamp": "2026-11-04T06:14:44.521684+00:00",
+      "result": "PASS",
+      "expected": "Denied",
+      "actual": "Invalid token signature",
+      "severity": "CRITICAL",
+      "evidence": [
+        {
+          "reason": "Invalid token signature"
+        }
+      ],
+      "failure_reason": null
+    },
+    {
+      "test_id": "AUTH-006",
+      "work_package": "WP-07",
+      "category": "AUTHENTICATION",
+      "test_name": "Token with invalid signature",
+      "environment": "isolated-test",
+      "test_version": "1.0",
+      "timestamp": "2026-11-04T06:14:44.521684+00:00",
+      "result": "PASS",
+      "expected": "Denied (Invalid signature)",
+      "actual": "Invalid token signature",
+      "severity": "CRITICAL",
+      "evidence": [
+        {
+          "reason": "Invalid token signature"
+        }
+      ],
+      "failure_reason": null
+    },
+    {
+      "test_id": "AUTH-007",
+      "work_package": "WP-07",
+      "category": "AUTHENTICATION",
+      "test_name": "Revoked session/token",
+      "environment": "isolated-test",
+      "test_version": "1.0",
+      "timestamp": "2026-11-04T06:14:44.526973+00:00",
+      "result": "PASS",
+      "expected": "Denied (Token has been revoked)",
+      "actual": "Token has been revoked",
+      "severity": "HIGH",
+      "evidence": [
+        {
+          "reason": "Token has been revoked"
+        }
+      ],
+      "failure_reason": null
+    },
+    {
+      "test_id": "AUTH-008",
+      "work_package": "WP-07",
+      "category": "AUTHENTICATION",
+      "test_name": "Refresh with invalid refresh token",
+      "environment": "isolated-test",
+      "test_version": "1.0",
+      "timestamp": "2026-11-04T06:14:44.526973+00:00",
+      "result": "PASS",
+      "expected": "Denied",
+      "actual": "Denied (Invalid refresh token)",
+      "severity": "HIGH",
+      "evidence": [
+        {
+          "refresh_token": "rejected"
+        }
+      ],
+      "failure_reason": null
+    },
+    {
+      "test_id": "AUTH-009",
+      "work_package": "WP-07",
+      "category": "AUTHENTICATION",
+      "test_name": "Logout then reuse invalidated session",
+      "environment": "isolated-test",
+      "test_version": "1.0",
+      "timestamp": "2026-11-04T06:14:44.526973+00:00",
+      "result": "PASS",
+      "expected": "Denied (Session invalidated)",
+      "actual": "Session has been invalidated",
+      "severity": "HIGH",
+      "evidence": [
+        {
+          "reason": "Session has been invalidated"
+        }
+      ],
+      "failure_reason": null
+    },
+    {
+      "test_id": "AUTH-010",
+      "work_package": "WP-07",
+      "category": "AUTHENTICATION",
+      "test_name": "Repeated failed login attempts lockout",
+      "environment": "isolated-test",
+      "test_version": "1.0",
+      "timestamp": "2026-11-04T06:14:44.526973+00:00",
+      "result": "PASS",
+      "expected": "Rate-limited or locked out",
+      "actual": "Locked out after 5 attempts",
+      "severity": "HIGH",
+      "evidence": [
+        {
+          "ip": "192.168.1.100",
+          "locked_out": true
+        }
+      ],
+      "failure_reason": null
+    },
+    {
+      "test_id": "AUTH-011",
+      "work_package": "WP-07",
+      "category": "AUTHENTICATION",
+      "test_name": "Password reset token reuse rejection",
+      "environment": "isolated-test",
+      "test_version": "1.0",
+      "timestamp": "2026-11-04T06:14:44.526973+00:00",
+      "result": "PASS",
+      "expected": "Denied on reuse",
+      "actual": "Password reset token already used",
+      "severity": "CRITICAL",
+      "evidence": [
+        {
+          "first_use": true,
+          "second_use": false
+        }
+      ],
+      "failure_reason": null
+    },
+    {
+      "test_id": "AUTH-012",
+      "work_package": "WP-07",
+      "category": "AUTHENTICATION",
+      "test_name": "Account disabled token rejection",
+      "environment": "isolated-test",
+      "test_version": "1.0",
+      "timestamp": "2026-11-04T06:14:44.526973+00:00",
+      "result": "PASS",
+      "expected": "Denied (User account is disabled)",
+      "actual": "User account is disabled",
+      "severity": "HIGH",
+      "evidence": [
+        {
+          "reason": "User account is disabled"
+        }
+      ],
+      "failure_reason": null
+    }
+  ],
+  "errors": [],
+  "execution_status": "COMPLETED"
+}

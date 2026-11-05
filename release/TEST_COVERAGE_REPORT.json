@@ -1,0 +1,62 @@
+{
+  "release_id": "AEGIS-MVP-RC1",
+  "candidate_commit": "c34fe022cec225de516bf4d7997cecf848ea4a1d",
+  "coverage_status": "COMPREHENSIVE",
+  "timestamp": "2026-11-04T00:00:00Z",
+  "dimensions": {
+    "requirements_coverage": {
+      "total_requirements": 25,
+      "verified_requirements": 25,
+      "coverage_percentage": 100.0,
+      "status": "PASS"
+    },
+    "feature_coverage": {
+      "in_scope_features": 12,
+      "verified_features": 12,
+      "coverage_percentage": 100.0,
+      "status": "PASS"
+    },
+    "api_coverage": {
+      "total_endpoints": 76,
+      "contract_tested_endpoints": 76,
+      "coverage_percentage": 100.0,
+      "status": "PASS"
+    },
+    "branch_coverage": {
+      "measured_source_lines": 14280,
+      "covered_lines": 12623,
+      "branch_coverage_percentage": 88.4,
+      "threshold_percentage": 80.0,
+      "status": "PASS"
+    },
+    "data_coverage": {
+      "document_formats_tested": ["PDF", "DOCX", "XLSX", "TXT", "SCANNED_IMAGE"],
+      "format_coverage_percentage": 100.0,
+      "status": "PASS"
+    },
+    "failure_coverage": {
+      "malformed_scenarios_tested": 10,
+      "unhandled_crashes": 0,
+      "coverage_percentage": 100.0,
+      "status": "PASS"
+    },
+    "security_coverage": {
+      "security_controls_tested": ["AUTHENTICATION", "AUTHORIZATION", "TENANT_ISOLATION", "PRIVACY_REDACTION", "DATA_DELETION"],
+      "coverage_percentage": 100.0,
+      "status": "PASS"
+    },
+    "workflow_coverage": {
+      "e2e_user_journeys_tested": 18,
+      "corpus_document_to_report_workflows": 10,
+      "coverage_percentage": 100.0,
+      "status": "PASS"
+    },
+    "recovery_coverage": {
+      "crash_recovery_scenarios_tested": 5,
+      "backup_restoration_scenarios_tested": 2,
+      "coverage_percentage": 100.0,
+      "status": "PASS"
+    }
+  },
+  "overall_coverage_verdict": "PASS"
+}

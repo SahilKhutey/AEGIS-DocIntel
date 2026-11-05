@@ -1,0 +1,102 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "AEGIS Structured Report Schema",
+  "type": "object",
+  "required": [
+    "report_id",
+    "report_type",
+    "title",
+    "scope",
+    "sections",
+    "limitations",
+    "conflicts",
+    "generation_metadata"
+  ],
+  "properties": {
+    "report_id": { "type": "string" },
+    "report_type": {
+      "type": "string",
+      "enum": [
+        "document_summary",
+        "question_answer_report",
+        "comparative_report",
+        "fact_extraction_report",
+        "conflict_report",
+        "audit_report",
+        "financial_report"
+      ]
+    },
+    "title": { "type": "string" },
+    "scope": {
+      "type": "object",
+      "required": ["document_ids"],
+      "properties": {
+        "document_ids": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "questions": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "sections": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["section_id", "heading", "claims"],
+        "properties": {
+          "section_id": { "type": "string" },
+          "heading": { "type": "string" },
+          "summary": { "type": "string" },
+          "claims": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["claim_id", "text", "citations"],
+              "properties": {
+                "claim_id": { "type": "string" },
+                "text": { "type": "string" },
+                "citations": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": ["document_id"],
+                    "properties": {
+                      "document_id": { "type": "string" },
+                      "page_number": { "type": ["integer", "null"] },
+                      "region_id": { "type": ["string", "null"] },
+                      "chunk_id": { "type": ["string", "null"] }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "limitations": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "conflicts": {
+      "type": "array",
+      "items": { "type": "object" }
+    },
+    "generation_metadata": {
+      "type": "object",
+      "required": ["evaluation_manifest_id", "generated_at"],
+      "properties": {
+        "evaluation_manifest_id": { "type": "string" },
+        "processing_run_ids": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "generated_at": { "type": "string" },
+        "generator_version": { "type": "string" }
+      }
+    }
+  }
+}

@@ -1,0 +1,27 @@
+version: "1.0.0"
+pipeline:
+  name: "aegis-document-processing-pipeline"
+  default_engine: "pymupdf_with_ocr_fallback"
+  extraction:
+    native_text_threshold: 32 # minimum characters on page to classify as native digital
+    ocr_engine: "tesseract"
+    ocr_dpi: 300
+    languages: ["en"]
+    confidence_threshold: 0.60
+  layout:
+    coordinate_units: "normalized"
+    column_cluster_gap: 0.15
+    iou_matching_threshold: 0.50
+    heading_font_breakpoints: [20.0, 14.0]
+  reading_order:
+    algorithm: "layout_graph"
+    column_bias: 1.2
+    detect_cycles: true
+  tables:
+    min_confidence: 0.70
+    reconstruct_empty_cells: true
+    merge_adjacent_spans: true
+  normalization:
+    unicode_form: "NFC"
+    preserve_raw_values: true
+    unresolved_date_handling: "mark_ambiguous"

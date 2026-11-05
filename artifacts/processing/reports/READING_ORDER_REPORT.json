@@ -1,0 +1,29 @@
+{
+  "benchmark_id": "WP05-ORD-001",
+  "run_id": "RUN-20261103-ORDER-BENCH",
+  "work_package": "WP-05",
+  "capability": "reading_order",
+  "dataset_id": "DOCLAYNET-ORDERING-V1.1",
+  "dataset_version": "1.1",
+  "partition_id": "WP04-VALIDATION-001",
+  "manifest_id": "MANIFEST-20261103",
+  "pipeline_version": "1.0.0",
+  "configuration_hash": "b6f03e08544c922880775d7b5b54a613cfcfc382",
+  "software_versions": {
+    "ReadingOrderResolver": "1.0.0"
+  },
+  "metrics": {
+    "pairwise_ordering_accuracy": 1.0,
+    "kendall_tau": 1.0,
+    "sequence_similarity": 1.0,
+    "total_evaluated_pairs": 10,
+    "concordant_pairs": 10,
+    "discordant_pairs": 0,
+    "column_interleaving_detected": false
+  },
+  "resource_metrics": {
+    "elapsed_seconds": 0.008
+  },
+  "errors": [],
+  "execution_status": "COMPLETED"
+}

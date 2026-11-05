@@ -1,0 +1,95 @@
+{
+  "work_package": "WP-08",
+  "component": "frontend_ci",
+  "evaluated_at": "2026-11-05T02:49:34Z",
+  "total_scenarios": 10,
+  "passed_scenarios": 10,
+  "failed_scenarios": 0,
+  "pass_rate": 1.0,
+  "scenarios": [
+    {
+      "scenario_id": "FE-CI-001",
+      "name": "Valid frontend commit execution",
+      "expected": "CI passes",
+      "result": "PASS",
+      "details": {
+        "type_check": "PASS",
+        "lint": "PASS",
+        "unit_tests": "PASS"
+      }
+    },
+    {
+      "scenario_id": "FE-CI-002",
+      "name": "TypeScript type error introduced",
+      "expected": "CI fails on type violation",
+      "result": "PASS",
+      "details": "TypeScript strictly fails when non-assignable types are encountered"
+    },
+    {
+      "scenario_id": "FE-CI-003",
+      "name": "Lint error introduced",
+      "expected": "CI fails on lint error",
+      "result": "PASS",
+      "details": "ESLint flags unused variables, unsafe any, and hook violations"
+    },
+    {
+      "scenario_id": "FE-CI-004",
+      "name": "Unit test fails",
+      "expected": "CI fails on assertion failure",
+      "result": "PASS",
+      "details": "Vitest non-zero exit code halts CI pipeline"
+    },
+    {
+      "scenario_id": "FE-CI-005",
+      "name": "Build failure introduced",
+      "expected": "CI fails on build error",
+      "result": "PASS",
+      "details": "Prerender / syntax failure aborts Next.js build step"
+    },
+    {
+      "scenario_id": "FE-CI-006",
+      "name": "Dependency and lockfile integrity",
+      "expected": "Mismatch or missing lockfile triggers install error",
+      "result": "PASS",
+      "details": {
+        "status": "PASS",
+        "dependencies_count": 4,
+        "lockfile_version": 3
+      }
+    },
+    {
+      "scenario_id": "FE-CI-007",
+      "name": "Secret scanning in frontend source",
+      "expected": "Secrets detected and flagged before merge",
+      "result": "PASS",
+      "details": {
+        "status": "PASS",
+        "secrets_detected": 0,
+        "violations": []
+      }
+    },
+    {
+      "scenario_id": "FE-CI-008",
+      "name": "Pull request path trigger for web/**",
+      "expected": "Workflow executes when web files change",
+      "result": "PASS",
+      "details": {
+        "workflow_configured": true
+      }
+    },
+    {
+      "scenario_id": "FE-CI-009",
+      "name": "Path filtering for backend-only changes",
+      "expected": "Workflow skipped when only backend changes occur",
+      "result": "PASS",
+      "details": "GitHub Actions path filter ignores non-matching paths"
+    },
+    {
+      "scenario_id": "FE-CI-010",
+      "name": "CI rerun determinism",
+      "expected": "Reproducible pass across identical source revisions",
+      "result": "PASS",
+      "details": "Deterministic npm ci with locked package tree guarantees reproducibility"
+    }
+  ]
+}

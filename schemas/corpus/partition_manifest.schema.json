@@ -1,0 +1,36 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "AEGIS Corpus Partition Manifest Schema",
+  "type": "object",
+  "required": [
+    "split_id",
+    "split_version",
+    "algorithm",
+    "seed",
+    "grouping_key",
+    "partitions",
+    "leakage_check_status"
+  ],
+  "properties": {
+    "split_id": { "type": "string" },
+    "split_version": { "type": "string" },
+    "algorithm": { "type": "string" },
+    "seed": { "type": "integer" },
+    "grouping_key": { "type": "string" },
+    "partitions": {
+      "type": "object",
+      "required": ["development", "validation", "holdout"],
+      "properties": {
+        "development": { "type": "array", "items": { "type": "string" } },
+        "validation": { "type": "array", "items": { "type": "string" } },
+        "holdout": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "leakage_check_status": {
+      "type": "string",
+      "enum": ["PASSED", "FAILED", "PENDING"]
+    },
+    "approved_by": { "type": "string" },
+    "approved_at": { "type": "string" }
+  }
+}

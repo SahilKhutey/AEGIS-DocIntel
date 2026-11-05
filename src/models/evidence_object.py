@@ -46,6 +46,7 @@ class RetrievedEvidence:
     source_format: str = "pdf"
     tenant_id: str = ""
     is_deleted: bool = False
+    document_version: Optional[str] = None
 
 
 @dataclass(frozen=True)

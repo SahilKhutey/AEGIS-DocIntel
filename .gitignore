@@ -39,7 +39,8 @@ dist/
 # C++ Build outputs
 build/
 bin/
-lib/
+/lib/
+!web/src/lib/
 CMakeCache.txt
 CMakeFiles/
 Makefile
@@ -75,3 +76,5 @@ Retrack/
 out/
 
 artifacts/audits/
+
+scratch/

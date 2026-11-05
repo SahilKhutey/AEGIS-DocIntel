@@ -1,0 +1,29 @@
+{
+  "benchmark_id": "WP05-TAB-001",
+  "run_id": "RUN-20261103-TABLE-BENCH",
+  "work_package": "WP-05",
+  "capability": "tables",
+  "dataset_id": "PUBTABNET-SAMPLE-V1.0",
+  "dataset_version": "1.0",
+  "partition_id": "WP04-VALIDATION-001",
+  "manifest_id": "MANIFEST-20261103",
+  "pipeline_version": "1.0.0",
+  "configuration_hash": "b6f03e08544c922880775d7b5b54a613cfcfc382",
+  "software_versions": {
+    "TableExtractor": "1.0.0"
+  },
+  "metrics": {
+    "teds_score": 1.0,
+    "cell_exact_match_ratio": 1.0,
+    "cell_numeric_accuracy": 1.0,
+    "structure_accuracy": 1.0,
+    "total_evaluated_cells": 12,
+    "grid_valid": true,
+    "evaluated_tables": 1
+  },
+  "resource_metrics": {
+    "elapsed_seconds": 0.009
+  },
+  "errors": [],
+  "execution_status": "COMPLETED"
+}

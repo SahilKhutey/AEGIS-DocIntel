@@ -1,0 +1,65 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "AEGIS Complete Document Processing Result Schema",
+  "type": "object",
+  "required": [
+    "document_id",
+    "processing_run_id",
+    "status",
+    "page_count",
+    "completed_stages",
+    "failed_stages"
+  ],
+  "properties": {
+    "document_id": { "type": "string" },
+    "processing_run_id": { "type": "string" },
+    "status": {
+      "type": "string",
+      "enum": [
+        "SUCCESS",
+        "PARTIAL_SUCCESS",
+        "INVALID_FORMAT",
+        "CORRUPTED_DOCUMENT",
+        "ENCRYPTED_DOCUMENT",
+        "RESOURCE_LIMIT_EXCEEDED",
+        "TIMEOUT",
+        "UNSUPPORTED_FEATURE",
+        "EXTRACTION_FAILED",
+        "VALIDATION_FAILED",
+        "SECURITY_REJECTED"
+      ]
+    },
+    "page_count": { "type": "integer", "minimum": 0 },
+    "pages": {
+      "type": "array",
+      "items": { "type": "object" }
+    },
+    "error": {
+      "type": ["object", "null"],
+      "properties": {
+        "code": { "type": "string" },
+        "stage": { "type": "string" },
+        "page_number": { "type": ["integer", "null"] },
+        "category": { "type": "string" },
+        "recoverable": { "type": "boolean" },
+        "message": { "type": "string" }
+      }
+    },
+    "resource_usage": {
+      "type": "object",
+      "properties": {
+        "elapsed_ms": { "type": "number" },
+        "peak_memory_bytes": { "type": ["integer", "null"] },
+        "cpu_time_ms": { "type": ["number", "null"] }
+      }
+    },
+    "completed_stages": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "failed_stages": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  }
+}

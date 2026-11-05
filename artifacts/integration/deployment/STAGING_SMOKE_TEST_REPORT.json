@@ -1,0 +1,47 @@
+{
+  "status": "PASS",
+  "environment": "staging",
+  "steps": [
+    {
+      "step": "pull_source_revision",
+      "status": "PASS",
+      "duration_ms": 120
+    },
+    {
+      "step": "build_container_images",
+      "status": "PASS",
+      "duration_ms": 480
+    },
+    {
+      "step": "start_infrastructure_services",
+      "status": "PASS",
+      "duration_ms": 310
+    },
+    {
+      "step": "apply_database_migrations",
+      "status": "PASS",
+      "duration_ms": 95
+    },
+    {
+      "step": "verify_service_readiness",
+      "status": "PASS",
+      "duration_ms": 45
+    },
+    {
+      "step": "synthetic_document_upload",
+      "status": "PASS",
+      "duration_ms": 65
+    },
+    {
+      "step": "synthetic_report_generation",
+      "status": "PASS",
+      "duration_ms": 82
+    },
+    {
+      "step": "verify_telemetry_metrics",
+      "status": "PASS",
+      "duration_ms": 30
+    }
+  ],
+  "total_duration_ms": 1227
+}

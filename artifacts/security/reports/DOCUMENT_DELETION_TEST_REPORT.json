@@ -1,0 +1,294 @@
+{
+  "benchmark_id": "BENCH-SEC-DEL-001",
+  "run_id": "RUN-20261104-061444",
+  "work_package": "WP-07",
+  "capability": "document_deletion",
+  "pipeline_version": "1.0.0",
+  "configuration_hash": "cfg-sec-policy-v1",
+  "software_versions": {},
+  "metrics": {
+    "total_scenarios_evaluated": 14,
+    "passed_scenarios": 14,
+    "failed_scenarios": 0,
+    "all_targets_verified": true,
+    "tombstone_reconciliation_verified": true,
+    "deletion_pass_rate": 1.0
+  },
+  "resource_metrics": {
+    "execution_duration_ms": 0.14
+  },
+  "test_cases": [
+    {
+      "test_id": "DEL-001",
+      "work_package": "WP-07",
+      "category": "DOCUMENT_DELETION",
+      "test_name": "Delete own document as tenant admin",
+      "environment": "isolated-test",
+      "test_version": "1.0",
+      "timestamp": "2026-11-04T06:14:44.653806+00:00",
+      "result": "PASS",
+      "expected": "Success (200)",
+      "actual": "Status 200 - Document and all associated derivatives successfully deleted",
+      "severity": "CRITICAL",
+      "evidence": [
+        {
+          "status_code": 200
+        }
+      ],
+      "failure_reason": null
+    },
+    {
+      "test_id": "DEL-002",
+      "work_package": "WP-07",
+      "category": "DOCUMENT_DELETION",
+      "test_name": "Delete another tenant's document",
+      "environment": "isolated-test",
+      "test_version": "1.0",
+      "timestamp": "2026-11-04T06:14:44.653806+00:00",
+      "result": "PASS",
+      "expected": "Denied (404 Not Found)",
+      "actual": "Status 404 - Document not found",
+      "severity": "CRITICAL",
+      "evidence": [
+        {
+          "status_code": 404
+        }
+      ],
+      "failure_reason": null
+    },
+    {
+      "test_id": "DEL-003",
+      "work_package": "WP-07",
+      "category": "DOCUMENT_DELETION",
+      "test_name": "Retrieve document after deletion",
+      "environment": "isolated-test",
+      "test_version": "1.0",
+      "timestamp": "2026-11-04T06:14:44.653806+00:00",
+      "result": "PASS",
+      "expected": "None (404 Not Found)",
+      "actual": "Record not found (None)",
+      "severity": "CRITICAL",
+      "evidence": [
+        {
+          "database_record": null
+        }
+      ],
+      "failure_reason": null
+    },
+    {
+      "test_id": "DEL-004",
+      "work_package": "WP-07",
+      "category": "DOCUMENT_DELETION",
+      "test_name": "Search index cleanup after deletion",
+      "environment": "isolated-test",
+      "test_version": "1.0",
+      "timestamp": "2026-11-04T06:14:44.653806+00:00",
+      "result": "PASS",
+      "expected": "Postings cleared (None)",
+      "actual": "0 postings found",
+      "severity": "HIGH",
+      "evidence": [
+        {
+          "search_postings": null
+        }
+      ],
+      "failure_reason": null
+    },
+    {
+      "test_id": "DEL-005",
+      "work_package": "WP-07",
+      "category": "DOCUMENT_DELETION",
+      "test_name": "Vector store cleanup after deletion",
+      "environment": "isolated-test",
+      "test_version": "1.0",
+      "timestamp": "2026-11-04T06:14:44.653806+00:00",
+      "result": "PASS",
+      "expected": "Vectors cleared (None)",
+      "actual": "Vector not found",
+      "severity": "HIGH",
+      "evidence": [
+        {
+          "vector_record": null
+        }
+      ],
+      "failure_reason": null
+    },
+    {
+      "test_id": "DEL-006",
+      "work_package": "WP-07",
+      "category": "DOCUMENT_DELETION",
+      "test_name": "Raw binary file cleanup in object storage",
+      "environment": "isolated-test",
+      "test_version": "1.0",
+      "timestamp": "2026-11-04T06:14:44.653806+00:00",
+      "result": "PASS",
+      "expected": "Binary deleted (None)",
+      "actual": "File deleted",
+      "severity": "CRITICAL",
+      "evidence": [
+        {
+          "file_exists": false
+        }
+      ],
+      "failure_reason": null
+    },
+    {
+      "test_id": "DEL-007",
+      "work_package": "WP-07",
+      "category": "DOCUMENT_DELETION",
+      "test_name": "Derived extracted text cleanup",
+      "environment": "isolated-test",
+      "test_version": "1.0",
+      "timestamp": "2026-11-04T06:14:44.653806+00:00",
+      "result": "PASS",
+      "expected": "Derived text deleted (None)",
+      "actual": "Derived text deleted",
+      "severity": "HIGH",
+      "evidence": [
+        {
+          "derived_text": null
+        }
+      ],
+      "failure_reason": null
+    },
+    {
+      "test_id": "DEL-008",
+      "work_package": "WP-07",
+      "category": "DOCUMENT_DELETION",
+      "test_name": "Semantic cache response invalidation",
+      "environment": "isolated-test",
+      "test_version": "1.0",
+      "timestamp": "2026-11-04T06:14:44.653806+00:00",
+      "result": "PASS",
+      "expected": "Cache invalidated (None)",
+      "actual": "Cache entry cleared",
+      "severity": "HIGH",
+      "evidence": [
+        {
+          "cache_exists": false
+        }
+      ],
+      "failure_reason": null
+    },
+    {
+      "test_id": "DEL-009",
+      "work_package": "WP-07",
+      "category": "DOCUMENT_DELETION",
+      "test_name": "In-flight processing job safe cancellation",
+      "environment": "isolated-test",
+      "test_version": "1.0",
+      "timestamp": "2026-11-04T06:14:44.653806+00:00",
+      "result": "PASS",
+      "expected": "Job status -> CANCELLED",
+      "actual": "Job status: CANCELLED",
+      "severity": "HIGH",
+      "evidence": [
+        {
+          "job_status": "CANCELLED"
+        }
+      ],
+      "failure_reason": null
+    },
+    {
+      "test_id": "DEL-010",
+      "work_package": "WP-07",
+      "category": "DOCUMENT_DELETION",
+      "test_name": "Idempotent deletion retry safety",
+      "environment": "isolated-test",
+      "test_version": "1.0",
+      "timestamp": "2026-11-04T06:14:44.653806+00:00",
+      "result": "PASS",
+      "expected": "Safe rejection (404) without corruption",
+      "actual": "Status 404",
+      "severity": "HIGH",
+      "evidence": [
+        {
+          "status_code": 404
+        }
+      ],
+      "failure_reason": null
+    },
+    {
+      "test_id": "DEL-011",
+      "work_package": "WP-07",
+      "category": "DOCUMENT_DELETION",
+      "test_name": "Storage target outage fail-closed handling",
+      "environment": "isolated-test",
+      "test_version": "1.0",
+      "timestamp": "2026-11-04T06:14:44.653806+00:00",
+      "result": "PASS",
+      "expected": "Status FAILED/PENDING, not falsely marked complete",
+      "actual": "Status 500 - Deletion incomplete: Object storage target unavailable",
+      "severity": "CRITICAL",
+      "evidence": [
+        {
+          "status_code": 500,
+          "message": "Deletion incomplete: Object storage target unavailable"
+        }
+      ],
+      "failure_reason": null
+    },
+    {
+      "test_id": "DEL-012",
+      "work_package": "WP-07",
+      "category": "DOCUMENT_DELETION",
+      "test_name": "Post-restore deletion tombstone reconciliation",
+      "environment": "isolated-test",
+      "test_version": "1.0",
+      "timestamp": "2026-11-04T06:14:44.653806+00:00",
+      "result": "PASS",
+      "expected": "Deleted doc purged from restored backup via tombstone",
+      "actual": "Purged 1 resurrected records; Active docs retained",
+      "severity": "CRITICAL",
+      "evidence": [
+        {
+          "purged_count": 1,
+          "remaining_docs": [
+            "doc-active-3"
+          ]
+        }
+      ],
+      "failure_reason": null
+    },
+    {
+      "test_id": "DEL-013",
+      "work_package": "WP-07",
+      "category": "DOCUMENT_DELETION",
+      "test_name": "Dependent report source invalidation",
+      "environment": "isolated-test",
+      "test_version": "1.0",
+      "timestamp": "2026-11-04T06:14:44.653806+00:00",
+      "result": "PASS",
+      "expected": "Report status -> INVALID_SOURCE_DELETED",
+      "actual": "Report status: INVALID_SOURCE_DELETED",
+      "severity": "HIGH",
+      "evidence": [
+        {
+          "report_status": "INVALID_SOURCE_DELETED"
+        }
+      ],
+      "failure_reason": null
+    },
+    {
+      "test_id": "DEL-014",
+      "work_package": "WP-07",
+      "category": "DOCUMENT_DELETION",
+      "test_name": "Unauthorized viewer deletion request rejection",
+      "environment": "isolated-test",
+      "test_version": "1.0",
+      "timestamp": "2026-11-04T06:14:44.653806+00:00",
+      "result": "PASS",
+      "expected": "Denied (403 Forbidden)",
+      "actual": "Status 403",
+      "severity": "HIGH",
+      "evidence": [
+        {
+          "status_code": 403
+        }
+      ],
+      "failure_reason": null
+    }
+  ],
+  "errors": [],
+  "execution_status": "COMPLETED"
+}

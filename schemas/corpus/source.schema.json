@@ -1,0 +1,74 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "AEGIS Corpus Source Schema",
+  "type": "object",
+  "required": [
+    "source_id",
+    "source_name",
+    "provider",
+    "source_url",
+    "source_type",
+    "document_types",
+    "language",
+    "access_method",
+    "licence_id",
+    "provenance_status"
+  ],
+  "properties": {
+    "source_id": {
+      "type": "string",
+      "pattern": "^SRC-[A-Z0-9_-]+$"
+    },
+    "source_name": {
+      "type": "string",
+      "minLength": 2
+    },
+    "provider": {
+      "type": "string",
+      "minLength": 2
+    },
+    "source_url": {
+      "type": "string",
+      "format": "uri"
+    },
+    "access_url": {
+      "type": "string"
+    },
+    "source_type": {
+      "type": "string",
+      "enum": ["dataset", "government_portal", "repository", "archive", "regulatory_filing", "internal_fixture"]
+    },
+    "document_types": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "language": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "geographic_scope": {
+      "type": "string"
+    },
+    "access_method": {
+      "type": "string",
+      "enum": ["direct", "api", "registration", "manual", "local_file"]
+    },
+    "date_accessed": {
+      "type": "string"
+    },
+    "source_version": {
+      "type": "string"
+    },
+    "licence_id": {
+      "type": "string",
+      "pattern": "^LIC-[A-Z0-9_-]+$"
+    },
+    "provenance_status": {
+      "type": "string",
+      "enum": ["VERIFIED", "PENDING", "REJECTED"]
+    },
+    "notes": {
+      "type": "string"
+    }
+  }
+}

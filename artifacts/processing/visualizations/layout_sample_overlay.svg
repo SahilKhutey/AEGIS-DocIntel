@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 612.0 792.0" width="612.0" height="792.0">
+  <rect width="100%" height="100%" fill="#fafafa" stroke="#cccccc" stroke-width="1"/>
+  <defs>
+    <style>
+      .gt-matched { fill: rgba(46, 204, 113, 0.15); stroke: #27ae60; stroke-width: 2; }
+      .gt-missed { fill: rgba(230, 126, 34, 0.15); stroke: #d35400; stroke-width: 2; stroke-dasharray: 4,4; }
+      .pred-fp { fill: rgba(231, 76, 60, 0.15); stroke: #c0392b; stroke-width: 2; }
+      .label { font-family: sans-serif; font-size: 10px; font-weight: bold; fill: #2c3e50; }
+    </style>
+  </defs>
+  <rect x="54.0" y="36.0" width="504.0" height="18.0" class="gt-matched"/>
+  <text x="58.0" y="48.0" class="label">header [GT-1]</text>
+  <rect x="54.0" y="72.0" width="504.0" height="36.0" class="gt-matched"/>
+  <text x="58.0" y="84.0" class="label">title [GT-2]</text>
+  <rect x="54.0" y="120.0" width="240.0" height="300.0" class="gt-matched"/>
+  <text x="58.0" y="132.0" class="label">paragraph [GT-3]</text>
+  <rect x="306.0" y="120.0" width="240.0" height="300.0" class="gt-matched"/>
+  <text x="310.0" y="132.0" class="label">paragraph [GT-4]</text>
+  <rect x="54.0" y="740.0" width="504.0" height="18.0" class="gt-matched"/>
+  <text x="58.0" y="752.0" class="label">footer [GT-5]</text>
+</svg>

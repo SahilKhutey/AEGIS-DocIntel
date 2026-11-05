@@ -1,0 +1,34 @@
+{
+  "benchmark_id": "WP05-OCR-001",
+  "run_id": "RUN-20261103-OCR-BENCH",
+  "work_package": "WP-05",
+  "capability": "ocr",
+  "dataset_id": "BENCHMARK-DATASET-REAL-PDF",
+  "dataset_version": "1.0",
+  "partition_id": "WP04-VALIDATION-001",
+  "manifest_id": "MANIFEST-20261103",
+  "pipeline_version": "1.0.0",
+  "configuration_hash": "b6f03e08544c922880775d7b5b54a613cfcfc382",
+  "software_versions": {
+    "PyMuPDF": "1.28.0",
+    "Tesseract": "pytesseract-0.3.13"
+  },
+  "metrics": {
+    "documents_evaluated": 15,
+    "total_pages_evaluated": 95,
+    "native_pdf_cer": 0.0021,
+    "native_pdf_wer": 0.0048,
+    "word_accuracy": 0.9952,
+    "structured_field_exact_match": 0.985,
+    "empty_page_handling_success_rate": 1.0,
+    "confidence_recorded_ratio": 1.0
+  },
+  "resource_metrics": {
+    "elapsed_seconds": 0.4704,
+    "latency_per_page_ms": 4.95,
+    "throughput_pages_per_sec": 201.95,
+    "total_characters_extracted": 154729
+  },
+  "errors": [],
+  "execution_status": "COMPLETED"
+}

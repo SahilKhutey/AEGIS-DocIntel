@@ -1,0 +1,59 @@
+version: "1.0.0"
+security:
+  authentication:
+    algorithm: "RS256"
+    required_claims: ["sub", "exp", "tenant_id"]
+    api_key_header: "X-API-Key"
+    hash_algorithm: "sha256"
+    max_clock_skew_seconds: 30
+    failed_attempt_threshold: 5
+    lockout_duration_seconds: 300
+  authorization:
+    default_action: "DENY"
+    disclose_cross_tenant_resource: false  # Return 404 instead of 403 to prevent IDOR enumeration
+    roles:
+      - viewer
+      - editor
+      - reviewer
+      - review_admin
+      - tenant_admin
+      - platform_admin
+  tenant_isolation:
+    enforce_server_derived_context: true
+    allow_client_tenant_override: false
+    database_scoped_queries: true
+    vector_search_pre_filtering: true
+    cache_tenant_partitioning: true
+    worker_tenant_preservation: true
+  privacy:
+    fail_closed: true
+    mask_character: "[REDACTED]"
+    safe_telemetry_only: true
+    classification_levels:
+      - PUBLIC
+      - INTERNAL
+      - CONFIDENTIAL
+      - SENSITIVE_PERSONAL_DATA
+      - HIGHLY_RESTRICTED
+  deletion:
+    cascade_targets:
+      - database_metadata
+      - object_storage
+      - extracted_text
+      - search_index
+      - vector_index
+      - semantic_cache
+    tombstone_retention_days: 90
+    idempotent_retries: true
+  reliability:
+    worker_lease_seconds: 120
+    heartbeat_interval_seconds: 40
+    max_retries: 3
+    base_backoff_seconds: 1.0
+    max_backoff_seconds: 60.0
+    jitter: true
+  backup:
+    integrity_verification: "PRAGMA integrity_check"
+    rpo_target_seconds: 3600    # 1 hour max data loss
+    rto_target_seconds: 900     # 15 minutes max restore time
+    permissions: "0o600"

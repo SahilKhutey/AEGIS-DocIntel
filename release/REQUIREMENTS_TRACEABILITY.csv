@@ -1,0 +1,23 @@
+req_id,domain,description,test_id,commit_sha,status,evidence_path,approver
+REQ-001,BASELINE,Mathematical context compiler specifications,TEST-BASE-01,c34fe022cec225de516bf4d7997cecf848ea4a1d,PASS,WP-01-Baseline-Acceptance.md,Architecture Lead
+REQ-002,AUDIT,Tamper-evident audit trail & runner,TEST-AUDIT-01,c34fe022cec225de516bf4d7997cecf848ea4a1d,PASS,WP-02-Audit-Infrastructure-Acceptance.md,Security Architect
+REQ-003,REMEDIATION,Zero P0/P1 baseline vulnerabilities open,TEST-REM-01,c34fe022cec225de516bf4d7997cecf848ea4a1d,PASS,WP-03-Remediation-Acceptance.md,Engineering Lead
+REQ-004,CORPUS,SPDX-compliant public corpus provenance & licensing,TEST-CORPUS-01,c34fe022cec225de516bf4d7997cecf848ea4a1d,PASS,WP-04-Public-Corpus-Acceptance.md,Data Governance Lead
+REQ-005,CORPUS,Isolated holdout partition with zero leakage,TEST-CORPUS-02,c34fe022cec225de516bf4d7997cecf848ea4a1d,PASS,artifacts/corpus/reports/holdout_leakage_report.json,Data Governance Lead
+REQ-006,PROCESSING,OCR accuracy >=95% and CER <=5%,TEST-PROC-01,c34fe022cec225de516bf4d7997cecf848ea4a1d,PASS,WP-05-Processing-Acceptance.md,Pipeline Lead
+REQ-007,PROCESSING,Table reconstruction structure F1 >=90%,TEST-PROC-02,c34fe022cec225de516bf4d7997cecf848ea4a1d,PASS,WP-05-Processing-Acceptance.md,Pipeline Lead
+REQ-008,PROCESSING,Safe parsing of corrupted and adversarial PDFs,TEST-PROC-03,c34fe022cec225de516bf4d7997cecf848ea4a1d,PASS,WP-05-Processing-Acceptance.md,Pipeline Lead
+REQ-009,INTELLIGENCE,Claim-level citation precision >=95%,TEST-INTEL-01,c34fe022cec225de516bf4d7997cecf848ea4a1d,PASS,WP-06-Intelligence-Acceptance.md,AI Lead
+REQ-010,INTELLIGENCE,Abstention on unanswerable questions >=95%,TEST-INTEL-02,c34fe022cec225de516bf4d7997cecf848ea4a1d,PASS,WP-06-Intelligence-Acceptance.md,AI Lead
+REQ-011,INTELLIGENCE,Fact and contradiction extraction accuracy >=90%,TEST-INTEL-03,c34fe022cec225de516bf4d7997cecf848ea4a1d,PASS,WP-06-Intelligence-Acceptance.md,AI Lead
+REQ-012,SECURITY,Cross-tenant access fails closed with HTTP 404,TEST-SEC-01,c34fe022cec225de516bf4d7997cecf848ea4a1d,PASS,WP-07-Security-Reliability-Acceptance.md,Security Lead
+REQ-013,SECURITY,Zero PII and credential leakage in outputs & logs,TEST-SEC-02,c34fe022cec225de516bf4d7997cecf848ea4a1d,PASS,WP-07-Security-Reliability-Acceptance.md,Privacy Officer
+REQ-014,SECURITY,Hard document deletion across storage and vector indexes,TEST-SEC-03,c34fe022cec225de516bf4d7997cecf848ea4a1d,PASS,WP-07-Security-Reliability-Acceptance.md,Security Lead
+REQ-015,RELIABILITY,Worker crash recovery and idempotent job retry,TEST-REL-01,c34fe022cec225de516bf4d7997cecf848ea4a1d,PASS,WP-07-Security-Reliability-Acceptance.md,SRE Lead
+REQ-016,RELIABILITY,Backup restoration and point-in-time recovery,TEST-REL-02,c34fe022cec225de516bf4d7997cecf848ea4a1d,PASS,WP-07-Security-Reliability-Acceptance.md,SRE Lead
+REQ-017,INTEGRATION,Frontend CI clean build & strict typecheck,TEST-INT-01,c34fe022cec225de516bf4d7997cecf848ea4a1d,PASS,artifacts/integration/frontend_ci/FRONTEND_BUILD_REPORT.json,Frontend Lead
+REQ-018,INTEGRATION,OpenAPI 3.1.0 contract conformance (76 endpoints),TEST-INT-02,c34fe022cec225de516bf4d7997cecf848ea4a1d,PASS,artifacts/integration/api_contract/API_CONTRACT_TEST_REPORT.json,API Architect
+REQ-019,INTEGRATION,Browser E2E validation across 18 user journeys,TEST-INT-03,c34fe022cec225de516bf4d7997cecf848ea4a1d,PASS,artifacts/integration/browser_e2e/BROWSER_E2E_TEST_REPORT.json,QA Lead
+REQ-020,INTEGRATION,Complete document-to-report workflow on corpus files,TEST-INT-04,c34fe022cec225de516bf4d7997cecf848ea4a1d,PASS,artifacts/integration/workflows/DOCUMENT_TO_REPORT_TEST_REPORT.json,Product Lead
+REQ-021,INTEGRATION,Deployment configuration & staging smoke tests,TEST-INT-05,c34fe022cec225de516bf4d7997cecf848ea4a1d,PASS,artifacts/integration/deployment/DEPLOYMENT_VERIFICATION_REPORT.json,DevOps Lead
+REQ-022,RELEASE,Immutable candidate freeze & manifest integrity,TEST-REL-RC-01,c34fe022cec225de516bf4d7997cecf848ea4a1d,PASS,RELEASE_FREEZE_REPORT.md,Release Owner

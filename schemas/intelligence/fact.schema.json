@@ -1,0 +1,73 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "AEGIS Canonical Fact Schema",
+  "type": "object",
+  "required": [
+    "fact_id",
+    "subject",
+    "predicate",
+    "object",
+    "qualifiers",
+    "evidence",
+    "extraction_method",
+    "verification_status"
+  ],
+  "properties": {
+    "fact_id": { "type": "string" },
+    "subject": {
+      "type": "object",
+      "required": ["entity_id", "name", "type"],
+      "properties": {
+        "entity_id": { "type": "string" },
+        "name": { "type": "string" },
+        "type": { "type": "string" }
+      }
+    },
+    "predicate": { "type": "string" },
+    "object": {
+      "type": "object",
+      "required": ["value", "data_type"],
+      "properties": {
+        "value": { "type": ["string", "number", "boolean"] },
+        "raw_value": { "type": "string" },
+        "unit": { "type": ["string", "null"] },
+        "data_type": {
+          "type": "string",
+          "enum": ["string", "quantity", "currency", "date", "boolean", "percentage"]
+        }
+      }
+    },
+    "qualifiers": {
+      "type": "object",
+      "properties": {
+        "reporting_period": { "type": ["string", "null"] },
+        "geographic_scope": { "type": ["string", "null"] },
+        "status": { "type": ["string", "null"] },
+        "date_precision": { "type": ["string", "null"] }
+      }
+    },
+    "evidence": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["document_id"],
+        "properties": {
+          "document_id": { "type": "string" },
+          "page_number": { "type": ["integer", "null"] },
+          "region_id": { "type": ["string", "null"] },
+          "chunk_id": { "type": ["string", "null"] },
+          "quoted_text": { "type": "string" }
+        }
+      }
+    },
+    "extraction_method": {
+      "type": "string",
+      "enum": ["structured_extraction", "regex", "table_cell_extraction", "relation_model"]
+    },
+    "confidence": { "type": ["number", "null"], "minimum": 0.0, "maximum": 1.0 },
+    "verification_status": {
+      "type": "string",
+      "enum": ["UNVERIFIED", "VERIFIED", "DISPUTED", "DEPRECATED"]
+    }
+  }
+}

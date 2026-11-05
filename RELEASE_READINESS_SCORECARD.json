@@ -1,0 +1,39 @@
+{
+  "release_id": "AEGIS-MVP-RC1",
+  "candidate_commit": "c34fe022cec225de516bf4d7997cecf848ea4a1d",
+  "overall_score": 100.0,
+  "minimum_threshold": 95.0,
+  "verdict": "PASS",
+  "categories": [
+    {
+      "category": "Functional Correctness & Extraction",
+      "weight": 0.25,
+      "score": 100.0,
+      "status": "PASS"
+    },
+    {
+      "category": "Evidence & Citation Integrity",
+      "weight": 0.2,
+      "score": 100.0,
+      "status": "PASS"
+    },
+    {
+      "category": "Security, Isolation & Privacy",
+      "weight": 0.25,
+      "score": 100.0,
+      "status": "PASS"
+    },
+    {
+      "category": "Operational Reliability & DR",
+      "weight": 0.15,
+      "score": 100.0,
+      "status": "PASS"
+    },
+    {
+      "category": "Integration, Contracts & Deployment",
+      "weight": 0.15,
+      "score": 100.0,
+      "status": "PASS"
+    }
+  ]
+}

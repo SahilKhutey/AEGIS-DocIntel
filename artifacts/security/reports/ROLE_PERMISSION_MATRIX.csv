@@ -1,0 +1,17 @@
+operation,anonymous,viewer,editor,reviewer,review_admin,tenant_admin,platform_admin
+login,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW
+view_public_health,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW
+view_own_documents,DENY,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW,DENY
+upload_documents,DENY,DENY,ALLOW,DENY,DENY,ALLOW,DENY
+run_document_analysis,DENY,DENY,ALLOW,ALLOW,DENY,ALLOW,DENY
+view_permitted_reports,DENY,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW,DENY
+generate_reports,DENY,DENY,ALLOW,ALLOW,ALLOW,ALLOW,DENY
+review_citations_and_facts,DENY,DENY,DENY,ALLOW,ALLOW,ALLOW,DENY
+manage_tenant_users,DENY,DENY,DENY,DENY,DENY,ALLOW,DENY
+delete_own_documents,DENY,DENY,DENY,DENY,DENY,ALLOW,DENY
+view_tenant_audit_logs,DENY,DENY,DENY,DENY,ALLOW,ALLOW,DENY
+view_platform_metrics,DENY,DENY,DENY,DENY,DENY,DENY,ALLOW
+trigger_platform_backup,DENY,DENY,DENY,DENY,DENY,DENY,ALLOW
+restore_database_snapshot,DENY,DENY,DENY,DENY,DENY,DENY,ALLOW
+cross_tenant_document_read,DENY,DENY,DENY,DENY,DENY,DENY,DENY
+cross_tenant_document_delete,DENY,DENY,DENY,DENY,DENY,DENY,DENY

@@ -1,0 +1,23 @@
+{
+  "project": "AEGIS-DocIntel",
+  "architecture": "Dual Open-Core (aegis-docprep: Apache-2.0, AMDI-OS: Proprietary)",
+  "total_dependencies_audited": 89,
+  "python_packages_count": 71,
+  "npm_packages_count": 18,
+  "approved_packages_count": 88,
+  "conditional_packages_count": 1,
+  "prohibited_packages_count": 0,
+  "compliance_status": "COMPLIANT",
+  "conditional_items": [
+    {
+      "package_name": "pymupdf",
+      "version": "1.28.2",
+      "license_declared": "Dual: AGPL-3.0 / Artifex Commercial",
+      "classification": "DUAL_LICENSED",
+      "ecosystem": "python",
+      "compliance_status": "CONDITIONAL (Artifex Commercial License required for closed-source distribution; AGPL-3.0 for research/eval)"
+    }
+  ],
+  "prohibited_items": [],
+  "recommendation": "All dependencies are compliant for research and evaluation. For enterprise closed-source commercial distribution, procure Artifex Commercial License for PyMuPDF or activate the pure-permissive parser cascade (pdfminer.six + pdfplumber)."
+}

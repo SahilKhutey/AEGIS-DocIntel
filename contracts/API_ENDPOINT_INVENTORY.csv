@@ -1,0 +1,77 @@
+method,path,operation_id,summary,tags,auth_requirement,tenant_scope,request_schema,status_codes,version
+GET,/health,health_check_health_get,Health Check,System,Optional,System,None,200,v1
+GET,/health/live,liveness_health_live_get,Liveness probe,Health,Optional,System,None,200,v1
+GET,/health/ready,readiness_health_ready_get,Readiness probe,Health,Optional,System,None,200,v1
+GET,/readiness,readiness_readiness_get,Readiness,System,Optional,System,None,200,v1
+GET,/stats,get_stats_stats_get,Get Stats,System,Optional,System,None,200,v1
+GET,/v1/admin/stats,get_stats_v1_admin_stats_get,Get tenant operational statistics,Admin,Bearer / APIKey,Tenant,None,200,v1
+GET,/v1/admin/token-usage,get_token_usage_v1_admin_token_usage_get,Get token usage breakdown,Admin,Bearer / APIKey,Tenant,None,200,v1
+POST,/v1/advanced/compliance/pii-detect,scan_pii_entities_v1_advanced_compliance_pii_detect_post,Scan Pii Entities,Advanced Systems & Pre-LLM,Bearer / APIKey,Tenant,application/json,200;422,v1
+POST,/v1/advanced/compliance/pii-scan,scan_and_redact_pii_v1_advanced_compliance_pii_scan_post,Scan And Redact Pii,Advanced Systems & Pre-LLM,Bearer / APIKey,Tenant,application/json,200;422,v1
+POST,/v1/advanced/compliance/redact,redact_pii_entities_v1_advanced_compliance_redact_post,Redact Pii Entities,Advanced Systems & Pre-LLM,Bearer / APIKey,Tenant,application/json,200;422,v1
+POST,/v1/advanced/entity/resolve,resolve_entities_v1_advanced_entity_resolve_post,Resolve Entities,Advanced Systems & Pre-LLM,Bearer / APIKey,Tenant,application/json,200;422,v1
+POST,/v1/advanced/export/llm-optimized,export_llm_optimized_v1_advanced_export_llm_optimized_post,Export Llm Optimized,Advanced Systems & Pre-LLM,Bearer / APIKey,Tenant,application/json,200;422,v1
+POST,/v1/advanced/ingestion/anomaly-check,scan_ingestion_anomalies_v1_advanced_ingestion_anomaly_check_post,Scan Ingestion Anomalies,Advanced Systems & Pre-LLM,Bearer / APIKey,Tenant,application/json,200;422,v1
+POST,/v1/advanced/ingestion/parse-image-layout,parse_image_layout_v1_advanced_ingestion_parse_image_layout_post,Parse Image Layout,Advanced Systems & Pre-LLM,Bearer / APIKey,Tenant,application/json,200;422,v1
+POST,/v1/advanced/ingestion/parse-speech,parse_speech_audio_v1_advanced_ingestion_parse_speech_post,Parse Speech Audio,Advanced Systems & Pre-LLM,Bearer / APIKey,Tenant,application/json,200;422,v1
+POST,/v1/advanced/math/unified-evaluation,evaluate_unified_math_v1_advanced_math_unified_evaluation_post,Evaluate Unified Math,Advanced Systems & Pre-LLM,Bearer / APIKey,Tenant,application/json,200;422,v1
+POST,/v1/advanced/matrix/normalize-quantity,normalize_cell_quantity_v1_advanced_matrix_normalize_quantity_post,Normalize Cell Quantity,Advanced Systems & Pre-LLM,Bearer / APIKey,Tenant,application/json,200;422,v1
+POST,/v1/advanced/optimization/ising-anneal,anneal_master_objective_v1_advanced_optimization_ising_anneal_post,Anneal Master Objective,Advanced Systems & Pre-LLM,Bearer / APIKey,Tenant,application/json,200;422,v1
+POST,/v1/advanced/query/decompose,decompose_query_v1_advanced_query_decompose_post,Decompose Query,Advanced Systems & Pre-LLM,Bearer / APIKey,Tenant,application/json,200;422,v1
+GET,/v1/advanced/topology/percolation-check,estimate_resilience_v1_advanced_topology_percolation_check_get,Estimate Resilience,Advanced Systems & Pre-LLM,Bearer / APIKey,Tenant,None,200,v1
+POST,/v1/advanced/versioning/diff,diff_document_versions_v1_advanced_versioning_diff_post,Diff Document Versions,Advanced Systems & Pre-LLM,Bearer / APIKey,Tenant,application/json,200;422,v1
+POST,/v1/annotations/,create_generic_annotation_v1_annotations__post,Create Generic Annotation,annotations,Bearer / APIKey,Tenant,application/json,200;422,v1
+GET,/v1/annotations/,list_annotations_v1_annotations__get,List Annotations,annotations,Bearer / APIKey,Tenant,None,200;422,v1
+POST,/v1/annotations/auto-annotate,auto_annotate_v1_annotations_auto_annotate_post,Auto Annotate,annotations,Bearer / APIKey,Tenant,application/json,200;422,v1
+POST,/v1/annotations/correction,create_correction_v1_annotations_correction_post,Create Correction,annotations,Bearer / APIKey,Tenant,application/json,200;422,v1
+GET,/v1/annotations/export/{doc_id},export_annotations_v1_annotations_export__doc_id__get,Export Annotations,annotations,Bearer / APIKey,Tenant,None,200;422,v1
+POST,/v1/annotations/highlight,create_highlight_v1_annotations_highlight_post,Create Highlight,annotations,Bearer / APIKey,Tenant,application/json,200;422,v1
+POST,/v1/annotations/import/{doc_id},import_annotations_v1_annotations_import__doc_id__post,Import Annotations,annotations,Bearer / APIKey,Tenant,application/json,200;422,v1
+POST,/v1/annotations/note,create_note_v1_annotations_note_post,Create Note,annotations,Bearer / APIKey,Tenant,application/json,200;422,v1
+GET,/v1/annotations/search/,search_annotations_v1_annotations_search__get,Search Annotations,annotations,Bearer / APIKey,Tenant,None,200;422,v1
+GET,/v1/annotations/statistics/{doc_id},get_statistics_v1_annotations_statistics__doc_id__get,Get Statistics,annotations,Bearer / APIKey,Tenant,None,200;422,v1
+POST,/v1/annotations/verify,create_verification_v1_annotations_verify_post,Create Verification,annotations,Bearer / APIKey,Tenant,application/json,200;422,v1
+GET,/v1/annotations/{annotation_id},get_annotation_v1_annotations__annotation_id__get,Get Annotation,annotations,Bearer / APIKey,Tenant,None,200;422,v1
+PATCH,/v1/annotations/{annotation_id},update_annotation_v1_annotations__annotation_id__patch,Update Annotation,annotations,Bearer / APIKey,Tenant,application/json,200;422,v1
+DELETE,/v1/annotations/{annotation_id},delete_annotation_v1_annotations__annotation_id__delete,Delete Annotation,annotations,Bearer / APIKey,Tenant,None,200;422,v1
+POST,/v1/annotations/{annotation_id}/resolve,resolve_annotation_v1_annotations__annotation_id__resolve_post,Resolve Annotation,annotations,Bearer / APIKey,Tenant,None,200;422,v1
+POST,/v1/answers,create_answer_v1_answers_post,Generate evidence-grounded answer with validated citations,Answers,Bearer / APIKey,Tenant,application/json,200;422,v1
+DELETE,/v1/document,clear_document_v1_document_delete,Clear Document,,Bearer / APIKey,Tenant,None,204,v1
+GET,/v1/documents,list_documents_v1_documents_get,List all documents,Documents,Bearer / APIKey,Tenant,None,200;422,v1
+POST,/v1/documents/batch,batch_upload_v1_documents_batch_post,Batch upload from S3 manifest,Documents,Bearer / APIKey,Tenant,application/json,202;422,v1
+POST,/v1/documents/upload,upload_document_v1_documents_upload_post,Upload a document for indexing,Documents,Bearer / APIKey,Tenant,multipart/form-data,202;422,v1
+GET,/v1/documents/{doc_id},get_document_v1_documents__doc_id__get,Get document status,Documents,Bearer / APIKey,Tenant,None,200;422,v1
+DELETE,/v1/documents/{doc_id},delete_document_v1_documents__doc_id__delete,Delete a document,Documents,Bearer / APIKey,Tenant,None,204;422,v1
+GET,/v1/documents/{doc_id}/chunks,list_chunks_v1_documents__doc_id__chunks_get,List document chunks,Documents,Bearer / APIKey,Tenant,None,200;422,v1
+GET,/v1/documents/{doc_id}/elements,get_elements_v1_documents__doc_id__elements_get,Get document elements,Documents,Bearer / APIKey,Tenant,None,200;422,v1
+GET,/v1/documents/{doc_id}/explain,explain_v1_documents__doc_id__explain_get,Explain,,Bearer / APIKey,Tenant,None,200;422,v1
+GET,/v1/documents/{doc_id}/export,export_document_v1_documents__doc_id__export_get,Export Document,,Bearer / APIKey,Tenant,None,200;422,v1
+POST,/v1/documents/{doc_id}/reindex,reindex_document_v1_documents__doc_id__reindex_post,Trigger document re-indexing,Documents,Bearer / APIKey,Tenant,None,202;422,v1
+GET,/v1/documents/{doc_id}/status,get_indexing_status_v1_documents__doc_id__status_get,Get detailed indexing progress,Documents,Bearer / APIKey,Tenant,None,200;422,v1
+POST,/v1/documents/{document_id}/extract-facts,extract_facts_v1_documents__document_id__extract_facts_post,Extract structured facts from document passages,Intelligence,Bearer / APIKey,Tenant,application/json,200;422,v1
+GET,/v1/documents/{document_id}/facts,get_document_facts_v1_documents__document_id__facts_get,Retrieve extracted structured facts for a document,Intelligence,Bearer / APIKey,Tenant,None,200;422,v1
+POST,/v1/ingest,ingest_v1_ingest_post,Ingest,,Bearer / APIKey,Tenant,multipart/form-data,201;422,v1
+POST,/v1/intelligence/compare,compare_documents_v1_intelligence_compare_post,Compare structured facts between two documents,Intelligence,Bearer / APIKey,Tenant,application/json,200;422,v1
+GET,/v1/intelligence/conflicts,get_conflicts_v1_intelligence_conflicts_get,Detect conflicting facts across documents,Intelligence,Bearer / APIKey,Tenant,None,200;422,v1
+POST,/v1/jobs,submit_job_v1_jobs_post,Submit a background processing job,Jobs,Bearer / APIKey,Tenant,application/json,202;422,v1
+GET,/v1/jobs,list_jobs_v1_jobs_get,List background jobs for authenticated tenant,Jobs,Bearer / APIKey,Tenant,None,200;422,v1
+GET,/v1/jobs/{job_id},get_job_v1_jobs__job_id__get,Get background job status and progress metadata,Jobs,Bearer / APIKey,Tenant,None,200;422,v1
+POST,/v1/jobs/{job_id}/cancel,cancel_job_v1_jobs__job_id__cancel_post,Cancel an active or pending background job,Jobs,Bearer / APIKey,Tenant,application/json,200;422,v1
+GET,/v1/jobs/{job_id}/events,get_job_events_v1_jobs__job_id__events_get,Read operational audit events and attempt history for a job,Jobs,Bearer / APIKey,Tenant,None,200;422,v1
+POST,/v1/jobs/{job_id}/retry,retry_job_v1_jobs__job_id__retry_post,Manually reschedule a failed or cancelled background job,Jobs,Bearer / APIKey,Tenant,None,200;422,v1
+POST,/v1/query,query_documents_v1_query_post,Query documents with RAG,Query,Bearer / APIKey,Tenant,application/json,200;422,v1
+GET,/v1/query/stream,query_stream_v1_query_stream_get,Query Stream,,Bearer / APIKey,Tenant,None,200;422,v1
+GET,/v1/reviews,list_reviews_v1_reviews_get,List tenant review queue items,Governance,Bearer / APIKey,Tenant,None,200;422,v1
+GET,/v1/reviews/approved-facts,get_approved_facts_v1_reviews_approved_facts_get,Retrieve approved facts for report generation,Governance,Bearer / APIKey,Tenant,None,200;422,v1
+GET,/v1/reviews/metrics,get_metrics_v1_reviews_metrics_get,Get review governance and quality metrics,Governance,Bearer / APIKey,Tenant,None,200,v1
+GET,/v1/reviews/{review_id},get_review_detail_v1_reviews__review_id__get,Fetch review item details and evidence links,Governance,Bearer / APIKey,Tenant,None,200;422,v1
+POST,/v1/reviews/{review_id}/claim,claim_review_v1_reviews__review_id__claim_post,Claim a review item,Governance,Bearer / APIKey,Tenant,application/json,200;422,v1
+POST,/v1/reviews/{review_id}/decisions,submit_decision_v1_reviews__review_id__decisions_post,"Submit a reviewer decision (approve, correct, reject, request_evidence)",Governance,Bearer / APIKey,Tenant,application/json,200;422,v1
+POST,/v1/reviews/{review_id}/feedback,submit_feedback_v1_reviews__review_id__feedback_post,Record structured evaluation feedback,Governance,Bearer / APIKey,Tenant,application/json,200;422,v1
+GET,/v1/reviews/{review_id}/history,get_history_v1_reviews__review_id__history_get,Read audit history of state transitions,Governance,Bearer / APIKey,Tenant,None,200;422,v1
+POST,/v1/reviews/{review_id}/reopen,reopen_review_v1_reviews__review_id__reopen_post,Reopen a completed review under administrative authority,Governance,Bearer / APIKey,Tenant,application/json,200;422,v1
+GET,/v1/stats,get_stats_v1_stats_get,Get Stats,System,Bearer / APIKey,Tenant,None,200,v1
+POST,/v1/webhooks/ingest-complete,ingest_complete_webhook_v1_webhooks_ingest_complete_post,Ingest Complete Webhook,Webhooks,Bearer / APIKey,Tenant,None,200,v1
+GET,/v1/webhooks/subscriptions,list_subscriptions_v1_webhooks_subscriptions_get,List Subscriptions,Webhooks,Bearer / APIKey,Tenant,None,200,v1
+POST,/v1/webhooks/subscriptions,create_subscription_v1_webhooks_subscriptions_post,Create Subscription,Webhooks,Bearer / APIKey,Tenant,application/json,201;422,v1
+DELETE,/v1/webhooks/subscriptions/{subscription_id},delete_subscription_v1_webhooks_subscriptions__subscription_id__delete,Delete Subscription,Webhooks,Bearer / APIKey,Tenant,None,200;422,v1

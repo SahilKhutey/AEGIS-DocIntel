@@ -1,0 +1,17 @@
+[
+  {
+    "claim_id": "CLM-ERR-001",
+    "claim_text": "In fiscal year 2024, consolidated revenue declined by 50% to $100 million.",
+    "citations": [
+      {
+        "citation_id": "CIT-ERR-001",
+        "document_id": "doc_annual_report_2024",
+        "document_version": "v1.0",
+        "page_number": 1,
+        "chunk_id": "c1",
+        "claim_id": "CLM-ERR-001"
+      }
+    ],
+    "expected_supporting": false
+  }
+]

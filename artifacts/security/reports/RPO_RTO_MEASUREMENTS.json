@@ -1,0 +1,35 @@
+{
+  "run_id": "RUN-20261104-053849",
+  "rpo_target_seconds": 3600,
+  "rpo_actual_seconds": 3600,
+  "rpo_compliant": true,
+  "rto_target_seconds": 900,
+  "rto_actual_seconds": 0.0011,
+  "rto_compliant": true,
+  "recovery_timeline": [
+    {
+      "stage": "backup_snapshot",
+      "duration_ms": 12.5
+    },
+    {
+      "stage": "decryption_verification",
+      "duration_ms": 4.1
+    },
+    {
+      "stage": "clean_environment_provision",
+      "duration_ms": 5.0
+    },
+    {
+      "stage": "database_restoration",
+      "duration_ms": 1.08
+    },
+    {
+      "stage": "tombstone_reconciliation",
+      "duration_ms": 2.3
+    },
+    {
+      "stage": "smoke_verification",
+      "duration_ms": 8.0
+    }
+  ]
+}

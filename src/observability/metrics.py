@@ -6,6 +6,7 @@ Prometheus metrics definitions + structured logging setup.
 from __future__ import annotations
 
 import logging
+import os
 import sys
 from typing import Any
 
@@ -114,7 +115,7 @@ def start_observability() -> None:
     """Start Prometheus /metrics HTTP server and OpenTelemetry."""
     global REQUEST_LATENCY
 
-    if settings.observability.enable_metrics:
+    if settings.observability.enable_metrics and not os.environ.get("PYTEST_CURRENT_TEST"):
         try:
             start_http_server(settings.observability.metrics_port)
         except OSError:

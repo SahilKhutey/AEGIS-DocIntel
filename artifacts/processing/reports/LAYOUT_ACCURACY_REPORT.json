@@ -1,0 +1,35 @@
+{
+  "benchmark_id": "WP05-LAY-001",
+  "run_id": "RUN-20261103-LAYOUT-BENCH",
+  "work_package": "WP-05",
+  "capability": "layout",
+  "dataset_id": "DOCLAYNET-SAMPLE-V1.1",
+  "dataset_version": "1.1",
+  "partition_id": "WP04-VALIDATION-001",
+  "manifest_id": "MANIFEST-20261103",
+  "pipeline_version": "1.0.0",
+  "configuration_hash": "b6f03e08544c922880775d7b5b54a613cfcfc382",
+  "software_versions": {
+    "LayoutDetector": "1.0.0"
+  },
+  "metrics": {
+    "overall_precision": 1.0,
+    "overall_recall": 1.0,
+    "overall_f1": 1.0,
+    "mean_average_precision": 1.0,
+    "iou_threshold": 0.5,
+    "total_evaluated_regions": 5,
+    "per_class_f1": {
+      "footer": 1.0,
+      "header": 1.0,
+      "paragraph": 1.0,
+      "title": 1.0
+    }
+  },
+  "resource_metrics": {
+    "elapsed_seconds": 0.012,
+    "visual_overlay_generated": "artifacts/processing/visualizations/layout_sample_overlay.svg"
+  },
+  "errors": [],
+  "execution_status": "COMPLETED"
+}

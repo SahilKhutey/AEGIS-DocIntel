@@ -1,0 +1,8 @@
+{
+  "run_id": "RUN-20261104-053849",
+  "backup_method": "sqlite3_online_backup",
+  "pragma_integrity_check": "ok",
+  "corrupted_backup_rejected": true,
+  "encryption_decryption_verified": true,
+  "integrity_status": "PASSED"
+}

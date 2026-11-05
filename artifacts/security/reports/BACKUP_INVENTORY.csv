@@ -1,0 +1,8 @@
+component,backup_type,source_path,backup_target,verification_method,rebuildable
+sqlite_database,FULL_SNAPSHOT,data/aegis.db,backups/db/aegis_{ts}.db,PRAGMA integrity_check,FALSE
+original_documents,FILE_MIRROR,storage/{tenant_id}/,backups/docs/{tenant_id}/,SHA-256 Checksum,FALSE
+derived_ocr_layout,SNAPSHOT_OR_REBUILD,artifacts/processing/,backups/derived/,Directory Manifest,TRUE
+vector_index,SNAPSHOT_OR_REBUILD,data/vectors/,backups/vectors/,Record Count & Norm Check,TRUE
+search_index,SNAPSHOT_OR_REBUILD,data/indexes/,backups/indexes/,Posting Count Check,TRUE
+audit_logs,APPEND_ONLY,artifacts/audits/,backups/audits/,Hash Chain Verification,FALSE
+configuration,VERSION_CONTROL,configs/,backups/configs/,Git Commit SHA Match,TRUE

@@ -1,0 +1,60 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "AEGIS Text Extraction Schema",
+  "type": "object",
+  "required": [
+    "document_id",
+    "page_number",
+    "extraction_method",
+    "engine",
+    "engine_version",
+    "language",
+    "text",
+    "blocks",
+    "processing_status"
+  ],
+  "properties": {
+    "document_id": { "type": "string" },
+    "page_number": { "type": "integer", "minimum": 1 },
+    "extraction_method": {
+      "type": "string",
+      "enum": ["native_pdf", "ocr", "hybrid"]
+    },
+    "engine": { "type": "string" },
+    "engine_version": { "type": "string" },
+    "language": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "text": { "type": "string" },
+    "confidence": { "type": ["number", "null"], "minimum": 0.0, "maximum": 1.0 },
+    "blocks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["block_id", "text", "bbox"],
+        "properties": {
+          "block_id": { "type": "string" },
+          "text": { "type": "string" },
+          "bbox": {
+            "type": "array",
+            "items": { "type": "number" },
+            "minItems": 4,
+            "maxItems": 4
+          },
+          "confidence": { "type": ["number", "null"] }
+        }
+      }
+    },
+    "processing_status": {
+      "type": "string",
+      "enum": [
+        "SUCCESS",
+        "PARTIAL_SUCCESS",
+        "EMPTY_PAGE",
+        "EXTRACTION_FAILED",
+        "TIMEOUT"
+      ]
+    }
+  }
+}

@@ -1,0 +1,97 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "AEGIS Evaluation Manifest Schema",
+  "description": "Schema definition for manifest-driven document intelligence and benchmark evaluations.",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "manifest_id",
+    "name",
+    "target_domain",
+    "datasets",
+    "tasks",
+    "quality_gates"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    "manifest_id": {
+      "type": "string",
+      "minLength": 3
+    },
+    "name": {
+      "type": "string",
+      "minLength": 3
+    },
+    "target_domain": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "datasets": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "required": ["path", "sha256", "format"],
+        "properties": {
+          "path": {
+            "type": "string"
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "format": {
+            "type": "string",
+            "enum": ["jsonl", "json", "csv"]
+          },
+          "item_count": {
+            "type": "integer",
+            "minimum": 0
+          }
+        }
+      }
+    },
+    "tasks": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "required": ["dataset", "engine", "metrics"],
+        "properties": {
+          "dataset": {
+            "type": "string"
+          },
+          "engine": {
+            "type": "string"
+          },
+          "metrics": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "quality_gates": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "min_value": {
+            "type": "number"
+          },
+          "max_value": {
+            "type": "number"
+          },
+          "strict": {
+            "type": "boolean"
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,488 @@
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.5",
+  "serialNumber": "urn:uuid:aegis-docintel-1.0.0-rc1-sbom",
+  "version": 1,
+  "metadata": {
+    "component": {
+      "type": "application",
+      "name": "AEGIS-DocIntel",
+      "version": "1.0.0-rc.1",
+      "description": "Production-grade Multimodal Document Intelligence Platform"
+    }
+  },
+  "components": [
+    {
+      "type": "library",
+      "name": "pydantic",
+      "version": "2.6.0",
+      "purl": "pkg:pypi/pydantic@2.6.0",
+      "language": "python",
+      "source": "requirements-core.txt"
+    },
+    {
+      "type": "library",
+      "name": "pydantic-settings",
+      "version": "2.2.0",
+      "purl": "pkg:pypi/pydantic-settings@2.2.0",
+      "language": "python",
+      "source": "requirements-core.txt"
+    },
+    {
+      "type": "library",
+      "name": "pyyaml",
+      "version": "6.0.1",
+      "purl": "pkg:pypi/pyyaml@6.0.1",
+      "language": "python",
+      "source": "requirements-core.txt"
+    },
+    {
+      "type": "library",
+      "name": "fastapi",
+      "version": "0.110.0",
+      "purl": "pkg:pypi/fastapi@0.110.0",
+      "language": "python",
+      "source": "requirements-core.txt"
+    },
+    {
+      "type": "library",
+      "name": "starlette",
+      "version": "0.36.0",
+      "purl": "pkg:pypi/starlette@0.36.0",
+      "language": "python",
+      "source": "requirements-core.txt"
+    },
+    {
+      "type": "library",
+      "name": "uvicorn",
+      "version": "0.27.0",
+      "purl": "pkg:pypi/uvicorn@0.27.0",
+      "language": "python",
+      "source": "requirements-core.txt"
+    },
+    {
+      "type": "library",
+      "name": "python-multipart",
+      "version": "0.0.9",
+      "purl": "pkg:pypi/python-multipart@0.0.9",
+      "language": "python",
+      "source": "requirements-core.txt"
+    },
+    {
+      "type": "library",
+      "name": "httpx",
+      "version": "0.27.0",
+      "purl": "pkg:pypi/httpx@0.27.0",
+      "language": "python",
+      "source": "requirements-core.txt"
+    },
+    {
+      "type": "library",
+      "name": "pymupdf",
+      "version": "1.24.0",
+      "purl": "pkg:pypi/pymupdf@1.24.0",
+      "language": "python",
+      "source": "requirements-core.txt"
+    },
+    {
+      "type": "library",
+      "name": "pdfplumber",
+      "version": "0.10.0",
+      "purl": "pkg:pypi/pdfplumber@0.10.0",
+      "language": "python",
+      "source": "requirements-core.txt"
+    },
+    {
+      "type": "library",
+      "name": "pillow",
+      "version": "10.2.0",
+      "purl": "pkg:pypi/pillow@10.2.0",
+      "language": "python",
+      "source": "requirements-core.txt"
+    },
+    {
+      "type": "library",
+      "name": "python-docx",
+      "version": "1.1.0",
+      "purl": "pkg:pypi/python-docx@1.1.0",
+      "language": "python",
+      "source": "requirements-core.txt"
+    },
+    {
+      "type": "library",
+      "name": "python-pptx",
+      "version": "0.6.23",
+      "purl": "pkg:pypi/python-pptx@0.6.23",
+      "language": "python",
+      "source": "requirements-core.txt"
+    },
+    {
+      "type": "library",
+      "name": "openpyxl",
+      "version": "3.1.2",
+      "purl": "pkg:pypi/openpyxl@3.1.2",
+      "language": "python",
+      "source": "requirements-core.txt"
+    },
+    {
+      "type": "library",
+      "name": "openai",
+      "version": "1.30.0",
+      "purl": "pkg:pypi/openai@1.30.0",
+      "language": "python",
+      "source": "requirements-core.txt"
+    },
+    {
+      "type": "library",
+      "name": "anthropic",
+      "version": "0.25.0",
+      "purl": "pkg:pypi/anthropic@0.25.0",
+      "language": "python",
+      "source": "requirements-core.txt"
+    },
+    {
+      "type": "library",
+      "name": "numpy",
+      "version": "1.26.0",
+      "purl": "pkg:pypi/numpy@1.26.0",
+      "language": "python",
+      "source": "requirements-core.txt"
+    },
+    {
+      "type": "library",
+      "name": "scipy",
+      "version": "1.12.0",
+      "purl": "pkg:pypi/scipy@1.12.0",
+      "language": "python",
+      "source": "requirements-core.txt"
+    },
+    {
+      "type": "library",
+      "name": "networkx",
+      "version": "3.2",
+      "purl": "pkg:pypi/networkx@3.2",
+      "language": "python",
+      "source": "requirements-core.txt"
+    },
+    {
+      "type": "library",
+      "name": "scikit-learn",
+      "version": "1.4.0",
+      "purl": "pkg:pypi/scikit-learn@1.4.0",
+      "language": "python",
+      "source": "requirements-core.txt"
+    },
+    {
+      "type": "library",
+      "name": "prometheus-client",
+      "version": "0.20.0",
+      "purl": "pkg:pypi/prometheus-client@0.20.0",
+      "language": "python",
+      "source": "requirements-core.txt"
+    },
+    {
+      "type": "library",
+      "name": "structlog",
+      "version": "24.1.0",
+      "purl": "pkg:pypi/structlog@24.1.0",
+      "language": "python",
+      "source": "requirements-core.txt"
+    },
+    {
+      "type": "library",
+      "name": "loguru",
+      "version": "0.7.2",
+      "purl": "pkg:pypi/loguru@0.7.2",
+      "language": "python",
+      "source": "requirements-core.txt"
+    },
+    {
+      "type": "library",
+      "name": "pyjwt",
+      "version": "2.9.0",
+      "purl": "pkg:pypi/pyjwt@2.9.0",
+      "language": "python",
+      "source": "requirements-core.txt"
+    },
+    {
+      "type": "library",
+      "name": "passlib",
+      "version": "1.7.4",
+      "purl": "pkg:pypi/passlib@1.7.4",
+      "language": "python",
+      "source": "requirements-core.txt"
+    },
+    {
+      "type": "library",
+      "name": "bcrypt",
+      "version": "4.1.0",
+      "purl": "pkg:pypi/bcrypt@4.1.0",
+      "language": "python",
+      "source": "requirements-core.txt"
+    },
+    {
+      "type": "library",
+      "name": "tiktoken",
+      "version": "0.6.0",
+      "purl": "pkg:pypi/tiktoken@0.6.0",
+      "language": "python",
+      "source": "requirements-core.txt"
+    },
+    {
+      "type": "library",
+      "name": "pytest",
+      "version": "8.0.0",
+      "purl": "pkg:pypi/pytest@8.0.0",
+      "language": "python",
+      "source": "requirements-dev.txt"
+    },
+    {
+      "type": "library",
+      "name": "pytest-asyncio",
+      "version": "0.24.0",
+      "purl": "pkg:pypi/pytest-asyncio@0.24.0",
+      "language": "python",
+      "source": "requirements-dev.txt"
+    },
+    {
+      "type": "library",
+      "name": "pytest-cov",
+      "version": "5.0.0",
+      "purl": "pkg:pypi/pytest-cov@5.0.0",
+      "language": "python",
+      "source": "requirements-dev.txt"
+    },
+    {
+      "type": "library",
+      "name": "hypothesis",
+      "version": "6.98.0",
+      "purl": "pkg:pypi/hypothesis@6.98.0",
+      "language": "python",
+      "source": "requirements-dev.txt"
+    },
+    {
+      "type": "library",
+      "name": "ruff",
+      "version": "0.6.0",
+      "purl": "pkg:pypi/ruff@0.6.0",
+      "language": "python",
+      "source": "requirements-dev.txt"
+    },
+    {
+      "type": "library",
+      "name": "mypy",
+      "version": "1.11.0",
+      "purl": "pkg:pypi/mypy@1.11.0",
+      "language": "python",
+      "source": "requirements-dev.txt"
+    },
+    {
+      "type": "library",
+      "name": "bandit",
+      "version": "1.7.8",
+      "purl": "pkg:pypi/bandit@1.7.8",
+      "language": "python",
+      "source": "requirements-dev.txt"
+    },
+    {
+      "type": "library",
+      "name": "pip-audit",
+      "version": "2.7.0",
+      "purl": "pkg:pypi/pip-audit@2.7.0",
+      "language": "python",
+      "source": "requirements-dev.txt"
+    },
+    {
+      "type": "library",
+      "name": "pytesseract",
+      "version": "0.3.10",
+      "purl": "pkg:pypi/pytesseract@0.3.10",
+      "language": "python",
+      "source": "requirements-dev.txt"
+    },
+    {
+      "type": "library",
+      "name": "sentence-transformers",
+      "version": "2.7.0",
+      "purl": "pkg:pypi/sentence-transformers@2.7.0",
+      "language": "python",
+      "source": "requirements-ml.txt"
+    },
+    {
+      "type": "library",
+      "name": "faiss-cpu",
+      "version": "1.7.4",
+      "purl": "pkg:pypi/faiss-cpu@1.7.4",
+      "language": "python",
+      "source": "requirements-ml.txt"
+    },
+    {
+      "type": "library",
+      "name": "redis",
+      "version": "5.0.0",
+      "purl": "pkg:pypi/redis@5.0.0",
+      "language": "python",
+      "source": "requirements-infra.txt"
+    },
+    {
+      "type": "library",
+      "name": "opentelemetry-api",
+      "version": "1.24.0",
+      "purl": "pkg:pypi/opentelemetry-api@1.24.0",
+      "language": "python",
+      "source": "requirements-infra.txt"
+    },
+    {
+      "type": "library",
+      "name": "opentelemetry-sdk",
+      "version": "1.24.0",
+      "purl": "pkg:pypi/opentelemetry-sdk@1.24.0",
+      "language": "python",
+      "source": "requirements-infra.txt"
+    },
+    {
+      "type": "library",
+      "name": "next",
+      "version": "16.4.3",
+      "purl": "pkg:npm/next@16.4.3",
+      "language": "javascript",
+      "scope": "production"
+    },
+    {
+      "type": "library",
+      "name": "react",
+      "version": "19.3.0",
+      "purl": "pkg:npm/react@19.3.0",
+      "language": "javascript",
+      "scope": "production"
+    },
+    {
+      "type": "library",
+      "name": "react-dom",
+      "version": "19.3.0",
+      "purl": "pkg:npm/react-dom@19.3.0",
+      "language": "javascript",
+      "scope": "production"
+    },
+    {
+      "type": "library",
+      "name": "zod",
+      "version": "4.6.7",
+      "purl": "pkg:npm/zod@4.6.7",
+      "language": "javascript",
+      "scope": "production"
+    },
+    {
+      "type": "library",
+      "name": "@playwright/test",
+      "version": "1.64.1",
+      "purl": "pkg:npm/@playwright/test@1.64.1",
+      "language": "javascript",
+      "scope": "development"
+    },
+    {
+      "type": "library",
+      "name": "@tailwindcss/turbopack",
+      "version": "4",
+      "purl": "pkg:npm/@tailwindcss/turbopack@4",
+      "language": "javascript",
+      "scope": "development"
+    },
+    {
+      "type": "library",
+      "name": "@testing-library/dom",
+      "version": "10.4.2",
+      "purl": "pkg:npm/@testing-library/dom@10.4.2",
+      "language": "javascript",
+      "scope": "development"
+    },
+    {
+      "type": "library",
+      "name": "@testing-library/jest-dom",
+      "version": "7.0.1",
+      "purl": "pkg:npm/@testing-library/jest-dom@7.0.1",
+      "language": "javascript",
+      "scope": "development"
+    },
+    {
+      "type": "library",
+      "name": "@testing-library/react",
+      "version": "16.3.3",
+      "purl": "pkg:npm/@testing-library/react@16.3.3",
+      "language": "javascript",
+      "scope": "development"
+    },
+    {
+      "type": "library",
+      "name": "@types/node",
+      "version": "22.20.5",
+      "purl": "pkg:npm/@types/node@22.20.5",
+      "language": "javascript",
+      "scope": "development"
+    },
+    {
+      "type": "library",
+      "name": "@types/react",
+      "version": "19",
+      "purl": "pkg:npm/@types/react@19",
+      "language": "javascript",
+      "scope": "development"
+    },
+    {
+      "type": "library",
+      "name": "@types/react-dom",
+      "version": "19",
+      "purl": "pkg:npm/@types/react-dom@19",
+      "language": "javascript",
+      "scope": "development"
+    },
+    {
+      "type": "library",
+      "name": "eslint",
+      "version": "9",
+      "purl": "pkg:npm/eslint@9",
+      "language": "javascript",
+      "scope": "development"
+    },
+    {
+      "type": "library",
+      "name": "eslint-config-next",
+      "version": "16.4.3",
+      "purl": "pkg:npm/eslint-config-next@16.4.3",
+      "language": "javascript",
+      "scope": "development"
+    },
+    {
+      "type": "library",
+      "name": "jsdom",
+      "version": "30.1.3",
+      "purl": "pkg:npm/jsdom@30.1.3",
+      "language": "javascript",
+      "scope": "development"
+    },
+    {
+      "type": "library",
+      "name": "tailwindcss",
+      "version": "4",
+      "purl": "pkg:npm/tailwindcss@4",
+      "language": "javascript",
+      "scope": "development"
+    },
+    {
+      "type": "library",
+      "name": "typescript",
+      "version": "5",
+      "purl": "pkg:npm/typescript@5",
+      "language": "javascript",
+      "scope": "development"
+    },
+    {
+      "type": "library",
+      "name": "vitest",
+      "version": "5.0.5",
+      "purl": "pkg:npm/vitest@5.0.5",
+      "language": "javascript",
+      "scope": "development"
+    }
+  ]
+}

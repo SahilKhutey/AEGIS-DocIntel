@@ -1,0 +1,17 @@
+[
+  {
+    "claim_id": "CLM-DOC-ERR-001",
+    "claim_text": "In fiscal year 2024, consolidated revenue grew by 18% to $450 million.",
+    "citations": [
+      {
+        "citation_id": "CIT-DOC-ERR-001",
+        "document_id": "doc_nonexistent_2024",
+        "document_version": "v1.0",
+        "page_number": 1,
+        "chunk_id": "c1",
+        "claim_id": "CLM-DOC-ERR-001"
+      }
+    ],
+    "expected_supporting": false
+  }
+]

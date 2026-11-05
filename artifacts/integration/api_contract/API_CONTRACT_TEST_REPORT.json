@@ -1,0 +1,116 @@
+{
+  "work_package": "WP-08",
+  "component": "api_contract",
+  "evaluated_at": "2026-11-05T02:16:11Z",
+  "total_scenarios": 15,
+  "passed_scenarios": 15,
+  "failed_scenarios": 0,
+  "pass_rate": 1.0,
+  "scenarios": [
+    {
+      "scenario_id": "API-001",
+      "name": "Valid authentication request",
+      "expected_status": 200,
+      "result": "PASS",
+      "details": "Authenticated request with valid Bearer token returns schema-valid response"
+    },
+    {
+      "scenario_id": "API-002",
+      "name": "Invalid request payload schema validation",
+      "expected_status": 422,
+      "result": "PASS",
+      "details": "Empty body or missing required fields triggers standard HTTP 422 validation error"
+    },
+    {
+      "scenario_id": "API-003",
+      "name": "Upload valid document multipart",
+      "expected_status": 202,
+      "result": "PASS",
+      "details": "Valid PDF multipart upload returns HTTP 202 with doc_id and status=pending"
+    },
+    {
+      "scenario_id": "API-004",
+      "name": "Upload unsupported file type",
+      "expected_status": 415,
+      "result": "PASS",
+      "details": "Unsupported media type triggers controlled rejection with allowed MIME list"
+    },
+    {
+      "scenario_id": "API-005",
+      "name": "Get document processing status",
+      "expected_status": 200,
+      "result": "PASS",
+      "details": "Status returns valid state among [pending, indexing, ready, failed]"
+    },
+    {
+      "scenario_id": "API-006",
+      "name": "Search query response structure",
+      "expected_status": 200,
+      "result": "PASS",
+      "details": "Search returns query string, items, and confidence metrics"
+    },
+    {
+      "scenario_id": "API-007",
+      "name": "Evidence-grounded answer generation",
+      "expected_status": 200,
+      "result": "PASS",
+      "details": "Answer response includes grounded answer, citations list, and warnings"
+    },
+    {
+      "scenario_id": "API-008",
+      "name": "Citation resolution precision",
+      "expected_status": 200,
+      "result": "PASS",
+      "details": "Citations strictly reference existing document ID and page number"
+    },
+    {
+      "scenario_id": "API-009",
+      "name": "Generate synthesized report",
+      "expected_status": 201,
+      "result": "PASS",
+      "details": "Report generation endpoint returns 201 with report ID and artifact paths"
+    },
+    {
+      "scenario_id": "API-010",
+      "name": "Unauthenticated access attempt",
+      "expected_status": 401,
+      "result": "PASS",
+      "details": "Missing credentials reject immediately with HTTP 401 Unauthorized"
+    },
+    {
+      "scenario_id": "API-011",
+      "name": "Anti-IDOR cross-tenant document request",
+      "expected_status": 404,
+      "result": "PASS",
+      "details": "Cross-tenant request returns HTTP 404 to prevent resource existence enumeration"
+    },
+    {
+      "scenario_id": "API-012",
+      "name": "Non-existent document lookup",
+      "expected_status": 404,
+      "result": "PASS",
+      "details": "Query for unknown doc_id returns structured 404 error envelope"
+    },
+    {
+      "scenario_id": "API-013",
+      "name": "Contract failure on missing required field",
+      "expected_status": "CONTRACT_FAIL",
+      "result": "PASS",
+      "details": "Frontend apiRequest safeParse detects missing fields and raises ApiError"
+    },
+    {
+      "scenario_id": "API-014",
+      "name": "Breaking change schema detection",
+      "expected_status": "DETECTED",
+      "result": "PASS",
+      "details": "Schema analyzer flags breaking removals or type shifts between API versions"
+    },
+    {
+      "scenario_id": "API-015",
+      "name": "Service timeout and failure handling",
+      "expected_status": 504,
+      "result": "PASS",
+      "details": "Downstream model timeout triggers controlled 504 gateway timeout envelope"
+    }
+  ]
+}

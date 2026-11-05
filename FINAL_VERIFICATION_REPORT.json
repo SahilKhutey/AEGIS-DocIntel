@@ -1,0 +1,35 @@
+{
+  "release_id": "AEGIS-MVP-RC1",
+  "candidate_commit": "c34fe022cec225de516bf4d7997cecf848ea4a1d",
+  "product": "AEGIS-DocIntel",
+  "version": "1.0.0-rc.1",
+  "overall_status": "PASS",
+  "work_packages": {
+    "WP-01_Baseline": "PASS",
+    "WP-02_Audit_Infrastructure": "PASS",
+    "WP-03_Remediation": "PASS",
+    "WP-04_Corpus": "PASS",
+    "WP-05_Processing": "PASS",
+    "WP-06_Intelligence": "PASS",
+    "WP-07_Security_and_Reliability": "PASS",
+    "WP-08_Integration": "PASS",
+    "WP-09_Release_Audit": "PASS"
+  },
+  "critical_gates": {
+    "candidate_freeze": "PASS",
+    "authentication_and_authorization": "PASS",
+    "tenant_isolation": "PASS",
+    "privacy_protection": "PASS",
+    "document_deletion": "PASS",
+    "processing_quality": "PASS",
+    "citation_correctness": "PASS",
+    "worker_reliability": "PASS",
+    "backup_restoration": "PASS",
+    "document_to_report": "PASS",
+    "deployment": "PASS",
+    "evidence_completeness": "PASS",
+    "independent_review": "PASS"
+  },
+  "open_blockers": 0,
+  "release_verdict": "GO"
+}

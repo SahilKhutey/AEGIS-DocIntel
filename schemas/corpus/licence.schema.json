@@ -1,0 +1,72 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "AEGIS Corpus Licence Schema",
+  "type": "object",
+  "required": [
+    "licence_id",
+    "name",
+    "official_url",
+    "attribution_required",
+    "permissions",
+    "legal_review_status"
+  ],
+  "properties": {
+    "licence_id": {
+      "type": "string",
+      "pattern": "^LIC-[A-Z0-9_-]+$"
+    },
+    "name": {
+      "type": "string",
+      "minLength": 2
+    },
+    "spdx_identifier": {
+      "type": "string"
+    },
+    "official_url": {
+      "type": "string"
+    },
+    "rights_holder": {
+      "type": "string"
+    },
+    "attribution_required": {
+      "type": "boolean"
+    },
+    "attribution_text": {
+      "type": "string"
+    },
+    "permissions": {
+      "type": "object",
+      "required": [
+        "download_and_retain",
+        "parse_and_extract",
+        "use_in_evaluation",
+        "use_for_training",
+        "publish_derived_annotations",
+        "redistribute_original",
+        "redistribute_transformed"
+      ],
+      "properties": {
+        "download_and_retain": { "type": "string", "enum": ["YES", "NO", "CONDITIONAL", "UNKNOWN"] },
+        "parse_and_extract": { "type": "string", "enum": ["YES", "NO", "CONDITIONAL", "UNKNOWN"] },
+        "use_in_evaluation": { "type": "string", "enum": ["YES", "NO", "CONDITIONAL", "UNKNOWN"] },
+        "use_for_training": { "type": "string", "enum": ["YES", "NO", "CONDITIONAL", "UNKNOWN"] },
+        "publish_derived_annotations": { "type": "string", "enum": ["YES", "NO", "CONDITIONAL", "UNKNOWN"] },
+        "redistribute_original": { "type": "string", "enum": ["YES", "NO", "CONDITIONAL", "UNKNOWN"] },
+        "redistribute_transformed": { "type": "string", "enum": ["YES", "NO", "CONDITIONAL", "UNKNOWN"] }
+      }
+    },
+    "legal_review_status": {
+      "type": "string",
+      "enum": ["APPROVED", "CONDITIONAL", "PENDING", "REJECTED"]
+    },
+    "reviewer": {
+      "type": "string"
+    },
+    "review_date": {
+      "type": "string"
+    },
+    "notes": {
+      "type": "string"
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "status": "PASSED",
+  "violations": [],
+  "warnings": [
+    "Near-duplicate text detected between holdout (PUB-190) and dev (PUB-218): similarity=1.000",
+    "Near-duplicate text detected between holdout (PUB-215) and dev (PUB-187): similarity=1.000"
+  ],
+  "metrics": {
+    "total_documents": 250,
+    "development_count": 150,
+    "validation_count": 50,
+    "holdout_count": 50,
+    "violations_count": 0,
+    "warnings_count": 2
+  }
+}

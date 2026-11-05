@@ -1,0 +1,68 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "AEGIS Table Reconstruction Schema",
+  "type": "object",
+  "required": [
+    "table_id",
+    "document_id",
+    "page_number",
+    "bbox",
+    "row_count",
+    "column_count",
+    "cells",
+    "header_rows",
+    "source_reference"
+  ],
+  "properties": {
+    "table_id": { "type": "string" },
+    "document_id": { "type": "string" },
+    "page_number": { "type": "integer", "minimum": 1 },
+    "bbox": {
+      "type": "array",
+      "items": { "type": "number" },
+      "minItems": 4,
+      "maxItems": 4
+    },
+    "row_count": { "type": "integer", "minimum": 0 },
+    "column_count": { "type": "integer", "minimum": 0 },
+    "cells": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "cell_id",
+          "row_index",
+          "column_index",
+          "row_span",
+          "column_span",
+          "text",
+          "role",
+          "bbox"
+        ],
+        "properties": {
+          "cell_id": { "type": "string" },
+          "row_index": { "type": "integer", "minimum": 0 },
+          "column_index": { "type": "integer", "minimum": 0 },
+          "row_span": { "type": "integer", "minimum": 1 },
+          "column_span": { "type": "integer", "minimum": 1 },
+          "text": { "type": "string" },
+          "role": {
+            "type": "string",
+            "enum": ["column_header", "row_header", "data", "empty", "summary"]
+          },
+          "bbox": {
+            "type": "array",
+            "items": { "type": "number" },
+            "minItems": 4,
+            "maxItems": 4
+          }
+        }
+      }
+    },
+    "header_rows": {
+      "type": "array",
+      "items": { "type": "integer" }
+    },
+    "source_reference": { "type": "string" }
+  }
+}

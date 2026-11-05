@@ -8,6 +8,8 @@ with strict mathematical consistency checks.
 from __future__ import annotations
 
 import datetime
+import hashlib
+import re
 from typing import Any, Dict, List, Optional
 
 
@@ -63,7 +65,25 @@ class AuditResultNormalizer:
 
         # Normalize findings
         findings: List[Dict[str, Any]] = raw_result.get("findings", [])
-        artifacts: List[Dict[str, Any]] = raw_result.get("artifacts", [])
+
+        # Normalize artifacts with SHA-256 and artifact_id
+        raw_artifacts: List[Dict[str, Any]] = raw_result.get("artifacts", [])
+        normalized_artifacts: List[Dict[str, Any]] = []
+        for idx, a in enumerate(raw_artifacts, 1):
+            content_str = a.get("content", "")
+            content_bytes = content_str.encode("utf-8") if isinstance(content_str, str) else b""
+            sha = a.get("sha256")
+            if not sha or not re.match(r"^[a-f0-9]{64}$", sha):
+                sha = hashlib.sha256(content_bytes).hexdigest()
+            art_id = a.get("artifact_id") or f"ART-{suite_id.upper().replace('-', '_')}-{idx:03d}"
+            rel_p = a.get("relative_path") or a.get("filename") or f"{art_id}.txt"
+            normalized_artifacts.append({
+                "artifact_id": art_id,
+                "artifact_type": a.get("artifact_type", "DATA"),
+                "relative_path": rel_p,
+                "sha256": sha,
+                "size_bytes": a.get("size_bytes", len(content_bytes)),
+            })
 
         normalized = {
             "suite_id": suite_id,
@@ -80,7 +100,7 @@ class AuditResultNormalizer:
                 "errors": errors,
             },
             "findings": findings,
-            "artifacts": artifacts,
+            "artifacts": normalized_artifacts,
         }
 
         if error_type or raw_result.get("error_type"):

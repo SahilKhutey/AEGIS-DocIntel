@@ -1,0 +1,15 @@
+{
+  "release_id": "AEGIS-MVP-RC1",
+  "candidate_commit": "c34fe022cec225de516bf4d7997cecf848ea4a1d",
+  "review_status": "COMPLETED",
+  "findings_summary": {
+    "total_findings": 10,
+    "closed": 9,
+    "open_critical_p0": 0,
+    "open_high_p1": 0,
+    "open_medium_p2": 0,
+    "accepted_minor_p3": 1
+  },
+  "critical_blockers_remaining": 0,
+  "release_gate_verdict": "PASS"
+}

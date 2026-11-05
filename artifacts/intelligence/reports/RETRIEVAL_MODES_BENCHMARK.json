@@ -1,0 +1,80 @@
+{
+  "benchmark_id": "WP06-RET-001",
+  "run_id": "RUN-20261103-RETRIEVAL-BENCH",
+  "work_package": "WP-06",
+  "capability": "retrieval",
+  "dataset_id": "QA-EVAL-RETRIEVAL-V1.0",
+  "dataset_version": "1.0",
+  "partition_id": "WP04-VALIDATION-001",
+  "manifest_id": "MANIFEST-20261103",
+  "pipeline_version": "1.0.0",
+  "configuration_hash": "0993e47087612f0f8705007ee23ea0305f2479e0",
+  "software_versions": {
+    "retriever_modes": [
+      "lexical",
+      "semantic",
+      "structured",
+      "hybrid"
+    ],
+    "fusion": "RRF_k0_60"
+  },
+  "metrics": {
+    "total_queries_evaluated": 20,
+    "modes": {
+      "lexical": {
+        "queries_evaluated": 20,
+        "precision_at_k": 0.53,
+        "recall_at_k": 0.95,
+        "mrr": 0.65,
+        "ndcg_at_k": 0.953,
+        "map_score": 0.9333,
+        "latency_median_ms": 0.017,
+        "latency_p95_ms": 0.131,
+        "latency_p99_ms": 0.131
+      },
+      "semantic": {
+        "queries_evaluated": 20,
+        "precision_at_k": 0.2,
+        "recall_at_k": 1.0,
+        "mrr": 0.65,
+        "ndcg_at_k": 0.6344,
+        "map_score": 0.6333,
+        "latency_median_ms": 0.347,
+        "latency_p95_ms": 0.588,
+        "latency_p99_ms": 0.588
+      },
+      "structured": {
+        "queries_evaluated": 20,
+        "precision_at_k": 0.2,
+        "recall_at_k": 1.0,
+        "mrr": 0.65,
+        "ndcg_at_k": 0.65,
+        "map_score": 0.65,
+        "latency_median_ms": 0.015,
+        "latency_p95_ms": 0.037,
+        "latency_p99_ms": 0.037
+      },
+      "hybrid": {
+        "queries_evaluated": 20,
+        "precision_at_k": 0.2,
+        "recall_at_k": 1.0,
+        "mrr": 0.65,
+        "ndcg_at_k": 0.641,
+        "map_score": 0.6167,
+        "latency_median_ms": 0.383,
+        "latency_p95_ms": 0.886,
+        "latency_p99_ms": 0.886
+      }
+    },
+    "hybrid_mrr": 0.65,
+    "hybrid_recall_at_5": 1.0,
+    "hybrid_ndcg_at_5": 0.641,
+    "hybrid_latency_median_ms": 0.383
+  },
+  "resource_metrics": {
+    "evaluated_modes_count": 4,
+    "fusion_constant_k0": 60
+  },
+  "errors": [],
+  "execution_status": "COMPLETED"
+}

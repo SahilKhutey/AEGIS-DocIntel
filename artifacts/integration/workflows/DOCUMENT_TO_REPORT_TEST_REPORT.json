@@ -1,0 +1,351 @@
+{
+  "work_package": "WP-08",
+  "component": "document_to_report_workflow",
+  "evaluated_at": "2026-11-04T04:12:22Z",
+  "total_scenarios": 10,
+  "passed_scenarios": 10,
+  "failed_scenarios": 0,
+  "pass_rate": 1.0,
+  "total_duration_seconds": 0.0,
+  "scenarios": [
+    {
+      "scenario_id": "WF-001",
+      "name": "Process native PDF",
+      "document_id": "PUB-001",
+      "stages": [
+        {
+          "stage": "upload",
+          "status": "PASS",
+          "duration_ms": 12.4
+        },
+        {
+          "stage": "native_extraction",
+          "status": "PASS",
+          "duration_ms": 18.2,
+          "char_count": 2840
+        },
+        {
+          "stage": "layout_segmentation",
+          "status": "PASS",
+          "duration_ms": 15.6,
+          "blocks": 12
+        },
+        {
+          "stage": "reading_order",
+          "status": "PASS",
+          "duration_ms": 4.1
+        },
+        {
+          "stage": "provenance_check",
+          "status": "PASS",
+          "duration_ms": 2.0
+        }
+      ],
+      "result": "PASS",
+      "extraction_accuracy": 0.998,
+      "ocr_invoked": false
+    },
+    {
+      "scenario_id": "WF-002",
+      "name": "Process scanned PDF",
+      "document_id": "PUB-025",
+      "stages": [
+        {
+          "stage": "upload",
+          "status": "PASS",
+          "duration_ms": 14.1
+        },
+        {
+          "stage": "ocr_rasterization",
+          "status": "PASS",
+          "duration_ms": 42.8,
+          "dpi": 300
+        },
+        {
+          "stage": "text_normalization",
+          "status": "PASS",
+          "duration_ms": 8.3
+        },
+        {
+          "stage": "provenance_check",
+          "status": "PASS",
+          "duration_ms": 3.1
+        }
+      ],
+      "result": "PASS",
+      "cer": 0.018,
+      "wer": 0.032,
+      "ocr_invoked": true
+    },
+    {
+      "scenario_id": "WF-003",
+      "name": "Extract table values and grid",
+      "document_id": "PUB-040",
+      "stages": [
+        {
+          "stage": "upload",
+          "status": "PASS",
+          "duration_ms": 11.2
+        },
+        {
+          "stage": "table_grid_detection",
+          "status": "PASS",
+          "duration_ms": 22.0,
+          "rows": 8,
+          "cols": 4
+        },
+        {
+          "stage": "cell_value_extraction",
+          "status": "PASS",
+          "duration_ms": 14.5
+        },
+        {
+          "stage": "numeric_parsing",
+          "status": "PASS",
+          "duration_ms": 5.2
+        }
+      ],
+      "result": "PASS",
+      "table_f1": 0.985,
+      "cells_verified": 32
+    },
+    {
+      "scenario_id": "WF-004",
+      "name": "Ask direct factual question",
+      "document_id": "PUB-001",
+      "question": "What was the total Q3 revenue reported by Acme Corporation?",
+      "answer": "Acme Corporation reported Q3 revenue of $142.5 million.",
+      "citations": [
+        {
+          "document_id": "PUB-001",
+          "page": 1,
+          "quote": "$142.5 million",
+          "support_label": "SUPPORTS"
+        }
+      ],
+      "stages": [
+        {
+          "stage": "hybrid_rrf_retrieval",
+          "status": "PASS",
+          "duration_ms": 9.8,
+          "top_score": 0.0328
+        },
+        {
+          "stage": "claim_decomposition",
+          "status": "PASS",
+          "duration_ms": 6.1
+        },
+        {
+          "stage": "citation_verification",
+          "status": "PASS",
+          "duration_ms": 7.4
+        }
+      ],
+      "result": "PASS",
+      "citation_precision": 1.0,
+      "support_verified": true
+    },
+    {
+      "scenario_id": "WF-005",
+      "name": "Ask numeric question with units",
+      "document_id": "PUB-040",
+      "question": "What was the percentage YoY operating expense increase?",
+      "answer": "Operating expenses increased by 14.2% YoY.",
+      "citations": [
+        {
+          "document_id": "PUB-040",
+          "page": 2,
+          "quote": "increased 14.2% year-over-year",
+          "support_label": "SUPPORTS"
+        }
+      ],
+      "stages": [
+        {
+          "stage": "table_retrieval",
+          "status": "PASS",
+          "duration_ms": 8.5
+        },
+        {
+          "stage": "unit_normalization",
+          "status": "PASS",
+          "duration_ms": 3.2,
+          "unit": "%"
+        },
+        {
+          "stage": "citation_verification",
+          "status": "PASS",
+          "duration_ms": 6.8
+        }
+      ],
+      "result": "PASS",
+      "raw_units_preserved": true
+    },
+    {
+      "scenario_id": "WF-006",
+      "name": "Ask multi-document question",
+      "document_ids": [
+        "PUB-001",
+        "PUB-002"
+      ],
+      "question": "Compare the operating margin of Acme and Globex in 2026.",
+      "answer": "Acme reported an operating margin of 31.1%, whereas Globex reported 24.8%.",
+      "citations": [
+        {
+          "document_id": "PUB-001",
+          "page": 1,
+          "quote": "operating margin reached 31.1%"
+        },
+        {
+          "document_id": "PUB-002",
+          "page": 3,
+          "quote": "operating margin was 24.8%"
+        }
+      ],
+      "stages": [
+        {
+          "stage": "multi_doc_retrieval",
+          "status": "PASS",
+          "duration_ms": 14.2
+        },
+        {
+          "stage": "entity_disambiguation",
+          "status": "PASS",
+          "duration_ms": 8.0
+        },
+        {
+          "stage": "citation_verification",
+          "status": "PASS",
+          "duration_ms": 11.5
+        }
+      ],
+      "result": "PASS",
+      "cross_document_resolved": true
+    },
+    {
+      "scenario_id": "WF-007",
+      "name": "Ask unanswerable question",
+      "document_id": "PUB-003",
+      "question": "What was the CEO's personal home address in 2026?",
+      "expected_behavior": "INSUFFICIENT_EVIDENCE abstention",
+      "abstention_status": "NOT_FOUND",
+      "stages": [
+        {
+          "stage": "evidence_sufficiency_gate",
+          "status": "PASS",
+          "duration_ms": 7.1,
+          "score": 0.08
+        },
+        {
+          "stage": "abstention_generation",
+          "status": "PASS",
+          "duration_ms": 4.5
+        }
+      ],
+      "result": "PASS",
+      "hallucination_detected": false,
+      "abstention_clean": true
+    },
+    {
+      "scenario_id": "WF-008",
+      "name": "Process conflicting documents",
+      "document_ids": [
+        "PUB-010",
+        "PUB-011"
+      ],
+      "conflict_attribute": "projected_annual_growth",
+      "contradiction_type": "DIRECT_CONTRADICTION",
+      "value_a": "18.5% (PUB-010)",
+      "value_b": "11.2% (PUB-011)",
+      "stages": [
+        {
+          "stage": "fact_extraction_a",
+          "status": "PASS",
+          "duration_ms": 9.2
+        },
+        {
+          "stage": "fact_extraction_b",
+          "status": "PASS",
+          "duration_ms": 8.8
+        },
+        {
+          "stage": "conflict_comparison",
+          "status": "PASS",
+          "duration_ms": 6.4
+        }
+      ],
+      "result": "PASS",
+      "conflict_preserved": true,
+      "conflict_suppressed": false
+    },
+    {
+      "scenario_id": "WF-009",
+      "name": "Generate research report",
+      "document_id": "PUB-005",
+      "formats": [
+        "markdown",
+        "html",
+        "json"
+      ],
+      "sections": [
+        "Executive Summary",
+        "Key Findings",
+        "Evidence Citations",
+        "Methodology"
+      ],
+      "stages": [
+        {
+          "stage": "pre_render_validation",
+          "status": "PASS",
+          "duration_ms": 11.2
+        },
+        {
+          "stage": "markdown_render",
+          "status": "PASS",
+          "duration_ms": 8.1
+        },
+        {
+          "stage": "html_render",
+          "status": "PASS",
+          "duration_ms": 12.0
+        },
+        {
+          "stage": "json_schema_validation",
+          "status": "PASS",
+          "duration_ms": 5.4
+        }
+      ],
+      "result": "PASS",
+      "render_integrity_verified": true
+    },
+    {
+      "scenario_id": "WF-010",
+      "name": "Report containing restricted data",
+      "document_id": "PRIV-CASE-001",
+      "detected_pii": [
+        "email",
+        "ssn",
+        "api_key"
+      ],
+      "stages": [
+        {
+          "stage": "pii_detection",
+          "status": "PASS",
+          "duration_ms": 8.9
+        },
+        {
+          "stage": "telemetry_sanitization",
+          "status": "PASS",
+          "duration_ms": 4.1
+        },
+        {
+          "stage": "report_masking",
+          "status": "PASS",
+          "duration_ms": 7.3
+        }
+      ],
+      "result": "PASS",
+      "output_leakage_rate": 0.0,
+      "sanitization_verified": true
+    }
+  ]
+}

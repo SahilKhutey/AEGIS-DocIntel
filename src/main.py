@@ -94,7 +94,7 @@ async def lifespan(app: FastAPI) -> AsyncGenerator:
     app.state.job_repository = container.job_repository
 
     # Start observability (Prometheus metrics endpoint)
-    if settings.observability.enable_metrics:
+    if settings.observability.enable_metrics and not os.environ.get("PYTEST_CURRENT_TEST"):
         start_observability()
 
     log.info("AEGIS-DocIntel ready", host=settings.api.host, port=settings.api.port)

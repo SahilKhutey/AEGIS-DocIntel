@@ -27,6 +27,10 @@ audit:
       enabled: true
       required: true
       timeout_seconds: 240
+    - id: "corpus"
+      enabled: true
+      required: true
+      timeout_seconds: 180
   evidence:
     enabled: true
     format: "json"

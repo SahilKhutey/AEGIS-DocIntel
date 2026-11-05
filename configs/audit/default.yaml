@@ -27,6 +27,26 @@ audit:
       enabled: true
       required: false
       timeout_seconds: 180
+    - id: "corpus"
+      enabled: true
+      required: true
+      timeout_seconds: 180
+    - id: "processing"
+      enabled: true
+      required: true
+      timeout_seconds: 180
+    - id: "intelligence"
+      enabled: true
+      required: true
+      timeout_seconds: 180
+    - id: "security_reliability"
+      enabled: true
+      required: true
+      timeout_seconds: 180
+    - id: "release_audit"
+      enabled: true
+      required: true
+      timeout_seconds: 180
   evidence:
     enabled: true
     format: "json"

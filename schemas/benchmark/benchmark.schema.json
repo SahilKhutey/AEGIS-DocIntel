@@ -1,0 +1,64 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "AEGIS Benchmark Report Schema",
+  "description": "Standardized schema for reproducible benchmark results, quality gates, and metric provenance.",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "report_id",
+    "benchmark_name",
+    "timestamp_utc",
+    "commit_sha",
+    "status",
+    "metrics",
+    "quality_gates"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    "report_id": {
+      "type": "string"
+    },
+    "benchmark_name": {
+      "type": "string"
+    },
+    "timestamp_utc": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "commit_sha": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["PASSED", "FAILED", "WARNING"]
+    },
+    "metrics": {
+      "type": "object"
+    },
+    "quality_gates": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "required": ["threshold", "observed_baseline", "status"],
+        "properties": {
+          "threshold": {
+            "type": "string"
+          },
+          "observed_baseline": {
+            "type": "number"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["PASS", "FAIL", "WAIVED"]
+          }
+        }
+      }
+    },
+    "provenance": {
+      "type": "object"
+    }
+  }
+}

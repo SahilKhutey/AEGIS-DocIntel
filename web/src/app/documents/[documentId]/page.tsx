@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState, use } from "react";
+import React, { useEffect, useState, useCallback, use } from "react";
 import Link from "next/link";
 import {
   DocumentSchema,
@@ -32,7 +32,7 @@ function DocumentDetailContent({ params }: PageProps) {
   const [error, setError] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
 
-  async function loadData() {
+  const loadData = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
@@ -69,11 +69,11 @@ function DocumentDetailContent({ params }: PageProps) {
     } finally {
       setLoading(false);
     }
-  }
+  }, [documentId]);
 
   useEffect(() => {
     loadData();
-  }, [documentId]);
+  }, [loadData]);
 
   async function handleExtractFacts() {
     try {

@@ -1,0 +1,45 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "AEGIS Reading Order Schema",
+  "type": "object",
+  "required": [
+    "document_id",
+    "page_number",
+    "reading_order",
+    "ordering_method"
+  ],
+  "properties": {
+    "document_id": { "type": "string" },
+    "page_number": { "type": "integer", "minimum": 1 },
+    "reading_order": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "ordering_method": {
+      "type": "string",
+      "enum": ["layout_graph", "topological_sort", "xy_cut", "heuristic"]
+    },
+    "confidence": { "type": ["number", "null"], "minimum": 0.0, "maximum": 1.0 },
+    "relationships": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["source_id", "target_id", "relation_type"],
+        "properties": {
+          "source_id": { "type": "string" },
+          "target_id": { "type": "string" },
+          "relation_type": {
+            "type": "string",
+            "enum": [
+              "heading_to_section",
+              "figure_to_caption",
+              "table_to_caption",
+              "footnote_to_marker",
+              "continuation"
+            ]
+          }
+        }
+      }
+    }
+  }
+}

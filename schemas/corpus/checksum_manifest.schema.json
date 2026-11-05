@@ -1,0 +1,43 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "AEGIS Corpus Checksum Manifest Schema",
+  "type": "object",
+  "required": [
+    "manifest_version",
+    "algorithm",
+    "generated_at",
+    "artifacts"
+  ],
+  "properties": {
+    "manifest_version": { "type": "string" },
+    "algorithm": { "type": "string", "enum": ["sha256"] },
+    "generated_at": { "type": "string" },
+    "artifacts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "document_id",
+          "filename",
+          "path",
+          "size_bytes",
+          "sha256",
+          "source_id",
+          "dataset_id",
+          "licence_id"
+        ],
+        "properties": {
+          "document_id": { "type": "string" },
+          "filename": { "type": "string" },
+          "path": { "type": "string" },
+          "size_bytes": { "type": "integer", "minimum": 0 },
+          "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+          "source_id": { "type": "string" },
+          "dataset_id": { "type": "string" },
+          "licence_id": { "type": "string" },
+          "status": { "type": "string" }
+        }
+      }
+    }
+  }
+}

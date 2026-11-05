@@ -1,0 +1,5 @@
+environment,purpose,database,queue_backend,storage_backend,tls_enforced,auth_mode,monitoring_level
+local,Developer local debugging,SQLite (:memory: or local db),In-Memory Python Queue,Local File Storage,false,Bypass or Mock JWT,Console structlog
+ci,Automated regression testing,SQLite isolated temp file,In-Memory Deterministic,Isolated Temp Directory,false,Deterministic Mock Tokens,JUnit & JSON Reports
+staging,Pre-release integration mirror,PostgreSQL Staging Instance,Redis Cluster Staging,MinIO S3 Staging Bucket,true,Full JWT RS256 + API Keys,Prometheus + Full Grafana
+production,Live multi-tenant service,PostgreSQL Multi-AZ Primary,Redis High-Availability Cluster,Encrypted Multi-AZ S3,true,Full JWT RS256 + Key Rotation,Prometheus + AlertManager + PagerDuty

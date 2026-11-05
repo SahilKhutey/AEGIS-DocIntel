@@ -1,0 +1,42 @@
+{
+  "report_version": "1.0.0",
+  "timestamp_utc": "2026-11-03T05:00:20.195566+00:00",
+  "total_documents": 250,
+  "category_distribution": {
+    "Layout-Detection": 40,
+    "Scientific-Layout": 15,
+    "Table-Extraction": 15,
+    "Forms-and-Key-Values": 15,
+    "Document-QA": 15,
+    "Public-Reports-Longform": 50,
+    "Financial-Filings": 35,
+    "Government-Data": 35,
+    "Scientific-Papers": 20,
+    "Adversarial-Edge-Cases": 10
+  },
+  "publisher_distribution": {
+    "DocLayNet": 40,
+    "PubLayNet": 15,
+    "PubTabNet": 15,
+    "FUNSD": 15,
+    "DocVQA": 15,
+    "World Bank": 50,
+    "SEC EDGAR": 35,
+    "India OGD": 35,
+    "arXiv": 20,
+    "AEGIS-Adversarial": 10
+  },
+  "format_distribution": {
+    "pdf": 201,
+    "png+html": 15,
+    "png+json": 30,
+    "bin": 1,
+    "jsonl": 1,
+    "json": 1,
+    "py": 1
+  },
+  "total_estimated_pages": 10114,
+  "mean_pages_per_doc": 40.46,
+  "categories_covered_count": 10,
+  "is_diverse": true
+}

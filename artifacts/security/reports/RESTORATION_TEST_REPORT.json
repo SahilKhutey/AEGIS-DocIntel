@@ -1,0 +1,297 @@
+{
+  "benchmark_id": "BENCH-SEC-RESTORE-001",
+  "run_id": "RUN-20261104-053849",
+  "work_package": "WP-07",
+  "capability": "backup_restoration",
+  "pipeline_version": "1.0.0",
+  "configuration_hash": "cfg-sec-policy-v1",
+  "software_versions": {},
+  "metrics": {
+    "total_dr_scenarios": 14,
+    "passed_scenarios": 14,
+    "failed_scenarios": 0,
+    "database_integrity_verified": true,
+    "file_checksum_accuracy": 1.0,
+    "measured_rto_seconds": 0.0011,
+    "measured_rpo_seconds": 3600.0,
+    "rto_target_met": true,
+    "rpo_target_met": true,
+    "restoration_pass_rate": 1.0
+  },
+  "resource_metrics": {
+    "execution_duration_ms": 30.95
+  },
+  "test_cases": [
+    {
+      "test_id": "BACKUP-001",
+      "work_package": "WP-07",
+      "category": "BACKUP_RESTORATION",
+      "test_name": "Full database restore into clean environment",
+      "environment": "clean-recovery-sandbox",
+      "test_version": "1.0",
+      "timestamp": "2026-11-04T05:38:49.396328+00:00",
+      "result": "PASS",
+      "expected": "Database restored; 2 documents verified",
+      "actual": "Status: Restoration complete and verified; Documents: 2; RTO: 0.0011s",
+      "severity": "CRITICAL",
+      "evidence": [
+        {
+          "document_count": 2,
+          "rto_seconds": 0.0010800000000017462
+        }
+      ],
+      "failure_reason": null
+    },
+    {
+      "test_id": "BACKUP-002",
+      "work_package": "WP-07",
+      "category": "BACKUP_RESTORATION",
+      "test_name": "Original file SHA-256 byte-level restoration integrity",
+      "environment": "clean-recovery-sandbox",
+      "test_version": "1.0",
+      "timestamp": "2026-11-04T05:38:49.396328+00:00",
+      "result": "PASS",
+      "expected": "Exact cryptographic hash match",
+      "actual": "SHA256: cbb10844ea9d83a18cc942b85dcc710c4fe3f945cc1ec3a2aa6064b3ef743097",
+      "severity": "CRITICAL",
+      "evidence": [
+        {
+          "sha256": "cbb10844ea9d83a18cc942b85dcc710c4fe3f945cc1ec3a2aa6064b3ef743097"
+        }
+      ],
+      "failure_reason": null
+    },
+    {
+      "test_id": "BACKUP-003",
+      "work_package": "WP-07",
+      "category": "BACKUP_RESTORATION",
+      "test_name": "Derived OCR and layout artifacts restored or rebuilt",
+      "environment": "clean-recovery-sandbox",
+      "test_version": "1.0",
+      "timestamp": "2026-11-04T05:38:49.396328+00:00",
+      "result": "PASS",
+      "expected": "Derived artifacts available",
+      "actual": "Derived content verified",
+      "severity": "HIGH",
+      "evidence": [
+        {
+          "rebuilt": true
+        }
+      ],
+      "failure_reason": null
+    },
+    {
+      "test_id": "BACKUP-004",
+      "work_package": "WP-07",
+      "category": "BACKUP_RESTORATION",
+      "test_name": "Lexical BM25 search index restored",
+      "environment": "clean-recovery-sandbox",
+      "test_version": "1.0",
+      "timestamp": "2026-11-04T05:38:49.396328+00:00",
+      "result": "PASS",
+      "expected": "Lexical search operational",
+      "actual": "BM25 index functional",
+      "severity": "HIGH",
+      "evidence": [
+        {
+          "search_ready": true
+        }
+      ],
+      "failure_reason": null
+    },
+    {
+      "test_id": "BACKUP-005",
+      "work_package": "WP-07",
+      "category": "BACKUP_RESTORATION",
+      "test_name": "Vector embedding index rebuilt from restored documents",
+      "environment": "clean-recovery-sandbox",
+      "test_version": "1.0",
+      "timestamp": "2026-11-04T05:38:49.396328+00:00",
+      "result": "PASS",
+      "expected": "Vector records reconstructed",
+      "actual": "Vector store populated",
+      "severity": "HIGH",
+      "evidence": [
+        {
+          "vector_count": 2
+        }
+      ],
+      "failure_reason": null
+    },
+    {
+      "test_id": "BACKUP-006",
+      "work_package": "WP-07",
+      "category": "BACKUP_RESTORATION",
+      "test_name": "Audit log continuity and history preservation",
+      "environment": "clean-recovery-sandbox",
+      "test_version": "1.0",
+      "timestamp": "2026-11-04T05:38:49.398078+00:00",
+      "result": "PASS",
+      "expected": "Audit events preserved (1)",
+      "actual": "1 audit records restored",
+      "severity": "HIGH",
+      "evidence": [
+        {
+          "audit_records": 1
+        }
+      ],
+      "failure_reason": null
+    },
+    {
+      "test_id": "BACKUP-007",
+      "work_package": "WP-07",
+      "category": "BACKUP_RESTORATION",
+      "test_name": "Application configuration restoration",
+      "environment": "clean-recovery-sandbox",
+      "test_version": "1.0",
+      "timestamp": "2026-11-04T05:38:49.398078+00:00",
+      "result": "PASS",
+      "expected": "Configuration boots cleanly",
+      "actual": "Configuration loaded successfully",
+      "severity": "HIGH",
+      "evidence": [
+        {
+          "config_status": "LOADED"
+        }
+      ],
+      "failure_reason": null
+    },
+    {
+      "test_id": "BACKUP-008",
+      "work_package": "WP-07",
+      "category": "BACKUP_RESTORATION",
+      "test_name": "Encrypted backup decryption and key recovery",
+      "environment": "clean-recovery-sandbox",
+      "test_version": "1.0",
+      "timestamp": "2026-11-04T05:38:49.402756+00:00",
+      "result": "PASS",
+      "expected": "Cryptographic match after KMS decryption",
+      "actual": "Decrypted hash match: True",
+      "severity": "CRITICAL",
+      "evidence": [
+        {
+          "hash_match": true
+        }
+      ],
+      "failure_reason": null
+    },
+    {
+      "test_id": "BACKUP-009",
+      "work_package": "WP-07",
+      "category": "BACKUP_RESTORATION",
+      "test_name": "Corrupted snapshot detection and rejection",
+      "environment": "clean-recovery-sandbox",
+      "test_version": "1.0",
+      "timestamp": "2026-11-04T05:38:49.404689+00:00",
+      "result": "PASS",
+      "expected": "Integrity check failure; corrupted backup rejected",
+      "actual": "Restoration failure: file is not a database",
+      "severity": "CRITICAL",
+      "evidence": [
+        {
+          "rejection_reason": "Restoration failure: file is not a database"
+        }
+      ],
+      "failure_reason": null
+    },
+    {
+      "test_id": "BACKUP-010",
+      "work_package": "WP-07",
+      "category": "BACKUP_RESTORATION",
+      "test_name": "Partial backup missing dependencies identification",
+      "environment": "clean-recovery-sandbox",
+      "test_version": "1.0",
+      "timestamp": "2026-11-04T05:38:49.404689+00:00",
+      "result": "PASS",
+      "expected": "Missing dependency detected; flagged for review",
+      "actual": "Dependency check identified missing delta",
+      "severity": "HIGH",
+      "evidence": [
+        {
+          "dependency_validated": true
+        }
+      ],
+      "failure_reason": null
+    },
+    {
+      "test_id": "BACKUP-011",
+      "work_package": "WP-07",
+      "category": "BACKUP_RESTORATION",
+      "test_name": "Post-restore deletion tombstone reconciliation",
+      "environment": "clean-recovery-sandbox",
+      "test_version": "1.0",
+      "timestamp": "2026-11-04T05:38:49.408213+00:00",
+      "result": "PASS",
+      "expected": "Deleted doc purged post-restore; doc-b1 preserved",
+      "actual": "Remaining: ['doc-b1']",
+      "severity": "CRITICAL",
+      "evidence": [
+        {
+          "remaining_documents": [
+            "doc-b1"
+          ]
+        }
+      ],
+      "failure_reason": null
+    },
+    {
+      "test_id": "BACKUP-012",
+      "work_package": "WP-07",
+      "category": "BACKUP_RESTORATION",
+      "test_name": "Operational QA query execution on restored data",
+      "environment": "clean-recovery-sandbox",
+      "test_version": "1.0",
+      "timestamp": "2026-11-04T05:38:49.408213+00:00",
+      "result": "PASS",
+      "expected": "Answerable query returns verified citation",
+      "actual": "Retrieved answer with valid provenance chunk",
+      "severity": "HIGH",
+      "evidence": [
+        {
+          "query_succeeded": true
+        }
+      ],
+      "failure_reason": null
+    },
+    {
+      "test_id": "BACKUP-013",
+      "work_package": "WP-07",
+      "category": "BACKUP_RESTORATION",
+      "test_name": "Tenant boundary containment post-restore",
+      "environment": "clean-recovery-sandbox",
+      "test_version": "1.0",
+      "timestamp": "2026-11-04T05:38:49.408213+00:00",
+      "result": "PASS",
+      "expected": "Tenant boundaries strictly enforced after restore",
+      "actual": "Zero cross-tenant bleed in restored database",
+      "severity": "CRITICAL",
+      "evidence": [
+        {
+          "isolation_verified": true
+        }
+      ],
+      "failure_reason": null
+    },
+    {
+      "test_id": "BACKUP-014",
+      "work_package": "WP-07",
+      "category": "BACKUP_RESTORATION",
+      "test_name": "Operational report generation post-restore",
+      "environment": "clean-recovery-sandbox",
+      "test_version": "1.0",
+      "timestamp": "2026-11-04T05:38:49.408213+00:00",
+      "result": "PASS",
+      "expected": "Report generator synthesizes from restored data",
+      "actual": "Markdown and HTML reports generated successfully",
+      "severity": "HIGH",
+      "evidence": [
+        {
+          "report_generated": true
+        }
+      ],
+      "failure_reason": null
+    }
+  ],
+  "errors": [],
+  "execution_status": "COMPLETED"
+}

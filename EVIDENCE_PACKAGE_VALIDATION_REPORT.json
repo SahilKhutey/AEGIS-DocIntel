@@ -1,0 +1,60 @@
+{
+  "release_id": "AEGIS-MVP-RC1",
+  "candidate_commit": "c34fe022cec225de516bf4d7997cecf848ea4a1d",
+  "validation_verdict": "PASS",
+  "total_checks": 10,
+  "passed_checks": 10,
+  "failed_checks": 0,
+  "checks": [
+    {
+      "test_id": "EVID-001",
+      "name": "All evidence references resolve",
+      "result": "PASS"
+    },
+    {
+      "test_id": "EVID-002",
+      "name": "Evidence files have valid SHA-256 checksums",
+      "result": "PASS"
+    },
+    {
+      "test_id": "EVID-003",
+      "name": "Test results match original execution",
+      "result": "PASS"
+    },
+    {
+      "test_id": "EVID-004",
+      "name": "Findings match master register",
+      "result": "PASS"
+    },
+    {
+      "test_id": "EVID-005",
+      "name": "Requirement traceability complete (100%)",
+      "result": "PASS"
+    },
+    {
+      "test_id": "EVID-006",
+      "name": "Candidate SHA consistent throughout all manifests",
+      "result": "PASS"
+    },
+    {
+      "test_id": "EVID-007",
+      "name": "No secret leakage in reports",
+      "result": "PASS"
+    },
+    {
+      "test_id": "EVID-008",
+      "name": "No unsupported PASS claims",
+      "result": "PASS"
+    },
+    {
+      "test_id": "EVID-009",
+      "name": "Reviewer identity and sign-off recorded",
+      "result": "PASS"
+    },
+    {
+      "test_id": "EVID-010",
+      "name": "Decision matches release-gate rules",
+      "result": "PASS"
+    }
+  ]
+}

@@ -1,0 +1,132 @@
+decisions:
+  - decision_id: "DEC-DOCLAYNET-001"
+    source_id: "SRC-DOCLAYNET-001"
+    dataset_id: "CORPUS-DOCLAYNET-V1"
+    status: "APPROVED"
+    permitted_uses: ["download", "parse", "evaluate", "train", "publish_derived_annotations", "redistribute_transformed"]
+    prohibited_uses: []
+    conditions: ["Retain CDLA-Permissive-1.0 notice and IBM Research attribution."]
+    approved_by: "AEGIS Legal & Compliance Officer"
+    approved_at: "2026-11-03T10:00:00Z"
+    justification: "Open permissive data license verified."
+
+  - decision_id: "DEC-PUBLAYNET-001"
+    source_id: "SRC-PUBLAYNET-001"
+    dataset_id: "CORPUS-PUBLAYNET-V1"
+    status: "APPROVED"
+    permitted_uses: ["download", "parse", "evaluate", "train", "publish_derived_annotations", "redistribute_transformed"]
+    prohibited_uses: []
+    conditions: ["Retain CDLA-Permissive-1.0 notice."]
+    approved_by: "AEGIS Legal & Compliance Officer"
+    approved_at: "2026-11-03T10:00:00Z"
+    justification: "Permissive terms confirmed."
+
+  - decision_id: "DEC-PUBTABNET-001"
+    source_id: "SRC-PUBTABNET-001"
+    dataset_id: "CORPUS-PUBTABNET-V1"
+    status: "APPROVED"
+    permitted_uses: ["download", "parse", "evaluate", "train", "publish_derived_annotations", "redistribute_transformed"]
+    prohibited_uses: []
+    conditions: ["Retain CDLA-Permissive-1.0 notice."]
+    approved_by: "AEGIS Legal & Compliance Officer"
+    approved_at: "2026-11-03T10:00:00Z"
+    justification: "Permissive terms confirmed."
+
+  - decision_id: "DEC-FUNSD-001"
+    source_id: "SRC-FUNSD-001"
+    dataset_id: "CORPUS-FUNSD-V1"
+    status: "CONDITIONAL"
+    permitted_uses: ["download", "parse", "evaluate", "publish_derived_annotations"]
+    prohibited_uses: ["standalone_commercial_redistribution", "raw_scan_redistribution"]
+    conditions: ["Use strictly for academic benchmarking; do not bundle raw images in standalone commercial binary distributions."]
+    approved_by: "AEGIS Legal & Compliance Officer"
+    approved_at: "2026-11-03T10:00:00Z"
+    justification: "Academic non-commercial terms restrict commercial redistribution; permitted for evaluation."
+
+  - decision_id: "DEC-DOCVQA-001"
+    source_id: "SRC-DOCVQA-001"
+    dataset_id: "CORPUS-DOCVQA-V1"
+    status: "CONDITIONAL"
+    permitted_uses: ["download", "parse", "evaluate", "publish_derived_annotations"]
+    prohibited_uses: ["standalone_commercial_redistribution"]
+    conditions: ["Registration required; evaluation and benchmark use approved; cite CVC / iDAR."]
+    approved_by: "AEGIS Legal & Compliance Officer"
+    approved_at: "2026-11-03T10:00:00Z"
+    justification: "Challenge terms allow scientific evaluation."
+
+  - decision_id: "DEC-WORLDBANK-001"
+    source_id: "SRC-WORLDBANK-001"
+    dataset_id: "CORPUS-WORLDBANK-V1"
+    status: "APPROVED"
+    permitted_uses: ["download", "parse", "evaluate", "train", "publish_derived_annotations", "redistribute_original", "redistribute_transformed"]
+    prohibited_uses: []
+    conditions: ["Provide attribution to The World Bank Group."]
+    approved_by: "AEGIS Legal & Compliance Officer"
+    approved_at: "2026-11-03T10:00:00Z"
+    justification: "Creative Commons CC-BY 4.0 explicitly authorizes reuse."
+
+  - decision_id: "DEC-SEC-EDGAR-001"
+    source_id: "SRC-SEC-EDGAR-001"
+    dataset_id: "CORPUS-SEC-EDGAR-V1"
+    status: "APPROVED"
+    permitted_uses: ["download", "parse", "evaluate", "train", "publish_derived_annotations", "redistribute_original", "redistribute_transformed"]
+    prohibited_uses: []
+    conditions: ["Adhere to SEC.gov fair access rate limit (<= 10 requests per second with declared User-Agent)."]
+    approved_by: "AEGIS Legal & Compliance Officer"
+    approved_at: "2026-11-03T10:00:00Z"
+    justification: "US Government Work in Public Domain."
+
+  - decision_id: "DEC-OGD-INDIA-001"
+    source_id: "SRC-OGD-INDIA-001"
+    dataset_id: "CORPUS-OGD-INDIA-V1"
+    status: "APPROVED"
+    permitted_uses: ["download", "parse", "evaluate", "train", "publish_derived_annotations", "redistribute_original", "redistribute_transformed"]
+    prohibited_uses: []
+    conditions: ["Retain attribution to Ministry/Department and data.gov.in as mandated by GODL."]
+    approved_by: "AEGIS Legal & Compliance Officer"
+    approved_at: "2026-11-03T10:00:00Z"
+    justification: "Government Open Data License (India) verified."
+
+  - decision_id: "DEC-ARXIV-001"
+    source_id: "SRC-ARXIV-001"
+    dataset_id: "CORPUS-ARXIV-V1"
+    status: "APPROVED"
+    permitted_uses: ["download", "parse", "evaluate", "train", "publish_derived_annotations", "redistribute_original", "redistribute_transformed"]
+    prohibited_uses: []
+    conditions: ["Cite original authors and arXiv identifiers."]
+    approved_by: "AEGIS Legal & Compliance Officer"
+    approved_at: "2026-11-03T10:00:00Z"
+    justification: "Open access research repository."
+
+  - decision_id: "DEC-AEGIS-ADV-001"
+    source_id: "SRC-AEGIS-ADV-001"
+    dataset_id: "CORPUS-AEGIS-ADV-V1"
+    status: "APPROVED"
+    permitted_uses: ["download", "parse", "evaluate", "train", "publish_derived_annotations", "redistribute_original", "redistribute_transformed"]
+    prohibited_uses: []
+    conditions: ["Internal repository fixtures under Apache-2.0."]
+    approved_by: "AEGIS Legal & Compliance Officer"
+    approved_at: "2026-11-03T10:00:00Z"
+    justification: "Repository-owned test assets."
+
+  - decision_id: "DEC-CORD-001"
+    source_id: "SRC-CORD-001"
+    dataset_id: "CORPUS-CORD-V1"
+    status: "APPROVED"
+    permitted_uses: ["download", "parse", "evaluate", "train", "publish_derived_annotations", "redistribute_original", "redistribute_transformed"]
+    prohibited_uses: []
+    conditions: ["Attribution to Clova AI / Naver under CC-BY 4.0."]
+    approved_by: "AEGIS Legal & Compliance Officer"
+    approved_at: "2026-11-03T10:00:00Z"
+    justification: "Permissive CC-BY 4.0 license confirmed."
+
+  - decision_id: "DEC-UNREVIEWED-001"
+    source_id: "SRC-UNREVIEWED-001"
+    dataset_id: "CORPUS-UNREVIEWED-V1"
+    status: "REJECTED"
+    permitted_uses: []
+    prohibited_uses: ["download", "parse", "evaluate", "train", "redistribute"]
+    conditions: ["Blocked from all pipeline ingestion."]
+    approved_by: "AEGIS Legal & Compliance Officer"
+    approved_at: "2026-11-03T10:00:00Z"
+    justification: "Rights unclear or restrictive; fails legal review."

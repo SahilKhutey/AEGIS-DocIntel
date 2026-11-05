@@ -1,0 +1,53 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "AEGIS Security & Reliability Test Result Schema",
+  "type": "object",
+  "required": [
+    "test_id",
+    "work_package",
+    "category",
+    "test_name",
+    "environment",
+    "test_version",
+    "timestamp",
+    "result",
+    "expected",
+    "actual",
+    "severity"
+  ],
+  "properties": {
+    "test_id": { "type": "string" },
+    "work_package": { "type": "string", "enum": ["WP-07"] },
+    "category": {
+      "type": "string",
+      "enum": [
+        "AUTHENTICATION",
+        "AUTHORIZATION",
+        "TENANT_ISOLATION",
+        "PRIVACY_DETECTION",
+        "DOCUMENT_DELETION",
+        "WORKER_RELIABILITY",
+        "BACKUP_RESTORATION",
+        "INTEGRATED_SECURITY"
+      ]
+    },
+    "test_name": { "type": "string" },
+    "environment": { "type": "string" },
+    "test_version": { "type": "string" },
+    "timestamp": { "type": "string" },
+    "result": {
+      "type": "string",
+      "enum": ["PASS", "FAIL", "BLOCKED", "ERROR", "NOT_APPLICABLE", "NOT_RUN"]
+    },
+    "expected": { "type": "string" },
+    "actual": { "type": "string" },
+    "severity": {
+      "type": "string",
+      "enum": ["CRITICAL", "HIGH", "MEDIUM", "LOW", "INFORMATIONAL"]
+    },
+    "evidence": { "type": "array" },
+    "failure_reason": { "type": ["string", "null"] },
+    "commit_hash": { "type": "string" },
+    "duration_ms": { "type": "number" }
+  }
+}

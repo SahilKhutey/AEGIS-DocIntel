@@ -1,0 +1,108 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "AEGIS Golden Question Schema",
+  "type": "object",
+  "required": [
+    "question_id",
+    "dataset_version",
+    "question",
+    "task_type",
+    "difficulty",
+    "answerability",
+    "document_scope",
+    "expected_answer",
+    "accepted_answers",
+    "required_evidence",
+    "evaluation",
+    "annotation_status"
+  ],
+  "properties": {
+    "question_id": { "type": "string" },
+    "dataset_version": { "type": "string" },
+    "question": { "type": "string", "minLength": 1 },
+    "task_type": {
+      "type": "string",
+      "enum": [
+        "direct_factual",
+        "entity_extraction",
+        "numeric_extraction",
+        "temporal_reasoning",
+        "table_retrieval",
+        "multi_hop",
+        "cross_document",
+        "summarization",
+        "citation_verification",
+        "unanswerable",
+        "ambiguity_clarification",
+        "conflict_analysis"
+      ]
+    },
+    "difficulty": {
+      "type": "string",
+      "enum": ["easy", "medium", "hard", "expert"]
+    },
+    "answerability": {
+      "type": "string",
+      "enum": [
+        "ANSWERABLE",
+        "NOT_FOUND",
+        "INSUFFICIENT_EVIDENCE",
+        "AMBIGUOUS",
+        "CONFLICTING_EVIDENCE",
+        "OUT_OF_SCOPE",
+        "RESTRICTED"
+      ]
+    },
+    "document_scope": {
+      "type": "array",
+      "items": { "type": "string" },
+      "minItems": 1
+    },
+    "expected_answer": {
+      "type": "object",
+      "required": ["value", "type"],
+      "properties": {
+        "value": { "type": ["string", "number", "boolean", "null"] },
+        "type": { "type": "string" },
+        "unit": { "type": ["string", "null"] }
+      }
+    },
+    "accepted_answers": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "required_evidence": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["document_id", "evidence_text"],
+        "properties": {
+          "document_id": { "type": "string" },
+          "page_number": { "type": ["integer", "null"] },
+          "region_id": { "type": ["string", "null"] },
+          "chunk_id": { "type": ["string", "null"] },
+          "evidence_text": { "type": "string" }
+        }
+      }
+    },
+    "evaluation": {
+      "type": "object",
+      "required": ["answer_match", "citation_required", "all_evidence_required"],
+      "properties": {
+        "answer_match": {
+          "type": "string",
+          "enum": ["exact", "normalized_exact", "numeric_tolerance", "semantic", "abstention"]
+        },
+        "citation_required": { "type": "boolean" },
+        "all_evidence_required": { "type": "boolean" }
+      }
+    },
+    "annotation_status": {
+      "type": "string",
+      "enum": ["DRAFT", "REVIEWED", "APPROVED", "DEPRECATED"]
+    },
+    "annotation_version": { "type": "string" },
+    "reviewer": { "type": "string" },
+    "created_at": { "type": "string" }
+  }
+}

@@ -1,0 +1,64 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "AEGIS Answerability and Abstention Schema",
+  "type": "object",
+  "required": [
+    "question_id",
+    "classification",
+    "evidence_sufficiency_score",
+    "decision",
+    "signals"
+  ],
+  "properties": {
+    "question_id": { "type": "string" },
+    "classification": {
+      "type": "string",
+      "enum": [
+        "ANSWERABLE",
+        "NOT_FOUND",
+        "INSUFFICIENT_EVIDENCE",
+        "AMBIGUOUS",
+        "CONFLICTING_EVIDENCE",
+        "OUT_OF_SCOPE",
+        "RESTRICTED"
+      ]
+    },
+    "evidence_sufficiency_score": {
+      "type": "number",
+      "minimum": 0.0,
+      "maximum": 1.0
+    },
+    "decision": {
+      "type": "string",
+      "enum": [
+        "ANSWER",
+        "ABSTAIN_NOT_FOUND",
+        "ABSTAIN_INSUFFICIENT",
+        "REQUEST_CLARIFICATION",
+        "DISCLOSE_CONFLICT",
+        "DENY_RESTRICTED"
+      ]
+    },
+    "signals": {
+      "type": "object",
+      "required": [
+        "retrieved_chunk_count",
+        "max_relevance_score",
+        "source_count",
+        "contradiction_detected",
+        "missing_required_fields"
+      ],
+      "properties": {
+        "retrieved_chunk_count": { "type": "integer", "minimum": 0 },
+        "max_relevance_score": { "type": "number", "minimum": 0.0 },
+        "source_count": { "type": "integer", "minimum": 0 },
+        "contradiction_detected": { "type": "boolean" },
+        "missing_required_fields": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "explanation": { "type": "string" }
+  }
+}

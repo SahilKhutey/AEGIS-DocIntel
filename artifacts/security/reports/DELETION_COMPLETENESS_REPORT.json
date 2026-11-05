@@ -1,0 +1,16 @@
+{
+  "run_id": "RUN-20261104-061444",
+  "targets_evaluated": [
+    "database_metadata",
+    "object_storage",
+    "extracted_text",
+    "search_index",
+    "vector_index",
+    "semantic_cache",
+    "job_queue"
+  ],
+  "targets_cleared_ratio": 1.0,
+  "residual_data_detected": false,
+  "tombstones_active_count": 1,
+  "status": "VERIFIED_CLEAN"
+}

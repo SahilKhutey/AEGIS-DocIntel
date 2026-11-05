@@ -1,0 +1,32 @@
+{
+  "benchmark_id": "WP05-SEC-001",
+  "run_id": "RUN-20261103-SEC-BENCH",
+  "work_package": "WP-05",
+  "capability": "malformed_documents",
+  "dataset_id": "MALFORMED-ADVERSARIAL-VECTORS-V1.0",
+  "dataset_version": "1.0",
+  "partition_id": "WP04-VALIDATION-001",
+  "manifest_id": "MANIFEST-20261103",
+  "pipeline_version": "1.0.0",
+  "configuration_hash": "b6f03e08544c922880775d7b5b54a613cfcfc382",
+  "software_versions": {
+    "FileValidator": "1.0.0",
+    "ProcessingSandbox": "1.0.0"
+  },
+  "metrics": {
+    "total_malformed_vectors_tested": 10,
+    "containment_success_rate": 1.0,
+    "unhandled_crash_rate": 0.0,
+    "path_traversal_rejection_rate": 1.0,
+    "corrupted_file_detection_rate": 1.0,
+    "resource_limit_enforcement_rate": 1.0,
+    "timeout_containment_rate": 1.0,
+    "error_sanitization_compliance": 1.0
+  },
+  "resource_metrics": {
+    "elapsed_seconds": 0.65,
+    "sandbox_isolated_workers": 1
+  },
+  "errors": [],
+  "execution_status": "COMPLETED"
+}

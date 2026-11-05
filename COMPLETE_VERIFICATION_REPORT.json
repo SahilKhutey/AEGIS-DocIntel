@@ -1,0 +1,36 @@
+{
+  "release_id": "AEGIS-MVP-RC1",
+  "candidate_commit": "c34fe022cec225de516bf4d7997cecf848ea4a1d",
+  "verification_status": "COMPLETED",
+  "summary": {
+    "total": 25,
+    "passed": 25,
+    "failed": 0,
+    "blocked": 0,
+    "errors": 0,
+    "not_run": 0
+  },
+  "critical_gates": {
+    "authentication": "PASS",
+    "tenant_isolation": "PASS",
+    "citation_correctness": "PASS",
+    "document_deletion": "PASS",
+    "backup_restoration": "PASS",
+    "document_to_report": "PASS",
+    "deployment": "PASS"
+  },
+  "regression_gates": {
+    "total_regressions_tested": 6,
+    "passed": 6,
+    "failed": 0
+  },
+  "levels": {
+    "level_1_static_analysis_and_builds": "PASS",
+    "level_2_unit_and_component_tests": "PASS",
+    "level_3_api_and_integration_tests": "PASS",
+    "level_4_security_and_reliability": "PASS",
+    "level_5_browser_and_complete_workflow": "PASS",
+    "level_6_deployment_and_recovery": "PASS"
+  },
+  "evidence_complete": true
+}

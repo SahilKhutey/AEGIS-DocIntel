@@ -1,0 +1,34 @@
+{
+  "benchmark_id": "WP06-CONF-001",
+  "run_id": "RUN-20261103-CONFLICT-BENCH",
+  "work_package": "WP-06",
+  "capability": "conflict_detection",
+  "dataset_id": "CONFLICT-EVAL-CORPUS-V1.0",
+  "dataset_version": "1.0",
+  "partition_id": "WP04-VALIDATION-001",
+  "manifest_id": "MANIFEST-20261103",
+  "pipeline_version": "1.0.0",
+  "configuration_hash": "0993e47087612f0f8705007ee23ea0305f2479e0",
+  "software_versions": {
+    "conflict_comparator": "1.0.0"
+  },
+  "metrics": {
+    "test_pairs_evaluated": 5,
+    "conflict_classification_accuracy": 1.0,
+    "conflict_precision": 1.0,
+    "conflict_recall": 1.0,
+    "false_conflict_rate": 0.0,
+    "missed_conflict_rate": 0.0
+  },
+  "resource_metrics": {
+    "evaluated_conflict_types": [
+      "NO_CONFLICT",
+      "TEMPORAL_DIFFERENCE",
+      "SCOPE_DIFFERENCE",
+      "UNIT_DIFFERENCE",
+      "DIRECT_CONFLICT"
+    ]
+  },
+  "errors": [],
+  "execution_status": "COMPLETED"
+}
