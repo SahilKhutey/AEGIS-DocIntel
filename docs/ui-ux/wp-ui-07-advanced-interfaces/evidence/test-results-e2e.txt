@@ -1,0 +1,27 @@
+$ npx --prefix web playwright test --config=web/playwright.config.ts web/tests/e2e/advanced
+
+Running 20 tests using 5 workers
+
+  ok  5 web/tests/e2e/advanced/pipelines.spec.ts:4:7 › Advanced Interfaces — Pipeline Visualization (/pipelines) › renders pipeline runs list with filters and status badges (465ms)
+  ok  2 web/tests/e2e/advanced/analytics.spec.ts:8:7 › Advanced Interfaces — Analytics & Reporting (/analytics) › renders analytics dashboard with operational KPI metrics (1.2s)
+  ok  4 web/tests/e2e/advanced/mathematics.spec.ts:8:7 › Advanced Interfaces — Mathematical Representations (/mathematics) › renders mathematics catalog and vector viewer (1.3s)
+  ok  1 web/tests/e2e/advanced/monitoring.spec.ts:8:7 › Advanced Interfaces — Performance Monitoring (/monitoring) › renders overall health banner and freshness indicator (2.1s)
+  ok  3 web/tests/e2e/advanced/developer.spec.ts:4:7 › Advanced Interfaces — Developer Platform (/developer) › renders developer platform and provisions new API key with secret warning (1.4s)
+  ok  6 web/tests/e2e/advanced/pipelines.spec.ts:20:7 › Advanced Interfaces — Pipeline Visualization (/pipelines) › navigates to pipeline run detail and displays DAG graph (758ms)
+  ok  9 web/tests/e2e/advanced/monitoring.spec.ts:14:7 › Advanced Interfaces — Performance Monitoring (/monitoring) › displays service health cards with latencies and uptime (697ms)
+  ok  7 web/tests/e2e/advanced/analytics.spec.ts:19:7 › Advanced Interfaces — Analytics & Reporting (/analytics) › switches time range presets (807ms)
+  ok  8 web/tests/e2e/advanced/mathematics.spec.ts:24:7 › Advanced Interfaces — Mathematical Representations (/mathematics) › interacts with matrix viewer cell selection (750ms)
+  ok 10 web/tests/e2e/advanced/developer.spec.ts:28:7 › Advanced Interfaces — Developer Platform (/developer) › explores OpenAPI documentation and switches code language (693ms)
+  ok 12 web/tests/e2e/advanced/monitoring.spec.ts:23:7 › Advanced Interfaces — Performance Monitoring (/monitoring) › displays latency percentiles and throughput metrics (464ms)
+  ok 11 web/tests/e2e/advanced/pipelines.spec.ts:37:7 › Advanced Interfaces — Pipeline Visualization (/pipelines) › displays failure diagnostics and retry button on failed run (843ms)
+  ok 14 web/tests/e2e/advanced/mathematics.spec.ts:35:7 › Advanced Interfaces — Mathematical Representations (/mathematics) › navigates to formulas tab and displays LaTeX equations (751ms)
+  ok 13 web/tests/e2e/advanced/analytics.spec.ts:32:7 › Advanced Interfaces — Analytics & Reporting (/analytics) › switches between analytics tabs (800ms)
+  ok 15 web/tests/e2e/advanced/developer.spec.ts:43:7 › Advanced Interfaces — Developer Platform (/developer) › validates webhook URL and prevents SSRF localhost entry (802ms)
+  ok 16 web/tests/e2e/advanced/monitoring.spec.ts:34:7 › Advanced Interfaces — Performance Monitoring (/monitoring) › acknowledges active operational alert (725ms)
+  ok 18 web/tests/e2e/advanced/analytics.spec.ts:52:7 › Advanced Interfaces — Analytics & Reporting (/analytics) › triggers CSV export without crash (595ms)
+  ok 17 web/tests/e2e/advanced/mathematics.spec.ts:45:7 › Advanced Interfaces — Mathematical Representations (/mathematics) › navigates to transformation trace tab (677ms)
+  ok 19 web/tests/e2e/advanced/developer.spec.ts:58:7 › Advanced Interfaces — Developer Platform (/developer) › checks integrations and pings connectors (710ms)
+  ok 20 web/tests/e2e/advanced/mathematics.spec.ts:56:7 › Advanced Interfaces — Mathematical Representations (/mathematics) › runs interactive unified math evaluator (661ms)
+
+  20 passed (13.9s)
+  Status: 100% Passing

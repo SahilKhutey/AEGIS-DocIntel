@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef } from "react";
+import { useState, useCallback, useRef, useEffect } from "react";
 import {
   fetchReviewQueue,
   fetchReviewItem,
@@ -114,7 +114,10 @@ export function useGovernanceDetail(reviewId: string) {
   const [staleWarning, setStaleWarning] = useState(false);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const itemRef = useRef<ReviewItem | null>(null);
-  itemRef.current = item;
+
+  useEffect(() => {
+    itemRef.current = item;
+  }, [item]);
 
   const idempotencyKeyRef = useRef<string>(
     `idem-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`,
