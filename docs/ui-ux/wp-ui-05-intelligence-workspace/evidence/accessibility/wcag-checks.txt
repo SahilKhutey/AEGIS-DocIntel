@@ -1,0 +1,19 @@
+=== Accessibility & WCAG 2.2 AA Verification ===
+> playwright test tests/e2e/accessibility.spec.ts
+ok 1 main content is reachable by keyboard (591ms)
+ok 2 main landmark exists (1.1s)
+ok 3 primary buttons have accessible names (381ms)
+
+Specialized Intelligence Accessibility:
+1. Knowledge Graph Accessible Table View:
+   - Evaluated via `tests/unit/knowledge-graph.test.tsx` and `tests/e2e/intelligence/knowledge-visualization.spec.ts`.
+   - Semantic `<table>`, `<thead>`, `<tbody>`, `<th scope="col">` provided as complete accessible alternative to SVG canvas.
+   - Screen reader announcements enabled for node selection and edge relationships.
+2. Form & Control Accessibility:
+   - `QuestionComposer`: `<label htmlFor="aegis-question">` and `aria-label="Ask AEGIS a question"`.
+   - `RetrievalSearch`: `aria-label="Search documents"`.
+   - Citation buttons: Individual descriptive names with document and page numbers (`aria-label="Citation 1: Master Services Agreement, page 14"`).
+   - Zoom & mode toggles: Semantic buttons with accessible labels.
+3. Focus & Contrast:
+   - Visible focus ring `focus-visible:ring-2 focus-visible:ring-blue-500`.
+   - Contrast ratio meets 4.5:1 on text nodes.

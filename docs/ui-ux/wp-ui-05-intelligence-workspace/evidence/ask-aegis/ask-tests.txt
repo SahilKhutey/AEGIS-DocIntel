@@ -1,0 +1,12 @@
+=== Ask AEGIS Unit & Component Tests ===
+> vitest run tests/unit/question-composer.test.tsx
+✓ tests/unit/question-composer.test.tsx (3 tests) 108ms
+Test Files  1 passed (1)
+Tests  3 passed (3)
+
+=== Ask AEGIS Browser E2E Tests ===
+> playwright test tests/e2e/intelligence/ask-aegis.spec.ts
+ok 1 Ask AEGIS › renders the question workspace (2.1s)
+ok 2 Ask AEGIS › blocks an empty question (453ms)
+ok 3 workbench.spec.ts: E2E-009 & E2E-010: ask page executes query and renders grounded citation (645ms)
+All tests passed with verified citations and safe abstention handling.

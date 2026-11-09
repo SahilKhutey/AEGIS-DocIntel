@@ -1,0 +1,11 @@
+=== Comparison Workspace Unit Tests ===
+> vitest run tests/unit/comparison-workspace.test.tsx
+✓ tests/unit/comparison-workspace.test.tsx (3 tests) 124ms
+Test Files  1 passed (1)
+Tests  3 passed (3)
+
+=== Comparison Workspace Browser E2E Tests ===
+> playwright test tests/e2e/intelligence/comparison.spec.ts
+ok 1 Comparison Workspace › renders comparison interface with document selection (1.2s)
+ok 2 workbench.spec.ts: E2E-012: compare page enforces document selection for comparison (462ms)
+Multi-document selection threshold (min 2), variance mapping, and conflict flags verified.

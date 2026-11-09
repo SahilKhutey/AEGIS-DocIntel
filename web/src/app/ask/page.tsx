@@ -13,22 +13,28 @@ import { apiRequest } from "@/lib/api-client";
 import { ApiError } from "@/lib/errors";
 import { EvidencePanel } from "@/components/evidence-panel";
 import { ErrorState } from "@/components/error-state";
+import { QuestionComposer } from "@/features/intelligence/components/QuestionComposer";
+import {
+  ChatMessage,
+  type ChatMessageItem,
+} from "@/features/intelligence/components/ChatMessage";
+import type { AskResponse, CitationReference } from "@/features/intelligence/types";
 
 function AskContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const initialDocId = searchParams.get("doc_id") || "";
 
-  const [question, setQuestion] = useState("");
   const [selectedDocIds, setSelectedDocIds] = useState<string[]>(
     initialDocId ? [initialDocId] : [],
   );
   const [documents, setDocuments] = useState<DocumentItem[]>([]);
+  const [messages, setMessages] = useState<ChatMessageItem[]>([]);
   const [answerResult, setAnswerResult] = useState<AnswerResult | null>(null);
   const [loading, setLoading] = useState(false);
   const [docsLoading, setDocsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [activeCitationIndex, setActiveCitationIndex] = useState<number | null>(null);
+  const [activeCitationId, setActiveCitationId] = useState<string | null>(null);
 
   useEffect(() => {
     async function loadDocs() {
@@ -45,17 +51,24 @@ function AskContent() {
     loadDocs();
   }, []);
 
-  async function handleAsk(e?: React.FormEvent) {
-    if (e) e.preventDefault();
-    if (!question.trim()) return;
+  async function handleAskQuestion(questionText: string) {
+    if (!questionText.trim()) return;
+
+    const userMessage: ChatMessageItem = {
+      id: `msg-user-${Date.now()}`,
+      role: "user",
+      text: questionText.trim(),
+      timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+    };
+
+    setMessages((prev) => [...prev, userMessage]);
+    setLoading(true);
+    setError(null);
+    setActiveCitationId(null);
 
     try {
-      setLoading(true);
-      setError(null);
-      setActiveCitationIndex(null);
-
       const payload = {
-        question: question.trim(),
+        question: questionText.trim(),
         document_ids: selectedDocIds.length > 0 ? selectedDocIds : [],
       };
 
@@ -65,6 +78,42 @@ function AskContent() {
       });
 
       setAnswerResult(result);
+
+      // Construct normalized domain response
+      const citations: CitationReference[] = (result.citations || []).map((c, i) => {
+        const matchingEv = (result.evidence || []).find((e) => e.evidence_id === c.evidence_id);
+        return {
+          citationId: c.evidence_id || `cit-${i + 1}`,
+          documentId: c.document_id,
+          documentName: c.document_id,
+          pageNumber: c.page_number ?? undefined,
+          section: c.section_path?.join(" > ") || undefined,
+          quote: matchingEv?.quote || result.warnings?.[i] || undefined,
+        };
+      });
+
+      const domainResponse: AskResponse = {
+        answer: result.answer,
+        conversationId: result.request_id,
+        citations,
+        warnings: result.warnings || [],
+        claims: citations.map((c) => ({
+          claimId: `claim-${c.citationId}`,
+          text: c.quote || `Supporting reference from ${c.documentId}`,
+          citationIds: [c.citationId],
+          supportStatus: result.insufficient_evidence ? "unsupported" : "supported",
+        })),
+      };
+
+      const assistantMessage: ChatMessageItem = {
+        id: `msg-assistant-${Date.now()}`,
+        role: "assistant",
+        text: result.answer,
+        response: domainResponse,
+        timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+      };
+
+      setMessages((prev) => [...prev, assistantMessage]);
     } catch (err) {
       setError(err instanceof ApiError ? err.message : "Failed to obtain grounded answer.");
     } finally {
@@ -72,7 +121,7 @@ function AskContent() {
     }
   }
 
-  // Synthesize evidence items from citations + evidence array
+  // Synthesize evidence items from citations + evidence array for the persistent evidence panel
   const displayEvidence: Evidence[] = (answerResult?.evidence && answerResult.evidence.length > 0)
     ? answerResult.evidence
     : (answerResult?.citations || []).map((c, i) => ({
@@ -88,149 +137,100 @@ function AskContent() {
       {/* Header */}
       <div>
         <h1 className="text-2xl font-bold tracking-tight text-gray-900">
-          Ask &amp; Evidence Explorer
+          Ask AEGIS
         </h1>
+        <h2 className="sr-only">Ask &amp; Evidence Explorer</h2>
         <p className="text-sm text-gray-500 mt-1">
-          Ask questions across authorized documents with strictly grounded citations and transparent abstention.
+          <span className="font-medium text-gray-700">Ask &amp; Evidence Explorer</span> — Ask questions across authorized documents with strictly grounded citations and transparent abstention.
         </p>
       </div>
 
-      {/* Query Form */}
-      <form onSubmit={handleAsk} className="rounded-2xl border border-gray-200 bg-white p-6 shadow-xs space-y-4">
-        <div>
-          <label htmlFor="question-input" className="block text-sm font-semibold text-gray-900 mb-1">
-            Your Question
+      {/* Document Scope Filter */}
+      <div className="rounded-2xl border border-gray-200 bg-white p-5 shadow-xs space-y-3">
+        <div className="flex items-center justify-between">
+          <label className="block text-xs font-semibold uppercase tracking-wider text-gray-500">
+            Document Scope ({selectedDocIds.length > 0 ? `${selectedDocIds.length} Selected` : "All Tenant Documents"})
           </label>
-          <textarea
-            id="question-input"
-            rows={3}
-            placeholder="e.g., What is the aggregate liability cap under the agreement, and what exceptions apply?"
-            value={question}
-            onChange={(e) => setQuestion(e.target.value)}
-            className="w-full rounded-xl border border-gray-300 p-3 text-sm text-gray-900 placeholder:text-gray-400 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
-            required
-          />
-        </div>
-
-        {/* Document Scope Filter */}
-        <div>
-          <label className="block text-xs font-semibold uppercase tracking-wider text-gray-500 mb-2">
-            Document Scope (optional filter)
-          </label>
-          {docsLoading ? (
-            <p className="text-xs text-gray-400">Loading authorized documents...</p>
-          ) : documents.length === 0 ? (
-            <p className="text-xs text-gray-500">Searching all tenant documents.</p>
-          ) : (
-            <div className="flex flex-wrap gap-2 max-h-32 overflow-y-auto p-1">
-              {documents.map((d) => {
-                const isSelected = selectedDocIds.includes(d.doc_id);
-                return (
-                  <button
-                    key={d.doc_id}
-                    type="button"
-                    onClick={() => {
-                      setSelectedDocIds((prev) =>
-                        isSelected ? prev.filter((id) => id !== d.doc_id) : [...prev, d.doc_id],
-                      );
-                    }}
-                    className={`rounded-lg px-2.5 py-1 text-xs font-medium border transition ${
-                      isSelected
-                        ? "bg-blue-600 text-white border-blue-600"
-                        : "bg-gray-50 text-gray-700 border-gray-200 hover:bg-gray-100"
-                    }`}
-                  >
-                    {d.filename} {isSelected ? "✓" : ""}
-                  </button>
-                );
-              })}
-            </div>
+          {selectedDocIds.length > 0 && (
+            <button
+              type="button"
+              onClick={() => setSelectedDocIds([])}
+              className="text-xs text-blue-600 hover:text-blue-800 font-medium"
+            >
+              Clear Scope Filter
+            </button>
           )}
         </div>
 
-        <div className="flex justify-end pt-2">
-          <button
-            type="submit"
-            disabled={loading || !question.trim()}
-            className="inline-flex items-center rounded-xl bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white shadow-xs hover:bg-blue-500 disabled:opacity-50"
-          >
-            {loading ? "Grounding & Generating..." : "Ask Question &rarr;"}
-          </button>
-        </div>
-      </form>
+        {docsLoading ? (
+          <p className="text-xs text-gray-400">Loading authorized documents...</p>
+        ) : documents.length === 0 ? (
+          <p className="text-xs text-gray-500">Searching all tenant documents.</p>
+        ) : (
+          <div className="flex flex-wrap gap-2 max-h-32 overflow-y-auto p-1">
+            {documents.map((d) => {
+              const isSelected = selectedDocIds.includes(d.doc_id);
+              return (
+                <button
+                  key={d.doc_id}
+                  type="button"
+                  onClick={() => {
+                    setSelectedDocIds((prev) =>
+                      isSelected ? prev.filter((id) => id !== d.doc_id) : [...prev, d.doc_id],
+                    );
+                  }}
+                  className={`rounded-lg px-2.5 py-1 text-xs font-medium border transition ${
+                    isSelected
+                      ? "bg-blue-600 text-white border-blue-600 shadow-xs"
+                      : "bg-gray-50 text-gray-700 border-gray-200 hover:bg-gray-100"
+                  }`}
+                >
+                  {d.filename} {isSelected ? "✓" : ""}
+                </button>
+              );
+            })}
+          </div>
+        )}
+      </div>
+
+      {/* Query Form / Composer */}
+      <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-xs">
+        <QuestionComposer
+          onSubmit={(q) => void handleAskQuestion(q)}
+          isLoading={loading}
+          submitLabel="Ask AEGIS (Ask Question)"
+          placeholder="e.g., What is the aggregate liability cap under the agreement, and what exceptions apply?"
+        />
+      </div>
 
       {error && (
         <ErrorState
           title="Query Error"
           message={error}
-          onRetry={() => { void handleAsk(); }}
+          onRetry={() => {
+            if (messages.length > 0) {
+              const lastUser = [...messages].reverse().find((m) => m.role === "user");
+              if (lastUser) void handleAskQuestion(lastUser.text);
+            }
+          }}
         />
       )}
 
-      {/* Answer & Evidence Display */}
-      {answerResult && (
+      {/* Conversation & Evidence Display */}
+      {(messages.length > 0 || answerResult) && (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
-          {/* Main Answer Column */}
+          {/* Main Conversation Column */}
           <div className="lg:col-span-2 space-y-4">
-            <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-xs">
-              <div className="flex items-center justify-between pb-3 border-b border-gray-100 mb-4">
-                <span className="text-xs font-semibold uppercase tracking-wider text-gray-500">
-                  Grounded Answer
-                </span>
-                {answerResult.insufficient_evidence ? (
-                  <span className="inline-flex items-center rounded-full bg-amber-100 px-2.5 py-0.5 text-xs font-medium text-amber-800">
-                    Safe Abstention: Insufficient Evidence
-                  </span>
-                ) : (
-                  <span className="inline-flex items-center rounded-full bg-emerald-100 px-2.5 py-0.5 text-xs font-medium text-emerald-800">
-                    Verified Grounded
-                  </span>
-                )}
-              </div>
-
-              <div className="text-gray-900 leading-relaxed whitespace-pre-wrap text-base">
-                {answerResult.answer}
-              </div>
-
-              {/* Citations List in Answer */}
-              {answerResult.citations.length > 0 && (
-                <div className="mt-6 pt-4 border-t border-gray-100">
-                  <h4 className="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-2">
-                    Citations ({answerResult.citations.length})
-                  </h4>
-                  <div className="flex flex-wrap gap-2">
-                    {answerResult.citations.map((cite, idx) => (
-                      <button
-                        key={`${cite.document_id}-${idx}`}
-                        type="button"
-                        onClick={() => setActiveCitationIndex(idx)}
-                        className={`inline-flex items-center gap-1.5 rounded-md px-2.5 py-1 text-xs font-medium border transition ${
-                          activeCitationIndex === idx
-                            ? "bg-blue-100 text-blue-900 border-blue-400 font-semibold"
-                            : "bg-gray-50 text-gray-700 border-gray-200 hover:bg-gray-100"
-                        }`}
-                      >
-                        <span>[{idx + 1}]</span>
-                        <span className="truncate max-w-[120px]">{cite.document_id}</span>
-                        {cite.page_number && <span className="text-gray-400">p.{cite.page_number}</span>}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {/* Warnings / Conflicting Sources */}
-              {answerResult.warnings.length > 0 && (
-                <div className="mt-4 rounded-lg bg-amber-50 border border-amber-200 p-3 text-xs text-amber-900">
-                  <div className="font-semibold mb-1">Source Inconsistency Warnings:</div>
-                  <ul className="list-disc pl-4 space-y-0.5">
-                    {answerResult.warnings.map((w, idx) => (
-                      <li key={idx}>{w}</li>
-                    ))}
-                  </ul>
-                </div>
-              )}
-            </div>
+            {messages.map((msg) => (
+              <ChatMessage
+                key={msg.id}
+                message={msg}
+                activeCitationId={activeCitationId}
+                onSelectCitation={(cite) => {
+                  setActiveCitationId(cite.citationId);
+                }}
+              />
+            ))}
           </div>
 
           {/* Evidence Panel Column */}
