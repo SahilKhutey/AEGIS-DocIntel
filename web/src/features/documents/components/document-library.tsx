@@ -90,20 +90,23 @@ export function DocumentLibrary({
   return (
     <section className="space-y-5">
       {/* Search and Action Bar */}
-      <div className="flex flex-wrap items-center justify-between gap-3">
+      <div className="flex flex-wrap items-center justify-between gap-4">
         <div className="relative min-w-48 flex-1 max-w-md">
-          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--muted)]" />
+          <Search
+            aria-hidden="true"
+            className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--muted)] pointer-events-none"
+          />
           <Input
             id="doc-search"
             value={query}
             onChange={(event) => setQuery(event.target.value)}
             placeholder="Search documents by filename..."
             aria-label="Search documents"
-            className="pl-9"
+            className="pl-9 min-h-[40px]"
           />
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-3">
           <Button
             type="button"
             variant="outline"

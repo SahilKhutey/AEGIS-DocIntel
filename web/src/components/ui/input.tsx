@@ -14,7 +14,7 @@ export function Input({
     <input
       aria-invalid={invalid || undefined}
       className={cn(
-        "w-full min-h-10 rounded-[var(--radius-md)]",
+        "w-full h-10 min-h-[40px] box-border rounded-[var(--radius-md)]",
         "border bg-[var(--surface)] px-3 py-2",
         "text-[var(--foreground)] placeholder:text-[var(--muted)]",
         "border-[var(--border)]",

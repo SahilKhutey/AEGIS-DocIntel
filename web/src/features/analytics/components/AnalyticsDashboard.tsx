@@ -37,7 +37,7 @@ export const AnalyticsDashboard: React.FC = () => {
             type="button"
             onClick={refresh}
             disabled={isLoading}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg border border-slate-200 bg-white text-slate-700 hover:bg-slate-50 disabled:opacity-50 cursor-pointer"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 min-h-[28px] text-xs font-medium rounded-lg border border-slate-200 bg-white text-slate-700 hover:bg-slate-50 disabled:opacity-50 cursor-pointer"
             aria-label="Refresh metrics"
             title="Refresh metrics"
           >
@@ -49,8 +49,7 @@ export const AnalyticsDashboard: React.FC = () => {
             type="button"
             onClick={exportCsv}
             disabled={isLoading || !data}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 cursor-pointer shadow-xs"
-            aria-label="Export metrics as CSV"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 min-h-[28px] text-xs font-medium rounded-lg bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 cursor-pointer shadow-xs"
           >
             <Download className="w-3.5 h-3.5" aria-hidden="true" />
             <span>Export CSV</span>

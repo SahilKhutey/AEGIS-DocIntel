@@ -92,6 +92,8 @@ export function GlobalSearch({ search }: GlobalSearchProps) {
           onChange={(event) => setQuery(event.target.value)}
           placeholder="Search documents, evidence, reviews..."
           aria-label="Search AEGIS"
+          role="combobox"
+          aria-autocomplete="list"
           aria-controls="global-search-results"
           aria-expanded={showResults}
           className="pl-9 pr-9 h-9 text-xs sm:text-sm bg-[var(--surface)] border-[var(--border)]"

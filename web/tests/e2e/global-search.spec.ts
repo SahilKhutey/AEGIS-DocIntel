@@ -5,7 +5,7 @@ test.describe("Global Search", () => {
     await page.setViewportSize({ width: 1440, height: 900 });
     await page.goto("/");
 
-    const searchInput = page.getByRole("textbox", { name: "Search AEGIS" });
+    const searchInput = page.getByLabel("Search AEGIS");
     await expect(searchInput).toBeVisible();
 
     await searchInput.fill("acme");

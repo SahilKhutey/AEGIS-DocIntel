@@ -86,7 +86,7 @@ export function WorkspaceSelector({
         disabled={changing}
         aria-haspopup="listbox"
         aria-expanded={open}
-        aria-label="Select workspace"
+        aria-label={activeWorkspace?.name ? `${activeWorkspace.name} — Select workspace` : "Select workspace"}
         onClick={() => setOpen((value) => !value)}
         className="flex items-center gap-2 border-[var(--border)] bg-[var(--surface)] font-medium text-xs sm:text-sm"
       >

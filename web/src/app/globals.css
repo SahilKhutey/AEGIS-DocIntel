@@ -8,8 +8,16 @@
   box-sizing: border-box;
 }
 
-body {
+input:not([type="checkbox"]):not([type="radio"]),
+select,
+button {
+  min-height: 28px;
+}
+
+html, body {
   margin: 0;
+  max-width: 100%;
+  overflow-x: hidden;
   min-width: 320px;
 }
 

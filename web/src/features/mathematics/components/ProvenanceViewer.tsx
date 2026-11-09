@@ -20,8 +20,10 @@ export const ProvenanceViewer: React.FC<ProvenanceViewerProps> = ({ provenance }
             <GitBranch className="w-3.5 h-3.5" aria-hidden="true" />
             <span>Source Document</span>
           </dt>
-          <dd className="font-semibold text-slate-800">{provenance.sourceDocumentTitle}</dd>
-          <span className="text-[10px] text-slate-400 font-mono">{provenance.sourceDocumentId}</span>
+          <dd className="font-semibold text-slate-800">
+            {provenance.sourceDocumentTitle}
+            <span className="block text-[10px] text-slate-400 font-mono font-normal">{provenance.sourceDocumentId}</span>
+          </dd>
         </div>
 
         <div className="p-3 rounded-lg bg-slate-50 border border-slate-100">
@@ -29,8 +31,10 @@ export const ProvenanceViewer: React.FC<ProvenanceViewerProps> = ({ provenance }
             <Cpu className="w-3.5 h-3.5" aria-hidden="true" />
             <span>Inference Model & Pooling</span>
           </dt>
-          <dd className="font-semibold text-slate-800 font-mono">{provenance.model}</dd>
-          <span className="text-[10px] text-slate-400">{provenance.poolingMethod}</span>
+          <dd className="font-semibold text-slate-800 font-mono">
+            {provenance.model}
+            <span className="block text-[10px] text-slate-400 font-sans font-normal">{provenance.poolingMethod}</span>
+          </dd>
         </div>
 
         <div className="p-3 rounded-lg bg-slate-50 border border-slate-100">

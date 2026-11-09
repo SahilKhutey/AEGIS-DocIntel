@@ -1,0 +1,69 @@
+Next.js Turbopack Production Build Log
+Timestamp: 2026-11-09T17:43:56+05:30
+Command: npm --prefix web run build
+Next.js Version: 16.4.3 (Turbopack)
+Node: v24.18.0
+
+> web@0.1.0 build
+> next build
+
+▲ Next.js 16.4.3 (Turbopack)
+✓ Running next.config.ts took 36ms
+- Cache Components enabled
+- Partial Prefetching enabled
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 396ms
+  Running TypeScript ...
+  Finished TypeScript in 3.3s ...
+  Collecting page data using 11 workers ...
+  Generating static pages using 11 workers (0/30) ...
+  Generating static pages using 11 workers (7/30) 
+  Generating static pages using 11 workers (14/30) 
+  Generating static pages using 11 workers (22/30) 
+✓ Generating static pages using 11 workers (30/30) in 718ms
+  Finalizing page optimization ...
+
+Route (app)
+┌ ○ /
+├ ○ /_not-found
+├ ○ /analytics
+├ ○ /ask
+├ ○ /compare
+├ ○ /developer
+├ ○ /developer/api
+├ ○ /developer/integrations
+├ ○ /developer/webhooks
+├ ○ /documents
+├   /documents/[documentId]
+│ └ ◐ /documents/[documentId]
+├ ○ /governance/audit
+├ ○ /intelligence
+├ ○ /intelligence/evidence
+├ ○ /intelligence/knowledge
+├ ○ /intelligence/retrieval
+├ ○ /mathematics
+├   /mathematics/[representationId]
+│ └ ◐ /mathematics/[representationId]
+├ ○ /monitoring
+├ ○ /pipelines
+├   /pipelines/[runId]
+│ └ ◐ /pipelines/[runId]
+├ ○ /processing
+├ ○ /reviews
+├   /reviews/[reviewId]
+│ └ ◐ /reviews/[reviewId]
+├   /reviews/[reviewId]/conflicts
+│ └ ◐ /reviews/[reviewId]/conflicts
+├   /reviews/[reviewId]/decisions
+│ └ ◐ /reviews/[reviewId]/decisions
+├   /reviews/[reviewId]/history
+│ └ ◐ /reviews/[reviewId]/history
+└   /reviews/[reviewId]/verification
+  └ ◐ /reviews/[reviewId]/verification
+
+○  (Static)             prerendered as static content
+◐  (Partial Prerender)  prerendered as static HTML with dynamic server-streamed content
+
+Exit Code: 0
+Build Status: SUCCESS (Production ready)

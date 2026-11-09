@@ -142,20 +142,22 @@ export const PipelineList: React.FC = () => {
 
         <div className="flex flex-wrap items-center gap-2.5">
           <div className="relative">
-            <Search className="w-3.5 h-3.5 absolute left-2.5 top-2.5 text-slate-400" aria-hidden="true" />
+            <Search className="w-3.5 h-3.5 absolute left-2.5 top-3 text-slate-400 pointer-events-none" aria-hidden="true" />
             <input
               type="text"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Search pipelines..."
-              className="pl-8 pr-3 py-1.5 text-xs rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              aria-label="Search pipelines"
+              className="pl-8 pr-3 h-9 min-h-[36px] box-border text-xs rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
 
           <select
             value={statusFilter}
+            aria-label="Filter pipeline runs by status"
             onChange={(e) => setStatusFilter(e.target.value as PipelineJobStatus | "all")}
-            className="px-3 py-1.5 text-xs rounded-lg border border-slate-200 bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer"
+            className="px-3 h-9 min-h-[36px] box-border text-xs rounded-lg border border-slate-200 bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer"
           >
             <option value="all">All Statuses</option>
             <option value="running">Running</option>
@@ -167,7 +169,7 @@ export const PipelineList: React.FC = () => {
             type="button"
             onClick={loadRuns}
             disabled={isLoading}
-            className="p-1.5 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 disabled:opacity-50 cursor-pointer text-slate-600"
+            className="h-9 w-9 min-h-[36px] min-w-[36px] box-border flex items-center justify-center rounded-lg border border-slate-200 bg-white hover:bg-slate-50 disabled:opacity-50 cursor-pointer text-slate-600"
             title="Refresh runs"
             aria-label="Refresh pipeline runs"
           >

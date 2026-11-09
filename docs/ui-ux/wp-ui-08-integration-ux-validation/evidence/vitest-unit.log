@@ -1,0 +1,60 @@
+Vitest Unit Test Suite Execution Log
+Timestamp: 2026-11-09T17:42:40+05:30
+Node.js: v24.18.0
+npm: 11.16.0
+Vitest: v5.0.5
+
+RUN v5.0.5 C:/Users/ASUS/.gemini/antigravity/worktrees/Aegis-DocIntel/ui_ux_development_strategy/web
+
+ ✓ tests/unit/governance/decision-panel.test.tsx (2 tests) 334ms
+ ✓ tests/unit/governance/audit-timeline.test.tsx (3 tests) 347ms
+ ✓ tests/unit/advanced/pipeline-stage.test.tsx (2 tests) 403ms
+ ✓ tests/unit/comparison-workspace.test.tsx (3 tests) 383ms
+ ✓ tests/unit/processing-timeline.test.tsx (4 tests) 493ms
+ ✓ tests/unit/knowledge-graph.test.tsx (3 tests) 377ms
+ ✓ tests/unit/governance/conflict-resolution.test.tsx (2 tests) 485ms
+ ✓ tests/unit/governance/fact-verification.test.tsx (2 tests) 550ms
+ ✓ tests/unit/advanced/vector-viewer.test.tsx (3 tests) 432ms
+ ✓ tests/unit/advanced/developer.test.tsx (7 tests) 479ms
+ ✓ tests/unit/advanced/analytics.test.tsx (4 tests) 611ms
+ ✓ src/components/evidence-panel.test.tsx (2 tests) 266ms
+ ✓ tests/unit/question-composer.test.tsx (3 tests) 295ms
+ ✓ tests/unit/button.test.tsx (4 tests) 334ms
+ ✓ tests/unit/retrieval-search.test.tsx (3 tests) 341ms
+ ✓ tests/unit/advanced/data-table.test.tsx (3 tests) 380ms
+ ✓ tests/unit/component-contracts.test.tsx (14 tests) 453ms
+ ✓ tests/unit/input.test.tsx (3 tests) 242ms
+ ✓ tests/unit/evidence-detail.test.tsx (3 tests) 269ms
+ ✓ tests/unit/advanced/matrix-viewer.test.tsx (2 tests) 208ms
+ ✓ tests/unit/governance/review-queue.test.tsx (4 tests) 197ms
+ ✓ tests/unit/advanced/service-health.test.tsx (3 tests) 198ms
+ ✓ tests/unit/integration/components.test.tsx (6 tests) 420ms
+ ✓ tests/unit/advanced/metric-card.test.tsx (4 tests) 146ms
+ ✓ tests/unit/advanced/equation-renderer.test.tsx (2 tests) 160ms
+ ✓ tests/unit/advanced/format-metric.test.ts (10 tests) 32ms
+ ✓ tests/unit/document-status.test.tsx (5 tests) 69ms
+ ✓ tests/unit/integration/api-client.test.ts (7 tests) 18ms
+ ✓ src/features/reviews/submit-decision.test.ts (3 tests) 9ms
+ ✓ tests/unit/citation-integrity.test.ts (6 tests) 9ms
+ ✓ tests/unit/advanced/validate-graph.test.ts (4 tests) 8ms
+ ✓ tests/unit/upload-validation.test.ts (6 tests) 11ms
+ ✓ tests/unit/navigation.test.ts (13 tests) 14ms
+ ✓ tests/unit/advanced/export-data.test.ts (6 tests) 6ms
+ ✓ tests/unit/integration/realtime.test.ts (4 tests) 10ms
+ ✓ tests/unit/integration/auth-permissions.test.ts (9 tests) 8ms
+ ✓ tests/unit/advanced/time-range.test.ts (5 tests) 8ms
+ ✓ tests/unit/workflows.test.ts (6 tests) 7ms
+ ✓ tests/unit/shell-state.test.ts (5 tests) 6ms
+ ✓ tests/unit/governance/decision-transitions.test.ts (4 tests) 9ms
+ ✓ tests/unit/routes.test.ts (7 tests) 6ms
+ ✓ tests/unit/design-tokens.test.ts (12 tests) 6ms
+ ✓ tests/unit/workspace-overview.test.ts (2 tests) 5ms
+ ✓ tests/unit/breadcrumbs.test.ts (4 tests) 4ms
+ ✓ tests/unit/governance/review-status.test.ts (4 tests) 4ms
+ ✓ tests/unit/permissions.test.ts (7 tests) 3ms
+
+Test Files:  46 passed (46)
+Tests:       220 passed (220)
+Start at:    17:41:57
+Duration:    39.00s
+Status:      PASSED (100%)

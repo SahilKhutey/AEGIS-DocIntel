@@ -36,6 +36,11 @@ const DEFAULT_WORKSPACES: Workspace[] = [
     name: "Primary Workspace",
     description: "Default analytical workspace",
   },
+  {
+    id: "workspace-prod",
+    name: "Production Corpus",
+    description: "Production legal & financial contracts",
+  },
 ];
 
 const DEFAULT_PERMISSIONS = [
@@ -105,7 +110,7 @@ function AppShellInner({
         </div>
 
         {/* Main Content Area */}
-        <div className="flex min-w-0 flex-1 flex-col">
+        <div className="flex min-w-0 max-w-full flex-1 flex-col overflow-x-hidden">
           <AppHeader
             workspaces={workspaces}
             activeWorkspaceId={currentWorkspaceId}
@@ -153,7 +158,7 @@ function AppShellInner({
           <main
             id="main-content"
             tabIndex={-1}
-            className="mx-auto w-full max-w-[90rem] flex-1 p-4 sm:p-6 lg:p-8 outline-none"
+            className="mx-auto w-full max-w-[90rem] min-w-0 flex-1 p-4 sm:p-6 lg:p-8 outline-none"
           >
             <Breadcrumbs />
             {children}
@@ -179,7 +184,7 @@ function AppShellInner({
 
 export function AppShell(props: AppShellProps) {
   return (
-    <div className="min-h-screen bg-[var(--background)] text-[var(--foreground)] flex flex-col font-sans">
+    <div className="min-h-screen max-w-full overflow-x-hidden bg-[var(--background)] text-[var(--foreground)] flex flex-col font-sans">
       <a className="skip-link" href="#main-content">
         Skip to main content
       </a>

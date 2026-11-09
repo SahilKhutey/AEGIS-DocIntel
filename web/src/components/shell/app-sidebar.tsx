@@ -62,7 +62,6 @@ export function AppSidebar({
       <div className="flex h-16 items-center gap-3 px-4 border-b border-[var(--border)]">
         <Link
           href="/"
-          aria-label="AEGIS home"
           className="flex items-center gap-3"
           onClick={onNavigate}
         >
@@ -70,14 +69,18 @@ export function AppSidebar({
             className="h-7 w-7 shrink-0 text-[var(--primary)]"
             aria-hidden="true"
           />
-          {!collapsed && (
-            <span className="text-lg font-bold tracking-tight text-[var(--foreground)]">
-              AEGIS
-              <span className="ml-1 text-xs font-semibold text-[var(--primary)]">
-                DocIntel
-              </span>
+          <span
+            className={cn(
+              collapsed
+                ? "sr-only"
+                : "text-lg font-bold tracking-tight text-[var(--foreground)]"
+            )}
+          >
+            AEGIS
+            <span className="ml-1 text-xs font-semibold text-[var(--primary)]">
+              DocIntel
             </span>
-          )}
+          </span>
         </Link>
       </div>
 

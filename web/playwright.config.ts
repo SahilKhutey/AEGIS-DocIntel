@@ -1,7 +1,7 @@
 import { defineConfig } from "@playwright/test";
 
 export default defineConfig({
-  testDir: "./tests/e2e",
+  testDir: "./tests",
   timeout: 30000,
   expect: {
     timeout: 5000,
@@ -16,4 +16,18 @@ export default defineConfig({
     reuseExistingServer: true,
     timeout: 30000,
   },
+  projects: [
+    {
+      name: "e2e",
+      testDir: "./tests/e2e",
+    },
+    {
+      name: "accessibility",
+      testDir: "./tests/accessibility",
+    },
+    {
+      name: "responsive",
+      testDir: "./tests/responsive",
+    },
+  ],
 });
