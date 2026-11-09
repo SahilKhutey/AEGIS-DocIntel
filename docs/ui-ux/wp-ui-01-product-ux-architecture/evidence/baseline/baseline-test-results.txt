@@ -1,0 +1,11 @@
+AEGIS-DocIntel Baseline Test Report
+Component: Next.js 16.4.3 Web Application (web/)
+Date: 2026-11-09T11:23:50+05:30
+
+Vitest Baseline:
+✓ src/features/reviews/submit-decision.test.ts (3 tests)
+✓ src/components/evidence-panel.test.tsx (2 tests)
+
+Baseline Test Files: 2 passed (2)
+Baseline Tests: 5 passed (5)
+Baseline Status: VERIFIED & PASS

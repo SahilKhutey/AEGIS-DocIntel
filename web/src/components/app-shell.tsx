@@ -4,97 +4,129 @@ import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
+import {
+  NAVIGATION,
+  isNavigationItemActive,
+} from "@/config/navigation";
+
 interface AppShellProps {
   children: React.ReactNode;
 }
 
-const NAV_ITEMS = [
-  { href: "/documents", label: "Documents", icon: "📄" },
-  { href: "/ask", label: "Ask & Evidence", icon: "💬" },
-  { href: "/compare", label: "Intelligence & Compare", icon: "⚖️" },
-  { href: "/reviews", label: "Review Queue", icon: "🛡️" },
-];
-
 export function AppShell({ children }: AppShellProps) {
-  const pathname = usePathname();
+  const pathname = usePathname() ?? "/";
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col font-sans">
-      <header className="sticky top-0 z-40 bg-white border-b border-gray-200 shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
-            <div className="flex items-center gap-8">
-              <Link href="/documents" className="flex items-center gap-2.5">
-                <div className="h-9 w-9 rounded-lg bg-blue-600 flex items-center justify-center text-white font-bold text-lg shadow-sm">
-                  A
-                </div>
-                <div>
-                  <span className="text-base font-bold text-gray-900 tracking-tight">AEGIS</span>
-                  <span className="text-xs font-semibold uppercase tracking-wider text-blue-600 ml-1.5 px-1.5 py-0.5 bg-blue-50 rounded">
-                    DocIntel
-                  </span>
-                </div>
-              </Link>
+      <header className="sticky top-0 z-40 border-b border-gray-200 bg-white">
+        <div className="mx-auto flex min-h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+          <Link
+            href="/"
+            aria-label="AEGIS workspace home"
+            className="flex items-center gap-3"
+          >
+            <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-blue-700 font-bold text-white">
+              A
+            </span>
+            <span className="font-bold tracking-tight text-gray-900">
+              AEGIS
+              <span className="ml-1.5 text-xs font-semibold text-blue-700">
+                DocIntel
+              </span>
+            </span>
+          </Link>
 
-              <nav className="hidden md:flex space-x-1" aria-label="Main Navigation">
-                {NAV_ITEMS.map((item) => {
-                  const isActive = pathname === item.href || (item.href !== "/" && pathname?.startsWith(item.href));
+          <span className="hidden text-xs text-gray-500 sm:block">
+            Document Intelligence Workbench
+          </span>
+        </div>
+
+        <nav
+          aria-label="Primary navigation"
+          className="mx-auto hidden max-w-7xl gap-1 overflow-x-auto px-4 pb-2 md:flex sm:px-6 lg:px-8"
+        >
+          {NAVIGATION.map((group) => {
+            const visibleItems = group.items.filter(
+              (item) => item.status === "active",
+            );
+
+            if (visibleItems.length === 0) return null;
+
+            return (
+              <div key={group.id} className="flex items-center gap-1">
+                <span className="px-2 text-xs font-semibold uppercase tracking-wide text-gray-400">
+                  {group.label}
+                </span>
+
+                {visibleItems.map((item) => {
+                  const active = isNavigationItemActive(
+                    pathname,
+                    item,
+                  );
+
                   return (
                     <Link
                       key={item.href}
                       href={item.href}
-                      className={`inline-flex items-center gap-1.5 px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-                        isActive
-                          ? "bg-blue-50 text-blue-700 font-semibold"
-                          : "text-gray-600 hover:text-gray-900 hover:bg-gray-100/70"
-                      }`}
-                      aria-current={isActive ? "page" : undefined}
+                      aria-current={active ? "page" : undefined}
+                      title={item.description}
+                      className={[
+                        "rounded-md px-3 py-2 text-sm transition-colors",
+                        active
+                          ? "bg-blue-50 font-semibold text-blue-700"
+                          : "text-gray-600 hover:bg-gray-100 hover:text-gray-900",
+                      ].join(" ")}
                     >
-                      <span>{item.icon}</span>
-                      <span>{item.label}</span>
+                      {item.label}
                     </Link>
                   );
                 })}
-              </nav>
-            </div>
-
-            <div className="flex items-center gap-3">
-              <div className="hidden sm:flex items-center gap-2 text-xs text-gray-500 bg-gray-100/80 px-2.5 py-1.5 rounded-md border border-gray-200/60">
-                <span className="h-2 w-2 rounded-full bg-emerald-500" aria-hidden="true" />
-                <span className="font-mono">Tenant: default-tenant</span>
               </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Mobile Navigation */}
-        <div className="md:hidden border-t border-gray-100 px-4 py-2 flex overflow-x-auto gap-1">
-          {NAV_ITEMS.map((item) => {
-            const isActive = pathname === item.href || (item.href !== "/" && pathname?.startsWith(item.href));
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={`whitespace-nowrap px-3 py-1.5 rounded-md text-xs font-medium ${
-                  isActive
-                    ? "bg-blue-50 text-blue-700 font-semibold"
-                    : "text-gray-600 hover:bg-gray-100"
-                }`}
-              >
-                {item.label}
-              </Link>
             );
           })}
-        </div>
+        </nav>
+
+        <nav
+          aria-label="Mobile navigation"
+          className="flex gap-2 overflow-x-auto border-t border-gray-100 px-4 py-2 md:hidden"
+        >
+          {NAVIGATION.flatMap((group) => group.items)
+            .filter((item) => item.status === "active")
+            .map((item) => {
+              const active = isNavigationItemActive(
+                pathname,
+                item,
+              );
+
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  aria-current={active ? "page" : undefined}
+                  className={[
+                    "whitespace-nowrap rounded-md px-3 py-2 text-xs",
+                    active
+                      ? "bg-blue-50 font-semibold text-blue-700"
+                      : "text-gray-600 hover:bg-gray-100",
+                  ].join(" ")}
+                >
+                  {item.label}
+                </Link>
+              );
+            })}
+        </nav>
       </header>
 
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <main
+        id="main-content"
+        className="mx-auto w-full max-w-7xl flex-1 px-4 py-8 sm:px-6 lg:px-8"
+      >
         {children}
       </main>
 
-      <footer className="bg-white border-t border-gray-200 py-4 mt-auto">
-        <div className="max-w-7xl mx-auto px-4 text-center text-xs text-gray-400">
-          AEGIS-DocIntel &bull; Evidence Grounding, Document Intelligence &amp; Governance Workbench
+      <footer className="mt-auto border-t border-gray-200 bg-white py-4">
+        <div className="mx-auto max-w-7xl px-4 text-center text-xs text-gray-500">
+          AEGIS-DocIntel · Evidence Grounding · Document Intelligence · Governance
         </div>
       </footer>
     </div>

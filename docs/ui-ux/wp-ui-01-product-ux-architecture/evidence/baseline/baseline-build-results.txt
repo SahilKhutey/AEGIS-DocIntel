@@ -1,0 +1,17 @@
+AEGIS-DocIntel Baseline Build Report
+Component: Next.js 16.4.3 Web Application (web/)
+Date: 2026-11-09T11:23:55+05:30
+
+Next.js Turbopack Build:
+Compiled successfully in 3.0s
+TypeScript: 0 errors (strict mode)
+Static & Partial Prerender Routes:
+/ (Static)
+/documents (Static)
+/documents/[documentId] (Partial Prerender)
+/ask (Static)
+/compare (Static)
+/reviews (Static)
+/reviews/[reviewId] (Partial Prerender)
+
+Baseline Build Status: VERIFIED & PASS
