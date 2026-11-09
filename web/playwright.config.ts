@@ -7,7 +7,13 @@ export default defineConfig({
     timeout: 5000,
   },
   use: {
-    baseURL: process.env.BASE_URL || "http://localhost:3000",
+    baseURL: process.env.BASE_URL || "http://127.0.0.1:3000",
     trace: "on-first-retry",
+  },
+  webServer: {
+    command: "npm run start -- -p 3000",
+    url: "http://127.0.0.1:3000",
+    reuseExistingServer: true,
+    timeout: 30000,
   },
 });

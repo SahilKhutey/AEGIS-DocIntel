@@ -1,0 +1,30 @@
+Component Contract Test Results:
+Suite: tests/unit/button.test.tsx
+  ✓ renders its content (Save document)
+  ✓ supports variants (primary, danger, etc.)
+  ✓ disables itself when loading and sets aria-busy="true"
+  ✓ does not activate when disabled
+
+Suite: tests/unit/input.test.tsx
+  ✓ renders an accessible input with label
+  ✓ exposes its invalid state (aria-invalid="true")
+  ✓ supports disabled state
+
+Suite: tests/unit/component-contracts.test.tsx
+  ✓ Badge: renders text and applies variant
+  ✓ Card: renders children with surface styling
+  ✓ Card: applies interactive variant styling
+  ✓ Textarea: renders an accessible textarea
+  ✓ Textarea: exposes invalid and disabled attributes
+  ✓ Select: renders select with options and handles value change
+  ✓ Checkbox: renders with associated label and toggles checked state
+  ✓ Dialog: does not render when closed
+  ✓ Dialog: renders title, description, and closes on Escape
+  ✓ Tooltip: displays tooltip on hover/focus
+  ✓ Table: renders responsive structured table with header, rows, and caption
+  ✓ Skeleton: renders loading placeholder with accessibility attributes
+  ✓ Alert: renders danger alert with role='alert'
+  ✓ Alert: renders info alert with role='status'
+
+Total Component Contract Tests: 21 passed (21)
+Result: 100% PASS

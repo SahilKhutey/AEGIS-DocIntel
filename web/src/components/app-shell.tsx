@@ -18,6 +18,10 @@ export function AppShell({ children }: AppShellProps) {
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col font-sans">
+      <a className="skip-link" href="#main-content">
+        Skip to main content
+      </a>
+
       <header className="sticky top-0 z-40 border-b border-gray-200 bg-white">
         <div className="mx-auto flex min-h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
           <Link
@@ -119,7 +123,8 @@ export function AppShell({ children }: AppShellProps) {
 
       <main
         id="main-content"
-        className="mx-auto w-full max-w-7xl flex-1 px-4 py-8 sm:px-6 lg:px-8"
+        tabIndex={-1}
+        className="mx-auto w-full max-w-7xl flex-1 px-4 py-8 sm:px-6 lg:px-8 outline-none"
       >
         {children}
       </main>
