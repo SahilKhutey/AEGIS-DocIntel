@@ -36,7 +36,7 @@ export const ApiExplorer: React.FC = () => {
 
 url = "https://api.aegis.enterprise.internal${ep.path}"
 headers = {
-    "Authorization": "Bearer aegis_live_sec_...",
+    "Authorization": "Bearer $AEGIS_API_KEY",
     "Content-Type": "application/json"
 }
 ${hasBody ? `payload = ${bodyStr}\n\nresponse = requests.${ep.method.toLowerCase()}(url, json=payload, headers=headers)` : `response = requests.${ep.method.toLowerCase()}(url, headers=headers)`}
@@ -48,7 +48,7 @@ print(response.json())`;
         return `const response = await fetch("https://api.aegis.enterprise.internal${ep.path}", {
   method: "${ep.method}",
   headers: {
-    "Authorization": "Bearer aegis_live_sec_...",
+    "Authorization": "Bearer $AEGIS_API_KEY",
     "Content-Type": "application/json"
   }${hasBody ? `,\n  body: JSON.stringify(${bodyStr.replace(/\n/g, "\n  ")})` : ""}
 });
@@ -59,7 +59,7 @@ console.log(data);`;
       case "curl":
       default:
         return `curl -X ${ep.method} "https://api.aegis.enterprise.internal${ep.path}" \\
-  -H "Authorization: Bearer aegis_live_sec_..." \\
+  -H "Authorization: Bearer $AEGIS_API_KEY" \\
   -H "Content-Type: application/json"${hasBody ? ` \\\n  -d '${JSON.stringify(ep.requestBodySample)}'` : ""}`;
     }
   };

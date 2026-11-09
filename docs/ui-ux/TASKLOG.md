@@ -189,3 +189,19 @@
 - **Result:**
   - Standalone verification drill passed with exit code 0 (2 jobs executed, transient error retried and succeeded, monotonic audit trail confirmed, 0 queued/0 running/0 failed).
   - Pytest operations suite: 23 passed in 13.29s (100% passing).
+
+---
+
+### TASK-SEC-01: CI Security Gate Remediation (Gitleaks False Positive)
+- **Date:** 2026-11-09
+- **Scope:** Resolve Gitleaks CI action failure on pull request #8 for `curl-auth-header`.
+- **Commands Executed:**
+  - `gitleaks detect --redact -v --log-opts="--no-merges --first-parent ee293f09fbb4b2ad95b2fb3d82133cbc189a5136^..HEAD"`
+  - `gitleaks protect -v`
+  - `npm run test`
+  - `npx tsc --noEmit`
+  - `npm run lint`
+- **Outputs & Deliverables:**
+  - `.gitleaksignore`: Added reviewed false-positive fingerprint for commit `c1ff775` in `ApiExplorer.tsx`.
+  - `web/src/features/developer/components/ApiExplorer.tsx`: Sanitized documentation snippet to use `$AEGIS_API_KEY` placeholder.
+- **Result:** Passed (0 leaks found across PR commit range, 100% test pass rate, 0 type errors, 0 lint warnings).

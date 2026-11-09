@@ -2148,3 +2148,17 @@ uff check src tests scripts dashboard: All checks passed.
   - npx playwright test: PASSED (87 tests passed).
   - npx tsc --noEmit: PASSED (0 errors).
   - npm run lint: PASSED (0 errors, 0 warnings).
+
+
+### Task UI.09 — CI Security Gate Remediation (Gitleaks False Positive)
+- **Time:** 2026-11-09 19:45:00 UTC
+- **Context & Objective:**
+  Resolve Gitleaks CI action failure on pull request #8 (Rule: curl-auth-header):
+  1. Root cause: Developer API Explorer snippet (ApiExplorer.tsx) contained documentation placeholder Bearer aegis_live_sec_... which matched Gitleaks curl-auth-header pattern in historical commit c1ff775.
+  2. Remediated placeholder across curl, python, and typescript snippets to standard env token syntax Bearer .
+  3. Added audited false-positive fingerprint to .gitleaksignore with documented rationale.
+- **Verification:**
+  - gitleaks detect: PASSED (0 leaks found).
+  - npm run test: PASSED (46 suites, 220 tests passed).
+  - npx tsc --noEmit: PASSED (0 errors).
+  - npm run lint: PASSED (0 errors, 0 warnings).
