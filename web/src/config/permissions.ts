@@ -108,3 +108,26 @@ export function hasAnyPermission(
     grantedPermissions.includes(permission),
   );
 }
+
+export const GOVERNANCE_PERMISSIONS = {
+  REVIEW_READ: "governance.read",
+  REVIEW_CREATE: "governance.review.create",
+  REVIEW_ASSIGN: "governance.review.assign",
+  FACT_READ: "governance.fact.read",
+  FACT_VERIFY: "governance.fact.verify",
+  CONFLICT_READ: "governance.conflict.read",
+  CONFLICT_RESOLVE: "governance.conflict.resolve",
+  CONFLICT_ESCALATE: "governance.conflict.escalate",
+  DECISION_READ: "governance.decision.read",
+  DECISION_SUBMIT: "governance.decision.submit",
+  DECISION_APPROVE: "governance.decision.approve",
+  AUDIT_READ: "governance.audit.read",
+} as const;
+
+export function canPerformGovernanceAction(
+  permissions: readonly string[],
+  requiredPermission: string,
+): boolean {
+  return permissions.includes(requiredPermission);
+}
+
