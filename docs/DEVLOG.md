@@ -2035,3 +2035,116 @@ uff check src tests scripts dashboard: All checks passed.
   - `bandit -r src dashboard scripts -ll`: PASSED (0 issues).
   - `ruff check src tests scripts evaluation dashboard`: All checks passed.
   - `gitleaks detect --verbose`: 241 commits scanned, 0 leaks found.
+
+
+### Task UI.01 — Product UX Architecture & Specification Blueprint
+- **Time:** 2026-11-09 09:30:00 UTC
+- **Context & Objective:**
+  Establish the architectural and functional blueprint for the AEGIS-DocIntel frontend workspace without inventing ungrounded roles, routes, or capabilities:
+  1. Authored complete 10-document specification dossier under docs/ui-ux/wp-ui-01-product-ux-architecture/.
+  2. Defined 5 core user personas: Analyst, Reviewer, Auditor, Engineer, Administrator.
+  3. Mapped frontend capabilities to authoritative FastAPI backend RBAC scopes (documents:read, documents:write, intelligence:query, reviews:decide, admin:manage).
+  4. Formulated complete 30-route register and user journey maps.
+- **Deliverables:**
+  - docs/ui-ux/wp-ui-01-product-ux-architecture/ (Specs 01 through 10).
+
+
+### Task UI.02 — Design System & Visual Tokens
+- **Time:** 2026-11-09 11:00:00 UTC
+- **Context & Objective:**
+  Construct the visual token engine and reusable atomic primitives complying with WCAG 2.2 AA standards:
+  1. Created semantic design tokens in web/src/styles/tokens.css with dark/light themes.
+  2. Implemented core primitives (Button, Card, Badge, Dialog, Input, Table, Toast) with strict contrast checks.
+- **Verification:**
+  - Vitest component suite: 14/14 tests passed.
+  - ESLint: 0 errors, 0 warnings.
+
+
+### Task UI.03 — Application Shell & Navigation
+- **Time:** 2026-11-09 12:45:00 UTC
+- **Context & Objective:**
+  Build the persistent application frame surrounding all workspace routes:
+  1. Collapsible sidebar with role-aware item visibility and active state tracking.
+  2. Top header with dynamic breadcrumbs, workspace selector, notification drawer, and user profile context.
+  3. Global search modal (Ctrl+K) with keyboard navigation.
+- **Verification:**
+  - Vitest suite: 24/24 tests passed.
+  - TypeScript: 0 errors.
+
+
+### Task UI.04 — Core Operational Workspace
+- **Time:** 2026-11-09 13:50:00 UTC
+- **Context & Objective:**
+  Deliver the operational document management and ingestion workbench:
+  1. Operational Overview Dashboard with real-time KPI metrics.
+  2. Document Library table with faceted filtering and pagination.
+  3. Document Inspector dual-pane with chunk metadata and structure viewing.
+  4. Drag-and-drop document upload modal with parsing validation.
+  5. Live pipeline processing monitor.
+- **Verification:**
+  - Vitest suite: 58/58 tests passed.
+  - Next.js build: Clean compilation.
+
+
+### Task UI.05 — Intelligence Workspace
+- **Time:** 2026-11-09 14:45:00 UTC
+- **Context & Objective:**
+  Implement grounded document intelligence, Q&A, and comparative analysis:
+  1. 'Ask AEGIS' grounded Q&A with strict claim citations.
+  2. Citation side drawer with document page and bounding box inspection.
+  3. Visual Evidence Explorer with confidence thresholds and entity categorization.
+  4. Document Comparison Workbench with side-by-side diffing.
+  5. Interactive Entity Relation Graph.
+- **Verification:**
+  - Vitest suite: 92/92 tests passed.
+  - Next.js build: Clean compilation.
+
+
+### Task UI.06 — Governance Workspace
+- **Time:** 2026-11-09 15:30:00 UTC
+- **Context & Objective:**
+  Implement human oversight, fact verification, and compliance governance:
+  1. Central Review Queue with priority scoring and SLA indicators.
+  2. Fact Verification Workbench with raw source evidence binding.
+  3. Conflicting Information Reconciliation Matrix.
+  4. Sovereign Decision Dialog requiring reviewer justification and signature.
+  5. Immutable chronological Audit History Timeline.
+- **Verification:**
+  - Vitest suite: 136/136 tests passed.
+  - Next.js build: Clean compilation.
+
+
+### Task UI.07 — Advanced Interfaces
+- **Time:** 2026-11-09 16:30:00 UTC
+- **Context & Objective:**
+  Build operational observability, mathematical visualization, and developer tools:
+  1. Analytics & Reporting Dashboard with CSV export.
+  2. High-dimensional mathematical representations with KaTeX and projection charts.
+  3. Cycle-safe pipeline DAG visualizer.
+  4. Performance telemetry gauges (latency, tokens, memory, health).
+  5. Developer Hub with REST API playground and SSRF-safe webhook management.
+- **Verification:**
+  - Vitest suite: 184/184 tests passed.
+  - Next.js build: Clean compilation.
+
+
+### Task UI.08 — System Integration, UX Validation & Background Operations Release
+- **Time:** 2026-11-09 18:00:00 UTC
+- **Context & Objective:**
+  Perform end-to-end integration and release validation across frontend and backend background job operations:
+  1. Unified API Client (api-client.ts) and Server-Sent Events bus (events.ts).
+  2. Executed Vitest unit/component suite (46 suites, 220 tests passed, 100%).
+  3. Executed Playwright E2E browser regression suite (87/87 tests passed).
+  4. Automated WCAG 2.2 AA accessibility audit (12/12 routes passed, 0 violations).
+  5. Responsive multi-viewport audit across 6 standard viewports (60/60 tests passed, 0 overflow).
+  6. Next.js Turbopack production compilation: all 30 routes compiled cleanly (0 type errors, 0 lint warnings).
+  7. Background Job Pipeline Verification Drill (scripts/verify_jobs_run.py): all operational invariants verified (submission, polling, execution, transient error retry, lease renewal, monotonic audit trail, clean shutdown).
+  8. Pytest backend operations regression suite (tests/test_mvp8_*.py): 23/23 tests passed in 13.29s.
+  9. Formal Release Recommendation: GO (Production Ready).
+- **Verification:**
+  - python scripts/verify_jobs_run.py: PASSED (0 errors, all invariants verified).
+  - pytest tests/test_mvp8_*.py -v: PASSED (23/23 passed).
+  - npm run test: PASSED (46 suites, 220 tests passed).
+  - npx playwright test: PASSED (87 tests passed).
+  - npx tsc --noEmit: PASSED (0 errors).
+  - npm run lint: PASSED (0 errors, 0 warnings).

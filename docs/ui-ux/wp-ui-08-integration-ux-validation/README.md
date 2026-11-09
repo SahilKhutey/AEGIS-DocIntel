@@ -70,7 +70,7 @@ $$\mathbf{RELEASE\ VERDICT:\ GO\ (APPROVED\ FOR\ PRODUCTION)}$$
 - [`defect-register.md`](./defect-register.md) — Log of encountered anomalies, root causes, and verified remediations.
 - [`api-integration-register.md`](./api-integration-register.md) — Complete endpoint mapping register against backend routers.
 - [`traceability-matrix.md`](./traceability-matrix.md) — Full bidirectional requirement to test-case mapping.
-- [`evidence/`](./evidence/) — Raw execution outputs from Vitest, Playwright, axe-core, ESLint, TypeScript, and Turbopack.
+- [`evidence/`](./evidence/) — Raw execution outputs from Vitest, Playwright, axe-core, ESLint, TypeScript, Turbopack, and backend job execution verification drill (`job-verification.log`).
 
 ---
 
@@ -87,5 +87,6 @@ AEGIS-DOCINTEL FRONTEND QUALITY GATES — CONSOLIDATED EVIDENCE
 5. TypeScript Strict Check:         0 errors (npx tsc --noEmit)
 6. ESLint Code Quality:             0 errors, 0 warnings (npm run lint)
 7. Turbopack Production Build:      30 / 30 routes prerendered cleanly (exit 0)
+8. Background Jobs Pipeline Drill:  100% passed (23/23 tests, drill exit code 0)
 ================================================================================
 ```
