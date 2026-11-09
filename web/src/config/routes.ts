@@ -1,87 +1,109 @@
+import type { Permission } from "./permissions";
+
 export type RouteDefinition = {
+  id: string;
   path: string;
   name: string;
-  capability: string;
+  requiredPermissions: Permission[];
   status: "active" | "planned";
-  requiresAuthentication: boolean;
+  authenticationRequired: boolean;
 };
 
 export const ROUTES: RouteDefinition[] = [
   {
+    id: "overview",
     path: "/",
     name: "Workspace Overview",
-    capability: "workspace.read",
+    requiredPermissions: ["workspace.read"],
     status: "active",
-    requiresAuthentication: true,
+    authenticationRequired: true,
   },
   {
+    id: "documents",
     path: "/documents",
     name: "Document Library",
-    capability: "documents.read",
+    requiredPermissions: ["documents.read"],
     status: "active",
-    requiresAuthentication: true,
+    authenticationRequired: true,
   },
   {
+    id: "document-detail",
     path: "/documents/[documentId]",
     name: "Document Inspection",
-    capability: "documents.read",
+    requiredPermissions: ["documents.read"],
     status: "active",
-    requiresAuthentication: true,
+    authenticationRequired: true,
   },
   {
+    id: "ask",
     path: "/ask",
     name: "Ask AEGIS",
-    capability: "intelligence.query",
+    requiredPermissions: ["intelligence.query"],
     status: "active",
-    requiresAuthentication: true,
+    authenticationRequired: true,
   },
   {
+    id: "compare",
     path: "/compare",
     name: "Document Comparison",
-    capability: "documents.compare",
+    requiredPermissions: ["documents.compare"],
     status: "active",
-    requiresAuthentication: true,
+    authenticationRequired: true,
   },
   {
+    id: "reviews",
     path: "/reviews",
     name: "Review Queue",
-    capability: "governance.read",
+    requiredPermissions: ["governance.read"],
     status: "active",
-    requiresAuthentication: true,
+    authenticationRequired: true,
   },
   {
+    id: "review-detail",
     path: "/reviews/[reviewId]",
     name: "Review Details",
-    capability: "governance.review",
+    requiredPermissions: ["governance.review"],
     status: "active",
-    requiresAuthentication: true,
+    authenticationRequired: true,
   },
   {
-    path: "/processing",
-    name: "Processing Monitor",
-    capability: "processing.read",
-    status: "planned",
-    requiresAuthentication: true,
-  },
-  {
+    id: "evidence",
     path: "/evidence",
     name: "Evidence Explorer",
-    capability: "evidence.read",
+    requiredPermissions: ["evidence.read"],
     status: "planned",
-    requiresAuthentication: true,
+    authenticationRequired: true,
   },
   {
+    id: "processing",
+    path: "/processing",
+    name: "Processing Monitor",
+    requiredPermissions: ["processing.read"],
+    status: "planned",
+    authenticationRequired: true,
+  },
+  {
+    id: "analytics",
     path: "/analytics",
     name: "Analytics",
-    capability: "analytics.read",
+    requiredPermissions: ["workspace.read"],
     status: "planned",
-    requiresAuthentication: true,
+    authenticationRequired: true,
   },
   {
+    id: "settings",
     path: "/settings",
     name: "Settings",
-    capability: "settings.read",
+    requiredPermissions: ["workspace.settings.manage"],
     status: "planned",
-    requiresAuthentication: true,
+    authenticationRequired: true,
+  },
+  {
+    id: "integrations",
+    path: "/integrations",
+    name: "Integrations",
+    requiredPermissions: ["integrations.manage"],
+    status: "planned",
+    authenticationRequired: true,
   },
 ];
