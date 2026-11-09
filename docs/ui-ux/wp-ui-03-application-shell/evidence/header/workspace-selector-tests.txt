@@ -1,0 +1,21 @@
+=== WORKSPACE SELECTOR & HEADER AUTOMATED VERIFICATION ===
+
+Source: web/tests/e2e/workspace-selector.spec.ts
+Framework: Playwright
+
+Running tests using 1 worker
+  ok 1 tests\e2e\workspace-selector.spec.ts:4:7 › Workspace Selector › displays current workspace and opens listbox (490ms)
+    - Verifies trigger displays active workspace name
+    - Verifies clicking trigger opens role="listbox"
+    - Verifies listbox renders permitted workspace options
+    - Verifies pressing Escape dismisses the listbox
+    - Verifies trigger is refocused upon dismissal
+
+Source: web/tests/unit/shell-state.test.ts
+Framework: Vitest
+  ✓ tests/unit/shell-state.test.ts
+    - handles workspace selection without mutating unexpected state
+    - handles invalid workspace IDs safely
+    - prevents duplicate selection dispatch
+
+Status: VERIFIED

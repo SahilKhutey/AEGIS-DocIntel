@@ -1,0 +1,18 @@
+=== BREADCRUMBS HIERARCHY AUTOMATED VERIFICATION ===
+
+Source: web/tests/unit/breadcrumbs.test.ts
+Framework: Vitest
+
+  ✓ tests/unit/breadcrumbs.test.ts (4 tests) 6ms
+    - returns root breadcrumb for "/"
+    - returns correct breadcrumbs for top-level routes (/documents, /ask, /compare, /reviews)
+    - returns correct breadcrumbs for nested routes (/documents/doc-123)
+    - handles unknown/unmapped segments gracefully
+
+Source: web/tests/e2e/shell-navigation.spec.ts
+Framework: Playwright
+  ok 3 tests\e2e\shell-navigation.spec.ts:24:5 › breadcrumbs are visible (404ms)
+    - Verifies <nav aria-label="Breadcrumb"> is rendered above content
+    - Verifies current page label is rendered with aria-current="page"
+
+Status: VERIFIED

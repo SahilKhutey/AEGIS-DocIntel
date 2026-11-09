@@ -1,0 +1,21 @@
+=== GLOBAL SEARCH INTERFACE AUTOMATED VERIFICATION ===
+
+Source: web/tests/e2e/global-search.spec.ts
+Framework: Playwright
+
+Running tests using 1 worker
+  ok 1 tests\e2e\global-search.spec.ts:4:7 › Global Search › renders search input and supports typing and clearing (1.7s)
+    - Verifies search input renders with accessible placeholder
+    - Verifies typing query updates value
+    - Verifies clear button appears when input has text
+    - Verifies clicking clear button resets query to empty
+
+Source: web/tests/unit/shell-state.test.ts
+Framework: Vitest
+  ✓ tests/unit/shell-state.test.ts
+    - validates internal hrefs (/documents, /ask, /reviews) as safe
+    - rejects protocol-relative URLs (//attacker.com)
+    - rejects external URLs (https://malicious.com)
+    - rejects javascript: and data: pseudo-protocols
+
+Status: VERIFIED

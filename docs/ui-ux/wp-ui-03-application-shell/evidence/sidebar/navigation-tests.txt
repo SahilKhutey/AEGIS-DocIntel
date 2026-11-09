@@ -1,0 +1,22 @@
+=== SIDEBAR NAVIGATION AUTOMATED VERIFICATION ===
+
+Source: web/tests/e2e/shell-navigation.spec.ts
+Framework: Playwright
+
+Running tests using 1 worker
+  ok 1 tests\e2e\shell-navigation.spec.ts:3:5 › sidebar navigates to documents (648ms)
+  ok 2 tests\e2e\shell-navigation.spec.ts:16:5 › active navigation item is identified (536ms)
+  ok 3 tests\e2e\shell-navigation.spec.ts:24:5 › breadcrumbs are visible (404ms)
+
+3 passed (3.2s)
+
+Source: web/tests/unit/navigation.test.ts
+Framework: Vitest
+  ✓ tests/unit/navigation.test.ts (13 tests) 14ms
+    - maps navigation items to active routes
+    - hides planned routes from navigation
+    - filters items based on required permissions across all 5 workflow groups
+    - prunes empty groups when no permissions match
+
+All 16 navigation tests PASSED cleanly.
+Status: VERIFIED

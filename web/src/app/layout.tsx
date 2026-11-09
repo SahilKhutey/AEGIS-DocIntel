@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { Suspense } from "react";
 import "./globals.css";
 import { AppShell } from "@/components/app-shell";
 
@@ -16,9 +15,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="h-full antialiased">
       <body className="min-h-full flex flex-col bg-gray-50 text-gray-900">
-        <Suspense fallback={<div className="min-h-screen bg-gray-50 p-4 flex items-center justify-center text-sm text-gray-500">Loading AEGIS Workbench...</div>}>
-          <AppShell>{children}</AppShell>
-        </Suspense>
+        <AppShell>{children}</AppShell>
       </body>
     </html>
   );

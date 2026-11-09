@@ -104,3 +104,42 @@ describe("AEGIS navigation", () => {
     expect(getActiveNavigationItem("/unknown")).toBeUndefined();
   });
 });
+
+
+import { getVisibleNavigation as getVisibleShellNavigation } from "@/components/shell/navigation-access";
+
+describe("getVisibleShellNavigation", () => {
+  it("shows only routes granted to the user", () => {
+    const result = getVisibleShellNavigation([
+      "workspace.read",
+      "documents.read",
+    ]);
+
+    const ids = result.flatMap((group) =>
+      group.items.map((item) => item.id)
+    );
+
+    expect(ids).toContain("overview");
+    expect(ids).toContain("documents-list");
+    expect(ids).not.toContain("settings");
+  });
+
+  it("does not display planned routes", () => {
+    const result = getVisibleShellNavigation([
+      "workspace.read",
+      "processing.read",
+    ]);
+
+    const ids = result.flatMap((group) =>
+      group.items.map((item) => item.id)
+    );
+
+    expect(ids).not.toContain("processing");
+  });
+
+  it("does not display routes without permissions", () => {
+    const result = getVisibleShellNavigation([]);
+
+    expect(result).toHaveLength(0);
+  });
+});
