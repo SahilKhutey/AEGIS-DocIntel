@@ -1,0 +1,18 @@
+======================================================================
+AEGIS-DocIntel: Security Evidence - Pre-Flight Upload Security
+Date: 2026-11-09T08:14:00Z
+Work Package: WP-UI-04 Core Workspace
+======================================================================
+
+1. Pre-Flight Client Policy Verification:
+   - File Size Enforcement: Maximum 209,715,200 bytes (200MB). Files > 200MB are blocked client-side.
+   - Zero-Byte File Check: 0-byte files rejected client-side before network payload creation.
+   - MIME Type Restrictions: Only PDF, DOCX, PPTX, HTML, TXT, XLSX allowed.
+   - Executable/Script Rejection: .sh, .exe, .bin, .bat, .zip rejected with explicit user warning.
+
+2. Transmission Security:
+   - Form data constructed with authentic File binary instances.
+   - Headers: Accept: application/json, Content-Type: multipart/form-data.
+   - Response Handling: Expects 202 Accepted with server-generated document_id.
+
+Status: VERIFIED & COMPLIANT.

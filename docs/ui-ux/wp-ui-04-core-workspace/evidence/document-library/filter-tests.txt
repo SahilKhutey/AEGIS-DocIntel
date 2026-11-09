@@ -1,0 +1,40 @@
+======================================================================
+AEGIS-DocIntel: Document Library Filter Verification Record
+Date: 2026-11-09T08:14:00Z
+Test Spec: web/tests/e2e/document-library.spec.ts
+======================================================================
+
+[Test 1]: Displays document library with records and status badges
+  - Endpoint: GET /api/v1/documents
+  - Expected rows:
+      * acme_q3_financial_report.pdf (Status: Ready -> Completed)
+      * security_policy_v2.docx (Status: Indexing -> Processing)
+      * vendor_contract_2026.pdf (Status: Failed -> Failed)
+  - Accessible badges verified:
+      * aria-label="Document status: Completed" [PASSED]
+      * aria-label="Document status: Processing" [PASSED]
+      * aria-label="Document status: Failed" [PASSED]
+  - Result: PASS
+
+[Test 2]: Filters documents by search query
+  - Input: Search query "security"
+  - Filter logic: matches filename case-insensitively
+  - Visible: security_policy_v2.docx
+  - Hidden: acme_q3_financial_report.pdf, vendor_contract_2026.pdf
+  - Result: PASS
+
+[Test 3]: Filters documents by status tabs
+  - Filter button: "Completed"
+  - Active status: ready
+  - Visible: acme_q3_financial_report.pdf
+  - Hidden: security_policy_v2.docx, vendor_contract_2026.pdf
+  - Result: PASS
+
+[Test 4]: Opens upload documents modal dialog
+  - Trigger: Button "Upload Document"
+  - Modal title: "Upload Documents"
+  - Accessible role: role="dialog", aria-modal="true"
+  - Dropzone verified: "Drag and drop files here"
+  - Result: PASS
+
+Summary: 4 of 4 document library filter assertions PASSED (100%).

@@ -43,6 +43,7 @@ const DEFAULT_PERMISSIONS = [
   "documents.read",
   "documents.upload",
   "documents.compare",
+  "processing.read",
   "intelligence.query",
   "governance.read",
   "evidence.read",

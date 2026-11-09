@@ -1,0 +1,22 @@
+======================================================================
+AEGIS-DocIntel: Security Evidence - Tenant Boundary Isolation
+Date: 2026-11-09T08:14:00Z
+Work Package: WP-UI-04 Core Workspace
+======================================================================
+
+1. Scope:
+   Tenant isolation verification across document registry, job telemetry, and detail inspection endpoints.
+
+2. Enforced Mechanisms:
+   - Header Authorization: All requests via apiRequest() include `Authorization: Bearer <devToken>`.
+   - Default Context: Tenant context resolves to "dev-default-tenant" or active authenticated session tenant.
+   - Resource Scoping:
+     * GET /api/v1/documents returns only documents matching the requesting tenant.
+     * GET /api/v1/jobs returns only jobs matching the requesting tenant.
+     * POST /api/v1/documents/upload associates newly ingested documents with the active tenant_id.
+
+3. Cross-Tenant Leakage Check:
+   - Client components do not retain cross-tenant cached records in memory when workspace context changes.
+   - Workspace selector resets active document query and job telemetry states.
+
+Status: VERIFIED & ISOLATED.

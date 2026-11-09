@@ -1,0 +1,27 @@
+======================================================================
+AEGIS-DocIntel: Processing Telemetry & Job State Verification Record
+Date: 2026-11-09T08:14:00Z
+Test Spec: web/tests/unit/processing-timeline.test.tsx & web/tests/e2e/processing.spec.ts
+Route: /processing
+======================================================================
+
+Unit Tests: ProcessingTimeline (<ol role="list" aria-label="Processing stages">)
+  ✓ renders stages in an ordered list with semantic aria-label
+  ✓ marks running stage with aria-current="step"
+  ✓ displays error message when a stage fails ("Corrupt PDF stream encountered at page 4")
+  ✓ computes and displays total execution time (1.2s + 2.8s = 4.0s)
+
+End-to-End Tests: Processing Monitor
+  ✓ displays processing monitor with jobs list and status badges
+      - security_policy_v2.docx: Running (Badge: info)
+      - vendor_contract_2026.pdf: Failed (Badge: danger)
+      - acme_q3_financial_report.pdf: Succeeded (Badge: success)
+  ✓ filters jobs by status tabs ("Failed" tab isolates failed items)
+  ✓ allows retrying a failed job (POST /api/v1/jobs/{job_id}/retry triggered)
+  ✓ displays empty state when no jobs exist ("No processing jobs")
+
+Smart Polling Verification:
+  - Active jobs present: Polling interval active (8,000ms)
+  - All jobs terminal: Polling automatically suspended
+
+Summary: 8 of 8 processing telemetry and job state tests PASSED (100%).

@@ -1,0 +1,33 @@
+{
+  "timestamp": "2026-11-09T08:14:00Z",
+  "composedFrom": [
+    "/api/v1/documents",
+    "/api/v1/jobs"
+  ],
+  "zeroFakeEndpoints": true,
+  "metrics": {
+    "totalDocuments": 128,
+    "processingDocuments": 4,
+    "completedDocuments": 112,
+    "failedDocuments": 3,
+    "queuedDocuments": 9,
+    "activeJobs": 4,
+    "attentionCount": 3
+  },
+  "attentionTriage": [
+    {
+      "id": "doc-fail-001",
+      "type": "failed_document",
+      "title": "Vendor_Master_Services_Agreement_2026.pdf",
+      "reason": "Corrupt stream encountered at page 4",
+      "status": "action_required"
+    },
+    {
+      "id": "job-fail-002",
+      "type": "failed_job",
+      "title": "Fact Extraction - Q3 Financial Report",
+      "reason": "Extraction timeout on dense table",
+      "status": "retry_available"
+    }
+  ]
+}

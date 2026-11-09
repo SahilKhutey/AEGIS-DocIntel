@@ -1,0 +1,21 @@
+> web@0.1.0 test
+> vitest run
+
+ RUN  v5.0.5 C:/Users/ASUS/.gemini/antigravity/worktrees/Aegis-DocIntel/ui_ux_development_strategy/web
+
+ ✓ tests/unit/shell-state.test.ts (5 tests) 7ms
+ ✓ tests/unit/routes.test.ts (7 tests) 6ms
+ ✓ tests/unit/breadcrumbs.test.ts (4 tests) 6ms
+ ✓ tests/unit/workflows.test.ts (6 tests) 9ms
+ ✓ tests/unit/permissions.test.ts (7 tests) 6ms
+ ✓ tests/unit/navigation.test.ts (13 tests) 14ms
+ ✓ src/features/reviews/submit-decision.test.ts (3 tests) 9ms
+ ✓ tests/unit/input.test.tsx (3 tests) 214ms
+ ✓ tests/unit/button.test.tsx (4 tests) 226ms
+ ✓ src/components/evidence-panel.test.tsx (2 tests) 218ms
+ ✓ tests/unit/component-contracts.test.tsx (14 tests) 288ms
+ ✓ tests/unit/design-tokens.test.ts (12 tests) 3ms
+
+ Test Files  12 passed (12)
+      Tests  80 passed (80)
+Status: CLEAN BASELINE

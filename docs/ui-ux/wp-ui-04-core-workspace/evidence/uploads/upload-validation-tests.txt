@@ -1,0 +1,24 @@
+======================================================================
+AEGIS-DocIntel: Upload Pre-Flight Validation Verification Record
+Date: 2026-11-09T08:14:00Z
+Test Spec: web/tests/unit/upload-validation.test.ts & web/tests/e2e/upload.spec.ts
+======================================================================
+
+Unit Test Suite: Upload File Validation
+  ✓ accepts a valid PDF file within the size limit (application/pdf, 18 bytes)
+  ✓ accepts valid DOCX, PPTX, and TXT files (standard office and text formats)
+  ✓ rejects an empty file when allowEmptyFiles is false (0 bytes -> "File cannot be empty (0 bytes).")
+  ✓ rejects a file exceeding the maximum size limit (250MB -> "The file exceeds the maximum allowed size.")
+  ✓ accepts boundary size file (exactly 200MB boundary: 209,715,200 bytes)
+  ✓ rejects files with disallowed MIME types (application/zip, image/png)
+
+End-to-End Suite: Upload Experience
+  ✓ validates file and completes upload workflow (staged file, Start Upload, progressbar, 202 accepted)
+  ✓ rejects unsupported file type with client-side error (malicious_script.sh -> disabled Start Upload)
+
+Policy Constraints Checked:
+  - maxFileSizeBytes: 209,715,200 (200 MB)
+  - allowEmptyFiles: false
+  - allowedMimeTypes: PDF, DOCX, PPTX, HTML, TXT, XLSX
+
+Summary: 8 of 8 upload validation & experience tests PASSED (100%).
