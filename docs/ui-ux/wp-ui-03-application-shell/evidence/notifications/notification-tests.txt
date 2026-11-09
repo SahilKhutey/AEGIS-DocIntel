@@ -1,0 +1,20 @@
+=== NOTIFICATION CENTER AUTOMATED VERIFICATION ===
+
+Source: web/tests/e2e/notifications.spec.ts
+Framework: Playwright
+
+Running tests using 1 worker
+  ok 1 tests\e2e\notifications.spec.ts:4:7 › Notification Center › displays bell trigger and opens panel (451ms)
+    - Verifies bell trigger renders aria-label with unread count
+    - Verifies clicking bell toggles notification flyout
+    - Verifies notification category badges are rendered
+    - Verifies pressing Escape dismisses the flyout
+    - Verifies clicking outside dismisses the flyout
+
+Source: web/tests/unit/shell-state.test.ts
+Framework: Vitest
+  ✓ tests/unit/shell-state.test.ts
+    - formats unread badge counts correctly (0 -> hidden, 5 -> "5", 100+ -> "99+")
+    - handles mark read transitions cleanly
+
+Status: VERIFIED

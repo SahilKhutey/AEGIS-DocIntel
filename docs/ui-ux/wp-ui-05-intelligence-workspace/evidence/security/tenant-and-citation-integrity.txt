@@ -1,0 +1,18 @@
+=== Security & Citation Integrity Verification ===
+> vitest run tests/unit/citation-integrity.test.ts
+✓ tests/unit/citation-integrity.test.ts (6 tests) 10ms
+  - accepts claims whose citations exist
+  - identifies a broken citation reference
+  - accepts an answer without claims
+  - extracts citations corresponding to a claim
+  - identifies unreferenced citations
+  - finds broken citation references as string IDs
+
+Test Files  1 passed (1)
+Tests  6 passed (6)
+
+Tenant Isolation Audit:
+- Query endpoints enforce tenant Bearer token validation.
+- All requests scoped to active tenant and authorized documents.
+- Prompt injection and malicious snippets safely escaped as text nodes inside blockquotes.
+- Integrity warning banner triggers on unreferenced or broken citation IDs.

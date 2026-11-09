@@ -1,0 +1,44 @@
+ui_feature_id,ui_component,route_path,http_method,api_endpoint,backend_operation_id,request_payload,response_schema,auth_scope,error_handling_strategy,caching_policy
+INT-001,SystemHealthPill,All (Shell),GET,/health,health_check_health_get,None,HealthResponse,Optional,SilentStatusFallback,15s Stale-While-Revalidate
+INT-002,SystemReadinessPill,All (Shell),GET,/health/ready,readiness_health_ready_get,None,ReadinessResponse,Optional,AmberWarningBadge,10s Polling
+INT-003,OperationalStatsCard,/,GET,/v1/stats,get_stats_v1_stats_get,None,SystemStatsSchema,Tenant,InlineErrorBanner,30s Cache
+INT-004,AdminStatsCard,/,GET,/v1/admin/stats,get_stats_v1_admin_stats_get,None,AdminStatsSchema,TenantAdmin,InlineErrorBanner,60s Cache
+INT-005,TokenUsageChart,/analytics/tokens,GET,/v1/admin/token-usage,get_token_usage_v1_admin_token_usage_get,None,TokenUsageSchema,TenantAdmin,ChartEmptyState,60s Cache
+INT-006,DocumentUploadDropzone,/documents/upload,POST,/v1/documents/upload,upload_document_v1_documents_upload_post,multipart/form-data,DocumentResponse,Tenant,UploadModalRetry,No Cache (Mutation)
+INT-007,BatchUploadForm,/documents/upload,POST,/v1/documents/batch,batch_upload_v1_documents_batch_post,BatchUploadRequest,BatchResponse,Tenant,FormValidationAlert,No Cache (Mutation)
+INT-008,DocumentTable,/documents,GET,/v1/documents,list_documents_v1_documents_get,QueryFilters,DocumentListSchema,Tenant,TableErrorRecoveryState,5s Stale-While-Revalidate
+INT-009,DocumentHeaderCard,/documents/[documentId],GET,/v1/documents/{doc_id},get_document_v1_documents__doc_id__get,None,DocumentSchema,Tenant,NotFoundRedirectNotice,30s Cache
+INT-010,DocumentDeleteModal,/documents/[documentId],DELETE,/v1/documents/{doc_id},delete_document_v1_documents__doc_id__delete,None,None (204),TenantAdmin,ModalErrorToast,Invalidate Documents Cache
+INT-011,DocumentChunkTable,/documents/[documentId],GET,/v1/documents/{doc_id}/chunks,list_chunks_v1_documents__doc_id__chunks_get,Pagination,DocumentChunkListSchema,Tenant,InlineRetryBanner,60s Cache
+INT-012,ElementCanvasViewer,/documents/[documentId],GET,/v1/documents/{doc_id}/elements,get_elements_v1_documents__doc_id__elements_get,None,LayoutElementListSchema,Tenant,CanvasPlaceholderAlert,60s Cache
+INT-013,ReindexActionBtn,/documents/[documentId],POST,/v1/documents/{doc_id}/reindex,reindex_document_v1_documents__doc_id__reindex_post,None,JobSchema,KnowledgeEng,ActionErrorToast,Invalidate Status Cache
+INT-014,IndexingProgressTracker,/documents/[documentId],GET,/v1/documents/{doc_id}/status,get_indexing_status_v1_documents__doc_id__status_get,None,IngestionStatusResponse,Tenant,PollingFallbackToast,2s Polling until Ready
+INT-015,FactExtractionTrigger,/documents/[documentId],POST,/v1/documents/{document_id}/extract-facts,extract_facts_v1_documents__document_id__extract_facts_post,ExtractFactsRequest,JobListSchema,Tenant,FormErrorBanner,Invalidate Facts Cache
+INT-016,DocumentFactsTable,/documents/[documentId],GET,/v1/documents/{document_id}/facts,get_document_facts_v1_documents__document_id__facts_get,None,ExtractedFactListSchema,Tenant,TableEmptyStateNotice,30s Cache
+INT-017,GroundedAnswerStream,/ask,POST,/v1/answers,create_answer_v1_answers_post,AnswerRequestSchema,AnswerSchema,Tenant,StreamingErrorFallback,No Cache (Session Stream)
+INT-018,RAGQueryConsole,/retrieval,POST,/v1/query,query_documents_v1_query_post,QueryRequestSchema,QueryResponseSchema,Tenant,QueryErrorBanner,No Cache
+INT-019,QueryDecomposeViewer,/ask,POST,/v1/advanced/query/decompose,decompose_query_v1_advanced_query_decompose_post,DecomposeRequest,DecomposeResponse,KnowledgeEng,SilentAccordionCollapse,300s Cache
+INT-020,DocumentCompareStudio,/compare,POST,/v1/intelligence/compare,compare_documents_v1_intelligence_compare_post,CompareRequestSchema,DocumentComparisonSchema,Tenant,ComparisonErrorNotice,No Cache
+INT-021,ContradictionMatrix,/compare/conflicts,GET,/v1/intelligence/conflicts,get_conflicts_v1_intelligence_conflicts_get,None,ConflictListSchema,Tenant,MatrixEmptyState,15s Cache
+INT-022,ReviewQueueTable,/reviews,GET,/v1/reviews,list_reviews_v1_reviews_get,ReviewFilters,ReviewListSchema,Reviewer,TableErrorRecoveryState,5s Stale-While-Revalidate
+INT-023,ReviewDetailCard,/reviews/[reviewId],GET,/v1/reviews/{review_id},get_review_detail_v1_reviews__review_id__get,None,ReviewItemSchema,Reviewer,NotFoundRedirectNotice,No Cache
+INT-024,ClaimReviewBtn,/reviews/[reviewId],POST,/v1/reviews/{review_id}/claim,claim_review_v1_reviews__review_id__claim_post,ClaimPayload,ReviewItemSchema,Reviewer,ConcurrencyConflictAlert,Invalidate Review Cache
+INT-025,SovereignDecisionForm,/reviews/[reviewId],POST,/v1/reviews/{review_id}/decisions,submit_decision_v1_reviews__review_id__decisions_post,DecisionRequestSchema,DecisionResponseSchema,Reviewer,DecisionFormErrorToast,Invalidate Reviews Cache
+INT-026,EvaluationFeedbackForm,/reviews/[reviewId],POST,/v1/reviews/{review_id}/feedback,submit_feedback_v1_reviews__review_id__feedback_post,FeedbackRequestSchema,FeedbackResponse,Reviewer,FeedbackErrorToast,No Cache
+INT-027,AuditHistoryTimeline,/reviews/[reviewId],GET,/v1/reviews/{review_id}/history,get_history_v1_reviews__review_id__history_get,None,AuditEventListSchema,Reviewer,TimelineErrorNotice,10s Cache
+INT-028,ReopenReviewAction,/reviews/[reviewId],POST,/v1/reviews/{review_id}/reopen,reopen_review_v1_reviews__review_id__reopen_post,ReopenRequestSchema,ReviewItemSchema,TenantAdmin,AdminActionAlert,Invalidate Review Cache
+INT-029,ApprovedFactsCatalog,/reviews/approved,GET,/v1/reviews/approved-facts,get_approved_facts_v1_reviews_approved_facts_get,None,ApprovedFactListSchema,Tenant,CatalogEmptyState,60s Cache
+INT-030,GovernanceMetricsCharts,/reviews/metrics,GET,/v1/reviews/metrics,get_metrics_v1_reviews_metrics_get,None,GovernanceMetricsSchema,Tenant,MetricsErrorBanner,60s Cache
+INT-031,ActiveJobsMonitorTable,/processing/jobs,GET,/v1/jobs,list_jobs_v1_jobs_get,JobFilters,JobListSchema,Tenant,JobTableErrorNotice,3s Polling / SSE
+INT-032,JobDetailInspector,/processing/jobs/[jobId],GET,/v1/jobs/{job_id},get_job_v1_jobs__job_id__get,None,JobSchema,Tenant,JobNotFoundToast,2s Polling
+INT-033,JobEventsTimeline,/processing/jobs/[jobId],GET,/v1/jobs/{job_id}/events,get_job_events_v1_jobs__job_id__events_get,None,JobEventListSchema,Tenant,EventStreamErrorNotice,2s Polling
+INT-034,JobCancelActionBtn,/processing/jobs/[jobId],POST,/v1/jobs/{job_id}/cancel,cancel_job_v1_jobs__job_id__cancel_post,CancelRequestSchema,JobSchema,TenantAdmin,ActionErrorToast,Invalidate Job Cache
+INT-035,JobRetryActionBtn,/processing/jobs/[jobId],POST,/v1/jobs/{job_id}/retry,retry_job_v1_jobs__job_id__retry_post,None,JobSchema,TenantAdmin,ActionErrorToast,Invalidate Job Cache
+INT-036,PIIScanRedactForm,/documents/upload,POST,/v1/advanced/compliance/pii-scan,scan_and_redact_pii_v1_advanced_compliance_pii_scan_post,PIIScanRequest,PIIScanResponse,ComplianceOfficer,PreFlightWarningToast,No Cache
+INT-037,PercolationResilienceGauge,/advanced/topology,GET,/v1/advanced/topology/percolation-check,estimate_resilience_v1_advanced_topology_percolation_check_get,None,PercolationResponse,KnowledgeEng,CalculationErrorAlert,60s Cache
+INT-038,IsingAnnealOptimizer,/advanced/ising,POST,/v1/advanced/optimization/ising-anneal,anneal_master_objective_v1_advanced_optimization_ising_anneal_post,IsingPayload,IsingResponse,Researcher,OptimizerErrorBanner,No Cache
+INT-039,MatrixNormalizeSandbox,/advanced/matrix-norm,POST,/v1/advanced/matrix/normalize-quantity,normalize_cell_quantity_v1_advanced_matrix_normalize_quantity_post,MatrixCellPayload,NormalizedCellResponse,KnowledgeEng,CellConversionAlert,No Cache
+INT-040,VersionClauseDiffViewer,/compare/diff,POST,/v1/advanced/versioning/diff,diff_document_versions_v1_advanced_versioning_diff_post,VersionDiffPayload,VersionDiffResponse,ComplianceOfficer,DiffParsingErrorNotice,No Cache
+INT-041,WebhookSubscriptionsTable,/developer/webhooks,GET,/v1/webhooks/subscriptions,list_subscriptions_v1_webhooks_subscriptions_get,None,WebhookSubscriptionListSchema,TenantAdmin,TableErrorNotice,30s Cache
+INT-042,CreateWebhookModal,/developer/webhooks,POST,/v1/webhooks/subscriptions,create_subscription_v1_webhooks_subscriptions_post,WebhookCreatePayload,WebhookSubscriptionSchema,TenantAdmin,FormErrorToast,Invalidate Webhooks Cache
+INT-043,DeleteWebhookAction,/developer/webhooks,DELETE,/v1/webhooks/subscriptions/{subscription_id},delete_subscription_v1_webhooks_subscriptions__subscription_id__delete,None,None (204),TenantAdmin,ActionErrorToast,Invalidate Webhooks Cache

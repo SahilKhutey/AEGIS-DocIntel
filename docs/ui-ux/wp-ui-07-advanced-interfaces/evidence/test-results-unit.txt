@@ -1,0 +1,24 @@
+$ npm --prefix web test
+> web@0.1.0 test
+> vitest run
+
+Test Files  42 passed (42)
+     Tests  194 passed (194)
+  Duration  43.97s
+  Status    PASS (100% Passing)
+
+Suites included:
+- tests/unit/advanced/analytics.test.tsx (4 tests)
+- tests/unit/advanced/data-table.test.tsx (3 tests)
+- tests/unit/advanced/developer.test.tsx (7 tests)
+- tests/unit/advanced/equation-renderer.test.tsx (2 tests)
+- tests/unit/advanced/export-data.test.ts (6 tests)
+- tests/unit/advanced/format-metric.test.ts (10 tests)
+- tests/unit/advanced/matrix-viewer.test.tsx (2 tests)
+- tests/unit/advanced/metric-card.test.tsx (4 tests)
+- tests/unit/advanced/pipeline-stage.test.tsx (2 tests)
+- tests/unit/advanced/service-health.test.tsx (3 tests)
+- tests/unit/advanced/time-range.test.ts (5 tests)
+- tests/unit/advanced/validate-graph.test.ts (4 tests)
+- tests/unit/advanced/vector-viewer.test.tsx (3 tests)
+- All WP-UI-01 through WP-UI-06 unit test suites (139 tests)

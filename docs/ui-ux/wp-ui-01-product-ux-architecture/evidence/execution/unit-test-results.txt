@@ -1,0 +1,22 @@
+Vitest Unit Test Execution Report
+Date: 2026-11-09T11:24:14+05:30
+Environment: jsdom, Node.js 22, TypeScript 5
+
+ RUN  v5.0.5 C:/Users/ASUS/.gemini/antigravity/worktrees/Aegis-DocIntel/ui_ux_development_strategy/web
+
+ ✓ tests/unit/navigation.test.ts (8 tests) 8ms
+   ✓ AEGIS navigation architecture > contains unique navigation group identifiers
+   ✓ AEGIS navigation architecture > contains unique navigation hrefs
+   ✓ AEGIS navigation architecture > marks document library active on its route
+   ✓ AEGIS navigation architecture > keeps parent navigation active on nested routes
+   ✓ AEGIS navigation architecture > does not match unrelated route prefixes
+   ✓ AEGIS navigation architecture > does not activate planned navigation items
+   ✓ AEGIS navigation architecture > resolves the active page
+   ✓ AEGIS navigation architecture > does not return an active item for an unknown route
+ ✓ src/features/reviews/submit-decision.test.ts (3 tests) 9ms
+ ✓ src/components/evidence-panel.test.tsx (2 tests) 229ms
+
+ Test Files  3 passed (3)
+      Tests  13 passed (13)
+   Duration  5.16s (environment 82%, import 10%, tests 4%, transform 3%, worker 1%)
+ Outcome: PASS

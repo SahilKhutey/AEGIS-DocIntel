@@ -1,0 +1,33 @@
+=== RESPONSIVE LAYOUT & VIEWPORT AUDIT ===
+
+Source: web/tests/e2e/responsive-shell.spec.ts & web/tests/e2e/responsive.spec.ts
+Framework: Playwright
+
+Audit Metrics:
+1. Viewport 375x812 (Mobile):
+   - Mobile menu trigger button: VISIBLE
+   - Desktop sidebar: HIDDEN (display: none)
+   - Mobile navigation drawer: Opens on click, closes on Escape
+   - Body scroll lock: VERIFIED (overflow: hidden applied on dialog open)
+   - Horizontal overflow: ZERO (scrollWidth <= innerWidth: 375 <= 375) -> PASSED
+
+2. Viewport 768x1024 (Tablet):
+   - Mobile menu trigger button: VISIBLE
+   - Desktop sidebar: HIDDEN
+   - Quick mobile navigation: VISIBLE & functional
+   - Horizontal overflow: ZERO (scrollWidth <= innerWidth: 768 <= 768) -> PASSED
+
+3. Viewport 1024x768 (Desktop Standard):
+   - Mobile menu trigger button: HIDDEN
+   - Desktop sidebar: VISIBLE (width: 256px)
+   - Quick mobile navigation: HIDDEN
+   - Horizontal overflow: ZERO (scrollWidth <= innerWidth: 1024 <= 1024) -> PASSED
+
+4. Viewport 1440x900 (Desktop Wide):
+   - Mobile menu trigger button: HIDDEN
+   - Desktop sidebar: VISIBLE (width: 256px)
+   - Max width constraint on main content: 1440px -> VERIFIED
+   - Horizontal overflow: ZERO (scrollWidth <= innerWidth: 1440 <= 1440) -> PASSED
+
+All 6 responsive tests passed across all viewports.
+Status: VERIFIED

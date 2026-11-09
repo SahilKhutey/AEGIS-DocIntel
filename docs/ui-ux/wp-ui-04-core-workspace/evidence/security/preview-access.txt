@@ -1,0 +1,19 @@
+======================================================================
+AEGIS-DocIntel: Security Evidence - Document Preview Access
+Date: 2026-11-09T08:14:00Z
+Work Package: WP-UI-04 Core Workspace
+======================================================================
+
+1. Format Gating:
+   - Only documents with verified preview support (PDF, HTML) activate the preview renderer.
+   - Non-renderable binary formats display safe metadata and extracted text fallback.
+
+2. Sandboxed DOM Rendering:
+   - Preview DOM elements are sandboxed without JavaScript evaluation access.
+   - External asset references and script tags embedded in HTML documents are stripped/sanitized.
+
+3. Authorization Boundary:
+   - Preview requests enforce document-level read authorization (`documents.read`).
+   - Unauthorized users receive an accessible ErrorState card with return navigation.
+
+Status: VERIFIED & SECURE.

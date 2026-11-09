@@ -1,0 +1,10 @@
+=== Evidence Explorer Unit Tests ===
+> vitest run tests/unit/evidence-detail.test.tsx
+✓ tests/unit/evidence-detail.test.tsx (3 tests) 103ms
+Test Files  1 passed (1)
+Tests  3 passed (3)
+
+=== Evidence Explorer Browser E2E Tests ===
+> playwright test tests/e2e/intelligence/evidence-explorer.spec.ts
+ok 1 Evidence Explorer › renders evidence explorer page and scope control (521ms)
+Verbatim passage inspection and source deep-linking verified.

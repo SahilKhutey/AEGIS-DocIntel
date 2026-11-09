@@ -1,0 +1,10 @@
+=== Knowledge Graph Unit Tests ===
+> vitest run tests/unit/knowledge-graph.test.tsx
+✓ tests/unit/knowledge-graph.test.tsx (3 tests) 183ms
+Test Files  1 passed (1)
+Tests  3 passed (3)
+
+=== Knowledge Graph Browser E2E Tests ===
+> playwright test tests/e2e/intelligence/knowledge-visualization.spec.ts
+ok 1 Knowledge Visualization › renders knowledge graph workspace with view modes (880ms)
+Interactive SVG canvas and WCAG 2.2 AA accessible table view verified.

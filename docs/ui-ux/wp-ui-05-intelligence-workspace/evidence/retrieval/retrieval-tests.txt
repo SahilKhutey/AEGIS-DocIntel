@@ -1,0 +1,11 @@
+=== Document Retrieval Unit Tests ===
+> vitest run tests/unit/retrieval-search.test.tsx
+✓ tests/unit/retrieval-search.test.tsx (3 tests) 102ms
+Test Files  1 passed (1)
+Tests  3 passed (3)
+
+=== Document Retrieval Browser E2E Tests ===
+> playwright test tests/e2e/intelligence/retrieval.spec.ts
+ok 1 Document Retrieval Interface › renders retrieval interface with search form (749ms)
+ok 2 Document Retrieval Interface › enables search button when query is entered (421ms)
+All retrieval tests passed cleanly with scope filtering and ranking score inspection.

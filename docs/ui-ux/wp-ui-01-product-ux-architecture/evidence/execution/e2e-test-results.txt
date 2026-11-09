@@ -1,0 +1,18 @@
+Playwright E2E Browser Test Execution Report
+Date: 2026-11-09T11:32:38+05:30
+Suite: tests/e2e/navigation.spec.ts
+Engine: Playwright 1.64.1 (Chromium headless shell win64)
+Target Server: Next.js 16.4.3 Production Server (http://localhost:3000)
+
+Running 7 tests using 1 worker
+
+  ok 1 tests\e2e\navigation.spec.ts:4:7 › AEGIS product navigation › renders the workspace home page (311ms)
+  ok 2 tests\e2e\navigation.spec.ts:16:7 › AEGIS product navigation › navigates to the document workspace (1.3s)
+  ok 3 tests\e2e\navigation.spec.ts:27:7 › AEGIS product navigation › navigates to Ask AEGIS (261ms)
+  ok 4 tests\e2e\navigation.spec.ts:38:7 › AEGIS product navigation › navigates to the review queue (259ms)
+  ok 5 tests\e2e\navigation.spec.ts:49:7 › AEGIS product navigation › does not expose planned routes in navigation (199ms)
+  ok 6 tests\e2e\navigation.spec.ts:61:7 › AEGIS product navigation › primary navigation has an accessible name (199ms)
+  ok 7 tests\e2e\navigation.spec.ts:71:7 › AEGIS product navigation › mobile navigation remains available (193ms)
+
+  7 passed (5.1s)
+ Outcome: PASS

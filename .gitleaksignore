@@ -76,3 +76,7 @@ ee9a6964e1d7adc414edf78e79361960c25c82ce:evaluation/mvp-golden/text/orion-multip
 #   Matched `generic-api-key` on prose descriptions of resolved test fixture variables.
 bc065a16f126b97920517f077e19581412b9646f:docs/DEVLOG.md:generic-api-key:1667
 bc065a16f126b97920517f077e19581412b9646f:docs/DEVLOG.md:generic-api-key:1668
+#
+# web/src/features/developer/components/ApiExplorer.tsx:59 (commit c1ff775, 2026-11-09)
+#   Matched curl-auth-header on documentation/playground curl command example using placeholder 'Bearer aegis_live_sec_...'.
+c1ff7753fc4aa2ec791272622c6b5d6ae9177c10:web/src/features/developer/components/ApiExplorer.tsx:curl-auth-header:59

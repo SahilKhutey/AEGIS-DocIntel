@@ -1,0 +1,31 @@
+> web@0.1.0 test
+> vitest run
+
+ RUN  v5.0.5 C:/Users/ASUS/.gemini/antigravity/worktrees/Aegis-DocIntel/ui_ux_development_strategy/web
+
+ ✓ tests/unit/document-status.test.tsx (5 tests) 79ms
+ ✓ tests/unit/input.test.tsx (3 tests) 269ms
+ ✓ tests/unit/retrieval-search.test.tsx (3 tests) 279ms
+ ✓ tests/unit/evidence-detail.test.tsx (3 tests) 257ms
+ ✓ tests/unit/question-composer.test.tsx (3 tests) 271ms
+ ✓ tests/unit/button.test.tsx (4 tests) 389ms
+ ✓ src/components/evidence-panel.test.tsx (2 tests) 368ms
+ ✓ tests/unit/processing-timeline.test.tsx (4 tests) 479ms
+ ✓ tests/unit/comparison-workspace.test.tsx (3 tests) 409ms
+ ✓ tests/unit/knowledge-graph.test.tsx (3 tests) 613ms
+ ✓ tests/unit/component-contracts.test.tsx (14 tests) 488ms
+ ✓ tests/unit/navigation.test.ts (13 tests) 13ms
+ ✓ src/features/reviews/submit-decision.test.ts (3 tests) 14ms
+ ✓ tests/unit/routes.test.ts (7 tests) 8ms
+ ✓ tests/unit/upload-validation.test.ts (6 tests) 10ms
+ ✓ tests/unit/design-tokens.test.ts (12 tests) 7ms
+ ✓ tests/unit/shell-state.test.ts (5 tests) 13ms
+ ✓ tests/unit/workflows.test.ts (6 tests) 7ms
+ ✓ tests/unit/citation-integrity.test.ts (6 tests) 8ms
+ ✓ tests/unit/workspace-overview.test.ts (2 tests) 5ms
+ ✓ tests/unit/permissions.test.ts (7 tests) 4ms
+ ✓ tests/unit/breadcrumbs.test.ts (4 tests) 3ms
+
+ Test Files  22 passed (22)
+      Tests  118 passed (118)
+   Duration  22.99s
