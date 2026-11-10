@@ -55,9 +55,12 @@ not_in_nav: |
   Deployment.md
   Design.md
   SUPPORT.md
-  deployment/**
-  pilot/**
-  release/**
+  deployment/**
+
+  pilot/**
+
+  release/**
+
 
 validation:
   omitted_files: ignore
@@ -70,6 +73,8 @@ nav:
       - System Status & Roadmap: status.md
       - Master Remediation Checklist: MASTER_REMEDIATION_CHECKLIST.md
   - aegis-docprep (Start Here): docprep.md
+  - UI/UX Enterprise Workbench:
+      - Overview & Architecture: ui-ux/README.md
   - Full Platform:
       - Architecture & Master State: Architecture.md
       - Installation & Cold-Start: installation.md

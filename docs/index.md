@@ -74,6 +74,7 @@ In Phase 9, synthetic benchmark claims were permanently replaced with measuremen
 
 ## Documentation Navigation
 
+- [**Enterprise UI/UX Workbench**](ui-ux/README.md): Complete architecture, design system, and validation dossier across WP-UI-01 through WP-UI-08.
 - [**Status & 16-Phase Journey**](status.md): Complete audit of what was broken, what was fixed, and the layer-by-layer roadmap.
 - [**aegis-docprep Package**](docprep.md): Alpha standalone package (install from source; not yet on PyPI).
 - [**Architecture & Master State**](Architecture.md): Formal mathematical specification of $\mathcal{D}$ and the engine hierarchy.
