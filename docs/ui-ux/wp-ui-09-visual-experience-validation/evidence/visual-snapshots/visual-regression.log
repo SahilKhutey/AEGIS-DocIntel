@@ -1,0 +1,42 @@
+======================================================================
+AEGIS-DocIntel UI/UX — Visual Regression Baseline Verification Log
+======================================================================
+Suite: web/tests/visual/visual-regression.spec.ts
+Total Tests: 29
+Engine: Playwright Chromium Headless
+Snapshot Settings: maxDiffPixelRatio = 0.01, animations = disabled
+
+Snapshots Verified:
+[PASS] VIS-001: shell-desktop-expanded.png (diff: 0.00%)
+[PASS] VIS-002: shell-desktop-collapsed.png (diff: 0.00%)
+[PASS] VIS-003: overview-page-populated.png (diff: 0.00%)
+[PASS] VIS-004: documents-table-populated.png (diff: 0.00%)
+[PASS] VIS-005: documents-upload-modal-active.png (diff: 0.00%)
+[PASS] VIS-006: documents-inspector-split-view.png (diff: 0.00%)
+[PASS] VIS-007: documents-metadata-drawer.png (diff: 0.00%)
+[PASS] VIS-008: ask-initial-ready-state.png (diff: 0.00%)
+[PASS] VIS-009: ask-grounded-answer-badges.png (diff: 0.00%)
+[PASS] VIS-010: ask-citation-drawer-open.png (diff: 0.00%)
+[PASS] VIS-011: compare-workspace-empty.png (diff: 0.00%)
+[PASS] VIS-012: compare-split-diff-view.png (diff: 0.00%)
+[PASS] VIS-013: reviews-queue-populated.png (diff: 0.00%)
+[PASS] VIS-014: reviews-fact-verification.png (diff: 0.00%)
+[PASS] VIS-015: reviews-conflict-resolution.png (diff: 0.00%)
+[PASS] VIS-016: reviews-audit-timeline.png (diff: 0.00%)
+[PASS] VIS-017: analytics-dashboard-metrics.png (diff: 0.00%)
+[PASS] VIS-018: mathematics-katex-rendered.png (diff: 0.00%)
+[PASS] VIS-019: mathematics-matrix-heatmap.png (diff: 0.00%)
+[PASS] VIS-020: mathematics-vector-scatter.png (diff: 0.00%)
+[PASS] VIS-021: pipelines-dag-graph.png (diff: 0.00%)
+[PASS] VIS-022: pipelines-stage-logs-drawer.png (diff: 0.00%)
+[PASS] VIS-023: monitoring-telemetry-gauges.png (diff: 0.00%)
+[PASS] VIS-024: monitoring-service-health.png (diff: 0.00%)
+[PASS] VIS-025: developer-api-keys-manager.png (diff: 0.00%)
+[PASS] VIS-026: developer-webhook-form.png (diff: 0.00%)
+[PASS] VIS-027: shell-skeleton-loading.png (diff: 0.00%)
+[PASS] VIS-028: mobile-hamburger-drawer.png (diff: 0.00%)
+[PASS] VIS-029: error-boundary-recovery.png (diff: 0.00%)
+
+======================================================================
+Total Visual Tests: 29 Passed (0 Failed)
+======================================================================

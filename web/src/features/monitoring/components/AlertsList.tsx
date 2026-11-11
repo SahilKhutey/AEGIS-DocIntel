@@ -58,8 +58,8 @@ export const AlertsList: React.FC<AlertsListProps> = ({ initialAlerts }) => {
                   <Icon className="w-4 h-4 mt-0.5 shrink-0" aria-hidden="true" />
                   <div>
                     <h4 className="text-xs font-bold">{alert.title}</h4>
-                    <p className="text-[11px] opacity-90 mt-0.5">{alert.message}</p>
-                    <span className="text-[10px] opacity-75 font-mono block mt-1">
+                    <p className="text-[11px] mt-0.5">{alert.message}</p>
+                    <span className="text-[10px] font-mono block mt-1">
                       {new Date(alert.timestamp).toLocaleTimeString()} · Source: {alert.serviceId}
                     </span>
                   </div>

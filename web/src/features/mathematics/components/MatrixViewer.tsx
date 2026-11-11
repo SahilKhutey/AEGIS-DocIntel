@@ -17,12 +17,12 @@ export const MatrixViewer: React.FC<MatrixViewerProps> = ({ matrix }) => {
   // Value color interpolation: 0.0 -> white/light slate, 1.0 -> deep blue
   const getCellBg = (val: number) => {
     const clamped = Math.max(0, Math.min(1, val));
-    if (clamped >= 0.99) return "bg-blue-600 text-white font-bold";
-    if (clamped >= 0.75) return "bg-blue-500 text-white font-medium";
-    if (clamped >= 0.5) return "bg-blue-400 text-slate-900 font-medium";
-    if (clamped >= 0.25) return "bg-blue-200 text-slate-900";
-    if (clamped > 0) return "bg-blue-50 text-slate-700";
-    return "bg-slate-50 text-slate-400";
+    if (clamped >= 0.9) return "bg-blue-700 text-white font-bold";
+    if (clamped >= 0.7) return "bg-blue-600 text-white font-medium";
+    if (clamped >= 0.4) return "bg-blue-200 text-slate-900 font-medium";
+    if (clamped >= 0.2) return "bg-blue-100 text-slate-900";
+    if (clamped > 0) return "bg-blue-50 text-slate-800";
+    return "bg-slate-50 text-slate-700";
   };
 
   return (
@@ -48,7 +48,7 @@ export const MatrixViewer: React.FC<MatrixViewerProps> = ({ matrix }) => {
             </span>
           </div>
         ) : (
-          <div className="text-xs text-slate-400 italic">Click any cell to inspect value</div>
+          <div className="text-xs text-slate-600 italic">Click any cell to inspect value</div>
         )}
       </div>
 
@@ -58,7 +58,7 @@ export const MatrixViewer: React.FC<MatrixViewerProps> = ({ matrix }) => {
           <table className="border-collapse text-xs">
             <thead>
               <tr>
-                <th className="p-2 text-slate-400 font-mono text-[10px]">#</th>
+                <th className="p-2 text-slate-600 font-mono text-[10px]">#</th>
                 {matrix.colLabels?.map((label, cIdx) => (
                   <th
                     key={cIdx}
@@ -68,7 +68,7 @@ export const MatrixViewer: React.FC<MatrixViewerProps> = ({ matrix }) => {
                   </th>
                 )) ||
                   Array.from({ length: matrix.cols }, (_, cIdx) => (
-                    <th key={cIdx} className="p-2 text-center text-slate-400 font-mono text-[10px]">
+                    <th key={cIdx} className="p-2 text-center text-slate-600 font-mono text-[10px]">
                       C{cIdx}
                     </th>
                   ))}

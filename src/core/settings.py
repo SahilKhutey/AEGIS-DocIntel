@@ -79,7 +79,7 @@ class RuntimeSettings:
     max_concurrent_jobs: int = 10
     log_level: str = "INFO"
     enable_docs: bool = True
-    cors_origins: List[str] = field(default_factory=lambda: ["http://localhost:3000", "http://localhost:8080"])
+    cors_origins: List[str] = field(default_factory=lambda: ["http://localhost:3000", "http://127.0.0.1:3000", "http://localhost:8080"])
     
     # Auth invariants
     jwt_public_key: Optional[str] = None
@@ -125,7 +125,7 @@ def load_runtime_settings(validate_production: bool = True) -> RuntimeSettings:
     if raw_cors:
         cors_origins = [orig.strip() for orig in raw_cors.split(",") if orig.strip()]
     else:
-        cors_origins = ["http://localhost:3000", "http://localhost:8080"]
+        cors_origins = ["http://localhost:3000", "http://127.0.0.1:3000", "http://localhost:8080"]
 
     jwt_pub_key = os.getenv("AEGIS_JWT_PUBLIC_KEY")
     jwt_pub_key_path = os.getenv("AEGIS_JWT_PUBLIC_KEY_PATH")
