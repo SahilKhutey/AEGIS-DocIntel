@@ -1,12 +1,14 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   MOCK_VECTOR_REP,
   MOCK_MATRIX_REP,
   STANDARD_EQUATIONS,
   TRANSFORMATION_HISTORY,
+  getRepresentations,
 } from "../api/mathematics.api";
+import { VectorRepresentation, MatrixRepresentation } from "../types";
 import { VectorViewer } from "./VectorViewer";
 import { MatrixViewer } from "./MatrixViewer";
 import { EquationRenderer } from "./EquationRenderer";
@@ -19,6 +21,26 @@ export type MathTab = "representations" | "equations" | "transformations" | "eva
 
 export const MathCatalog: React.FC = () => {
   const [activeTab, setActiveTab] = useState<MathTab>("representations");
+  const [vectorRep, setVectorRep] = useState<VectorRepresentation>(MOCK_VECTOR_REP);
+  const [matrixRep, setMatrixRep] = useState<MatrixRepresentation>(MOCK_MATRIX_REP);
+
+  useEffect(() => {
+    let mounted = true;
+    getRepresentations()
+      .then((reps) => {
+        if (!mounted) return;
+        const v = reps.find((r): r is VectorRepresentation => r.type === "vector");
+        const m = reps.find((r): r is MatrixRepresentation => r.type === "matrix");
+        if (v) setVectorRep(v);
+        if (m) setMatrixRep(m);
+      })
+      .catch(() => {
+        // Fallback already in place
+      });
+    return () => {
+      mounted = false;
+    };
+  }, []);
 
   return (
     <div className="space-y-6">
@@ -99,13 +121,13 @@ export const MathCatalog: React.FC = () => {
       {activeTab === "representations" && (
         <div className="space-y-6">
           <div className="space-y-6">
-            <VectorViewer vector={MOCK_VECTOR_REP} />
-            <ProvenanceViewer provenance={MOCK_VECTOR_REP.provenance} />
+            <VectorViewer vector={vectorRep} />
+            <ProvenanceViewer provenance={vectorRep.provenance} />
           </div>
 
           <div className="space-y-6 pt-4 border-t border-slate-200">
-            <MatrixViewer matrix={MOCK_MATRIX_REP} />
-            <ProvenanceViewer provenance={MOCK_MATRIX_REP.provenance} />
+            <MatrixViewer matrix={matrixRep} />
+            <ProvenanceViewer provenance={matrixRep.provenance} />
           </div>
         </div>
       )}

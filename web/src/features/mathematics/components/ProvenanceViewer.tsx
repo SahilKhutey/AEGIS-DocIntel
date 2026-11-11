@@ -50,8 +50,8 @@ export const ProvenanceViewer: React.FC<ProvenanceViewerProps> = ({ provenance }
             <Calendar className="w-3.5 h-3.5" aria-hidden="true" />
             <span>Generated At</span>
           </dt>
-          <dd className="font-semibold text-slate-800">
-            {new Date(provenance.generatedAt).toLocaleString()}
+          <dd className="font-semibold text-slate-800" suppressHydrationWarning>
+            {provenance.generatedAt ? new Date(provenance.generatedAt).toLocaleString() : "—"}
           </dd>
         </div>
       </dl>
