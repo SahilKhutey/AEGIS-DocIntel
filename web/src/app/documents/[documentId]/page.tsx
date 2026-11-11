@@ -23,12 +23,14 @@ function DocumentDetailContent({ params }: PageProps) {
   const [loading, setLoading] = useState(true);
   const [extracting, setExtracting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [extractionError, setExtractionError] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
 
   const loadData = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
+      setExtractionError(null);
 
       const inspectionData = await defaultDocumentService.getInspection(documentId);
       setInspection(inspectionData);
@@ -38,9 +40,13 @@ function DocumentDetailContent({ params }: PageProps) {
         const encodedId = encodeURIComponent(documentId);
         const factsData = await apiRequest(
           `/api/v1/documents/${encodedId}/facts`,
-          z.object({ facts: z.array(ExtractedFactSchema) }),
+          z.union([
+            z.object({ facts: z.array(ExtractedFactSchema) }),
+            z.array(ExtractedFactSchema),
+          ]),
         );
-        setFacts(factsData.facts || []);
+        const factList = Array.isArray(factsData) ? factsData : factsData.facts || [];
+        setFacts(factList);
       } catch {
         // Facts optional
       }
@@ -59,16 +65,35 @@ function DocumentDetailContent({ params }: PageProps) {
     try {
       setExtracting(true);
       setMessage(null);
+      setExtractionError(null);
       const encodedId = encodeURIComponent(documentId);
       const res = await apiRequest(
         `/api/v1/documents/${encodedId}/extract-facts`,
-        z.object({ facts: z.array(ExtractedFactSchema), fact_count: z.number().optional() }),
-        { method: "POST" },
+        z.object({
+          status: z.string().optional(),
+          facts: z.array(ExtractedFactSchema).default([]),
+          errors: z.array(z.string()).optional(),
+          document_id: z.string().optional(),
+        }),
+        {
+          method: "POST",
+          body: JSON.stringify({ schema_name: "contract_terms" }),
+        },
       );
+
+      if (res.status === "failed" && (!res.facts || res.facts.length === 0)) {
+        const errorMsg =
+          res.errors && res.errors.length > 0
+            ? res.errors.join(". ")
+            : "No structured facts could be extracted from this document.";
+        setExtractionError(errorMsg);
+        return;
+      }
+
       setFacts(res.facts || []);
       setMessage(`Successfully extracted ${res.facts.length} facts.`);
     } catch (err) {
-      setError(err instanceof ApiError ? err.message : "Failed to extract facts.");
+      setExtractionError(err instanceof ApiError ? err.message : "Failed to extract facts.");
     } finally {
       setExtracting(false);
     }
@@ -99,6 +124,19 @@ function DocumentDetailContent({ params }: PageProps) {
       {message && (
         <div role="status" className="rounded-lg bg-emerald-50 border border-emerald-200 p-3 text-sm text-emerald-800">
           {message}
+        </div>
+      )}
+
+      {extractionError && (
+        <div role="alert" className="rounded-lg bg-rose-50 border border-rose-200 p-3 text-sm text-rose-800 flex items-center justify-between">
+          <span>{extractionError}</span>
+          <button
+            type="button"
+            onClick={() => setExtractionError(null)}
+            className="text-rose-600 hover:text-rose-800 text-xs font-semibold ml-4"
+          >
+            Dismiss
+          </button>
         </div>
       )}
 
