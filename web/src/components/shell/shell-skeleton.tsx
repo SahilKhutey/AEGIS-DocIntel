@@ -4,6 +4,7 @@ export function ShellSkeleton() {
   return (
     <div
       className="min-h-screen bg-[var(--background)] flex"
+      role="status"
       aria-busy="true"
       aria-label="Loading workspace"
     >

@@ -21,6 +21,36 @@ export function UploadDialog({ isOpen, onClose, onSuccess }: UploadDialogProps) 
   const [uploading, setUploading] = useState(false);
   const [globalError, setGlobalError] = useState<string | null>(null);
   const abortControllerRef = useRef<AbortController | null>(null);
+  const dialogRef = useRef<HTMLDivElement>(null);
+
+  const handleClose = React.useCallback(() => {
+    if (uploading) {
+      if (confirm("An upload is in progress. Are you sure you want to cancel?")) {
+        abortControllerRef.current?.abort();
+        setUploading(false);
+        onClose();
+      }
+      return;
+    }
+    setItems([]);
+    setGlobalError(null);
+    onClose();
+  }, [uploading, onClose]);
+
+  React.useEffect(() => {
+    if (!isOpen) return;
+    function handleKeyDown(e: KeyboardEvent) {
+      if (e.key === "Escape") {
+        handleClose();
+      }
+    }
+    window.addEventListener("keydown", handleKeyDown);
+    const firstFocusable = dialogRef.current?.querySelector<HTMLElement>(
+      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+    );
+    firstFocusable?.focus();
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isOpen, handleClose]);
 
   if (!isOpen) return null;
 
@@ -103,24 +133,11 @@ export function UploadDialog({ isOpen, onClose, onSuccess }: UploadDialogProps) 
     }
   }
 
-  function handleClose() {
-    if (uploading) {
-      if (confirm("An upload is in progress. Are you sure you want to cancel?")) {
-        abortControllerRef.current?.abort();
-        setUploading(false);
-        onClose();
-      }
-      return;
-    }
-    setItems([]);
-    setGlobalError(null);
-    onClose();
-  }
-
   const allCompleted = items.length > 0 && items.every((i) => i.state === "uploaded");
 
   return (
     <div
+      ref={dialogRef}
       role="dialog"
       aria-modal="true"
       aria-labelledby="upload-dialog-title"
@@ -140,7 +157,7 @@ export function UploadDialog({ isOpen, onClose, onSuccess }: UploadDialogProps) 
             type="button"
             onClick={handleClose}
             className="rounded-lg p-1 text-[var(--muted)] hover:bg-[var(--surface-muted)] hover:text-[var(--foreground)]"
-            aria-label="Close modal"
+            aria-label="Close dialog"
           >
             <X className="h-5 w-5" />
           </button>

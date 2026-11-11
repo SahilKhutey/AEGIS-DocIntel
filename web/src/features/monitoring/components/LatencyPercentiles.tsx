@@ -46,7 +46,7 @@ export const LatencyPercentiles: React.FC<LatencyPercentilesProps> = ({ percenti
                   style={{ width: `${barPct}%` }}
                 />
               </div>
-              <span className="text-[10px] text-slate-400 block">{item.desc}</span>
+              <span className="text-[10px] text-slate-600 block">{item.desc}</span>
             </div>
           );
         })}

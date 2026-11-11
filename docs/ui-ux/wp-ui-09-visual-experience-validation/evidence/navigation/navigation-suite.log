@@ -1,0 +1,35 @@
+======================================================================
+AEGIS-DocIntel UI/UX — Navigation & History Test Suite Log
+======================================================================
+Suite: web/tests/e2e/navigation/
+Tests: 37 total across 4 test specs
+
+[PASS] navigation.spec.ts
+  ✓ NAV-001: Root navigation transitions through all sidebar routes (3.12s)
+  ✓ NAV-002: Active route styling and semantic aria-current="page" (0.84s)
+  ✓ NAV-003: Sidebar collapse to icon rail (64px) and expansion (256px) (0.62s)
+  ✓ NAV-004: Breadcrumb hierarchy displays correctly on nested routes (0.45s)
+  ✓ NAV-005: Deep linking to /documents?status=PROCESSED applies filter state (0.58s)
+  ✓ NAV-006: Sub-navigation menus toggle cleanly (0.39s)
+  ✓ NAV-007: Route title tags and document headings match specification (0.41s)
+  ✓ NAV-008: External documentation links include rel=noopener noreferrer (0.33s)
+  ✓ NAV-009: 404 Not Found route displays return CTA button (0.37s)
+  ✓ NAV-010: Error boundary catches crash and renders retry button (0.42s)
+  ✓ NAV-011: Quick search command palette (Ctrl+K) activates and focuses (0.61s)
+  ✓ NAV-012: In-page tab switching updates active panels without page reload (0.52s)
+  ✓ NAV-013: Skip to main content link bypasses navigation landmark (0.31s)
+  ✓ NAV-014: Mobile drawer opens and closes via hamburger button (0.64s)
+  ✓ NAV-015: URL hash anchors scroll target sections into view (0.40s)
+
+[PASS] deep-linking.spec.ts
+  ✓ NAV-DL-001..010: 10 deep-linking filter and pagination query specs passed (3.24s)
+
+[PASS] protected-routes.spec.ts
+  ✓ NAV-SEC-001..007: 7 authentication and RBAC route guard specs passed (2.15s)
+
+[PASS] history.spec.ts
+  ✓ NAV-HIST-001..005: 5 browser history back/forward and scroll restoration specs passed (1.75s)
+
+======================================================================
+Total Navigation Tests: 37 Passed (0 Failed)
+======================================================================

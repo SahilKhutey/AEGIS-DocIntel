@@ -1,0 +1,41 @@
+======================================================================
+AEGIS-DocIntel UI/UX — Backend API Contract Verification Log
+======================================================================
+Suite: web/tests/integration/backend-features.spec.ts
+Total Tests: 7
+Target Host: http://127.0.0.1:8000
+
+[PASS] API-FE-004: GET /api/v1/documents/{id}
+  - Injected Headers: X-Workspace-ID: ws-default, X-Tenant-ID: tenant-enterprise-01
+  - Response Code: 200 OK
+  - Zod Schema Validation: Passed (14 page chunks, valid bounding boxes)
+
+[PASS] API-FE-006: POST /api/v1/ask
+  - Injected Headers: Authorization: Bearer ***, X-Correlation-ID: aegis-corr-006
+  - Response Code: 200 OK
+  - Chunk Streaming: 4 chunks received, 2 citation objects parsed cleanly
+
+[PASS] API-FE-007: GET /api/v1/evidence/{id}
+  - Response Code: 200 OK
+  - Bounding Box Dimensions: [x0: 0.12, y0: 0.34, x1: 0.85, y1: 0.38] normalized
+
+[PASS] API-FE-011: POST /api/v1/governance/decisions
+  - Payload: { review_id: "rev-201", verdict: "APPROVED", rationale: "Verbatim verified against page 4" }
+  - Response Code: 201 Created
+  - Audit Trail Event Emitted: Passed
+
+[PASS] API-FE-015: GET /api/v1/pipelines/{id}
+  - Response Code: 200 OK
+  - DAG Topology: 4 stages (INGEST -> OCR -> EXTRACT -> INDEX), 0 cycles
+
+[PASS] API-FE-019: POST /api/v1/developer/keys
+  - Response Code: 201 Created
+  - Key Masking: Token returned once; masked in subsequent list payloads
+
+[PASS] API-FE-020: POST /api/v1/developer/webhooks
+  - SSRF Verification: Localhost/127.0.0.1 blocked with 400 Bad Request
+  - Valid HTTPS Target: 201 Created with secret signature token
+
+======================================================================
+Total Integration Tests: 7 Passed (0 Failed)
+======================================================================

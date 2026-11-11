@@ -22,7 +22,7 @@ export const ProvenanceViewer: React.FC<ProvenanceViewerProps> = ({ provenance }
           </dt>
           <dd className="font-semibold text-slate-800">
             {provenance.sourceDocumentTitle}
-            <span className="block text-[10px] text-slate-400 font-mono font-normal">{provenance.sourceDocumentId}</span>
+            <span className="block text-[10px] text-slate-600 font-mono font-normal">{provenance.sourceDocumentId}</span>
           </dd>
         </div>
 
@@ -33,7 +33,7 @@ export const ProvenanceViewer: React.FC<ProvenanceViewerProps> = ({ provenance }
           </dt>
           <dd className="font-semibold text-slate-800 font-mono">
             {provenance.model}
-            <span className="block text-[10px] text-slate-400 font-sans font-normal">{provenance.poolingMethod}</span>
+            <span className="block text-[10px] text-slate-600 font-sans font-normal">{provenance.poolingMethod}</span>
           </dd>
         </div>
 
@@ -50,8 +50,8 @@ export const ProvenanceViewer: React.FC<ProvenanceViewerProps> = ({ provenance }
             <Calendar className="w-3.5 h-3.5" aria-hidden="true" />
             <span>Generated At</span>
           </dt>
-          <dd className="font-semibold text-slate-800">
-            {new Date(provenance.generatedAt).toLocaleString()}
+          <dd className="font-semibold text-slate-800" suppressHydrationWarning>
+            {provenance.generatedAt ? new Date(provenance.generatedAt).toLocaleString() : "—"}
           </dd>
         </div>
       </dl>

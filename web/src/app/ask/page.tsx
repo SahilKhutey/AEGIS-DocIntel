@@ -163,7 +163,7 @@ function AskContent() {
         </div>
 
         {docsLoading ? (
-          <p className="text-xs text-gray-400">Loading authorized documents...</p>
+          <p className="text-xs text-gray-600">Loading authorized documents...</p>
         ) : documents.length === 0 ? (
           <p className="text-xs text-gray-500">Searching all tenant documents.</p>
         ) : (

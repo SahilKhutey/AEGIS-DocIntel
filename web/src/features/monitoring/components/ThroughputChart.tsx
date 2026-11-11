@@ -18,7 +18,7 @@ export const ThroughputChart: React.FC<ThroughputChartProps> = ({ metrics }) => 
 
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
         <div className="p-3 rounded-lg bg-slate-50 border border-slate-100">
-          <span className="text-[10px] uppercase font-semibold text-slate-400 block mb-1">
+          <span className="text-[10px] uppercase font-semibold text-slate-600 block mb-1">
             Request Rate
           </span>
           <div className="text-xl font-bold text-slate-800 font-mono">
@@ -27,7 +27,7 @@ export const ThroughputChart: React.FC<ThroughputChartProps> = ({ metrics }) => 
         </div>
 
         <div className="p-3 rounded-lg bg-slate-50 border border-slate-100">
-          <span className="text-[10px] uppercase font-semibold text-slate-400 block mb-1">
+          <span className="text-[10px] uppercase font-semibold text-slate-600 block mb-1">
             Chunk Ingestion Rate
           </span>
           <div className="text-xl font-bold text-slate-800 font-mono">
@@ -36,7 +36,7 @@ export const ThroughputChart: React.FC<ThroughputChartProps> = ({ metrics }) => 
         </div>
 
         <div className="p-3 rounded-lg bg-slate-50 border border-slate-100">
-          <span className="text-[10px] uppercase font-semibold text-slate-400 block mb-1">
+          <span className="text-[10px] uppercase font-semibold text-slate-600 block mb-1">
             Worker Pool
           </span>
           <div className="text-xl font-bold text-slate-800 font-mono">
@@ -45,7 +45,7 @@ export const ThroughputChart: React.FC<ThroughputChartProps> = ({ metrics }) => 
         </div>
 
         <div className="p-3 rounded-lg bg-slate-50 border border-slate-100">
-          <span className="text-[10px] uppercase font-semibold text-slate-400 block mb-1">
+          <span className="text-[10px] uppercase font-semibold text-slate-600 block mb-1">
             Pending Queue Depth
           </span>
           <div className="text-xl font-bold text-slate-800 font-mono">

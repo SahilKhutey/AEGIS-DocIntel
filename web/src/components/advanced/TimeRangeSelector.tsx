@@ -24,7 +24,7 @@ export const TimeRangeSelector: React.FC<TimeRangeSelectorProps> = ({
       aria-label="Select analytics time range"
       className={`inline-flex items-center gap-1.5 rounded-lg bg-slate-100 p-1 border border-slate-200 ${className}`}
     >
-      <div className="flex items-center px-2 py-1 text-slate-400">
+      <div className="flex items-center px-2 py-1 text-slate-600">
         <Calendar className="w-3.5 h-3.5" aria-hidden="true" />
       </div>
       {TIME_RANGE_OPTIONS.map((opt) => {
@@ -36,10 +36,11 @@ export const TimeRangeSelector: React.FC<TimeRangeSelectorProps> = ({
             disabled={disabled}
             aria-pressed={isSelected}
             onClick={() => onChange(opt.value)}
+            style={{ color: isSelected ? "#0f172a" : "#0f172a" }}
             className={`px-3 py-1.5 h-8 min-h-[32px] box-border text-xs font-medium rounded-md transition-all ${
               isSelected
-                ? "bg-white text-slate-900 shadow-xs"
-                : "text-slate-600 hover:text-slate-900 hover:bg-slate-200/60"
+                ? "bg-white shadow-xs font-bold"
+                : "hover:bg-slate-200/60 font-semibold"
             } ${disabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
           >
             {opt.label}

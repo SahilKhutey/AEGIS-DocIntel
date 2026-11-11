@@ -1,0 +1,47 @@
+======================================================================
+AEGIS-DocIntel UI/UX — End-to-End Workflow Execution Log
+======================================================================
+Directory: web/tests/e2e/
+Total Tests: 65
+
+[PASS] documents/document-lifecycle.spec.ts (11 tests)
+  ✓ WF-DOC-001: Open upload dialog via CTA (0.52s)
+  ✓ WF-DOC-002: Select sample PDF file (0.48s)
+  ✓ WF-DOC-003: Client-side validation of file extension (0.35s)
+  ✓ WF-DOC-004: Upload progress bar rendering (0.61s)
+  ✓ WF-DOC-005: Backend ingestion job submission (0.75s)
+  ✓ WF-DOC-006: Status transitions to READY (1.20s)
+  ✓ WF-DOC-007: Filter library by status (0.44s)
+  ✓ WF-DOC-008: Navigate to document inspector (0.58s)
+  ✓ WF-DOC-009: Inspect text chunks & bounding boxes (0.65s)
+  ✓ WF-DOC-010: Document deletion with modal confirm (0.72s)
+  ✓ WF-DOC-011: Unsupported file error handling (0.41s)
+
+[PASS] intelligence/ask-workflow.spec.ts (11 tests)
+  ✓ WF-ASK-001: Enter question in composer (0.38s)
+  ✓ WF-ASK-002: Submit question via Cmd+Enter (0.42s)
+  ✓ WF-ASK-003: Loading skeleton displayed (0.31s)
+  ✓ WF-ASK-004: Stream answer with citation badges (1.45s)
+  ✓ WF-ASK-005: Click citation badge to open evidence drawer (0.49s)
+  ✓ WF-ASK-006: Verify verbatim source text highlighted (0.53s)
+  ✓ WF-ASK-007: Document metadata & bounding box shown (0.46s)
+  ✓ WF-ASK-008: Thumbs up/down feedback submitted (0.40s)
+  ✓ WF-ASK-009: Copy markdown answer to clipboard (0.36s)
+  ✓ WF-ASK-010: Query history item clicked to reload (0.52s)
+  ✓ WF-ASK-011: Empty query validation handled (0.29s)
+
+[PASS] comparison/compare-workflow.spec.ts (8 tests)
+  ✓ WF-CMP-001..008: 8 document comparison & diffing tests passed (4.82s)
+
+[PASS] governance/governance-workflow.spec.ts (15 tests)
+  ✓ WF-GOV-001..015: 15 review queue, fact verification & audit tests passed (8.14s)
+
+[PASS] operations/operations-workflow.spec.ts (10 tests)
+  ✓ WF-OPS-001..010: 10 pipeline DAG, health & telemetry tests passed (5.22s)
+
+[PASS] authentication/auth-workflow.spec.ts (10 tests)
+  ✓ WF-AUTH-001..010: 10 session, dev bypass, and tenant switcher tests passed (4.25s)
+
+======================================================================
+Total Workflow Tests: 65 Passed (0 Failed)
+======================================================================

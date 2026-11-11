@@ -23,7 +23,7 @@ export const EquationRenderer: React.FC<EquationRendererProps> = ({ equation }) 
 
       {/* LaTeX Formula Display Box */}
       <div className="p-4 rounded-lg bg-slate-900 text-slate-100 font-mono text-xs overflow-x-auto border border-slate-800">
-        <div className="text-[10px] uppercase text-slate-400 font-sans font-semibold mb-1">
+        <div className="text-[10px] uppercase text-slate-600 font-sans font-semibold mb-1">
           Mathematical Formulation (LaTeX)
         </div>
         <code className="text-emerald-300 font-bold tracking-wide select-all">

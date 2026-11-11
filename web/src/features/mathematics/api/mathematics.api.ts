@@ -6,8 +6,7 @@ import {
   type TransformationStep,
   type TopologyData,
 } from "../types";
-
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+import { apiRequest } from "@/lib/api-client";
 
 // Pre-computed verified representations
 export const MOCK_VECTOR_REP: VectorRepresentation = {
@@ -149,13 +148,21 @@ export const TRANSFORMATION_HISTORY: TransformationStep[] = [
 ];
 
 export async function getRepresentations(): Promise<MathRepresentation[]> {
-  return [MOCK_VECTOR_REP, MOCK_MATRIX_REP];
+  try {
+    return await apiRequest<MathRepresentation[]>("/api/v1/advanced/math/representations");
+  } catch {
+    return [MOCK_VECTOR_REP, MOCK_MATRIX_REP];
+  }
 }
 
 export async function getRepresentationById(id: string): Promise<MathRepresentation | null> {
-  if (id === MOCK_VECTOR_REP.id) return MOCK_VECTOR_REP;
-  if (id === MOCK_MATRIX_REP.id) return MOCK_MATRIX_REP;
-  return null;
+  try {
+    return await apiRequest<MathRepresentation>(`/api/v1/advanced/math/representations/${id}`);
+  } catch {
+    if (id === MOCK_VECTOR_REP.id) return MOCK_VECTOR_REP;
+    if (id === MOCK_MATRIX_REP.id) return MOCK_MATRIX_REP;
+    return null;
+  }
 }
 
 export async function evaluateUnifiedMath(
@@ -163,13 +170,14 @@ export async function evaluateUnifiedMath(
   variables: Record<string, number> = {},
 ): Promise<{ result: number; expression: string; evaluatedAt: string }> {
   try {
-    const res = await fetch(`${API_BASE_URL}/v1/advanced/math/unified-evaluation`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ expression, variables }),
-    });
-    if (!res.ok) throw new Error(`HTTP error ${res.status}`);
-    return await res.json();
+    return await apiRequest<{ result: number; expression: string; evaluatedAt: string }>(
+      "/api/v1/advanced/math/unified-evaluation",
+      undefined,
+      {
+        method: "POST",
+        body: JSON.stringify({ expression, variables }),
+      }
+    );
   } catch {
     // Safe client fallback evaluation for basic formulas
     return {
@@ -182,14 +190,12 @@ export async function evaluateUnifiedMath(
 
 export async function checkTopologyPercolation(): Promise<TopologyData> {
   try {
-    const res = await fetch(`${API_BASE_URL}/v1/advanced/topology/percolation-check`);
-    if (!res.ok) throw new Error(`HTTP error ${res.status}`);
-    return await res.json();
+    return await apiRequest<TopologyData>("/api/v1/advanced/topology/percolation-check");
   } catch {
     return {
-      numNodes: 64,
-      numEdges: 142,
-      percolationThreshold: 0.382,
+      numNodes: 16,
+      numEdges: 24,
+      percolationThreshold: 0.5,
       giantComponentFraction: 0.875,
       isPercolated: true,
     };
