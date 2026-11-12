@@ -3,6 +3,7 @@
 **Adaptive Mathematical Document Intelligence Operating System**
 
 [![CI Status](https://github.com/SahilKhutey/AEGIS-DocIntel/actions/workflows/ci.yml/badge.svg)](https://github.com/SahilKhutey/AEGIS-DocIntel/actions)
+[![Release: v1.1.0](https://img.shields.io/badge/Release-v1.1.0-blue)](https://github.com/SahilKhutey/AEGIS-DocIntel/releases/tag/v1.1.0)
 [![Coverage: 76%+](https://img.shields.io/badge/Coverage-76%25%2B-brightgreen)](STATUS.md)
 [![Status: Alpha / Experimental](https://img.shields.io/badge/Status-Alpha%20%2F%20Experimental-orange)](STATUS.md)
 [![License: Apache 2.0 (docprep)](https://img.shields.io/badge/License-Apache--2.0-blue)](aegis-docprep/LICENSE)
@@ -37,7 +38,7 @@ See the [aegis-docprep package documentation](aegis-docprep/README.md) and [docs
 
 ## 2. Enterprise UI/UX Workbench (`web/`)
 
-The AEGIS-DocIntel Workbench is built on Next.js 16.4.3, React 19, TypeScript 5, and Tailwind CSS. It connects authorized users to document intelligence, evidence verification, and sovereign oversight:
+The AEGIS-DocIntel Workbench is built on Next.js 16.4.3, React 19, TypeScript 5, and Tailwind CSS. It delivers a full-featured interface across 30 prerendered static and hybrid routes, connecting authorized users to document intelligence, evidence verification, and sovereign oversight:
 
 ```
                   ┌─────────────────────────────────────────────────────────┐
@@ -61,19 +62,21 @@ The AEGIS-DocIntel Workbench is built on Next.js 16.4.3, React 19, TypeScript 5,
 - **Ask AEGIS Grounded Q&A**: Natural-language question answering strictly bound to verbatim document chunks with click-to-preview page citations and spatial bounding boxes.
 - **Sovereign Governance Layer**: Human oversight layer allowing verified reviewers to confirm, dispute, or override model-derived facts with cryptographic signatures and immutable audit logging.
 - **Document Comparison Workbench**: Side-by-side diffing identifying semantic deviations, conflicting claims, and tabular changes across document versions.
-- **Mathematical Observability**: Formatted KaTeX equation rendering, embedding vector similarity matrices, and live pipeline stage latency telemetry.
+- **Mathematical Observability & Evaluator**: Formatted KaTeX equation rendering, interactive AST-safe formula evaluator playground, embedding vector similarity matrices, and live pipeline stage latency telemetry.
 - **WCAG 2.2 Level AA Accessibility**: 100% compliant contrast ratios (>=4.5:1 text, >=3:1 UI), keyboard navigation focus traps, and screen reader landmarks.
+- **Production Standalone Packaging**: Self-contained Next.js server (`.next/standalone`) containerized with multi-stage Docker build without runtime node_modules overhead.
 
 ```bash
 # Launch the web workbench locally:
 cd web
 npm install
 npm run dev        # Runs on http://localhost:3000
-npm run test       # Vitest unit & component test suite (46 suites, 220 tests)
-npm run test:e2e   # Playwright browser regression test suite (87 tests)
+npm run test       # Vitest unit & component test suite across 46 suites
+npm run test:e2e   # Playwright browser regression and visual verification suite
+npm run build      # Next.js production standalone compilation (30 routes)
 ```
 
-See the full [UI/UX Architecture Dossier](docs/ui-ux/README.md) for specifications across WP-UI-01 through WP-UI-08.
+See the full [UI/UX Architecture Dossier](docs/ui-ux/README.md) for specifications across WP-UI-01 through WP-UI-09.
 
 ---
 
@@ -107,6 +110,13 @@ implemented as a strictly-typed immutable schema in [`src/core/master_state.py`]
                ▼
   Token-Bounded, Non-Redundant Context Injection for LLMs
 ```
+
+### Mathematical Intelligence Foundations
+
+In addition to document structure compiler primitives, AEGIS-DocIntel provides mathematical intelligence services:
+- **AST-Safe Formula Evaluator**: Secure formula computation (`POST /api/v1/advanced/math/unified-evaluation`) evaluating algebraic, exponential, trigonometric expressions, and vector cosine similarities with strictly bounded Python AST parsing.
+- **Topological Resilience**: Knowledge graph percolation checks (`POST /api/v1/advanced/topology/percolation-check`) determining network robustness, giant component connectivity, and phase transitions.
+- **High-Dimensional Representations**: Dense semantic embedding vectors and Gram kernel matrices (`GET /api/v1/advanced/math/representations`) with full provenance metadata.
 
 ---
 
@@ -217,6 +227,45 @@ npm run test       # Runs Vitest unit & component test suite
 npm run test:e2e   # Runs Playwright browser regression test suite
 ```
 
+### Tier 6: Multi-Container Production Stack (Docker Compose)
+
+Launch the integrated stack orchestrating the FastAPI backend, Next.js standalone web frontend, Prometheus metrics engine, Grafana dashboards, and Nginx reverse proxy:
+
+```bash
+# Start all production services in the background:
+docker compose -f deploy/docker-compose.yml up -d
+
+# Verify container status:
+docker compose -f deploy/docker-compose.yml ps
+```
+
+The stack exposes:
+- Web Workbench: `http://localhost` (or `http://localhost:3000` direct)
+- REST API: `http://localhost/api/` or `http://localhost/v1/` (`http://localhost:8000` direct)
+- Prometheus Telemetry: `http://localhost:9090`
+- Grafana Dashboards: `http://localhost:3001`
+
+### Tier 7: Python Distribution Wheel & Standalone Web Server
+
+Install the pre-built distribution package directly:
+
+```bash
+# Install binary wheel from release:
+pip install dist/aegis_docintel-0.1.0a1-py3-none-any.whl
+
+# Or start the compiled standalone web server:
+cd web
+node .next/standalone/server.js
+```
+
+### Tier 8: Production Release Verification Drill
+
+Validate distribution packages, Next.js standalone assets, Docker/Compose configurations, and OpenAPI schema parity:
+
+```bash
+python scripts/verify_production_release.py
+```
+
 ---
 
 ## 7. Documentation Architecture
@@ -231,8 +280,10 @@ mkdocs serve
 
 ### Primary Documentation Guides
 
-- [**Enterprise UI/UX Workbench Dossier**](docs/ui-ux/README.md): Master index for WP-UI-01 through WP-UI-08.
+- [**Enterprise UI/UX Workbench Dossier**](docs/ui-ux/README.md): Master index for WP-UI-01 through WP-UI-09.
+- [**Production Release Notes (v1.1.0)**](RELEASE_NOTES.md): Official release delivery highlights, system specifications, and verification scorecard.
 - [**System Status & Roadmap**](docs/status.md): Layer-by-layer status, audit history, and active milestones.
+- [**Changelog**](CHANGELOG.md): SemVer release history from v0.1.0-alpha through v1.1.0.
 - [**aegis-docprep Package Guide**](docs/docprep.md): Standalone library quickstart and framework recipes.
 - [**Platform Architecture & Master State**](docs/Architecture.md): Formal mathematical specification of $\mathcal{D}$.
 - [**Multi-Tenant Isolation Architecture**](docs/architecture/tenant-isolation.md): Cryptographic tenant separation and IDOR defenses.

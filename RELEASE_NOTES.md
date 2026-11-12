@@ -2,7 +2,7 @@
 **Release Version**: `1.1.0`  
 **Release Tag**: `v1.1.0`  
 **Release Date**: `2026-11-12`  
-**Commit SHA**: `dfdf4ce` (HEAD of `origin/master`)  
+**Commit SHA**: `c54a7e6` (HEAD of `origin/master`, tag `v1.1.0`)  
 **License**: Proprietary (AEGIS Enterprise Production)
 
 ---

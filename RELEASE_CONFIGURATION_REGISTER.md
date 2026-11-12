@@ -26,3 +26,19 @@
 ## 2. Configuration Governance Rules
 1. **Immutable Freeze**: Any manual modification to the above configuration files invalidates the release candidate.
 2. **Environment Separation**: Actual runtime secrets (`DATABASE_URL`, `JWT_PUBLIC_KEY`, `S3_SECRET_KEY`) are injected via environment variables at deployment time; no plaintext secrets exist in repository configurations.
+
+---
+
+## 3. Production Release v1.1.0 Configuration Register
+> **Release**: `v1.1.0`  
+> **Status**: **RELEASED CONFIGURATION**  
+> **Date**: 2026-11-12  
+> **Commit SHA**: `c54a7e6`
+
+| Configuration Asset | Purpose | Format |
+| :--- | :--- | :--- |
+| `web/next.config.ts` | Next.js 16 standalone server configuration (`output: "standalone"`) | TypeScript |
+| `web/Dockerfile` | Multi-stage production container for web workbench | Dockerfile |
+| `deploy/docker-compose.yml` | Multi-service stack orchestrating API, Web, Prometheus, Grafana, and Nginx | YAML |
+| `deploy/nginx/aegis.conf` | Ingress reverse proxy routing `/api/`, `/v1/`, and `/` routes | Conf |
+| `scripts/verify_production_release.py` | Automated production release & packaging verification suite | Python |
