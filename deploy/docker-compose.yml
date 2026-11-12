@@ -48,6 +48,31 @@ services:
       start_period: 45s
     stop_grace_period: 30s
 
+  aegis-web:
+    build:
+      context: ../web
+      dockerfile: Dockerfile
+    image: aegis-docintel-web:${AEGIS_WEB_IMAGE_TAG:-${AEGIS_IMAGE_TAG:-latest}}
+    restart: unless-stopped
+    init: true
+    ports:
+      - "127.0.0.1:3000:3000"
+    environment:
+      NODE_ENV: production
+      NEXT_PUBLIC_API_URL: http://aegis-api:8000
+      NEXT_PUBLIC_API_BASE_URL: http://127.0.0.1:8000
+    networks:
+      - aegis-internal
+    depends_on:
+      aegis-api:
+        condition: service_healthy
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    mem_limit: 1g
+    cpus: 1.0
+
   prometheus:
     image: ${PROMETHEUS_IMAGE:?Set PROMETHEUS_IMAGE to a pinned version or digest}
     restart: unless-stopped
