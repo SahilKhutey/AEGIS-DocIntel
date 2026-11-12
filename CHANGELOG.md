@@ -6,6 +6,32 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.1.0] - 2026-11-12 — Production Release: Web Workbench, UI/UX System & Mathematical Intelligence Engine
+
+### Added
+- **Complete Web Workbench Delivery (WP-UI-01 through WP-UI-09):**
+  - **Design Tokens & Themes (WP-UI-01):** Tailwind CSS v4 design token architecture with semantic colors, typography tokens, light/dark themes, and WCAG AA contrast compliance.
+  - **Application Shell & Navigation (WP-UI-02):** Responsive collapsible sidebar, active route indicators, breadcrumbs, command search dialog, and mobile viewport optimizations.
+  - **Document Ingestion & Library (WP-UI-03):** Multi-file drag-and-drop upload manager with real-time stage progress, client-side validation, search, sorting, and status badges.
+  - **Document Inspector (WP-UI-04):** Dual-pane viewer with extracted text, table viewer, fact extraction cards, and isolated error boundaries.
+  - **Ask AEGIS & Citations (WP-UI-05):** Natural language intelligence composer with claim-level evidence citations, coordinate bounding boxes, and truth scoring.
+  - **Document Comparison Workspace (WP-UI-06):** Side-by-side diffing, chunk alignment, and semantic change detection.
+  - **Governance & Review Queue (WP-UI-07):** Human-in-the-loop review queue, conflict resolution panel, decision audit timeline, and cryptographic decision signing.
+  - **Advanced Interfaces & Systems (WP-UI-08):** Analytics dashboards, Mathematics catalog & evaluator, Pipeline DAG visualizer, Service health monitoring, and Developer API credentials & webhooks.
+  - **Visual QA & Certification Suite (WP-UI-09):** 416 automated tests (220 Vitest unit/component tests + 196 Playwright E2E tests) with formal GO production certification.
+- **Mathematical Foundations & Resilience Engine:**
+  - Implemented AST-safe mathematical expression evaluator supporting arithmetic, powers, and standard math functions (`sqrt`, `cos`, `sin`, `exp`, `cos_sim`) with zero arbitrary code execution risk.
+  - Implemented topological percolation resilience check evaluating giant component connectivity and phase transitions across document knowledge graphs.
+  - Exposed REST endpoints for verified 1536-dimensional semantic embeddings and Gram kernel similarity matrices with cryptographic provenance.
+- **Containerization & Production Deployment:**
+  - Added multi-stage production `web/Dockerfile` generating lightweight Next.js standalone container images without external npm dependencies.
+  - Integrated `aegis-web` into `deploy/docker-compose.yml` with health checks, non-root users, and memory limits.
+  - Configured Nginx ingress reverse proxy (`deploy/nginx/aegis.conf`) routing `/api/`, `/v1/`, and `/health` to backend API and `/`, `/_next/` to frontend web application.
+  - Created automated release verification suite (`scripts/verify_production_release.py`).
+  - Built production wheel (`aegis_docintel-0.1.0a1-py3-none-any.whl`) and source archive (`aegis_docintel-0.1.0a1.tar.gz`).
+
+---
+
 ## [0.4.0] - 2026-10-25 — Phase P4: Enterprise Architecture, Multi-Tenancy & Data Governance
 
 ### Added
