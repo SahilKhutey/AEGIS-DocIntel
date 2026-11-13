@@ -119,3 +119,29 @@
   - `python distribution/audit/generate_evidence.py` -> 6 evidence JSON files generated.
   - `powershell -ExecutionPolicy Bypass -File distribution\demo-edition\launcher\verify-package.ps1` -> 37 files verified, signature valid.
 - **Result:** **RELEASE GO**. Status moved from HOLD to PASSED. All 15 release criteria and 4 adversarial attack vectors satisfied with zero findings.
+
+---
+
+### TASK-WP-04.01: Authentication Baseline, Role Claim Hardening & Threat Model Dossiers
+- **Date:** 2026-11-13
+- **Scope:** Source code inspection, gap remediation, and threat model sign-off for WP-04.01:
+  1. Remediate JWT role array injection flaw (Finding A03) in `src/api/auth.py`.
+  2. Remediate conflicting `tenant_id` vs `tid` claim handling (Finding A05) in `src/api/auth.py`.
+  3. Add regression tests for roles array injection, contradictory primary role, and conflicting tenant claims in `tests/test_production_auth.py`.
+  4. Author 8 required dossiers in `docs/distribution/prot-04-auth-licensing/wp-04-01-authentication-baseline/`.
+  5. Execute test verification across all security and distribution suites.
+- **Commands Executed:**
+  - `python -m pytest tests/test_production_auth.py tests/test_auth_guard.py -v` -> 42 / 42 PASSED.
+  - `python -m pytest tests/test_production_auth.py tests/test_auth_guard.py tests/security/evaluation tests/distribution_security demo/tests -v` -> 111 / 111 PASSED in 21.16s.
+  - `npm --prefix web run verify:auth` -> Exit code 0 (Clean).
+- **Deliverables:**
+  - `docs/distribution/prot-04-auth-licensing/wp-04-01-authentication-baseline/01_AUTHENTICATION_ARCHITECTURE.md`
+  - `docs/distribution/prot-04-auth-licensing/wp-04-01-authentication-baseline/02_JWT_AND_API_KEY_REVIEW.md`
+  - `docs/distribution/prot-04-auth-licensing/wp-04-01-authentication-baseline/03_TENANT_CONTEXT_AND_RBAC_REVIEW.md`
+  - `docs/distribution/prot-04-auth-licensing/wp-04-01-authentication-baseline/04_MIDDLEWARE_AND_ROUTE_COVERAGE.md`
+  - `docs/distribution/prot-04-auth-licensing/wp-04-01-authentication-baseline/05_SESSION_LIFECYCLE_REVIEW.md`
+  - `docs/distribution/prot-04-auth-licensing/wp-04-01-authentication-baseline/06_THREAT_MODEL.md`
+  - `docs/distribution/prot-04-auth-licensing/wp-04-01-authentication-baseline/07_SECURITY_DECISIONS.md`
+  - `docs/distribution/prot-04-auth-licensing/wp-04-01-authentication-baseline/08_WP_04_01_SIGNOFF.md`
+- **Result:** **PASSED / PROCEED**. Work package WP-04.01 formally signed off from HOLD to PASSED.
+

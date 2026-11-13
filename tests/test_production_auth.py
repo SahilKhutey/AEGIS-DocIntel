@@ -405,3 +405,79 @@ def test_development_bypass_preservation(auth_app):
         client = TestClient(auth_app)
         assert client.get("/protected", headers={"Authorization": "Bearer dev-tenant-custom"}).status_code == 401
         assert client.get("/protected", headers={"X-API-Key": "aegis-dev-key"}).status_code == 401
+
+
+def test_production_jwt_roles_array_unsupported_role_rejected(rsa_keypair, auth_app, tmp_path):
+    """A03: JWT roles array containing unsupported roles must be rejected with 401."""
+    private_pem, public_pem = rsa_keypair
+    now = int(time.time())
+    payload = {
+        "tenant_id": "tenant-prod-100",
+        "sub": "user-42",
+        "role": "viewer",
+        "roles": ["viewer", "unauthorized_role_injection"],
+        "exp": now + 3600,
+    }
+    token = jwt.encode(payload, private_pem, algorithm="RS256")
+
+    audit_path = tmp_path / "audit.log"
+    with patch.dict(os.environ, {
+        "AEGIS_ENVIRONMENT": "production",
+        "AEGIS_JWT_PUBLIC_KEY": public_pem,
+        "AEGIS_AUDIT_LOG_PATH": str(audit_path),
+    }):
+        client = TestClient(auth_app)
+        res = client.get("/protected", headers={"Authorization": f"Bearer {token}"})
+        assert res.status_code == 401
+        assert "roles" in res.text.lower()
+
+
+def test_production_jwt_roles_array_contradictory_primary_role_rejected(rsa_keypair, auth_app, tmp_path):
+    """A03: Primary role claim contradicting roles array must be rejected with 401."""
+    private_pem, public_pem = rsa_keypair
+    now = int(time.time())
+    payload = {
+        "tenant_id": "tenant-prod-100",
+        "sub": "user-42",
+        "role": "viewer",
+        "roles": ["editor"],
+        "exp": now + 3600,
+    }
+    token = jwt.encode(payload, private_pem, algorithm="RS256")
+
+    audit_path = tmp_path / "audit.log"
+    with patch.dict(os.environ, {
+        "AEGIS_ENVIRONMENT": "production",
+        "AEGIS_JWT_PUBLIC_KEY": public_pem,
+        "AEGIS_AUDIT_LOG_PATH": str(audit_path),
+    }):
+        client = TestClient(auth_app)
+        res = client.get("/protected", headers={"Authorization": f"Bearer {token}"})
+        assert res.status_code == 401
+        assert "contradicts" in res.text.lower()
+
+
+def test_production_jwt_conflicting_tenant_id_and_tid_rejected(rsa_keypair, auth_app, tmp_path):
+    """A05: Conflicting tenant_id and tid claims must be rejected with 401."""
+    private_pem, public_pem = rsa_keypair
+    now = int(time.time())
+    payload = {
+        "tenant_id": "tenant-primary",
+        "tid": "tenant-conflicting",
+        "sub": "user-42",
+        "role": "viewer",
+        "exp": now + 3600,
+    }
+    token = jwt.encode(payload, private_pem, algorithm="RS256")
+
+    audit_path = tmp_path / "audit.log"
+    with patch.dict(os.environ, {
+        "AEGIS_ENVIRONMENT": "production",
+        "AEGIS_JWT_PUBLIC_KEY": public_pem,
+        "AEGIS_AUDIT_LOG_PATH": str(audit_path),
+    }):
+        client = TestClient(auth_app)
+        res = client.get("/protected", headers={"Authorization": f"Bearer {token}"})
+        assert res.status_code == 401
+        assert "conflicting" in res.text.lower()
+

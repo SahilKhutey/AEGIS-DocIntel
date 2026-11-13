@@ -96,3 +96,33 @@ Completed full implementation and adversarial security certification for work pa
 - **Adversarial Test Suite (`tests/security/evaluation/`):** Implemented and verified 41 automated tests covering all PROT-04 test IDs (`AUTH-001`-`008`, `LIC-001`-`006`, `DEV-001`-`004`, `ENT-001`-`005`, `QUOTA-001`-`004`, `TENANT-001`-`002`, `SESSION-001`-`003`, `AUDIT-001`-`003`, `DIST-001`-`002`, plus 4 Adversarial Scenarios A-D).
 - **Test Pass Rate:** **41 / 41 PASSED (100%)** in `tests/security/evaluation/`, **69 / 69 PASSED (100%)** across all security suites.
 - **Status Gate:** Moved PROT-04 from **HOLD** to **RELEASE GO**. Delivered 10 documentation dossiers in `docs/distribution/prot-04-auth-licensing/` and 4 machine-readable policy schemas in `distribution/policy/`.
+
+---
+
+### Phase 9: WP-04.01 — Authentication Baseline, Role Claim Hardening & Threat Model Sign-Off
+Conducted source-level inspection and runtime verification of the authentication baseline (`src/api/auth.py`, `src/api/auth_guard.py`, `src/core/security_context.py`), remediated baseline findings A01–A06, and formally cleared WP-04.01 from **HOLD** to **PASSED / PROCEED**:
+- **Backend Role Claim Hardening (`src/api/auth.py`):**
+  - **Finding A03 Remediation:** Fixed role array parsing vulnerability where untrusted array members bypassed validation. Enforced that every role in `payload["roles"]` belongs to `ALLOWED_ROLES` and that the primary `role` claim is consistent with `roles`.
+  - **Finding A05 Remediation:** Enforced fail-closed validation if `tenant_id` and alternative claim `tid` are both present with conflicting values.
+- **Regression Test Coverage (`tests/test_production_auth.py`):**
+  - Added `test_production_jwt_roles_array_unsupported_role_rejected`
+  - Added `test_production_jwt_roles_array_contradictory_primary_role_rejected`
+  - Added `test_production_jwt_conflicting_tenant_id_and_tid_rejected`
+- **Execution & Runtime Pass Rate:**
+  - `tests/test_production_auth.py`: **15 / 15 PASSED**
+  - `tests/test_auth_guard.py`: **27 / 27 PASSED**
+  - `tests/security/evaluation/`: **41 / 41 PASSED**
+  - `tests/distribution_security/`: **20 / 20 PASSED**
+  - `demo/tests/`: **8 / 8 PASSED**
+  - Total Test Suite: **111 / 111 PASSED (100%)** in 21.16s
+  - Frontend Security Guard: `npm --prefix web run verify:auth` passed clean (0 bypasses).
+- **Documentation Deliverables (`docs/distribution/prot-04-auth-licensing/wp-04-01-authentication-baseline/`):**
+  - `01_AUTHENTICATION_ARCHITECTURE.md`: Ingress architecture, call graph, and WebSocket policy.
+  - `02_JWT_AND_API_KEY_REVIEW.md`: Detailed inspection of PyJWT RS256, findings A01–A06, and key loading.
+  - `03_TENANT_CONTEXT_AND_RBAC_REVIEW.md`: Immutable `TenantContext`, role capability hierarchy, and IDOR 404 masking.
+  - `04_MIDDLEWARE_AND_ROUTE_COVERAGE.md`: 59-route inventory, deny-by-default `AuthGuardMiddleware`, and `/metrics` container isolation.
+  - `05_SESSION_LIFECYCLE_REVIEW.md`: 600s access TTL, rotating refresh tokens with family revocation, and <15ms revocation SLA.
+  - `06_THREAT_MODEL.md`: STRIDE analysis across zones A, B, and C with TH-01 through TH-16 threat matrix.
+  - `07_SECURITY_DECISIONS.md`: Strategic ADR covering cryptographic selections and boundary invariants.
+  - `08_WP_04_01_SIGNOFF.md`: Formal verification certification transitioning WP-04.01 to PASSED / PROCEED.
+

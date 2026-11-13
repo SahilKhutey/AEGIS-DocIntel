@@ -220,7 +220,15 @@ def _validate_jwt(token: str) -> TenantContext:
             headers={"WWW-Authenticate": 'Bearer error="invalid_token"'},
         )
 
-    tenant_id = payload.get("tenant_id") or payload.get("tid")
+    raw_tid = payload.get("tenant_id")
+    raw_tid_alt = payload.get("tid")
+    if raw_tid and raw_tid_alt and str(raw_tid) != str(raw_tid_alt):
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Conflicting tenant_id and tid claims in token",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    tenant_id = raw_tid or raw_tid_alt
     if not tenant_id:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
@@ -244,6 +252,32 @@ def _validate_jwt(token: str) -> TenantContext:
             headers={"WWW-Authenticate": "Bearer"},
         )
 
+    roles = frozenset({"admin", "tenant_admin"}) if role == "admin" else frozenset({role})
+    if "roles" in payload and payload["roles"] is not None:
+        raw_roles = payload["roles"]
+        if not isinstance(raw_roles, (list, set, tuple)) or not raw_roles:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Invalid roles claim format",
+                headers={"WWW-Authenticate": "Bearer"},
+            )
+        if not all(isinstance(r, str) and r in ALLOWED_ROLES for r in raw_roles):
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Unsupported role in roles array",
+                headers={"WWW-Authenticate": "Bearer"},
+            )
+        parsed_roles = set(raw_roles)
+        if role == "admin":
+            parsed_roles.add("tenant_admin")
+        if role not in parsed_roles:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail=f"Primary role '{role}' contradicts roles array",
+                headers={"WWW-Authenticate": "Bearer"},
+            )
+        roles = frozenset(parsed_roles)
+
     audit_logger.log(
         action="auth.jwt_success",
         tenant_id=str(tenant_id),
@@ -251,10 +285,6 @@ def _validate_jwt(token: str) -> TenantContext:
         status="SUCCESS",
         detail={"role": role},
     )
-
-    roles = frozenset({"admin", "tenant_admin"}) if role == "admin" else frozenset({role})
-    if "roles" in payload and isinstance(payload["roles"], (list, set, tuple)):
-        roles = frozenset(payload["roles"])
 
     return TenantContext(
         tenant_id=str(tenant_id),

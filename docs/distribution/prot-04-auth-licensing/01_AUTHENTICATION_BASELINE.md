@@ -50,3 +50,19 @@ Production JWT authentication enforces RS256 asymmetric cryptographic validation
 | **THREAT-06** | **Forged Client Role Claims** | Header / Payload | Client headers ignored; server context is source of truth | `ENT-004`, `ENT-005` |
 | **THREAT-07** | **Burst Quota Exhaustion Race** | Query / Ingestion | Atomic reservation via `threading.Lock` | `QUOTA-003`, `test_adversarial_d` |
 | **THREAT-08** | **Device Identity Spoofing** | Activation | Asymmetric device key registered; 1-device limit enforced | `DEV-001`-`DEV-004` |
+
+---
+
+## 4. Comprehensive WP-04.01 Dossier Index
+
+The detailed audit, threat analysis, and sign-off records are cataloged in the dedicated dossier repository:
+- `docs/distribution/prot-04-auth-licensing/wp-04-01-authentication-baseline/`
+  - `01_AUTHENTICATION_ARCHITECTURE.md`: Subsystem architecture, call graph, and WebSocket policy.
+  - `02_JWT_AND_API_KEY_REVIEW.md`: Detailed audit of findings A01–A06 and PyJWT RS256 validation.
+  - `03_TENANT_CONTEXT_AND_RBAC_REVIEW.md`: Security context immutability, role permissions, and IDOR 404 masking.
+  - `04_MIDDLEWARE_AND_ROUTE_COVERAGE.md`: 59-route inventory, `AuthGuardMiddleware`, and `/metrics` network isolation.
+  - `05_SESSION_LIFECYCLE_REVIEW.md`: 600s access TTL, rotating refresh tokens, and <15ms revocation SLA.
+  - `06_THREAT_MODEL.md`: Full threat matrix covering TH-01 through TH-16 across trust zones A, B, and C.
+  - `07_SECURITY_DECISIONS.md`: Strategic decision log (ADR) governing evaluation security boundaries.
+  - `08_WP_04_01_SIGNOFF.md`: Formal verification certification, test command outputs, and approval.
+
