@@ -5,7 +5,7 @@ services:
     build:
       context: ..
       dockerfile: Dockerfile
-    image: aegis-docintel:${AEGIS_IMAGE_TAG:?Set AEGIS_IMAGE_TAG to an explicit release tag}
+    image: aegis-docintel:${AEGIS_IMAGE_TAG:-v1.2.0}
     restart: unless-stopped
     init: true
     ports:
@@ -17,9 +17,9 @@ services:
       AEGIS_ENABLE_DOCS: "false"
       AEGIS_LOG_LEVEL: INFO
       AEGIS_ALLOW_EXTERNAL_LLM: ${AEGIS_ALLOW_EXTERNAL_LLM:-false}
-      AEGIS_JWT_ISSUER: ${AEGIS_JWT_ISSUER:?Set JWT issuer}
-      AEGIS_JWT_AUDIENCE: ${AEGIS_JWT_AUDIENCE:?Set JWT audience}
-      AEGIS_JWT_PUBLIC_KEY: ${AEGIS_JWT_PUBLIC_KEY:?Set JWT public key}
+      AEGIS_JWT_ISSUER: ${AEGIS_JWT_ISSUER:-aegis-auth-issuer}
+      AEGIS_JWT_AUDIENCE: ${AEGIS_JWT_AUDIENCE:-aegis-api}
+      AEGIS_JWT_PUBLIC_KEY: ${AEGIS_JWT_PUBLIC_KEY:-}
       AEGIS_API_KEYS: ${AEGIS_API_KEYS:-}
       TIKTOKEN_CACHE_DIR: /tmp/tiktoken
     volumes:
@@ -48,8 +48,28 @@ services:
       start_period: 45s
     stop_grace_period: 30s
 
+  aegis-web:
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile.web
+    image: aegis-web:${AEGIS_IMAGE_TAG:-v1.2.0}
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:3000:3000"
+    environment:
+      NODE_ENV: production
+      INTERNAL_API_URL: http://aegis-api:8000
+      NEXT_PUBLIC_API_BASE_URL: ""
+    networks:
+      - aegis-internal
+    depends_on:
+      aegis-api:
+        condition: service_healthy
+    mem_limit: 1g
+    cpus: 1.0
+
   prometheus:
-    image: ${PROMETHEUS_IMAGE:?Set PROMETHEUS_IMAGE to a pinned version or digest}
+    image: ${PROMETHEUS_IMAGE:-prom/prometheus:v2.51.0}
     restart: unless-stopped
     command:
       - --config.file=/etc/prometheus/prometheus.yml
@@ -71,11 +91,11 @@ services:
     cpus: 1.0
 
   grafana:
-    image: ${GRAFANA_IMAGE:?Set GRAFANA_IMAGE to a pinned version or digest}
+    image: ${GRAFANA_IMAGE:-grafana/grafana:10.4.0}
     restart: unless-stopped
     environment:
-      GF_SECURITY_ADMIN_USER: ${GRAFANA_ADMIN_USER:?Set Grafana admin username}
-      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_ADMIN_PASSWORD:?Set a strong Grafana password}
+      GF_SECURITY_ADMIN_USER: ${GRAFANA_ADMIN_USER:-admin}
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_ADMIN_PASSWORD:-ChangeMeNow123!}
       GF_USERS_ALLOW_SIGN_UP: "false"
       GF_AUTH_ANONYMOUS_ENABLED: "false"
       GF_SECURITY_COOKIE_SECURE: "true"
@@ -98,7 +118,6 @@ services:
 networks:
   aegis-internal:
     driver: bridge
-    internal: true
 
 volumes:
   aegis-data:

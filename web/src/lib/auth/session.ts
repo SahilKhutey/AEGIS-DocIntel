@@ -47,8 +47,16 @@ function parseJwtPayload(token: string): Record<string, unknown> | null {
 export function resolveSessionFromToken(token: string): UserSession | null {
   if (!token) return null;
 
-  // Development bypass token
+  const isProduction =
+    process.env.NODE_ENV === "production" ||
+    process.env.NEXT_PUBLIC_APP_ENV === "production";
+
+  // Development bypass token: prohibited in production & demo distribution (PROT-03 / Finding IP-010)
   if (token.startsWith("dev-")) {
+    if (isProduction) {
+      // Fail closed in production: dev tokens are rejected
+      return null;
+    }
     const tenantId = token.slice(4) || "default-tenant";
     return {
       user: {
@@ -58,8 +66,8 @@ export function resolveSessionFromToken(token: string): UserSession | null {
       },
       workspaceId: `ws-${tenantId}`,
       tenantId,
-      role: "admin",
-      permissions: getPermissionsForRole("admin"),
+      role: "viewer",
+      permissions: getPermissionsForRole("viewer"),
       token,
       expiresAt: new Date(Date.now() + 86400000).toISOString(),
     };
@@ -104,13 +112,39 @@ export const defaultSessionProvider: SessionProvider = {
       return cachedSession;
     }
 
+    // Read token strictly from browser session storage (PROT-03 remediation)
     const token =
-      process.env.NEXT_PUBLIC_AEGIS_DEV_TOKEN ||
-      (typeof window !== "undefined" ? window.sessionStorage.getItem("aegis_token") : null) ||
-      "dev-default-tenant";
+      typeof window !== "undefined"
+        ? window.sessionStorage.getItem("aegis_token") || window.sessionStorage.getItem("aegis_auth_token")
+        : null;
 
-    cachedSession = resolveSessionFromToken(token);
-    return cachedSession;
+    if (token) {
+      cachedSession = resolveSessionFromToken(token);
+      return cachedSession;
+    }
+
+    // Demo evaluation guest session (read-only evaluator, never admin)
+    const isDemoMode =
+      process.env.NEXT_PUBLIC_DEMO_MODE === "true" ||
+      process.env.NEXT_PUBLIC_AEGIS_DEMO_MODE === "true";
+
+    if (isDemoMode) {
+      cachedSession = {
+        user: {
+          id: "evaluator",
+          displayName: "Product Hunt Evaluator",
+        },
+        workspaceId: "ws-demo-evaluation",
+        tenantId: "demo-evaluation",
+        role: "viewer",
+        permissions: getPermissionsForRole("viewer"),
+        expiresAt: new Date(Date.now() + 86400000).toISOString(),
+      };
+      return cachedSession;
+    }
+
+    cachedSession = null;
+    return null;
   },
 
   async refreshSession(): Promise<UserSession | null> {

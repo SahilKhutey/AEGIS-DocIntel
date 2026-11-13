@@ -6,6 +6,39 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.1.0-demo] - 2026-11-13 — Product Hunt Launch Packaging & Protected Demo Edition
+
+### Added
+- **Protected Downloadable Demo Edition:** Created hybrid evaluation architecture combining local compiled Next.js standalone container (`aegis-demo-web`), hardened Nginx proxy (`aegis-demo-proxy`), and remote Evaluation Gateway.
+- **Evaluation Gateway Microservice (`services/evaluation_gateway/`):**
+  - Ed25519 256-bit asymmetric cryptographic license generation and verification (`license.py`).
+  - Automated instance registration and activation endpoint (`activation.py`) with sliding-window anti-scraping rate limiting.
+  - Server-side quota enforcement (`quotas.py`) strictly enforcing 5 active document uploads, 20 Ask AEGIS queries/day, 5 document comparisons/day, and 10 MB file size limit.
+  - Revocation registry (`revocation.py`) rejecting revoked licenses.
+  - Tenant-isolated evaluation store with IDOR protection (mismatches return 404).
+- **Windows & Cross-Platform Demo Launchers (`distribution/demo-edition/launcher/`):**
+  - `start-demo.ps1`, `stop-demo.ps1`, `status-demo.ps1`, `reset-demo.ps1`, `verify-package.ps1`.
+  - `start-demo.sh`, `stop-demo.sh` for Unix/macOS/WSL.
+- **Synthetic Evaluation Benchmark Corpus (`demo/seed/` & `demo-data/`):**
+  - Hardware specifications revision 1.0 vs 2.0 with deliberate contradictions (450 vs 620 TFLOPS, 220W vs 285W TDP) and invariants (128 MB cache).
+  - Security whitepaper with SHA-256 audit chaining and Genesis block verification.
+  - Verifiable citation maps and ground-truth Q&A datasets.
+- **Distribution Security Attack Test Suite (`tests/distribution_security/`):**
+  - 20 automated tests covering source isolation, secret hygiene, sourcemap stripping, proxy admin route blocking, tamper defense, temporal expiration, quota enforcement, IDOR prevention, and error sanitization (`SEC-DEMO-001` through `020`, 100% pass rate).
+- **Comprehensive Audit Dossiers:**
+  - `docs/distribution/prot-01-repository-audit/` (11 reports on repository baseline, file classification, IP separation).
+  - `docs/distribution/prot-02-dependency-license-audit.md` (CycloneDX SBOMs, 551 NPM + 71 Python dependencies, DEP-01–DEP-12).
+  - `docs/distribution/prot-03-ip-exposure/` (10 reports on algorithm protection, frontend exposure, error hygiene, IP-TEST-001–012).
+  - `docs/distribution/TASKLOG.md` and `docs/distribution/DEVLOG.md`.
+
+### Security Hardening & Remediation
+- **Frontend Authentication Bypass Remediation (`web/src/lib/auth/session.ts`):** Prohibited `dev-` tokens in production; removed automatic `admin` role; eliminated `"dev-default-tenant"` fallback.
+- **Browser Secret Leakage Remediation (`web/src/lib/validation/environment.ts` & `client.ts`):** Purged `NEXT_PUBLIC_AEGIS_DEV_TOKEN` from schema and headers; enforced same-origin relative `/api` paths.
+- **Backend Error Sanitization (`src/api/routes/query.py`):** Eliminated raw Python exception text leakage (`raise HTTPException(500, f'Ingest failed: {e}')`); implemented sanitized generic error messages with random tracking UUIDs.
+- **Monolithic Container Exclusion:** Excluded root Dockerfile from distribution to prevent extraction of raw backend source; adopted two-tier container architecture.
+
+---
+
 ## [0.4.0] - 2026-10-25 — Phase P4: Enterprise Architecture, Multi-Tenancy & Data Governance
 
 ### Added

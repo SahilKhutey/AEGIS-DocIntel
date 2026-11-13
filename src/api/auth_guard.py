@@ -82,7 +82,20 @@ def _authenticate(headers: dict[str, str]):
     api_key = headers.get("x-api-key", "").strip()
     if api_key:
         return _validate_api_key(api_key)
-        return
+
+    import os
+    env = os.environ.get("AEGIS_ENVIRONMENT", "production").lower()
+    demo_mode = os.environ.get("AEGIS_DEMO_MODE", "false").lower() in ("true", "1", "yes")
+    allow_anon = os.environ.get("AEGIS_DEMO_ALLOW_ANONYMOUS", "false").lower() in ("true", "1", "yes")
+    if (demo_mode or env == "demo") and allow_anon:
+        from src.core.security_context import TenantContext
+        return TenantContext(
+            tenant_id="demo-tenant",
+            principal_id="demo-anonymous-visitor",
+            roles=frozenset({"viewer", "editor"}),
+            authentication_method="demo_anonymous",
+            monthly_token_limit=50_000,
+        )
 
     raise HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,

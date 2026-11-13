@@ -101,7 +101,7 @@ class RuntimeSettings:
 def load_runtime_settings(validate_production: bool = True) -> RuntimeSettings:
     """Load configuration from environment variables with strict validation."""
     env = os.getenv("AEGIS_ENVIRONMENT", "development").strip().lower()
-    valid_envs = {"development", "test", "staging", "production"}
+    valid_envs = {"development", "test", "staging", "production", "demo"}
     if env not in valid_envs:
         raise ConfigurationError(
             f"Unsupported AEGIS_ENVIRONMENT: '{env}'. Must be one of {sorted(valid_envs)}"

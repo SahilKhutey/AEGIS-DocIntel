@@ -1,0 +1,13 @@
+{
+  "query_id": "qa-03-audit-chaining",
+  "query": "How are audit log entries cryptographically chained and what is the genesis hash?",
+  "ground_truth_answer": "All audit log entries are chained sequentially using SHA-256 cryptographic hashes rooted at the genesis hash 0000000000000000000000000000000000000000000000000000000000000000. Each entry combines the previous entry's hash with its canonical JSON payload.",
+  "expected_facts": [
+    "SHA-256",
+    "0000000000000000000000000000000000000000000000000000000000000000",
+    "genesis hash"
+  ],
+  "source_document": "aegis_enterprise_governance_whitepaper.txt",
+  "section": "1. Evidence Grounding & Cryptographic Audit Trails",
+  "confidence_threshold": 0.90
+}

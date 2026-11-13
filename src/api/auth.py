@@ -55,11 +55,23 @@ async def get_current_tenant(
     elif api_key:
         context = _validate_api_key(api_key)
     else:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Missing authentication. Provide Bearer token or X-API-Key header.",
-            headers={"WWW-Authenticate": "Bearer"},
-        )
+        env = os.environ.get("AEGIS_ENVIRONMENT", "production").lower()
+        demo_mode = os.environ.get("AEGIS_DEMO_MODE", "false").lower() in ("true", "1", "yes")
+        allow_anon = os.environ.get("AEGIS_DEMO_ALLOW_ANONYMOUS", "false").lower() in ("true", "1", "yes")
+        if (demo_mode or env == "demo") and allow_anon:
+            context = TenantContext(
+                tenant_id="demo-tenant",
+                principal_id="demo-anonymous-visitor",
+                roles=frozenset({"viewer", "editor"}),
+                authentication_method="demo_anonymous",
+                monthly_token_limit=50_000,
+            )
+        else:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Missing authentication. Provide Bearer token or X-API-Key header.",
+                headers={"WWW-Authenticate": "Bearer"},
+            )
 
     if request is not None:
         request.state.tenant_context = context
@@ -83,6 +95,28 @@ def _validate_jwt(token: str) -> TenantContext:
     from src.observability.audit_logger import audit_logger
 
     env = os.environ.get("AEGIS_ENVIRONMENT", "production").lower()
+    demo_mode = os.environ.get("AEGIS_DEMO_MODE", "false").lower() in ("true", "1", "yes")
+
+    if (demo_mode or env == "demo") and (
+        token == os.environ.get("AEGIS_DEMO_TOKEN", "aegis-demo-token-sandbox")
+        or token == "demo-token"
+        or token.startswith("demo-")
+    ):
+        audit_logger.log(
+            action="auth.demo_jwt_success",
+            tenant_id="demo-tenant",
+            user_id="demo-visitor",
+            status="SUCCESS",
+            detail={"role": "editor"},
+        )
+        return TenantContext(
+            tenant_id="demo-tenant",
+            principal_id="demo-visitor",
+            roles=frozenset({"viewer", "editor"}),
+            authentication_method="demo_bearer",
+            monthly_token_limit=50_000,
+        )
+
     if env == "development" and token.startswith("dev-"):
         tenant_id = token[4:] or "default-tenant"
         return TenantContext(
@@ -246,6 +280,27 @@ def _validate_api_key(api_key: str) -> TenantContext:
         )
 
     env = os.environ.get("AEGIS_ENVIRONMENT", "production").lower()
+    demo_mode = os.environ.get("AEGIS_DEMO_MODE", "false").lower() in ("true", "1", "yes")
+
+    if (demo_mode or env == "demo") and (
+        api_key == os.environ.get("AEGIS_DEMO_API_KEY", "aegis-demo-public-key")
+        or api_key == "demo-key"
+    ):
+        audit_logger.log(
+            action="auth.demo_api_key_success",
+            tenant_id="demo-tenant",
+            user_id="demo-visitor",
+            status="SUCCESS",
+            detail={"role": "editor"},
+        )
+        return TenantContext(
+            tenant_id="demo-tenant",
+            principal_id="demo-visitor",
+            roles=frozenset({"viewer", "editor"}),
+            authentication_method="demo_key",
+            monthly_token_limit=50_000,
+        )
+
     if env == "development" and api_key == "aegis-dev-key":
         return TenantContext(
             tenant_id="default-tenant",

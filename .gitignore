@@ -55,6 +55,10 @@ target/
 *.zip
 .amdi_last_doc
 
+# Cryptographic private keys - never commit
+*private*.pem
+services/evaluation_gateway/keys/private-key.pem
+
 # MkDocs build output
 site/
 

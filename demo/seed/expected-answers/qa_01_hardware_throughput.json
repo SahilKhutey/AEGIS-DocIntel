@@ -1,0 +1,13 @@
+{
+  "query_id": "qa-01-throughput",
+  "query": "What is the peak FP16 tensor throughput of the NHA-100 hardware accelerator?",
+  "ground_truth_answer": "According to the AEGIS Neural Hardware Accelerator Architecture Specification v1.0, the peak tensor compute throughput for the NHA-100 is rated at 450 TFLOPS FP16 at a base operating frequency of 1.85 GHz.",
+  "expected_facts": [
+    "450 TFLOPS",
+    "1.85 GHz",
+    "NHA-100"
+  ],
+  "source_document": "aegis_neural_hardware_spec_v1.txt",
+  "section": "2. Electrical, Thermal & Processing Specifications",
+  "confidence_threshold": 0.85
+}

@@ -1,0 +1,16 @@
+{
+  "audit_target": "web/src",
+  "scan_timestamp_utc": "2026-11-13T08:47:00Z",
+  "dev_token_in_schema": false,
+  "dev_token_in_session": false,
+  "dev_token_in_client": false,
+  "sourcemaps_generated": false,
+  "default_admin_role_assigned": false,
+  "same_origin_proxy_configured": true,
+  "findings_resolved": [
+    "IP-010: Removed dev- bypass and default admin role from session.ts",
+    "IP-011: Removed devToken default from client.ts; same-origin relative URL enabled",
+    "IP-012: Removed NEXT_PUBLIC_AEGIS_DEV_TOKEN from environment.ts schema"
+  ],
+  "verdict": "CLEAN_AND_REMEDIATED"
+}

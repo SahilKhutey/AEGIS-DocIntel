@@ -225,6 +225,10 @@ def create_app() -> FastAPI:
     app.include_router(jobs_router_mod.router, prefix="/v1/jobs")
     app.include_router(jobs_router_mod.router, prefix="/api/v1/jobs", include_in_schema=False)
 
+    from src.api.routers import demo as demo_router_mod
+    app.include_router(demo_router_mod.router, prefix="/v1")
+    app.include_router(demo_router_mod.router, prefix="/api/v1", include_in_schema=False)
+
     from src.api.error_handlers import register_error_handlers
     register_error_handlers(app)
 

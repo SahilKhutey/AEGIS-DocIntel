@@ -1,0 +1,11 @@
+id,component,file_path,exposure_surface,initial_risk,residual_risk,mitigation_status,mitigation_details
+EXP-001,Context Packer Algorithm,aegis-docprep/aegis_docprep/context_packer.py,Public GitHub repo,Critical,Low,MITIGATED,Retained under Apache 2.0; future enhancements private.
+EXP-002,Graph Reading Order Engine,src/engines/graph_reading_order.py,Local Docker distribution,Critical,Negligible,MITIGATED,Excluded from demo package; executed remotely.
+EXP-003,Submodular Retrieval Engine,src/engines/retrieval/submodular_packer.py,Local Docker distribution,Critical,Negligible,MITIGATED,Excluded from demo package; executed remotely.
+EXP-004,Orchestrator Pipeline,src/core/orchestrator.py,Local Docker distribution,Critical,Negligible,MITIGATED,Excluded from demo package; executed remotely.
+EXP-005,Exception Stack Traces,src/api/routes/query.py,HTTP 500 error responses,High,Negligible,MITIGATED,Sanitized error responses with reference UUID.
+EXP-006,Dev Token in Session,web/src/lib/auth/session.ts,Browser client JS,Critical,Negligible,MITIGATED,Dev- token fallback removed; fail closed in production.
+EXP-007,Dev Token in Client,web/src/lib/api/client.ts,Browser client JS,Critical,Negligible,MITIGATED,Stripped dev token from default auth headers.
+EXP-008,Dev Token in Environment,web/src/lib/validation/environment.ts,Browser inlined env,High,Negligible,MITIGATED,Removed from Zod schema and runtime env validation.
+EXP-009,Localhost Defaults,web/src/lib/api/client.ts,Browser client JS,High,Negligible,MITIGATED,Same-origin relative routing through Nginx reverse proxy.
+EXP-010,Root Private Key,services/evaluation_gateway/keys/private-key.pem,Downloadable package,Critical,Negligible,MITIGATED,Air-gapped on KMS/gateway server; public key only in demo.

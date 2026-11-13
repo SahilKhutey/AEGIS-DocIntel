@@ -1,0 +1,38 @@
+# AEGIS Evaluation Gateway — Public API Allowlist
+openapi: 3.1.0
+info:
+  title: AEGIS-DocIntel Evaluation Public API
+  version: 1.1.0
+paths:
+  /health:
+    get:
+      summary: Health check probe
+  /api/v1/gateway/health:
+    get:
+      summary: Gateway service health check
+  /api/v1/gateway/activate:
+    post:
+      summary: Activate evaluation instance and issue license
+  /api/v1/gateway/license/status:
+    get:
+      summary: Query license claims and remaining quotas
+  /api/v1/gateway/documents:
+    get:
+      summary: List caller-isolated ingested documents
+    post:
+      summary: Ingest evaluation document (max 5 docs, 10MB limit)
+  /api/v1/gateway/documents/{doc_id}:
+    get:
+      summary: Retrieve caller-isolated document metadata
+  /api/v1/gateway/query:
+    post:
+      summary: Ask AEGIS grounded question with evidence citations
+  /api/v1/gateway/compare:
+    post:
+      summary: Cross-document contradiction and invariant analysis
+  /api/v1/gateway/demo/seed:
+    post:
+      summary: Populate evaluation session with synthetic benchmark data
+  /api/v1/gateway/demo/reset:
+    post:
+      summary: Reset session documents and quota counters

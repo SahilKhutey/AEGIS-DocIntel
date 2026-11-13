@@ -1,0 +1,58 @@
+{
+  "schema_version": "1.0.0",
+  "package": "AEGIS-DocIntel-Demo-Edition",
+  "exclusion_rules": [
+    {
+      "pattern": "src/**",
+      "reason": "Proprietary core backend implementation"
+    },
+    {
+      "pattern": "backend/**",
+      "reason": "Internal backend benchmarks and optimizations"
+    },
+    {
+      "pattern": "aegis/**",
+      "reason": "Internal compliance and release pipeline modules"
+    },
+    {
+      "pattern": "tests/**",
+      "reason": "Internal test fixtures, attack cases, and mocks"
+    },
+    {
+      "pattern": "evaluation/**",
+      "reason": "Proprietary benchmark datasets and evaluation runners"
+    },
+    {
+      "pattern": "audit/**",
+      "reason": "Internal audit reports and baseline records"
+    },
+    {
+      "pattern": "config/**",
+      "reason": "Production configurations and tokenizers"
+    },
+    {
+      "pattern": ".github/**",
+      "reason": "Internal CI/CD workflows and release actions"
+    },
+    {
+      "pattern": "services/evaluation_gateway/**",
+      "reason": "Runs exclusively on private cloud infrastructure"
+    },
+    {
+      "pattern": "**/*.py",
+      "reason": "Zero Python source code in client package"
+    },
+    {
+      "pattern": "**/*.map",
+      "reason": "Source maps strictly stripped to prevent UI reverse engineering"
+    },
+    {
+      "pattern": "**/*private*.pem",
+      "reason": "Asymmetric root private keys remain in cloud vault/KMS"
+    },
+    {
+      "pattern": "**/.env*",
+      "reason": "Production environment credentials and secrets"
+    }
+  ]
+}

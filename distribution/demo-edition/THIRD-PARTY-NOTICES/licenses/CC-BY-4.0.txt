@@ -1,0 +1,9 @@
+Creative Commons Attribution 4.0 International Public License
+
+By exercising the Licensed Rights, You accept and agree to be bound by the terms and conditions of this Creative Commons Attribution 4.0 International Public License ("Public License").
+
+Section 3 - License Conditions.
+If You Share the Licensed Material, You must:
+a. retain identification of the creator(s), copyright notice, notice referring to this Public License, and URI;
+b. indicate if You modified the Licensed Material;
+c. indicate the Licensed Material is licensed under this Public License.

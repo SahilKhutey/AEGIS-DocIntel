@@ -6,7 +6,8 @@ const PublicEnvironmentSchema = z.object({
   NEXT_PUBLIC_APP_ENV: z
     .enum(["development", "test", "staging", "production"])
     .default("development"),
-  NEXT_PUBLIC_AEGIS_DEV_TOKEN: z.string().optional(),
+  NEXT_PUBLIC_DEMO_MODE: z.string().optional(),
+  NEXT_PUBLIC_AEGIS_DEMO_MODE: z.string().optional(),
 });
 
 export type PublicEnvironment = z.infer<typeof PublicEnvironmentSchema>;
@@ -16,7 +17,8 @@ export function validatePublicEnvironment(env: Record<string, string | undefined
     NEXT_PUBLIC_API_BASE_URL: env.NEXT_PUBLIC_API_BASE_URL,
     NEXT_PUBLIC_AEGIS_API_URL: env.NEXT_PUBLIC_AEGIS_API_URL,
     NEXT_PUBLIC_APP_ENV: env.NEXT_PUBLIC_APP_ENV || "development",
-    NEXT_PUBLIC_AEGIS_DEV_TOKEN: env.NEXT_PUBLIC_AEGIS_DEV_TOKEN,
+    NEXT_PUBLIC_DEMO_MODE: env.NEXT_PUBLIC_DEMO_MODE,
+    NEXT_PUBLIC_AEGIS_DEMO_MODE: env.NEXT_PUBLIC_AEGIS_DEMO_MODE,
   });
 
   if (!parsed.success) {

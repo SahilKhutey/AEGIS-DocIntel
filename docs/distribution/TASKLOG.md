@@ -1,0 +1,99 @@
+# AEGIS-DocIntel — Product Hunt Launch Packaging Task Execution Log (TASKLOG)
+
+**Workstream:** `product_hunt_launch_packaging`  
+**Target Repository:** `SahilKhutey/AEGIS-DocIntel`  
+**Branch:** `product_hunt_launch_packaging`  
+**Execution Environment:** Windows 11 (PowerShell 5.1+, Python 3.12.10, Node.js 24.18.0, Docker Compose, Cryptography, Pytest)  
+**Execution Timestamp:** 2026-11-12 – 2026-11-13  
+
+---
+
+## Task Execution Summary Matrix
+
+| Task ID | Work Package | Objective | Execution Commands | Exit Code / Result | Status |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| **TASK-LAUNCH-01** | Live Demo Foundation | Build synthetic evaluation corpus & manifest | Automated Python seed generator | 0 (3 specs + ground-truth QA maps) | **COMPLETED** |
+| **TASK-LAUNCH-02** | Live Demo Foundation | Demo session endpoints & tenant isolation | `src/api/routers/demo.py`, `pytest demo/tests` | 0 (8/8 tests passed) | **COMPLETED** |
+| **TASK-LAUNCH-03** | Launch Alignment | Reconcile STATUS.md and docs/status.md | Created `launch/FEATURE_MATRIX.md` | 0 (P0/P1/P2 verified) | **COMPLETED** |
+| **TASK-PROT-01.1** | PROT-01 | Source & IP separation repository audit | Python classification parser over 4,668 files | 0 (`distribution_inventory.csv`) | **COMPLETED** |
+| **TASK-PROT-01.2** | PROT-01 | Reconcile critical initial findings (F01–F05) | Produced 11 audit docs in `prot-01-repository-audit/` | 0 (Signed off: PROCEED) | **COMPLETED** |
+| **TASK-PROT-02.1** | PROT-02 | Python dependency & lockfile audit | `pip-licenses`, `pip-audit`, CycloneDX | 0 (`python-licenses.csv`, `python-sbom.json`) | **COMPLETED** |
+| **TASK-PROT-02.2** | PROT-02 | Frontend NPM lockfile audit (551 pkgs) | `npm-dependency-tree.json`, CycloneDX 1.5 | 0 (`npm-sbom.json`, 61 prod deps) | **COMPLETED** |
+| **TASK-PROT-02.3** | PROT-02 | Notice bundle & license text generation | Generated `THIRD-PARTY-NOTICES/licenses/` (9 txts) | 0 (MIT, Apache, LGPL, MPL, etc.) | **COMPLETED** |
+| **TASK-PROT-02.4** | PROT-02 | Resolve DEP-001 through DEP-005 findings | Authored `prot-02-dependency-license-audit.md` | 0 (DEP-01–DEP-12 passed) | **COMPLETED** |
+| **TASK-PROT-03.1** | PROT-03 | Identify proprietary algorithms & models | Cataloged IP-001–IP-015 in `ip_component_register.csv` | 0 (Submodular, DAG, Sheaf, etc.) | **COMPLETED** |
+| **TASK-PROT-03.2** | PROT-03 | Remediate frontend auth bypass & dev tokens | Refactored `session.ts`, `client.ts`, `environment.ts` | 0 (No dev- bypass; no env secret) | **COMPLETED** |
+| **TASK-PROT-03.3** | PROT-03 | Sanitize backend API error responses | Refactored `src/api/routes/query.py` with UUID refs | 0 (Zero tracebacks or path leaks) | **COMPLETED** |
+| **TASK-PROT-03.4** | PROT-03 | Define public API allowlist & denylists | Generated `public_api_allowlist.yaml`, denylist | 0 (10 allowed endpoints) | **COMPLETED** |
+| **TASK-PROT-03.5** | PROT-03 | Author 10 IP exposure audit reports | Generated docs in `prot-03-ip-exposure/` | 0 (Signed off: PROCEED) | **COMPLETED** |
+| **TASK-GATEWAY-01**| Evaluation Gateway | Cryptographic Ed25519 licensing service | `license.py`, `activation.py`, `generate_keys.py` | 0 (256-bit asymmetric signatures) | **COMPLETED** |
+| **TASK-GATEWAY-02**| Evaluation Gateway | Server-side quota & entitlement enforcement | `quotas.py`, `entitlements.py`, `revocation.py` | 0 (5 docs, 20 queries, 5 comp.) | **COMPLETED** |
+| **TASK-PACKAGE-01**| Release Packaging | Assemble downloadable Demo package | Assembled `distribution/demo-edition/` | 0 (37 bundled files) | **COMPLETED** |
+| **TASK-PACKAGE-02**| Release Packaging | Windows & cross-platform launchers | `start-demo.ps1`, `verify-package.ps1`, etc. | 0 (Self-contained verification) | **COMPLETED** |
+| **TASK-PACKAGE-03**| Release Packaging | Build release ZIP & SHA256SUMS | `distribution/release/build-release.ps1` | 0 (`AEGIS-DocIntel-Demo-Edition.zip`)| **COMPLETED** |
+| **TASK-TEST-01**   | Security Suite | Distribution security attack test suite | `pytest tests/distribution_security -v` | 0 (20/20 SEC-DEMO tests passed) | **COMPLETED** |
+| **TASK-TEST-02**   | Full Regression | Combined demo & security verification | `pytest tests/distribution_security demo/tests` | 0 (28/28 tests passed 100%) | **COMPLETED** |
+
+---
+
+## Detailed Task Logs
+
+### TASK-LAUNCH-01: Synthetic Evaluation Corpus & Demo Foundation
+- **Date:** 2026-11-12
+- **Scope:** Create a 100% synthetic, unencumbered evaluation dataset with intentional contradictions and invariant metrics to showcase AEGIS-DocIntel's cross-document intelligence.
+- **Commands Executed:**
+  - Generated `demo/seed/documents/aegis_neural_hardware_spec_v1.txt` (450 TFLOPS, 220W TDP, 128 MB cache)
+  - Generated `demo/seed/documents/aegis_neural_hardware_spec_v2.txt` (620 TFLOPS, 285W TDP, 128 MB cache)
+  - Generated `demo/seed/documents/aegis_enterprise_governance_whitepaper.txt` (SHA-256 audit chaining, Genesis block)
+  - Generated ground-truth QA maps and citation coordinates in `demo/seed/expected-answers/` and `demo/seed/expected-citations/`.
+- **Result:** Complete synthetic corpus created and packaged in `demo/seed/` and `distribution/demo-edition/demo-data/`.
+
+---
+
+### TASK-PROT-01.1 & 01.2: Repository Audit & IP Classification (PROT-01)
+- **Date:** 2026-11-12
+- **Scope:** Complete file-by-file audit of all 4,668 repository paths. Reconcile findings F01 through F05.
+- **Commands Executed:**
+  - Python audit script generating `distribution/audit/distribution_inventory.csv` with 10 required columns.
+  - Authored 11 comprehensive audit documents in `docs/distribution/prot-01-repository-audit/` (00 through 10).
+- **Result:** Formally signed off from HOLD to PROCEED. Root Dockerfile barred; two-tier architecture adopted.
+
+---
+
+### TASK-PROT-02.1 through 02.4: Third-Party Dependency & License Audit (PROT-02)
+- **Date:** 2026-11-13
+- **Scope:** Audit 551 NPM lockfile entries and 71 Python pinned packages. Resolve LGPL, MPL, CC-BY, Blue Oak, and Python vulnerabilities.
+- **Commands Executed:**
+  - `pip-audit -r requirements-core.lock.txt --no-deps --disable-pip -f json` -> `python-vulnerabilities.json`
+  - Generated `python-sbom.json` (361 KB) and `npm-sbom.json` (CycloneDX 1.5 format, 550 components).
+  - Built `THIRD-PARTY-NOTICES/` folder structure with 9 full license texts and 3 manifests.
+  - Authored `docs/distribution/prot-02-dependency-license-audit.md` covering DEP-01 through DEP-12.
+- **Result:** All 12 acceptance criteria passed. Python backend kept 100% remote to eliminate client vulnerabilities.
+
+---
+
+### TASK-PROT-03.1 through 03.5: IP Exposure Audit & Code Remediation (PROT-03)
+- **Date:** 2026-11-13
+- **Scope:** Audit proprietary algorithms (submodular packing, DAG reading order, Sheaf topology). Remediate frontend auth bypass, dev tokens, and backend error leakage.
+- **Commands Executed:**
+  - Refactored `web/src/lib/auth/session.ts` to reject `dev-` tokens in production and remove default admin role.
+  - Refactored `web/src/lib/api/client.ts` to enforce same-origin relative `/api` paths and strip `NEXT_PUBLIC_AEGIS_DEV_TOKEN`.
+  - Refactored `web/src/lib/validation/environment.ts` to purge `NEXT_PUBLIC_AEGIS_DEV_TOKEN`.
+  - Refactored `src/api/routes/query.py` exception handlers to return sanitized error messages with UUID tracking references.
+  - Generated 7 audit artifacts in `distribution/audit/prot-03/` and 10 documents in `docs/distribution/prot-03-ip-exposure/`.
+- **Result:** Formally signed off from HOLD to PROCEED. Zero source or credential leakage.
+
+---
+
+### TASK-TEST-01 & 02: Distribution Security Attack Test Suite
+- **Date:** 2026-11-13
+- **Scope:** Execute automated attack test suite (`SEC-DEMO-001` through `020`) and demo regression tests.
+- **Commands Executed:**
+  - `pytest tests/distribution_security demo/tests -v`
+- **Result:**
+  - `tests/distribution_security/`: **20/20 PASSED**
+  - `demo/tests/`: **8/8 PASSED**
+  - Combined Pass Rate: **28 / 28 PASSED (100%)**
+- **Release Verification:**
+  - `powershell -ExecutionPolicy Bypass -File distribution\demo-edition\launcher\verify-package.ps1`
+  - All 37 files verified authentic, SHA-256 match, Ed25519 signature valid.

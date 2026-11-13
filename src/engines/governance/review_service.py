@@ -36,12 +36,11 @@ from src.engines.governance.policy import (
     authorize_review_action,
 )
 from src.engines.intelligence.contracts import ConflictReport, ExtractedFact
-from src.repositories.review_repository import (
-    IdempotencyConflictError,
-    ReviewNotFoundError,
-    ReviewRepository,
-    StaleReviewVersionError,
-)
+from src.repositories.review_repository import ReviewNotFoundError
+
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from src.repositories.review_repository import ReviewRepository
 
 log = logging.getLogger("aegis.governance.review")
 
@@ -54,10 +53,14 @@ class ReviewService:
 
     def __init__(
         self,
-        repository: Optional[ReviewRepository] = None,
+        repository: Optional[Any] = None,
         orchestrator: Optional[Any] = None,
     ) -> None:
-        self.repository = repository or ReviewRepository()
+        if repository is None:
+            from src.repositories.review_repository import ReviewRepository
+            self.repository = ReviewRepository()
+        else:
+            self.repository = repository
         self.orchestrator = orchestrator
 
     def create_review_from_fact(

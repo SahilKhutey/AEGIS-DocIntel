@@ -1,0 +1,39 @@
+{
+  "comparison_id": "cmp-hw-v1-vs-v2",
+  "expected_citations": [
+    {
+      "claim": "Peak tensor compute throughput increased from 450 TFLOPS to 620 TFLOPS FP16.",
+      "sources": [
+        {
+          "doc_id": "doc-seed-hw-v1",
+          "filename": "aegis_neural_hardware_spec_v1.txt",
+          "section": "2. Electrical, Thermal & Processing Specifications",
+          "snippet": "Peak tensor compute throughput is rated at 450 TFLOPS FP16 at a base operating frequency of 1.85 GHz."
+        },
+        {
+          "doc_id": "doc-seed-hw-v2",
+          "filename": "aegis_neural_hardware_spec_v2.txt",
+          "section": "2. Revised Electrical, Thermal & Processing Specifications",
+          "snippet": "Peak tensor compute throughput has been increased to 620 TFLOPS FP16, operating at an overclocked frequency of 2.20 GHz"
+        }
+      ]
+    },
+    {
+      "claim": "TDP re-rated from 220W to 285W.",
+      "sources": [
+        {
+          "doc_id": "doc-seed-hw-v1",
+          "filename": "aegis_neural_hardware_spec_v1.txt",
+          "section": "2. Electrical, Thermal & Processing Specifications",
+          "snippet": "Maximum thermal design power (TDP) is 220 Watts."
+        },
+        {
+          "doc_id": "doc-seed-hw-v2",
+          "filename": "aegis_neural_hardware_spec_v2.txt",
+          "section": "2. Revised Electrical, Thermal & Processing Specifications",
+          "snippet": "Maximum thermal design power (TDP) was re-rated to 285 Watts (increased from 220 Watts due to elevated clock profiles)."
+        }
+      ]
+    }
+  ]
+}

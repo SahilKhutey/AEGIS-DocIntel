@@ -1,0 +1,13 @@
+Mozilla Public License Version 2.0
+==================================
+
+1. Definitions
+1.1. "Contributor" means each individual or legal entity that creates, contributes to the creation of, or owns Covered Software.
+1.4. "Covered Software" means the Source Code Form to which the initial Contributor has attached the notice in Exhibit A, the Executable Form of such Source Code Form, and Modifications of such Source Code Form.
+1.6. "Executable Form" means any form resulting from mechanical transformation or translation of a Source Code Form.
+1.13. "Source Code Form" means the form of the work preferred for making modifications.
+
+2. License Grants and Conditions
+2.1. Grants. Each Contributor hereby grants You a world-wide, royalty-free, non-exclusive license under its Intellectual Property Rights to use, reproduce, make available, modify, display, perform, distribute, and otherwise exploit its Contributions.
+3.1. Availability of Source Code. All distribution of Covered Software in Source Code Form must be made available under the terms of this License.
+3.2. Distribution of Executable Form. If You distribute Covered Software in Executable Form then such Executable Form may be distributed under a different license, provided that You inform recipients how they can obtain a copy of such Source Code Form by reasonable means.
