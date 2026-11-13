@@ -69,6 +69,8 @@ data/*.db-journal
 data/*.db-wal
 data/*.db-shm
 data/*.log
+services/evaluation_gateway/*.jsonl
+services/evaluation_gateway/revocation_list.json
 
 # Exported patches & bundles
 outputs/

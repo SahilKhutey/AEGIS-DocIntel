@@ -1,0 +1,36 @@
+{
+  "suite": "PROT-04 Revocation & Session Security",
+  "timestamp": "2026-11-13T04:09:00.745365+00:00",
+  "passed": 4,
+  "failed": 0,
+  "tests": [
+    {
+      "id": "SESSION-001",
+      "name": "Refresh token replay detection",
+      "status": "PASSED",
+      "expected": "401 Family Revocation",
+      "actual": 401
+    },
+    {
+      "id": "SESSION-002",
+      "name": "Logout session termination",
+      "status": "PASSED",
+      "expected": "401 Session Terminated",
+      "actual": 401
+    },
+    {
+      "id": "SESSION-003",
+      "name": "Revocation terminates in-flight sessions",
+      "status": "PASSED",
+      "expected": "403 LICENSE_REVOKED",
+      "actual": 403
+    },
+    {
+      "id": "REV-SLA",
+      "name": "Real-time revocation propagation SLA",
+      "status": "PASSED",
+      "expected": "< 1000 ms",
+      "actual": "12 ms"
+    }
+  ]
+}

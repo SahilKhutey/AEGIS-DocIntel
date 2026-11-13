@@ -1,0 +1,65 @@
+{
+  "suite": "PROT-04 Authentication Security",
+  "timestamp": "2026-11-13T04:09:00.745365+00:00",
+  "framework": "pytest-9.1.1",
+  "passed": 8,
+  "failed": 0,
+  "tests": [
+    {
+      "id": "AUTH-001",
+      "name": "Missing session token",
+      "status": "PASSED",
+      "expected": "401 Unauthorized",
+      "actual": 401
+    },
+    {
+      "id": "AUTH-002",
+      "name": "Malformed token",
+      "status": "PASSED",
+      "expected": "400 Bad Request",
+      "actual": 400
+    },
+    {
+      "id": "AUTH-003",
+      "name": "Forged Ed25519 signature",
+      "status": "PASSED",
+      "expected": "401 Unauthorized",
+      "actual": 401
+    },
+    {
+      "id": "AUTH-004",
+      "name": "Expired RS256 JWT",
+      "status": "PASSED",
+      "expected": "401 Unauthorized",
+      "actual": 401
+    },
+    {
+      "id": "AUTH-005",
+      "name": "Incorrect JWT issuer",
+      "status": "PASSED",
+      "expected": "401 Unauthorized",
+      "actual": 401
+    },
+    {
+      "id": "AUTH-006",
+      "name": "Incorrect JWT audience",
+      "status": "PASSED",
+      "expected": "401 Unauthorized",
+      "actual": 401
+    },
+    {
+      "id": "AUTH-007",
+      "name": "Algorithm confusion (HS256 rejection)",
+      "status": "PASSED",
+      "expected": "401 Unauthorized",
+      "actual": 401
+    },
+    {
+      "id": "AUTH-008",
+      "name": "Development token in production mode",
+      "status": "PASSED",
+      "expected": "401 Unauthorized",
+      "actual": 401
+    }
+  ]
+}

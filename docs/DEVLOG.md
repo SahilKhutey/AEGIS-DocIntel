@@ -2213,3 +2213,24 @@ uff check src tests scripts dashboard: All checks passed.
   - Package integrity verification (`verify-package.ps1`): 37/37 files verified, Ed25519 signature valid (exit code 0).
   - Total test pass: 28/28 tests passed (100%).
   - Formal sign-off: Transition from HOLD to PROCEED.
+
+---
+
+## Phase 18: PROT-04 — Authentication, Licensing & Entitlement Security
+- **Time:** 2026-11-13 09:40:00 UTC
+- **Context & Objective:**
+  Establish authoritative, server-side cryptographic licensing, device binding, capability authorization, atomic usage accounting, and tamper-resistant session lifecycles for the Protected Demo Edition.
+- **Architectural & Security Deliverables:**
+  1. **WP-04.01 Authentication Baseline:** Verified deny-by-default `AuthGuardMiddleware` across all 59 backend endpoints, strict RS256 algorithm pinning, and tenant isolation.
+  2. **WP-04.02 Production Auth Hardening:** Implemented automated build-time guard `web/scripts/verify-production-auth.mjs` (`verify:auth`) to block compilation if dev tokens or bypasses are reintroduced.
+  3. **WP-04.03 Activation & Device Binding:** Created account-backed activation (`POST /v1/evaluation/activate`) with asymmetric device public key binding, 1-device active limit, and deactivation workflows.
+  4. **WP-04.04 Cryptographic License Engine:** Pinned Ed25519 signing in `services/evaluation_gateway/license.py`, validating claims, temporal expiration, suspension status, and product matches.
+  5. **WP-04.05 Entitlement Enforcement:** Codified canonical capabilities (`documents.read`, `documents.upload`, `intelligence.query`, `documents.compare`, `evidence.inspect`); direct denial of admin functions (`users.manage`, `platform.admin`).
+  6. **WP-04.06 Server-Side Atomic Quotas:** Thread-safe two-phase quota reservation and settlement in `quotas.py`, validated under 20-thread concurrency race testing (zero leakage).
+  7. **WP-04.07 Session Lifecycle & Revocation:** Short-lived access tokens (600s TTL), rotating refresh tokens with replay detection family revocation, and real-time revocation propagation (< 12 ms).
+  8. **WP-04.08 Security Audit Telemetry:** Structured append-only JSONL logging (`audit.py`) with 100% regex redaction for raw credentials, keys, and document text.
+  9. **WP-04.09 Release Certification:** Authored 10 dossiers in `docs/distribution/prot-04-auth-licensing/` and 4 machine-readable policy schemas in `distribution/policy/`.
+- **Verification:**
+  - `tests/security/evaluation/`: **41/41 PASSED (100%)**
+  - All security suites combined (`tests/security/evaluation`, `tests/distribution_security`, `demo/tests`): **69/69 PASSED (100%)**
+  - Release Decision: **RELEASE GO** signed off.

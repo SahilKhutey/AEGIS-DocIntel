@@ -1,0 +1,50 @@
+{
+  "suite": "PROT-04 License Engine & Cryptography",
+  "timestamp": "2026-11-13T04:09:00.745365+00:00",
+  "passed": 6,
+  "failed": 0,
+  "tests": [
+    {
+      "id": "LIC-001",
+      "name": "Valid evaluation license activation",
+      "status": "PASSED",
+      "expected": "Active license returned",
+      "actual": "ACTIVE"
+    },
+    {
+      "id": "LIC-002",
+      "name": "Forged license signature",
+      "status": "PASSED",
+      "expected": "401 INVALID_SIGNATURE",
+      "actual": 401
+    },
+    {
+      "id": "LIC-003",
+      "name": "Expired evaluation license",
+      "status": "PASSED",
+      "expected": "403 LICENSE_EXPIRED",
+      "actual": 403
+    },
+    {
+      "id": "LIC-004",
+      "name": "Revoked evaluation license",
+      "status": "PASSED",
+      "expected": "403 LICENSE_REVOKED",
+      "actual": 403
+    },
+    {
+      "id": "LIC-005",
+      "name": "Wrong product identifier",
+      "status": "PASSED",
+      "expected": "403 PRODUCT_MISMATCH",
+      "actual": 403
+    },
+    {
+      "id": "LIC-006",
+      "name": "Suspended evaluation license",
+      "status": "PASSED",
+      "expected": "403 LICENSE_SUSPENDED",
+      "actual": 403
+    }
+  ]
+}

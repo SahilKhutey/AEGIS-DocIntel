@@ -1,0 +1,47 @@
+# AEGIS-DocIntel Evaluation Quota & Rate-Limit Policy (PROT-04 WP-04.06)
+# Enforced atomically on the server-side Evaluation Gateway to prevent exhaustion and scraping.
+
+version: "1.0"
+policy_id: "aegis-evaluation-quotas-v1"
+last_updated: "2026-11-13"
+
+quotas:
+  documents:
+    max_count: 5
+    description: "Maximum concurrent active documents in the evaluation workspace"
+    remediation_on_exceeded: "Run reset_demo or delete existing documents"
+    http_status_on_breach: 429
+
+  file_size:
+    max_bytes: 10485760 # 10 MB
+    description: "Maximum individual document upload payload"
+    http_status_on_breach: 413
+
+  storage:
+    max_bytes: 104857600 # 100 MB
+    description: "Cumulative storage footprint for evaluation documents"
+    http_status_on_breach: 429
+
+  queries:
+    max_per_day: 20
+    window_seconds: 86400
+    description: "Maximum Ask AEGIS natural language queries per 24-hour sliding window"
+    atomic_reservation: true
+    http_status_on_breach: 429
+
+  comparisons:
+    max_per_day: 5
+    window_seconds: 86400
+    description: "Maximum cross-document comparative analysis runs per 24-hour sliding window"
+    atomic_reservation: true
+    http_status_on_breach: 429
+
+  rate_limits:
+    requests_per_minute: 60
+    description: "Gateway ingress rate limit per evaluation license"
+    http_status_on_breach: 429
+
+  device_limits:
+    max_active_devices: 1
+    description: "Maximum concurrent activated device per evaluation license"
+    http_status_on_breach: 409

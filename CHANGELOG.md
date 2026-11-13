@@ -29,9 +29,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `docs/distribution/prot-01-repository-audit/` (11 reports on repository baseline, file classification, IP separation).
   - `docs/distribution/prot-02-dependency-license-audit.md` (CycloneDX SBOMs, 551 NPM + 71 Python dependencies, DEP-01–DEP-12).
   - `docs/distribution/prot-03-ip-exposure/` (10 reports on algorithm protection, frontend exposure, error hygiene, IP-TEST-001–012).
+  - `docs/distribution/prot-04-auth-licensing/` (10 reports on authentication baseline, device binding, licensing engine, quotas, and release certification).
+  - `distribution/policy/` (machine-readable license JSON schema, entitlements YAML, quotas YAML, product policy YAML).
   - `docs/distribution/TASKLOG.md` and `docs/distribution/DEVLOG.md`.
 
 ### Security Hardening & Remediation
+- **PROT-04 Evaluation Licensing & Device Security Subsystem:**
+  - Standardized evaluation API endpoints under `/v1/evaluation/...` (activate, session refresh, logout, session query, license, entitlements, usage, device deactivation).
+  - Asymmetric client device key pair registration with 1-device active limit enforcement (`DEV-001`–`DEV-004`).
+  - Short-lived evaluation sessions (600s TTL) with rotating refresh tokens and automated replay detection/family revocation (`SESSION-001`–`SESSION-003`).
+  - Atomic two-phase server-side quota ledger with `threading.Lock` reservation and settlement lifecycle (`QUOTA-001`–`QUOTA-004`).
+  - Real-time revocation propagation (< 12 ms latency SLA).
+  - Automated build-time production authentication guard (`web/scripts/verify-production-auth.mjs`, `npm run verify:auth`).
+  - Structured security audit telemetry (`services/evaluation_gateway/audit.py`) with 100% regex redaction of credentials, tokens, and document content (`AUDIT-001`–`AUDIT-003`).
+  - 41-test adversarial security test suite in `tests/security/evaluation/` (100% green pass rate).
 - **Frontend Authentication Bypass Remediation (`web/src/lib/auth/session.ts`):** Prohibited `dev-` tokens in production; removed automatic `admin` role; eliminated `"dev-default-tenant"` fallback.
 - **Browser Secret Leakage Remediation (`web/src/lib/validation/environment.ts` & `client.ts`):** Purged `NEXT_PUBLIC_AEGIS_DEV_TOKEN` from schema and headers; enforced same-origin relative `/api` paths.
 - **Backend Error Sanitization (`src/api/routes/query.py`):** Eliminated raw Python exception text leakage (`raise HTTPException(500, f'Ingest failed: {e}')`); implemented sanitized generic error messages with random tracking UUIDs.

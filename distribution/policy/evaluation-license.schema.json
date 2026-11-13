@@ -1,0 +1,137 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aegis-docintel.io/schemas/evaluation-license.v1.json",
+  "title": "AEGIS-DocIntel Evaluation License Schema",
+  "description": "Cryptographically verifiable claims schema for AEGIS Protected Demo Edition",
+  "type": "object",
+  "required": ["payload", "signature", "algorithm", "kid"],
+  "properties": {
+    "algorithm": {
+      "type": "string",
+      "enum": ["Ed25519"]
+    },
+    "kid": {
+      "type": "string",
+      "description": "Identifier of the public signing key"
+    },
+    "signature": {
+      "type": "string",
+      "description": "Base64-encoded Ed25519 signature of canonical JSON payload"
+    },
+    "payload": {
+      "type": "object",
+      "required": [
+        "license_id",
+        "product",
+        "tier",
+        "version",
+        "policy_version",
+        "iss",
+        "aud",
+        "subject",
+        "status",
+        "max_devices",
+        "max_workspaces",
+        "issued_at",
+        "expires_at",
+        "entitlements",
+        "quotas"
+      ],
+      "properties": {
+        "license_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "product": {
+          "type": "string",
+          "enum": ["AEGIS_PROTECTED_EVALUATION", "AEGIS-DocIntel"]
+        },
+        "tier": {
+          "type": "string",
+          "enum": ["evaluation", "evaluation_trial"]
+        },
+        "version": {
+          "type": "string"
+        },
+        "policy_version": {
+          "type": "string"
+        },
+        "iss": {
+          "type": "string",
+          "format": "uri"
+        },
+        "aud": {
+          "type": "string"
+        },
+        "subject": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string",
+          "enum": ["ACTIVE", "SUSPENDED", "EXPIRED", "REVOKED"]
+        },
+        "max_devices": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 5
+        },
+        "max_workspaces": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 1
+        },
+        "issued_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "not_before": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "expires_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "hardware_fingerprint": {
+          "type": "string"
+        },
+        "entitlements": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "quotas": {
+          "type": "object",
+          "required": [
+            "max_documents",
+            "max_queries_per_day",
+            "max_comparisons_per_day"
+          ],
+          "properties": {
+            "max_documents": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "max_queries_per_day": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "max_comparisons_per_day": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "max_file_size_mb": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "max_storage_mb": {
+              "type": "integer",
+              "minimum": 1
+            }
+          }
+        }
+      }
+    }
+  }
+}

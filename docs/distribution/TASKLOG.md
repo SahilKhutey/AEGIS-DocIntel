@@ -97,3 +97,25 @@
 - **Release Verification:**
   - `powershell -ExecutionPolicy Bypass -File distribution\demo-edition\launcher\verify-package.ps1`
   - All 37 files verified authentic, SHA-256 match, Ed25519 signature valid.
+
+---
+
+### TASK-PROT-04.1 through 04.9: Authentication, Licensing & Entitlement Security (PROT-04)
+- **Date:** 2026-11-13
+- **Scope:** Complete implementation and verification of PROT-04 across WP-04.01 through WP-04.09:
+  1. WP-04.01: Authentication baseline, RS256 token enforcement, and threat model.
+  2. WP-04.02: Production authentication hardening with automated build guard `web/scripts/verify-production-auth.mjs`.
+  3. WP-04.03: Evaluation activation, asymmetric device key registration, and single-device quota enforcement.
+  4. WP-04.04: Ed25519 cryptographic license authority, claims schema, key rotation, and tamper resistance.
+  5. WP-04.05: Canonical capability vocabulary, server-side entitlement dependency, and privilege escalation immunity.
+  6. WP-04.06: Atomic server-side quota ledger with reservation/settlement lifecycle and concurrency race-condition protection.
+  7. WP-04.07: Short-lived access sessions, rotating refresh tokens, replay detection, and sub-second revocation propagation.
+  8. WP-04.08: Dedicated security audit telemetry service with 100% credential and token redaction.
+  9. WP-04.09: Comprehensive adversarial verification suite (41 tests) and release certification.
+- **Commands Executed:**
+  - `node web/scripts/verify-production-auth.mjs` -> Exit code 0 (Clean).
+  - `python -m pytest tests/security/evaluation -v` -> 41 / 41 PASSED (100%).
+  - `python -m pytest tests/security/evaluation tests/distribution_security demo/tests -v` -> 69 / 69 PASSED (100%).
+  - `python distribution/audit/generate_evidence.py` -> 6 evidence JSON files generated.
+  - `powershell -ExecutionPolicy Bypass -File distribution\demo-edition\launcher\verify-package.ps1` -> 37 files verified, signature valid.
+- **Result:** **RELEASE GO**. Status moved from HOLD to PASSED. All 15 release criteria and 4 adversarial attack vectors satisfied with zero findings.

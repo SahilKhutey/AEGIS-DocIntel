@@ -82,3 +82,17 @@ Built and verified the attack test suite in `tests/distribution_security/`:
 ### Phase 7: Release Packaging & Verification
 - **Package Archive:** Built [AEGIS-DocIntel-Demo-Edition.zip](file:///C:/Users/ASUS/.gemini/antigravity/worktrees/Aegis-DocIntel/product_hunt_launch_packaging/distribution/release/AEGIS-DocIntel-Demo-Edition.zip) containing 37 verified files.
 - **Integrity:** Validated with `verify-package.ps1` (exit code 0) and cataloged in `SHA256SUMS`.
+
+---
+
+### Phase 8: PROT-04 — Authentication, Licensing & Entitlement Security
+Completed full implementation and adversarial security certification for work package PROT-04:
+- **Client Build Guard (`web/scripts/verify-production-auth.mjs`):** CI/build-time guard checking frontend code for forbidden development tokens (`NEXT_PUBLIC_AEGIS_DEV_TOKEN`), default bypasses, and auto-admin escalation. Added `verify:auth` script.
+- **Device Cryptographic Binding & Deactivation (`activation.py`):** Extended evaluation activation to register client asymmetric public keys, enforcing a strict 1-device active limit (`DEV-002`) and enabling seamless device deactivation and replacement (`DEV-004`).
+- **Cryptographic License Engine Hardening (`license.py`):** Enforced canonical claims schema (`product: "AEGIS_PROTECTED_EVALUATION"`, `iss`, `aud`, `kid: "key-ed25519-v1"`), rejecting foreign products (`LIC-005`), suspended licenses (`LIC-006`), expired licenses (`LIC-003`), and forged signatures (`LIC-002`).
+- **Atomic Server-Side Quotas (`quotas.py`):** Implemented thread-safe two-phase quota reservation and settlement protocol with `threading.Lock`. Validated zero quota race leakage under 20-thread concurrency (`QUOTA-003`).
+- **Session Lifecycle & Replay Invalidation (`activation.py`):** Short-lived access tokens (600s TTL) with rotating refresh tokens. Replayed refresh tokens automatically trigger family-wide revocation (`SESSION-001`).
+- **Sanitized Security Audit Telemetry (`audit.py`):** Structured append-only JSONL security event recording with 100% regex redaction for raw tokens, keys, activation codes, and document contents (`AUDIT-003`).
+- **Adversarial Test Suite (`tests/security/evaluation/`):** Implemented and verified 41 automated tests covering all PROT-04 test IDs (`AUTH-001`-`008`, `LIC-001`-`006`, `DEV-001`-`004`, `ENT-001`-`005`, `QUOTA-001`-`004`, `TENANT-001`-`002`, `SESSION-001`-`003`, `AUDIT-001`-`003`, `DIST-001`-`002`, plus 4 Adversarial Scenarios A-D).
+- **Test Pass Rate:** **41 / 41 PASSED (100%)** in `tests/security/evaluation/`, **69 / 69 PASSED (100%)** across all security suites.
+- **Status Gate:** Moved PROT-04 from **HOLD** to **RELEASE GO**. Delivered 10 documentation dossiers in `docs/distribution/prot-04-auth-licensing/` and 4 machine-readable policy schemas in `distribution/policy/`.
