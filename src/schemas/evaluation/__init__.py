@@ -2,3 +2,7 @@
 from .entitlement_catalogue import *
 from .entitlement_policy import *
 from .authorization import *
+from .quota import *
+from .usage_reservation import *
+from .usage_event import *
+from .usage_summary import *

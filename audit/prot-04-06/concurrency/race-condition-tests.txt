@@ -1,0 +1,21 @@
+============================= test session starts =============================
+platform win32 -- Python 3.12.10, pytest-9.1.1, pluggy-1.6.0 -- C:\Users\ASUS\AppData\Local\Programs\Python\Python312\python.exe
+cachedir: .pytest_cache
+hypothesis profile 'default'
+rootdir: C:\Users\ASUS\.gemini\antigravity\worktrees\Aegis-DocIntel\product_hunt_launch_packaging
+configfile: pyproject.toml
+plugins: anyio-4.12.1, hypothesis-6.156.6, langsmith-0.14.4, asyncio-1.4.0, cov-7.1.0
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collecting ... collected 60 items / 52 deselected / 8 selected
+
+tests/security/evaluation/test_quota_enforcement_protocol.py::TestConcurrencyAndRaceConditions::test_conc_001_competing_threads_final_unit_exactly_one_succeeds PASSED [ 12%]
+tests/security/evaluation/test_quota_enforcement_protocol.py::TestConcurrencyAndRaceConditions::test_conc_002_50_parallel_requests_never_exceed_limit PASSED [ 25%]
+tests/security/evaluation/test_quota_enforcement_protocol.py::TestConcurrencyAndRaceConditions::test_conc_003_concurrent_multi_quota_reservation_no_partial_leak PASSED [ 37%]
+tests/security/evaluation/test_quota_enforcement_protocol.py::TestConcurrencyAndRaceConditions::test_conc_004_simultaneous_settlement_succeeds_once PASSED [ 50%]
+tests/security/evaluation/test_quota_enforcement_protocol.py::TestConcurrencyAndRaceConditions::test_conc_005_reservation_and_cancellation_race_consistent PASSED [ 62%]
+tests/security/evaluation/test_quota_enforcement_protocol.py::TestConcurrencyAndRaceConditions::test_conc_006_counter_repository_atomic_accuracy PASSED [ 75%]
+tests/security/evaluation/test_quota_enforcement_protocol.py::TestConcurrencyAndRaceConditions::test_conc_007_rollback_maintains_ledger_consistency PASSED [ 87%]
+tests/security/evaluation/test_quota_enforcement_protocol.py::TestConcurrencyAndRaceConditions::test_conc_008_heartbeat_and_expiry_race_no_double_release PASSED [100%]
+
+====================== 8 passed, 52 deselected in 1.46s =======================
+

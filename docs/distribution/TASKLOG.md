@@ -35,6 +35,7 @@
 | **TASK-WP-04.03** | PROT-04.03 | Device challenge protocol & binding | `activation.py`, `app.py`, 30 DEV tests | 0 (147/147 tests passed) | **COMPLETED** |
 | **TASK-WP-04.04** | PROT-04.04 | License issuance & JWS Ed25519 validation | `signing_key_registry.py`, `license_repository.py`, `license.py`, 40 LIC tests | 0 (187/187 tests passed) | **COMPLETED** |
 | **TASK-WP-04.05** | PROT-04.05 | Entitlement enforcement & feature authorization | `src/services/evaluation/`, `app.py`, 43 ENT/RBAC/TENANT tests | 0 (230/230 tests passed) | **COMPLETED** |
+| **TASK-WP-04.06** | PROT-04.06 | Quotas, usage accounting & resource limits | `src/services/evaluation/`, `app.py`, 60 QUOTA/RES/CONC tests | 0 (290/290 tests passed) | **COMPLETED** |
 | **TASK-TEST-01**   | Security Suite | Distribution security attack test suite | `pytest tests/distribution_security -v` | 0 (20/20 SEC-DEMO tests passed) | **COMPLETED** |
 | **TASK-TEST-02**   | Full Regression | Combined demo & security verification | `pytest tests/distribution_security demo/tests` | 0 (28/28 tests passed 100%) | **COMPLETED** |
 
@@ -272,3 +273,34 @@
   - `audit/prot-04-05/` (baseline, inventory, authorization, integration, reports)
   - `docs/distribution/prot-04-auth-licensing/05_ENTITLEMENT_MATRIX_AND_ENFORCEMENT.md` (Updated overview)
 - **Result:** **PASSED / PROCEED**. Work package WP-04.05 formally signed off from HOLD to PASSED. Authorized to proceed to WP-04.06 (Quotas, Usage Accounting & Resource Limits).
+
+---
+
+### TASK-WP-04.06: Quotas, Usage Accounting & Resource Limits Certification
+- **Date:** 2026-11-14
+- **Scope:** Complete implementation and verification of WP-04.06:
+  1. Defined canonical quota dimensions (12 dimensions), units (10 units), and periods (7 periods) in `src/schemas/evaluation/quota.py` with strict schema validation.
+  2. Implemented versioned quota policy documents (`evaluation-basic` v1.0, `evaluation-pro` v1.0) and repository in `src/repositories/evaluation/quota_policy_repository.py`.
+  3. Implemented atomic two-phase capacity reservation engine in `src/services/evaluation/quota_reservation_service.py` enforcing $\text{Available} = \text{Limit} - \text{Consumed} - \text{Reserved}$ with all-or-nothing multi-dimensional atomicity.
+  4. Implemented durable operational counters with conditional atomic updates in `src/repositories/evaluation/quota_counter_repository.py`.
+  5. Implemented authoritative append-only usage ledger in `src/repositories/evaluation/usage_event_repository.py` recording integer measurements.
+  6. Implemented in-flight reservation management with lease TTL in `src/repositories/evaluation/usage_reservation_repository.py`.
+  7. Implemented idempotent usage settlement, unconsumed capacity refunds, and partial work accounting in `src/services/evaluation/quota_settlement_service.py`.
+  8. Implemented server-side workload metering for uploads, OCR pages, and LLM provider tokens in `src/services/evaluation/usage_metering_service.py`.
+  9. Implemented sliding-window rate limiting (60 req/min) returning `HTTP 429 Too Many Requests` with dynamic `Retry-After` header in `src/services/evaluation/rate_limit_service.py`.
+  10. Implemented forensic accounting reconciliation, counter drift detection, and stale reservation auto-recovery in `src/services/evaluation/quota_reconciliation_service.py`.
+  11. Extended evaluation gateway application in `services/evaluation_gateway/app.py` & `quotas.py` with evaluator usage reporting (`GET /v1/evaluation/usage`, `/history`, `/limits`, `/operations/{id}`) and admin quota management (`GET/POST /v1/admin/evaluation/quotas/policies`, `/quota-adjustments`, `/usage/reconciliation`).
+  12. Implemented 60 automated security scenarios in `tests/security/evaluation/test_quota_enforcement_protocol.py` across 6 functional suites.
+  13. Generated complete empirical audit evidence artifacts in `audit/prot-04-06/` via `scripts/generate_audit_prot_04_06.py`.
+  14. Authored 14 comprehensive engineering dossiers in `docs/distribution/prot-04-auth-licensing/wp-04-06-usage-quotas/`.
+  15. Updated master quota architecture document in `docs/distribution/prot-04-auth-licensing/06_QUOTA_AND_USAGE_ENFORCEMENT.md`.
+- **Commands Executed:**
+  - `python -m pytest tests/security/evaluation/test_quota_enforcement_protocol.py -v` -> 60 / 60 PASSED (5.12s).
+  - `python -m pytest tests/security/evaluation/ tests/test_production_auth.py tests/test_auth_guard.py tests/distribution_security/ demo/tests/ -q` -> 290 / 290 PASSED in 27.23s (100% green).
+  - `npm --prefix web run verify:auth` -> Exit code 0 (Clean, 0 violations).
+  - `python scripts/generate_audit_prot_04_06.py` -> All 14 audit evidence artifacts generated.
+- **Deliverables:**
+  - `docs/distribution/prot-04-auth-licensing/wp-04-06-usage-quotas/01_QUOTA_ARCHITECTURE.md` through `14_WP_04_06_SIGNOFF.md`
+  - `audit/prot-04-06/` (baseline, inventory, quota, concurrency, metering, reconciliation, reports)
+  - `docs/distribution/prot-04-auth-licensing/06_QUOTA_AND_USAGE_ENFORCEMENT.md` (Updated overview)
+- **Result:** **PASSED / PROCEED**. Work package WP-04.06 formally signed off from HOLD to PASSED. Authorized to proceed to WP-04.07 (Session Lifecycle, Refresh Rotation & Revocation).

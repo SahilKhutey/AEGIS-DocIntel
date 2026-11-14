@@ -7,16 +7,37 @@ Tracks and strictly enforces usage limits per evaluation license:
 - Max upload file size: 10 MB
 - Max total storage: 100 MB
 - Atomic reservation and settlement with thread-safety for multi-concurrency (PROT-04 WP-04.06)
+- Integration with durable QuotaCounterRepository and UsageEventRepository ledger
 """
 
 from __future__ import annotations
 
 import threading
 import time
+import uuid
 from collections import defaultdict
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from typing import Any, Dict, List, Optional, Set, Tuple
+
+from src.repositories.evaluation.quota_counter_repository import (
+    QuotaCounterRepository,
+    default_quota_counter_repository,
+)
+from src.repositories.evaluation.usage_event_repository import (
+    UsageEventRepository,
+    default_usage_event_repository,
+)
+from src.repositories.evaluation.usage_reservation_repository import (
+    UsageReservationRepository,
+    default_usage_reservation_repository,
+)
+from src.schemas.evaluation.usage_event import UsageEvent, UsageEventType
+from src.schemas.evaluation.usage_reservation import (
+    ReservationItem,
+    ReservationStatus,
+    UsageReservation,
+)
 
 
 class QuotaExceededError(Exception):
@@ -48,6 +69,9 @@ class QuotaManager:
         max_file_size_bytes: int = 10 * 1024 * 1024,  # 10 MB
         max_storage_bytes: int = 100 * 1024 * 1024,  # 100 MB
         rate_limit_per_minute: int = 60,
+        counter_repo: Optional[QuotaCounterRepository] = None,
+        event_repo: Optional[UsageEventRepository] = None,
+        reservation_repo: Optional[UsageReservationRepository] = None,
     ):
         self.default_max_documents = default_max_documents
         self.default_max_queries_per_day = default_max_queries_per_day
@@ -57,6 +81,9 @@ class QuotaManager:
         self.rate_limit_per_minute = rate_limit_per_minute
         self._usage: Dict[str, LicenseUsage] = defaultdict(LicenseUsage)
         self._lock = threading.Lock()
+        self.counter_repo = counter_repo or default_quota_counter_repository
+        self.event_repo = event_repo or default_usage_event_repository
+        self.reservation_repo = reservation_repo or default_usage_reservation_repository
 
     def _prune_sliding_window(self, timestamps: List[float], window_seconds: float) -> List[float]:
         now = time.time()
@@ -90,7 +117,6 @@ class QuotaManager:
         Atomically reserves quota before executing an expensive operation.
         Prevents race conditions in parallel requests (QUOTA-003).
         """
-        import uuid
         res_id = reservation_id or str(uuid.uuid4())
 
         with self._lock:
@@ -144,9 +170,42 @@ class QuotaManager:
             else:
                 raise ValueError(f"Unknown quota metric: {metric}")
 
+            # Also sync with persistent counter repository
+            now_dt = datetime.now(timezone.utc)
+            counter = self.counter_repo.get_or_create_counter(
+                license_id=license_id,
+                evaluator_id=license_id,
+                tenant_id=license_id,
+                quota_key=metric,
+                period_key="daily",
+                limit_value=limit,
+                period_start=now_dt,
+            )
+            self.counter_repo.atomic_reserve(counter.id, amount)
+
+            # Record in reservation repository
+            res_item = ReservationItem(
+                quota_key=metric,
+                requested_amount=amount,
+                reserved_amount=amount,
+            )
+            usage_res = UsageReservation(
+                id=res_id,
+                idempotency_key=res_id,
+                license_id=license_id,
+                evaluator_id=license_id,
+                tenant_id=license_id,
+                operation_id=res_id,
+                items={metric: res_item},
+                status=ReservationStatus.PENDING,
+                created_at=now_dt,
+                expires_at=datetime.fromtimestamp(now + 300, tz=timezone.utc),
+            )
+            self.reservation_repo.create_reservation(usage_res)
+
         return res_id
 
-    def settle_reservation(self, license_id: str, reservation_id: str) -> None:
+    def settle_reservation(self, license_id: str, reservation_id: str, actual_amount: Optional[int] = None) -> None:
         """Settles an in-flight reservation into permanent usage accounting."""
         with self._lock:
             usage = self._usage[license_id]
@@ -154,18 +213,73 @@ class QuotaManager:
                 return
             metric, amount, _ = usage.pending_reservations.pop(reservation_id)
             now = time.time()
+            settled_amt = actual_amount if actual_amount is not None else amount
+
             if metric == "queries":
-                for _ in range(amount):
+                for _ in range(settled_amt):
                     usage.query_timestamps.append(now)
             elif metric == "comparisons":
-                for _ in range(amount):
+                for _ in range(settled_amt):
                     usage.comparison_timestamps.append(now)
+
+            now_dt = datetime.now(timezone.utc)
+            # Commit to counter repo
+            counters = self.counter_repo.list_counters(license_id)
+            matching = [c for c in counters if c.quota_key == metric]
+            if matching:
+                self.counter_repo.atomic_commit(
+                    counter_id=matching[0].id,
+                    reserved_to_release=amount,
+                    actual_consumed=settled_amt,
+                )
+
+            # Record in ledger
+            ev = UsageEvent(
+                event_id=str(uuid.uuid4()),
+                license_id=license_id,
+                evaluator_id=license_id,
+                tenant_id=license_id,
+                operation_id=reservation_id,
+                reservation_id=reservation_id,
+                event_type=UsageEventType.CONSUMPTION,
+                quota_key=metric,
+                amount=settled_amt,
+                unit="units",
+                source="gateway_settlement",
+                idempotency_key=f"settle:{reservation_id}:{metric}",
+                occurred_at=now_dt,
+                recorded_at=now_dt,
+            )
+            self.event_repo.record_event(ev)
+
+            # Update reservation repository
+            try:
+                self.reservation_repo.update_status(
+                    reservation_id=reservation_id,
+                    new_status=ReservationStatus.COMMITTED,
+                    settled_items={metric: settled_amt},
+                )
+            except Exception:
+                pass
 
     def rollback_reservation(self, license_id: str, reservation_id: str) -> None:
         """Rolls back an in-flight reservation if an operation fails."""
         with self._lock:
             usage = self._usage[license_id]
-            usage.pending_reservations.pop(reservation_id, None)
+            if reservation_id in usage.pending_reservations:
+                metric, amount, _ = usage.pending_reservations.pop(reservation_id)
+                counters = self.counter_repo.list_counters(license_id)
+                matching = [c for c in counters if c.quota_key == metric]
+                if matching:
+                    self.counter_repo.atomic_release(matching[0].id, amount)
+
+                try:
+                    self.reservation_repo.update_status(
+                        reservation_id=reservation_id,
+                        new_status=ReservationStatus.RELEASED,
+                    )
+                except Exception:
+                    pass
 
     def record_document_upload(
         self,
@@ -207,6 +321,69 @@ class QuotaManager:
             usage.uploaded_doc_ids.add(doc_id)
             usage.uploaded_bytes += file_size_bytes
 
+            # Synchronize with counter repository & ledger
+            now_dt = datetime.now(timezone.utc)
+            doc_counter = self.counter_repo.get_or_create_counter(
+                license_id=license_id,
+                evaluator_id=license_id,
+                tenant_id=license_id,
+                quota_key="documents",
+                period_key="lifetime",
+                limit_value=limit,
+                period_start=now_dt,
+            )
+            doc_counter.consumed = len(usage.uploaded_doc_ids)
+            doc_counter.revision += 1
+            doc_counter.updated_at = now_dt
+
+            storage_counter = self.counter_repo.get_or_create_counter(
+                license_id=license_id,
+                evaluator_id=license_id,
+                tenant_id=license_id,
+                quota_key="storage",
+                period_key="lifetime",
+                limit_value=self.max_storage_bytes,
+                period_start=now_dt,
+            )
+            storage_counter.consumed = usage.uploaded_bytes
+            storage_counter.revision += 1
+            storage_counter.updated_at = now_dt
+
+            # Record ledger events
+            ev_doc = UsageEvent(
+                event_id=str(uuid.uuid4()),
+                license_id=license_id,
+                evaluator_id=license_id,
+                tenant_id=license_id,
+                operation_id=doc_id,
+                event_type=UsageEventType.CONSUMPTION,
+                quota_key="documents",
+                amount=1,
+                unit="documents",
+                source="gateway_upload",
+                idempotency_key=f"upload:doc:{doc_id}",
+                occurred_at=now_dt,
+                recorded_at=now_dt,
+            )
+            self.event_repo.record_event(ev_doc)
+
+            ev_storage = UsageEvent(
+                event_id=str(uuid.uuid4()),
+                license_id=license_id,
+                evaluator_id=license_id,
+                tenant_id=license_id,
+                operation_id=doc_id,
+                event_type=UsageEventType.CONSUMPTION,
+                quota_key="storage",
+                amount=file_size_bytes,
+                unit="bytes",
+                source="gateway_upload",
+                idempotency_key=f"upload:storage:{doc_id}",
+                occurred_at=now_dt,
+                recorded_at=now_dt,
+            )
+            self.event_repo.record_event(ev_storage)
+
     def record_query(self, license_id: str, max_limit: Optional[int] = None) -> int:
         """Atomically checks and records an Ask AEGIS query against daily quota."""
         limit = max_limit if max_limit is not None else self.default_max_queries_per_day
@@ -223,6 +400,39 @@ class QuotaManager:
                 )
             now = time.time()
             usage.query_timestamps.append(now)
+
+            # Sync counter repository & ledger
+            now_dt = datetime.now(timezone.utc)
+            q_counter = self.counter_repo.get_or_create_counter(
+                license_id=license_id,
+                evaluator_id=license_id,
+                tenant_id=license_id,
+                quota_key="queries",
+                period_key="daily",
+                limit_value=limit,
+                period_start=now_dt,
+            )
+            q_counter.consumed = len(usage.query_timestamps)
+            q_counter.revision += 1
+            q_counter.updated_at = now_dt
+
+            ev_query = UsageEvent(
+                event_id=str(uuid.uuid4()),
+                license_id=license_id,
+                evaluator_id=license_id,
+                tenant_id=license_id,
+                operation_id=str(uuid.uuid4()),
+                event_type=UsageEventType.CONSUMPTION,
+                quota_key="queries",
+                amount=1,
+                unit="queries",
+                source="gateway_query",
+                idempotency_key=f"query:{license_id}:{len(usage.query_timestamps)}:{now}",
+                occurred_at=now_dt,
+                recorded_at=now_dt,
+            )
+            self.event_repo.record_event(ev_query)
+
             return len(usage.query_timestamps)
 
     def record_comparison(self, license_id: str, max_limit: Optional[int] = None) -> int:
@@ -241,6 +451,38 @@ class QuotaManager:
                 )
             now = time.time()
             usage.comparison_timestamps.append(now)
+
+            now_dt = datetime.now(timezone.utc)
+            c_counter = self.counter_repo.get_or_create_counter(
+                license_id=license_id,
+                evaluator_id=license_id,
+                tenant_id=license_id,
+                quota_key="comparisons",
+                period_key="daily",
+                limit_value=limit,
+                period_start=now_dt,
+            )
+            c_counter.consumed = len(usage.comparison_timestamps)
+            c_counter.revision += 1
+            c_counter.updated_at = now_dt
+
+            ev_comp = UsageEvent(
+                event_id=str(uuid.uuid4()),
+                license_id=license_id,
+                evaluator_id=license_id,
+                tenant_id=license_id,
+                operation_id=str(uuid.uuid4()),
+                event_type=UsageEventType.CONSUMPTION,
+                quota_key="comparisons",
+                amount=1,
+                unit="comparisons",
+                source="gateway_compare",
+                idempotency_key=f"compare:{license_id}:{len(usage.comparison_timestamps)}:{now}",
+                occurred_at=now_dt,
+                recorded_at=now_dt,
+            )
+            self.event_repo.record_event(ev_comp)
+
             return len(usage.comparison_timestamps)
 
     def get_quota_status(self, license_id: str, quotas: Optional[Dict[str, int]] = None) -> Dict[str, Any]:
@@ -283,6 +525,9 @@ class QuotaManager:
         with self._lock:
             if license_id in self._usage:
                 del self._usage[license_id]
+            counters = self.counter_repo.list_counters(license_id)
+            for c in counters:
+                self.counter_repo.reset_counter(license_id, c.quota_key, c.period_key)
 
 
 # Global manager instance

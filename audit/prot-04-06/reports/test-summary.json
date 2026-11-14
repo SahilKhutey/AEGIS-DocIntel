@@ -1,0 +1,42 @@
+{
+  "work_package": "PROT-04.06",
+  "title": "Quotas, Usage Accounting & Resource Limits",
+  "suites": {
+    "quota_enforcement": {
+      "tests": 14,
+      "passed": 14,
+      "failed": 0
+    },
+    "reservation_and_settlement": {
+      "tests": 15,
+      "passed": 15,
+      "failed": 0
+    },
+    "concurrency_and_races": {
+      "tests": 8,
+      "passed": 8,
+      "failed": 0
+    },
+    "usage_metering": {
+      "tests": 10,
+      "passed": 10,
+      "failed": 0
+    },
+    "rate_limiting_abuse": {
+      "tests": 6,
+      "passed": 6,
+      "failed": 0
+    },
+    "reconciliation_admin": {
+      "tests": 7,
+      "passed": 7,
+      "failed": 0
+    }
+  },
+  "total_dedicated_tests": 60,
+  "total_regression_tests": 290,
+  "pass_rate_percent": 100.0,
+  "frontend_violations": 0,
+  "mean_reservation_latency_ms": 0.32,
+  "evaluated_at": "2026-11-14T05:34:54.322823+00:00"
+}

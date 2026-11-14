@@ -258,3 +258,38 @@ Implemented comprehensive server-authoritative entitlement evaluation engine, ve
   - Complete evidence files in `audit/prot-04-05/` (baseline, inventory, authorization, integration, reports)
   - Updated master entitlement architecture doc in `docs/distribution/prot-04-auth-licensing/05_ENTITLEMENT_MATRIX_AND_ENFORCEMENT.md`
   - Formal sign-off transitioning WP-04.05 from HOLD to PASSED / PROCEED.
+
+---
+
+### Phase 14: WP-04.06 — Quotas, Usage Accounting & Resource Limits Certification
+Implemented comprehensive server-authoritative two-phase quota reservation engine, durable usage ledger, high-concurrency race protection, and accounting reconciliation, transitioning WP-04.06 from **HOLD** to **PASSED / PROCEED**:
+- **Atomic Two-Phase Capacity Reservation (`src/services/evaluation/quota_reservation_service.py`):**
+  - Authoritatively enforces $\text{Available} = \text{Limit} - \text{Consumed} - \text{Reserved}$ before private-engine execution begins.
+  - Multi-dimensional atomicity across 12 dimensions (`storage`, `documents`, `queries`, `comparisons`, `llm_tokens`, `concurrent_jobs`, etc.).
+  - Deterministic dimension key sorting prevents deadlocks; all-or-nothing rollback on partial capacity exhaustion (`RES-005`, `CONC-003`).
+- **Durable Usage Accounting Subsystem (`src/repositories/evaluation/`):**
+  - `QuotaCounterRepository`: Fast operational counters updated using conditional atomic updates (`WHERE consumed + reserved + amt <= limit`).
+  - `UsageReservationRepository`: Tracks in-flight leases with bounded TTL, heartbeat extension, and terminal state immutability.
+  - `UsageEventRepository`: Authoritative append-only immutable usage ledger recording `CONSUMPTION`, `RELEASE`, and `ADJUSTMENT` events with integer measurement precision.
+  - `UsageAdjustmentRepository`: Administrative audit records for quota adjustments with before/after snapshots and justifications.
+- **Idempotent Settlement & Unused Capacity Release (`src/services/evaluation/quota_settlement_service.py`):**
+  - Commits actual measured usage, releases unconsumed reservation differences back to available pool (`RES-008`).
+  - Strict idempotency protection: repeated settlements with identical keys return existing records without double-charging (`RES-009`).
+- **Workload Metering Engine (`src/services/evaluation/usage_metering_service.py`):**
+  - Streaming file upload byte counter rejecting payloads $> 10\text{ MB}$ before disk persistence (`METER-002`).
+  - Provider response token adapters for Gemini, OpenAI, and Anthropic with conservative heuristic fallback (`is_estimated=True`).
+- **Sliding-Window Rate Limiting (`src/services/evaluation/rate_limit_service.py`):**
+  - 60 requests/minute per license sliding-window rate limiter returning `HTTP 429 Too Many Requests` with dynamic `Retry-After` header (`RATE-001`, `RATE-002`).
+  - Immunized against header spoofing (`X-Forwarded-For`).
+- **Forensic Accounting Reconciliation (`src/services/evaluation/quota_reconciliation_service.py`):**
+  - Sweeps for counter drift against authoritative ledger sum ($\sum \text{CONSUMPTION} - \sum |\text{RELEASE}| + \sum \text{ADJUSTMENT}$).
+  - Automatically recovers abandoned reservations from crashed workers after TTL expiration (`RES-011`, `RECON-005`).
+- **Comprehensive Automated Verification Suite (`tests/security/evaluation/test_quota_enforcement_protocol.py`):**
+  - Implemented 60 test scenarios covering `QUOTA-001` - `014`, `RES-001` - `015`, `CONC-001` - `008`, `METER-001` - `010`, `RATE-001` - `006`, and `RECON-001` - `007`: **60 / 60 PASSED (5.12s)**.
+  - Total Passing: **290 / 290 tests (100% green)** across full system test suite in 27.23s.
+  - Frontend Guard: `npm --prefix web run verify:auth` -> Clean (0 violations).
+- **Deliverables:**
+  - 14 comprehensive engineering dossiers in `docs/distribution/prot-04-auth-licensing/wp-04-06-usage-quotas/`
+  - Complete evidence files in `audit/prot-04-06/` (baseline, inventory, quota, concurrency, metering, reconciliation, reports)
+  - Updated master quota doc in `docs/distribution/prot-04-auth-licensing/06_QUOTA_AND_USAGE_ENFORCEMENT.md`
+  - Formal sign-off transitioning WP-04.06 from HOLD to PASSED / PROCEED.

@@ -1,0 +1,6 @@
+operation,endpoint,metering_source,reserved_dimensions,settled_dimensions,refund_policy
+Upload Document,POST /v1/evaluation/documents,Server measured stream bytes,"1 doc, N bytes","1 doc, actual bytes",Full refund on validation error
+Query Document,POST /v1/evaluation/query,Gateway accepted request + LLM metadata,"1 query, est tokens, 1 slot","1 query, actual tokens",Release unused tokens
+Compare Documents,POST /v1/evaluation/compare,Gateway comparison engine,"1 comparison, 1 slot",1 comparison,Release slot on complete
+Parse & OCR,POST /v1/evaluation/jobs,Engine job result metadata,"1 job, est pages","1 job, actual pages",Settle completed work only
+Export Result,POST /v1/evaluation/export,Server generated artifact bytes,1 export,"1 export, output bytes",Full refund if generation fails

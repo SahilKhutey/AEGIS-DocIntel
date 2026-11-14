@@ -1,0 +1,23 @@
+============================= test session starts =============================
+platform win32 -- Python 3.12.10, pytest-9.1.1, pluggy-1.6.0 -- C:\Users\ASUS\AppData\Local\Programs\Python\Python312\python.exe
+cachedir: .pytest_cache
+hypothesis profile 'default'
+rootdir: C:\Users\ASUS\.gemini\antigravity\worktrees\Aegis-DocIntel\product_hunt_launch_packaging
+configfile: pyproject.toml
+plugins: anyio-4.12.1, hypothesis-6.156.6, langsmith-0.14.4, asyncio-1.4.0, cov-7.1.0
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collecting ... collected 60 items / 50 deselected / 10 selected
+
+tests/security/evaluation/test_quota_enforcement_protocol.py::TestUsageMeteringProtocol::test_meter_001_upload_byte_count_measured PASSED [ 10%]
+tests/security/evaluation/test_quota_enforcement_protocol.py::TestUsageMeteringProtocol::test_meter_002_oversized_streaming_upload_rejected PASSED [ 20%]
+tests/security/evaluation/test_quota_enforcement_protocol.py::TestUsageMeteringProtocol::test_meter_003_archive_expansion_limit_enforced PASSED [ 30%]
+tests/security/evaluation/test_quota_enforcement_protocol.py::TestUsageMeteringProtocol::test_meter_004_parsing_page_count_metered PASSED [ 40%]
+tests/security/evaluation/test_quota_enforcement_protocol.py::TestUsageMeteringProtocol::test_meter_005_ocr_page_usage_metered PASSED [ 50%]
+tests/security/evaluation/test_quota_enforcement_protocol.py::TestUsageMeteringProtocol::test_meter_006_llm_input_tokens_captured PASSED [ 60%]
+tests/security/evaluation/test_quota_enforcement_protocol.py::TestUsageMeteringProtocol::test_meter_007_llm_output_tokens_captured PASSED [ 70%]
+tests/security/evaluation/test_quota_enforcement_protocol.py::TestUsageMeteringProtocol::test_meter_008_provider_retry_no_duplicate_accounting PASSED [ 80%]
+tests/security/evaluation/test_quota_enforcement_protocol.py::TestUsageMeteringProtocol::test_meter_009_provider_timeout_conservative_accounting PASSED [ 90%]
+tests/security/evaluation/test_quota_enforcement_protocol.py::TestUsageMeteringProtocol::test_meter_010_export_storage_accounting PASSED [100%]
+
+====================== 10 passed, 50 deselected in 0.39s ======================
+

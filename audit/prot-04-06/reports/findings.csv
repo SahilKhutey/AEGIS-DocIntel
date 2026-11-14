@@ -1,0 +1,7 @@
+finding_id,severity,title,remediation,status,verified_in
+FIND-QUOTA-01,CRITICAL,Concurrent race leaks in parallel query requests,Implemented atomic conditional update (WHERE consumed + reserved + amt <= limit),RESOLVED,"CONC-001, CONC-002"
+FIND-QUOTA-02,HIGH,Partial multi-quota failure leaving orphaned locks,Implemented all-or-nothing reservation with deterministic rollback,RESOLVED,"RES-005, CONC-003"
+FIND-QUOTA-03,HIGH,Worker crash leaving permanently locked reservations,Implemented automated expiration & reconciliation recovery,RESOLVED,"RES-011, RECON-005"
+FIND-QUOTA-04,MEDIUM,Oversized file upload consuming server memory,Enforced streaming upload byte measurement before disk write,RESOLVED,"METER-001, METER-002"
+FIND-QUOTA-05,MEDIUM,Rapid API flooding exhausting backend LLM quota,Implemented sliding-window rate limiter (60 req/min) returning 429,RESOLVED,"RATE-001, RATE-002"
+FIND-QUOTA-06,LOW,Operational counter drift from ledger events,Implemented automated reconciliation scanner with transaction-safe fix,RESOLVED,"RECON-002, RECON-003"

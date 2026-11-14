@@ -60,6 +60,7 @@ class EntitlementContext:
         self.payload = payload
         self.session_info = session_info or {}
         self.license_id: str = payload.get("license_id", "unknown-license")
+        self.tenant_id: str = payload.get("tenant_id") or f"tenant-{self.license_id}"
         self.user_id: str = payload.get("user_id") or payload.get("subject", "evaluator")
         self.tier: str = payload.get("tier", "evaluation")
         self.features: List[str] = payload.get("features", [])

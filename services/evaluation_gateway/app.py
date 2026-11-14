@@ -191,6 +191,20 @@ class RevokeLicenseRequest(BaseModel):
     reason: Optional[str] = "administrative_revocation"
 
 
+class CreateQuotaPolicyRequest(BaseModel):
+    policy_key: str = Field(..., description="Unique policy identifier")
+    version: str = Field(..., description="Policy version string")
+    description: Optional[str] = None
+    quotas: Dict[str, Any] = Field(..., description="Map of quota definitions")
+
+
+class AdminQuotaAdjustmentRequest(BaseModel):
+    quota_key: str = Field(..., description="Target quota dimension")
+    amount: int = Field(..., description="Adjustment units (signed integer)")
+    reason: str = Field(..., description="Audit justification")
+    ticket_ref: Optional[str] = None
+
+
 # ---------------------------------------------------------------------------
 # Tenant / License Isolated Storage (In-Memory Evaluation Store)
 # ---------------------------------------------------------------------------
@@ -515,7 +529,7 @@ ADMIN_SECRET_KEY = os.getenv("AEGIS_ADMIN_SECRET", "aegis-admin-secret-key-eval-
 
 def require_admin_auth(request: Request) -> str:
     """Verifies administrator authorization (rejects LIC-002)."""
-    admin_key = request.headers.get("X-Admin-Key")
+    admin_key = request.headers.get("X-Admin-Key") or request.headers.get("X-Admin-Secret")
     if admin_key and admin_key.strip() == ADMIN_SECRET_KEY:
         return "admin-root"
     auth_header = request.headers.get("Authorization", "")
@@ -1045,10 +1059,226 @@ async def admin_list_entitlement_events(
     return {"events": [e.model_dump() for e in events]}
 
 
+@app.get("/v1/evaluation/usage/summary")
 @app.get("/v1/evaluation/usage")
 async def get_usage(ctx: EntitlementContext = Depends(get_current_entitlement)):
-    """Returns current server-side quota consumption (PROT-04 WP-04.06)."""
-    return quota_manager.get_quota_status(ctx.license_id, ctx.quotas)
+    """Returns current authoritative evaluation usage summary (PROT-04 WP-04.06)."""
+    from src.services.evaluation.usage_aggregation_service import default_usage_aggregation_service
+    summary = default_usage_aggregation_service.get_evaluator_usage_summary(
+        license_id=ctx.license_id,
+        evaluator_id=ctx.user_id,
+        tenant_id=ctx.tenant_id,
+        policy_key="evaluation-basic",
+    )
+    res = summary.model_dump()
+    # Backwards compatibility fields for legacy clients
+    qs = quota_manager.get_quota_status(ctx.license_id, ctx.quotas)
+    for k, v in qs.items():
+        if k not in res:
+            res[k] = v
+    return res
+
+
+@app.get("/v1/evaluation/usage/history")
+async def get_evaluator_usage_history(ctx: EntitlementContext = Depends(get_current_entitlement)):
+    """Returns immutable usage ledger events for the authenticated evaluator (WP-04.06.09)."""
+    from src.repositories.evaluation.usage_event_repository import default_usage_event_repository
+    events = default_usage_event_repository.list_events(ctx.license_id)
+    return {"license_id": ctx.license_id, "events": [e.model_dump() for e in events]}
+
+
+@app.get("/v1/evaluation/usage/limits")
+async def get_evaluator_usage_limits(ctx: EntitlementContext = Depends(get_current_entitlement)):
+    """Returns effective quota limits for the authenticated evaluation tier (WP-04.06.09)."""
+    from src.services.evaluation.quota_policy_service import default_quota_policy_service
+    policy = default_quota_policy_service.get_effective_policy("evaluation-basic")
+    return {"license_id": ctx.license_id, "policy": policy.model_dump()}
+
+
+@app.get("/v1/evaluation/usage/operations/{operation_id}")
+async def get_operation_usage_status(
+    operation_id: str,
+    ctx: EntitlementContext = Depends(get_current_entitlement),
+):
+    """Returns reservation and settlement status for an operation (WP-04.06.09)."""
+    from src.repositories.evaluation.usage_reservation_repository import default_usage_reservation_repository
+    res = default_usage_reservation_repository.get_reservation(operation_id)
+    if not res or res.license_id != ctx.license_id:
+        raise HTTPException(status_code=404, detail="Operation reservation not found")
+    return res.model_dump()
+
+
+# --- Admin Quota & Accounting Endpoints ---
+
+@app.get("/v1/admin/evaluation/quotas/policies")
+async def admin_list_quota_policies(admin_id: str = Depends(require_admin_auth)):
+    """Lists all evaluation quota policies (WP-04.06.08)."""
+    from src.services.evaluation.quota_policy_service import default_quota_policy_service
+    policies = default_quota_policy_service.list_policies()
+    return {"policies": [p.model_dump() for p in policies]}
+
+
+@app.post("/v1/admin/evaluation/quotas/policies")
+async def admin_create_quota_policy(
+    req: CreateQuotaPolicyRequest,
+    admin_id: str = Depends(require_admin_auth),
+):
+    """Creates a new evaluation quota policy version (WP-04.06.08)."""
+    from src.services.evaluation.quota_policy_service import default_quota_policy_service
+    from src.schemas.evaluation.quota import EvaluationQuotaPolicy, QuotaDefinition, QuotaDimension, QuotaPeriod, QuotaUnit
+    try:
+        quota_defs = {}
+        for dim_name, def_dict in req.quotas.items():
+            quota_defs[dim_name] = QuotaDefinition(
+                dimension=QuotaDimension(def_dict.get("dimension", dim_name)),
+                limit=def_dict["limit"],
+                period=QuotaPeriod(def_dict["period"]),
+                unit=QuotaUnit(def_dict["unit"]),
+                rolling_window_seconds=def_dict.get("rolling_window_seconds"),
+            )
+        policy = EvaluationQuotaPolicy(
+            policy_key=req.policy_key,
+            version=req.version,
+            description=req.description,
+            status="DRAFT",
+            quotas=quota_defs,
+        )
+        created = default_quota_policy_service.create_policy(policy)
+        return {"status": "created", "policy": created.model_dump()}
+    except Exception as e:
+        raise HTTPException(status_code=400, detail={"error": "INVALID_POLICY", "message": str(e)})
+
+
+@app.post("/v1/admin/evaluation/quotas/policies/{key}/versions/{version}/activate")
+async def admin_activate_quota_policy(
+    key: str,
+    version: str,
+    admin_id: str = Depends(require_admin_auth),
+):
+    """Activates a quota policy version and retires previous version (WP-04.06.08)."""
+    from src.services.evaluation.quota_policy_service import default_quota_policy_service
+    try:
+        activated = default_quota_policy_service.activate_policy(key, version)
+        return {"status": "activated", "policy": activated.model_dump()}
+    except Exception as e:
+        raise HTTPException(status_code=404, detail={"error": "NOT_FOUND", "message": str(e)})
+
+
+@app.get("/v1/admin/evaluation/licenses/{id}/usage")
+async def admin_get_license_usage(
+    id: str,
+    admin_id: str = Depends(require_admin_auth),
+):
+    """Inspects authoritative usage for an evaluation license (WP-04.06.08)."""
+    from src.services.evaluation.usage_aggregation_service import default_usage_aggregation_service
+    summary = default_usage_aggregation_service.get_evaluator_usage_summary(
+        license_id=id,
+        evaluator_id="admin-lookup",
+        tenant_id="admin-lookup",
+    )
+    return summary.model_dump()
+
+
+@app.post("/v1/admin/evaluation/licenses/{id}/quota-adjustments")
+async def admin_apply_quota_adjustment(
+    id: str,
+    req: AdminQuotaAdjustmentRequest,
+    admin_id: str = Depends(require_admin_auth),
+):
+    """Applies an administrative quota adjustment with auditable ledger entry (WP-04.06.08)."""
+    from src.repositories.evaluation.quota_counter_repository import default_quota_counter_repository
+    from src.repositories.evaluation.usage_adjustment_repository import default_usage_adjustment_repository
+    from src.repositories.evaluation.usage_event_repository import default_usage_event_repository
+    from src.schemas.evaluation.usage_summary import UsageAdjustmentRecord
+    from src.schemas.evaluation.usage_event import UsageEvent, UsageEventType
+    import uuid
+
+    counters = default_quota_counter_repository.list_counters(id)
+    matching = [c for c in counters if c.quota_key == req.quota_key]
+    if not matching:
+        raise HTTPException(status_code=404, detail=f"No counter found for license '{id}' and quota '{req.quota_key}'")
+
+    counter = matching[0]
+    before_val = counter.consumed
+    new_val = default_quota_counter_repository.atomic_adjust(counter.id, req.amount)
+
+    adj_id = str(uuid.uuid4())
+    now = datetime.now(timezone.utc)
+    record = UsageAdjustmentRecord(
+        adjustment_id=adj_id,
+        license_id=id,
+        tenant_id=counter.tenant_id,
+        quota_key=req.quota_key,
+        amount=req.amount,
+        before_value=before_val,
+        after_value=new_val,
+        reason=req.reason,
+        ticket_ref=req.ticket_ref,
+        approved_by=admin_id,
+        timestamp=now,
+    )
+    default_usage_adjustment_repository.record_adjustment(record)
+
+    # Compensating ledger entry
+    ev = UsageEvent(
+        event_id=str(uuid.uuid4()),
+        license_id=id,
+        evaluator_id=counter.evaluator_id,
+        tenant_id=counter.tenant_id,
+        operation_id="admin_adjustment",
+        event_type=UsageEventType.ADJUSTMENT,
+        quota_key=req.quota_key,
+        amount=req.amount,
+        unit="units",
+        source=f"admin:{admin_id}",
+        idempotency_key=f"adj:{adj_id}",
+        occurred_at=now,
+        recorded_at=now,
+        metadata={"reason": req.reason, "ticket": req.ticket_ref},
+    )
+    default_usage_event_repository.record_event(ev)
+
+    return {
+        "status": "ADJUSTMENT_APPLIED",
+        "adjustment_id": adj_id,
+        "license_id": id,
+        "quota_key": req.quota_key,
+        "before": before_val,
+        "after": new_val,
+        "amount": req.amount,
+    }
+
+
+@app.get("/v1/admin/evaluation/usage/reconciliation")
+async def admin_get_reconciliation(
+    license_id: Optional[str] = None,
+    admin_id: str = Depends(require_admin_auth),
+):
+    """Reviews accounting reconciliation findings across licenses (WP-04.06.10)."""
+    from src.services.evaluation.quota_reconciliation_service import default_quota_reconciliation_service
+    if license_id:
+        res = default_quota_reconciliation_service.reconcile_license(license_id)
+        return {"reconciliations": [res]}
+
+    from src.repositories.evaluation.quota_counter_repository import default_quota_counter_repository
+    licenses = list({c.license_id for c in default_quota_counter_repository._counters.values()})
+    results = [default_quota_reconciliation_service.reconcile_license(lic) for lic in licenses]
+    return {"reconciliations": results}
+
+
+@app.post("/v1/admin/evaluation/licenses/{id}/reconciliation/fix")
+async def admin_fix_reconciliation(
+    id: str,
+    quota_key: str,
+    admin_id: str = Depends(require_admin_auth),
+):
+    """Applies transaction-safe reconciliation fix to correct counter drift (WP-04.06.10)."""
+    from src.services.evaluation.quota_reconciliation_service import default_quota_reconciliation_service
+    try:
+        res = default_quota_reconciliation_service.apply_reconciliation_fix(id, quota_key, actor=admin_id)
+        return res
+    except KeyError as e:
+        raise HTTPException(status_code=404, detail=str(e))
 
 
 # ---------------------------------------------------------------------------

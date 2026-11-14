@@ -1,0 +1,45 @@
+AEGIS-DocIntel Repository Baseline & Quota Accounting Security State
+================================================================
+Generated: 2026-11-14T05:34:40.610717+00:00
+Work Package: PROT-04.06 (Quotas, Usage Accounting & Resource Limits)
+Commit: 8dbb156e6a3be9a52c50ef640cee9a7a3b988290
+Branch: product_hunt_launch_packaging
+Python Version: 3.12.10
+Platform: Windows-11-10.0.26300-SP0
+
+Active Working Tree Status:
+M services/evaluation_gateway/app.py
+ M services/evaluation_gateway/entitlements.py
+ M services/evaluation_gateway/quotas.py
+ M src/repositories/evaluation/__init__.py
+ M src/schemas/evaluation/__init__.py
+ M src/services/evaluation/__init__.py
+?? scripts/generate_audit_prot_04_06.py
+?? src/repositories/evaluation/quota_counter_repository.py
+?? src/repositories/evaluation/quota_policy_repository.py
+?? src/repositories/evaluation/usage_adjustment_repository.py
+?? src/repositories/evaluation/usage_event_repository.py
+?? src/repositories/evaluation/usage_reservation_repository.py
+?? src/schemas/evaluation/quota.py
+?? src/schemas/evaluation/usage_event.py
+?? src/schemas/evaluation/usage_reservation.py
+?? src/schemas/evaluation/usage_summary.py
+?? src/services/evaluation/quota_policy_service.py
+?? src/services/evaluation/quota_reconciliation_service.py
+?? src/services/evaluation/quota_reservation_service.py
+?? src/services/evaluation/quota_settlement_service.py
+?? src/services/evaluation/rate_limit_service.py
+?? src/services/evaluation/usage_aggregation_service.py
+?? src/services/evaluation/usage_metering_service.py
+?? tests/security/evaluation/test_quota_enforcement_protocol.py
+
+Security & Quota Architecture Pinned:
+- Four-Factor Authorization Pipeline: ALLOW = Identity & License & Device & Entitlement & Resource & Quota
+- Two-Phase Atomic Quota Reservation: Capacity locked before execution; unconsumed difference released
+- Multi-Dimensional Atomicity: All-or-nothing reservation with automatic rollback on partial exhaustion
+- Authoritative Ledger vs Operational Counters: Append-only immutable usage ledger as source of truth
+- Sub-Millisecond Concurrency Defense: Conditional atomic counter updates preventing race over-granting
+- Operation Metering: Server-side measured bytes, LLM provider token adapters, query/comparison counts
+- Sliding-Window Rate Limiting: 60 req/min per license with HTTP 429 Retry-After protection
+- Accounting Integrity: Periodic reconciliation recovering stale reservations and repairing counter drift
+================================================================
