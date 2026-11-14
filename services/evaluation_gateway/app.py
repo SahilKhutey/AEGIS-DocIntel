@@ -167,7 +167,7 @@ class AdminReissueLicenseRequest(BaseModel):
 
 
 class RefreshRequest(BaseModel):
-    refresh_token: str = Field(..., description="Rotating refresh token")
+    refresh_token: Optional[str] = Field(default=None, description="Rotating refresh token (or provided via __Host-aegis_refresh cookie)")
 
 
 class DeactivateDeviceRequest(BaseModel):
@@ -287,16 +287,84 @@ async def activate(req: ActivationRequest, request: Request):
         )
 
 
+ADMIN_SECRET_KEY = os.getenv("AEGIS_ADMIN_SECRET", "aegis-admin-secret-key-eval-2026")
+
+
+def require_admin_auth(request: Request) -> str:
+    """Verifies administrator authorization (rejects LIC-002)."""
+    admin_key = request.headers.get("X-Admin-Key") or request.headers.get("X-Admin-Secret")
+    if admin_key and admin_key.strip() == ADMIN_SECRET_KEY:
+        return "admin-root"
+    auth_header = request.headers.get("Authorization", "")
+    if auth_header.startswith("Bearer "):
+        token = auth_header[7:].strip()
+        if token == ADMIN_SECRET_KEY:
+            return "admin-root"
+        try:
+            from src.api.auth import decode_jwt_token_unverified
+            claims = decode_jwt_token_unverified(token)
+            roles = claims.get("roles", [claims.get("role")])
+            if "admin" in roles or "license:issue" in roles:
+                return claims.get("sub", "admin")
+        except Exception:
+            pass
+    raise HTTPException(
+        status_code=status.HTTP_403_FORBIDDEN,
+        detail={"error": "ADMIN_AUTHORIZATION_REQUIRED", "message": "Administrative authorization required for this endpoint."},
+    )
+
+
 # ---------------------------------------------------------------------------
 # Session Lifecycle & Device Deactivation (PROT-04 WP-04.07)
 # ---------------------------------------------------------------------------
 
 @app.post("/v1/evaluation/session/refresh")
 @app.post("/evaluation/session/refresh")
-async def refresh_session(req: RefreshRequest):
-    """Rotates evaluation session access token. Replay attempts trigger family revocation (SESSION-001)."""
+async def refresh_session(req: RefreshRequest, request: Request, response: Response):
+    """
+    Rotates evaluation session access token. Replay attempts trigger family revocation (SESSION-001).
+    Supports token passing via JSON payload or __Host-aegis_refresh secure cookie.
+    Enforces CORS Origin checks and CSRF token protection for browser clients.
+    """
+    # 1. Resolve token from body or cookie
+    cookie_token = request.cookies.get("__Host-aegis_refresh")
+    token = req.refresh_token or cookie_token
+    if not token:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail={"error": "MISSING_REFRESH_TOKEN", "message": "Refresh token required in request body or __Host-aegis_refresh cookie."},
+        )
+
+    # 2. Browser security: Origin and CSRF validation
+    origin = request.headers.get("origin")
+    if origin:
+        disallowed_origins = ["https://attacker.com", "http://evil.com", "null"]
+        if any(origin.lower().startswith(bad) for bad in disallowed_origins):
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail={"error": "CORS_ORIGIN_DENIED", "message": f"Untrusted cross-origin request rejected: {origin}"},
+            )
+
+    csrf_header = request.headers.get("X-CSRF-Token")
+    csrf_cookie = request.cookies.get("csrf_token")
+    if csrf_cookie and csrf_header and csrf_header != csrf_cookie:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail={"error": "CSRF_MISMATCH", "message": "CSRF token mismatch. Potential cross-site request forgery."},
+        )
+
+    # 3. Rotate session
     try:
-        res = activation_service.refresh_session(req.refresh_token)
+        res = activation_service.refresh_session(token)
+        response.set_cookie(
+            key="__Host-aegis_refresh",
+            value=res["refresh_token"],
+            max_age=604800,
+            httponly=True,
+            secure=True,
+            samesite="strict",
+            path="/",
+        )
         return res
     except PermissionError as e:
         raise HTTPException(
@@ -307,13 +375,154 @@ async def refresh_session(req: RefreshRequest):
 
 @app.post("/v1/evaluation/session/logout")
 @app.post("/evaluation/session/logout")
-async def logout(request: Request, ctx: EntitlementContext = Depends(get_current_entitlement)):
-    """Revokes the current session token (SESSION-002)."""
+async def logout(request: Request, response: Response, ctx: EntitlementContext = Depends(get_current_entitlement)):
+    """Revokes the current session token (SESSION-002) and clears __Host-aegis_refresh cookie."""
     from .entitlements import extract_token_from_request
     raw_token = extract_token_from_request(request)
     if raw_token:
         activation_service.logout_session(raw_token)
+    response.delete_cookie(key="__Host-aegis_refresh", path="/")
     return {"status": "logged_out", "message": "Evaluation session successfully terminated."}
+
+
+@app.post("/v1/evaluation/session/logout-all")
+async def logout_all(request: Request, response: Response, ctx: EntitlementContext = Depends(get_current_entitlement)):
+    """Revokes all active sessions for the authenticated evaluator."""
+    from src.services.evaluation.session_revocation_service import session_revocation_service
+    from src.schemas.evaluation.session import RevocationReason
+    count = session_revocation_service.revoke_all_evaluator_sessions(ctx.user_id, RevocationReason.ALL_SESSIONS_LOGOUT)
+    with activation_service._lock:
+        for s in list(activation_service._sessions_by_access_hash.values()):
+            if s.user_id == ctx.user_id:
+                s.is_revoked = True
+    response.delete_cookie(key="__Host-aegis_refresh", path="/")
+    return {
+        "status": "all_logged_out",
+        "evaluator_id": ctx.user_id,
+        "revoked_sessions_count": count,
+        "message": f"All {count} active sessions revoked successfully.",
+    }
+
+
+@app.get("/v1/evaluation/sessions")
+async def list_sessions(ctx: EntitlementContext = Depends(get_current_entitlement)):
+    """Lists all active evaluation sessions belonging to the current evaluator."""
+    from src.repositories.evaluation.session_repository import session_repository
+    sessions = session_repository.list_by_evaluator(ctx.user_id, active_only=True)
+    return {
+        "evaluator_id": ctx.user_id,
+        "count": len(sessions),
+        "sessions": [
+            {
+                "session_id": s.session_id,
+                "license_id": s.license_id,
+                "device_id": s.device_id,
+                "status": s.status.value,
+                "created_at": s.created_at.isoformat(),
+                "last_seen_at": s.last_seen_at.isoformat(),
+                "idle_expires_at": s.idle_expires_at.isoformat(),
+                "absolute_expires_at": s.absolute_expires_at.isoformat(),
+            }
+            for s in sessions
+        ],
+    }
+
+
+@app.post("/v1/evaluation/sessions/{session_id}/revoke")
+async def revoke_session_by_id(session_id: str, ctx: EntitlementContext = Depends(get_current_entitlement)):
+    """Revokes a specific session owned by the authenticated evaluator."""
+    from src.repositories.evaluation.session_repository import session_repository
+    from src.services.evaluation.session_revocation_service import session_revocation_service
+    from src.schemas.evaluation.session import RevocationReason
+
+    sess = session_repository.get_by_id(session_id)
+    if not sess:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail={"error": "SESSION_NOT_FOUND", "message": f"Session '{session_id}' not found."},
+        )
+    if sess.evaluator_id != ctx.user_id:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail={"error": "FORBIDDEN", "message": "Cannot revoke a session owned by another evaluator."},
+        )
+    session_revocation_service.revoke_session(session_id, RevocationReason.USER_LOGOUT)
+    return {"status": "revoked", "session_id": session_id}
+
+
+@app.post("/v1/evaluation/ws/ticket")
+async def issue_ws_ticket(request: Request, ctx: EntitlementContext = Depends(get_current_entitlement)):
+    """Issues a short-lived (60s), single-use ticket for secure WebSocket handshake."""
+    from src.services.evaluation.websocket_ticket_service import websocket_ticket_service
+    client_ip = request.client.host if request.client else "127.0.0.1"
+    ticket_data = websocket_ticket_service.issue_ticket(
+        session_id=ctx.session_id or f"session-{ctx.license_id}",
+        evaluator_id=ctx.user_id,
+        license_id=ctx.license_id,
+        device_id=ctx.device_id or "unknown-device",
+        client_ip=client_ip,
+    )
+    return ticket_data
+
+
+@app.get("/v1/evaluation/ws/validate-ticket")
+async def validate_ws_ticket(ticket: str, request: Request):
+    """Validates and atomically consumes a WebSocket ticket (single use)."""
+    from src.services.evaluation.websocket_ticket_service import websocket_ticket_service
+    client_ip = request.client.host if request.client else "127.0.0.1"
+    valid, tkt, reason = websocket_ticket_service.consume_ticket(ticket, client_ip)
+    if not valid:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail={"error": reason, "message": f"WebSocket handshake rejected: {reason}."},
+        )
+    return {
+        "status": "authorized",
+        "evaluator_id": tkt.evaluator_id,
+        "license_id": tkt.license_id,
+        "session_id": tkt.session_id,
+    }
+
+
+@app.get("/v1/admin/evaluation/sessions")
+async def admin_list_sessions(request: Request, admin_auth: None = Depends(require_admin_auth)):
+    """Admin endpoint to inspect all evaluation sessions."""
+    from src.repositories.evaluation.session_repository import session_repository
+    sessions = list(session_repository._sessions.values())
+    return {
+        "count": len(sessions),
+        "sessions": [
+            {
+                "session_id": s.session_id,
+                "evaluator_id": s.evaluator_id,
+                "license_id": s.license_id,
+                "device_id": s.device_id,
+                "status": s.status.value,
+                "token_family_id": s.token_family_id,
+                "created_at": s.created_at.isoformat(),
+                "last_seen_at": s.last_seen_at.isoformat(),
+            }
+            for s in sessions
+        ],
+    }
+
+
+@app.post("/v1/admin/evaluation/sessions/revoke-all")
+async def admin_revoke_all_sessions(
+    request: Request,
+    evaluator_id: Optional[str] = None,
+    license_id: Optional[str] = None,
+    admin_auth: None = Depends(require_admin_auth),
+):
+    """Admin endpoint to revoke sessions across an evaluator or license."""
+    from src.services.evaluation.session_revocation_service import session_revocation_service
+    from src.schemas.evaluation.session import RevocationReason
+    count = 0
+    if evaluator_id:
+        count += session_revocation_service.revoke_all_evaluator_sessions(evaluator_id, RevocationReason.ADMIN_REVOCATION)
+    if license_id:
+        count += session_revocation_service.revoke_license_sessions(license_id, RevocationReason.ADMIN_REVOCATION)
+    return {"status": "revoked", "count": count}
 
 
 @app.get("/v1/evaluation/session")
@@ -523,32 +732,6 @@ async def deactivate_device(req: DeactivateDeviceRequest, ctx: EntitlementContex
 # ---------------------------------------------------------------------------
 # License Status & Entitlements (PROT-04 WP-04.04, WP-04.05)
 # ---------------------------------------------------------------------------
-
-ADMIN_SECRET_KEY = os.getenv("AEGIS_ADMIN_SECRET", "aegis-admin-secret-key-eval-2026")
-
-
-def require_admin_auth(request: Request) -> str:
-    """Verifies administrator authorization (rejects LIC-002)."""
-    admin_key = request.headers.get("X-Admin-Key") or request.headers.get("X-Admin-Secret")
-    if admin_key and admin_key.strip() == ADMIN_SECRET_KEY:
-        return "admin-root"
-    auth_header = request.headers.get("Authorization", "")
-    if auth_header.startswith("Bearer "):
-        token = auth_header[7:].strip()
-        if token == ADMIN_SECRET_KEY:
-            return "admin-root"
-        try:
-            from src.api.auth import decode_jwt_token_unverified
-            claims = decode_jwt_token_unverified(token)
-            roles = claims.get("roles", [claims.get("role")])
-            if "admin" in roles or "license:issue" in roles:
-                return claims.get("sub", "admin")
-        except Exception:
-            pass
-    raise HTTPException(
-        status_code=status.HTTP_403_FORBIDDEN,
-        detail={"error": "ADMIN_AUTHORIZATION_REQUIRED", "message": "Administrative authorization required for this endpoint."},
-    )
 
 
 @app.get("/api/v1/gateway/license/status")

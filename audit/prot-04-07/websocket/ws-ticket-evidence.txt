@@ -1,0 +1,7 @@
+AEGIS-DocIntel WebSocket Security Verification
+================================================================
+Protocol Scenarios: SESSION-039 through SESSION-040
+- Ticket Issuance: POST /v1/evaluation/ws/ticket issues 60-second single-use ticket (aegis_ws_tkt_...).
+- Single-Use Consumption: Ticket consumed upon WebSocket handshake; replay rejected with 401 TICKET_ALREADY_CONSUMED.
+- Revocation Closure: Active connection authorization verified; connection closed immediately upon session/license revocation.
+================================================================

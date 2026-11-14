@@ -848,6 +848,56 @@ class ActivationService:
         self._sessions_by_refresh_hash[rt_hash] = record
         self._session_families[fam_id].add(session_id)
 
+        try:
+            from datetime import timedelta
+            from src.schemas.evaluation.session import EvaluationSession, SessionStatus
+            from src.schemas.evaluation.refresh import EvaluationRefreshToken, RefreshTokenStatus
+            from src.repositories.evaluation.session_repository import session_repository
+            from src.repositories.evaluation.refresh_token_repository import refresh_token_repository
+
+            now_dt = datetime.fromtimestamp(now, timezone.utc)
+            eval_sess = EvaluationSession(
+                session_id=session_id,
+                evaluator_id=user_id,
+                tenant_id=f"tenant-{license_id}",
+                license_id=license_id,
+                device_id=device_id,
+                status=SessionStatus.ACTIVE,
+                token_family_id=fam_id,
+                access_token_hash=at_hash,
+                created_at=now_dt,
+                last_seen_at=now_dt,
+                idle_expires_at=now_dt + timedelta(seconds=1800),
+                absolute_expires_at=now_dt + timedelta(days=7),
+            )
+            session_repository.save_session(eval_sess)
+
+            eval_rt = EvaluationRefreshToken(
+                token_id=str(uuid.uuid4()),
+                session_id=session_id,
+                family_id=fam_id,
+                token_hash=rt_hash,
+                status=RefreshTokenStatus.ACTIVE,
+                created_at=now_dt,
+                expires_at=now_dt + timedelta(days=7),
+            )
+            refresh_token_repository.save_token(eval_rt)
+
+            from src.schemas.evaluation.session_audit import SessionAuditEvent, SessionAuditEventType
+            from src.repositories.evaluation.session_audit_repository import session_audit_repository
+            session_audit_repository.record_event(
+                SessionAuditEvent(
+                    event_type=SessionAuditEventType.SESSION_CREATED,
+                    session_id=session_id,
+                    evaluator_id=user_id,
+                    license_id=license_id,
+                    device_id=device_id,
+                    status="SUCCESS",
+                )
+            )
+        except Exception:
+            pass
+
         return access_token, refresh_token
 
     def refresh_session(self, refresh_token: str) -> Dict[str, Any]:
@@ -864,6 +914,12 @@ class ActivationService:
                     for s in list(self._sessions_by_access_hash.values()):
                         if s.session_id == sid:
                             s.is_revoked = True
+                try:
+                    from src.services.evaluation.session_revocation_service import session_revocation_service
+                    from src.schemas.evaluation.session import RevocationReason
+                    session_revocation_service.revoke_security_incident(fam_id, RevocationReason.REFRESH_REPLAY_DETECTED)
+                except Exception:
+                    pass
                 audit_service.record_event(
                     event_type="session.refresh_replay_detected",
                     status="COMPROMISE_DETECTED",
@@ -914,6 +970,17 @@ class ActivationService:
             record = self._sessions_by_access_hash.get(at_hash)
             if not record or record.is_revoked:
                 return None
+
+            try:
+                from src.repositories.evaluation.session_repository import session_repository
+                from src.schemas.evaluation.session import SessionStatus
+                repo_sess = session_repository.get_by_access_hash(at_hash)
+                if repo_sess and repo_sess.status != SessionStatus.ACTIVE:
+                    record.is_revoked = True
+                    return None
+            except Exception:
+                pass
+
             if time.time() > record.expires_at:
                 return None
             device = self._devices_by_id.get(record.device_id)
@@ -929,6 +996,12 @@ class ActivationService:
             if not record:
                 return False
             record.is_revoked = True
+            try:
+                from src.services.evaluation.session_revocation_service import session_revocation_service
+                from src.schemas.evaluation.session import RevocationReason
+                session_revocation_service.revoke_by_access_token(access_token, RevocationReason.USER_LOGOUT)
+            except Exception:
+                pass
             audit_service.record_event(
                 event_type="session.logged_out",
                 status="SUCCESS",
@@ -962,6 +1035,13 @@ class ActivationService:
             for sess in list(self._sessions_by_access_hash.values()):
                 if sess.device_id == target.device_id:
                     sess.is_revoked = True
+
+            try:
+                from src.services.evaluation.session_revocation_service import session_revocation_service
+                from src.schemas.evaluation.session import RevocationReason
+                session_revocation_service.revoke_device_sessions(target.device_id, RevocationReason.DEVICE_DEACTIVATED)
+            except Exception:
+                pass
 
             audit_service.record_event(
                 event_type="device.deactivated",

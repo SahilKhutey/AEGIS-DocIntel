@@ -304,3 +304,49 @@
   - `audit/prot-04-06/` (baseline, inventory, quota, concurrency, metering, reconciliation, reports)
   - `docs/distribution/prot-04-auth-licensing/06_QUOTA_AND_USAGE_ENFORCEMENT.md` (Updated overview)
 - **Result:** **PASSED / PROCEED**. Work package WP-04.06 formally signed off from HOLD to PASSED. Authorized to proceed to WP-04.07 (Session Lifecycle, Refresh Rotation & Revocation).
+
+---
+
+### TASK-WP-04.07: Session Lifecycle, Refresh Rotation & Revocation Certification
+- **Date:** 2026-11-14
+- **Scope:** Complete implementation, testing, and formal certification of WP-04.07:
+  1. Implemented canonical session, refresh, and audit schemas in `src/schemas/evaluation/`:
+     - `session.py`: `SessionStatus` (`ACTIVE`, `REVOKED`, `EXPIRED`, `SUSPENDED`), `RevocationReason`, `EvaluationSession` model.
+     - `refresh.py`: `RefreshTokenStatus` (`ACTIVE`, `CONSUMED`, `REVOKED`, `EXPIRED`), `EvaluationRefreshToken` model.
+     - `session_audit.py`: `SessionAuditEventType`, `SessionAuditEvent` model.
+  2. Implemented thread-safe, concurrency-hardened repositories in `src/repositories/evaluation/`:
+     - `session_repository.py`: Multi-indexed in-memory store with cascading revocation across evaluator, device, license, and token families.
+     - `refresh_token_repository.py`: Opaque token hash store (`SHA-256` only at rest) with atomic conditional rotation (`status='consumed' WHERE id=:id AND status='active'`).
+     - `session_audit_repository.py`: Append-only structured audit logger for session events.
+  3. Implemented cryptographic session services in `src/services/evaluation/`:
+     - `refresh_token_service.py`: High-entropy generation (`secrets.token_urlsafe`) and SHA-256 hashing.
+     - `session_service.py`: Dual-credential session issuance (600s access token TTL, 7-day refresh TTL).
+     - `session_validation_service.py`: Sliding idle timeouts (30 min), fixed absolute timeouts (7 days), hardware device checks, license revocation checks.
+     - `refresh_rotation_service.py`: Atomic rotation and instant token family compromise lockdown.
+     - `session_revocation_service.py`: Multi-scoped revocations (single session, evaluator all sessions, device deactivation cascade, license revocation cascade, security incident lockdown).
+     - `session_expiry_service.py`: Periodic sweeping of expired sessions.
+     - `websocket_ticket_service.py`: Short-lived (60s) single-use ticket handshake and real-time revocation closure.
+  4. Hardened Evaluation Gateway in `services/evaluation_gateway/app.py`:
+     - `POST /v1/evaluation/session/refresh`: Supports JSON body or `__Host-aegis_refresh` cookie, CORS Origin check, CSRF token validation.
+     - `POST /v1/evaluation/session/logout`: Terminates current session, clears cookie.
+     - `POST /v1/evaluation/session/logout-all`: Terminates all sessions for evaluator.
+     - `GET /v1/evaluation/sessions`: Lists active sessions for evaluator.
+     - `POST /v1/evaluation/sessions/{id}/revoke`: Revokes specific owned session.
+     - `POST /v1/evaluation/ws/ticket`: Issues single-use 60-second WebSocket ticket.
+     - `GET /v1/evaluation/ws/validate-ticket`: Consumes single-use ticket atomically.
+     - Admin session inspection and revocation endpoints under `/v1/admin/evaluation/sessions`.
+  5. Implemented 42 automated protocol verification scenarios in `tests/security/evaluation/test_session_lifecycle_protocol.py` (`SESSION-001` through `SESSION-042`).
+  6. Generated complete empirical audit evidence in `audit/prot-04-07/` via `scripts/generate_audit_prot_04_07.py`.
+  7. Authored 11 comprehensive engineering dossiers in `docs/distribution/prot-04-auth-licensing/wp-04-07-session-lifecycle/`.
+  8. Updated master session architecture document in `docs/distribution/prot-04-auth-licensing/07_SESSION_AND_REVOCATION.md`.
+- **Commands Executed:**
+  - `python -m pytest tests/security/evaluation/test_session_lifecycle_protocol.py -v` -> 42 / 42 PASSED (0.75s).
+  - `python -m pytest tests/security/evaluation/ -q` -> 256 / 256 PASSED in 9.36s (100% green).
+  - `python -m pytest tests/test_production_auth.py tests/test_auth_guard.py tests/security/ -q` -> 404 / 404 PASSED in 32.40s (100% green).
+  - `npm --prefix web run verify:auth` -> Exit code 0 (Clean, 0 violations).
+  - `python scripts/generate_audit_prot_04_07.py` -> All 10 audit evidence artifacts generated.
+- **Deliverables:**
+  - `docs/distribution/prot-04-auth-licensing/wp-04-07-session-lifecycle/01_SESSION_ARCHITECTURE.md` through `11_WP_04_07_SIGNOFF.md`
+  - `audit/prot-04-07/` (baseline, inventory, lifecycle, rotation, replay, concurrency, revocation, browser, websocket, jobs, reports)
+  - `docs/distribution/prot-04-auth-licensing/07_SESSION_AND_REVOCATION.md` (Updated overview)
+- **Result:** **PASSED / PROCEED**. Work package WP-04.07 formally signed off from HOLD to PASSED. Authorized to proceed to final PROT-04 consolidation and sign-off.

@@ -7,3 +7,6 @@ from .quota_counter_repository import *
 from .usage_reservation_repository import *
 from .usage_event_repository import *
 from .usage_adjustment_repository import *
+from .session_repository import *
+from .refresh_token_repository import *
+from .session_audit_repository import *

@@ -1,10 +1,10 @@
 {
   "project": "AEGIS-DocIntel",
   "architecture": "Dual Open-Core (aegis-docprep: Apache-2.0, AMDI-OS: Proprietary)",
-  "total_dependencies_audited": 89,
+  "total_dependencies_audited": 91,
   "python_packages_count": 71,
-  "npm_packages_count": 18,
-  "approved_packages_count": 88,
+  "npm_packages_count": 20,
+  "approved_packages_count": 90,
   "conditional_packages_count": 1,
   "prohibited_packages_count": 0,
   "compliance_status": "COMPLIANT",

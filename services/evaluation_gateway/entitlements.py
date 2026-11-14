@@ -67,6 +67,7 @@ class EntitlementContext:
         self.entitlements: List[str] = payload.get("entitlements", self.features)
         self.quotas: Dict[str, int] = payload.get("quotas", {})
         self.device_id: Optional[str] = self.session_info.get("device_id")
+        self.session_id: Optional[str] = self.session_info.get("session_id")
 
     def has_feature(self, feature_name: str) -> bool:
         canonical = FEATURE_MAP.get(feature_name, feature_name)
@@ -163,6 +164,25 @@ def get_current_entitlement(request: Request) -> EntitlementContext:
     if token.startswith("aegis_eval_at_"):
         session_rec = activation_service.validate_session(token)
         if not session_rec:
+            # Check if token belongs to a revoked license before falling back to 401
+            import hashlib
+            at_hash = hashlib.sha256(token.strip().encode("utf-8")).hexdigest()
+            raw_rec = activation_service._sessions_by_access_hash.get(at_hash)
+            if raw_rec and revocation_registry.is_revoked(raw_rec.license_id):
+                audit_service.record_event(
+                    event_type="session.license_revoked",
+                    status="FORBIDDEN",
+                    actor_id=raw_rec.user_id,
+                    license_id=raw_rec.license_id,
+                )
+                raise HTTPException(
+                    status_code=status.HTTP_403_FORBIDDEN,
+                    detail={
+                        "error": "LICENSE_REVOKED",
+                        "message": f"License {raw_rec.license_id} has been revoked. All active sessions terminated."
+                    }
+                )
+
             audit_service.record_event(
                 event_type="session.invalid_or_expired",
                 status="UNAUTHORIZED",
@@ -221,7 +241,7 @@ def get_current_entitlement(request: Request) -> EntitlementContext:
                 "max_storage_mb": 100,
             },
         }
-        ctx = EntitlementContext(payload, session_info={"device_id": session_rec.device_id})
+        ctx = EntitlementContext(payload, session_info={"device_id": session_rec.device_id, "session_id": getattr(session_rec, "session_id", None)})
 
     else:
         # Cryptographic license token verification

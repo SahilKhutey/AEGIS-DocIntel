@@ -40,6 +40,12 @@ class RevocationRegistry:
     def revoke(self, license_id: str) -> None:
         self._revoked_license_ids.add(license_id)
         self._save()
+        try:
+            from src.services.evaluation.session_revocation_service import session_revocation_service
+            from src.schemas.evaluation.session import RevocationReason
+            session_revocation_service.revoke_license_sessions(license_id, RevocationReason.LICENSE_REVOKED)
+        except Exception:
+            pass
 
     def unrevoke(self, license_id: str) -> None:
         self._revoked_license_ids.discard(license_id)

@@ -1,0 +1,71 @@
+AEGIS-DocIntel Repository Baseline & Session Lifecycle Security State
+================================================================
+Generated: 2026-11-14T06:03:09.929763+00:00
+Work Package: PROT-04.07 (Session Lifecycle, Refresh Rotation & Revocation)
+Commit: e6658fe1a4794e0db95def9dd8ef9703f42e7828
+Branch: product_hunt_launch_packaging
+Python Version: 3.12.10
+Platform: Windows-11-10.0.26300-SP0
+
+Active Working Tree Status:
+M DEPLOYMENT_ROLLBACK_REPORT.md
+ M PRODUCTION_READINESS_REPORT.md
+ M WP08_INTEGRATION_FAILURE_REGISTRY.md
+ M artifacts/integration/api_contract/API_CONTRACT_TEST_REPORT.json
+ M artifacts/integration/browser_e2e/BROWSER_E2E_TEST_REPORT.json
+ M artifacts/integration/browser_e2e/BROWSER_FAILURE_ANALYSIS.md
+ M artifacts/integration/deployment/DEPLOYMENT_VERIFICATION_REPORT.json
+ M artifacts/integration/workflows/DOCUMENT_TO_REPORT_PERFORMANCE.json
+ M artifacts/integration/workflows/DOCUMENT_TO_REPORT_TEST_REPORT.json
+ M artifacts/integration/workflows/END_TO_END_FAILURE_ANALYSIS.md
+ M artifacts/licence-audit/LICENSE_ARCHITECTURE.md
+ M artifacts/licence-audit/license-compliance-report.json
+ M artifacts/licence-audit/npm-licenses.json
+ M artifacts/security/reports/AUTHENTICATION_TEST_REPORT.json
+ M artifacts/security/reports/AUTHORIZATION_TEST_REPORT.json
+ M artifacts/security/reports/BACKUP_INTEGRITY_REPORT.json
+ M artifacts/security/reports/CROSS_TENANT_ATTACK_REPORT.md
+ M artifacts/security/reports/DELETION_COMPLETENESS_REPORT.json
+ M artifacts/security/reports/DOCUMENT_DELETION_TEST_REPORT.json
+ M artifacts/security/reports/JOB_STATE_CONSISTENCY_REPORT.json
+ M artifacts/security/reports/PRIVACY_DETECTION_REPORT.json
+ M artifacts/security/reports/PRIVACY_OUTPUT_LEAKAGE_REPORT.json
+ M artifacts/security/reports/RESTORATION_TEST_REPORT.json
+ M artifacts/security/reports/RPO_RTO_MEASUREMENTS.json
+ M artifacts/security/reports/TENANT_ISOLATION_TEST_REPORT.json
+ M artifacts/security/reports/WORKER_RELIABILITY_REPORT.json
+ M services/evaluation_gateway/activation.py
+ M services/evaluation_gateway/app.py
+ M services/evaluation_gateway/entitlements.py
+ M services/evaluation_gateway/revocation.py
+ M src/repositories/evaluation/__init__.py
+ M src/schemas/evaluation/__init__.py
+ M src/services/evaluation/__init__.py
+?? scripts/generate_audit_prot_04_07.py
+?? src/repositories/evaluation/refresh_token_repository.py
+?? src/repositories/evaluation/session_audit_repository.py
+?? src/repositories/evaluation/session_repository.py
+?? src/schemas/evaluation/refresh.py
+?? src/schemas/evaluation/session.py
+?? src/schemas/evaluation/session_audit.py
+?? src/services/evaluation/refresh_rotation_service.py
+?? src/services/evaluation/refresh_token_service.py
+?? src/services/evaluation/session_expiry_service.py
+?? src/services/evaluation/session_revocation_service.py
+?? src/services/evaluation/session_service.py
+?? src/services/evaluation/session_validation_service.py
+?? src/services/evaluation/websocket_ticket_service.py
+?? tests/security/evaluation/test_session_lifecycle_protocol.py
+
+Security & Session Architecture Pinned:
+- Two-Credential Architecture: Short-lived access token (600s TTL) + rotating high-entropy refresh token.
+- Raw Secrets Never Persisted: Raw refresh tokens are never stored at rest; only SHA-256 digests exist in repositories.
+- Lineage Tracking via Token Families: Every refresh rotation preserves token_family_id.
+- Replay Attack Detection: Consuming an already-used refresh token immediately triggers family revocation.
+- Sub-Millisecond Concurrency Defense: 20 competing threads attempting simultaneous rotation result in exactly 1 success and 19 rejections without split lineages.
+- Multi-Scoped Revocations: Single session logout, evaluator logout-all, hardware device deactivation cascade, and license revocation cascade.
+- Real-Time Revocation SLA: License revocation terminates active evaluation sessions immediately (verified SLA < 50ms).
+- Hardened Browser Security: __Host-aegis_refresh cookie (HttpOnly; Secure; SameSite=Strict; Path=/), CORS Origin validation, CSRF verification.
+- WebSocket Ticket Handshake: 60s single-use ticket prevents token leaks in URL query strings and enforces connection closure on revocation.
+- Background Job Authorization: Long-running jobs retain evaluator authorization context and revalidate before batch execution.
+================================================================
