@@ -145,3 +145,26 @@
   - `docs/distribution/prot-04-auth-licensing/wp-04-01-authentication-baseline/08_WP_04_01_SIGNOFF.md`
 - **Result:** **PASSED / PROCEED**. Work package WP-04.01 formally signed off from HOLD to PASSED.
 
+---
+
+### TASK-WP-04.02: Production Authentication Hardening Certification
+- **Date:** 2026-11-14
+- **Scope:** Complete implementation and verification of WP-04.02:
+  1. Remove frontend development bypasses, admin auto-escalation, and hardcoded tokens in `web/src/lib/auth/session.ts` and `web/src/lib/api/client.ts`.
+  2. Neutralize request context in `web/src/lib/api/request-context.ts` (empty default context).
+  3. Purge `NEXT_PUBLIC_AEGIS_DEV_TOKEN` from `web/src/lib/validation/environment.ts`.
+  4. Harden backend JWT claims, role array validation, generic error messages, and startup config validation in `src/api/auth.py`.
+  5. Harden ASGI ingress guard to require auth for `/metrics` and `/docs` in hardened production mode (`src/api/auth_guard.py`).
+  6. Standardize gateway session routes in `services/evaluation_gateway/app.py`.
+  7. Add 6 new test scenarios across `tests/test_production_auth.py` and `tests/test_auth_guard.py`.
+  8. Generate complete audit artifacts in `audit/prot-04-02/` and author 10 dossiers in `docs/distribution/prot-04-auth-licensing/wp-04-02-production-auth-hardening/`.
+- **Commands Executed:**
+  - `python -m pytest tests/test_production_auth.py tests/test_auth_guard.py -v` -> 48 / 48 PASSED.
+  - `python -m pytest tests/security/evaluation tests/distribution_security demo/tests -v` -> 69 / 69 PASSED.
+  - `npm --prefix web run verify:auth` -> Exit code 0 (Clean, 0 violations).
+- **Deliverables:**
+  - `docs/distribution/prot-04-auth-licensing/wp-04-02-production-auth-hardening/01_IMPLEMENTATION_SCOPE.md` through `10_WP_04_02_SIGNOFF.md`
+  - `audit/prot-04-02/` (baseline, tests, build, reports)
+- **Result:** **PASSED / PROCEED**. Work package WP-04.02 formally signed off from HOLD to PASSED. Authorized to proceed to WP-04.03 (Evaluation Activation & Device Binding).
+
+

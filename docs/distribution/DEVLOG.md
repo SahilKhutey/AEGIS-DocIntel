@@ -126,3 +126,35 @@ Conducted source-level inspection and runtime verification of the authentication
   - `07_SECURITY_DECISIONS.md`: Strategic ADR covering cryptographic selections and boundary invariants.
   - `08_WP_04_01_SIGNOFF.md`: Formal verification certification transitioning WP-04.01 to PASSED / PROCEED.
 
+---
+
+### Phase 10: WP-04.02 — Production Authentication Hardening Certification
+Implemented comprehensive production authentication hardening across frontend client code, backend JWT verification, and ASGI ingress endpoints, transitioning WP-04.02 from **HOLD** to **PASSED / PROCEED**:
+- **Frontend Identity & Session Contract (`web/src/lib/auth/session.ts`):**
+  - Eliminated legacy dev token admin bypasses (`resolveSessionFromToken` fails closed).
+  - Implemented server-authoritative session contract via `/evaluation/session` with runtime Zod validation (`validateSessionResponse`).
+- **Browser API Client Hardening (`web/src/lib/api/client.ts`):**
+  - Removed localhost fallback URLs and hardcoded demo tokens; enforced relative same-origin paths and `credentials: "include"`.
+- **Request Context Neutralization (`web/src/lib/api/request-context.ts`):**
+  - Removed hardcoded `default-tenant` and `workspace-default`; unauthenticated requests emit no tenant or workspace headers.
+- **Backend JWT Hardening (`src/api/auth.py`):**
+  - Added startup configuration check (`validate_production_auth_config`).
+  - Enforced strict role array validation, claim length constraints, and generic HTTP 401 error responses.
+- **Ingress Allowlist Hardening (`src/api/auth_guard.py`):**
+  - Implemented environment-aware hardened allowlist: `/metrics` and `/docs` routes reject anonymous requests with HTTP 401 in hardened production mode.
+- **Gateway Endpoint Aliases (`services/evaluation_gateway/app.py`):**
+  - Added aliases for `/evaluation/session`, `/evaluation/session/refresh`, `/evaluation/session/logout`.
+- **Automated Verification Suites:**
+  - `tests/test_production_auth.py`: **19 / 19 PASSED**
+  - `tests/test_auth_guard.py`: **29 / 29 PASSED**
+  - `tests/security/evaluation/`: **41 / 41 PASSED**
+  - `tests/distribution_security/`: **20 / 20 PASSED**
+  - `demo/tests/`: **8 / 8 PASSED**
+  - Total Passing: **117 / 117 tests (100% green)**
+  - Frontend Guard: `npm --prefix web run verify:auth` -> Clean (0 violations).
+- **Deliverables:**
+  - 10 comprehensive dossiers in `docs/distribution/prot-04-auth-licensing/wp-04-02-production-auth-hardening/`
+  - Complete evidence files in `audit/prot-04-02/` (baseline, tests, build, reports)
+  - Formal sign-off transitioning WP-04.02 from HOLD to PASSED / PROCEED.
+
+

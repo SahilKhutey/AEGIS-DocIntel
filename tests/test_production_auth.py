@@ -481,3 +481,107 @@ def test_production_jwt_conflicting_tenant_id_and_tid_rejected(rsa_keypair, auth
         assert res.status_code == 401
         assert "conflicting" in res.text.lower()
 
+
+def test_production_jwt_roles_not_a_list_rejected(rsa_keypair, auth_app, tmp_path):
+    """AUTH-H-014: roles claim as a string instead of a list must be rejected with 401."""
+    private_pem, public_pem = rsa_keypair
+    now = int(time.time())
+    payload = {
+        "tenant_id": "tenant-prod-100",
+        "sub": "user-42",
+        "role": "viewer",
+        "roles": "viewer",  # string instead of list
+        "exp": now + 3600,
+    }
+    token = jwt.encode(payload, private_pem, algorithm="RS256")
+
+    audit_path = tmp_path / "audit.log"
+    with patch.dict(os.environ, {
+        "AEGIS_ENVIRONMENT": "production",
+        "AEGIS_JWT_PUBLIC_KEY": public_pem,
+        "AEGIS_AUDIT_LOG_PATH": str(audit_path),
+    }):
+        client = TestClient(auth_app)
+        res = client.get("/protected", headers={"Authorization": f"Bearer {token}"})
+        assert res.status_code == 401
+        assert "roles" in res.text.lower()
+
+
+def test_production_jwt_empty_roles_array_rejected(rsa_keypair, auth_app, tmp_path):
+    """AUTH-H-015: empty roles array must be rejected with 401."""
+    private_pem, public_pem = rsa_keypair
+    now = int(time.time())
+    payload = {
+        "tenant_id": "tenant-prod-100",
+        "sub": "user-42",
+        "role": "viewer",
+        "roles": [],
+        "exp": now + 3600,
+    }
+    token = jwt.encode(payload, private_pem, algorithm="RS256")
+
+    audit_path = tmp_path / "audit.log"
+    with patch.dict(os.environ, {
+        "AEGIS_ENVIRONMENT": "production",
+        "AEGIS_JWT_PUBLIC_KEY": public_pem,
+        "AEGIS_AUDIT_LOG_PATH": str(audit_path),
+    }):
+        client = TestClient(auth_app)
+        res = client.get("/protected", headers={"Authorization": f"Bearer {token}"})
+        assert res.status_code == 401
+        assert "roles" in res.text.lower()
+
+
+def test_production_jwt_empty_tenant_id_rejected(rsa_keypair, auth_app, tmp_path):
+    """AUTH-H-017: empty or whitespace-only tenant_id claim must be rejected with 401."""
+    private_pem, public_pem = rsa_keypair
+    now = int(time.time())
+    payload = {
+        "tenant_id": "   ",
+        "sub": "user-42",
+        "role": "viewer",
+        "exp": now + 3600,
+    }
+    token = jwt.encode(payload, private_pem, algorithm="RS256")
+
+    audit_path = tmp_path / "audit.log"
+    with patch.dict(os.environ, {
+        "AEGIS_ENVIRONMENT": "production",
+        "AEGIS_JWT_PUBLIC_KEY": public_pem,
+        "AEGIS_AUDIT_LOG_PATH": str(audit_path),
+    }):
+        client = TestClient(auth_app)
+        res = client.get("/protected", headers={"Authorization": f"Bearer {token}"})
+        assert res.status_code == 401
+        assert "tenant_id" in res.text.lower()
+
+
+def test_production_auth_config_startup_validation(tmp_path):
+    """AUTH-H-030: Application startup fails if production config lacks mandatory parameters."""
+    from src.api.auth import validate_production_auth_config
+
+    # Missing public key
+    with patch.dict(os.environ, {"AEGIS_ENVIRONMENT": "production", "AEGIS_JWT_PUBLIC_KEY": ""}, clear=True):
+        with pytest.raises(RuntimeError, match="AEGIS_JWT_PUBLIC_KEY"):
+            validate_production_auth_config()
+
+    # In strict evaluation mode, missing issuer or audience fails startup
+    with patch.dict(os.environ, {
+        "AEGIS_ENVIRONMENT": "production",
+        "AEGIS_JWT_PUBLIC_KEY": "some-key",
+        "AEGIS_EVALUATION_MODE": "true",
+    }, clear=True):
+        with pytest.raises(RuntimeError, match="AEGIS_JWT_ISSUER"):
+            validate_production_auth_config()
+
+    # Complete configuration succeeds
+    with patch.dict(os.environ, {
+        "AEGIS_ENVIRONMENT": "production",
+        "AEGIS_JWT_PUBLIC_KEY": "some-key",
+        "AEGIS_EVALUATION_MODE": "true",
+        "AEGIS_JWT_ISSUER": "https://auth.example.com",
+        "AEGIS_JWT_AUDIENCE": "aegis-api",
+    }, clear=True):
+        validate_production_auth_config()  # must not raise
+
+

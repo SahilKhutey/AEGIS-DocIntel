@@ -6,7 +6,7 @@ import {
   getPermissionsForRole,
   ROLE_PERMISSION_MAP,
 } from "@/lib/auth/permissions";
-import { resolveSessionFromToken, defaultSessionProvider } from "@/lib/auth/session";
+import { resolveSessionFromToken, defaultSessionProvider, validateSessionResponse } from "@/lib/auth/session";
 import { checkRouteAccess } from "@/lib/auth/route-guard";
 
 describe("Authentication, Roles & RBAC System", () => {
@@ -55,12 +55,26 @@ describe("Authentication, Roles & RBAC System", () => {
     expect(hasAllPermissions(granted, ["documents.read", "documents.upload"])).toBe(false);
   });
 
-  it("resolves development token safely into an authenticated session", () => {
+  it("rejects development token unconditionally in production auth model", () => {
     const session = resolveSessionFromToken("dev-custom-tenant");
+    expect(session).toBeNull();
+  });
+
+  it("validates trusted server session response correctly", () => {
+    const serverPayload = {
+      user_id: "user-eval-99",
+      license_id: "lic-prod-alpha",
+      device_id: "dev-key-hash",
+      role: "viewer",
+      tier: "pro_evaluation",
+      authenticated: true,
+    };
+    const session = validateSessionResponse(serverPayload);
     expect(session).not.toBeNull();
-    expect(session?.tenantId).toBe("custom-tenant");
-    expect(session?.role).toBe("admin");
-    expect(session?.user.id).toBe("dev-user");
+    expect(session.user.id).toBe("user-eval-99");
+    expect(session.tenantId).toBe("lic-prod-alpha");
+    expect(session.role).toBe("viewer");
+    expect(session.permissions).toContain("documents.read");
   });
 
   it("checks route access and blocks unauthenticated users from protected routes", () => {

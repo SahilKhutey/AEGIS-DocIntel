@@ -22,6 +22,18 @@ const PROHIBITED_PATTERNS = [
     description: 'Banned hardcoded default tenant bypass fallback',
   },
   {
+    pattern: /"dev-user"/,
+    description: 'Banned development user fallback in client code',
+  },
+  {
+    pattern: /"dev@aegis\.corp"/,
+    description: 'Banned development email identity in client code',
+  },
+  {
+    pattern: /"aegis-dev-key"/,
+    description: 'Banned development API key in client code',
+  },
+  {
     pattern: /role:\s*["']admin["']\s*,[\s\S]*?permissions:\s*getPermissionsForRole\(["']admin["']\)/,
     description: 'Banned automatic admin privilege escalation in token resolution',
   },

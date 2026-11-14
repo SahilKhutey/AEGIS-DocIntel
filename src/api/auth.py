@@ -177,6 +177,24 @@ def _validate_jwt(token: str) -> TenantContext:
     if jwt_audience:
         decode_options["require"].append("aud")
 
+    is_strict = (
+        os.environ.get("AEGIS_EVALUATION_MODE", "").lower() in ("true", "1", "yes") or
+        os.environ.get("AEGIS_STRICT_JWT_VALIDATION", "").lower() in ("true", "1", "yes")
+    )
+    if is_strict:
+        if not jwt_issuer:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Evaluation production requires AEGIS_JWT_ISSUER",
+                headers={"WWW-Authenticate": "Bearer"},
+            )
+        if not jwt_audience:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Evaluation production requires AEGIS_JWT_AUDIENCE",
+                headers={"WWW-Authenticate": "Bearer"},
+            )
+
     decode_kwargs = {
         "algorithms": ["RS256"],
         "options": decode_options,
@@ -216,7 +234,7 @@ def _validate_jwt(token: str) -> TenantContext:
         )
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail=f"Invalid token: {e}",
+            detail="Invalid authentication credentials",
             headers={"WWW-Authenticate": 'Bearer error="invalid_token"'},
         )
 
@@ -229,7 +247,7 @@ def _validate_jwt(token: str) -> TenantContext:
             headers={"WWW-Authenticate": "Bearer"},
         )
     tenant_id = raw_tid or raw_tid_alt
-    if not tenant_id:
+    if not tenant_id or not isinstance(tenant_id, str) or not str(tenant_id).strip() or len(str(tenant_id)) > 256:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Token missing tenant_id claim",
@@ -237,7 +255,7 @@ def _validate_jwt(token: str) -> TenantContext:
         )
 
     user_id = payload.get("sub") or payload.get("user_id")
-    if not user_id:
+    if not user_id or not isinstance(user_id, str) or not str(user_id).strip() or len(str(user_id)) > 256:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Token missing sub (user identity) claim",
@@ -245,7 +263,7 @@ def _validate_jwt(token: str) -> TenantContext:
         )
 
     role = payload.get("role") or "viewer"
-    if role not in ALLOWED_ROLES:
+    if not isinstance(role, str) or role not in ALLOWED_ROLES:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail=f"Unsupported role in token: {role}",
@@ -493,3 +511,30 @@ async def get_current_tenant_ws(
 
     await _safe_close()
     raise HTTPException(status_code=401, detail="WebSocket authentication required")
+
+
+def validate_production_auth_config(strict_evaluation: bool = False) -> None:
+    """
+    Validates that production authentication configuration is complete and fail-closed.
+    Raises RuntimeError at application startup if mandatory security parameters are missing.
+    """
+    env = os.environ.get("AEGIS_ENVIRONMENT", "production").lower()
+    if env not in ("production", "prod", "evaluation"):
+        return
+
+    public_key = os.environ.get("AEGIS_JWT_PUBLIC_KEY")
+    key_path = os.environ.get("AEGIS_JWT_PUBLIC_KEY_PATH")
+    if not public_key and (not key_path or not os.path.isfile(key_path)):
+        raise RuntimeError("Production auth misconfiguration: AEGIS_JWT_PUBLIC_KEY or AEGIS_JWT_PUBLIC_KEY_PATH is required.")
+
+    is_strict = (
+        strict_evaluation
+        or os.environ.get("AEGIS_EVALUATION_MODE", "").lower() in ("true", "1", "yes")
+        or os.environ.get("AEGIS_STRICT_JWT_VALIDATION", "").lower() in ("true", "1", "yes")
+    )
+    if is_strict:
+        if not os.environ.get("AEGIS_JWT_ISSUER"):
+            raise RuntimeError("Production auth misconfiguration: AEGIS_JWT_ISSUER is required in evaluation production.")
+        if not os.environ.get("AEGIS_JWT_AUDIENCE"):
+            raise RuntimeError("Production auth misconfiguration: AEGIS_JWT_AUDIENCE is required in evaluation production.")
+

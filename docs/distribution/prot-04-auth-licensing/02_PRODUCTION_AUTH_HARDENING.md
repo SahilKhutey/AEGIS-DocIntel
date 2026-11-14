@@ -43,3 +43,27 @@ $ node web/scripts/verify-production-auth.mjs
 Running PROT-04 Production Authentication Guard...
 ✅ PROT-04 Guard Passed: No development tokens or auth bypasses found in web/src.
 ```
+
+---
+
+## 3. Comprehensive WP-04.02 Dossier & Evidence Index
+
+The complete audit, verification suites, and sign-off records are documented in:
+- `docs/distribution/prot-04-auth-licensing/wp-04-02-production-auth-hardening/`
+  - `01_IMPLEMENTATION_SCOPE.md`: P0 and P1 prioritization, file modification inventory, and trust boundaries.
+  - `02_FRONTEND_AUTH_HARDENING.md`: Server-session contract, request context neutralization, and client fetch hardening.
+  - `03_BACKEND_JWT_HARDENING.md`: Startup configuration validation, role array validation, and generic 401 errors.
+  - `04_AUTH_GUARD_AND_PUBLIC_ENDPOINTS.md`: Hardened public allowlist removing `/metrics` and `/docs`, minimal health responses.
+  - `05_CORS_COOKIE_AND_PROXY_SECURITY.md`: Production CORS without wildcards, HttpOnly/Secure cookies, and local reverse proxy.
+  - `06_WEBSOCKET_AUTH_REVIEW.md`: `get_current_tenant_ws` handshake token parsing and WS 1008 fail-closed termination.
+  - `07_SECURITY_TEST_PLAN.md`: Automated matrix mapping scenarios AUTH-H-001 through AUTH-H-030 to test suites.
+  - `08_TEST_EXECUTION_REPORT.md`: Runtime test logs and pass rate evidence (118/118 passing tests).
+  - `09_ARTIFACT_SCAN_REPORT.md`: Zero forbidden strings detected across client bundles and package files.
+  - `10_WP_04_02_SIGNOFF.md`: Formal release certification transitioning WP-04.02 from HOLD to PASSED.
+
+- `audit/prot-04-02/` Evidence Repository:
+  - `baseline/auth-reference-scan.txt` & `baseline/baseline-git-status.txt`
+  - `tests/backend-auth-tests.txt`, `tests/frontend-auth-tests.txt`, `tests/security-regression-tests.txt`
+  - `build/production-build.txt` & `build/forbidden-string-scan.txt`
+  - `reports/findings.csv` & `reports/signoff.json`
+

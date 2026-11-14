@@ -24,12 +24,12 @@ export function getApiBaseUrl(): string {
     // In browser runtime, default to same-origin relative URL to enable reverse proxy & rewrites
     return "";
   }
-  // Server-side default to internal docker or localhost backend
+  // Server-side default to internal docker or configured backend URL
   return (
     process.env.INTERNAL_API_URL ||
     process.env.NEXT_PUBLIC_API_BASE_URL ||
     process.env.NEXT_PUBLIC_AEGIS_API_URL ||
-    "http://127.0.0.1:8000"
+    ""
   ).replace(/\/+$/, "");
 }
 
@@ -45,16 +45,6 @@ export function getDefaultAuthHeaders(): Record<string, string> {
     } catch {
       // Storage access blocked or restricted
     }
-  }
-
-  // Scoped demo mode token for public Product Hunt / evaluation access
-  const isDemoMode =
-    process.env.NEXT_PUBLIC_AEGIS_DEMO_MODE === "true" ||
-    process.env.NEXT_PUBLIC_DEMO_MODE === "true";
-  if (isDemoMode) {
-    return {
-      Authorization: "Bearer aegis-demo-token-sandbox",
-    };
   }
 
   // Fail closed in production: do not send insecure default tokens
@@ -112,6 +102,7 @@ export async function apiRequest<T>(
     const response = await fetch(url, {
       ...fetchInit,
       headers,
+      credentials: "include",
       cache: "no-store",
       signal: fetchInit.signal || controller.signal,
     });

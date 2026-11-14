@@ -183,6 +183,7 @@ async def health_check():
 
 @app.post("/api/v1/gateway/activate")
 @app.post("/v1/evaluation/activate")
+@app.post("/evaluation/activate")
 async def activate(req: ActivationRequest, request: Request):
     """
     Activates an eligible evaluation license, registers the device key pair,
@@ -227,6 +228,7 @@ async def activate(req: ActivationRequest, request: Request):
 # ---------------------------------------------------------------------------
 
 @app.post("/v1/evaluation/session/refresh")
+@app.post("/evaluation/session/refresh")
 async def refresh_session(req: RefreshRequest):
     """Rotates evaluation session access token. Replay attempts trigger family revocation (SESSION-001)."""
     try:
@@ -240,6 +242,7 @@ async def refresh_session(req: RefreshRequest):
 
 
 @app.post("/v1/evaluation/session/logout")
+@app.post("/evaluation/session/logout")
 async def logout(request: Request, ctx: EntitlementContext = Depends(get_current_entitlement)):
     """Revokes the current session token (SESSION-002)."""
     from .entitlements import extract_token_from_request
@@ -250,6 +253,7 @@ async def logout(request: Request, ctx: EntitlementContext = Depends(get_current
 
 
 @app.get("/v1/evaluation/session")
+@app.get("/evaluation/session")
 async def get_session(ctx: EntitlementContext = Depends(get_current_entitlement)):
     """Returns the current authenticated evaluation identity and active device."""
     return {
