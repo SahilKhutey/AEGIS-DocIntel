@@ -34,6 +34,7 @@
 | **TASK-WP-04.02** | PROT-04.02 | Production authentication hardening | Refactored `session.ts`, `client.ts`, `auth.py`, `auth_guard.py` | 0 (117/117 tests passed) | **COMPLETED** |
 | **TASK-WP-04.03** | PROT-04.03 | Device challenge protocol & binding | `activation.py`, `app.py`, 30 DEV tests | 0 (147/147 tests passed) | **COMPLETED** |
 | **TASK-WP-04.04** | PROT-04.04 | License issuance & JWS Ed25519 validation | `signing_key_registry.py`, `license_repository.py`, `license.py`, 40 LIC tests | 0 (187/187 tests passed) | **COMPLETED** |
+| **TASK-WP-04.05** | PROT-04.05 | Entitlement enforcement & feature authorization | `src/services/evaluation/`, `app.py`, 43 ENT/RBAC/TENANT tests | 0 (230/230 tests passed) | **COMPLETED** |
 | **TASK-TEST-01**   | Security Suite | Distribution security attack test suite | `pytest tests/distribution_security -v` | 0 (20/20 SEC-DEMO tests passed) | **COMPLETED** |
 | **TASK-TEST-02**   | Full Regression | Combined demo & security verification | `pytest tests/distribution_security demo/tests` | 0 (28/28 tests passed 100%) | **COMPLETED** |
 
@@ -235,3 +236,39 @@
   - `audit/prot-04-04/` (baseline, cryptography, issuance, key-management, revocation, security, reports)
   - `docs/distribution/prot-04-auth-licensing/04_LICENSE_ENGINE.md` (Updated overview)
 - **Result:** **PASSED / PROCEED**. Work package WP-04.04 formally signed off from HOLD to PASSED. Authorized to proceed to WP-04.05 (Entitlement Enforcement & Quotas).
+
+---
+
+### TASK-WP-04.05: Entitlement Enforcement & Feature Authorization Certification
+- **Date:** 2026-11-14
+- **Scope:** Complete implementation and verification of WP-04.05:
+  1. Implemented canonical capability catalogue and bidirectional normalization in `src/schemas/evaluation/entitlement_catalogue.py` (12 evaluation features, 12 action permissions, 5 forbidden admin capabilities, 6 admin permissions).
+  2. Implemented evaluator RBAC boundaries, anti-privilege escalation checks, and safe summary response in `src/schemas/evaluation/authorization.py` (strictly rejecting admin roles for evaluator principals, ignoring untrusted client-supplied headers).
+  3. Implemented versioned policy document schemas in `src/schemas/evaluation/entitlement_policy.py`.
+  4. Implemented repositories in `src/repositories/evaluation/`:
+     - `EntitlementPolicyRepository`: Versioned, immutable policies (`evaluation-basic` v1.0, `evaluation-pro` v1.0).
+     - `EntitlementRepository`: License assignments and dynamic overrides (`EvaluationEntitlementOverride`).
+     - `EntitlementEventRepository`: Append-only structured audit logger with canonical `AuditReasonCode`.
+  5. Implemented evaluation services and caching in `src/services/evaluation/`:
+     - `EntitlementCache`: Revision-aware low-latency in-memory cache (< 0.25 ms evaluation) with proactive invalidation (< 2 ms).
+     - `EntitlementResolver`: Deterministic rule evaluator with override resolution and temporal validity bounds.
+     - `EntitlementService`: Server-authoritative Four-Factor Authorization engine ($\mathbf{ALLOW} = \mathbf{I} \land \mathbf{L} \land \mathbf{D} \land \mathbf{E} \land \mathbf{R} \land \mathbf{Q}$) with fail-closed security.
+     - `fastapi_dependencies.py`: FastAPI security dependencies (`require_entitlement`, `get_current_evaluation_principal`).
+  6. Hardened Evaluation Gateway in `services/evaluation_gateway/app.py` & `entitlements.py`:
+     - Multi-tenant document and query isolation with uniform `HTTP 404 Not Found` IDOR defense (no 403 oracle).
+     - Administrative lifecycle endpoints for policies and overrides guarded by `require_admin_auth`.
+     - Sanitized `SafeEntitlementResponse` at `GET /v1/evaluation/license/entitlements`.
+  7. Implemented 43 automated security scenarios in `tests/security/evaluation/test_entitlement_enforcement_protocol.py` (`ENT-001` - `018`, `RBAC-001` - `010`, `TENANT-ENT-001` - `010`, `BYPASS-001` - `005`).
+  8. Generated all 11 empirical audit evidence artifacts in `audit/prot-04-05/` via `scripts/generate_audit_prot_04_05.py`.
+  9. Authored 13 comprehensive engineering dossiers in `docs/distribution/prot-04-auth-licensing/wp-04-05-entitlement-enforcement/`.
+  10. Updated master entitlement architecture document in `docs/distribution/prot-04-auth-licensing/05_ENTITLEMENT_MATRIX_AND_ENFORCEMENT.md`.
+- **Commands Executed:**
+  - `python -m pytest tests/security/evaluation/test_entitlement_enforcement_protocol.py -v` -> 43 / 43 PASSED (0.63s).
+  - `python -m pytest tests/security/evaluation/ tests/test_evaluation_gateway.py tests/test_production_auth.py tests/test_auth_guard.py -q` -> 230 / 230 PASSED in 23.65s (100% green).
+  - `npm --prefix web run verify:auth` -> Exit code 0 (Clean, 0 violations).
+  - `python scripts/generate_audit_prot_04_05.py` -> All 11 audit evidence artifacts generated.
+- **Deliverables:**
+  - `docs/distribution/prot-04-auth-licensing/wp-04-05-entitlement-enforcement/01_ENTITLEMENT_ARCHITECTURE.md` through `13_WP_04_05_SIGNOFF.md`
+  - `audit/prot-04-05/` (baseline, inventory, authorization, integration, reports)
+  - `docs/distribution/prot-04-auth-licensing/05_ENTITLEMENT_MATRIX_AND_ENFORCEMENT.md` (Updated overview)
+- **Result:** **PASSED / PROCEED**. Work package WP-04.05 formally signed off from HOLD to PASSED. Authorized to proceed to WP-04.06 (Quotas, Usage Accounting & Resource Limits).

@@ -1,0 +1,18 @@
+============================= test session starts =============================
+platform win32 -- Python 3.12.10, pytest-9.1.1, pluggy-1.6.0 -- C:\Users\ASUS\AppData\Local\Programs\Python\Python312\python.exe
+cachedir: .pytest_cache
+hypothesis profile 'default'
+rootdir: C:\Users\ASUS\.gemini\antigravity\worktrees\Aegis-DocIntel\product_hunt_launch_packaging
+configfile: pyproject.toml
+plugins: anyio-4.12.1, hypothesis-6.156.6, langsmith-0.14.4, asyncio-1.4.0, cov-7.1.0
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collecting ... collected 5 items
+
+tests/security/evaluation/test_entitlements.py::test_ent_001_allowed_document_read PASSED [ 20%]
+tests/security/evaluation/test_entitlements.py::test_ent_002_disallowed_user_administration_forbidden PASSED [ 40%]
+tests/security/evaluation/test_entitlements.py::test_ent_003_disallowed_platform_administration_forbidden PASSED [ 60%]
+tests/security/evaluation/test_entitlements.py::test_ent_004_client_changes_its_role_to_admin_no_escalation PASSED [ 80%]
+tests/security/evaluation/test_entitlements.py::test_ent_005_client_modifies_entitlement_response_no_escalation PASSED [100%]
+
+============================== 5 passed in 0.44s ==============================
+

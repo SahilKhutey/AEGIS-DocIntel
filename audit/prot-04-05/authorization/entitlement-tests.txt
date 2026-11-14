@@ -1,0 +1,31 @@
+============================= test session starts =============================
+platform win32 -- Python 3.12.10, pytest-9.1.1, pluggy-1.6.0 -- C:\Users\ASUS\AppData\Local\Programs\Python\Python312\python.exe
+cachedir: .pytest_cache
+hypothesis profile 'default'
+rootdir: C:\Users\ASUS\.gemini\antigravity\worktrees\Aegis-DocIntel\product_hunt_launch_packaging
+configfile: pyproject.toml
+plugins: anyio-4.12.1, hypothesis-6.156.6, langsmith-0.14.4, asyncio-1.4.0, cov-7.1.0
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collecting ... collected 43 items / 25 deselected / 18 selected
+
+tests/security/evaluation/test_entitlement_enforcement_protocol.py::test_ent_001_active_license_with_granted_feature PASSED [  5%]
+tests/security/evaluation/test_entitlement_enforcement_protocol.py::test_ent_002_active_license_without_feature_denied PASSED [ 11%]
+tests/security/evaluation/test_entitlement_enforcement_protocol.py::test_ent_003_expired_license_denied PASSED [ 16%]
+tests/security/evaluation/test_entitlement_enforcement_protocol.py::test_ent_004_suspended_license_denied PASSED [ 22%]
+tests/security/evaluation/test_entitlement_enforcement_protocol.py::test_ent_005_revoked_license_denied PASSED [ 27%]
+tests/security/evaluation/test_entitlement_enforcement_protocol.py::test_ent_006_inactive_device_denied PASSED [ 33%]
+tests/security/evaluation/test_entitlement_enforcement_protocol.py::test_ent_007_unknown_feature_denied PASSED [ 38%]
+tests/security/evaluation/test_entitlement_enforcement_protocol.py::test_ent_008_unknown_permission_denied PASSED [ 44%]
+tests/security/evaluation/test_entitlement_enforcement_protocol.py::test_ent_009_invalid_policy_version_denied PASSED [ 50%]
+tests/security/evaluation/test_entitlement_enforcement_protocol.py::test_ent_010_expired_entitlement_assignment_denied PASSED [ 55%]
+tests/security/evaluation/test_entitlement_enforcement_protocol.py::test_ent_011_future_entitlement_assignment_denied PASSED [ 61%]
+tests/security/evaluation/test_entitlement_enforcement_protocol.py::test_ent_012_disabled_entitlement_in_policy_denied PASSED [ 66%]
+tests/security/evaluation/test_entitlement_enforcement_protocol.py::test_ent_013_expired_override_denied PASSED [ 72%]
+tests/security/evaluation/test_entitlement_enforcement_protocol.py::test_ent_014_unauthorized_override_creation_denied PASSED [ 77%]
+tests/security/evaluation/test_entitlement_enforcement_protocol.py::test_ent_015_admin_permission_in_evaluator_policy_rejected PASSED [ 83%]
+tests/security/evaluation/test_entitlement_enforcement_protocol.py::test_ent_016_policy_update_enforces_new_revision PASSED [ 88%]
+tests/security/evaluation/test_entitlement_enforcement_protocol.py::test_ent_017_cache_invalidation_clears_old_grant PASSED [ 94%]
+tests/security/evaluation/test_entitlement_enforcement_protocol.py::test_ent_018_entitlement_service_unavailable_fails_closed PASSED [100%]
+
+====================== 18 passed, 25 deselected in 0.49s ======================
+

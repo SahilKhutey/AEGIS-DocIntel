@@ -178,6 +178,7 @@ class DeactivateDeviceRequest(BaseModel):
 class QueryRequest(BaseModel):
     query: str = Field(..., min_length=1, max_length=1000)
     document_ids: Optional[List[str]] = Field(default=None)
+    document_id: Optional[str] = Field(default=None)
 
 
 class CompareRequest(BaseModel):
@@ -597,23 +598,49 @@ async def verify_license_endpoint(
 @app.get("/v1/evaluation/entitlements")
 async def get_entitlements(ctx: EntitlementContext = Depends(get_current_entitlement)):
     """Returns granted evaluation capabilities and denied administrative operations."""
-    return {
-        "license_id": ctx.license_id,
-        "tier": ctx.tier,
-        "granted": [
+    try:
+        from src.services.evaluation.entitlement_service import default_entitlement_service
+        features_map, limits_map, policy_ver = default_entitlement_service.resolver.resolve_effective_entitlements(
+            license_id=ctx.license_id
+        )
+        version = default_entitlement_service.current_revision
+    except Exception:
+        features_map, limits_map, policy_ver, version = {}, {}, "evaluation-basic:1.0", 1
+
+    if not features_map:
+        features_map = {feat: True for feat in ctx.features}
+
+    granted = [f for f, enabled in features_map.items() if enabled]
+    if not granted:
+        granted = [
             "documents.read",
             "documents.upload",
             "intelligence.query",
             "documents.compare",
             "evidence.inspect",
-        ],
+        ]
+
+    return {
+        "license_id": ctx.license_id,
+        "tier": ctx.tier,
+        "granted": granted,
         "denied": [
             "users.manage",
             "platform.admin",
             "workspaces.create",
             "models.configure",
             "integrations.manage",
+            "admin.manage_users",
+            "admin.issue_license",
+            "admin.revoke_license",
         ],
+        "entitlements": features_map,
+        "limits": limits_map or {
+            "documents_per_license": 20,
+            "max_file_size_bytes": 10485760,
+            "queries_per_license": 100,
+        },
+        "version": version,
     }
 
 
@@ -842,6 +869,182 @@ async def admin_compromise_signing_key(
     return {"status": "compromised", "key_id": kid, "message": "Key has been permanently revoked."}
 
 
+# ---------------------------------------------------------------------------
+# Administrative Entitlement Policy & Override Routes (PROT-04 WP-04.05)
+# ---------------------------------------------------------------------------
+
+class CreatePolicyRequest(BaseModel):
+    policy_key: str
+    version: str
+    features: Dict[str, bool]
+    limits: Optional[Dict[str, Any]] = None
+
+
+class AssignPolicyRequest(BaseModel):
+    policy_key: str = "evaluation-basic"
+    policy_version: str = "1.0"
+
+
+class AddOverrideRequest(BaseModel):
+    feature_key: str
+    override_enabled: bool
+    reason_code: str
+    valid_until: Optional[str] = None
+
+
+@app.get("/v1/admin/evaluation/policies")
+async def admin_list_policies(admin_id: str = Depends(require_admin_auth)):
+    """Lists all evaluation entitlement policies in the repository."""
+    from src.services.evaluation.entitlement_service import default_entitlement_service
+    policies = default_entitlement_service.policy_repo.list_policies()
+    return {"policies": [p.model_dump() for p in policies]}
+
+
+@app.post("/v1/admin/evaluation/policies")
+async def admin_create_policy(
+    req: CreatePolicyRequest,
+    admin_id: str = Depends(require_admin_auth),
+):
+    """Creates a new evaluation entitlement policy version (ENT-015)."""
+    from src.services.evaluation.entitlement_service import default_entitlement_service
+    from src.schemas.evaluation.entitlement_policy import (
+        EvaluationPolicyDocument,
+        EvaluationEntitlementPolicy,
+        PolicyStatus,
+    )
+    try:
+        doc = EvaluationPolicyDocument(
+            policy_key=req.policy_key,
+            version=req.version,
+            features=req.features,
+            limits=req.limits or {},
+        )
+        policy = EvaluationEntitlementPolicy(
+            policy_key=req.policy_key,
+            version=req.version,
+            status=PolicyStatus.DRAFT,
+            policy_document=doc,
+        )
+        default_entitlement_service.policy_repo.save_policy(policy)
+    except ValueError as e:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail={"error": "INVALID_POLICY_CONFIGURATION", "message": str(e)},
+        )
+    return {"status": "created", "policy_key": req.policy_key, "version": req.version}
+
+
+@app.post("/v1/admin/evaluation/policies/{key}/versions/{version}/activate")
+async def admin_activate_policy(
+    key: str,
+    version: str,
+    admin_id: str = Depends(require_admin_auth),
+):
+    """Activates an evaluation entitlement policy version (immutable once active)."""
+    from src.services.evaluation.entitlement_service import default_entitlement_service
+    from src.repositories.evaluation.entitlement_policy_repository import PolicyNotFoundError, PolicyImmutabilityError
+    try:
+        activated = default_entitlement_service.policy_repo.activate_policy(key, version)
+    except PolicyNotFoundError:
+        raise HTTPException(status_code=404, detail="Policy not found")
+    except PolicyImmutabilityError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    default_entitlement_service.invalidate_cache()
+    return {"status": "activated", "policy_key": key, "version": version}
+
+
+@app.post("/v1/admin/evaluation/policies/{key}/versions/{version}/retire")
+async def admin_retire_policy(
+    key: str,
+    version: str,
+    admin_id: str = Depends(require_admin_auth),
+):
+    """Retires an evaluation entitlement policy version."""
+    from src.services.evaluation.entitlement_service import default_entitlement_service
+    from src.repositories.evaluation.entitlement_policy_repository import PolicyNotFoundError
+    try:
+        retired = default_entitlement_service.policy_repo.retire_policy(key, version)
+    except PolicyNotFoundError:
+        raise HTTPException(status_code=404, detail="Policy not found")
+    default_entitlement_service.invalidate_cache()
+    return {"status": "retired", "policy_key": key, "version": version}
+
+
+@app.post("/v1/admin/evaluation/licenses/{id}/assign-policy")
+async def admin_assign_policy_to_license(
+    id: str,
+    req: AssignPolicyRequest,
+    admin_id: str = Depends(require_admin_auth),
+):
+    """Assigns an entitlement policy version to an evaluation license."""
+    from src.services.evaluation.entitlement_service import default_entitlement_service
+    assignment = default_entitlement_service.entitlement_repo.assign_policy(
+        license_id=id,
+        evaluator_id="evaluator-" + id,
+        tenant_id="tenant-" + id,
+        policy_key=req.policy_key,
+        policy_version=req.policy_version,
+    )
+    default_entitlement_service.invalidate_cache(id)
+    return {"status": "assigned", "license_id": id, "policy_key": req.policy_key, "version": req.policy_version}
+
+
+@app.post("/v1/admin/evaluation/licenses/{id}/override")
+async def admin_add_entitlement_override(
+    id: str,
+    req: AddOverrideRequest,
+    admin_id: str = Depends(require_admin_auth),
+):
+    """Creates an administrative entitlement override for a license (ENT-013, ENT-014)."""
+    from src.services.evaluation.entitlement_service import default_entitlement_service
+    from src.schemas.evaluation.entitlement_policy import EvaluationEntitlementOverride
+    from datetime import datetime, timezone
+    valid_until = None
+    if req.valid_until:
+        try:
+            valid_until = datetime.fromisoformat(req.valid_until)
+        except Exception:
+            pass
+
+    try:
+        override = EvaluationEntitlementOverride(
+            license_id=id,
+            feature_key=req.feature_key,
+            override_enabled=req.override_enabled,
+            reason_code=req.reason_code,
+            issued_by_admin=admin_id,
+            valid_until=valid_until,
+        )
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail={"error": "INVALID_OVERRIDE", "message": str(e)})
+
+    default_entitlement_service.entitlement_repo.add_override(override)
+    default_entitlement_service.invalidate_cache(id)
+    return {"status": "override_added", "license_id": id, "feature": req.feature_key, "enabled": req.override_enabled}
+
+
+@app.delete("/v1/admin/evaluation/licenses/{id}/override")
+async def admin_clear_entitlement_overrides(
+    id: str,
+    admin_id: str = Depends(require_admin_auth),
+):
+    """Clears all administrative overrides for a license."""
+    from src.services.evaluation.entitlement_service import default_entitlement_service
+    default_entitlement_service.entitlement_repo.clear_overrides(id)
+    default_entitlement_service.invalidate_cache(id)
+    return {"status": "overrides_cleared", "license_id": id}
+
+
+@app.get("/v1/admin/evaluation/entitlement-events")
+async def admin_list_entitlement_events(
+    admin_id: str = Depends(require_admin_auth),
+):
+    """Returns append-only audit events of entitlement decisions (WP-04.05.10)."""
+    from src.services.evaluation.entitlement_service import default_entitlement_service
+    events = default_entitlement_service.event_repo.list_events()
+    return {"events": [e.model_dump() for e in events]}
+
+
 @app.get("/v1/evaluation/usage")
 async def get_usage(ctx: EntitlementContext = Depends(get_current_entitlement)):
     """Returns current server-side quota consumption (PROT-04 WP-04.06)."""
@@ -1009,6 +1212,21 @@ async def ask_aegis(req: QueryRequest, ctx: EntitlementContext = Depends(get_cur
         )
 
     try:
+        # Tenant isolation check if document_id or document_ids are specified
+        doc_ids_to_check = []
+        if req.document_ids:
+            doc_ids_to_check.extend(req.document_ids)
+        if req.document_id:
+            doc_ids_to_check.append(req.document_id)
+
+        for target_id in doc_ids_to_check:
+            target_doc = DOCUMENT_STORE.get(target_id)
+            if not target_doc or target_doc.license_id != ctx.license_id:
+                raise HTTPException(
+                    status_code=status.HTTP_404_NOT_FOUND,
+                    detail={"error": "DOCUMENT_NOT_FOUND", "message": f"Document {target_id} not found."},
+                )
+
         # Grounded intelligence evaluation
         query_lower = req.query.lower()
         if "tflops" in query_lower or "fp32" in query_lower or "performance" in query_lower:

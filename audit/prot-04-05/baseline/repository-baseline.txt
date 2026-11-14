@@ -1,0 +1,29 @@
+AEGIS-DocIntel Repository Baseline & Entitlement Security State
+================================================================
+Generated: 2026-11-14T04:49:11.813112+00:00
+Work Package: PROT-04.05 (Entitlement Enforcement & Feature Authorization)
+Commit: 123309c2dfc6fab97d46c0b9e2293f6227d8fa1e
+Branch: product_hunt_launch_packaging
+Python Version: 3.12.10
+Platform: Windows-11-10.0.26300-SP0
+
+Active Working Tree Status:
+M services/evaluation_gateway/app.py
+ M services/evaluation_gateway/entitlements.py
+?? audit/prot-04-05/
+?? scripts/generate_audit_prot_04_05.py
+?? src/repositories/evaluation/
+?? src/schemas/
+?? src/services/evaluation/
+?? tests/security/evaluation/test_entitlement_enforcement_protocol.py
+
+Security Policy Pinned:
+- Authorization Decision Formula: ALLOW = Identity & License & Device & Entitlement & Resource & Quota
+- Canonical Feature Catalogue: 12 Evaluation Features, 5 Admin Features (Strictly Forbidden for Evaluators)
+- Canonical Action Permissions: 12 Evaluation Permissions, 6 Admin Permissions
+- Evaluator RBAC Boundary: Evaluator sessions strictly forbidden from holding admin/platform_admin roles
+- Policy Immutability: Activated evaluation policy versions are immutable
+- Administrative Overrides: Audited, time-bounded, explicit reason code required
+- Resource Isolation: Object-level tenant checks; IDOR attempts fail with non-disclosing HTTP 404
+- Fail-Closed Architecture: Unknown feature, unknown permission, or service failure denies access
+================================================================

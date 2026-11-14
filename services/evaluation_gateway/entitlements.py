@@ -71,6 +71,23 @@ class EntitlementContext:
         canonical = FEATURE_MAP.get(feature_name, feature_name)
         if canonical in DISALLOWED_ENTITLEMENTS:
             return False
+
+        # Authoritative policy & override resolution from EntitlementService
+        try:
+            if hasattr(self, "license_id") and self.license_id:
+                from src.services.evaluation.entitlement_service import default_entitlement_service
+                assignment = default_entitlement_service.entitlement_repo.get_assignment(self.license_id)
+                overrides = default_entitlement_service.entitlement_repo.get_overrides(self.license_id)
+                if assignment or overrides:
+                    allowed, reason = default_entitlement_service.resolver.evaluate_permission(
+                        license_id=self.license_id,
+                        feature=feature_name,
+                        permission=canonical,
+                    )
+                    return allowed
+        except Exception:
+            pass
+
         return (
             feature_name in self.features
             or canonical in self.entitlements
