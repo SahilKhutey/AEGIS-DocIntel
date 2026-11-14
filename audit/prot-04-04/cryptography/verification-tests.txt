@@ -1,0 +1,27 @@
+============================= test session starts =============================
+platform win32 -- Python 3.12.10, pytest-9.1.1, pluggy-1.6.0 -- C:\Users\ASUS\AppData\Local\Programs\Python\Python312\python.exe
+cachedir: .pytest_cache
+hypothesis profile 'default'
+rootdir: C:\Users\ASUS\.gemini\antigravity\worktrees\Aegis-DocIntel\product_hunt_launch_packaging
+configfile: pyproject.toml
+plugins: anyio-4.12.1, hypothesis-6.156.6, langsmith-0.14.4, asyncio-1.4.0, cov-7.1.0
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collecting ... collected 40 items / 26 deselected / 14 selected
+
+tests/security/evaluation/test_license_validation_protocol.py::test_lic_008_unsupported_algorithm_rejected PASSED [  7%]
+tests/security/evaluation/test_license_validation_protocol.py::test_lic_009_unknown_kid_rejected PASSED [ 14%]
+tests/security/evaluation/test_license_validation_protocol.py::test_lic_010_missing_issuer_rejected PASSED [ 21%]
+tests/security/evaluation/test_license_validation_protocol.py::test_lic_011_incorrect_issuer_rejected PASSED [ 28%]
+tests/security/evaluation/test_license_validation_protocol.py::test_lic_012_incorrect_audience_rejected PASSED [ 35%]
+tests/security/evaluation/test_license_validation_protocol.py::test_lic_013_missing_expiry_rejected PASSED [ 42%]
+tests/security/evaluation/test_license_validation_protocol.py::test_lic_014_expired_license_rejected PASSED [ 50%]
+tests/security/evaluation/test_license_validation_protocol.py::test_lic_015_future_nbf_rejected PASSED [ 57%]
+tests/security/evaluation/test_license_validation_protocol.py::test_lic_016_invalid_claim_types_rejected PASSED [ 64%]
+tests/security/evaluation/test_license_validation_protocol.py::test_lic_017_unknown_license_type_rejected PASSED [ 71%]
+tests/security/evaluation/test_license_validation_protocol.py::test_lic_018_unknown_policy_version_rejected PASSED [ 78%]
+tests/security/evaluation/test_license_validation_protocol.py::test_lic_034_token_controlled_key_url_rejected PASSED [ 85%]
+tests/security/evaluation/test_license_validation_protocol.py::test_lic_035_oversized_token_rejected PASSED [ 92%]
+tests/security/evaluation/test_license_validation_protocol.py::test_lic_036_malformed_compact_jws_rejected PASSED [100%]
+
+====================== 14 passed, 26 deselected in 0.52s ======================
+

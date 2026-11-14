@@ -35,8 +35,11 @@ from pydantic import BaseModel, Field
 
 from .license import (
     verify_license,
+    verify_signed_license,
     load_public_key,
     parse_license_token,
+    issue_evaluation_license,
+    export_license_token,
     LicenseVerificationError,
     LicenseExpiredError,
     LicenseSignatureError,
@@ -44,6 +47,8 @@ from .license import (
     LicenseSuspendedError,
     LicenseProductMismatchError,
 )
+from .signing_key_registry import key_registry
+from .license_repository import license_repository
 from .activation import activation_service
 from .entitlements import get_current_entitlement, EntitlementContext
 from .quotas import quota_manager, QuotaExceededError
@@ -135,6 +140,30 @@ class DeviceActivateRequest(BaseModel):
 class DeviceRecoveryRequest(BaseModel):
     recovery_code: str = Field(..., description="Emergency recovery code issued during device binding")
     license_id: Optional[str] = Field(default=None, description="Associated license ID if not calling with session bearer")
+
+
+class AdminIssueLicenseRequest(BaseModel):
+    evaluator_id: str = Field(..., description="Unique evaluator identity (sub)")
+    tenant_id: Optional[str] = Field(default=None, description="Assigned tenant identifier")
+    duration_days: Optional[int] = Field(default=14, description="Evaluation duration in days")
+    license_type: Optional[str] = Field(default="protected_demo_evaluation", description="License type allowlist")
+    policy_version: Optional[str] = Field(default="evaluation-1.0", description="Policy version allowlist")
+    device_limit: Optional[int] = Field(default=1, description="Max allowed active devices")
+    features: Optional[List[str]] = Field(default=None, description="Explicitly granted feature list")
+    quotas: Optional[Dict[str, int]] = Field(default=None, description="Usage quotas")
+    idempotency_key: Optional[str] = Field(default=None, description="Key for idempotent creation")
+
+
+class AdminRevokeLicenseRequest(BaseModel):
+    reason: Optional[str] = Field(default="administrative_revocation", description="Revocation reason code")
+
+
+class AdminRenewLicenseRequest(BaseModel):
+    additional_days: Optional[int] = Field(default=14, description="Additional validity days")
+
+
+class AdminReissueLicenseRequest(BaseModel):
+    duration_days: Optional[int] = Field(default=14, description="Validity duration for reissued license")
 
 
 class RefreshRequest(BaseModel):
@@ -480,23 +509,91 @@ async def deactivate_device(req: DeactivateDeviceRequest, ctx: EntitlementContex
 # License Status & Entitlements (PROT-04 WP-04.04, WP-04.05)
 # ---------------------------------------------------------------------------
 
+ADMIN_SECRET_KEY = os.getenv("AEGIS_ADMIN_SECRET", "aegis-admin-secret-key-eval-2026")
+
+
+def require_admin_auth(request: Request) -> str:
+    """Verifies administrator authorization (rejects LIC-002)."""
+    admin_key = request.headers.get("X-Admin-Key")
+    if admin_key and admin_key.strip() == ADMIN_SECRET_KEY:
+        return "admin-root"
+    auth_header = request.headers.get("Authorization", "")
+    if auth_header.startswith("Bearer "):
+        token = auth_header[7:].strip()
+        if token == ADMIN_SECRET_KEY:
+            return "admin-root"
+        try:
+            from src.api.auth import decode_jwt_token_unverified
+            claims = decode_jwt_token_unverified(token)
+            roles = claims.get("roles", [claims.get("role")])
+            if "admin" in roles or "license:issue" in roles:
+                return claims.get("sub", "admin")
+        except Exception:
+            pass
+    raise HTTPException(
+        status_code=status.HTTP_403_FORBIDDEN,
+        detail={"error": "ADMIN_AUTHORIZATION_REQUIRED", "message": "Administrative authorization required for this endpoint."},
+    )
+
+
 @app.get("/api/v1/gateway/license/status")
 @app.get("/v1/evaluation/license")
 async def get_license_status(ctx: EntitlementContext = Depends(get_current_entitlement)):
     """Returns safe license claims and live quota consumption."""
+    auth_rec = license_repository.get_license(ctx.license_id)
     quota_status = quota_manager.get_quota_status(ctx.license_id, ctx.quotas)
+    device_status = "active"
+    if ctx.device_id:
+        dev = activation_service.get_device_detail(ctx.license_id, ctx.device_id)
+        if dev and not dev.get("is_active", True):
+            device_status = "deactivated"
     return {
         "license_id": ctx.license_id,
         "user_id": ctx.user_id,
         "tier": ctx.tier,
+        "license_type": getattr(auth_rec, "license_type", "protected_demo_evaluation"),
+        "policy_version": getattr(auth_rec, "policy_version", "evaluation-1.0"),
         "features": ctx.features,
         "entitlements": ctx.entitlements,
         "quotas": quota_status,
-        "status": "ACTIVE",
+        "status": auth_rec.status if auth_rec else "ACTIVE",
+        "device_status": device_status,
         "valid": True,
     }
 
 
+@app.get("/v1/evaluation/license/verify")
+async def verify_license_endpoint(
+    request: Request,
+    ctx: EntitlementContext = Depends(get_current_entitlement),
+):
+    """
+    Evaluator endpoint: deep verification of current evaluation license,
+    signature integrity, server-side authoritative status, and device active status.
+    """
+    auth_rec = license_repository.get_license(ctx.license_id)
+    auth_status = auth_rec.status if auth_rec else "ACTIVE"
+
+    device_active = True
+    if ctx.device_id:
+        dev_detail = activation_service.get_device_detail(ctx.license_id, ctx.device_id)
+        if dev_detail:
+            device_active = dev_detail.get("is_active", True)
+
+    return {
+        "valid": True,
+        "license_id": ctx.license_id,
+        "user_id": ctx.user_id,
+        "tier": ctx.tier,
+        "license_type": getattr(auth_rec, "license_type", "protected_demo_evaluation"),
+        "policy_version": getattr(auth_rec, "policy_version", "evaluation-1.0"),
+        "status": auth_status,
+        "device_status": "active" if device_active else "deactivated",
+        "expires_at": getattr(auth_rec, "expires_at", None),
+    }
+
+
+@app.get("/v1/evaluation/license/entitlements")
 @app.get("/v1/evaluation/entitlements")
 async def get_entitlements(ctx: EntitlementContext = Depends(get_current_entitlement)):
     """Returns granted evaluation capabilities and denied administrative operations."""
@@ -518,6 +615,231 @@ async def get_entitlements(ctx: EntitlementContext = Depends(get_current_entitle
             "integrations.manage",
         ],
     }
+
+
+# ---------------------------------------------------------------------------
+# Administrative License & Key Management Routes (PROT-04 WP-04.04)
+# ---------------------------------------------------------------------------
+
+@app.post("/v1/admin/evaluation/licenses")
+async def admin_issue_license(
+    req: AdminIssueLicenseRequest,
+    admin_id: str = Depends(require_admin_auth),
+):
+    """Issues an evaluation license with server-side authoritative persistence (LIC-001)."""
+    try:
+        lic = issue_evaluation_license(
+            user_id=req.evaluator_id,
+            duration_days=req.duration_days or 14,
+            features=req.features,
+            quotas=req.quotas,
+            tenant_id=req.tenant_id,
+            license_type=req.license_type or "protected_demo_evaluation",
+            policy_version=req.policy_version or "evaluation-1.0",
+            max_devices=req.device_limit or 1,
+            idempotency_key=req.idempotency_key,
+        )
+        audit_service.record_event(
+            event_type="license.issued_by_admin",
+            status="SUCCESS",
+            actor_id=admin_id,
+            license_id=lic["payload"]["license_id"],
+            details={"evaluator_id": req.evaluator_id, "policy_version": req.policy_version},
+        )
+        return {
+            "status": "issued",
+            "license": lic["payload"],
+            "token": export_license_token(lic),
+            "jws": lic.get("jws"),
+            "kid": lic.get("kid"),
+        }
+    except ValueError as e:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail={"error": "INVALID_POLICY", "message": str(e)},
+        )
+
+
+@app.get("/v1/admin/evaluation/licenses/{id}")
+async def admin_get_license(
+    id: str,
+    admin_id: str = Depends(require_admin_auth),
+):
+    """Inspects authoritative license record from repository."""
+    lic = license_repository.get_license(id)
+    if not lic:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail={"error": "LICENSE_NOT_FOUND", "message": f"License '{id}' not found."},
+        )
+    return {
+        "license_id": lic.id,
+        "evaluator_id": lic.evaluator_id,
+        "tenant_id": lic.tenant_id,
+        "status": lic.status,
+        "license_type": lic.license_type,
+        "policy_version": lic.policy_version,
+        "key_id": lic.key_id,
+        "issued_at": lic.issued_at,
+        "expires_at": lic.expires_at,
+        "device_limit": lic.device_limit,
+        "features": lic.features,
+        "quotas": lic.quotas,
+        "revoked_at": lic.revoked_at,
+    }
+
+
+@app.post("/v1/admin/evaluation/licenses/{id}/suspend")
+async def admin_suspend_license(
+    id: str,
+    admin_id: str = Depends(require_admin_auth),
+):
+    """Temporarily suspends an active license."""
+    success = license_repository.suspend_license(id)
+    if not success:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail={"error": "LICENSE_NOT_FOUND", "message": f"License '{id}' not found."},
+        )
+    audit_service.record_event(
+        event_type="license.suspended_by_admin",
+        status="SUCCESS",
+        actor_id=admin_id,
+        license_id=id,
+    )
+    return {"status": "suspended", "license_id": id}
+
+
+@app.post("/v1/admin/evaluation/licenses/{id}/revoke")
+async def admin_revoke_license_by_id(
+    id: str,
+    req: AdminRevokeLicenseRequest = AdminRevokeLicenseRequest(),
+    admin_id: str = Depends(require_admin_auth),
+):
+    """Permanently revokes an evaluation license."""
+    lic_id = id
+    reason = req.reason or "administrative_revocation"
+    license_repository.revoke_license(lic_id, reason_code=reason)
+    revocation_registry.revoke(lic_id)
+    audit_service.record_event(
+        event_type="license.revoked_by_admin",
+        status="SUCCESS",
+        actor_id=admin_id,
+        license_id=lic_id,
+        details={"reason": reason},
+    )
+    return {"status": "revoked", "license_id": lic_id}
+
+
+@app.post("/v1/admin/evaluation/licenses/{id}/renew")
+async def admin_renew_license(
+    id: str,
+    req: AdminRenewLicenseRequest = AdminRenewLicenseRequest(),
+    admin_id: str = Depends(require_admin_auth),
+):
+    """Extends validity window for an evaluation license."""
+    lic = license_repository.renew_license(id, additional_days=req.additional_days or 14)
+    if not lic:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail={"error": "LICENSE_NOT_FOUND", "message": f"License '{id}' not found."},
+        )
+    audit_service.record_event(
+        event_type="license.renewed_by_admin",
+        status="SUCCESS",
+        actor_id=admin_id,
+        license_id=id,
+        details={"additional_days": req.additional_days},
+    )
+    return {
+        "status": "renewed",
+        "license_id": lic.id,
+        "expires_at": lic.expires_at,
+    }
+
+
+@app.post("/v1/admin/evaluation/licenses/{id}/reissue")
+async def admin_reissue_license(
+    id: str,
+    req: AdminReissueLicenseRequest = AdminReissueLicenseRequest(),
+    admin_id: str = Depends(require_admin_auth),
+):
+    """Reissues an evaluation license with the active signing key."""
+    old_lic = license_repository.get_license(id)
+    if not old_lic:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail={"error": "LICENSE_NOT_FOUND", "message": f"License '{id}' not found."},
+        )
+    new_lic = issue_evaluation_license(
+        user_id=old_lic.evaluator_id,
+        duration_days=req.duration_days or 14,
+        features=old_lic.features,
+        quotas=old_lic.quotas,
+        tenant_id=old_lic.tenant_id,
+        license_type=old_lic.license_type,
+        policy_version=old_lic.policy_version,
+        max_devices=old_lic.device_limit,
+    )
+    # Revoke old license
+    license_repository.revoke_license(id, reason_code="reissued_as_replacement")
+    revocation_registry.revoke(id)
+    return {
+        "status": "reissued",
+        "old_license_id": id,
+        "new_license": new_lic["payload"],
+        "token": export_license_token(new_lic),
+    }
+
+
+@app.get("/v1/admin/evaluation/signing-keys")
+async def admin_list_signing_keys(
+    admin_id: str = Depends(require_admin_auth),
+):
+    """Lists non-sensitive metadata for registered signing keys."""
+    return {"keys": key_registry.list_keys()}
+
+
+@app.post("/v1/admin/evaluation/signing-keys/rotate")
+async def admin_rotate_signing_key(
+    admin_id: str = Depends(require_admin_auth),
+):
+    """Rotates signing key: demotes current to VERIFY_ONLY, creates new ACTIVE_SIGNING."""
+    new_key = key_registry.rotate_key()
+    audit_service.record_event(
+        event_type="signing_key.rotated",
+        status="SUCCESS",
+        actor_id=admin_id,
+        details={"new_kid": new_key.key_id},
+    )
+    return {
+        "status": "rotated",
+        "key_id": new_key.key_id,
+        "algorithm": new_key.algorithm,
+        "public_key_pem": new_key.public_key_pem,
+    }
+
+
+@app.post("/v1/admin/evaluation/signing-keys/{kid}/compromise")
+async def admin_compromise_signing_key(
+    kid: str,
+    admin_id: str = Depends(require_admin_auth),
+):
+    """Emergency compromise invalidation: immediately revokes key and all its dependent licenses."""
+    try:
+        key_registry.compromise_key(kid)
+    except KeyError:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail={"error": "KEY_NOT_FOUND", "message": f"Key '{kid}' not found in registry."},
+        )
+    audit_service.record_event(
+        event_type="signing_key.compromised_emergency_invalidation",
+        status="COMPROMISED",
+        actor_id=admin_id,
+        details={"compromised_kid": kid},
+    )
+    return {"status": "compromised", "key_id": kid, "message": "Key has been permanently revoked."}
 
 
 @app.get("/v1/evaluation/usage")

@@ -188,3 +188,37 @@ Implemented comprehensive cryptographic device binding and activation subsystem,
 
 
 
+
+---
+
+### Phase 12: WP-04.04 — License Issuance & Cryptographic Validation Certification
+Implemented comprehensive JWS Ed25519 cryptographic licensing engine, authoritative database repository, and signing key management subsystem, transitioning WP-04.04 from **HOLD** to **PASSED / PROCEED**:
+- **Compact JWS EdDSA (Ed25519) Cryptographic Serialization (`services/evaluation_gateway/license.py`):**
+  - Serializes licenses as RFC 7515 Compact JWS tokens (`typ="AEGIS-EVALUATION-LICENSE"`, `alg="EdDSA"`, `kid`).
+  - Pins algorithm strictly to `EdDSA`; prevents algorithm substitution attacks (HS256, none, RS256 rejected; `LIC-008`).
+  - Pre-parse size guard strictly rejects tokens exceeding 8,192 bytes (`LIC-035`).
+  - Header validation rejects token-controlled remote keys (`jku`, `x5u`, `x5c`, `jwk`; `LIC-034`).
+  - Cryptographic verification via PyJWT 2.13 and cryptography 49.0 backend (`LIC-005`, `LIC-006`, `LIC-007`).
+- **Signing Key Registry Subsystem (`services/evaluation_gateway/signing_key_registry.py`):**
+  - Manages cryptographic keys across four strict states: `ACTIVE_SIGNING`, `VERIFY_ONLY`, `RETIRED`, `COMPROMISED`.
+  - Zero-downtime key rotation (`rotate_key`): moves predecessor key to `VERIFY_ONLY` and assigns new active key (`LIC-027`, `LIC-029`).
+  - Emergency incident response (`compromise_key`): atomically invalidates all tokens signed by compromised key (`LIC-026`).
+- **Authoritative Server License Repository (`services/evaluation_gateway/license_repository.py`):**
+  - Tracks authoritative license records across states: `DRAFT`, `ISSUED`, `ACTIVE`, `SUSPENDED`, `REVOKED`, `EXPIRED`.
+  - Idempotency key tracking avoids duplicate license generation upon retry (`LIC-004`).
+  - Authoritative cross-check validates evaluator ID, tenant ID, device binding, and license status (`LIC-019` - `LIC-024`).
+  - Fail-closed security guarantee when authoritative backend database is unavailable (`LIC-031`).
+- **Administrative API Hardening & Endpoints (`services/evaluation_gateway/app.py`):**
+  - Guarded by `require_admin_auth` verifying administrative credentials (`LIC-002`).
+  - Endpoints: `POST /v1/admin/evaluation/licenses`, `GET /v1/admin/evaluation/licenses/{id}`, `POST /v1/admin/evaluation/licenses/{id}/suspend`, `POST /v1/admin/evaluation/licenses/{id}/revoke`, `POST /v1/admin/evaluation/licenses/{id}/renew`, `POST /v1/admin/evaluation/licenses/{id}/reissue`.
+  - Key management endpoints: `GET /v1/admin/evaluation/signing-keys`, `POST /v1/admin/evaluation/signing-keys/rotate`, `POST /v1/admin/evaluation/signing-keys/{kid}/compromise`.
+  - Evaluator verification endpoint: `GET /v1/evaluation/license/verify` and `GET /v1/evaluation/license`.
+- **Comprehensive Automated Verification Suite (`tests/security/evaluation/test_license_validation_protocol.py`):**
+  - Implemented 40 test scenarios covering `LIC-001` through `LIC-040`: **40 / 40 PASSED**.
+  - Total Passing: **187 / 187 tests (100% green)** across full system test suite.
+  - Zero private keys in client packages or repository (`LIC-037`, `LIC-038`).
+  - Raw token logging prevention verified (`LIC-039`).
+- **Deliverables:**
+  - 12 comprehensive dossiers in `docs/distribution/prot-04-auth-licensing/wp-04-04-license-validation/`
+  - Complete evidence files in `audit/prot-04-04/` (baseline, cryptography, issuance, key-management, revocation, security, reports)
+  - Formal sign-off transitioning WP-04.04 from HOLD to PASSED / PROCEED.

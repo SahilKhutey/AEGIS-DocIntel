@@ -1,0 +1,29 @@
+AEGIS-DocIntel Repository Baseline & License Cryptographic Security State
+================================================================
+Generated: 2026-11-14T04:16:40.432786+00:00
+Work Package: PROT-04.04 (License Issuance & Cryptographic Validation)
+Commit: 287f0cfc196e5b58d6b5a5e2b7615d9f1ff221ff
+Branch: product_hunt_launch_packaging
+Python Version: 3.12.10
+Platform: Windows-11-10.0.26300-SP0
+
+Active Working Tree Status:
+M services/evaluation_gateway/app.py
+ M services/evaluation_gateway/license.py
+ M services/evaluation_gateway/revocation.py
+ M tests/security/evaluation/conftest.py
+?? scripts/generate_audit_prot_04_04.py
+?? services/evaluation_gateway/license_repository.py
+?? services/evaluation_gateway/signing_key_registry.py
+?? tests/security/evaluation/test_license_validation_protocol.py
+
+Security Policy Pinned:
+- Serialization Format: RFC 7515 Compact JWS (3 base64url segments)
+- Signing Algorithm: EdDSA (Ed25519) exclusively; algorithm switching attacks rejected
+- Maximum Token Payload Size: 8,192 bytes (Strict fail-closed buffer limit)
+- Header Validation: Rejection of token-controlled key URLs (jku, x5u, x5c, jwk)
+- Signing Key Registry: States ACTIVE_SIGNING, VERIFY_ONLY, RETIRED, COMPROMISED
+- Key Rotation & Compromise: Zero downtime rotation with atomic emergency invalidation
+- Authoritative Verification: Cryptographic verification + server DB cross-check (fail-closed)
+- Anti-Tamper & Anti-Replay: Expiry (exp), Not-Before (nbf), Unique ID (jti), Tenant/Evaluator binding
+================================================================

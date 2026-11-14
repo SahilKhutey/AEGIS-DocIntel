@@ -31,6 +31,9 @@
 | **TASK-PACKAGE-01**| Release Packaging | Assemble downloadable Demo package | Assembled `distribution/demo-edition/` | 0 (37 bundled files) | **COMPLETED** |
 | **TASK-PACKAGE-02**| Release Packaging | Windows & cross-platform launchers | `start-demo.ps1`, `verify-package.ps1`, etc. | 0 (Self-contained verification) | **COMPLETED** |
 | **TASK-PACKAGE-03**| Release Packaging | Build release ZIP & SHA256SUMS | `distribution/release/build-release.ps1` | 0 (`AEGIS-DocIntel-Demo-Edition.zip`)| **COMPLETED** |
+| **TASK-WP-04.02** | PROT-04.02 | Production authentication hardening | Refactored `session.ts`, `client.ts`, `auth.py`, `auth_guard.py` | 0 (117/117 tests passed) | **COMPLETED** |
+| **TASK-WP-04.03** | PROT-04.03 | Device challenge protocol & binding | `activation.py`, `app.py`, 30 DEV tests | 0 (147/147 tests passed) | **COMPLETED** |
+| **TASK-WP-04.04** | PROT-04.04 | License issuance & JWS Ed25519 validation | `signing_key_registry.py`, `license_repository.py`, `license.py`, 40 LIC tests | 0 (187/187 tests passed) | **COMPLETED** |
 | **TASK-TEST-01**   | Security Suite | Distribution security attack test suite | `pytest tests/distribution_security -v` | 0 (20/20 SEC-DEMO tests passed) | **COMPLETED** |
 | **TASK-TEST-02**   | Full Regression | Combined demo & security verification | `pytest tests/distribution_security demo/tests` | 0 (28/28 tests passed 100%) | **COMPLETED** |
 
@@ -199,3 +202,36 @@
 
 
 
+
+---
+
+### TASK-WP-04.04: License Issuance & Cryptographic Validation Certification
+- **Date:** 2026-11-14
+- **Scope:** Complete implementation and verification of WP-04.04:
+  1. Implemented `SigningKeyRegistry` (`services/evaluation_gateway/signing_key_registry.py`) supporting Ed25519 signing key states (`ACTIVE_SIGNING`, `VERIFY_ONLY`, `RETIRED`, `COMPROMISED`), key rotation (`rotate_key`), and emergency compromise invalidation (`compromise_key`).
+  2. Implemented `LicenseRepository` (`services/evaluation_gateway/license_repository.py`) supporting authoritative license records (`DRAFT`, `ISSUED`, `ACTIVE`, `SUSPENDED`, `REVOKED`, `EXPIRED`), idempotency key tracking (`idempotency_key`), suspension, revocation, renewal, and reissuance.
+  3. Implemented Compact JWS serialization and multi-stage verification pipeline in `services/evaluation_gateway/license.py`:
+     - Algorithm pinned strictly to `EdDSA`; rejected `HS256`, `none`, and other algorithms (`LIC-008`).
+     - Token size ceiling $\le 8,192\text{ bytes}$ enforced before deserialization (`LIC-035`).
+     - Rejection of token-controlled remote key URLs (`jku`, `x5u`, `x5c`, `jwk`; `LIC-034`).
+     - PyJWT 2.13.0 and cryptography 49.0 backend Ed25519 signature verification (`LIC-005`, `LIC-006`, `LIC-007`).
+     - Semantic claim verification (`iss`, `aud`, `sub`, `exp`, `nbf`, `license_type`, `policy_version`, `device_limit`, `features`, `quotas`; `LIC-010` - `LIC-018`).
+     - Authoritative server DB cross-check (`evaluator_id`, `tenant_id`, `device_id`, license status; `LIC-019` - `LIC-024`).
+     - Fail-closed security guarantee when authoritative DB is unreachable (`LIC-031`).
+  4. Hardened evaluation gateway app and administrative routes in `services/evaluation_gateway/app.py`:
+     - Guarded by `require_admin_auth` (validates `X-Admin-Key` or admin Bearer token).
+     - Admin endpoints: `/v1/admin/evaluation/licenses`, `/v1/admin/evaluation/licenses/{id}`, `/v1/admin/evaluation/licenses/{id}/suspend`, `/v1/admin/evaluation/licenses/{id}/revoke`, `/v1/admin/evaluation/licenses/{id}/renew`, `/v1/admin/evaluation/licenses/{id}/reissue`.
+     - Key management endpoints: `/v1/admin/evaluation/signing-keys`, `/v1/admin/evaluation/signing-keys/rotate`, `/v1/admin/evaluation/signing-keys/{kid}/compromise`.
+     - Evaluator endpoints: `GET /v1/evaluation/license/verify` and `GET /v1/evaluation/license`.
+  5. Implemented comprehensive test suite covering `LIC-001` through `LIC-040` in `tests/security/evaluation/test_license_validation_protocol.py`.
+  6. Generated complete audit evidence files in `audit/prot-04-04/` (baseline, cryptography, issuance, key-management, revocation, security, reports).
+  7. Authored 12 comprehensive dossiers in `docs/distribution/prot-04-auth-licensing/wp-04-04-license-validation/`.
+- **Commands Executed:**
+  - `python -m pytest tests/security/evaluation/test_license_validation_protocol.py -v` -> 40 / 40 PASSED (2.70s).
+  - `python -m pytest tests/security/evaluation/ tests/test_production_auth.py tests/test_auth_guard.py tests/distribution_security/ demo/tests/ -q` -> 187 / 187 PASSED in 26.56s (100% green).
+  - `python scripts/generate_audit_prot_04_04.py` -> All 12 audit evidence artifacts generated.
+- **Deliverables:**
+  - `docs/distribution/prot-04-auth-licensing/wp-04-04-license-validation/01_LICENSE_ARCHITECTURE.md` through `12_WP_04_04_SIGNOFF.md`
+  - `audit/prot-04-04/` (baseline, cryptography, issuance, key-management, revocation, security, reports)
+  - `docs/distribution/prot-04-auth-licensing/04_LICENSE_ENGINE.md` (Updated overview)
+- **Result:** **PASSED / PROCEED**. Work package WP-04.04 formally signed off from HOLD to PASSED. Authorized to proceed to WP-04.05 (Entitlement Enforcement & Quotas).

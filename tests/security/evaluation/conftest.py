@@ -11,6 +11,8 @@ from services.evaluation_gateway.quotas import quota_manager
 from services.evaluation_gateway.revocation import registry as revocation_registry
 from services.evaluation_gateway.audit import audit_service
 from services.evaluation_gateway.license import issue_evaluation_license, export_license_token, CANONICAL_PRODUCT
+from services.evaluation_gateway.signing_key_registry import key_registry
+from services.evaluation_gateway.license_repository import license_repository
 
 
 @pytest.fixture(autouse=True)
@@ -18,9 +20,15 @@ def clean_evaluation_environment():
     """Ensures each test runs in an isolated and clean security state."""
     activation_service.reset()
     audit_service.clear()
+    key_registry.reset()
+    license_repository.reset()
+    revocation_registry.clear()
     yield
     activation_service.reset()
     audit_service.clear()
+    key_registry.reset()
+    license_repository.reset()
+    revocation_registry.clear()
 
 
 @pytest.fixture

@@ -48,5 +48,9 @@ class RevocationRegistry:
     def get_revoked_set(self) -> Set[str]:
         return set(self._revoked_license_ids)
 
+    def clear(self) -> None:
+        self._revoked_license_ids.clear()
+        self._save()
+
 # Global default instance
 registry = RevocationRegistry()

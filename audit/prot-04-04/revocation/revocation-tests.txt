@@ -1,0 +1,22 @@
+============================= test session starts =============================
+platform win32 -- Python 3.12.10, pytest-9.1.1, pluggy-1.6.0 -- C:\Users\ASUS\AppData\Local\Programs\Python\Python312\python.exe
+cachedir: .pytest_cache
+hypothesis profile 'default'
+rootdir: C:\Users\ASUS\.gemini\antigravity\worktrees\Aegis-DocIntel\product_hunt_launch_packaging
+configfile: pyproject.toml
+plugins: anyio-4.12.1, hypothesis-6.156.6, langsmith-0.14.4, asyncio-1.4.0, cov-7.1.0
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collecting ... collected 40 items / 31 deselected / 9 selected
+
+tests/security/evaluation/test_license_validation_protocol.py::test_lic_019_evaluator_mismatch_against_authoritative_record PASSED [ 11%]
+tests/security/evaluation/test_license_validation_protocol.py::test_lic_020_tenant_mismatch_against_authoritative_record PASSED [ 22%]
+tests/security/evaluation/test_license_validation_protocol.py::test_lic_021_device_mismatch_rejected PASSED [ 33%]
+tests/security/evaluation/test_license_validation_protocol.py::test_lic_022_license_record_absent_in_authoritative_db PASSED [ 44%]
+tests/security/evaluation/test_license_validation_protocol.py::test_lic_023_license_suspended_in_authoritative_db PASSED [ 55%]
+tests/security/evaluation/test_license_validation_protocol.py::test_lic_024_license_revoked_in_authoritative_db PASSED [ 66%]
+tests/security/evaluation/test_license_validation_protocol.py::test_lic_025_device_deactivated_associated_with_license PASSED [ 77%]
+tests/security/evaluation/test_license_validation_protocol.py::test_lic_030_revocation_cache_invalidation PASSED [ 88%]
+tests/security/evaluation/test_license_validation_protocol.py::test_lic_031_fail_closed_on_authority_unavailable PASSED [100%]
+
+====================== 9 passed, 31 deselected in 0.51s =======================
+
