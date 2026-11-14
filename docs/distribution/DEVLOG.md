@@ -157,4 +157,34 @@ Implemented comprehensive production authentication hardening across frontend cl
   - Complete evidence files in `audit/prot-04-02/` (baseline, tests, build, reports)
   - Formal sign-off transitioning WP-04.02 from HOLD to PASSED / PROCEED.
 
+---
+
+### Phase 11: WP-04.03 — Evaluation Activation & Device Binding Certification
+Implemented comprehensive cryptographic device binding and activation subsystem, transitioning WP-04.03 from **HOLD** to **PASSED / PROCEED**:
+- **Two-Stage Cryptographic Proof-of-Possession Challenge Protocol (`services/evaluation_gateway/activation.py`):**
+  - Stage 1: `POST /v1/evaluation/device/challenge` generates a cryptographically signed challenge message with 256-bit random nonce and 300s TTL.
+  - Stage 2: `POST /v1/evaluation/device/activate` verifies the asymmetric signature proof against the client's public key (supporting Ed25519 raw & PEM and RSA-2048 PKCS1/PSS).
+  - Single-use challenge consumption guarantees strict anti-replay protection (`DEV-010`).
+  - Strict challenge expiration enforcement (`DEV-009`).
+- **Atomic 1-Device Limit Enforcement (`DEV-002`):**
+  - Enforced strict server-side 1 active device limit per evaluation license.
+  - Verified under high-concurrency 10-thread race testing (`DEV-026`): exactly 1 succeeds (HTTP 200), 9 conflict (HTTP 409).
+- **Keyed HMAC-SHA256 Activation Code Indexing (`DEV-025`):**
+  - Raw activation codes are never stored or logged in memory or audit records; all lookups use `HMAC-SHA256(K, code)`.
+- **Device Management & Emergency Recovery Endpoints (`services/evaluation_gateway/app.py`):**
+  - `GET /v1/evaluation/devices` and `GET /v1/evaluation/devices/{device_id}`: Registered device inventory and details with cross-license isolation (`DEV-019`).
+  - `POST /v1/evaluation/devices/{device_id}/deactivate`: Deactivates registered device, cascades session revocation (`DEV-003`), and frees device slot (`DEV-004`).
+  - `POST /v1/evaluation/device/heartbeat`: Periodic presence check-in updating device timestamp (`DEV-022`, `DEV-023`).
+  - `POST /v1/evaluation/devices/{device_id}/recover`: Emergency device recovery using secret recovery code (`DEV-020`, `DEV-021`).
+- **Comprehensive Automated Verification Suite (`tests/security/evaluation/test_device_binding_protocol.py`):**
+  - Implemented 30 test cases covering `DEV-001` through `DEV-030`: **30 / 30 PASSED**.
+  - Total Passing: **147 / 147 tests (100% green)** across full system test suite.
+  - Frontend Guard: `npm --prefix web run verify:auth` -> Clean (0 violations).
+  - Zero private keys in source paths (`audit/prot-04-03/security/secret-exposure-scan.txt`).
+- **Deliverables:**
+  - 11 comprehensive dossiers in `docs/distribution/prot-04-auth-licensing/wp-04-03-device-binding/`
+  - Complete evidence files in `audit/prot-04-03/` (baseline, crypto, activation, security, reports)
+  - Formal sign-off transitioning WP-04.03 from HOLD to PASSED / PROCEED.
+
+
 

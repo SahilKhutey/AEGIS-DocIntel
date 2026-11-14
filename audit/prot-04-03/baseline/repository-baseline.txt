@@ -1,0 +1,23 @@
+AEGIS-DocIntel Repository Baseline & Evaluation Security State
+================================================================
+Generated: 2026-11-14T03:56:17.030006+00:00
+Work Package: PROT-04.03 (Evaluation Activation & Device Binding)
+Commit: 63fc110032d678dc9f6ac863c13da7e66003bbb5
+Branch: product_hunt_launch_packaging
+Python Version: 3.12.10
+Platform: Windows-11-10.0.26300-SP0
+
+Active Working Tree Status:
+M services/evaluation_gateway/activation.py
+ M services/evaluation_gateway/app.py
+?? scripts/generate_audit_prot_04_03.py
+?? tests/security/evaluation/test_device_binding_protocol.py
+
+Security Policy Pinned:
+- Two-Stage Proof-of-Possession Device Challenge Protocol: ENFORCED
+- Maximum Active Devices per Evaluation License: 1 (Strict Server-Side Atomic)
+- Activation Code Lookup: HMAC-SHA256 Keyed Hash (Zero Raw Code Storage)
+- Single-Use Challenge Consumption: Nonce + Challenge ID Atomic Invalidation
+- Device Cryptographic Binding: Ed25519 (Raw & PEM) and RSA-2048 PKCS1/PSS
+- Emergency Device Recovery: Cryptographic Recovery Code Hash Verification
+================================================================

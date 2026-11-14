@@ -117,6 +117,26 @@ class ActivationRequest(BaseModel):
     client_version: Optional[str] = Field(default="1.1.0", description="AEGIS client version")
 
 
+class DeviceChallengeRequest(BaseModel):
+    activation_code: str = Field(..., description="Evaluation activation code (e.g. AEGIS-EVAL-2026-DEMO)")
+    device_public_key: str = Field(..., description="Device public key in PEM or base64 format")
+    installation_id: str = Field(..., description="Unique client installation identifier")
+    device_label: Optional[str] = Field(default="workstation", description="Human-readable device label")
+    platform: Optional[str] = Field(default="windows", description="Host OS platform")
+
+
+class DeviceActivateRequest(BaseModel):
+    challenge_id: str = Field(..., description="Cryptographic challenge ID received from Stage 1")
+    signature: str = Field(..., description="Base64 encoded digital signature over canonical challenge message")
+    installation_id: str = Field(..., description="Matching client installation identifier")
+    client_version: Optional[str] = Field(default="1.1.0", description="AEGIS client version")
+
+
+class DeviceRecoveryRequest(BaseModel):
+    recovery_code: str = Field(..., description="Emergency recovery code issued during device binding")
+    license_id: Optional[str] = Field(default=None, description="Associated license ID if not calling with session bearer")
+
+
 class RefreshRequest(BaseModel):
     refresh_token: str = Field(..., description="Rotating refresh token")
 
@@ -264,6 +284,178 @@ async def get_session(ctx: EntitlementContext = Depends(get_current_entitlement)
         "role": "evaluator",
         "authenticated": True,
     }
+
+
+@app.post("/v1/evaluation/device/challenge")
+async def device_challenge(req: DeviceChallengeRequest, request: Request):
+    """
+    Stage 1: Generates single-use cryptographic challenge for device proof-of-possession.
+    Verifies activation code eligibility, public key format, and 1-device limits.
+    """
+    client_ip = request.client.host if request.client else "127.0.0.1"
+    try:
+        challenge = activation_service.create_device_challenge(
+            activation_code=req.activation_code,
+            device_public_key=req.device_public_key,
+            installation_id=req.installation_id,
+            device_label=req.device_label or "workstation",
+            platform=req.platform or "windows",
+            client_ip=client_ip,
+        )
+        return challenge
+    except PermissionError as e:
+        msg = str(e)
+        if "Device limit exceeded" in msg:
+            raise HTTPException(
+                status_code=status.HTTP_409_CONFLICT,
+                detail={"error": "DEVICE_LIMIT_EXCEEDED", "message": msg},
+            )
+        raise HTTPException(
+            status_code=status.HTTP_429_TOO_MANY_REQUESTS,
+            detail={"error": "RATE_LIMIT_EXCEEDED", "message": msg},
+        )
+    except ValueError as e:
+        msg = str(e)
+        if "Malformed" in msg or "public key" in msg:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail={"error": "MALFORMED_PUBLIC_KEY", "message": msg},
+            )
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail={"error": "INVALID_ACTIVATION_CODE", "message": msg},
+        )
+
+
+@app.post("/v1/evaluation/device/activate")
+async def device_activate(req: DeviceActivateRequest, request: Request):
+    """
+    Stage 2: Verifies digital signature proof-of-possession, binds device key,
+    and returns evaluation license and authenticated session.
+    """
+    client_ip = request.client.host if request.client else "127.0.0.1"
+    try:
+        res = activation_service.activate_device_with_challenge(
+            challenge_id=req.challenge_id,
+            signature=req.signature,
+            installation_id=req.installation_id,
+            client_ip=client_ip,
+            client_version=req.client_version or "1.1.0",
+        )
+        return res
+    except KeyError as e:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail={"error": "CHALLENGE_NOT_FOUND", "message": str(e)},
+        )
+    except TimeoutError as e:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail={"error": "CHALLENGE_EXPIRED", "message": str(e)},
+        )
+    except ValueError as e:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail={"error": "INSTALLATION_MISMATCH", "message": str(e)},
+        )
+    except PermissionError as e:
+        msg = str(e)
+        if "already been consumed" in msg:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail={"error": "CHALLENGE_ALREADY_CONSUMED", "message": msg},
+            )
+        elif "Device limit exceeded" in msg:
+            raise HTTPException(
+                status_code=status.HTTP_409_CONFLICT,
+                detail={"error": "DEVICE_LIMIT_EXCEEDED", "message": msg},
+            )
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail={"error": "INVALID_DEVICE_SIGNATURE", "message": msg},
+        )
+
+
+@app.get("/v1/evaluation/devices")
+async def list_devices(ctx: EntitlementContext = Depends(get_current_entitlement)):
+    """Lists all registered devices bound to the caller's evaluation license."""
+    devices = activation_service.get_devices(ctx.license_id)
+    return {"license_id": ctx.license_id, "devices": devices}
+
+
+@app.get("/v1/evaluation/devices/{device_id}")
+async def get_device_detail(device_id: str, ctx: EntitlementContext = Depends(get_current_entitlement)):
+    """Retrieves metadata and status of a registered device under the caller's evaluation license."""
+    detail = activation_service.get_device_detail(ctx.license_id, device_id)
+    if not detail:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail={"error": "DEVICE_NOT_FOUND", "message": f"Device '{device_id}' not found under current license."},
+        )
+    return detail
+
+
+@app.post("/v1/evaluation/devices/{device_id}/deactivate")
+async def deactivate_device_by_id(device_id: str, ctx: EntitlementContext = Depends(get_current_entitlement)):
+    """Deactivates a registered device by ID under caller's evaluation license."""
+    success = activation_service.deactivate_device(ctx.license_id, device_id)
+    if not success:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail={"error": "DEVICE_NOT_FOUND", "message": f"Device '{device_id}' not found under current license."},
+        )
+    return {"status": "deactivated", "device_id": device_id, "message": "Device successfully deactivated."}
+
+
+@app.post("/v1/evaluation/device/heartbeat")
+async def device_heartbeat(ctx: EntitlementContext = Depends(get_current_entitlement)):
+    """Updates device presence timestamp and confirms active device registration status."""
+    try:
+        return activation_service.heartbeat_device(ctx.license_id, ctx.device_id)
+    except PermissionError as e:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail={"error": "DEVICE_INACTIVE", "message": str(e)},
+        )
+
+
+@app.post("/v1/evaluation/devices/{device_id}/recover")
+@app.post("/v1/evaluation/device/recover")
+async def recover_device(
+    device_id: str,
+    req: DeviceRecoveryRequest,
+    request: Request,
+):
+    """
+    Emergency device recovery: revokes a lost or inaccessible device using its recovery code,
+    freeing the license device slot. Can be authenticated via Bearer token or license_id in request.
+    """
+    license_id = req.license_id
+    if not license_id:
+        from .entitlements import extract_token_from_request
+        raw_token = extract_token_from_request(request)
+        if raw_token:
+            sess = activation_service.validate_session(raw_token)
+            if sess:
+                license_id = sess.license_id
+    if not license_id:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail={"error": "MISSING_LICENSE_ID", "message": "Specify license_id or provide valid session token."},
+        )
+    try:
+        res = activation_service.recover_device(license_id, device_id, req.recovery_code)
+        return res
+    except KeyError as e:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail={"error": "DEVICE_NOT_FOUND", "message": str(e)},
+        )
+    except PermissionError as e:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail={"error": "RECOVERY_FAILED", "message": str(e)},
+        )
 
 
 @app.post("/v1/evaluation/device/deactivate")

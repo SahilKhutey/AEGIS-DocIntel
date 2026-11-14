@@ -1,0 +1,23 @@
+============================= test session starts =============================
+platform win32 -- Python 3.12.10, pytest-9.1.1, pluggy-1.6.0 -- C:\Users\ASUS\AppData\Local\Programs\Python\Python312\python.exe
+cachedir: .pytest_cache
+hypothesis profile 'default'
+rootdir: C:\Users\ASUS\.gemini\antigravity\worktrees\Aegis-DocIntel\product_hunt_launch_packaging
+configfile: pyproject.toml
+plugins: anyio-4.12.1, hypothesis-6.156.6, langsmith-0.14.4, asyncio-1.4.0, cov-7.1.0
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collecting ... collected 30 items / 20 deselected / 10 selected
+
+tests/security/evaluation/test_device_binding_protocol.py::test_dev_001_stage1_challenge_creation_ed25519 PASSED [ 10%]
+tests/security/evaluation/test_device_binding_protocol.py::test_dev_005_challenge_rejected_invalid_activation_code PASSED [ 20%]
+tests/security/evaluation/test_device_binding_protocol.py::test_dev_006_challenge_rejected_malformed_public_key PASSED [ 30%]
+tests/security/evaluation/test_device_binding_protocol.py::test_dev_007_activation_rejected_invalid_signature PASSED [ 40%]
+tests/security/evaluation/test_device_binding_protocol.py::test_dev_008_activation_rejected_tampered_canonical_message PASSED [ 50%]
+tests/security/evaluation/test_device_binding_protocol.py::test_dev_009_challenge_expiry_rejected PASSED [ 60%]
+tests/security/evaluation/test_device_binding_protocol.py::test_dev_010_challenge_single_use_replay_prevention PASSED [ 70%]
+tests/security/evaluation/test_device_binding_protocol.py::test_dev_011_activation_nonexistent_challenge_id PASSED [ 80%]
+tests/security/evaluation/test_device_binding_protocol.py::test_dev_024_challenge_rate_limiting PASSED [ 90%]
+tests/security/evaluation/test_device_binding_protocol.py::test_dev_029_tampered_signature_payload_byte_modification PASSED [100%]
+
+====================== 10 passed, 20 deselected in 0.62s ======================
+

@@ -1,0 +1,21 @@
+============================= test session starts =============================
+platform win32 -- Python 3.12.10, pytest-9.1.1, pluggy-1.6.0 -- C:\Users\ASUS\AppData\Local\Programs\Python\Python312\python.exe
+cachedir: .pytest_cache
+hypothesis profile 'default'
+rootdir: C:\Users\ASUS\.gemini\antigravity\worktrees\Aegis-DocIntel\product_hunt_launch_packaging
+configfile: pyproject.toml
+plugins: anyio-4.12.1, hypothesis-6.156.6, langsmith-0.14.4, asyncio-1.4.0, cov-7.1.0
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collecting ... collected 35 items / 27 deselected / 8 selected
+
+tests/security/evaluation/test_activation.py::test_dev_001_first_device_activation PASSED [ 12%]
+tests/security/evaluation/test_activation.py::test_dev_002_second_device_beyond_limit_rejected PASSED [ 25%]
+tests/security/evaluation/test_activation.py::test_dev_004_device_deactivation_frees_slot_for_reactivation PASSED [ 37%]
+tests/security/evaluation/test_device_binding_protocol.py::test_dev_001_stage1_challenge_creation_ed25519 PASSED [ 50%]
+tests/security/evaluation/test_device_binding_protocol.py::test_dev_002_atomic_one_device_limit_enforcement PASSED [ 62%]
+tests/security/evaluation/test_device_binding_protocol.py::test_dev_004_deactivation_frees_device_slot_for_replacement PASSED [ 75%]
+tests/security/evaluation/test_device_binding_protocol.py::test_dev_016_idempotent_reactivation_same_device PASSED [ 87%]
+tests/security/evaluation/test_device_binding_protocol.py::test_dev_030_complete_evaluation_lifecycle_end_to_end PASSED [100%]
+
+====================== 8 passed, 27 deselected in 0.60s =======================
+

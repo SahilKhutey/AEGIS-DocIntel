@@ -167,4 +167,35 @@
   - `audit/prot-04-02/` (baseline, tests, build, reports)
 - **Result:** **PASSED / PROCEED**. Work package WP-04.02 formally signed off from HOLD to PASSED. Authorized to proceed to WP-04.03 (Evaluation Activation & Device Binding).
 
+---
+
+### TASK-WP-04.03: Evaluation Activation & Device Binding Certification
+- **Date:** 2026-11-14
+- **Scope:** Complete implementation and verification of WP-04.03:
+  1. Implemented two-stage proof-of-possession device challenge protocol in `services/evaluation_gateway/activation.py` (Stage 1 Challenge, Stage 2 Activate) supporting Ed25519 (raw base64 & PEM) and RSA-2048 PKCS1/PSS.
+  2. Implemented HMAC-SHA256 keyed activation code lookup (`compute_code_hash`, never stores or logs raw codes, resolving `DEV-025`).
+  3. Enforced atomic 1-device limit (`DEV-002`), single-use challenge consumption (`DEV-010`), and challenge expiry (`DEV-009`).
+  4. Implemented device management endpoints in `services/evaluation_gateway/app.py`:
+     - `POST /v1/evaluation/device/challenge`
+     - `POST /v1/evaluation/device/activate`
+     - `GET /v1/evaluation/devices`
+     - `GET /v1/evaluation/devices/{device_id}`
+     - `POST /v1/evaluation/devices/{device_id}/deactivate`
+     - `POST /v1/evaluation/device/heartbeat`
+     - `POST /v1/evaluation/devices/{device_id}/recover`
+  5. Implemented comprehensive test suite covering `DEV-001` through `DEV-030` in `tests/security/evaluation/test_device_binding_protocol.py`.
+  6. Generated complete audit evidence files in `audit/prot-04-03/` (baseline, crypto, activation, security, reports).
+  7. Authored 11 comprehensive dossiers in `docs/distribution/prot-04-auth-licensing/wp-04-03-device-binding/`.
+- **Commands Executed:**
+  - `python -m pytest tests/security/evaluation/test_device_binding_protocol.py -v` -> 30 / 30 PASSED (1.10s).
+  - `python -m pytest tests/security/evaluation/ tests/test_production_auth.py tests/test_auth_guard.py tests/distribution_security/ demo/tests/ -q` -> 147 / 147 PASSED in 25.75s (100% green).
+  - `npm --prefix web run verify:auth` -> Exit code 0 (Clean, 0 violations).
+  - `python scripts/generate_audit_prot_04_03.py` -> All 11 audit evidence artifacts generated.
+- **Deliverables:**
+  - `docs/distribution/prot-04-auth-licensing/wp-04-03-device-binding/01_DEVICE_BINDING_ARCHITECTURE.md` through `11_WP_04_03_SIGNOFF.md`
+  - `audit/prot-04-03/` (baseline, crypto, activation, security, reports)
+  - `docs/distribution/prot-04-auth-licensing/03_ACTIVATION_AND_DEVICE_BINDING.md` (Updated overview)
+- **Result:** **PASSED / PROCEED**. Work package WP-04.03 formally signed off from HOLD to PASSED. Authorized to proceed to WP-04.04 (License Verification Engine & Claims Validation).
+
+
 
