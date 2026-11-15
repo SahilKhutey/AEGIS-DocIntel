@@ -112,7 +112,7 @@ function CompareContent() {
 
       {/* Document Selection Workspace */}
       {docsLoading ? (
-        <p className="text-sm text-gray-400">Loading documents...</p>
+        <p className="text-sm text-gray-600">Loading documents...</p>
       ) : documents.length < 2 ? (
         <EmptyState
           title="Insufficient documents for comparison"

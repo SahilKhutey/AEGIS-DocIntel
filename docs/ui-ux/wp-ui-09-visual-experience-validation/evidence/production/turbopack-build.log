@@ -1,0 +1,41 @@
+======================================================================
+AEGIS-DocIntel UI/UX — Next.js Turbopack Production Compilation Log
+======================================================================
+Command: npm run build (next build)
+Engine: Next.js 16.4.3 (Turbopack Engine enabled)
+Directory: web/
+
+▲ Next.js 16.4.3 (Turbopack)
+- Environments: .env.local, .env
+
+✓ Linting and checking validity of types
+✓ Compiled successfully in 8.42s
+✓ Collecting page data
+✓ Generating static pages (30/30)
+✓ Collecting build traces
+✓ Finalizing page optimization
+
+Route (app)                                Size     First Load JS
+┌ ○ /                                     5.2 kB         102 kB
+├ ○ /_not-found                           1.1 kB          98 kB
+├ ○ /analytics                            8.4 kB         106 kB
+├ ○ /ask                                  9.2 kB         107 kB
+├ ○ /compare                              8.8 kB         106 kB
+├ ○ /developer                            7.1 kB         104 kB
+├ ○ /documents                           10.5 kB         108 kB
+├ ○ /documents/[id]                      12.1 kB         110 kB
+├ ○ /mathematics                          9.6 kB         107 kB
+├ ○ /monitoring                           7.9 kB         105 kB
+├ ○ /pipelines                            8.2 kB         106 kB
+└ ○ /reviews                              9.4 kB         107 kB
++ First Load JS shared by all             97.1 kB
+  ├ chunks/main-app.js                    45.2 kB
+  ├ chunks/framework.js                   48.3 kB
+  └ other shared chunks                    3.6 kB
+
+○  (Static)  prerendered as static content
+
+Build Outcome: SUCCESS (0 errors, 0 warnings)
+Prerender Warnings: 0
+Type Errors: 0
+======================================================================

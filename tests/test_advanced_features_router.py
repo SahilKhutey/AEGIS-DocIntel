@@ -126,3 +126,28 @@ def test_api_optimization_ising_anneal():
     data = resp.json()
     assert "energy" in data
     assert len(data["weights"]) == 4
+
+
+def test_api_math_unified_evaluation():
+    resp = client.post(
+        "/v1/advanced/math/unified-evaluation",
+        json={"expression": "cos_sim(u, v) * 0.85 + bm25_score * 0.15"},
+    )
+    assert resp.status_code == 200
+    data = resp.json()
+    assert data["status"] == "success"
+    assert "result" in data
+    assert abs(data["result"] - 0.858235) < 1e-4
+
+
+def test_api_math_representations():
+    resp = client.get("/v1/advanced/math/representations")
+    assert resp.status_code == 200
+    data = resp.json()
+    assert len(data) >= 2
+    rep_ids = [r["id"] for r in data]
+    assert "rep-vec-doc-01" in rep_ids
+
+    detail_resp = client.get("/v1/advanced/math/representations/rep-vec-doc-01")
+    assert detail_resp.status_code == 200
+    assert detail_resp.json()["id"] == "rep-vec-doc-01"

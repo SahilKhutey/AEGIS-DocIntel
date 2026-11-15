@@ -55,18 +55,18 @@ export const ServiceHealthList: React.FC<ServiceHealthListProps> = ({ services }
             <div className="flex items-start justify-between gap-2">
               <div>
                 <h4 className="text-xs font-bold text-slate-900 leading-snug">{svc.name}</h4>
-                <span className="text-[10px] text-slate-400 font-mono uppercase">{svc.category}</span>
+                <span className="text-[10px] text-slate-600 font-mono uppercase">{svc.category}</span>
               </div>
               {getStatusBadge(svc.status)}
             </div>
 
             <div className="grid grid-cols-2 gap-2 text-xs font-mono pt-2 border-t border-slate-200/60">
               <div>
-                <span className="text-[10px] text-slate-400 font-sans block">Latency</span>
+                <span className="text-[10px] text-slate-600 font-sans block">Latency</span>
                 <span className="font-bold text-slate-800">{svc.latencyMs}ms</span>
               </div>
               <div>
-                <span className="text-[10px] text-slate-400 font-sans block">Uptime</span>
+                <span className="text-[10px] text-slate-600 font-sans block">Uptime</span>
                 <span className="font-bold text-emerald-700">{svc.uptimePercent}%</span>
               </div>
             </div>

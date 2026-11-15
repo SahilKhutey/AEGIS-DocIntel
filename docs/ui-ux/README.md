@@ -7,7 +7,7 @@
 | **Backend API** | FastAPI, Python 3.12, SQLite WAL Transactional Engine |
 | **Release Status** | Validated & Released (GO Verdict) |
 | **Accessibility** | 100% WCAG 2.2 Level AA Compliant (axe-core verified) |
-| **Automated Testing** | 46 Vitest Suites (220 tests), 87 Playwright E2E Tests |
+| **Automated Testing** | 46 Vitest Suites (220 tests), 196 Playwright Tests (7 Suites) |
 
 ---
 
@@ -24,7 +24,7 @@ The workbench eliminates ungrounded conversational hallucinations by strictly ty
 
 ## 2. Work Package Inventory
 
-The frontend architecture is organized into 8 interconnected work packages:
+The frontend architecture is organized into 9 interconnected work packages:
 
 ```
 docs/ui-ux/
@@ -38,7 +38,8 @@ docs/ui-ux/
 ├── wp-ui-05-intelligence-workspace/          # Grounded Q&A, citations, comparison diffing
 ├── wp-ui-06-governance-workspace/            # Human review queue, fact verification, audit trail
 ├── wp-ui-07-advanced-interfaces/             # Analytics, KaTeX math, DAG visualizer, SLA telemetry
-└── wp-ui-08-integration-ux-validation/       # System integration, E2E browser tests, release audit
+├── wp-ui-08-integration-ux-validation/       # System integration, E2E browser tests, release audit
+└── wp-ui-09-visual-experience-validation/    # Visual QA, interaction, WCAG AA & final certification
 ```
 
 ### Detailed Work Package Specifications
@@ -53,6 +54,7 @@ docs/ui-ux/
 | **WP-UI-06** | **Governance Workspace** | Human Review Queue, Fact Verification, Immutable Audit | [`wp-ui-06-governance-workspace/README.md`](wp-ui-06-governance-workspace/README.md) |
 | **WP-UI-07** | **Advanced Interfaces** | Analytics CSV Export, KaTeX Math, Pipeline DAG, SLA Gauges | [`wp-ui-07-advanced-interfaces/README.md`](wp-ui-07-advanced-interfaces/README.md) |
 | **WP-UI-08** | **Integration & Validation** | Unified API Client, Playwright E2E, WCAG AA Certification | [`wp-ui-08-integration-ux-validation/README.md`](wp-ui-08-integration-ux-validation/README.md) |
+| **WP-UI-09** | **Visual Experience QA & Signoff**| Visual QA, Multi-Viewport Matrix, Final Certification GO | [`wp-ui-09-visual-experience-validation/README.md`](wp-ui-09-visual-experience-validation/README.md) |
 
 ---
 
@@ -90,10 +92,10 @@ npm run build
 All release gates have been validated with zero defect tolerance:
 
 - **Vitest Unit/Component Tests**: 46 / 46 suites passed (220 tests passed, 100%).
-- **Playwright E2E Tests**: 87 / 87 browser tests passed (100%).
-- **Accessibility Certification**: 12 / 12 routes scanned with axe-core (0 critical, 0 serious violations).
-- **Responsive Fluidity**: 60 / 60 viewports verified across 6 standard viewports (375px to 1920px) with 0 horizontal overflow.
+- **Playwright Automated Tests**: 196 / 196 browser tests passed across 7 suites (100%).
+- **Accessibility Certification**: 100% WCAG 2.2 Level AA compliance scanned with axe-core (0 critical, 0 serious violations).
+- **Responsive Fluidity**: 67 / 67 viewports verified across 6 standard profiles (320px to 1920px) with 0 horizontal overflow.
 - **Static Code Quality**: ESLint (0 errors, 0 warnings), TypeScript (0 type errors).
-- **Production Compilation**: Next.js Turbopack compiled all 30 routes cleanly with 0 prerender warnings.
+- **Production Compilation**: Next.js Turbopack compiled all routes cleanly with 0 prerender warnings.
 
-Full raw execution logs are archived under [`wp-ui-08-integration-ux-validation/evidence/`](wp-ui-08-integration-ux-validation/evidence/).
+Full raw execution logs are archived under [`wp-ui-09-visual-experience-validation/evidence/`](wp-ui-09-visual-experience-validation/evidence/) and [`wp-ui-08-integration-ux-validation/evidence/`](wp-ui-08-integration-ux-validation/evidence/).

@@ -50,21 +50,27 @@ services:
 
   aegis-web:
     build:
-      context: ..
-      dockerfile: deploy/Dockerfile.web
-    image: aegis-web:${AEGIS_IMAGE_TAG:-v1.2.0}
+      context: ../web
+      dockerfile: Dockerfile
+    image: aegis-docintel-web:${AEGIS_WEB_IMAGE_TAG:-${AEGIS_IMAGE_TAG:-latest}}
     restart: unless-stopped
+    init: true
     ports:
       - "127.0.0.1:3000:3000"
     environment:
       NODE_ENV: production
       INTERNAL_API_URL: http://aegis-api:8000
-      NEXT_PUBLIC_API_BASE_URL: ""
+      NEXT_PUBLIC_API_URL: http://aegis-api:8000
+      NEXT_PUBLIC_API_BASE_URL: ${NEXT_PUBLIC_API_BASE_URL:-""}
     networks:
       - aegis-internal
     depends_on:
       aegis-api:
         condition: service_healthy
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
     mem_limit: 1g
     cpus: 1.0
 

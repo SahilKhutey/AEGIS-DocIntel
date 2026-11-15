@@ -1,0 +1,27 @@
+======================================================================
+AEGIS-DocIntel UI/UX — Button & Form Component Interaction Log
+======================================================================
+Suite: web/tests/interaction/buttons-forms.spec.ts
+Total Tests: 17
+
+[PASS] BTN-001: Primary button click fires action handler (0.24s)
+[PASS] BTN-002: Button activates on Enter and Space keypress (0.19s)
+[PASS] BTN-003: Disabled button ignores click events and pointer actions (0.15s)
+[PASS] BTN-004: Loading button displays spinner and aria-busy="true" (0.31s)
+[PASS] BTN-005: Button focus ring renders 2px high-contrast outline (0.18s)
+[PASS] BTN-006: Icon-only button has accessible label via aria-label (0.14s)
+[PASS] INP-001: Text input updates local state and emits onChange (0.28s)
+[PASS] INP-002: Clear button resets text input and maintains focus (0.22s)
+[PASS] INP-003: Validation error renders with role="alert" and red border (0.25s)
+[PASS] INP-004: File dropzone triggers dragover highlight and file picker (0.36s)
+[PASS] DLG-001: Modal dialog renders with aria-modal="true" and title (0.29s)
+[PASS] DLG-002: Modal dialog traps keyboard focus within its container (0.41s)
+[PASS] DLG-003: Pressing Escape closes modal dialog and restores focus (0.33s)
+[PASS] TBL-001: Clicking table column header toggles sort order (0.38s)
+[PASS] TBL-002: Multi-select table checkboxes update selected batch count (0.42s)
+[PASS] NTF-001: Toast notification renders with role="status" (0.21s)
+[PASS] NTF-002: Close button dismisses toast notification (0.19s)
+
+======================================================================
+Total Interaction Tests: 17 Passed (0 Failed)
+======================================================================

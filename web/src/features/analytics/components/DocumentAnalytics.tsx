@@ -19,22 +19,22 @@ export const DocumentAnalytics: React.FC<DocumentAnalyticsProps> = ({ stats }) =
         </h3>
         <dl className="space-y-4 text-xs">
           <div className="flex items-center justify-between pb-3 border-b border-slate-100">
-            <dt className="text-slate-500">Total Active Documents</dt>
+            <dt className="text-slate-600">Total Active Documents</dt>
             <dd className="font-semibold text-slate-900">{stats.doc_count.toLocaleString()}</dd>
           </div>
           <div className="flex items-center justify-between pb-3 border-b border-slate-100">
-            <dt className="text-slate-500">Average Chunks Per Document</dt>
+            <dt className="text-slate-600">Average Chunks Per Document</dt>
             <dd className="font-semibold text-slate-900">{avgChunksPerDoc} chunks/doc</dd>
           </div>
           <div className="flex items-center justify-between pb-3 border-b border-slate-100">
-            <dt className="text-slate-500">Estimated Vector Footprint</dt>
+            <dt className="text-slate-600">Estimated Vector Footprint</dt>
             <dd className="font-semibold text-slate-900">{estimatedStorageMb.toFixed(2)} MB</dd>
           </div>
           <div className="flex items-center justify-between">
-            <dt className="text-slate-500">Ingestion Reliability</dt>
-            <dd className="inline-flex items-center gap-1 font-semibold text-emerald-600">
+            <dt className="text-slate-600">Ingestion Reliability</dt>
+            <dd className="inline-flex items-center gap-1 font-semibold text-emerald-800">
               <span>99.8%</span>
-              <span className="text-slate-400 font-normal">(0 errors)</span>
+              <span className="text-slate-600 font-normal">(0 errors)</span>
             </dd>
           </div>
         </dl>

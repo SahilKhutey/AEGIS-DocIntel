@@ -167,7 +167,10 @@ export class DefaultDocumentService implements DocumentService {
     try {
       await apiRequest(
         `/api/v1/documents/${encodedId}/facts`,
-        z.object({ facts: z.array(ExtractedFactSchema) })
+        z.union([
+          z.object({ facts: z.array(ExtractedFactSchema) }),
+          z.array(ExtractedFactSchema),
+        ])
       );
     } catch {
       // Facts are optional

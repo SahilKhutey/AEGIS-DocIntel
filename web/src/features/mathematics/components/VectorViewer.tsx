@@ -63,19 +63,19 @@ export const VectorViewer: React.FC<VectorViewerProps> = ({
       {/* Summary KPI Pills */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
         <div className="p-3 rounded-lg bg-slate-50 border border-slate-100">
-          <span className="text-[10px] font-semibold uppercase text-slate-400">Total Dimensions</span>
+          <span className="text-[10px] font-semibold uppercase text-slate-600">Total Dimensions</span>
           <div className="text-base font-bold text-slate-800">{vector.dimensions.toLocaleString()}</div>
         </div>
         <div className="p-3 rounded-lg bg-slate-50 border border-slate-100">
-          <span className="text-[10px] font-semibold uppercase text-slate-400">Min Value</span>
+          <span className="text-[10px] font-semibold uppercase text-slate-600">Min Value</span>
           <div className="text-base font-bold text-slate-800 font-mono">{vector.min.toFixed(4)}</div>
         </div>
         <div className="p-3 rounded-lg bg-slate-50 border border-slate-100">
-          <span className="text-[10px] font-semibold uppercase text-slate-400">Max Value</span>
+          <span className="text-[10px] font-semibold uppercase text-slate-600">Max Value</span>
           <div className="text-base font-bold text-slate-800 font-mono">{vector.max.toFixed(4)}</div>
         </div>
         <div className="p-3 rounded-lg bg-slate-50 border border-slate-100">
-          <span className="text-[10px] font-semibold uppercase text-slate-400">Sparsity</span>
+          <span className="text-[10px] font-semibold uppercase text-slate-600">Sparsity</span>
           <div className="text-base font-bold text-slate-800">{vector.sparsity}%</div>
         </div>
       </div>
@@ -110,7 +110,7 @@ export const VectorViewer: React.FC<VectorViewerProps> = ({
                     }`}
                     style={{ height: `${Math.max(10, barHeightPct)}%` }}
                   />
-                  <span className="mt-1 text-[9px] font-mono text-slate-400 select-none">
+                  <span className="mt-1 text-[9px] font-mono text-slate-300 select-none">
                     {dimIndex}
                   </span>
                 </div>

@@ -2192,6 +2192,76 @@
         }
       }
     },
+    "/v1/advanced/math/representations": {
+      "get": {
+        "tags": [
+          "Advanced Systems & Pre-LLM"
+        ],
+        "summary": "Get Math Representations",
+        "operationId": "get_math_representations_v1_advanced_math_representations_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "type": "array",
+                  "title": "Response Get Math Representations V1 Advanced Math Representations Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/advanced/math/representations/{rep_id}": {
+      "get": {
+        "tags": [
+          "Advanced Systems & Pre-LLM"
+        ],
+        "summary": "Get Math Representation By Id",
+        "operationId": "get_math_representation_by_id_v1_advanced_math_representations__rep_id__get",
+        "parameters": [
+          {
+            "name": "rep_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Rep Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response Get Math Representation By Id V1 Advanced Math Representations  Rep Id  Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/advanced/ingestion/parse-speech": {
       "post": {
         "tags": [
@@ -2393,11 +2463,18 @@
           }
         ],
         "requestBody": {
-          "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/ExtractFactsRequest"
+                "anyOf": [
+                  {
+                    "$ref": "#/components/schemas/ExtractFactsRequest"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "title": "Payload"
               }
             }
           }
@@ -6628,15 +6705,55 @@
       "UnifiedMathRequest": {
         "properties": {
           "document": {
-            "additionalProperties": true,
-            "type": "object",
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Document"
+          },
+          "document_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Document Id"
+          },
+          "expression": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Expression"
+          },
+          "variables": {
+            "anyOf": [
+              {
+                "additionalProperties": {
+                  "type": "number"
+                },
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Variables"
           }
         },
         "type": "object",
-        "required": [
-          "document"
-        ],
         "title": "UnifiedMathRequest"
       },
       "ValidationError": {

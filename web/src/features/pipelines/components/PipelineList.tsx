@@ -54,7 +54,7 @@ export const PipelineList: React.FC = () => {
       render: (run) => (
         <div>
           <span className="font-semibold text-slate-900 block">{run.resourceTitle}</span>
-          <span className="text-[10px] text-slate-400 font-mono">{run.resourceId}</span>
+          <span className="text-[10px] text-slate-600 font-mono">{run.resourceId}</span>
         </div>
       ),
     },

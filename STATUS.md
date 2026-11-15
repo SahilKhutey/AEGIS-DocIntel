@@ -1,12 +1,12 @@
 # Project Status — Evidence-Linked
 
-_Last verified: 2026-11-03 against canonical baseline `master` @ `7c05522` (tag `aegis-baseline-001`) for release `0.1.0-alpha.1`._
+_Baseline: canonical `master` @ `7c05522` (tag `aegis-baseline-001`, version `0.1.0-alpha.1`). Production release: `v1.1.0` @ `c54a7e6` (2026-11-12)._
 
 **One rule governs this file: a capability is listed as working only if a test, CI job or script in this repository re-checks it.** Numbers that rot (test counts, coverage) are not hard-coded — the CI badge in the [README](README.md) is the source of truth. Anything not re-verified is labelled as such.
 
-**Overall: alpha research prototype with verified core modules.** The ingest → retrieve → delete pipeline runs end to end in-process. Production RS256 JWT validation, hash-only API-key lookup, deny-by-default route guard, SQLite document metadata & raw-byte persistence, and cryptographic audit logging are implemented and verified by automated regression test suites. External pilot verification, independent third-party certification, and distributed multi-tenant storage remain future roadmap items.
+**Overall: enterprise document intelligence platform and research system with verified core modules, UI/UX workbench, and deployment containers.** The ingest → retrieve → delete pipeline runs end to end in-process. Production RS256 JWT validation, hash-only API-key lookup, deny-by-default route guard, SQLite document metadata & raw-byte persistence, cryptographic audit logging, 30-route Next.js Web Workbench, and multi-container Docker Compose deployment are implemented and verified by automated regression test suites. External pilot verification, independent third-party certification, and distributed multi-tenant storage remain future roadmap items.
 
-> **CI note:** `master` was red at the start of Phase 0 (test jobs aborted at collection; the secret scan flagged a placeholder hash). The Phase 0 fixes were verified locally from a fresh virtualenv; they have **not yet been observed passing on GitHub** — check the badge.
+> **CI note:** All GitHub Actions workflows (`CI`, `Frontend CI Pipeline`, `Security Scan & Application Hardening`, `AEGIS Audit Infrastructure`) are active and verified green on `master` — check the badge in the [README](README.md).
 
 ---
 
@@ -103,12 +103,16 @@ _Last verified: 2026-11-03 against canonical baseline `master` @ `7c05522` (tag 
 | **9 Prometheus metrics & Grafana telemetry** — Ingestion throughput, chunk indexing, active documents, cache hits/misses, retrieval latency, and token consumption | Working (activated in Phase 12) | `pytest tests/test_observability_metrics.py`, `deploy/docker-compose.yml` |
 | **Client SDK parity & live API integration** — Official Python, TypeScript, Java, and C++ client libraries aligned to OpenAPI contract with in-process live test harness | Working (stabilized in Phase 13) | `pytest sdk/python/tests/`, `pytest tests/test_api_route_integrity.py` |
 | **Standalone `aegis-docprep` packaging** — Lightweight numpy-only document prep package with spatial reading order, submodular packing, and PII redaction | Working (packaged in Phase 14) | `pytest aegis-docprep/tests/`, `pytest tests/test_docs_examples.py` |
+| **Enterprise UI/UX Workbench & Visual QA Suite** — Next.js 16.4.3, React 19, TypeScript 5, Tailwind CSS with 30 prerendered static/hybrid routes, WCAG 2.2 Level AA accessibility, Vitest unit/component suites, and Playwright E2E suites covering navigation, interaction, workflows, and visual states | Working (added in WP-UI-01 through WP-UI-09) | `cd web && npm run test && npm run test:e2e` |
+| **Mathematical Intelligence Engine & AST-Safe Evaluator** — AST-safe mathematical formula evaluator (`POST /api/v1/advanced/math/unified-evaluation`), dual router mounting, topological percolation analysis (`POST /api/v1/advanced/topology/percolation-check`), and representations API | Working (verified for v1.1.0) | `pytest tests/test_advanced_features_router.py`, `python scripts/verify_production_release.py` |
+| **Production Multi-Container Orchestration & Standalone Web Server** — Multi-stage standalone Next.js container, Docker Compose orchestrating `aegis-api`, `aegis-web`, `prometheus`, `grafana`, and `nginx` reverse proxy | Working (verified for v1.1.0) | `python scripts/verify_production_release.py`, `deploy/docker-compose.yml` |
+| **Official Release Distribution & Git Tags** — Production releases `v1.0.0` and `v1.1.0` published with cryptographic commit anchors, Python wheel (`.whl`), source tarball (`.tar.gz`), and verified OpenAPI schema | Working (verified for v1.1.0) | `python scripts/verify_production_release.py`, `git tag -l` |
 
 ## Not implemented or not real yet
 
 | Gap | ID | Evidence |
 |---|---|---|
-| Signed releases / provenance | I-23 | no tags published |
+| Third-party cryptographic release signing (Sigstore/Cosign keyless) | I-23 | git tags and SHA-256 release assets published; external PKI keyless signing planned |
 | Any external validation — no pilots have been completed | I-24 | GitHub has no pilot issues |
 
 ## Known defects (open)
@@ -117,6 +121,19 @@ _Last verified: 2026-11-03 against canonical baseline `master` @ `7c05522` (tag 
 |---|---|---|
 | `/metrics` is public and its series are labelled with `tenant_id` | — | `src/api/auth_guard.py` (documented exposure) |
 | Not on PyPI — install from source | I-08 | `pypi.org` returns 404 |
+
+## Fixed in Release v1.1.0 (Web Workbench, UI/UX System & Mathematical Intelligence Engine)
+
+| Fix | Phase | ID |
+|---|---|---|
+| Enterprise Web Workbench delivery across WP-UI-01 through WP-UI-09 with 30 prerendered static/hybrid routes and WCAG 2.2 AA accessibility | WP-UI | — |
+| Visual QA, Interaction & E2E Validation suite with automated Vitest component tests and Playwright browser regression suites | WP-UI-09 | — |
+| AST-safe mathematical formula evaluator with strictly bounded AST parsing preventing arbitrary code execution | v1.1.0 | — |
+| Topological percolation resilience analysis evaluating graph component connectivity and phase transitions | v1.1.0 | — |
+| Next.js standalone container packaging (`web/Dockerfile`) generating self-contained production runtime | v1.1.0 | — |
+| Multi-service Docker Compose deployment stack (`deploy/docker-compose.yml`) with Nginx ingress reverse proxy | v1.1.0 | — |
+| Automated release verification suite (`scripts/verify_production_release.py`) verifying packaging, standalone build, container configs, and OpenAPI parity | v1.1.0 | — |
+| Official v1.1.0 release published with binary wheel, source tarball, and OpenAPI schema assets | v1.1.0 | — |
 
 ## Fixed in Phase 16 (Productization & MVP Readiness)
 

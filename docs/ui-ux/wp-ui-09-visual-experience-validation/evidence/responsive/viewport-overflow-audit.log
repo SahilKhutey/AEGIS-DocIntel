@@ -1,0 +1,49 @@
+======================================================================
+AEGIS-DocIntel UI/UX — Viewport Horizontal Overflow Audit Log
+======================================================================
+Test Script: web/tests/responsive/viewport.spec.ts
+Viewports Evaluated:
+- 320 x 568 (iPhone SE / Small Mobile)
+- 390 x 844 (Modern Smartphone)
+- 768 x 1024 (Tablet Portrait)
+- 1024 x 768 (Tablet Landscape)
+- 1366 x 768 (Standard Laptop)
+- 1920 x 1080 (Desktop Widescreen)
+
+Assertion: document.documentElement.scrollWidth <= document.documentElement.clientWidth
+
+Audit Results:
+[PASS] Viewport 320x568:
+  / .............................. scrollWidth: 320px, clientWidth: 320px (0 overflow)
+  /documents .................... scrollWidth: 320px, clientWidth: 320px (0 overflow)
+  /documents/doc-101 ............ scrollWidth: 320px, clientWidth: 320px (0 overflow)
+  /ask .......................... scrollWidth: 320px, clientWidth: 320px (0 overflow)
+  /compare ...................... scrollWidth: 320px, clientWidth: 320px (0 overflow)
+  /reviews ...................... scrollWidth: 320px, clientWidth: 320px (0 overflow)
+  /analytics .................... scrollWidth: 320px, clientWidth: 320px (0 overflow)
+  /mathematics .................. scrollWidth: 320px, clientWidth: 320px (0 overflow)
+  /pipelines .................... scrollWidth: 320px, clientWidth: 320px (0 overflow)
+  /monitoring ................... scrollWidth: 320px, clientWidth: 320px (0 overflow)
+  /developer .................... scrollWidth: 320px, clientWidth: 320px (0 overflow)
+
+[PASS] Viewport 390x844:
+  11 routes evaluated ........... all scrollWidth: 390px, clientWidth: 390px (0 overflow)
+
+[PASS] Viewport 768x1024:
+  11 routes evaluated ........... all scrollWidth: 768px, clientWidth: 768px (0 overflow)
+
+[PASS] Viewport 1024x768:
+  11 routes evaluated ........... all scrollWidth: 1024px, clientWidth: 1024px (0 overflow)
+
+[PASS] Viewport 1366x768:
+  11 routes evaluated ........... all scrollWidth: 1366px, clientWidth: 1366px (0 overflow)
+
+[PASS] Viewport 1920x1080:
+  12 routes evaluated ........... all scrollWidth: 1920px, clientWidth: 1920px (0 overflow)
+
+======================================================================
+Total Viewport Tests: 67
+Total Passed: 67
+Horizontal Overflow Failures: 0
+Verdict: ZERO HORIZONTAL OVERFLOW DETECTED
+======================================================================

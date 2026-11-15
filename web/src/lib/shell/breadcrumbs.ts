@@ -31,6 +31,35 @@ const ROUTE_BREADCRUMBS: Record<string, BreadcrumbDefinition[]> = {
     { label: "Governance" },
     { label: "Reviews" },
   ],
+
+  "/analytics": [
+    { label: "Workspace", href: "/" },
+    { label: "Operations" },
+    { label: "Analytics" },
+  ],
+
+  "/mathematics": [
+    { label: "Workspace", href: "/" },
+    { label: "Operations" },
+    { label: "Mathematics" },
+  ],
+
+  "/pipelines": [
+    { label: "Workspace", href: "/" },
+    { label: "Operations" },
+    { label: "Pipelines" },
+  ],
+
+  "/monitoring": [
+    { label: "Workspace", href: "/" },
+    { label: "Operations" },
+    { label: "Monitoring" },
+  ],
+
+  "/developer": [
+    { label: "Workspace", href: "/" },
+    { label: "Developer" },
+  ],
 };
 
 export function getBreadcrumbs(pathname: string): BreadcrumbDefinition[] {
@@ -51,6 +80,22 @@ export function getBreadcrumbs(pathname: string): BreadcrumbDefinition[] {
       { label: "Workspace", href: "/" },
       { label: "Reviews", href: "/reviews" },
       { label: "Review details" },
+    ];
+  }
+
+  if (pathname.startsWith("/pipelines/")) {
+    return [
+      { label: "Workspace", href: "/" },
+      { label: "Pipelines", href: "/pipelines" },
+      { label: "Pipeline Run" },
+    ];
+  }
+
+  if (pathname.startsWith("/mathematics/")) {
+    return [
+      { label: "Workspace", href: "/" },
+      { label: "Mathematics", href: "/mathematics" },
+      { label: "Representation" },
     ];
   }
 

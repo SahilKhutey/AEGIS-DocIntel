@@ -9,7 +9,7 @@ from __future__ import annotations
 from typing import Any, Dict, List, Optional
 
 import structlog
-from fastapi import APIRouter, Depends, HTTPException, Query, Request, status
+from fastapi import APIRouter, Body, Depends, HTTPException, Query, Request, status
 from pydantic import BaseModel, Field
 
 from src.api.auth import TenantContext, get_current_tenant
@@ -140,14 +140,17 @@ class ConflictReportModel(BaseModel):
 )
 async def extract_facts(
     document_id: str,
-    payload: ExtractFactsRequest,
     request: Request,
+    payload: Optional[ExtractFactsRequest] = Body(default=None),
     tenant: TenantContext = Depends(get_current_tenant),
 ) -> ExtractionResultResponse:
     """
     Extract structured, typed facts from document passages or from indexed elements.
     Guarantees exact evidence span grounding and provenance persistence.
     """
+    if payload is None:
+        payload = ExtractFactsRequest()
+
     svc = get_intelligence_service(request)
     custom_schema_obj = (
         ExtractionSchema.from_dict(payload.custom_schema)

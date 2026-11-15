@@ -206,6 +206,7 @@ def create_app() -> FastAPI:
 
     from src.api.routers import advanced_features
     app.include_router(advanced_features.router)
+    app.include_router(advanced_features.router, prefix="/api", include_in_schema=False)
 
     from src.api.routers import health as health_router_mod
     app.include_router(health_router_mod.router)
