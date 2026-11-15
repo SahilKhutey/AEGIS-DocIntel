@@ -140,6 +140,7 @@ class DeviceActivateRequest(BaseModel):
 class DeviceRecoveryRequest(BaseModel):
     recovery_code: str = Field(..., description="Emergency recovery code issued during device binding")
     license_id: Optional[str] = Field(default=None, description="Associated license ID if not calling with session bearer")
+    device_id: Optional[str] = Field(default=None, description="Target device identifier to recover")
 
 
 class AdminIssueLicenseRequest(BaseModel):
@@ -685,14 +686,20 @@ async def device_heartbeat(ctx: EntitlementContext = Depends(get_current_entitle
 @app.post("/v1/evaluation/devices/{device_id}/recover")
 @app.post("/v1/evaluation/device/recover")
 async def recover_device(
-    device_id: str,
     req: DeviceRecoveryRequest,
     request: Request,
+    device_id: Optional[str] = None,
 ):
     """
     Emergency device recovery: revokes a lost or inaccessible device using its recovery code,
     freeing the license device slot. Can be authenticated via Bearer token or license_id in request.
     """
+    target_device_id = device_id or req.device_id
+    if not target_device_id:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail={"error": "MISSING_DEVICE_ID", "message": "Device ID must be provided in path or body."},
+        )
     license_id = req.license_id
     if not license_id:
         from .entitlements import extract_token_from_request
@@ -707,7 +714,7 @@ async def recover_device(
             detail={"error": "MISSING_LICENSE_ID", "message": "Specify license_id or provide valid session token."},
         )
     try:
-        res = activation_service.recover_device(license_id, device_id, req.recovery_code)
+        res = activation_service.recover_device(license_id, target_device_id, req.recovery_code)
         return res
     except KeyError as e:
         raise HTTPException(

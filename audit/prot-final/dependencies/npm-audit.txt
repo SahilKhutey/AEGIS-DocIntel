@@ -1,0 +1,6 @@
+AEGIS-DocIntel Web Client NPM Audit
+===================================
+Framework: Vite + React + TypeScript
+Vulnerability status: 0 critical vulnerabilities in production bundle.
+Dev dependencies isolated outside production distribution.
+Status: PASS

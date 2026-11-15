@@ -1,0 +1,11 @@
+PRIVATE ENGINE TENANT ISOLATION AUDIT (SEC-006, SEC-016)
+========================================================
+1. Gateway issues internal HMAC token for Tenant A.
+2. Evaluator attempts to invoke Private Engine for Tenant B using Tenant A token:
+   - Private Engine Guard detects CROSS_TENANT_CONTEXT_MISMATCH.
+   - Execution denied immediately; no document processing initiated (PASS)
+3. Evaluator attempts direct HTTP request bypassing Gateway:
+   - Missing HMAC service token -> HTTP 401 MISSING_SERVICE_CREDENTIAL (PASS)
+4. Evaluator injects forged HMAC signature:
+   - Private Engine Guard verifies signature against internal secret -> TAMPERED_SERVICE_SIGNATURE (PASS)
+Status: PASS

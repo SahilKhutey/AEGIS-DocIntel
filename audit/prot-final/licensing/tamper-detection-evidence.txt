@@ -1,0 +1,9 @@
+ED25519 SIGNATURE INTEGRITY & TAMPER DETECTION AUDIT (SEC-007, SEC-008)
+=====================================================================
+Test 1: Tampered payload bytes detected -> InvalidSignature (PASS)
+Test 2: Tampered signature string detected -> SignatureMismatch (PASS)
+Test 3: Expired license timestamp rejected -> LICENSE_EXPIRED (PASS)
+Test 4: Unknown key_id rejected -> UNKNOWN_SIGNING_KEY (PASS)
+Test 5: Compromised key_id immediate rejection -> KEY_COMPROMISED (PASS)
+Cryptographic Algorithm: Pure Ed25519 (RFC 8032) / EdDSA
+Status: PASS

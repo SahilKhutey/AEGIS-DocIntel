@@ -1,0 +1,14 @@
+ M artifacts/security/reports/AUTHENTICATION_TEST_REPORT.json
+ M artifacts/security/reports/AUTHORIZATION_TEST_REPORT.json
+ M artifacts/security/reports/CROSS_TENANT_ATTACK_REPORT.md
+ M artifacts/security/reports/DELETION_COMPLETENESS_REPORT.json
+ M artifacts/security/reports/DOCUMENT_DELETION_TEST_REPORT.json
+ M artifacts/security/reports/PRIVACY_DETECTION_REPORT.json
+ M artifacts/security/reports/PRIVACY_OUTPUT_LEAKAGE_REPORT.json
+ M artifacts/security/reports/TENANT_ISOLATION_TEST_REPORT.json
+ M services/evaluation_gateway/app.py
+ M services/evaluation_gateway/signing_key_registry.py
+ M src/services/evaluation/websocket_ticket_service.py
+?? audit/prot-final/
+?? scripts/generate_audit_prot_final.py
+?? tests/security/consolidated/

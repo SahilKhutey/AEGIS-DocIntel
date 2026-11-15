@@ -1,0 +1,22 @@
+AUDIT LOG: test_authentication.py
+Executed at: 2026-11-15T04:52:55.122432+00:00
+
+============================= test session starts =============================
+platform win32 -- Python 3.12.10, pytest-9.1.1, pluggy-1.6.0 -- C:\Users\ASUS\AppData\Local\Programs\Python\Python312\python.exe
+cachedir: .pytest_cache
+hypothesis profile 'default'
+rootdir: C:\Users\ASUS\.gemini\antigravity\worktrees\Aegis-DocIntel\product_hunt_launch_packaging
+configfile: pyproject.toml
+plugins: anyio-4.12.1, hypothesis-6.156.6, langsmith-0.14.4, asyncio-1.4.0, cov-7.1.0
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collecting ... collected 6 items
+
+tests/security/consolidated/test_authentication.py::test_auth_001_missing_bearer_token_rejected PASSED [ 16%]
+tests/security/consolidated/test_authentication.py::test_auth_002_malformed_token_rejected PASSED [ 33%]
+tests/security/consolidated/test_authentication.py::test_auth_003_dev_token_in_production_rejected PASSED [ 50%]
+tests/security/consolidated/test_authentication.py::test_auth_004_forged_jwt_signature_rejected PASSED [ 66%]
+tests/security/consolidated/test_authentication.py::test_auth_005_expired_session_token_rejected PASSED [ 83%]
+tests/security/consolidated/test_authentication.py::test_auth_006_valid_activation_authenticates_session PASSED [100%]
+
+============================== 6 passed in 0.54s ==============================
+

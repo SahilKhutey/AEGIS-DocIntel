@@ -10,6 +10,7 @@ Implements PROT-04 WP-04.04 specifications:
 
 from __future__ import annotations
 
+import secrets
 import threading
 import time
 from dataclasses import dataclass, field
@@ -131,7 +132,7 @@ class SigningKeyRegistry:
                     old.retired_at = now
 
             # Generate new key pair
-            kid = new_key_id or f"aegis-license-ed25519-{time.time_ns()}"
+            kid = new_key_id or f"aegis-license-ed25519-{time.time_ns()}-{secrets.token_hex(4)}"
             priv = ed25519.Ed25519PrivateKey.generate()
             pub = priv.public_key()
             pub_pem = pub.public_bytes(

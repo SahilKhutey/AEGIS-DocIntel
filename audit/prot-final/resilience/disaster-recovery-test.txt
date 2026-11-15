@@ -1,0 +1,9 @@
+DISASTER RECOVERY & PERSISTENT REVOCATION AUDIT (SEC-019)
+=========================================================
+Objective: Verify that revoked licenses and devices remain revoked following backup recovery.
+1. License LIC-REV-DR-1 revoked in registry.
+2. State backup snapshot created and SHA-256 checksummed.
+3. System state simulated disaster recovery restore.
+4. Evaluator attempts activation/auth with LIC-REV-DR-1 -> REJECTED (LICENSE_REVOKED).
+Non-resurrection invariant: VERIFIED (PASS)
+Status: PASS

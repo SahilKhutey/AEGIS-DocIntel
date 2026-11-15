@@ -1,0 +1,21 @@
+Control_ID,Category,Requirement,Test_Count,Pass_Count,Status,Risk_Rating
+SEC-001,Distribution,Source Code & Private Key Exclusion,3,3,PASS,RESOLVED
+SEC-002,Distribution,Foundation Model API Key Defense,1,1,PASS,RESOLVED
+SEC-003,Architecture,Private Engine Boundary Defense,6,6,PASS,RESOLVED
+SEC-004,Authorization,Administrative Endpoint Protection,4,4,PASS,RESOLVED
+SEC-005,Authentication,Evaluation Authentication Hardening,6,6,PASS,RESOLVED
+SEC-006,Multi-Tenancy,Evaluation Tenant Isolation,3,3,PASS,RESOLVED
+SEC-007,Licensing,Ed25519 Cryptographic Verification,4,4,PASS,RESOLVED
+SEC-008,Licensing,License Expiration & Revocation,2,2,PASS,RESOLVED
+SEC-009,Device Binding,Cryptographic Challenge-Response PoP,2,2,PASS,RESOLVED
+SEC-010,Device Binding,1-Device Limit & Recovery Workflow,2,2,PASS,RESOLVED
+SEC-011,Entitlements,Server-Side Capability Enforcement,4,4,PASS,RESOLVED
+SEC-012,Quotas,Atomic Resource Metering & Overdraft Prevention,5,5,PASS,RESOLVED
+SEC-013,Sessions,Rotating Refresh Tokens & Replay Defense,2,2,PASS,RESOLVED
+SEC-014,Sessions,Session Expiration & Cascading Revocation,3,3,PASS,RESOLVED
+SEC-015,Operations,WebSocket Authentication & Ticket Lifecycle,4,4,PASS,RESOLVED
+SEC-016,Integration,Internal Service Authentication & Isolation,6,6,PASS,RESOLVED
+SEC-017,Operations,Security Event Redaction & Data Minimization,2,2,PASS,RESOLVED
+SEC-018,Operations,Append-Only Audit Ledger Hash Chain,2,2,PASS,RESOLVED
+SEC-019,Resilience,Fail-Closed Behavior & Non-Resurrection,2,2,PASS,RESOLVED
+SEC-020,Distribution,Release Configuration & Manifest Integrity,1,1,PASS,RESOLVED

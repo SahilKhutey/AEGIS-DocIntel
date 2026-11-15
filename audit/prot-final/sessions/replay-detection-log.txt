@@ -1,0 +1,12 @@
+REFRESH TOKEN ROTATION & REPLAY ATTACK AUDIT (SEC-013, SEC-014)
+===============================================================
+Initial session issued with Refresh Token RT_0.
+1. Legitimate refresh: RT_0 exchanged -> RT_1 issued, RT_0 marked consumed (PASS)
+2. Attacker attempts to replay RT_0:
+   - System detects consumed token replay.
+   - Security event REFRESH_TOKEN_REUSE_DETECTED emitted with SEVERITY_HIGH.
+   - Complete token family revoked across all nodes (PASS)
+3. Subsequent refresh attempt with RT_1 -> HTTP 401 FAMILY_REVOKED (PASS)
+4. Explicit logout -> Immediately invalidates active access token (PASS)
+5. Global evaluator logout -> Invalidates all active sessions (PASS)
+Status: PASS

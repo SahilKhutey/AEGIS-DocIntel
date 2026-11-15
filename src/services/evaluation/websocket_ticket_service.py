@@ -14,6 +14,7 @@ from typing import Dict, Optional, Tuple
 
 from src.schemas.evaluation.session_audit import SessionAuditEvent, SessionAuditEventType
 from src.repositories.evaluation.session_audit_repository import session_audit_repository, SessionAuditRepository
+from src.repositories.evaluation.session_repository import session_repository
 from src.services.evaluation.session_validation_service import session_validation_service, SessionValidationService
 
 
