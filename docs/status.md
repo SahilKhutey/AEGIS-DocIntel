@@ -2,11 +2,11 @@
 
 The canonical, evidence-linked technical status of AEGIS-DocIntel lives in:
 
-**[STATUS.md](file:///C:/Users/ASUS/.gemini/antigravity/worktrees/Aegis-DocIntel/product_hunt_launch_packaging/STATUS.md)**
+**[STATUS.md](../STATUS.md)**
 
 For the verified Product Launch Edition feature availability breakdown, consult:
 
-**[launch/FEATURE_MATRIX.md](file:///C:/Users/ASUS/.gemini/antigravity/worktrees/Aegis-DocIntel/product_hunt_launch_packaging/launch/FEATURE_MATRIX.md)**
+**[launch/FEATURE_MATRIX.md](../launch/FEATURE_MATRIX.md)**
 
 ---
 

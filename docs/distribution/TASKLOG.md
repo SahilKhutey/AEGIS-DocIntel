@@ -589,3 +589,27 @@
   - `docs/distribution/prot-final/remediation/` (`00_REMEDIATION_OVERVIEW.md` through `08_REMEDIATION_SIGNOFF.md`)
   - `scripts/generate_audit_prot_final_remediation.py`
 - **Result:** **PASSED / CERTIFIED & SIGNED OFF — REMEDIATION COMPLETE & VERIFIED (100% GREEN)**. All 7 remediation workstreams are verified, with zero open vulnerabilities and zero regressions across the platform.
+
+---
+
+### Task: CI Pipeline Quality Gate Remediation (Lint & Frontend Tests)
+- **Status:** **COMPLETED**
+- **Issues Identified in GitHub Actions CI:**
+  1. CI Lint Run (`check_docs_claims.py`):
+     - `docs/status.md:5` and `docs/status.md:9` contained absolute worktree URLs (`file:///C:/Users/...`) violating rule R2.
+  2. Frontend Quality Gate Run (`npm test` in `web`):
+     - `tests/unit/integration/auth-permissions.test.ts`: `defaultSessionProvider.signOut()` threw `TypeError: Failed to parse URL from /evaluation/session/logout` in jsdom/Node fetch without error catching.
+     - `tests/unit/integration/api-client.test.ts`: `handles valid 200 responses with schema parsing` expected `"X-Workspace-ID": "workspace-default"` on unauthenticated request, conflicting with the neutralized request context.
+- **Remediations Applied:**
+  1. `docs/status.md`: Replaced absolute `file:///C:/Users/...` URLs with relative markdown links `../STATUS.md` and `../launch/FEATURE_MATRIX.md`.
+  2. `web/src/lib/auth/session.ts`: Added `try ... catch ... finally` around remote revocation in `defaultSessionProvider.signOut()` to allow local token cleanup to complete safely on network/URL rejections.
+  3. `web/tests/unit/integration/api-client.test.ts`: Updated assertion to check `Accept: application/json` for unauthenticated requests, and added explicit test `injects workspace header into apiRequest when context is set`.
+- **Verification Commands:**
+  - `python scripts/check_docs_claims.py` -> OK (R1-R6 passed).
+  - `python scripts/check_dependency_sync.py` -> OK (6 requirements files match pyproject.toml).
+  - `npm --prefix web test tests/unit/integration/auth-permissions.test.ts` -> 10/10 passed.
+  - `npm --prefix web test tests/unit/integration/api-client.test.ts` -> 8/8 passed.
+  - `npm --prefix web run verify:auth` -> 0 violations.
+  - `pytest (Get-ChildItem tests/security/evaluation/test_rem_*.py | ForEach-Object { $_.FullName }) -q` -> 98/98 passed.
+- **Result:** **PASSED (100% GREEN)**. CI gates resolved for both Lint and Frontend Quality workflows.
+

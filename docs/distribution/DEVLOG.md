@@ -515,3 +515,16 @@ Implemented final end-to-end integration protocol, Private Engine Isolation Guar
 - **Formal Remediation Dossiers (`docs/distribution/prot-final/remediation/`):**
   - Authored 9 formal engineering dossiers (`00_REMEDIATION_OVERVIEW.md` through `08_REMEDIATION_SIGNOFF.md`).
   - Final Verification Verdict: **ALL 7 WORKSTREAMS VERIFIED REMEDIATED & READY FOR RELEASE CERTIFICATION**.
+
+---
+
+## Phase 20: CI Pipeline Quality Gate Remediation (2026-11-15)
+- **CI Lint & Documentation Link Checker Remediation:**
+  - Resolved GitHub Actions CI lint failure (`check_docs_claims.py` rule R2 broken links).
+  - Converted local absolute worktree URLs in `docs/status.md` (lines 5 and 9) to repository-relative links (`../STATUS.md` and `../launch/FEATURE_MATRIX.md`).
+  - Verified `python scripts/check_docs_claims.py` and `python scripts/check_dependency_sync.py` pass with 0 violations.
+- **Frontend Quality Gate & Vitest Regression Remediation:**
+  - Resolved `web/src/lib/auth/session.ts` unhandled exception in `defaultSessionProvider.signOut()` by wrapping remote server revocation in `try ... catch ... finally` to ensure robust client-side session cleanup without uncaught URL/network rejections in jsdom/Node fetch environments.
+  - Resolved `web/tests/unit/integration/api-client.test.ts` schema parsing test expectation to align with neutralized unauthenticated request context (`Accept: application/json`), and added explicit test verifying context header injection when context is configured.
+  - Verified all tests in `tests/unit/integration/auth-permissions.test.ts` (10/10) and `tests/unit/integration/api-client.test.ts` (8/8) pass cleanly.
+

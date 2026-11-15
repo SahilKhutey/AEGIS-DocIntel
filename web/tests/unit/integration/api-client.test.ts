@@ -42,6 +42,29 @@ describe("API Client & Integration Transports", () => {
       expect.objectContaining({
         headers: expect.objectContaining({
           Accept: "application/json",
+        }),
+      })
+    );
+  });
+
+  it("injects workspace header into apiRequest when context is set", async () => {
+    setRequestContext({ workspaceId: "workspace-default" });
+    const TestSchema = z.object({
+      id: z.string(),
+    });
+
+    global.fetch = vi.fn().mockResolvedValue({
+      ok: true,
+      status: 200,
+      json: async () => ({ id: "doc-1" }),
+    });
+
+    await apiRequest("/v1/test", TestSchema);
+    expect(global.fetch).toHaveBeenCalledWith(
+      expect.stringContaining("/v1/test"),
+      expect.objectContaining({
+        headers: expect.objectContaining({
+          Accept: "application/json",
           "X-Workspace-ID": "workspace-default",
         }),
       })

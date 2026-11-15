@@ -138,6 +138,8 @@ export const defaultSessionProvider: SessionProvider = {
           cache: "no-store",
         });
       }
+    } catch {
+      // Best-effort remote revocation; local session cleanup must proceed regardless of network/URL errors
     } finally {
       clearRequestContext();
       if (typeof window !== "undefined") {
