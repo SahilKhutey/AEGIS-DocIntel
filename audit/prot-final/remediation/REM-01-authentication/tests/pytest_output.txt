@@ -1,0 +1,22 @@
+============================= test session starts =============================
+platform win32 -- Python 3.12.10, pytest-9.1.1, pluggy-1.6.0 -- C:\Users\ASUS\AppData\Local\Programs\Python\Python312\python.exe
+cachedir: .pytest_cache
+hypothesis profile 'default'
+rootdir: C:\Users\ASUS\.gemini\antigravity\worktrees\Aegis-DocIntel\product_hunt_launch_packaging
+configfile: pyproject.toml
+plugins: anyio-4.12.1, hypothesis-6.156.6, langsmith-0.14.4, asyncio-1.4.0, cov-7.1.0
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collecting ... collected 10 items
+
+tests/security/evaluation/test_rem_01_authentication.py::test_auth_rem_001_dev_token_rejected_in_production PASSED [ 10%]
+tests/security/evaluation/test_rem_01_authentication.py::test_auth_rem_002_missing_issuer_rejected PASSED [ 20%]
+tests/security/evaluation/test_rem_01_authentication.py::test_auth_rem_003_missing_audience_rejected PASSED [ 30%]
+tests/security/evaluation/test_rem_01_authentication.py::test_auth_rem_004_expired_token_rejected PASSED [ 40%]
+tests/security/evaluation/test_rem_01_authentication.py::test_auth_rem_005_invalid_role_rejected PASSED [ 50%]
+tests/security/evaluation/test_rem_01_authentication.py::test_auth_rem_006_tenant_header_manipulation_rejected PASSED [ 60%]
+tests/security/evaluation/test_rem_01_authentication.py::test_auth_rem_007_admin_privilege_escalation_rejected PASSED [ 70%]
+tests/security/evaluation/test_rem_01_authentication.py::test_auth_rem_008_public_metrics_access_restricted_in_hardened_mode PASSED [ 80%]
+tests/security/evaluation/test_rem_01_authentication.py::test_auth_rem_009_websocket_authentication_required PASSED [ 90%]
+tests/security/evaluation/test_rem_01_authentication.py::test_auth_rem_010_production_build_contains_no_dev_fallback PASSED [100%]
+
+============================= 10 passed in 2.57s ==============================

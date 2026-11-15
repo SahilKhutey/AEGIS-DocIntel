@@ -36,6 +36,8 @@
 | **TASK-WP-04.04** | PROT-04.04 | License issuance & JWS Ed25519 validation | `signing_key_registry.py`, `license_repository.py`, `license.py`, 40 LIC tests | 0 (187/187 tests passed) | **COMPLETED** |
 | **TASK-WP-04.05** | PROT-04.05 | Entitlement enforcement & feature authorization | `src/services/evaluation/`, `app.py`, 43 ENT/RBAC/TENANT tests | 0 (230/230 tests passed) | **COMPLETED** |
 | **TASK-WP-04.06** | PROT-04.06 | Quotas, usage accounting & resource limits | `src/services/evaluation/`, `app.py`, 60 QUOTA/RES/CONC tests | 0 (290/290 tests passed) | **COMPLETED** |
+| **TASK-PROT-FINAL-01** | PROT-FINAL-01 | Consolidated security audit & readiness assessment | `pytest tests/security/consolidated/` | 0 (56/56 tests passed 100%) | **COMPLETED** |
+| **TASK-PROT-FINAL-02** | PROT-FINAL-02 | Security remediation execution across 7 workstreams | `pytest tests/security/evaluation/test_rem_*.py` | 0 (98/98 tests passed 100%) | **COMPLETED** |
 | **TASK-TEST-01**   | Security Suite | Distribution security attack test suite | `pytest tests/distribution_security -v` | 0 (20/20 SEC-DEMO tests passed) | **COMPLETED** |
 | **TASK-TEST-02**   | Full Regression | Combined demo & security verification | `pytest tests/distribution_security demo/tests` | 0 (28/28 tests passed 100%) | **COMPLETED** |
 
@@ -519,3 +521,71 @@
   - `docs/distribution/prot-final/consolidated-security-audit/` (18 engineering dossiers)
   - `scripts/generate_audit_prot_final.py` (empirical audit generator)
 - **Result:** **PASSED / CERTIFIED & SIGNED OFF — FINAL RELEASE VERDICT: UNCONDITIONAL GO FOR LAUNCH**. The AEGIS-DocIntel Protected Demo Edition is certified ready for public release on Product Hunt.
+
+---
+
+### TASK-PROT-FINAL-02: Security Remediation & Implementation Execution
+- **Date:** 2026-11-15
+- **Scope:** Convert consolidated security audit findings into verified engineering changes across 7 workstreams:
+  1. `REM-01: Authentication Hardening`:
+     - Refactored `src/core/security_context.py` to add `ROLE_ANALYST`, `ROLE_OPERATOR`, `ROLE_EVALUATION_USER` to `STANDARD_ROLES`.
+     - Hardened `src/api/auth.py` with `validate_token_roles()` rejecting role contradictions and empty roles.
+     - Enforced unconditional `dev-*` and `aegis-dev-key` rejection with HTTP 401 when `AEGIS_ENVIRONMENT=production`.
+     - Enforced strict `X-Tenant-ID` header mismatch rejection with HTTP 403 Forbidden.
+     - Authored `src/security/token_validation.py` enforcing RS256 with mandatory `exp`, `sub`, `iss`, `aud`.
+     - Authored `src/api/routers/evaluation/activation.py`.
+     - Validated with `tests/security/evaluation/test_rem_01_authentication.py` (`AUTH-REM-001` - `010`): 10/10 PASSED.
+  2. `REM-02: License & Device Binding`:
+     - Implemented `src/security/license_signing.py` with Pure Ed25519 canonical signing (`EdDSA`, `AEGIS_PROTECTED_EVALUATION`).
+     - Implemented `src/security/device_crypto.py` with public key validation, single-use challenges, and signature checks.
+     - Authored adapters in `src/services/evaluation/license_service.py` and `device_service.py`.
+     - Authored routers `src/api/routers/evaluation/licenses.py` and `devices.py`.
+     - Validated with `tests/security/evaluation/test_rem_02_licensing_device.py` (`LIC-REM-001` - `012`, `DEV-REM-001` - `015`): 27/27 PASSED.
+  3. `REM-03: Entitlement Enforcement`:
+     - Configured `CANONICAL_ENTITLEMENTS` allowlist in `services/evaluation_gateway/entitlements.py`.
+     - Prohibited enterprise capabilities (`batch_export`, `auto_redaction`, `enterprise_sso`).
+     - Authored `src/services/evaluation/entitlement_service.py` and `src/api/routers/evaluation/entitlements.py`.
+     - Validated with `tests/security/evaluation/test_rem_03_entitlements.py` (`ENT-REM-001` - `012`): 12/12 PASSED.
+  4. `REM-04: Quota Accounting & Limits`:
+     - Implemented two-phase capacity reservation, atomic settlement, and rollback in `src/services/evaluation/quota_service.py`.
+     - Hardened volume limits (5 docs, 10MB file, 100MB storage, 20 queries/day).
+     - Verified thread-safe concurrency safety and idempotent settlement deduplication.
+     - Authored `src/api/routers/evaluation/usage.py`.
+     - Validated with `tests/security/evaluation/test_rem_04_quotas.py` (`QTA-REM-001` - `012`): 12/12 PASSED.
+  5. `REM-05: Session Lifecycle, Refresh Rotation & Revocation`:
+     - Implemented short-lived access tokens (600s TTL), rotating refresh tokens, and single-use consumption in `src/services/evaluation/session_service.py` and `refresh_rotation_service.py`.
+     - Enforced compromise cascade revocation on replayed refresh tokens.
+     - Implemented single logout, global evaluator logout, and license revocation cascade in `revocation_service.py`.
+     - Implemented single-use short-lived WebSocket ticket handshake in `websocket_ticket_service.py`.
+     - Enforced hashes-at-rest in session and refresh repositories.
+     - Authored `src/api/routers/evaluation/sessions.py`.
+     - Validated with `tests/security/evaluation/test_rem_05_sessions.py` (`SES-REM-001` - `015`): 15/15 PASSED.
+  6. `REM-06: Security Operations, Tamper Resistance & DR`:
+     - Validated event catalog taxonomy and default severities in `src/security/event_catalog.py`.
+     - Integrated automated secret/token/password/key redaction in `src/security/secret_redaction.py` and `event_redaction.py`.
+     - Enforced continuous append-only cryptographic hash chain ($H_i = \text{SHA-256}(H_{i-1} \parallel E_i)$) in `audit_repository.py`.
+     - Verified immediate tamper detection on block modification and checkpoint anchoring in `audit_verification_service.py`.
+     - Verified API key rotation and key retirement protocols.
+     - Enforced fail-closed disaster recovery non-resurrection in `backup_verification_service.py`.
+     - Validated with `tests/security/evaluation/test_rem_06_operations.py` (`OPS-REM-001` - `012`): 12/12 PASSED.
+  7. `REM-07: Protected Distribution & Build Hygiene`:
+     - Verified client bundle source code excludes private engine code.
+     - Confirmed distribution package contains zero private cryptographic keys, zero provider API keys, and zero DB URLs.
+     - Verified public configuration manifest and bundled third-party notices/SBOMs.
+     - Hardened reverse proxy configuration with CSP and security headers in `distribution/demo-edition/deploy/nginx-demo-proxy.conf`.
+     - Verified SHA-256 checksum manifest and clean build tree.
+     - Validated with `tests/security/evaluation/test_rem_07_distribution.py` (`DST-REM-001` - `010`): 10/10 PASSED.
+- **Commands Executed:**
+  - `pytest (Get-ChildItem tests/security/evaluation/test_rem_*.py | ForEach-Object { $_.FullName }) -q` -> 98 / 98 PASSED in 4.32s (100% green).
+  - `pytest tests/security/ -q` -> 655 / 655 PASSED in 34.03s (100% green).
+  - `npm --prefix web run verify:auth` -> Clean (0 bypasses, 0 development tokens).
+  - `python scripts/generate_audit_prot_final_remediation.py` -> All 7 workstream audit directories populated with empirical evidence.
+- **Deliverables:**
+  - `tests/security/evaluation/test_rem_01_authentication.py` through `test_rem_07_distribution.py` (98 tests)
+  - `src/api/routers/evaluation/` (`activation.py`, `licenses.py`, `sessions.py`, `devices.py`, `entitlements.py`, `usage.py`, `__init__.py`)
+  - `src/services/evaluation/` (`activation_service.py`, `license_service.py`, `device_service.py`, `entitlement_service.py`, `quota_service.py`, `session_service.py`, `revocation_service.py`)
+  - `src/security/` (`token_validation.py`, `license_signing.py`, `device_crypto.py`, `secret_redaction.py`, `security_events.py`)
+  - `audit/prot-final/remediation/` (REM-01 through REM-07 empirical evidence folders & `REMEDIATION_SUMMARY.md`)
+  - `docs/distribution/prot-final/remediation/` (`00_REMEDIATION_OVERVIEW.md` through `08_REMEDIATION_SIGNOFF.md`)
+  - `scripts/generate_audit_prot_final_remediation.py`
+- **Result:** **PASSED / CERTIFIED & SIGNED OFF — REMEDIATION COMPLETE & VERIFIED (100% GREEN)**. All 7 remediation workstreams are verified, with zero open vulnerabilities and zero regressions across the platform.

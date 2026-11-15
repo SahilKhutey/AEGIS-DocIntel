@@ -1,0 +1,8 @@
+[
+  "src/security/license_signing.py",
+  "src/security/device_crypto.py",
+  "src/services/evaluation/license_service.py",
+  "src/services/evaluation/device_service.py",
+  "src/api/routers/evaluation/licenses.py",
+  "src/api/routers/evaluation/devices.py"
+]

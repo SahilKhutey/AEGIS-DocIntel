@@ -35,6 +35,52 @@ ALLOWED_ROLES: frozenset[str] = STANDARD_ROLES
 _SHA256_HEX = re.compile(r"^[0-9a-f]{64}$")
 
 
+def validate_token_roles(payload: dict) -> frozenset[str]:
+    """
+    Validates token role claims against ALLOWED_ROLES catalogue (REM-01).
+    Rejects malformed, unsupported, or contradictory role claims.
+    """
+    role = payload.get("role")
+    if role is None:
+        role = "viewer"
+    if not isinstance(role, str) or role not in ALLOWED_ROLES:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail=f"Unsupported role in token: {role}",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+
+    raw_roles = payload.get("roles")
+    if raw_roles is None:
+        roles = {role}
+    else:
+        if not isinstance(raw_roles, (list, set, tuple)) or not raw_roles:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Invalid roles claim format",
+                headers={"WWW-Authenticate": "Bearer"},
+            )
+        if not all(isinstance(r, str) and r in ALLOWED_ROLES for r in raw_roles):
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Unsupported role in roles array",
+                headers={"WWW-Authenticate": "Bearer"},
+            )
+        roles = set(raw_roles)
+
+    if role not in roles:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail=f"Primary role '{role}' contradicts roles array",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+
+    if role == "admin" and "tenant_admin" in ALLOWED_ROLES:
+        roles.add("tenant_admin")
+
+    return frozenset(roles)
+
+
 async def get_current_tenant(
     request: Request = None,
     bearer: Optional[HTTPAuthorizationCredentials] = Depends(BEARER),
@@ -47,6 +93,12 @@ async def get_current_tenant(
     if request is not None:
         cached = getattr(request.state, "tenant_context", None)
         if isinstance(cached, TenantContext):
+            client_tid = (request.headers.get("x-tenant-id") or request.headers.get("X-Tenant-ID") or "").strip()
+            if client_tid and client_tid != cached.tenant_id:
+                raise HTTPException(
+                    status_code=status.HTTP_403_FORBIDDEN,
+                    detail="Tenant header manipulation rejected",
+                )
             return cached
 
     context: TenantContext
@@ -74,6 +126,13 @@ async def get_current_tenant(
             )
 
     if request is not None:
+        # SEC-006 / AUTH-REM-006: Prevent tenant header manipulation attacks
+        client_tid = (request.headers.get("x-tenant-id") or request.headers.get("X-Tenant-ID") or "").strip()
+        if client_tid and client_tid != context.tenant_id:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="Tenant header manipulation rejected",
+            )
         request.state.tenant_context = context
     return context
 
@@ -117,7 +176,13 @@ def _validate_jwt(token: str) -> TenantContext:
             monthly_token_limit=50_000,
         )
 
-    if env == "development" and token.startswith("dev-"):
+    if token.startswith("dev-"):
+        if env != "development":
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Development tokens are strictly rejected in production",
+                headers={"WWW-Authenticate": "Bearer"},
+            )
         tenant_id = token[4:] or "default-tenant"
         return TenantContext(
             tenant_id=tenant_id,
@@ -263,38 +328,7 @@ def _validate_jwt(token: str) -> TenantContext:
         )
 
     role = payload.get("role") or "viewer"
-    if not isinstance(role, str) or role not in ALLOWED_ROLES:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail=f"Unsupported role in token: {role}",
-            headers={"WWW-Authenticate": "Bearer"},
-        )
-
-    roles = frozenset({"admin", "tenant_admin"}) if role == "admin" else frozenset({role})
-    if "roles" in payload and payload["roles"] is not None:
-        raw_roles = payload["roles"]
-        if not isinstance(raw_roles, (list, set, tuple)) or not raw_roles:
-            raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="Invalid roles claim format",
-                headers={"WWW-Authenticate": "Bearer"},
-            )
-        if not all(isinstance(r, str) and r in ALLOWED_ROLES for r in raw_roles):
-            raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="Unsupported role in roles array",
-                headers={"WWW-Authenticate": "Bearer"},
-            )
-        parsed_roles = set(raw_roles)
-        if role == "admin":
-            parsed_roles.add("tenant_admin")
-        if role not in parsed_roles:
-            raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED,
-                detail=f"Primary role '{role}' contradicts roles array",
-                headers={"WWW-Authenticate": "Bearer"},
-            )
-        roles = frozenset(parsed_roles)
+    roles = validate_token_roles(payload)
 
     audit_logger.log(
         action="auth.jwt_success",
@@ -349,7 +383,13 @@ def _validate_api_key(api_key: str) -> TenantContext:
             monthly_token_limit=50_000,
         )
 
-    if env == "development" and api_key == "aegis-dev-key":
+    if api_key == "aegis-dev-key":
+        if env != "development":
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Development API keys are strictly rejected in production",
+                headers={"WWW-Authenticate": "ApiKey"},
+            )
         return TenantContext(
             tenant_id="default-tenant",
             principal_id="api-user",

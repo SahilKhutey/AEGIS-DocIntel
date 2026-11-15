@@ -1,0 +1,7 @@
+[
+  "src/core/security_context.py",
+  "src/api/auth.py",
+  "src/api/auth_guard.py",
+  "src/security/token_validation.py",
+  "src/api/routers/evaluation/activation.py"
+]

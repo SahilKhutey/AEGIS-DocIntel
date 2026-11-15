@@ -1,0 +1,6 @@
+[
+  "distribution/demo-edition/deploy/nginx-demo-proxy.conf",
+  "distribution/demo-edition/package-manifest.json",
+  "distribution/release/SHA256SUMS",
+  "web/scripts/verify-production-auth.mjs"
+]

@@ -12,7 +12,7 @@ from dataclasses import dataclass
 from typing import Optional, Set, FrozenSet, Iterable
 
 
-# Canonical enterprise roles
+# Canonical enterprise and evaluation roles
 ROLE_VIEWER = "viewer"
 ROLE_EDITOR = "editor"
 ROLE_REVIEWER = "reviewer"
@@ -20,6 +20,9 @@ ROLE_REVIEW_ADMIN = "review_admin"
 ROLE_TENANT_ADMIN = "tenant_admin"
 ROLE_PLATFORM_ADMIN = "platform_admin"
 LEGACY_ADMIN = "admin"
+ROLE_ANALYST = "analyst"
+ROLE_OPERATOR = "operator"
+ROLE_EVALUATION_USER = "evaluation_user"
 
 STANDARD_ROLES: frozenset[str] = frozenset({
     ROLE_VIEWER,
@@ -29,6 +32,9 @@ STANDARD_ROLES: frozenset[str] = frozenset({
     ROLE_TENANT_ADMIN,
     ROLE_PLATFORM_ADMIN,
     LEGACY_ADMIN,
+    ROLE_ANALYST,
+    ROLE_OPERATOR,
+    ROLE_EVALUATION_USER,
 })
 
 

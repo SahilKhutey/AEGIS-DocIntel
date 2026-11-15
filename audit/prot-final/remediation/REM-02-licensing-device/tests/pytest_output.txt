@@ -1,0 +1,39 @@
+============================= test session starts =============================
+platform win32 -- Python 3.12.10, pytest-9.1.1, pluggy-1.6.0 -- C:\Users\ASUS\AppData\Local\Programs\Python\Python312\python.exe
+cachedir: .pytest_cache
+hypothesis profile 'default'
+rootdir: C:\Users\ASUS\.gemini\antigravity\worktrees\Aegis-DocIntel\product_hunt_launch_packaging
+configfile: pyproject.toml
+plugins: anyio-4.12.1, hypothesis-6.156.6, langsmith-0.14.4, asyncio-1.4.0, cov-7.1.0
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collecting ... collected 27 items
+
+tests/security/evaluation/test_rem_02_licensing_device.py::test_lic_rem_001_ed25519_signature_generation PASSED [  3%]
+tests/security/evaluation/test_rem_02_licensing_device.py::test_lic_rem_002_signature_verification_succeeds PASSED [  7%]
+tests/security/evaluation/test_rem_02_licensing_device.py::test_lic_rem_003_tampered_payload_rejected PASSED [ 11%]
+tests/security/evaluation/test_rem_02_licensing_device.py::test_lic_rem_004_corrupted_signature_rejected PASSED [ 14%]
+tests/security/evaluation/test_rem_02_licensing_device.py::test_lic_rem_005_unknown_key_id_rejected PASSED [ 18%]
+tests/security/evaluation/test_rem_02_licensing_device.py::test_lic_rem_006_expired_license_rejected PASSED [ 22%]
+tests/security/evaluation/test_rem_02_licensing_device.py::test_lic_rem_007_revoked_license_rejected PASSED [ 25%]
+tests/security/evaluation/test_rem_02_licensing_device.py::test_lic_rem_008_key_rotation_preserves_circulating PASSED [ 29%]
+tests/security/evaluation/test_rem_02_licensing_device.py::test_lic_rem_009_key_rotation_signs_with_new_key PASSED [ 33%]
+tests/security/evaluation/test_rem_02_licensing_device.py::test_lic_rem_010_emergency_key_compromise_invalidates PASSED [ 37%]
+tests/security/evaluation/test_rem_02_licensing_device.py::test_lic_rem_011_token_export_and_deterministic_parse PASSED [ 40%]
+tests/security/evaluation/test_rem_02_licensing_device.py::test_lic_rem_012_public_key_registry_zero_private_keys PASSED [ 44%]
+tests/security/evaluation/test_rem_02_licensing_device.py::test_dev_rem_001_parse_valid_ed25519_pem PASSED [ 48%]
+tests/security/evaluation/test_rem_02_licensing_device.py::test_dev_rem_002_parse_valid_rsa_pem PASSED [ 51%]
+tests/security/evaluation/test_rem_02_licensing_device.py::test_dev_rem_003_parse_32_byte_raw_ed25519 PASSED [ 55%]
+tests/security/evaluation/test_rem_02_licensing_device.py::test_dev_rem_004_malformed_key_syntax_rejected PASSED [ 59%]
+tests/security/evaluation/test_rem_02_licensing_device.py::test_dev_rem_005_challenge_nonce_entropy PASSED [ 62%]
+tests/security/evaluation/test_rem_02_licensing_device.py::test_dev_rem_006_challenge_nonce_ttl PASSED [ 66%]
+tests/security/evaluation/test_rem_02_licensing_device.py::test_dev_rem_007_single_use_challenge_no_replay PASSED [ 70%]
+tests/security/evaluation/test_rem_02_licensing_device.py::test_dev_rem_008_valid_pop_registers_device PASSED [ 74%]
+tests/security/evaluation/test_rem_02_licensing_device.py::test_dev_rem_009_invalid_signature_rejected PASSED [ 77%]
+tests/security/evaluation/test_rem_02_licensing_device.py::test_dev_rem_010_atomic_device_limit_enforcement PASSED [ 81%]
+tests/security/evaluation/test_rem_02_licensing_device.py::test_dev_rem_011_device_limit_exceeded_status_409 PASSED [ 85%]
+tests/security/evaluation/test_rem_02_licensing_device.py::test_dev_rem_012_emergency_recovery_code_format PASSED [ 88%]
+tests/security/evaluation/test_rem_02_licensing_device.py::test_dev_rem_013_recovery_code_unbinds_and_frees_slot PASSED [ 92%]
+tests/security/evaluation/test_rem_02_licensing_device.py::test_dev_rem_014_invalid_recovery_code_rejected PASSED [ 96%]
+tests/security/evaluation/test_rem_02_licensing_device.py::test_dev_rem_015_device_deactivation_revokes_sessions PASSED [100%]
+
+============================= 27 passed in 0.51s ==============================

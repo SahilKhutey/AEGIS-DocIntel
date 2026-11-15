@@ -279,3 +279,4 @@ class EntitlementService:
 
 # Global singleton instance for easy import and dependency injection
 default_entitlement_service = EntitlementService()
+entitlement_service = default_entitlement_service

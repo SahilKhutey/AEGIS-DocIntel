@@ -1,0 +1,9 @@
+{
+  "workstream": "REM-03",
+  "baseline_commit": "8eeb5ea",
+  "files": [
+    "src/services/evaluation/entitlement_service.py",
+    "src/api/routers/evaluation/entitlements.py",
+    "services/evaluation_gateway/entitlements.py"
+  ]
+}

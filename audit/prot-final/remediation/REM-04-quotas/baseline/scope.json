@@ -1,0 +1,9 @@
+{
+  "workstream": "REM-04",
+  "baseline_commit": "8eeb5ea",
+  "files": [
+    "src/services/evaluation/quota_service.py",
+    "src/api/routers/evaluation/usage.py",
+    "services/evaluation_gateway/quotas.py"
+  ]
+}

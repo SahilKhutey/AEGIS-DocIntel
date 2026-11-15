@@ -130,6 +130,21 @@ class RefreshRotationService:
         }
         return True, response_payload, "SUCCESS"
 
+    def rotate_refresh_token(
+        self,
+        raw_refresh_token: str,
+        client_ip: Optional[str] = None,
+        user_agent: Optional[str] = None,
+    ) -> Tuple[str, str, EvaluationSession]:
+        """Convenience method that unpacks or raises on error."""
+        success, payload, outcome = self.rotate_session(raw_refresh_token, ip_address=client_ip, user_agent=user_agent)
+        if not success:
+            if outcome == "REFRESH_REPLAY_DETECTED":
+                raise PermissionError("Refresh token replay detected. Session family revoked.")
+            raise ValueError(f"Refresh failed: {outcome}")
+        sess = self._sess_repo.get_by_id(payload["session_id"])
+        return payload["access_token"], payload["refresh_token"], sess
+
     def _handle_replay_compromise(self, family_id: str, replayed_hash: str, ip_address: Optional[str]) -> None:
         """Executes immediate lockdown of the compromised token family."""
         revoked_sessions = self._sess_repo.revoke_family(family_id, RevocationReason.REFRESH_REPLAY_DETECTED)
