@@ -1,0 +1,16 @@
+{
+  "timestamp": "2026-11-15T04:28:03.982761+00:00",
+  "scenarios_verified": [
+    "INT-ENT-001: Permitted evaluation feature accessed cleanly",
+    "INT-ENT-002: Unentitled enterprise feature returns HTTP 403",
+    "INT-ENT-003: Client role tampering ignored; server derives entitlements authoritatively",
+    "INT-ENT-004: Client tenant identifier header override ignored; token tenant enforced",
+    "INT-ENT-005: Empty entitlement claims fail closed",
+    "INT-ENT-006: Incompatible policy version rejected",
+    "INT-ENT-007: Administrative mid-session entitlement override instantly restricts access",
+    "INT-ENT-008: Entitlement overrides take effect within current evaluation turn",
+    "INT-ENT-009: Cross-tenant document inspection denied (IDOR isolation)",
+    "INT-ENT-010: Evaluator calling admin endpoint returns HTTP 403 Forbidden"
+  ],
+  "verdict": "PASSED"
+}

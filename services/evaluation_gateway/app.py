@@ -276,6 +276,11 @@ async def activate(req: ActivationRequest, request: Request):
                 status_code=status.HTTP_409_CONFLICT,
                 detail={"error": "DEVICE_LIMIT_EXCEEDED", "message": msg},
             )
+        if any(w in msg.lower() for w in ("revoked", "suspended", "expired")):
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail={"error": "LICENSE_UNAVAILABLE", "message": msg},
+            )
         raise HTTPException(
             status_code=status.HTTP_429_TOO_MANY_REQUESTS,
             detail={"error": "RATE_LIMIT_EXCEEDED", "message": msg},
@@ -562,6 +567,11 @@ async def device_challenge(req: DeviceChallengeRequest, request: Request):
             raise HTTPException(
                 status_code=status.HTTP_409_CONFLICT,
                 detail={"error": "DEVICE_LIMIT_EXCEEDED", "message": msg},
+            )
+        if any(w in msg.lower() for w in ("revoked", "suspended", "expired")):
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail={"error": "LICENSE_UNAVAILABLE", "message": msg},
             )
         raise HTTPException(
             status_code=status.HTTP_429_TOO_MANY_REQUESTS,

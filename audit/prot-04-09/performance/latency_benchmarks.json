@@ -1,0 +1,29 @@
+{
+  "timestamp": "2026-11-15T04:28:04.083452+00:00",
+  "metrics_ms": {
+    "license_cryptographic_verification": {
+      "samples": 500,
+      "p50": 0.1165,
+      "p95": 0.1878,
+      "p99": 0.3312,
+      "sla_target_ms": 20.0,
+      "within_sla": true
+    },
+    "quota_atomic_reservation": {
+      "samples": 500,
+      "p50": 0.0173,
+      "p95": 0.0597,
+      "p99": 0.1452,
+      "sla_target_ms": 20.0,
+      "within_sla": true
+    },
+    "engine_guard_hmac_attestation": {
+      "samples": 500,
+      "p50": 0.0326,
+      "p95": 0.0841,
+      "p99": 0.1674,
+      "sla_target_ms": 20.0,
+      "within_sla": true
+    }
+  }
+}

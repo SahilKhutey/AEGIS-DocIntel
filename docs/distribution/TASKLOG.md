@@ -395,3 +395,72 @@
   - `audit/prot-04-08/` (baseline, event-schema, audit-integrity, monitoring, key-management, incident-response, backup-recovery, release-security, reports)
   - `docs/distribution/prot-04-auth-licensing/08_SECURITY_AUDIT_AND_OPERATIONS.md` (Updated master architecture)
 - **Result:** **PASSED / CERTIFIED & SIGNED OFF**. Work package PROT-04.08 formally certified and signed off from HOLD to PASSED.
+
+
+---
+
+### [TASK-WP-04.09] — PROT-04.09: Integration, End-to-End Verification & Release Certification
+- **Goal:** Execute final integrated end-to-end verification, Private Engine Isolation Guard enforcement, 101 automated integration test scenarios across 9 critical workstreams, empirical audit evidence generation across all subdirectories in `audit/prot-04-09/`, and formal release certification sign-off with an explicit `GO (Approved)` decision for the AEGIS-DocIntel Protected Demo Edition. Transition WP-04.09 from `HOLD` to `PASSED / CERTIFIED & SIGNED OFF`.
+- **Status:** **COMPLETED & CERTIFIED — RELEASE GO (APPROVED)**
+- **Changes Made:**
+  1. Implemented Private Engine Isolation Guard in `src/security/`:
+     - `private_engine_guard.py`: Defined `EngineAuthContext` model, implemented `PrivateEngineGuard` with HMAC-SHA256 authorization token generation (`create_authorized_token`) and verification (`verify_engine_request`). Enforced single-use request ID nonces, 60s temporal TTL, mandatory binding to single-use `quota_reservation_id`, immediate fail-closed revocation check against `revocation_registry`, and strict rejection of evaluator admin attempts.
+     - `__init__.py`: Exported `EngineAuthContext`, `PrivateEngineGuard`, `private_engine_guard`.
+  2. Enhanced Evaluation Gateway & Subsystem Resiliency:
+     - `services/evaluation_gateway/license.py`: Connected `verify_license` to dynamically resolve key IDs against `key_registry.get_verification_key(kid)`. Validated historical licenses in `VERIFY_ONLY` state and enforced immediate denial for `COMPROMISED` keys. Preserved standard `header` claims in `issue_evaluation_license`.
+     - `services/evaluation_gateway/quotas.py`: Updated `settle_reservation` to record settled document identifiers into `uploaded_doc_ids`, guaranteeing atomic multi-threaded concurrency limits.
+     - `services/evaluation_gateway/activation.py`: Hardened activation code status checking (`SUSPENDED`, `REVOKED`, `EXPIRED`) and ensured authoritative `user_id` attribution on client return.
+     - `services/evaluation_gateway/revocation.py`: Updated `revoke()` to accept optional `reason`.
+     - `src/repositories/security_operations/key_metadata_repository.py`: Made `compromise_key` resilient to dynamic unindexed keys.
+  3. Created Integration Certification Test Harness in `tests/security/integration_certification/`:
+     - `conftest.py`: Built clean isolation fixtures resetting all gateway, device, licensing, quota, session, audit, incident, and key stores between tests.
+     - `test_prot_04_09_integration_protocol.py`: Implemented 101 comprehensive integration scenarios covering:
+       - `INT-AUTH-001` - `012`: Authentication, Activation & Device Proofs (12/12 PASSED).
+       - `INT-LIC-001` - `012`: License Issuance, Cryptographic Verification & Rotation (12/12 PASSED).
+       - `INT-ENT-001` - `010`: Server-Enforced Entitlements & RBAC Isolation (10/10 PASSED).
+       - `INT-QUOTA-001` - `012`: Quotas, Atomic Reservations, Concurrency & Settlement (12/12 PASSED).
+       - `INT-SESSION-001` - `014`: Session Lifecycles, Token Rotation, Replay Lockdown & Revocation (14/14 PASSED).
+       - `INT-ENGINE-001` - `010`: Private Engine Isolation & Gateway Service Boundary (10/10 PASSED).
+       - `CROSS-001` - `015`: Cross-Cutting Subsystem Security Guarantees (15/15 PASSED).
+       - `JOURNEY-A` - `JOURNEY-F`: Complete End-to-End User Journeys (6/6 PASSED).
+       - `RES-INT-001` - `010`: Resilience, Chaos & Failure-Mode Handling (10/10 PASSED).
+  4. Created Audit Evidence Generator in `scripts/generate_audit_prot_04_09.py`:
+     - Populated all required audit artifacts in `audit/prot-04-09/`:
+       - `baseline/`: repository commit, branch, environment, python/node/database versions, dependency hashes, configuration manifest.
+       - `integration/`: authentication, licensing, entitlement, quotas, sessions, devices, engine, and websocket verification traces.
+       - `cross-cutting/`: cross-subsystem verification and core invariant matrices.
+       - `performance/`: empirical latency benchmarks reporting p50, p95, p99 across micro-benchmarks (< 0.15ms).
+       - `resilience/`: chaos resilience report and failure mode matrix.
+       - `audit-integrity/`: hash chain verification and checkpoint integrity data.
+       - `distribution/`: secrets scan report (0 secrets, 0 engine leaks) and artifact manifest.
+       - `recovery/`: disaster recovery non-resurrection verification.
+       - `defects/`: zero open defects and resolution ledger.
+       - `final-report/`: master integration certification report.
+  5. Authored 14 Engineering Dossiers in `docs/distribution/prot-04-auth-licensing/wp-04-09-integration-certification/`:
+     - `01_INTEGRATED_SECURITY_ARCHITECTURE.md`
+     - `02_COMPONENT_INTEGRATION_MATRIX.md`
+     - `03_END_TO_END_TEST_PLAN.md`
+     - `04_AUTHENTICATION_AND_LICENSE_VALIDATION.md`
+     - `05_ENTITLEMENT_AND_QUOTA_INTEGRATION.md`
+     - `06_SESSION_AND_REVOCATION_INTEGRATION.md`
+     - `07_PRIVATE_ENGINE_ISOLATION.md`
+     - `08_PROTECTED_CLIENT_PACKAGING.md`
+     - `09_PERFORMANCE_AND_RESILIENCE_TESTING.md`
+     - `10_SECURITY_ACCEPTANCE_CRITERIA.md`
+     - `11_RELEASE_AND_ROLLBACK_PLAN.md`
+     - `12_RESIDUAL_RISK_REGISTER.md`
+     - `13_FINAL_SECURITY_REPORT.md`
+     - `14_WP_04_09_SIGNOFF.md` (Formal GO release authorization)
+  6. Updated Master Documentation in `docs/distribution/prot-04-auth-licensing/09_PROT_04_RELEASE_CERTIFICATION.md`.
+- **Commands Executed:**
+  - `python -m pytest tests/security/integration_certification/test_prot_04_09_integration_protocol.py -v` -> 101 / 101 PASSED in 3.31s (100% green).
+  - `python -m pytest tests/security/ -q` -> 501 / 501 PASSED in 28.16s (100% green).
+  - `npm --prefix web run verify:auth` -> Exit code 0 (Clean, 0 violations).
+  - `python scripts/generate_audit_prot_04_09.py` -> Complete empirical evidence package generated in `audit/prot-04-09/`.
+- **Deliverables:**
+  - `docs/distribution/prot-04-auth-licensing/wp-04-09-integration-certification/01_INTEGRATED_SECURITY_ARCHITECTURE.md` through `14_WP_04_09_SIGNOFF.md`
+  - `audit/prot-04-09/` (baseline, integration, cross-cutting, performance, resilience, audit-integrity, distribution, recovery, defects, final-report)
+  - `docs/distribution/prot-04-auth-licensing/09_PROT_04_RELEASE_CERTIFICATION.md` (Updated master release certification)
+  - `tests/security/integration_certification/test_prot_04_09_integration_protocol.py` (101 automated integration scenarios)
+  - `src/security/private_engine_guard.py` (Server-side HMAC engine authorization guard)
+- **Result:** **PASSED / CERTIFIED & SIGNED OFF — RELEASE GO (APPROVED)**. Work package PROT-04.09 and the master PROT-04 initiative are fully certified for public release.

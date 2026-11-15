@@ -1,0 +1,10 @@
+{
+  "timestamp": "2026-11-15T04:28:03.982761+00:00",
+  "scenarios_verified": [
+    "WS-INT-001: Short-lived single-use ticket required for upgrade",
+    "WS-INT-002: Replay of consumed ticket rejected",
+    "WS-INT-003: Ticket expires after 60 seconds",
+    "WS-INT-004: Active socket terminated within 1 turn upon license/session revocation"
+  ],
+  "verdict": "PASSED"
+}

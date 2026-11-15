@@ -37,7 +37,7 @@ class RevocationRegistry:
     def is_revoked(self, license_id: str) -> bool:
         return license_id in self._revoked_license_ids
 
-    def revoke(self, license_id: str) -> None:
+    def revoke(self, license_id: str, reason: Optional[str] = None) -> None:
         self._revoked_license_ids.add(license_id)
         self._save()
         try:

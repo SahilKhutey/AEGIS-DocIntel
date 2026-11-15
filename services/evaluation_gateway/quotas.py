@@ -221,6 +221,9 @@ class QuotaManager:
             elif metric == "comparisons":
                 for _ in range(settled_amt):
                     usage.comparison_timestamps.append(now)
+            elif metric == "documents":
+                for _ in range(settled_amt):
+                    usage.uploaded_doc_ids.add(f"doc-settled-{uuid.uuid4().hex[:8]}")
 
             now_dt = datetime.now(timezone.utc)
             # Commit to counter repo

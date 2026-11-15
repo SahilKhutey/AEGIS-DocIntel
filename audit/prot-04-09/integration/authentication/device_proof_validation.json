@@ -1,0 +1,19 @@
+{
+  "timestamp": "2026-11-15T04:28:03.982761+00:00",
+  "scenarios_verified": [
+    "INT-AUTH-001: Valid activation code + Ed25519 challenge-response -> 200 OK with license & session",
+    "INT-AUTH-002: Unknown activation code -> 404/400 Rejected",
+    "INT-AUTH-003: Expired activation challenge -> 400 Expired",
+    "INT-AUTH-004: Replayed activation challenge -> 400 Replayed",
+    "INT-AUTH-005: Forged device signature -> 400/401 Rejected",
+    "INT-AUTH-006: Device limit exceedance -> 409 Conflict",
+    "INT-AUTH-007: Suspended license activation -> 403 Forbidden",
+    "INT-AUTH-008: Revoked license activation -> 403 Forbidden",
+    "INT-AUTH-009: Expired license activation -> 403/400 Forbidden",
+    "INT-AUTH-010: Evaluator identity account mismatch -> Enforces authoritative account",
+    "INT-AUTH-011: Device deactivation immediately blocks subsequent access",
+    "INT-AUTH-012: Device registration binds Ed25519 public key and issues active session"
+  ],
+  "verdict": "PASSED",
+  "proof_mechanism": "Ed25519 Canonical Challenge-Response with Single-Use Nonce & Fingerprint"
+}

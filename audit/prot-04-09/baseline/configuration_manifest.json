@@ -1,0 +1,33 @@
+{
+  "work_package": "PROT-04.09",
+  "release_edition": "AEGIS-DocIntel Protected Demo Edition",
+  "version": "1.1.0",
+  "environment": "evaluation-certified",
+  "security_profile": "high-assurance-evaluation",
+  "cryptographic_algorithms": {
+    "license_signing": "Ed25519 (RFC 8032 / EdDSA)",
+    "device_proof": "Ed25519 PoP challenge-response",
+    "audit_chain": "SHA-256 Chained Hash Sequence",
+    "engine_guard": "HMAC-SHA256 Token Attestation",
+    "session_hashes": "SHA-256 Opaque Token Digest"
+  },
+  "limits": {
+    "max_documents": 5,
+    "max_queries_per_day": 20,
+    "max_comparisons_per_day": 5,
+    "max_file_size_mb": 10,
+    "max_devices_per_license": 1,
+    "session_ttl_seconds": 900,
+    "refresh_token_ttl_seconds": 604800,
+    "websocket_ticket_ttl_seconds": 60
+  },
+  "zero_bypass_invariants": [
+    "Private engine code and prompt templates excluded from distribution",
+    "Server-side entitlement and quota enforcement for all capabilities",
+    "Atomic quota reservation before compute dispatch",
+    "Immediate fail-closed revocation propagation across HTTP and WebSockets",
+    "Zero client-trusted authorization headers or role claims",
+    "Single-use cryptographic challenge-response device binding",
+    "Refresh token replay immediate family quarantine"
+  ]
+}

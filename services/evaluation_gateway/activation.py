@@ -274,6 +274,7 @@ class ActivationService:
         tier: str = "evaluation",
         max_devices: int = 1,
         user_id: Optional[str] = None,
+        status: str = "ACTIVE",
     ) -> str:
         """Dynamically registers an eligible activation code hash."""
         with self._lock:
@@ -284,6 +285,7 @@ class ActivationService:
                 "max_devices": max_devices,
                 "valid_until": "2026-12-31T23:59:59Z",
                 "user_id": uid,
+                "status": status,
             }
             return code_hash
 
@@ -360,6 +362,8 @@ class ActivationService:
                     details={"reason": "invalid_activation_code", "code_hash_prefix": compute_code_hash(code)[:16]},
                 )
                 raise ValueError("Activation code is unrecognized, expired, or invalid.")
+            if code_meta.get("status") in ("SUSPENDED", "REVOKED", "EXPIRED"):
+                raise PermissionError(f"Activation code is {code_meta['status']}.")
 
             inst_id = (installation_id or "").strip()
             if not inst_id:
@@ -692,6 +696,14 @@ class ActivationService:
                     raise ValueError(f"Activation code '{code}' is unrecognized or invalid.")
                 user_id = code_meta.get("user_id", client_id)
                 max_devices = code_meta.get("max_devices", 1)
+                if code_meta.get("status") in ("SUSPENDED", "REVOKED", "EXPIRED"):
+                    audit_service.record_event(
+                        event_type="activation.code_blocked",
+                        status="DENIED",
+                        actor_id=client_id,
+                        details={"status": code_meta["status"]},
+                    )
+                    raise PermissionError(f"Activation code is {code_meta['status']}.")
 
             code_hash = compute_code_hash(code) if code else ""
             if code_hash and code_hash in self._licenses_by_code_hash:
@@ -711,6 +723,9 @@ class ActivationService:
                 self._licenses_by_user[user_id] = license_doc
 
             license_id = license_doc["payload"]["license_id"]
+            from .revocation import registry as revocation_registry
+            if revocation_registry.is_revoked(license_id):
+                raise PermissionError(f"License '{license_id}' has been revoked.")
             device_pub = (device_public_key or hardware_fingerprint or f"device-key-{client_id}").strip()
 
             # Enforce device binding and limit (DEV-001, DEV-002)
@@ -797,7 +812,7 @@ class ActivationService:
 
             return {
                 "status": "active",
-                "client_id": client_id,
+                "client_id": user_id,
                 "device_id": device_rec.device_id,
                 "recovery_code": recovery_code,
                 "license": {

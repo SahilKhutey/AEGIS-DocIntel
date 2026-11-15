@@ -132,6 +132,7 @@ def issue_evaluation_license(
         if existing:
             # Reconstruct legacy dictionary payload from existing authoritative record
             return {
+                "header": {"alg": "EdDSA", "kid": existing.key_id, "typ": "AEGIS-EVALUATION-LICENSE"},
                 "payload": {
                     "license_id": existing.id,
                     "jti": existing.id,
@@ -279,6 +280,7 @@ def issue_evaluation_license(
     license_repository.save_license(repo_rec)
 
     return {
+        "header": headers,
         "payload": claims,
         "signature": sig_b64,
         "jws": jws_token,
@@ -574,8 +576,22 @@ def verify_license(
     except Exception as e:
         raise LicenseSignatureError(f"Invalid base64 signature encoding: {e}") from e
 
+    kid = (license_doc.get("header") or {}).get("kid") or license_doc.get("kid") or payload.get("kid")
     if public_key is None:
-        public_key = load_public_key()
+        if kid:
+            key_rec = key_registry.get_verification_key(kid)
+            if key_rec is None:
+                raise LicenseVerificationError(f"Unknown signing key ID '{kid}' in key registry.")
+            if key_rec.status == "COMPROMISED":
+                raise LicenseVerificationError(f"Signing key '{kid}' is compromised. License rejected.")
+            public_key = key_rec.public_key
+        else:
+            public_key = load_public_key()
+    else:
+        if kid:
+            key_rec = key_registry.get_verification_key(kid)
+            if key_rec and key_rec.status == "COMPROMISED":
+                raise LicenseVerificationError(f"Signing key '{kid}' is compromised. License rejected.")
 
     payload_bytes = canonical_json(payload)
     try:

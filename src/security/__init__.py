@@ -16,3 +16,8 @@ from .security_context import (
     set_current_security_context,
     reset_security_context,
 )
+from .private_engine_guard import (
+    EngineAuthContext,
+    PrivateEngineGuard,
+    private_engine_guard,
+)

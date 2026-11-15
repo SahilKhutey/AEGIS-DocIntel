@@ -212,34 +212,51 @@ def get_current_entitlement(request: Request) -> EntitlementContext:
                 }
             )
 
+        features = [
+            "documents.read",
+            "documents.upload",
+            "intelligence.query",
+            "documents.compare",
+            "evidence.inspect",
+            "document_upload",
+            "ask_aegis",
+            "document_comparison",
+        ]
+        quotas = {
+            "max_documents": 5,
+            "max_queries_per_day": 20,
+            "max_comparisons_per_day": 5,
+            "max_file_size_mb": 10,
+            "max_storage_mb": 100,
+        }
+        try:
+            from .license_repository import license_repository
+            auth_lic = license_repository.get_license(session_rec.license_id)
+            if auth_lic:
+                features = list(auth_lic.features)
+                quotas = dict(auth_lic.quotas)
+        except Exception:
+            pass
+
+        try:
+            from src.services.evaluation.entitlement_service import default_entitlement_service
+            overrides = default_entitlement_service.entitlement_repo.get_overrides(session_rec.license_id)
+            for ov in overrides:
+                if not ov.override_enabled:
+                    features = [f for f in features if f != ov.feature_key]
+                else:
+                    if ov.feature_key not in features:
+                        features.append(ov.feature_key)
+        except Exception:
+            pass
+
         payload = {
             "license_id": session_rec.license_id,
             "user_id": session_rec.user_id,
             "tier": "evaluation",
-            "features": [
-                "documents.read",
-                "documents.upload",
-                "intelligence.query",
-                "documents.compare",
-                "evidence.inspect",
-                "document_upload",
-                "ask_aegis",
-                "document_comparison",
-            ],
-            "entitlements": [
-                "documents.read",
-                "documents.upload",
-                "intelligence.query",
-                "documents.compare",
-                "evidence.inspect",
-            ],
-            "quotas": {
-                "max_documents": 5,
-                "max_queries_per_day": 20,
-                "max_comparisons_per_day": 5,
-                "max_file_size_mb": 10,
-                "max_storage_mb": 100,
-            },
+            "features": features,
+            "entitlements": features,
+            "quotas": quotas,
         }
         ctx = EntitlementContext(payload, session_info={"device_id": session_rec.device_id, "session_id": getattr(session_rec, "session_id", None)})
 

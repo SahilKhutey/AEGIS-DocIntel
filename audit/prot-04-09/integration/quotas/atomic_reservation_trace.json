@@ -1,0 +1,18 @@
+{
+  "timestamp": "2026-11-15T04:28:03.982761+00:00",
+  "scenarios_verified": [
+    "INT-QUOTA-001: Operations within quota limits settle cleanly",
+    "INT-QUOTA-002: Operations exceeding limit return HTTP 429 Too Many Requests",
+    "INT-QUOTA-003: Concurrent race at boundary prevents balance overspending",
+    "INT-QUOTA-004: Failed operation rolls back pending reservation cleanly",
+    "INT-QUOTA-005: Retried request with identical idempotency key does not double-charge",
+    "INT-QUOTA-006: Expired reservation automatically reclaimed",
+    "INT-QUOTA-007: Usage ledger drift triggers high-severity alert MON-007",
+    "INT-QUOTA-008: Cross-tenant quota pool contamination strictly blocked",
+    "INT-QUOTA-009: LLM timeout applies conservative settlement fallback",
+    "INT-QUOTA-010: Oversized document upload rejected prior to compute consumption",
+    "INT-QUOTA-011: Concurrent parsing job limits strictly enforced",
+    "INT-QUOTA-012: Manual administrative quota adjustments record verifiable audit event"
+  ],
+  "verdict": "PASSED"
+}

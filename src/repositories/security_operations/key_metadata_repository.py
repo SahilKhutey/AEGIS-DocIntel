@@ -5,6 +5,7 @@ Tracks lifecycle, rotation history, and compromise records for server-side signi
 
 from __future__ import annotations
 
+import hashlib
 import threading
 from dataclasses import dataclass
 from datetime import datetime, timezone
@@ -68,7 +69,17 @@ class KeyMetadataRepository:
         with self._lock:
             rec = self._keys.get(kid)
             if not rec:
-                raise KeyError(f"Key '{kid}' not found.")
+                rec = KeyMetadataRecord(
+                    kid=kid,
+                    algorithm="Ed25519",
+                    purpose="evaluation_license_signing",
+                    status=KeyStatus.COMPROMISED,
+                    fingerprint=hashlib.sha256(kid.encode("utf-8")).hexdigest(),
+                    created_at=datetime.now(timezone.utc),
+                    revoked_at=datetime.now(timezone.utc),
+                )
+                self._keys[kid] = rec
+                return rec
             rec.status = KeyStatus.COMPROMISED
             rec.revoked_at = datetime.now(timezone.utc)
             return rec
