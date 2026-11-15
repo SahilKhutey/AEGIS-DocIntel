@@ -1,0 +1,38 @@
+AEGIS-DocIntel Repository Baseline & Security Operations State
+================================================================
+Generated: 2026-11-15T03:26:06.391963+00:00
+Work Package: PROT-04.08 (Security Audit, Monitoring & Operations)
+Commit: 1f6080c8ba138a33227ce7daa422869b61c84637
+Branch: product_hunt_launch_packaging
+Python Version: 3.12.10
+Platform: Windows-11-10.0.26300-SP0
+
+Active Working Tree Status:
+M artifacts/security/reports/AUTHENTICATION_TEST_REPORT.json
+ M artifacts/security/reports/AUTHORIZATION_TEST_REPORT.json
+ M artifacts/security/reports/CROSS_TENANT_ATTACK_REPORT.md
+ M artifacts/security/reports/DELETION_COMPLETENESS_REPORT.json
+ M artifacts/security/reports/DOCUMENT_DELETION_TEST_REPORT.json
+ M artifacts/security/reports/PRIVACY_DETECTION_REPORT.json
+ M artifacts/security/reports/PRIVACY_OUTPUT_LEAKAGE_REPORT.json
+ M artifacts/security/reports/TENANT_ISOLATION_TEST_REPORT.json
+ M services/evaluation_gateway/app.py
+ M services/evaluation_gateway/signing_key_registry.py
+?? audit/prot-04-08/
+?? scripts/generate_audit_prot_04_08.py
+?? src/repositories/security_operations/
+?? src/security/
+?? src/services/security_operations/
+?? tests/security/operations/
+
+Security Operations Architecture Invariants Pinned:
+- Standardized Security Taxonomy: 36 canonical event types across Authentication, License Lifecycle, Entitlements & Quotas, Session Management, Integrity & Operations, and Administrative.
+- Strict Pydantic Schema: Enforced schema version 1, strict type validation, rejection of undeclared metadata fields (extra='forbid').
+- Automatic Deep Redaction: Zero sensitive tokens, private keys, passwords, or connection strings logged at rest.
+- Append-Only Cryptographic Audit Log: Sequential hash chaining H_i = SHA256(H_{i-1} || Canonical(E_i)), strictly rejecting updates/deletes.
+- External Checkpoint Anchoring: Ed25519-signed periodic snapshots for external integrity attestation.
+- Threat Detection Engine: Automated evaluation rules MON-001 through MON-012 with sliding time windows, alert delivery retry queues, and fail-closed degraded mode.
+- Containment & Incident Response: 10 dedicated runbooks (IR-01 through IR-10), strict evidence attachment required prior to incident closure.
+- Secrets & Cryptographic Key Rotation: Seamless transition of Ed25519 license keys to VERIFY_ONLY (allowing circulating licenses to verify) and immediate invalidation on compromise.
+- Fail-Closed Disaster Recovery: SHA-256 backup checksum verification and authoritative revocation reconciliation preventing revoked entity resurrection.
+- Release & Dependency Hardening: Automated static scanning for private keys, development tokens, backend credentials, SBOM generation, and CI least-privilege verification.

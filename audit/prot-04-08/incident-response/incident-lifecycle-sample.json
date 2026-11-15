@@ -1,0 +1,15 @@
+{
+  "incident_id": "inc-9838a8fd",
+  "threat_id": "THREAT-REP-001",
+  "status": "closed",
+  "severity": "critical",
+  "containment_actions": [
+    "Revoked token family fam-99 and terminated evaluator sessions"
+  ],
+  "evidence_count": 2,
+  "evidence_ids": [
+    "ev-packet-replay-capture-001.pcap",
+    "audit-export-replay-001.json"
+  ],
+  "resolution_notes": "Post-incident analysis completed. Attacker token neutralized. No data leaked."
+}

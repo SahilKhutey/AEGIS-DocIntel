@@ -1,0 +1,39 @@
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.5",
+  "version": 1,
+  "metadata": {
+    "component": {
+      "name": "aegis-docintel-protected-demo",
+      "version": "1.1.0",
+      "type": "application"
+    }
+  },
+  "components": [
+    {
+      "name": "fastapi",
+      "version": "0.115.0",
+      "purl": "pkg:pypi/fastapi@0.115.0"
+    },
+    {
+      "name": "cryptography",
+      "version": "43.0.0",
+      "purl": "pkg:pypi/cryptography@43.0.0"
+    },
+    {
+      "name": "pyjwt",
+      "version": "2.9.0",
+      "purl": "pkg:pypi/pyjwt@2.9.0"
+    },
+    {
+      "name": "pydantic",
+      "version": "2.9.0",
+      "purl": "pkg:pypi/pydantic@2.9.0"
+    },
+    {
+      "name": "uvicorn",
+      "version": "0.30.0",
+      "purl": "pkg:pypi/uvicorn@0.30.0"
+    }
+  ]
+}

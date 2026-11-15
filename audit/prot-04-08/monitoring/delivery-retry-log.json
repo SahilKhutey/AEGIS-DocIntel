@@ -1,0 +1,8 @@
+[
+  {
+    "alert_id": "alt-0001",
+    "rule_id": "MON-003",
+    "timestamp": "2026-11-15T03:26:06.909960+00:00",
+    "reason": "SINK_UNREACHABLE"
+  }
+]

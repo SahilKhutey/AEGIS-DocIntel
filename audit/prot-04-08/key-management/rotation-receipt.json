@@ -1,0 +1,7 @@
+{
+  "action": "SCHEDULED_KEY_ROTATION",
+  "previous_key_id": "aegis-license-ed25519-2026-01",
+  "new_key_id": "aegis-license-ed25519-rot-001",
+  "transition": "Predecessor demoted to VERIFY_ONLY, Successor set to ACTIVE_SIGNING",
+  "timestamp": "2026-11-15T03:26:06.916134+00:00"
+}

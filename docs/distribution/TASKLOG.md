@@ -350,3 +350,48 @@
   - `audit/prot-04-07/` (baseline, inventory, lifecycle, rotation, replay, concurrency, revocation, browser, websocket, jobs, reports)
   - `docs/distribution/prot-04-auth-licensing/07_SESSION_AND_REVOCATION.md` (Updated overview)
 - **Result:** **PASSED / PROCEED**. Work package WP-04.07 formally signed off from HOLD to PASSED. Authorized to proceed to final PROT-04 consolidation and sign-off.
+
+
+---
+
+### [TASK-WP-04.08] — PROT-04.08: Security Audit, Monitoring & Operations Certification
+- **Goal:** Implement and certify the operational security layer for AEGIS-DocIntel Protected Demo Edition, covering centralized security event schema & taxonomy, append-only cryptographic hash chaining with external signed checkpoints, automated real-time threat detection rules (MON-001..012), incident response management with mandatory evidence attachment (IR-008), zero-downtime key rotation & emergency compromise invalidation, and fail-closed non-resurrection disaster recovery. Transition WP-04.08 from `HOLD` to `PASSED / CERTIFIED & SIGNED OFF`.
+- **Status:** **COMPLETED & CERTIFIED**
+- **Changes Made:**
+  1. Implemented centralized security event taxonomy and schema in `src/security/`:
+     - `event_schema.py`: `Severity` enum, `SecurityEvent` model with strict validation (`extra="forbid"`, `frozen=True`).
+     - `event_catalog.py`: 36 canonical event types across 6 categories, `is_known_event_type()`, `get_default_severity()`.
+     - `event_redaction.py`: Structural and regex redactor sanitizing bearer tokens, private keys, passwords, and DB connection strings.
+     - `audit_integrity.py`: Canonical JSON serialization, sequential SHA-256 hash chaining $H_i = \text{SHA256}(H_{i-1} \parallel \text{Canonical}(E_i))$, chain verification, and Ed25519-signed external checkpoints.
+     - `security_context.py`: Multi-tenant thread-local `SecurityContext` with fallback correlation ID generation.
+  2. Implemented operational repositories in `src/repositories/security_operations/`:
+     - `security_event_repository.py`: Tenant-isolated and role-gated operational event storage rejecting evaluator access.
+     - `audit_repository.py`: Append-only hash-chained storage explicitly raising `PermissionError` on `update_event` or `delete_event`.
+     - `incident_repository.py`: Incident state lifecycle (`DECLARED` $\to$ `CONTAINED` $\to$ `EVIDENCE_PENDING` $\to$ `CLOSED`) requiring attached forensic evidence on close (`IR-008`).
+     - `key_metadata_repository.py`: Key metadata lifecycle states (`ACTIVE`, `VERIFY_ONLY`, `RETIRED`, `COMPROMISED`).
+  3. Implemented operational security services in `src/services/security_operations/`:
+     - `security_event_service.py`: Central emission facade coordinating sanitization, indexing, and threat evaluation.
+     - `audit_service.py`: Audit trail querying with role boundaries and tamper-evident evidence export.
+     - `audit_verification_service.py`: Cryptographic chain verifier and external checkpoint mismatch alert trigger.
+     - `alert_evaluation_service.py`: Detection rules `MON-001` through `MON-012` with sliding time windows, channel delivery failure retries (`MON-008`), and fail-closed degraded monitoring (`MON-010`).
+     - `incident_service.py`: Incident coordination, containment tracking, evidence preservation, and closure validation.
+     - `key_rotation_service.py`: High-entropy API key rotation (`IR-003`), Ed25519 license key rotation (`IR-004`, `MON-006`), and emergency key compromise handling (`IR-002`, `MON-012`).
+     - `backup_verification_service.py`: SHA-256 backup checksum verification (`IR-005`) and authoritative revocation reconciliation enforcing the Non-Resurrection Rule (`IR-006`).
+  4. Extended Evaluation Gateway in `services/evaluation_gateway/app.py`:
+     - Public/Evaluator health probe: `GET /v1/evaluation/security/health`.
+     - Administrative endpoints under `/v1/admin/evaluation/security/*` for events, audit export, audit verify, audit checkpoints, active alerts, incident declaration/containment/closure, key rotation/compromise, and backup verify/restore.
+     - Strict RBAC: Evaluator tokens presented to admin endpoints rejected with HTTP 403 (`OPS-008`, `MON-011`).
+  5. Implemented 44 automated protocol verification scenarios in `tests/security/operations/test_security_operations_protocol.py` covering `OPS-001`..`008`, `AUDIT-001`..`010`, `MON-001`..`010`, `IR-001`..`008`, and `DIST-OPS-001`..`008`.
+  6. Generated complete empirical audit evidence in `audit/prot-04-08/` via `scripts/generate_audit_prot_04_08.py`.
+  7. Authored 13 comprehensive engineering dossiers in `docs/distribution/prot-04-auth-licensing/wp-04-08-security-operations/`.
+  8. Updated master security operations document in `docs/distribution/prot-04-auth-licensing/08_SECURITY_AUDIT_AND_OPERATIONS.md`.
+- **Commands Executed:**
+  - `python -m pytest tests/security/operations/test_security_operations_protocol.py -v` -> 44 / 44 PASSED (0.78s).
+  - `python -m pytest tests/security/ -q` -> 400 / 400 PASSED in 39.16s (100% green).
+  - `npm --prefix web run verify:auth` -> Exit code 0 (Clean, 0 violations).
+  - `python scripts/generate_audit_prot_04_08.py` -> All 20 audit evidence artifacts generated in `audit/prot-04-08/`.
+- **Deliverables:**
+  - `docs/distribution/prot-04-auth-licensing/wp-04-08-security-operations/01_SECURITY_OPERATIONS_ARCHITECTURE.md` through `13_WP_04_08_SIGNOFF.md`
+  - `audit/prot-04-08/` (baseline, event-schema, audit-integrity, monitoring, key-management, incident-response, backup-recovery, release-security, reports)
+  - `docs/distribution/prot-04-auth-licensing/08_SECURITY_AUDIT_AND_OPERATIONS.md` (Updated master architecture)
+- **Result:** **PASSED / CERTIFIED & SIGNED OFF**. Work package PROT-04.08 formally certified and signed off from HOLD to PASSED.

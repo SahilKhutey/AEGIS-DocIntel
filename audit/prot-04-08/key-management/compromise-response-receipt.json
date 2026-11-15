@@ -1,0 +1,7 @@
+{
+  "action": "EMERGENCY_KEY_COMPROMISE",
+  "compromised_key_id": "aegis-license-ed25519-2026-01",
+  "post_compromise_status": "COMPROMISED",
+  "effect": "All tokens/licenses signed with this key immediately rejected during verification",
+  "timestamp": "2026-11-15T03:26:06.916650+00:00"
+}

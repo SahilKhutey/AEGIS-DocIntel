@@ -1897,3 +1897,236 @@ async def get_audit_events(
 ):
     """Returns recorded security audit events."""
     return {"events": audit_service.get_events(50)}
+
+
+# ---------------------------------------------------------------------------
+# Security Audit, Monitoring & Operations (PROT-04 WP-04.08)
+# ---------------------------------------------------------------------------
+
+class DeclareIncidentRequest(BaseModel):
+    threat_id: str = Field(..., description="Canonical threat register ID (e.g. THREAT-ACT-001)")
+    severity: str = Field(..., description="Severity level: info, warning, high, critical")
+    title: str = Field(..., description="Short incident summary")
+    description: str = Field(..., description="Detailed incident description")
+
+
+class ContainIncidentRequest(BaseModel):
+    containment_action: str = Field(..., description="Containment action performed")
+
+
+class CloseIncidentRequest(BaseModel):
+    resolution_notes: str = Field(..., description="Post-incident review and resolution notes")
+    evidence_id: Optional[str] = Field(default=None, description="Preserved forensic evidence ID")
+
+
+class BackupVerifyRequest(BaseModel):
+    backup_id: str
+    dataset_name: str = "evaluation_database"
+    payload: Dict[str, Any]
+
+
+class BackupRestoreRequest(BaseModel):
+    backup_id: str
+    authoritative_revocations: Optional[List[str]] = None
+
+
+@app.get("/v1/evaluation/security/health")
+async def get_security_health():
+    """Returns overall operational security status, key registry state, and chain integrity."""
+    from src.services.security_operations.audit_verification_service import audit_verification_service
+    from src.services.security_operations.alert_evaluation_service import alert_evaluation_service
+    from services.evaluation_gateway.signing_key_registry import key_registry
+
+    valid, fail_idx, reason = audit_verification_service.verify_chain_integrity()
+    alerts = alert_evaluation_service.get_alerts()
+    active_signing_kid = key_registry.get_active_key_id()
+
+    return {
+        "status": "HEALTHY" if valid else "DEGRADED",
+        "timestamp": datetime.now(timezone.utc).isoformat(),
+        "audit_chain": {
+            "is_valid": valid,
+            "status": reason,
+            "failure_index": fail_idx,
+        },
+        "signing_keys": {
+            "active_key_id": active_signing_kid,
+            "key_count": len(key_registry.list_keys()),
+        },
+        "monitoring": {
+            "active_alerts_count": len(alerts),
+            "critical_alerts_count": len([a for a in alerts if a.severity == "critical"]),
+        },
+    }
+
+
+@app.get("/v1/admin/evaluation/security/events")
+async def admin_get_security_events(
+    tenant_id: Optional[str] = None,
+    evaluator_id: Optional[str] = None,
+    event_type: Optional[str] = None,
+    limit: int = 100,
+    admin_auth: None = Depends(require_admin_auth),
+):
+    """Admin endpoint to query validated security events."""
+    from src.repositories.security_operations.security_event_repository import security_event_repository
+    events = security_event_repository.query_events(
+        tenant_id=tenant_id,
+        evaluator_id=evaluator_id,
+        event_type=event_type,
+        caller_role="security_operator",
+        limit=limit,
+    )
+    return {"count": len(events), "events": [e.model_dump() for e in events]}
+
+
+@app.get("/v1/admin/evaluation/security/audit/export")
+async def admin_export_audit_log(admin_auth: None = Depends(require_admin_auth)):
+    """Admin endpoint to export verifiable hash-chained audit log with integrity report."""
+    from src.services.security_operations.audit_service import audit_service
+    return audit_service.export_evidence()
+
+
+@app.post("/v1/admin/evaluation/security/audit/verify")
+async def admin_verify_audit_chain(admin_auth: None = Depends(require_admin_auth)):
+    """Admin endpoint to trigger on-demand cryptographic audit chain verification."""
+    from src.services.security_operations.audit_verification_service import audit_verification_service
+    valid, fail_idx, reason = audit_verification_service.verify_chain_integrity()
+    return {
+        "is_valid": valid,
+        "failure_index": fail_idx,
+        "reason": reason,
+        "verified_at": datetime.now(timezone.utc).isoformat(),
+    }
+
+
+@app.post("/v1/admin/evaluation/security/audit/checkpoint")
+async def admin_create_audit_checkpoint(admin_auth: None = Depends(require_admin_auth)):
+    """Admin endpoint to anchor an external signed checkpoint."""
+    from src.services.security_operations.audit_verification_service import audit_verification_service
+    chk = audit_verification_service.anchor_checkpoint()
+    return {"status": "CHECKPOINT_CREATED", "checkpoint": chk}
+
+
+@app.get("/v1/admin/evaluation/security/alerts")
+async def admin_list_security_alerts(admin_auth: None = Depends(require_admin_auth)):
+    """Admin endpoint to review live threat detection alerts."""
+    from src.services.security_operations.alert_evaluation_service import alert_evaluation_service
+    alerts = alert_evaluation_service.get_alerts()
+    return {
+        "count": len(alerts),
+        "alerts": [
+            {
+                "alert_id": a.alert_id,
+                "rule_id": a.rule_id,
+                "severity": a.severity,
+                "title": a.title,
+                "description": a.description,
+                "triggered_at": a.triggered_at.isoformat(),
+                "context": a.context,
+                "delivery_status": a.delivery_status,
+            }
+            for a in alerts
+        ],
+    }
+
+
+@app.post("/v1/admin/evaluation/security/incidents")
+async def admin_declare_incident(req: DeclareIncidentRequest, admin_auth: None = Depends(require_admin_auth)):
+    """Admin endpoint to declare a formal security incident."""
+    from src.services.security_operations.incident_service import incident_service
+    inc = incident_service.declare_incident(
+        threat_id=req.threat_id,
+        severity=req.severity,
+        title=req.title,
+        description=req.description,
+    )
+    return {
+        "status": "DECLARED",
+        "incident_id": inc.incident_id,
+        "threat_id": inc.threat_id,
+        "severity": inc.severity,
+    }
+
+
+@app.get("/v1/admin/evaluation/security/incidents")
+async def admin_list_incidents(admin_auth: None = Depends(require_admin_auth)):
+    """Admin endpoint to list all declared incidents."""
+    from src.services.security_operations.incident_service import incident_service
+    incidents = incident_service.list_incidents()
+    return {
+        "count": len(incidents),
+        "incidents": [
+            {
+                "incident_id": i.incident_id,
+                "threat_id": i.threat_id,
+                "severity": i.severity,
+                "title": i.title,
+                "status": i.status.value,
+                "created_at": i.created_at.isoformat(),
+                "contained_at": i.contained_at.isoformat() if i.contained_at else None,
+                "closed_at": i.closed_at.isoformat() if i.closed_at else None,
+                "evidence_ids": i.evidence_ids,
+            }
+            for i in incidents
+        ],
+    }
+
+
+@app.post("/v1/admin/evaluation/security/incidents/{incident_id}/contain")
+async def admin_contain_incident(
+    incident_id: str,
+    req: ContainIncidentRequest,
+    admin_auth: None = Depends(require_admin_auth),
+):
+    """Admin endpoint to execute containment actions for an incident."""
+    from src.services.security_operations.incident_service import incident_service
+    try:
+        inc = incident_service.contain_incident(incident_id, req.containment_action)
+        return {"status": "CONTAINED", "incident_id": inc.incident_id, "actions": inc.containment_actions}
+    except KeyError as e:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(e))
+
+
+@app.post("/v1/admin/evaluation/security/incidents/{incident_id}/close")
+async def admin_close_incident(
+    incident_id: str,
+    req: CloseIncidentRequest,
+    admin_auth: None = Depends(require_admin_auth),
+):
+    """Admin endpoint to close a security incident after evidence preservation (IR-008)."""
+    from src.services.security_operations.incident_service import incident_service
+    try:
+        if req.evidence_id:
+            incident_service.preserve_evidence(incident_id, req.evidence_id)
+        inc = incident_service.close_incident(incident_id, req.resolution_notes)
+        return {
+            "status": "CLOSED",
+            "incident_id": inc.incident_id,
+            "closed_at": inc.closed_at.isoformat() if inc.closed_at else None,
+            "evidence_count": len(inc.evidence_ids),
+        }
+    except KeyError as e:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(e))
+    except ValueError as e:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail={"error": "EVIDENCE_REQUIRED", "message": str(e)})
+
+
+@app.post("/v1/admin/evaluation/security/backup/verify")
+async def admin_verify_backup(req: BackupVerifyRequest, admin_auth: None = Depends(require_admin_auth)):
+    """Admin endpoint to verify backup payload against its cryptographic checksum (IR-005)."""
+    from src.services.security_operations.backup_verification_service import backup_verification_service
+    backup_verification_service.record_backup(req.backup_id, req.dataset_name, req.payload)
+    valid = backup_verification_service.verify_backup_integrity(req.backup_id)
+    return {"backup_id": req.backup_id, "checksum_verified": valid}
+
+
+@app.post("/v1/admin/evaluation/security/backup/restore")
+async def admin_restore_backup(req: BackupRestoreRequest, admin_auth: None = Depends(require_admin_auth)):
+    """Admin endpoint to restore backup with fail-closed non-resurrection enforcement (IR-006)."""
+    from src.services.security_operations.backup_verification_service import backup_verification_service
+    auth_revocations = set(req.authoritative_revocations) if req.authoritative_revocations is not None else None
+    success, report = backup_verification_service.restore_and_reconcile(req.backup_id, auth_revocations)
+    if not success:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=report)
+    return {"status": "RESTORED_AND_RECONCILED", "report": report}

@@ -131,7 +131,7 @@ class SigningKeyRegistry:
                     old.retired_at = now
 
             # Generate new key pair
-            kid = new_key_id or f"aegis-license-ed25519-{int(now)}"
+            kid = new_key_id or f"aegis-license-ed25519-{time.time_ns()}"
             priv = ed25519.Ed25519PrivateKey.generate()
             pub = priv.public_key()
             pub_pem = pub.public_bytes(

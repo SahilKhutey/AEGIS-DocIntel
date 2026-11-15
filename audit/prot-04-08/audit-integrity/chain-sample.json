@@ -1,0 +1,119 @@
+{
+  "exported_at": "2026-11-15T03:26:06.838392+00:00",
+  "head_hash": "07dd6fbe2ef0e6bcd17ff5167aeb340512daf90c23fae5077436940f13ed2213",
+  "event_count": 10,
+  "is_valid": true,
+  "integrity_status": "CHAIN_VALID",
+  "events": [
+    {
+      "event_type": "AUTH_SUCCESS",
+      "evaluator_id": "eval-000",
+      "tenant_id": "tenant-corp",
+      "result": "allowed",
+      "step": 0,
+      "entry_id": "76eb4964-2a70-4d03-9e2b-7a0586c9089d",
+      "previous_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+      "recorded_at": "2026-11-15T03:26:06.838392+00:00",
+      "current_hash": "ba9553fa09741748cd12ff800bd4982d4f18515ee75ec35ce05e0728f237de2a"
+    },
+    {
+      "event_type": "AUTH_SUCCESS",
+      "evaluator_id": "eval-001",
+      "tenant_id": "tenant-corp",
+      "result": "allowed",
+      "step": 1,
+      "entry_id": "4cff9871-41a7-487a-a5d0-7b7dbf459126",
+      "previous_hash": "ba9553fa09741748cd12ff800bd4982d4f18515ee75ec35ce05e0728f237de2a",
+      "recorded_at": "2026-11-15T03:26:06.838392+00:00",
+      "current_hash": "81a08cfb009135fc97887e37010199955e19876dfdc80e29227725ca26adfdca"
+    },
+    {
+      "event_type": "AUTH_SUCCESS",
+      "evaluator_id": "eval-002",
+      "tenant_id": "tenant-corp",
+      "result": "allowed",
+      "step": 2,
+      "entry_id": "729827f5-f655-4335-8b69-e5095d0ebbe6",
+      "previous_hash": "81a08cfb009135fc97887e37010199955e19876dfdc80e29227725ca26adfdca",
+      "recorded_at": "2026-11-15T03:26:06.838392+00:00",
+      "current_hash": "d0f8d0dd5945604696836ec0cd0bef126500e2b3a701f1740b669c72d66ffe94"
+    },
+    {
+      "event_type": "AUTH_SUCCESS",
+      "evaluator_id": "eval-003",
+      "tenant_id": "tenant-corp",
+      "result": "allowed",
+      "step": 3,
+      "entry_id": "7ddb70d8-3a40-4178-b36c-2a5dd7269573",
+      "previous_hash": "d0f8d0dd5945604696836ec0cd0bef126500e2b3a701f1740b669c72d66ffe94",
+      "recorded_at": "2026-11-15T03:26:06.838392+00:00",
+      "current_hash": "e105ba8462d0d6babc247c85898175342fe8a25200740ec81817a348f4c55203"
+    },
+    {
+      "event_type": "AUTH_SUCCESS",
+      "evaluator_id": "eval-004",
+      "tenant_id": "tenant-corp",
+      "result": "allowed",
+      "step": 4,
+      "entry_id": "60e5df55-596b-41e2-89d5-781567464d1b",
+      "previous_hash": "e105ba8462d0d6babc247c85898175342fe8a25200740ec81817a348f4c55203",
+      "recorded_at": "2026-11-15T03:26:06.838392+00:00",
+      "current_hash": "42539ed2d375a567a772bf0287626a260bb2bd3c7c038ff4c3b01f622a34be16"
+    },
+    {
+      "event_type": "AUTH_SUCCESS",
+      "evaluator_id": "eval-005",
+      "tenant_id": "tenant-corp",
+      "result": "allowed",
+      "step": 5,
+      "entry_id": "d0758369-b50b-48d5-9f40-028571999277",
+      "previous_hash": "42539ed2d375a567a772bf0287626a260bb2bd3c7c038ff4c3b01f622a34be16",
+      "recorded_at": "2026-11-15T03:26:06.838392+00:00",
+      "current_hash": "ee698f213999e8077928c493b392c562a4eb24674230de61d55803db407bdaa1"
+    },
+    {
+      "event_type": "AUTH_SUCCESS",
+      "evaluator_id": "eval-006",
+      "tenant_id": "tenant-corp",
+      "result": "allowed",
+      "step": 6,
+      "entry_id": "b90c3b29-12e5-4b0c-a88c-6efd27100cc2",
+      "previous_hash": "ee698f213999e8077928c493b392c562a4eb24674230de61d55803db407bdaa1",
+      "recorded_at": "2026-11-15T03:26:06.838392+00:00",
+      "current_hash": "a2558a29265fe75d022096c905322df425ca6d233cf24109ccde467370741ec9"
+    },
+    {
+      "event_type": "AUTH_SUCCESS",
+      "evaluator_id": "eval-007",
+      "tenant_id": "tenant-corp",
+      "result": "allowed",
+      "step": 7,
+      "entry_id": "fcfb55dc-7cb2-49a4-9d93-0de2da7d8052",
+      "previous_hash": "a2558a29265fe75d022096c905322df425ca6d233cf24109ccde467370741ec9",
+      "recorded_at": "2026-11-15T03:26:06.838392+00:00",
+      "current_hash": "a8719196183ce8d0820ad9145c744a9d6321b5e0c3529a6e808091601c4163c7"
+    },
+    {
+      "event_type": "AUTH_SUCCESS",
+      "evaluator_id": "eval-008",
+      "tenant_id": "tenant-corp",
+      "result": "allowed",
+      "step": 8,
+      "entry_id": "3843faf9-d72f-4b98-9b4d-1afbce9cc533",
+      "previous_hash": "a8719196183ce8d0820ad9145c744a9d6321b5e0c3529a6e808091601c4163c7",
+      "recorded_at": "2026-11-15T03:26:06.838392+00:00",
+      "current_hash": "836ddd0d64a0db679860dfeb5bf5f7d4c0ae1608d73e6535f2518ae8130c3e0a"
+    },
+    {
+      "event_type": "AUTH_SUCCESS",
+      "evaluator_id": "eval-009",
+      "tenant_id": "tenant-corp",
+      "result": "allowed",
+      "step": 9,
+      "entry_id": "b6241fee-43ab-4dd4-b107-9a5aa693e18f",
+      "previous_hash": "836ddd0d64a0db679860dfeb5bf5f7d4c0ae1608d73e6535f2518ae8130c3e0a",
+      "recorded_at": "2026-11-15T03:26:06.838392+00:00",
+      "current_hash": "07dd6fbe2ef0e6bcd17ff5167aeb340512daf90c23fae5077436940f13ed2213"
+    }
+  ]
+}

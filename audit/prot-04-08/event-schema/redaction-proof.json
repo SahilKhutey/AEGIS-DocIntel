@@ -1,0 +1,14 @@
+{
+  "raw_input": {
+    "authorization": "Bearer eyJhbGciOiJFZERTQTEyMzQ1Njc4OTAifQ.evaluator_secret",
+    "private_key": "-----BEGIN PRIVATE KEY-----\nMIGHAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBG0wawIBAQQg...\n-----END PRIVATE KEY-----",
+    "connection_string": "postgresql://aegis_admin:super_secret_pwd@db.internal:5432/aegis_eval",
+    "harmless_metric": 42
+  },
+  "sanitized_output": {
+    "authorization": "[REDACTED]",
+    "private_key": "[REDACTED]",
+    "connection_string": "postgresql://aegis_admin:super_secret_pwd@db.internal:5432/aegis_eval",
+    "harmless_metric": 42
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "runbooks": [
+    {
+      "id": "IR-01",
+      "name": "Compromised Evaluator Session Containment",
+      "threat": "THREAT-SESS-001"
+    },
+    {
+      "id": "IR-02",
+      "name": "Emergency License Signing Key Revocation",
+      "threat": "THREAT-KEY-001"
+    },
+    {
+      "id": "IR-03",
+      "name": "API Key Compromise & Invalidation",
+      "threat": "THREAT-API-001"
+    },
+    {
+      "id": "IR-04",
+      "name": "License Revocation & Evaluator Suspension",
+      "threat": "THREAT-LIC-001"
+    },
+    {
+      "id": "IR-05",
+      "name": "Activation Code Brute-Force Mitigation",
+      "threat": "THREAT-ACT-001"
+    },
+    {
+      "id": "IR-06",
+      "name": "Refresh Token Replay Response",
+      "threat": "THREAT-REP-001"
+    },
+    {
+      "id": "IR-07",
+      "name": "Cross-Tenant Access Breach Protocol",
+      "threat": "THREAT-ISO-001"
+    },
+    {
+      "id": "IR-08",
+      "name": "Database Backup Integrity Failure & Restore",
+      "threat": "THREAT-DATA-001"
+    },
+    {
+      "id": "IR-09",
+      "name": "Audit Log Integrity Tamper Response",
+      "threat": "THREAT-AUDIT-001"
+    },
+    {
+      "id": "IR-10",
+      "name": "Distribution Artifact Tampering Detection",
+      "threat": "THREAT-DIST-001"
+    }
+  ]
+}

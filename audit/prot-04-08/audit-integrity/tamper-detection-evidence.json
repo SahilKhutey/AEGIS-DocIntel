@@ -1,0 +1,20 @@
+[
+  {
+    "test": "Historical Event Modification",
+    "detected": true,
+    "fail_idx": 2,
+    "reason": "CONTENT_TAMPERED: stored 'ada09c55fe4bdf6e43416af6f2e70c967248aa390e1cd7d336f167cdd8149c2f', computed '1a2ffe40dd81a139e4519c6d3c818fad02b311679e206c5c28068336669c2add'"
+  },
+  {
+    "test": "Event Deletion",
+    "detected": true,
+    "fail_idx": 2,
+    "reason": "PREVIOUS_HASH_MISMATCH: expected '773d6e38849cab7c31c4950f64b48885e4561c46acb92b7584944edc0e139016', got 'ada09c55fe4bdf6e43416af6f2e70c967248aa390e1cd7d336f167cdd8149c2f'"
+  },
+  {
+    "test": "Event Reordering",
+    "detected": true,
+    "fail_idx": 1,
+    "reason": "PREVIOUS_HASH_MISMATCH: expected '6ce8f6ff4b3d73450e46f14afefdf49a2f84571e0883ecec297659a16c8a4c6a', got '773d6e38849cab7c31c4950f64b48885e4561c46acb92b7584944edc0e139016'"
+  }
+]
