@@ -3683,6 +3683,66 @@
         }
       }
     },
+    "/v1/demo/session": {
+      "get": {
+        "tags": [
+          "Demo"
+        ],
+        "summary": "Get demo session metadata and guided tour configuration",
+        "description": "Retrieve demo session context, active tenant bounds, and guided walkthrough steps.",
+        "operationId": "get_demo_session_v1_demo_session_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DemoSessionResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          },
+          {
+            "APIKeyHeader": []
+          }
+        ]
+      }
+    },
+    "/v1/demo/reset": {
+      "post": {
+        "tags": [
+          "Demo"
+        ],
+        "summary": "Reset demo tenant workspace to initial seeded state",
+        "description": "Restore demo tenant documents to the default pristine seed state.\nAllowed only in demo mode and strictly scoped to demo-tenant.",
+        "operationId": "reset_demo_workspace_v1_demo_reset_post",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DemoResetResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          },
+          {
+            "APIKeyHeader": []
+          }
+        ]
+      }
+    },
     "/stats": {
       "get": {
         "tags": [
@@ -4614,6 +4674,123 @@
           "audit_event"
         ],
         "title": "DecisionResponse"
+      },
+      "DemoGuidedStep": {
+        "properties": {
+          "step": {
+            "type": "integer",
+            "title": "Step"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "description": {
+            "type": "string",
+            "title": "Description"
+          },
+          "target_route": {
+            "type": "string",
+            "title": "Target Route"
+          }
+        },
+        "type": "object",
+        "required": [
+          "step",
+          "title",
+          "description",
+          "target_route"
+        ],
+        "title": "DemoGuidedStep"
+      },
+      "DemoResetResponse": {
+        "properties": {
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "tenant_id": {
+            "type": "string",
+            "title": "Tenant Id"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message"
+          },
+          "documents_restored": {
+            "type": "integer",
+            "title": "Documents Restored"
+          }
+        },
+        "type": "object",
+        "required": [
+          "status",
+          "tenant_id",
+          "message",
+          "documents_restored"
+        ],
+        "title": "DemoResetResponse"
+      },
+      "DemoSessionResponse": {
+        "properties": {
+          "demo_mode": {
+            "type": "boolean",
+            "title": "Demo Mode"
+          },
+          "tenant_id": {
+            "type": "string",
+            "title": "Tenant Id"
+          },
+          "principal_id": {
+            "type": "string",
+            "title": "Principal Id"
+          },
+          "token": {
+            "type": "string",
+            "title": "Token"
+          },
+          "roles": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Roles"
+          },
+          "monthly_token_limit": {
+            "type": "integer",
+            "title": "Monthly Token Limit"
+          },
+          "system_version": {
+            "type": "string",
+            "title": "System Version",
+            "default": "1.2.0-launch"
+          },
+          "sample_documents": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "type": "array",
+            "title": "Sample Documents"
+          },
+          "guided_workflow": {
+            "items": {
+              "$ref": "#/components/schemas/DemoGuidedStep"
+            },
+            "type": "array",
+            "title": "Guided Workflow"
+          }
+        },
+        "type": "object",
+        "required": [
+          "demo_mode",
+          "tenant_id",
+          "principal_id",
+          "token",
+          "roles",
+          "monthly_token_limit"
+        ],
+        "title": "DemoSessionResponse"
       },
       "DiffRequest": {
         "properties": {

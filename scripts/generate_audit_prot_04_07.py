@@ -210,7 +210,7 @@ Protocol Scenarios: SESSION-031 through SESSION-034
 
     # 8. Browser, WebSocket, and Jobs Evidence
     print("[9/10] Generating browser, websocket, and job evidence...")
-    browser_text = f"""AEGIS-DocIntel Browser Security Verification
+    browser_text = """AEGIS-DocIntel Browser Security Verification
 ================================================================
 Protocol Scenarios: SESSION-035 through SESSION-038
 - Cookie Security: __Host-aegis_refresh configured with Path=/; Secure; HttpOnly; SameSite=Strict; Max-Age=604800.
@@ -221,7 +221,7 @@ Protocol Scenarios: SESSION-035 through SESSION-038
 """
     (AUDIT_DIR / "browser" / "browser-security-evidence.txt").write_text(browser_text, encoding="utf-8")
 
-    ws_text = f"""AEGIS-DocIntel WebSocket Security Verification
+    ws_text = """AEGIS-DocIntel WebSocket Security Verification
 ================================================================
 Protocol Scenarios: SESSION-039 through SESSION-040
 - Ticket Issuance: POST /v1/evaluation/ws/ticket issues 60-second single-use ticket (aegis_ws_tkt_...).
@@ -231,7 +231,7 @@ Protocol Scenarios: SESSION-039 through SESSION-040
 """
     (AUDIT_DIR / "websocket" / "ws-ticket-evidence.txt").write_text(ws_text, encoding="utf-8")
 
-    job_text = f"""AEGIS-DocIntel Background Job Security Verification
+    job_text = """AEGIS-DocIntel Background Job Security Verification
 ================================================================
 Protocol Scenarios: SESSION-041 through SESSION-042
 - Authorization Context Retention: Background document processing jobs retain evaluator session context.

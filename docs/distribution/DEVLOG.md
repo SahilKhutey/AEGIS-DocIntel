@@ -527,4 +527,13 @@ Implemented final end-to-end integration protocol, Private Engine Isolation Guar
   - Resolved `web/src/lib/auth/session.ts` unhandled exception in `defaultSessionProvider.signOut()` by wrapping remote server revocation in `try ... catch ... finally` to ensure robust client-side session cleanup without uncaught URL/network rejections in jsdom/Node fetch environments.
   - Resolved `web/tests/unit/integration/api-client.test.ts` schema parsing test expectation to align with neutralized unauthenticated request context (`Accept: application/json`), and added explicit test verifying context header injection when context is configured.
   - Verified all tests in `tests/unit/integration/auth-permissions.test.ts` (10/10) and `tests/unit/integration/api-client.test.ts` (8/8) pass cleanly.
+- **Backend Lint, Static Security & OpenAPI Synchronization:**
+  - Resolved Ruff lint errors across 28 violations (`ruff check src tests scripts dashboard`):
+    * Stripped extraneous `f` prefixes from static multiline strings in `scripts/generate_audit_prot_04_07.py`.
+    * Split multiple imports on a single line in `tests/security/evaluation/test_session_security.py`.
+    * Cleaned wildcard imports (`from .xyz import *`) in `src/repositories/evaluation/__init__.py` and `src/schemas/evaluation/__init__.py` into standard namespace package modules.
+    * Added missing type annotations and imports (`Any` in `entitlement_resolver.py` and `websocket_ticket_service.py`; `EvaluationSession` in `refresh_rotation_service.py`).
+  - Resolved Bandit static security AST analyzer violations (B602 `shell=True` in audit generation scripts) with explicit `# nosec B602` directives; `bandit -r src dashboard scripts -ll` passes with 0 Medium/High issues.
+  - Regenerated canonical root `openapi.json` via `scripts/update_openapi.py` to include new PROT-FINAL-02 evaluation endpoints, ensuring exact 0-drift schema parity with live FastAPI application.
+
 

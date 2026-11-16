@@ -9,7 +9,7 @@ Complies with PROT-04 WP-04.05 specification.
 from __future__ import annotations
 
 from datetime import datetime, timezone
-from typing import Dict, List, Optional, Set, Tuple
+from typing import Any, Dict, List, Optional, Set, Tuple
 
 from src.repositories.evaluation.entitlement_policy_repository import (
     EntitlementPolicyRepository,

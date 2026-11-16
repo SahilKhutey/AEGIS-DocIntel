@@ -10,7 +10,7 @@ from datetime import datetime, timedelta, timezone
 from typing import Any, Dict, Optional, Tuple
 
 from src.schemas.evaluation.refresh import EvaluationRefreshToken, RefreshTokenStatus
-from src.schemas.evaluation.session import RevocationReason
+from src.schemas.evaluation.session import EvaluationSession, RevocationReason
 from src.schemas.evaluation.session_audit import SessionAuditEvent, SessionAuditEventType
 from src.repositories.evaluation.session_repository import session_repository, SessionRepository
 from src.repositories.evaluation.refresh_token_repository import refresh_token_repository, RefreshTokenRepository

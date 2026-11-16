@@ -10,7 +10,7 @@ import secrets
 import threading
 import time
 from dataclasses import dataclass
-from typing import Dict, Optional, Tuple
+from typing import Any, Dict, Optional, Tuple
 
 from src.schemas.evaluation.session_audit import SessionAuditEvent, SessionAuditEventType
 from src.repositories.evaluation.session_audit_repository import session_audit_repository, SessionAuditRepository

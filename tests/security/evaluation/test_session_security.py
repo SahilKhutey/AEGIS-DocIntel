@@ -34,7 +34,8 @@ def test_auth_002_malformed_token(client: TestClient):
 
 def test_auth_003_forged_token_signature(client: TestClient):
     """AUTH-003: Forged token signature returns 401 Unauthorized."""
-    import base64, json
+    import base64
+    import json
     bogus_doc = {
         "payload": {"license_id": "fake", "user_id": "hacker", "expires_at": "2099-01-01T00:00:00Z"},
         "signature": base64.b64encode(b"invalid_signature_bytes_32_bytes!").decode("ascii"),

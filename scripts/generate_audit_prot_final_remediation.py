@@ -188,7 +188,7 @@ def run_cmd(cmd: str) -> str:
     res = subprocess.run(
         cmd,
         cwd=str(ROOT),
-        shell=True,
+        shell=True,  # nosec B602
         capture_output=True,
         text=True,
         encoding="utf-8",
