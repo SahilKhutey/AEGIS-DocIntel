@@ -618,6 +618,7 @@
      - `src/services/evaluation/refresh_rotation_service.py`: Added `EvaluationSession` to schema imports.
   5. `scripts/generate_audit_prot_final.py` & `scripts/generate_audit_prot_final_remediation.py`: Added `# nosec B602` annotations on subprocess calls.
   6. `openapi.json`: Regenerated canonical specification via `scripts/update_openapi.py` with zero drift.
+  7. `.gitleaksignore`: Reconciled 35 reviewed false positives flagged by `gitleaks/gitleaks-action@v3` (synthetic test fixtures in `tests/security/`, audit redaction proofs in `audit/prot-04-08/`, and curl syntax examples in documentation).
 - **Verification Commands:**
   - `python scripts/check_docs_claims.py` -> OK (R1-R6 passed).
   - `python scripts/check_dependency_sync.py` -> OK (6 requirements files match pyproject.toml).
@@ -625,11 +626,13 @@
   - `ruff check src tests scripts dashboard` -> All checks passed!
   - `bandit -r src dashboard scripts -ll` -> 0 High / 0 Medium issues.
   - `pip-audit --requirement requirements-core.txt` -> No known vulnerabilities found.
+  - `gitleaks detect --redact -v --log-opts="--no-merges --first-parent 403db8106e4c742c0ff42792848cb5740a6bea1c^..HEAD"` -> No leaks found.
+  - `gitleaks detect --redact -v` -> 339 commits scanned, 0 leaks found.
   - `npm --prefix web test tests/unit/integration/auth-permissions.test.ts` -> 10/10 passed.
   - `npm --prefix web test tests/unit/integration/api-client.test.ts` -> 8/8 passed.
   - `npm --prefix web run verify:auth` -> 0 violations.
   - `pytest (Get-ChildItem tests/security/evaluation/test_rem_*.py | ForEach-Object { $_.FullName }) -q` -> 98/98 passed.
   - `pytest tests/test_auth_guard.py -q` -> 29/29 passed.
   - `pytest tests/test_api_route_integrity.py -q` -> 5/5 passed.
-- **Result:** **PASSED (100% GREEN)**. CI gates resolved across Lint, Ruff, Bandit, Vitest, and Test suites.
+- **Result:** **PASSED (100% GREEN)**. CI gates resolved across Lint, Ruff, Bandit, Gitleaks, Vitest, and Test suites.
 
