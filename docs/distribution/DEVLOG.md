@@ -555,8 +555,10 @@ Implemented final end-to-end integration protocol, Private Engine Isolation Guar
   - Resolved `FileNotFoundError: [Errno 2] No such file or directory: 'powershell'` in CI Linux runner (`ubuntu-24.04`) during `test_sec_demo_020_verify_package_script_integrity`.
   - Added dynamic executable resolution (`shutil.which("powershell") or shutil.which("pwsh")`) with graceful `pytest.skip` when no PowerShell interpreter is installed on the host OS.
 - **Package Manifest Digest & Git Line-Ending Synchronization (`distribution/demo-edition/`):**
-  - Resolved `AssertionError: SHA-256 mismatch for deploy/nginx-demo-proxy.conf` in `test_sec_demo_016_package_manifest_integrity` and `launcher/verify-package.ps1`.
-  - Reconciled `package-manifest.json` digest for `deploy/nginx-demo-proxy.conf` to `4f8daa7a066a148068a5c65f9ea0c6d442c611a09a90616e286db41c4cc2928e` (size: 2,255 bytes) matching the hardened CSP and security header updates introduced under REM-07.
+  - Resolved `AssertionError: SHA-256 mismatch for deploy/nginx-demo-proxy.conf` and subsequent mismatches across 13 distribution assets (`license/evaluation.lic`, SBOM manifests, and third-party license notices) in `test_sec_demo_016_package_manifest_integrity` and `launcher/verify-package.ps1`.
+  - Identified root cause: these 13 distribution assets were originally hashed with CRLF on Windows disk, causing SHA-256 mismatch against the canonical LF checkouts produced by Git on Ubuntu Linux runners.
+  - Normalized all files under `distribution/demo-edition/` to deterministic LF line endings and recomputed canonical SHA-256 digests and exact byte sizes in `distribution/demo-edition/package-manifest.json`.
+  - Fixed Windows-specific backslash path separators (`license\evaluation.lic`) in `distribution/demo-edition/launcher/verify-package.ps1` to POSIX-compliant forward slashes (`license/evaluation.lic`) for seamless execution under `pwsh` on Linux.
   - Added `distribution/** text eol=lf` to `.gitattributes` to guarantee deterministic LF line endings across all platforms and Windows checkouts.
 - **Production Authentication Hardened Assertion Compatibility (`tests/test_auth.py`):**
   - Resolved `AssertionError: assert 'JWT validation not configured' in 'Development tokens are strictly rejected in production'` in `test_auth_bypass_rejected_in_production`.

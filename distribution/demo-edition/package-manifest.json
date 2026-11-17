@@ -97,13 +97,13 @@
     },
     {
       "path": "launcher/verify-package.ps1",
-      "sha256": "24e38b1f88f406cd43d3791c0d1709369c8f3f04dbf0b2e8070dfaf4d233f3a0",
-      "size_bytes": 3274
+      "sha256": "1e3161623dd4e74b9899a546933c5e56f9271cfa5247dce8d0365ba93542cdb5",
+      "size_bytes": 3286
     },
     {
       "path": "license/evaluation.lic",
-      "sha256": "4130b497484ada7cb12667d77cdcfa319b42a9b6ecab53e3253d9d41f14fe2f9",
-      "size_bytes": 781
+      "sha256": "d85b2338370d66ffd52a7604ba076b5fc555291b000207a9b330dee5ed3ff7db",
+      "size_bytes": 756
     },
     {
       "path": "license/public-key.pem",
@@ -122,63 +122,63 @@
     },
     {
       "path": "THIRD-PARTY-NOTICES/licenses/Apache-2.0.txt",
-      "sha256": "b8a215050b93eae3afdcc5b7dec9b296d5dcf64869276d12be87fdb9603f3e85",
-      "size_bytes": 2772
+      "sha256": "5a33703c7ce2db13344f4e8d26dcd51546a451adce7bf0de31dc31aaa674952b",
+      "size_bytes": 2745
     },
     {
       "path": "THIRD-PARTY-NOTICES/licenses/BlueOak-1.0.0.txt",
-      "sha256": "5cf1c4f87d705816bb56d40b40537fa1091bffe2ec976713e080541c9c19a75a",
-      "size_bytes": 423
+      "sha256": "56e5098bc37feeeda6738501f6bea1784ccb466328eb692e219712dc9f96b31e",
+      "size_bytes": 417
     },
     {
       "path": "THIRD-PARTY-NOTICES/licenses/BSD-2-Clause.txt",
-      "sha256": "7066c16ee49ed41bf64079095e4d9a4d55b60fb8637ead8077d8b02fefdf1e7a",
-      "size_bytes": 639
+      "sha256": "0a245a6422b3307a4bf4358903f74820991119ad4ba64c364222789e62991b5b",
+      "size_bytes": 631
     },
     {
       "path": "THIRD-PARTY-NOTICES/licenses/BSD-3-Clause.txt",
-      "sha256": "6d65cc6dcac221505804c38acf15a9cf5bd620eeff0a6bfe4cb988aa156f7dba",
-      "size_bytes": 831
+      "sha256": "cb6d6bb04b36bc1353e8cb144d4d458aadd200b2f4c3279ee93b599970837e30",
+      "size_bytes": 822
     },
     {
       "path": "THIRD-PARTY-NOTICES/licenses/CC-BY-4.0.txt",
-      "sha256": "635202512fc29a1423eb3e952882c39e850c1416382838a2fd4258bafc57a074",
-      "size_bytes": 573
+      "sha256": "f5d19c44bb8599d594e4e6f7a09e216b6a861df231c9efc5dd5bc70d4a7288c2",
+      "size_bytes": 564
     },
     {
       "path": "THIRD-PARTY-NOTICES/licenses/ISC.txt",
-      "sha256": "cbcebe6cc1f8432dfb76ab1b76c9b660bc16f99b66dac0ed4277009359bb74be",
-      "size_bytes": 461
+      "sha256": "2426c51f7e4d2ed2d4b4247a17ec51186a73ee142b4391127435db35bc211c21",
+      "size_bytes": 453
     },
     {
       "path": "THIRD-PARTY-NOTICES/licenses/LGPL-3.0-or-later.txt",
-      "sha256": "d7c022de88a11d47ec9c3a199e74a5ce6a59713778ffb95e64bae14dd6ba995a",
-      "size_bytes": 1388
+      "sha256": "9f819bed380ff5fc2cf2e16dd51e386204758bd095d4cc1fe06719e8f0a2432c",
+      "size_bytes": 1371
     },
     {
       "path": "THIRD-PARTY-NOTICES/licenses/MIT.txt",
-      "sha256": "9eb6f69d48a1dd764e8a33f14a584f460d3cec653477c136a95dd6df9c249211",
-      "size_bytes": 1055
+      "sha256": "508a77d2e7b51d98adeed32648ad124b7b30241a8e70b2e72c99f92d8e5874d1",
+      "size_bytes": 1036
     },
     {
       "path": "THIRD-PARTY-NOTICES/licenses/MPL-2.0.txt",
-      "sha256": "a04267e5bd6b6f4f15a8fa3755df2d8fdda1ef3e51bba0d401a5d6ad65c75210",
-      "size_bytes": 1350
+      "sha256": "7f3cc6a79a1edbb23b7778118afdcebb3a61930b325ab067d2280c6b911999f1",
+      "size_bytes": 1337
     },
     {
       "path": "THIRD-PARTY-NOTICES/manifest/dependency_license_register.csv",
-      "sha256": "15ff6be011529619ba5068b2e18d07fb8ba0230a08b690b6e57ab59dfbaf8bce",
-      "size_bytes": 111680
+      "sha256": "4ec96624e0b5debf1624904a5a5293494d7d4c70ed3cd1a20823e9ddc5202fc8",
+      "size_bytes": 111589
     },
     {
       "path": "THIRD-PARTY-NOTICES/manifest/npm-sbom.json",
-      "sha256": "7ae8cccd7bb508de9e78281f57dc7e560d39636fd6717e87d7c2eda1fcd2a806",
-      "size_bytes": 150732
+      "sha256": "e3464b71dcdbb26bc1babca5fbd546c793d5e41b71f30e6fd9969b64f8f1c280",
+      "size_bytes": 143569
     },
     {
       "path": "THIRD-PARTY-NOTICES/manifest/python-sbom.json",
-      "sha256": "ff2a157a925d590de16417ab6ce8952663eea987142bac7affdfd4dfac22ab50",
-      "size_bytes": 361000
+      "sha256": "0f49f4130b8746fb84d0de4cb5c93dc18e58d6406a4fa95e3bd99fce8e3b16ae",
+      "size_bytes": 360999
     },
     {
       "path": "THIRD-PARTY-NOTICES/THIRD-PARTY-NOTICES.md",

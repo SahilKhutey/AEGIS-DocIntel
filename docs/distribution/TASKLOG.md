@@ -645,7 +645,9 @@
   1. `tests/distribution_security/test_isolation_and_error_hygiene.py::test_sec_demo_020_verify_package_script_integrity`:
      - Cross-platform PowerShell execution check: added `shutil.which("powershell") or shutil.which("pwsh")` with graceful `pytest.skip` on platforms without PowerShell installed (e.g. Linux Ubuntu CI runners).
   2. `tests/distribution_security/test_package_contents.py::test_sec_demo_016_package_manifest_integrity`:
-     - Reconciled `distribution/demo-edition/package-manifest.json` SHA-256 hash for `deploy/nginx-demo-proxy.conf` to `4f8daa7a066a148068a5c65f9ea0c6d442c611a09a90616e286db41c4cc2928e` (size: 2,255 bytes) matching REM-07 security header updates.
+     - Reconciled `distribution/demo-edition/package-manifest.json` SHA-256 hashes and byte sizes across all 37 package components, resolving mismatches on `deploy/nginx-demo-proxy.conf`, `license/evaluation.lic`, and 11 license/SBOM assets caused by Windows CRLF vs Linux LF checkouts.
+     - Normalized all files under `distribution/demo-edition/` to canonical LF line endings.
+     - Updated `distribution/demo-edition/launcher/verify-package.ps1` to use forward slashes (`license/evaluation.lic`) and trimmed path arguments for cross-platform Linux/Windows compatibility.
      - Added `distribution/** text eol=lf` to `.gitattributes` to maintain identical SHA-256 digests across Windows and Linux environments.
   3. `tests/test_auth.py::test_auth_bypass_rejected_in_production`:
      - Updated exception detail assertion to accept hardened error message `"Development tokens are strictly rejected in production"` as well as `"JWT validation not configured"`.

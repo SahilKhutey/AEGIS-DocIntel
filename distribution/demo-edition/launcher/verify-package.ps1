@@ -60,13 +60,13 @@ foreach ($fileEntry in $manifest.files) {
 Write-Host "[+] Verified $verified files successfully." -ForegroundColor Green
 
 # Verify evaluation license
-$licPath = Join-Path $PackageRoot "license\evaluation.lic"
-$pubKeyPath = Join-Path $PackageRoot "license\public-key.pem"
+$licPath = Join-Path $PackageRoot "license/evaluation.lic"
+$pubKeyPath = Join-Path $PackageRoot "license/public-key.pem"
 
 if ((Test-Path $licPath) -and (Test-Path $pubKeyPath)) {
     Write-Host "[+] Verifying evaluation license signature..." -ForegroundColor Cyan
     try {
-        $pyCmd = "from services.evaluation_gateway.license import verify_license, load_public_key; import json, pathlib; lic = json.loads(pathlib.Path('$($licPath -replace '\\', '/ ')').read_text()); key = load_public_key(pathlib.Path('$($pubKeyPath -replace '\\', '/ ')')); res = verify_license(lic, key); print(res['license_id'])"
+        $pyCmd = "from services.evaluation_gateway.license import verify_license, load_public_key; import json, pathlib; lic = json.loads(pathlib.Path('$($licPath -replace '\\', '/').Trim()').read_text()); key = load_public_key(pathlib.Path('$($pubKeyPath -replace '\\', '/').Trim()')); res = verify_license(lic, key); print(res['license_id'])"
         # If python is available locally, run verification
         $res = & python -c "import sys, json; print('OK')" 2>$null
         if ($LASTEXITCODE -eq 0) {
