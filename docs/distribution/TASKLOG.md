@@ -619,6 +619,7 @@
   5. `scripts/generate_audit_prot_final.py` & `scripts/generate_audit_prot_final_remediation.py`: Added `# nosec B602` annotations on subprocess calls.
   6. `openapi.json`: Regenerated canonical specification via `scripts/update_openapi.py` with zero drift, aligning trailing-newline formatting with CI `json.dump` verification.
   7. `.gitleaksignore`: Reconciled 35 reviewed false positives flagged by `gitleaks/gitleaks-action@v3` (synthetic test fixtures in `tests/security/`, audit redaction proofs in `audit/prot-04-08/`, and curl syntax examples in documentation).
+  8. `pyproject.toml` & test packages: Added `addopts = "--import-mode=importlib"` and package `__init__.py` markers in `tests/compliance/`, `tests/compliance/licensing/`, and `tests/security/consolidated/` to resolve duplicate test basename import mismatch.
 - **Verification Commands:**
   - `python scripts/check_docs_claims.py` -> OK (R1-R6 passed).
   - `python scripts/check_dependency_sync.py` -> OK (6 requirements files match pyproject.toml).
@@ -628,6 +629,8 @@
   - `pip-audit --requirement requirements-core.txt` -> No known vulnerabilities found.
   - `gitleaks detect --redact -v --log-opts="--no-merges --first-parent 403db8106e4c742c0ff42792848cb5740a6bea1c^..HEAD"` -> No leaks found.
   - `gitleaks detect --redact -v` -> 339 commits scanned, 0 leaks found.
+  - `pytest --collect-only -q` -> 2,534 tests collected with 0 errors.
+  - `pytest tests/compliance/licensing/test_licensing.py tests/security/consolidated/test_licensing.py -q` -> 16/16 passed.
   - `npm --prefix web test tests/unit/integration/auth-permissions.test.ts` -> 10/10 passed.
   - `npm --prefix web test tests/unit/integration/api-client.test.ts` -> 8/8 passed.
   - `npm --prefix web run verify:auth` -> 0 violations.

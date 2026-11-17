@@ -542,6 +542,12 @@ Implemented final end-to-end integration protocol, Private Engine Isolation Guar
     * Audit proof-of-redaction artifacts (`redaction-proof.json`, `generate_audit_prot_04_08.py`).
     * Documentation curl examples and specification token placeholders (`demo-operations.md`, `02_ACCESS_AND_REFRESH_TOKEN_SPECIFICATION.md`, `03_ACTIVATION_AND_DEVICE_BINDING.md`, `07_ACTIVATION_API_SPECIFICATION.md`).
   - Executed full local scan across all 339 repository commits (`gitleaks detect --redact -v`): **0 leaks found (100% Green)**.
+- **Pytest Test Collection & Namespace Isolation (`pyproject.toml`):**
+  - Resolved `test (3.12)` CI collection failure (`import file mismatch: imported module 'test_licensing' ...`).
+  - Added `addopts = "--import-mode=importlib"` to `[tool.pytest.ini_options]` in `pyproject.toml`, enabling path-based module loading for tests with identical basenames.
+  - Added package namespace `__init__.py` markers in `tests/compliance/`, `tests/compliance/licensing/`, and `tests/security/consolidated/` to isolate test modules under distinct module hierarchies.
+  - Verified full test collection across all 2,534 automated tests with 0 collection errors (`pytest --collect-only -q`).
+
 
 
 

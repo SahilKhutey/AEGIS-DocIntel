@@ -56,6 +56,14 @@
     "compliance_status": "APPROVED"
   },
   {
+    "package_name": "@tailwindcss/postcss",
+    "version": "^4.3.5",
+    "license_declared": "MIT",
+    "classification": "PERMISSIVE",
+    "ecosystem": "npm",
+    "compliance_status": "APPROVED"
+  },
+  {
     "package_name": "@tailwindcss/turbopack",
     "version": "^4",
     "license_declared": "MIT",
