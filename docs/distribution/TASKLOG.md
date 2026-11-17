@@ -617,7 +617,7 @@
      - `src/services/evaluation/entitlement_resolver.py` & `websocket_ticket_service.py`: Added `Any` to typing imports.
      - `src/services/evaluation/refresh_rotation_service.py`: Added `EvaluationSession` to schema imports.
   5. `scripts/generate_audit_prot_final.py` & `scripts/generate_audit_prot_final_remediation.py`: Added `# nosec B602` annotations on subprocess calls.
-  6. `openapi.json`: Regenerated canonical specification via `scripts/update_openapi.py` with zero drift.
+  6. `openapi.json`: Regenerated canonical specification via `scripts/update_openapi.py` with zero drift, aligning trailing-newline formatting with CI `json.dump` verification.
   7. `.gitleaksignore`: Reconciled 35 reviewed false positives flagged by `gitleaks/gitleaks-action@v3` (synthetic test fixtures in `tests/security/`, audit redaction proofs in `audit/prot-04-08/`, and curl syntax examples in documentation).
 - **Verification Commands:**
   - `python scripts/check_docs_claims.py` -> OK (R1-R6 passed).

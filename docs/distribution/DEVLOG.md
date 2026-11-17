@@ -534,7 +534,7 @@ Implemented final end-to-end integration protocol, Private Engine Isolation Guar
     * Cleaned wildcard imports (`from .xyz import *`) in `src/repositories/evaluation/__init__.py` and `src/schemas/evaluation/__init__.py` into standard namespace package modules.
     * Added missing type annotations and imports (`Any` in `entitlement_resolver.py` and `websocket_ticket_service.py`; `EvaluationSession` in `refresh_rotation_service.py`).
   - Resolved Bandit static security AST analyzer violations (B602 `shell=True` in audit generation scripts) with explicit `# nosec B602` directives; `bandit -r src dashboard scripts -ll` passes with 0 Medium/High issues.
-  - Regenerated canonical root `openapi.json` via `scripts/update_openapi.py` to include new PROT-FINAL-02 evaluation endpoints, ensuring exact 0-drift schema parity with live FastAPI application.
+  - Regenerated canonical root `openapi.json` via `scripts/update_openapi.py` to include new PROT-FINAL-02 evaluation endpoints, ensuring exact 0-drift schema parity with live FastAPI application. Aligned trailing-newline semantics between `update_openapi.py` and CI `json.dump` verification.
 - **CI Secret Scan (Gitleaks) False Positive Reconciliation:**
   - Resolved GitHub Actions `gitleaks/gitleaks-action@v3` job failure on PR commits (`gitleaks detect` flagged 34 false positives across synthetic test fixtures, redaction audit evidence, and markdown curl examples).
   - Configured reviewed fingerprints in `.gitleaksignore` categorized by commit and domain:
