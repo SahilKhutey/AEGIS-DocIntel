@@ -62,8 +62,8 @@
     },
     {
       "path": "deploy/nginx-demo-proxy.conf",
-      "sha256": "72701a31984eeeb5d9114600fc66781b2ee404c167a95af3ce07e49131d0a8eb",
-      "size_bytes": 2078
+      "sha256": "4f8daa7a066a148068a5c65f9ea0c6d442c611a09a90616e286db41c4cc2928e",
+      "size_bytes": 2255
     },
     {
       "path": "launcher/reset-demo.ps1",

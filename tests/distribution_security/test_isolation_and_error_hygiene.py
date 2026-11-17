@@ -8,6 +8,7 @@ Covers:
 """
 
 import io
+import shutil
 import subprocess
 import pytest
 from pathlib import Path
@@ -99,7 +100,11 @@ def test_sec_demo_020_verify_package_script_integrity():
     script_path = Path(__file__).resolve().parent.parent.parent / "distribution" / "demo-edition" / "launcher" / "verify-package.ps1"
     assert script_path.exists()
 
-    cmd = ["powershell", "-ExecutionPolicy", "Bypass", "-File", str(script_path)]
+    ps_bin = shutil.which("powershell") or shutil.which("pwsh")
+    if not ps_bin:
+        pytest.skip("PowerShell executable ('powershell' or 'pwsh') not available on host")
+
+    cmd = [ps_bin, "-ExecutionPolicy", "Bypass", "-File", str(script_path)]
     result = subprocess.run(cmd, capture_output=True, text=True)
     assert result.returncode == 0, f"verify-package.ps1 failed:\n{result.stdout}\n{result.stderr}"
     assert "All package components verified authentic" in result.stdout

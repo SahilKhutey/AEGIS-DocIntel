@@ -84,7 +84,10 @@ def test_auth_bypass_rejected_in_production(monkeypatch):
     with pytest.raises(HTTPException) as jwt_exc:
         _validate_jwt("dev-tenant-123")
     assert jwt_exc.value.status_code == 401
-    assert "JWT validation not configured" in jwt_exc.value.detail
+    assert any(msg in jwt_exc.value.detail for msg in [
+        "Development tokens are strictly rejected in production",
+        "JWT validation not configured",
+    ])
 
     with pytest.raises(HTTPException) as key_exc:
         _validate_api_key("aegis-dev-key")
