@@ -1,0 +1,20 @@
+{
+  "work_package": "PROT-04.05",
+  "title": "Entitlement Enforcement & Feature Authorization",
+  "total_mapped_routes": 19,
+  "unmapped_routes": 0,
+  "route_coverage_percentage": 100.0,
+  "tests": {
+    "entitlement_protocol_tests": 43,
+    "legacy_entitlement_tests": 5,
+    "total_system_regression_tests": 230,
+    "passed": 230,
+    "failed": 0
+  },
+  "authoritative_model": "ALLOW = Identity & License & Device & Entitlement & Resource & Quota",
+  "evaluation_policies": [
+    "evaluation-basic",
+    "evaluation-pro"
+  ],
+  "fail_closed_verified": true
+}

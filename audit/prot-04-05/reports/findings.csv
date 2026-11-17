@@ -1,0 +1,44 @@
+ID,Category,Severity,Requirement,Status,Evidence
+ENT-001,Entitlement,HIGH,Active license with granted feature allowed,VERIFIED,test_ent_001_active_license_with_granted_feature PASSED
+ENT-002,Entitlement,HIGH,Active license without feature denied,VERIFIED,test_ent_002_active_license_without_feature_denied PASSED
+ENT-003,Lifecycle,HIGH,Expired license denied access,VERIFIED,test_ent_003_expired_license_denied PASSED
+ENT-004,Lifecycle,HIGH,Suspended license denied access,VERIFIED,test_ent_004_suspended_license_denied PASSED
+ENT-005,Lifecycle,CRITICAL,Revoked license denied immediately,VERIFIED,test_ent_005_revoked_license_denied PASSED
+ENT-006,Device Binding,HIGH,Inactive device denied access,VERIFIED,test_ent_006_inactive_device_denied PASSED
+ENT-007,Fail-Closed,MEDIUM,Unknown feature fails closed,VERIFIED,test_ent_007_unknown_feature_denied PASSED
+ENT-008,Fail-Closed,MEDIUM,Unknown permission fails closed,VERIFIED,test_ent_008_unknown_permission_denied PASSED
+ENT-009,Policy,MEDIUM,Invalid policy version fails closed,VERIFIED,test_ent_009_invalid_policy_version_denied PASSED
+ENT-010,Temporal,HIGH,Expired entitlement assignment denied,VERIFIED,test_ent_010_expired_entitlement_assignment_denied PASSED
+ENT-011,Temporal,MEDIUM,Future entitlement assignment denied,VERIFIED,test_ent_011_future_entitlement_assignment_denied PASSED
+ENT-012,Policy,HIGH,Disabled entitlement in policy denied,VERIFIED,test_ent_012_disabled_entitlement_in_policy_denied PASSED
+ENT-013,Override,HIGH,Expired override ceases access grant,VERIFIED,test_ent_013_expired_override_denied PASSED
+ENT-014,Authorization,CRITICAL,Unauthorized override creation rejected (HTTP 401/403),VERIFIED,test_ent_014_unauthorized_override_creation_denied PASSED
+ENT-015,Policy Guard,CRITICAL,Admin permission in evaluator policy strictly rejected,VERIFIED,test_ent_015_admin_permission_in_evaluator_policy_rejected PASSED
+ENT-016,Revision,MEDIUM,Policy update increments revision and enforces new rules,VERIFIED,test_ent_016_policy_update_enforces_new_revision PASSED
+ENT-017,Cache,HIGH,Cache invalidation immediately clears old grants,VERIFIED,test_ent_017_cache_invalidation_clears_old_grant PASSED
+ENT-018,Resilience,CRITICAL,Entitlement service failure fails closed,VERIFIED,test_ent_018_entitlement_service_unavailable_fails_closed PASSED
+RBAC-001,RBAC,CRITICAL,Evaluator requesting admin endpoint returns 401/403,VERIFIED,test_rbac_001_evaluator_requests_admin_endpoint_forbidden PASSED
+RBAC-002,Anti-Escalation,CRITICAL,Client header role=admin rejected,VERIFIED,test_rbac_002_evaluator_sends_role_admin_ignored_rejected PASSED
+RBAC-003,Anti-Escalation,CRITICAL,Admin role in evaluator session rejected,VERIFIED,test_rbac_003_evaluator_adds_admin_to_jwt_roles_rejected PASSED
+RBAC-004,Tenant Isolation,HIGH,Client changing tenant header cannot access other tenants,VERIFIED,test_rbac_004_evaluator_changes_tenant_header_no_privilege_change PASSED
+RBAC-005,Tenant Isolation,HIGH,Client changing workspace header cannot elevate access,VERIFIED,test_rbac_005_evaluator_changes_workspace_id_no_privilege_change PASSED
+RBAC-006,RBAC,CRITICAL,Evaluator direct access to admin feature denied,VERIFIED,test_rbac_006_evaluator_accesses_admin_feature_denied PASSED
+RBAC-007,Input Validation,HIGH,Empty or unknown role fails closed,VERIFIED,test_rbac_007_unknown_role_rejected PASSED
+RBAC-008,Authentication,HIGH,Malformed roles claim rejected (HTTP 400/401),VERIFIED,test_rbac_008_malformed_roles_claim_rejected PASSED
+RBAC-009,Administrative,HIGH,Admin entitlement override authorized for admin only,VERIFIED,test_rbac_009_admin_only_entitlement_override_authorized_only PASSED
+RBAC-010,Authentication,HIGH,Expired admin secret rejected (HTTP 401/403),VERIFIED,test_rbac_010_expired_admin_session_denied PASSED
+TENANT-ENT-001,Isolation,HIGH,Read own document succeeds (HTTP 200),VERIFIED,test_tenant_ent_001_read_own_document_allowed PASSED
+TENANT-ENT-002,IDOR Defense,CRITICAL,Read foreign document returns 404,VERIFIED,test_tenant_ent_002_read_another_tenant_document_denied_404 PASSED
+TENANT-ENT-003,IDOR Defense,CRITICAL,Query foreign document returns 404,VERIFIED,test_tenant_ent_003_query_another_tenant_document_denied_404 PASSED
+TENANT-ENT-004,IDOR Defense,CRITICAL,Compare against foreign document returns 404,VERIFIED,test_tenant_ent_004_compare_across_tenants_denied_404 PASSED
+TENANT-ENT-005,IDOR Defense,CRITICAL,Export foreign document returns 404,VERIFIED,test_tenant_ent_005_export_another_tenant_result_denied_404 PASSED
+TENANT-ENT-006,IDOR Defense,HIGH,Poll foreign job returns 404,VERIFIED,test_tenant_ent_006_poll_another_tenant_job_denied_404 PASSED
+TENANT-ENT-007,IDOR Defense,HIGH,Foreign WebSocket stream returns 404,VERIFIED,test_tenant_ent_007_subscribe_another_tenant_websocket_denied_404 PASSED
+TENANT-ENT-008,IDOR Defense,HIGH,Foreign download URL returns 404,VERIFIED,test_tenant_ent_008_access_another_tenant_download_denied_404 PASSED
+TENANT-ENT-009,Isolation,MEDIUM,Foreign workspace header causes zero privilege change,VERIFIED,test_tenant_ent_009_change_workspace_header_no_privilege_change PASSED
+TENANT-ENT-010,IDOR Defense,HIGH,Guessed UUID returns generic 404 without leakage,VERIFIED,test_tenant_ent_010_guess_resource_uuid_no_information_leakage PASSED
+BYPASS-001,Bypass Defense,CRITICAL,Direct API access to disabled feature rejected (HTTP 403),VERIFIED,test_bypass_001_direct_api_access_to_disabled_feature_denied PASSED
+BYPASS-002,Bypass Defense,CRITICAL,Tampered client-side entitlement header ignored,VERIFIED,test_bypass_002_tampered_client_side_entitlements_header_ignored PASSED
+BYPASS-003,Replay Defense,CRITICAL,Replay request after revocation rejected (HTTP 403),VERIFIED,test_bypass_003_replay_request_after_revocation_denied PASSED
+BYPASS-004,Private Engine,CRITICAL,Direct request to private engine blocked,VERIFIED,test_bypass_004_direct_request_to_private_engine_blocked PASSED
+BYPASS-005,E2E Lifecycle,HIGH,Complete end-to-end evaluation lifecycle verified,VERIFIED,test_bypass_005_complete_end_to_end_entitlement_lifecycle PASSED

@@ -1,0 +1,12 @@
+{
+  "workstream": "REM-06",
+  "baseline_commit": "8eeb5ea",
+  "files": [
+    "src/security/secret_redaction.py",
+    "src/security/security_events.py",
+    "src/security/event_redaction.py",
+    "src/services/security_operations/audit_verification_service.py",
+    "src/services/security_operations/key_rotation_service.py",
+    "src/services/security_operations/backup_verification_service.py"
+  ]
+}

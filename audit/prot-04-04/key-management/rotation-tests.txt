@@ -1,0 +1,16 @@
+============================= test session starts =============================
+platform win32 -- Python 3.12.10, pytest-9.1.1, pluggy-1.6.0 -- C:\Users\ASUS\AppData\Local\Programs\Python\Python312\python.exe
+cachedir: .pytest_cache
+hypothesis profile 'default'
+rootdir: C:\Users\ASUS\.gemini\antigravity\worktrees\Aegis-DocIntel\product_hunt_launch_packaging
+configfile: pyproject.toml
+plugins: anyio-4.12.1, hypothesis-6.156.6, langsmith-0.14.4, asyncio-1.4.0, cov-7.1.0
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collecting ... collected 40 items / 37 deselected / 3 selected
+
+tests/security/evaluation/test_license_validation_protocol.py::test_lic_027_old_key_in_verify_only_state PASSED [ 33%]
+tests/security/evaluation/test_license_validation_protocol.py::test_lic_028_old_key_retired_behavior PASSED [ 66%]
+tests/security/evaluation/test_license_validation_protocol.py::test_lic_029_new_key_after_rotation_signs_and_verifies PASSED [100%]
+
+====================== 3 passed, 37 deselected in 0.52s =======================
+

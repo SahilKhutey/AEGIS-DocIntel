@@ -107,8 +107,9 @@ if HAS_FASTAPI:
         try:
             stats = await orchestrator.ingest(doc)
         except Exception as e:
-            log.error('Ingest failed: %s', e, exc_info=True)
-            raise HTTPException(500, f'Ingest failed: {e}')
+            req_id = str(uuid.uuid4())[:8]
+            log.error('Ingest failed [ref=%s]: %s', req_id, e, exc_info=True)
+            raise HTTPException(status_code=500, detail=f'Document ingestion failed. Internal error ref: {req_id}')
 
         elapsed_ms = (time.perf_counter() - t0) * 1000
         stats['ingestion_ms'] = round(elapsed_ms, 1)
@@ -408,8 +409,9 @@ if HAS_FASTAPI:
                     model=result.get('model', 'mock')
                 )
             except Exception as e:
-                log.error('AEL Query failed: %s', e, exc_info=True)
-                raise HTTPException(500, f'AEL query failed: {e}')
+                req_id = str(uuid.uuid4())[:8]
+                log.error('AEL Query failed [ref=%s]: %s', req_id, e, exc_info=True)
+                raise HTTPException(status_code=500, detail=f'AEL query processing failed. Internal error ref: {req_id}')
 
         # Default local engine path if not exporting
         try:
@@ -424,10 +426,11 @@ if HAS_FASTAPI:
                 top_k=getattr(req, 'top_k', None) or 12,
             )
         except PermissionError:
-            raise HTTPException(404, 'Document not found')
+            raise HTTPException(status_code=404, detail='Document not found')
         except Exception as e:
-            log.error('Query failed: %s', e, exc_info=True)
-            raise HTTPException(500, f'Query failed: {e}')
+            req_id = str(uuid.uuid4())[:8]
+            log.error('Query failed [ref=%s]: %s', req_id, e, exc_info=True)
+            raise HTTPException(status_code=500, detail=f'Query execution failed. Internal error ref: {req_id}')
 
         elapsed_ms = (time.perf_counter() - t0) * 1000
 
@@ -458,7 +461,8 @@ if HAS_FASTAPI:
                     yield f'data: {token}\n\n'
                 yield 'data: [DONE]\n\n'
             except Exception as e:
-                yield f'data: [ERROR] {e}\n\n'
+                log.error('Streaming query failed: %s', e, exc_info=True)
+                yield 'data: [ERROR] Streaming failed. Please retry your request.\n\n'
 
         return StreamingResponse(event_generator(), media_type='text/event-stream')
 
@@ -472,7 +476,9 @@ if HAS_FASTAPI:
             afe = AdaptiveFusionEngine()
             return {'explanation': afe.explain_routing(question)}
         except Exception as e:
-            raise HTTPException(500, str(e))
+            req_id = str(uuid.uuid4())[:8]
+            log.error('Explain routing failed [ref=%s]: %s', req_id, e, exc_info=True)
+            raise HTTPException(status_code=500, detail=f'Routing explanation failed. Internal error ref: {req_id}')
 
     @router.get('/documents/{doc_id}/export')
     async def export_document(

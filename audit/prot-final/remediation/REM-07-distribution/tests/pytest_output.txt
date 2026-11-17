@@ -1,0 +1,22 @@
+============================= test session starts =============================
+platform win32 -- Python 3.12.10, pytest-9.1.1, pluggy-1.6.0 -- C:\Users\ASUS\AppData\Local\Programs\Python\Python312\python.exe
+cachedir: .pytest_cache
+hypothesis profile 'default'
+rootdir: C:\Users\ASUS\.gemini\antigravity\worktrees\Aegis-DocIntel\product_hunt_launch_packaging
+configfile: pyproject.toml
+plugins: anyio-4.12.1, hypothesis-6.156.6, langsmith-0.14.4, asyncio-1.4.0, cov-7.1.0
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collecting ... collected 10 items
+
+tests/security/evaluation/test_rem_07_distribution.py::test_dst_rem_001_client_excludes_private_engine_code PASSED [ 10%]
+tests/security/evaluation/test_rem_07_distribution.py::test_dst_rem_002_zero_private_keys_in_distribution PASSED [ 20%]
+tests/security/evaluation/test_rem_07_distribution.py::test_dst_rem_003_zero_provider_api_keys_in_client PASSED [ 30%]
+tests/security/evaluation/test_rem_07_distribution.py::test_dst_rem_004_public_configuration_manifest_only PASSED [ 40%]
+tests/security/evaluation/test_rem_07_distribution.py::test_dst_rem_005_no_internal_database_connection_strings PASSED [ 50%]
+tests/security/evaluation/test_rem_07_distribution.py::test_dst_rem_006_third_party_notices_and_sbom PASSED [ 60%]
+tests/security/evaluation/test_rem_07_distribution.py::test_dst_rem_007_checksum_manifest_verification PASSED [ 70%]
+tests/security/evaluation/test_rem_07_distribution.py::test_dst_rem_008_clean_build_tree PASSED [ 80%]
+tests/security/evaluation/test_rem_07_distribution.py::test_dst_rem_009_security_headers_in_nginx_conf PASSED [ 90%]
+tests/security/evaluation/test_rem_07_distribution.py::test_dst_rem_010_zero_dev_token_bypasses PASSED [100%]
+
+============================= 10 passed in 0.58s ==============================

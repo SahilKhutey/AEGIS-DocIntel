@@ -9,10 +9,7 @@ export interface RequestContext {
   correlationId?: string;
 }
 
-let currentContext: RequestContext = {
-  workspaceId: "workspace-default",
-  tenantId: "default-tenant",
-};
+let currentContext: RequestContext = {};
 
 export function setRequestContext(ctx: Partial<RequestContext>): void {
   currentContext = {
@@ -26,10 +23,7 @@ export function getRequestContext(): RequestContext {
 }
 
 export function clearRequestContext(): void {
-  currentContext = {
-    workspaceId: "workspace-default",
-    tenantId: "default-tenant",
-  };
+  currentContext = {};
 }
 
 export function getContextHeaders(): Record<string, string> {

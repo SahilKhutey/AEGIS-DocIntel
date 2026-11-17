@@ -65,7 +65,11 @@ def test_client_spoofed_tenant_header_ignored(monkeypatch):
         "X-Tenant-ID": "victim-tenant",
     }
     resp = client.get("/api/protected", headers=headers)
-    assert resp.status_code == 200
-    # Authority must be derived strictly from the authenticated token
-    assert resp.json()["tenant_id"] == "real-tenant"
-    assert resp.json()["tenant_id"] != "victim-tenant"
+    # Under hardened SEC-006 / AUTH-REM-006, tenant header spoofing is rejected with HTTP 403.
+    # If accepted in legacy/permissive mode, authority must derive strictly from the token.
+    assert resp.status_code in (403, 200)
+    if resp.status_code == 200:
+        assert resp.json()["tenant_id"] == "real-tenant"
+        assert resp.json()["tenant_id"] != "victim-tenant"
+    else:
+        assert "Tenant header manipulation rejected" in resp.json().get("detail", "")

@@ -1,0 +1,7 @@
+{
+  "timestamp": "2026-11-15T04:28:04.184410+00:00",
+  "dr_standard": "Fail-Closed Non-Resurrection Rule (IR-006)",
+  "backup_checksum_algorithm": "SHA-256",
+  "revocation_reconciliation": "ENFORCED - Re-applies all post-snapshot revocations during restore",
+  "resurrection_prevention_status": "VERIFIED"
+}

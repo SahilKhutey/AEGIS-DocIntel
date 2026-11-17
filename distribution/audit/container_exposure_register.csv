@@ -1,0 +1,7 @@
+container_image,base_image,build_context,contains_source_code,exposed_ports,mounts_volumes,distributable,security_verdict,notes
+aegis-api (deploy/Dockerfile),python:3.12-slim,Root (.),"YES (src/, backend/, config/)","8000, 9090","data/, config/tiktoken",NO,BLOCKED / EXCLUDE (PROT-F01),CRITICAL: Packaging raw proprietary source into Docker container exposes all intellectual property to recipient.
+aegis-web (deploy/Dockerfile.web),node:20-alpine,web/,NO (compiled Next.js standalone),3000,None,YES (Compiled),RESTRICTED / COMPILED ONLY,Acceptable when built with output:standalone and .map files stripped.
+aegis-demo-web (ghcr.io/sahilkhutey/aegis-docintel-demo-web),node:20-alpine,web/ (standalone build),NO (compiled UI only),3000 (internal bridge only),None,YES,APPROVED FOR DEMO,Frontend presentation UI for local evaluation; no proprietary Python source code.
+aegis-demo-proxy (nginx:alpine),nginx:alpine,distribution/demo-edition/deploy/,NO,3000 (host),nginx-demo-proxy.conf:ro,YES,APPROVED FOR DEMO,Reverse proxy forwarding / to web and /api to central evaluation gateway; blocks /admin.
+prometheus (prom/prometheus:v2.51.0),prom/prometheus,deploy/prometheus/,NO,9090,"prometheus.yml, storage",NO,EXCLUDE FROM DEMO,Internal metrics monitoring stack. Unnecessary and bloats evaluation package.
+grafana (grafana/grafana:10.4.0),grafana/grafana,deploy/grafana/,NO,3001,"dashboards, datasources",NO,EXCLUDE FROM DEMO,Internal metrics dashboard. Excluded from demo package.

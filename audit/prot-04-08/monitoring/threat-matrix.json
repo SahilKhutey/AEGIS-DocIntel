@@ -1,0 +1,89 @@
+{
+  "engine_version": "1.1.0",
+  "rules": [
+    {
+      "rule_id": "MON-001",
+      "name": "Activation Code Brute-Force (Account Level)",
+      "threshold": "5 failures / 300s",
+      "severity": "high",
+      "containment": "Lock account for 30 min"
+    },
+    {
+      "rule_id": "MON-002",
+      "name": "Activation Code Brute-Force (Source IP)",
+      "threshold": "20 failures / 300s",
+      "severity": "high",
+      "containment": "IP rate limit 429"
+    },
+    {
+      "rule_id": "MON-003",
+      "name": "Refresh Token Replay Reuse",
+      "threshold": "1 replay attempt",
+      "severity": "critical",
+      "containment": "Immediate family revocation & active session termination"
+    },
+    {
+      "rule_id": "MON-004",
+      "name": "Forged / Tampered License Signature",
+      "threshold": "1 invalid signature presentation",
+      "severity": "critical",
+      "containment": "Session deny & operator security page"
+    },
+    {
+      "rule_id": "MON-005",
+      "name": "Rapid Device Transfers",
+      "threshold": "3 device activations / 7 days",
+      "severity": "warning",
+      "containment": "Flag license for manual approval"
+    },
+    {
+      "rule_id": "MON-006",
+      "name": "Cross-Tenant Access Attempt",
+      "threshold": "1 cross-tenant request",
+      "severity": "critical",
+      "containment": "Immediate 403 & tenant security incident"
+    },
+    {
+      "rule_id": "MON-007",
+      "name": "Usage Ledger Quota Reconciliation Mismatch",
+      "threshold": "Drift > 0 units",
+      "severity": "high",
+      "containment": "Recalculate ledger & alert audit"
+    },
+    {
+      "rule_id": "MON-008",
+      "name": "Degraded Engine Security Mode",
+      "threshold": "Heartbeat failure / monitoring sink offline",
+      "severity": "critical",
+      "containment": "Fail-closed: deny critical features"
+    },
+    {
+      "rule_id": "MON-009",
+      "name": "Rapid WebSocket Auth Failures",
+      "threshold": "10 connection failures / 60s",
+      "severity": "high",
+      "containment": "IP level WebSocket throttling"
+    },
+    {
+      "rule_id": "MON-010",
+      "name": "Audit Hash-Chain / Checkpoint Tamper Alert",
+      "threshold": "1 hash or checkpoint mismatch",
+      "severity": "critical",
+      "containment": "Lock audit ingest, declare P1 incident"
+    },
+    {
+      "rule_id": "MON-011",
+      "name": "Privileged Role Escalation Attempt",
+      "threshold": "1 unauthorized admin route invocation",
+      "severity": "critical",
+      "containment": "Revoke evaluator token & record forensic trace"
+    },
+    {
+      "rule_id": "MON-012",
+      "name": "Emergency Key Compromise Alert",
+      "threshold": "Admin compromise signal",
+      "severity": "critical",
+      "containment": "Purge key from active cache, revoke all signed tokens"
+    }
+  ]
+}

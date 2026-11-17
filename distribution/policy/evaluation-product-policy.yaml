@@ -1,0 +1,31 @@
+# AEGIS-DocIntel Product Policy for Protected Evaluation Edition (PROT-04 Section 3)
+
+product_name: "AEGIS_PROTECTED_EVALUATION"
+target_release: "v1.1.0-demo"
+license_type: "Evaluation & Testing Only"
+commercial_use: false
+redistribution: false
+source_code_grant: false
+
+lifecycle:
+  initial_duration_days: 14
+  extension_policy: "Requires explicit security administrator approval"
+  revocation_policy: "Immediate server-side denial (< 1 second propagation)"
+  expiry_behavior: "All protected intelligence operations return HTTP 403 LICENSE_EXPIRED"
+
+architecture_boundary:
+  client_environment:
+    - "Standalone Next.js evaluation UI"
+    - "Local Nginx reverse proxy routing"
+    - "Deterministic synthetic document corpus"
+    - "Local verification and launcher scripts"
+  remote_gateway_environment:
+    - "Ed25519 cryptographic license authority"
+    - "Device binding and session rotation service"
+    - "Atomic server-side quota ledger"
+    - "Security audit event repository"
+  private_intelligence_platform:
+    - "Proprietary topological comparison engines"
+    - "Neural embeddings and vector index algorithms"
+    - "Context compression and mathematical optimizers"
+    - "LLM orchestrations and provider API credentials"

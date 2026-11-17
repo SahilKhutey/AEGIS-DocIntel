@@ -1,0 +1,13 @@
+DISTRIBUTION LICENSE INVENTORY & COMPLIANCE (PROT-02)
+====================================================
+Package               License      Commercial Use   Evaluation Compliant
+fastapi               MIT          YES              YES
+pydantic              MIT          YES              YES
+cryptography          Apache-2.0   YES              YES
+pyjwt                 MIT          YES              YES
+uvicorn               BSD-3-Clause YES              YES
+react                 MIT          YES              YES
+lucide-react          ISC          YES              YES
+All third-party runtime libraries are under permissible open-source licenses.
+No GPL/AGPL copyleft infection present in distribution packages.
+Status: PASS

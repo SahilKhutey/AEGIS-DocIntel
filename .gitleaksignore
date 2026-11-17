@@ -84,3 +84,67 @@ c1ff7753fc4aa2ec791272622c6b5d6ae9177c10:web/src/features/developer/components/A
 # tests/security/privacy/test_privacy_suite.py:55 (commit 631a803, 2026-11-04)
 #   Matched github-pat on synthetic mock token fixture 'ghp_1234567890...' used to test PII detection.
 631a8030a361ad093c987e287d44112b673b63e8:tests/security/privacy/test_privacy_suite.py:github-pat:55
+#
+# docs/launch/demo-operations.md:25 (commit 403db81, 2026-11-13)
+#   Matched `curl-auth-header` on placeholder curl example in demo operations guide.
+403db8106e4c742c0ff42792848cb5740a6bea1c:docs/launch/demo-operations.md:curl-auth-header:25
+#
+# docs/distribution/prot-04-auth-licensing/03_ACTIVATION_AND_DEVICE_BINDING.md:65, 68, 85 (commit ac49a1a, 2026-11-13)
+#   Matched `generic-api-key` on synthetic JWT token examples in activation and device binding documentation.
+ac49a1a2e2df8dc358d4c23d61a1468411d8895e:docs/distribution/prot-04-auth-licensing/03_ACTIVATION_AND_DEVICE_BINDING.md:generic-api-key:65
+ac49a1a2e2df8dc358d4c23d61a1468411d8895e:docs/distribution/prot-04-auth-licensing/03_ACTIVATION_AND_DEVICE_BINDING.md:generic-api-key:68
+ac49a1a2e2df8dc358d4c23d61a1468411d8895e:docs/distribution/prot-04-auth-licensing/03_ACTIVATION_AND_DEVICE_BINDING.md:generic-api-key:85
+#
+# audit/prot-04-02/baseline/auth-reference-scan.txt:7 (commit 63fc110, 2026-11-14)
+#   Matched `curl-auth-header` in auth reference grep output snippet.
+63fc110032d678dc9f6ac863c13da7e66003bbb5:audit/prot-04-02/baseline/auth-reference-scan.txt:curl-auth-header:7
+#
+# docs/distribution/prot-04-auth-licensing/03_ACTIVATION_AND_DEVICE_BINDING.md:86, 89 (commit 287f0cf, 2026-11-14)
+# docs/distribution/prot-04-auth-licensing/wp-04-03-device-binding/...:47, 56, 82, 85, 102 (commit 287f0cf, 2026-11-14)
+#   Matched `generic-api-key` on synthetic activation responses and key fingerprint examples in WP-04.03 docs.
+287f0cfc196e5b58d6b5a5e2b7615d9f1ff221ff:docs/distribution/prot-04-auth-licensing/03_ACTIVATION_AND_DEVICE_BINDING.md:generic-api-key:86
+287f0cfc196e5b58d6b5a5e2b7615d9f1ff221ff:docs/distribution/prot-04-auth-licensing/03_ACTIVATION_AND_DEVICE_BINDING.md:generic-api-key:89
+287f0cfc196e5b58d6b5a5e2b7615d9f1ff221ff:docs/distribution/prot-04-auth-licensing/wp-04-03-device-binding/02_DEVICE_IDENTITY_AND_KEY_MANAGEMENT.md:generic-api-key:56
+287f0cfc196e5b58d6b5a5e2b7615d9f1ff221ff:docs/distribution/prot-04-auth-licensing/wp-04-03-device-binding/07_ACTIVATION_API_SPECIFICATION.md:generic-api-key:47
+287f0cfc196e5b58d6b5a5e2b7615d9f1ff221ff:docs/distribution/prot-04-auth-licensing/wp-04-03-device-binding/07_ACTIVATION_API_SPECIFICATION.md:generic-api-key:82
+287f0cfc196e5b58d6b5a5e2b7615d9f1ff221ff:docs/distribution/prot-04-auth-licensing/wp-04-03-device-binding/07_ACTIVATION_API_SPECIFICATION.md:generic-api-key:85
+287f0cfc196e5b58d6b5a5e2b7615d9f1ff221ff:docs/distribution/prot-04-auth-licensing/wp-04-03-device-binding/07_ACTIVATION_API_SPECIFICATION.md:generic-api-key:102
+#
+# docs/.../01_LICENSE_ARCHITECTURE.md:55, test_license_validation_protocol.py:329 (commit 123309c, 2026-11-14)
+#   Matched `generic-api-key` on mermaid node and synthetic license verification token fixture in WP-04.04.
+123309c2dfc6fab97d46c0b9e2293f6227d8fa1e:docs/distribution/prot-04-auth-licensing/wp-04-04-license-validation/01_LICENSE_ARCHITECTURE.md:generic-api-key:55
+123309c2dfc6fab97d46c0b9e2293f6227d8fa1e:tests/security/evaluation/test_license_validation_protocol.py:generic-api-key:329
+#
+# docs/.../02_ACCESS_AND_REFRESH_TOKEN_SPECIFICATION.md:46, 49, test_session_lifecycle_protocol.py:352 (commit 1f6080c, 2026-11-14)
+#   Matched `generic-api-key` on mock token specification strings and family ID test fixture in WP-04.07.
+1f6080c8ba138a33227ce7daa422869b61c84637:docs/distribution/prot-04-auth-licensing/wp-04-07-session-lifecycle/02_ACCESS_AND_REFRESH_TOKEN_SPECIFICATION.md:generic-api-key:46
+1f6080c8ba138a33227ce7daa422869b61c84637:docs/distribution/prot-04-auth-licensing/wp-04-07-session-lifecycle/02_ACCESS_AND_REFRESH_TOKEN_SPECIFICATION.md:generic-api-key:49
+1f6080c8ba138a33227ce7daa422869b61c84637:tests/security/evaluation/test_session_lifecycle_protocol.py:generic-api-key:352
+#
+# audit/prot-04-08/...:4, scripts/generate_audit_prot_04_08.py:96, test_security_operations_protocol.py:123, 124, 591 (commit edd537f, 2026-11-15)
+#   Matched `private-key` and `generic-api-key` on redaction test evidence and synthetic token test fixtures in WP-04.08.
+edd537fcc9b57b53fe9289583a1a3dd280933201:audit/prot-04-08/event-schema/redaction-proof.json:private-key:4
+edd537fcc9b57b53fe9289583a1a3dd280933201:scripts/generate_audit_prot_04_08.py:private-key:96
+edd537fcc9b57b53fe9289583a1a3dd280933201:tests/security/operations/test_security_operations_protocol.py:generic-api-key:123
+edd537fcc9b57b53fe9289583a1a3dd280933201:tests/security/operations/test_security_operations_protocol.py:generic-api-key:124
+edd537fcc9b57b53fe9289583a1a3dd280933201:tests/security/operations/test_security_operations_protocol.py:private-key:591
+#
+# tests/security/consolidated/test_distribution_artifact.py:15, 18, 76 (commit 8eeb5ea, 2026-11-15)
+# tests/security/consolidated/test_engine_isolation.py:23, 51, 67, 80, 99 (commit 8eeb5ea, 2026-11-15)
+#   Matched `private-key` and `generic-api-key` on mock key fixtures testing distribution scanner and engine isolation.
+8eeb5ea023f034eb7f3951f29bd76a628c19a6ed:tests/security/consolidated/test_distribution_artifact.py:private-key:15
+8eeb5ea023f034eb7f3951f29bd76a628c19a6ed:tests/security/consolidated/test_distribution_artifact.py:private-key:18
+8eeb5ea023f034eb7f3951f29bd76a628c19a6ed:tests/security/consolidated/test_distribution_artifact.py:private-key:76
+8eeb5ea023f034eb7f3951f29bd76a628c19a6ed:tests/security/consolidated/test_engine_isolation.py:generic-api-key:23
+8eeb5ea023f034eb7f3951f29bd76a628c19a6ed:tests/security/consolidated/test_engine_isolation.py:generic-api-key:51
+8eeb5ea023f034eb7f3951f29bd76a628c19a6ed:tests/security/consolidated/test_engine_isolation.py:generic-api-key:67
+8eeb5ea023f034eb7f3951f29bd76a628c19a6ed:tests/security/consolidated/test_engine_isolation.py:generic-api-key:80
+8eeb5ea023f034eb7f3951f29bd76a628c19a6ed:tests/security/consolidated/test_engine_isolation.py:generic-api-key:99
+#
+# tests/security/evaluation/test_rem_06_operations.py:98, 124, 211 (commit 31f0a16, 2026-11-15)
+# tests/security/evaluation/test_rem_07_distribution.py:56 (commit 31f0a16, 2026-11-15)
+#   Matched `generic-api-key` and `private-key` on synthetic mock keys in REM-06/REM-07 regression test fixtures.
+31f0a16dcbd205654b6bfb455ddff5db7bffe169:tests/security/evaluation/test_rem_06_operations.py:generic-api-key:98
+31f0a16dcbd205654b6bfb455ddff5db7bffe169:tests/security/evaluation/test_rem_06_operations.py:generic-api-key:211
+31f0a16dcbd205654b6bfb455ddff5db7bffe169:tests/security/evaluation/test_rem_06_operations.py:private-key:124
+31f0a16dcbd205654b6bfb455ddff5db7bffe169:tests/security/evaluation/test_rem_07_distribution.py:private-key:56

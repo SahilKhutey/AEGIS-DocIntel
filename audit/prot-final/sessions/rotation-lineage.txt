@@ -1,0 +1,21 @@
+AUDIT LOG: test_sessions.py
+Executed at: 2026-11-15T04:53:08.369023+00:00
+
+============================= test session starts =============================
+platform win32 -- Python 3.12.10, pytest-9.1.1, pluggy-1.6.0 -- C:\Users\ASUS\AppData\Local\Programs\Python\Python312\python.exe
+cachedir: .pytest_cache
+hypothesis profile 'default'
+rootdir: C:\Users\ASUS\.gemini\antigravity\worktrees\Aegis-DocIntel\product_hunt_launch_packaging
+configfile: pyproject.toml
+plugins: anyio-4.12.1, hypothesis-6.156.6, langsmith-0.14.4, asyncio-1.4.0, cov-7.1.0
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collecting ... collected 5 items
+
+tests/security/consolidated/test_sessions.py::test_session_001_refresh_token_rotation_succeeds PASSED [ 20%]
+tests/security/consolidated/test_sessions.py::test_session_002_refresh_token_replay_revokes_token_family PASSED [ 40%]
+tests/security/consolidated/test_sessions.py::test_session_003_logout_revokes_session PASSED [ 60%]
+tests/security/consolidated/test_sessions.py::test_session_004_logout_all_terminates_all_evaluator_sessions PASSED [ 80%]
+tests/security/consolidated/test_sessions.py::test_session_005_license_revocation_cascades_to_session PASSED [100%]
+
+============================== 5 passed in 0.49s ==============================
+

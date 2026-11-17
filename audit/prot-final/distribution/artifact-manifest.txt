@@ -1,0 +1,21 @@
+AUDIT LOG: test_distribution_artifact.py
+Executed at: 2026-11-15T04:53:12.928415+00:00
+
+============================= test session starts =============================
+platform win32 -- Python 3.12.10, pytest-9.1.1, pluggy-1.6.0 -- C:\Users\ASUS\AppData\Local\Programs\Python\Python312\python.exe
+cachedir: .pytest_cache
+hypothesis profile 'default'
+rootdir: C:\Users\ASUS\.gemini\antigravity\worktrees\Aegis-DocIntel\product_hunt_launch_packaging
+configfile: pyproject.toml
+plugins: anyio-4.12.1, hypothesis-6.156.6, langsmith-0.14.4, asyncio-1.4.0, cov-7.1.0
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collecting ... collected 5 items
+
+tests/security/consolidated/test_distribution_artifact.py::test_dist_001_no_private_keys_in_client_source PASSED [ 20%]
+tests/security/consolidated/test_distribution_artifact.py::test_dist_002_no_provider_api_keys_in_client_source PASSED [ 40%]
+tests/security/consolidated/test_distribution_artifact.py::test_dist_003_no_development_tokens_in_client_source PASSED [ 60%]
+tests/security/consolidated/test_distribution_artifact.py::test_dist_004_sensitive_data_redaction_in_security_events PASSED [ 80%]
+tests/security/consolidated/test_distribution_artifact.py::test_dist_005_configuration_manifest_identifiable PASSED [100%]
+
+============================== 5 passed in 0.66s ==============================
+

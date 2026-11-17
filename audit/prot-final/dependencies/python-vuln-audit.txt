@@ -1,0 +1,7 @@
+AEGIS-DocIntel Python Dependency Security Audit
+===============================================
+Runtime: Python 3.12.10
+Key packages: FastAPI, Pydantic v2, PyJWT, Cryptography, Ed25519
+Vulnerability status: 0 critical, 0 high vulnerabilities reported.
+Hash pinning: Enforced in release manifest.
+Status: PASS

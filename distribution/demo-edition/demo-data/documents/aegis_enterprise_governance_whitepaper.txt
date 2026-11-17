@@ -1,0 +1,36 @@
+# AEGIS-DocIntel Enterprise Security, Provenance & Governance Framework
+Document ID: DOC-AEGIS-SEC-2026
+Version: 1.2.0-PRODUCTION
+Classification: Architecture Whitepaper / Security Verification
+Author: AEGIS Security & Cryptography Practice
+
+## 1. Evidence Grounding & Cryptographic Audit Trails
+AEGIS-DocIntel provides verifiable auditability for enterprise AI workflows. Unlike probabilistic generative systems that produce ungrounded hallucinations, AEGIS binds every extracted fact, citation, and downstream response to verifiable source locations (page coordinates, section paths, and table cell matrices).
+
+Key Audit Controls:
+- All audit log entries are chained sequentially using SHA-256 cryptographic hashes rooted at genesis hash 0000000000000000000000000000000000000000000000000000000000000000.
+- Every audit entry captures the event ID, UTC timestamp, action name, tenant ID, user principal, and deterministic entry hash.
+- Tamper detection executes in O(N) verification passes and halts immediately on checksum divergence.
+- External logging endpoints pseudonymize tenant identities using irreversible SHA-256 hashes to prevent multi-tenant correlation leaks.
+
+## 2. Multi-Tenant Isolation & Role-Based Access Control (RBAC)
+AEGIS enforces pre-retrieval tenant isolation across ingestion, retrieval, caching, and document storage.
+
+| Role | Document Read | Document Upload / Edit | Document Delete | Member Management | Platform Maintenance |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| viewer | Allowed | Denied | Denied | Denied | Denied |
+| editor | Allowed | Allowed | Denied | Denied | Denied |
+| reviewer | Allowed | Allowed | Denied | Denied | Denied |
+| review_admin | Allowed | Allowed | Denied | Denied | Denied |
+| tenant_admin | Allowed | Allowed | Allowed | Allowed | Denied |
+| platform_admin | Allowed | Allowed | Allowed | Allowed | Allowed |
+
+Isolation Guarantees:
+- Pre-retrieval query filtering strictly enforces parameterized SQL WHERE tenant_id = ? at the database query planner level before indexing.
+- Cross-tenant document lookups return non-disclosing 404 Not Found responses to mitigate Insecure Direct Object Reference (IDOR) attacks.
+- Deny-by-default HTTP route guard terminates all unauthenticated requests with 401 Unauthorized before routing.
+
+## 3. Data Lifecycle & Cascading Erasure
+- Cascading document deletion atomically wipes SQLite document metadata, raw byte payloads, extracted chunks, and vector index embeddings within 500 milliseconds.
+- Compliance with GDPR Right-to-Erasure (Article 17) is validated by automated cryptographic tombstones.
+- PII redaction engine automatically identifies and redacts SSNs, credit card numbers, email addresses, and API keys before vector embedding.

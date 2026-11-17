@@ -1,0 +1,20 @@
+{
+  "timestamp": "2026-11-15T04:28:03.982761+00:00",
+  "scenarios_verified": [
+    "INT-SESSION-001: Active session validates and accesses API",
+    "INT-SESSION-002: Expired access token rejected HTTP 401",
+    "INT-SESSION-003: Refresh token rotation issues new access and refresh tokens, invalidating old",
+    "INT-SESSION-004: Refresh token replay triggers immediate token family revocation",
+    "INT-SESSION-005: Evaluator logout terminates single session",
+    "INT-SESSION-006: Evaluator logout-all terminates entire evaluator session fleet",
+    "INT-SESSION-007: Device deactivation cascades to all linked sessions",
+    "INT-SESSION-008: License revocation immediately invalidates all linked sessions",
+    "INT-SESSION-009: Evaluator account suspension terminates API access",
+    "INT-SESSION-010: Single-use WebSocket ticket issued and consumed",
+    "INT-SESSION-011: Mid-turn logout preserves background processing audit trail",
+    "INT-SESSION-012: Active background job aborts upon mid-execution license revocation",
+    "INT-SESSION-013: Revocation cache propagation strictly adheres to SLA (< 50ms)",
+    "INT-SESSION-014: Revocation service failure causes API to fail closed"
+  ],
+  "verdict": "PASSED"
+}

@@ -1,0 +1,9 @@
+AEGIS-DocIntel Protected Demo Edition - Execution Environment
+Platform: Windows-11-10.0.26300-SP0
+Machine Architecture: AMD64
+Processor: AMD64 Family 25 Model 124 Stepping 0, AuthenticAMD
+Operating System: Windows 11
+Python Runtime: 3.12.10 (tags/v3.12.10:0cc8128, Apr  8 2025, 12:21:36) [MSC v.1943 64 bit (AMD64)]
+Node Runtime: v24.18.0
+Working Directory: C:\Users\ASUS\.gemini\antigravity\worktrees\Aegis-DocIntel\product_hunt_launch_packaging
+Timestamp: 2026-11-15T04:28:03.480763+00:00

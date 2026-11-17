@@ -1,3 +1,4 @@
+import { z } from "zod";
 import { Permission, getPermissionsForRole } from "./permissions";
 import { clearRequestContext } from "../api/request-context";
 
@@ -21,109 +22,131 @@ export interface SessionProvider {
   signOut(): Promise<void>;
 }
 
-// In-memory session cache
-let cachedSession: UserSession | null = null;
+export const GatewaySessionSchema = z.object({
+  user_id: z.string().min(1).optional(),
+  license_id: z.string().optional(),
+  device_id: z.string().optional(),
+  tier: z.string().optional(),
+  role: z.string().default("viewer"),
+  authenticated: z.boolean().optional(),
+  user: z
+    .object({
+      id: z.string().min(1),
+      email: z.string().optional(),
+      displayName: z.string().optional(),
+    })
+    .optional(),
+  workspaceId: z.string().optional(),
+  tenantId: z.string().optional(),
+  permissions: z.array(z.string()).optional(),
+  expiresAt: z.string().optional(),
+});
 
-function parseJwtPayload(token: string): Record<string, unknown> | null {
-  try {
-    const parts = token.split(".");
-    if (parts.length !== 3) return null;
-    const payloadBase64 = parts[1].replace(/-/g, "+").replace(/_/g, "/");
-    const jsonStr =
-      typeof window !== "undefined"
-        ? decodeURIComponent(
-            atob(payloadBase64)
-              .split("")
-              .map((c) => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2))
-              .join("")
-          )
-        : Buffer.from(payloadBase64, "base64").toString("utf-8");
-    return JSON.parse(jsonStr);
-  } catch {
-    return null;
-  }
-}
-
-export function resolveSessionFromToken(token: string): UserSession | null {
-  if (!token) return null;
-
-  // Development bypass token
-  if (token.startsWith("dev-")) {
-    const tenantId = token.slice(4) || "default-tenant";
-    return {
-      user: {
-        id: "dev-user",
-        email: "dev@aegis.corp",
-        displayName: "AEGIS Developer",
-      },
-      workspaceId: `ws-${tenantId}`,
-      tenantId,
-      role: "admin",
-      permissions: getPermissionsForRole("admin"),
-      token,
-      expiresAt: new Date(Date.now() + 86400000).toISOString(),
-    };
-  }
-
-  // JWT parsing
-  const payload = parseJwtPayload(token);
-  if (!payload) return null;
-
-  const tenantId = String(payload.tenant_id || payload.tid || "default-tenant");
-  const userId = String(payload.sub || payload.user_id || "anonymous");
-  const role = String(payload.role || "viewer");
-  const exp = typeof payload.exp === "number" ? new Date(payload.exp * 1000).toISOString() : undefined;
-
-  // Check expiration if exp is present
-  if (typeof payload.exp === "number" && payload.exp * 1000 < Date.now()) {
-    return null;
-  }
+export function validateSessionResponse(data: unknown): UserSession {
+  const parsed = GatewaySessionSchema.parse(data);
+  const userId = parsed.user?.id || parsed.user_id || "evaluator";
+  const tenantId = parsed.tenantId || parsed.license_id || "evaluator-workspace";
+  const workspaceId = parsed.workspaceId || `ws-${tenantId}`;
+  const role = parsed.role || "viewer";
+  const perms = (parsed.permissions as Permission[]) || getPermissionsForRole(role);
 
   return {
     user: {
       id: userId,
-      email: typeof payload.email === "string" ? payload.email : undefined,
-      displayName: typeof payload.name === "string" ? payload.name : userId,
+      email: parsed.user?.email,
+      displayName: parsed.user?.displayName || `Evaluator (${userId})`,
     },
-    workspaceId: typeof payload.workspace_id === "string" ? payload.workspace_id : `ws-${tenantId}`,
+    workspaceId,
     tenantId,
     role,
-    permissions: getPermissionsForRole(role),
-    expiresAt: exp,
-    token,
+    permissions: perms,
+    expiresAt: parsed.expiresAt,
   };
+}
+
+/**
+ * Historical helper: strictly fails closed in hardened production model.
+ * The browser never manufactures or verifies identity claims locally.
+ */
+export function resolveSessionFromToken(_token: string): UserSession | null {
+  // Fail closed unconditionally: client-side token parsing does not verify signatures
+  // and dev-* credentials are prohibited in the production authentication contract.
+  return null;
 }
 
 export const defaultSessionProvider: SessionProvider = {
   async getSession(): Promise<UserSession | null> {
-    if (cachedSession) {
-      if (cachedSession.expiresAt && new Date(cachedSession.expiresAt).getTime() < Date.now()) {
-        cachedSession = null;
-        return null;
-      }
-      return cachedSession;
+    if (typeof window === "undefined") {
+      return null;
     }
 
-    const token =
-      process.env.NEXT_PUBLIC_AEGIS_DEV_TOKEN ||
-      (typeof window !== "undefined" ? window.sessionStorage.getItem("aegis_token") : null) ||
-      "dev-default-tenant";
+    try {
+      const response = await fetch("/evaluation/session", {
+        method: "GET",
+        credentials: "include",
+        cache: "no-store",
+        headers: { Accept: "application/json" },
+      });
 
-    cachedSession = resolveSessionFromToken(token);
-    return cachedSession;
+      if (response.status === 401 || response.status === 403 || response.status === 404) {
+        return null;
+      }
+      if (!response.ok) {
+        throw new Error("Unable to retrieve evaluation session");
+      }
+
+      const body = await response.json();
+      return validateSessionResponse(body);
+    } catch {
+      return null;
+    }
   },
 
   async refreshSession(): Promise<UserSession | null> {
-    cachedSession = null;
-    return this.getSession();
+    if (typeof window === "undefined") {
+      return null;
+    }
+
+    try {
+      const response = await fetch("/evaluation/session/refresh", {
+        method: "POST",
+        credentials: "include",
+        cache: "no-store",
+        headers: { Accept: "application/json" },
+      });
+
+      if (response.status === 401 || response.status === 403) {
+        return null;
+      }
+      if (!response.ok) {
+        throw new Error("Unable to refresh evaluation session");
+      }
+
+      const body = await response.json();
+      return validateSessionResponse(body);
+    } catch {
+      return null;
+    }
   },
 
   async signOut(): Promise<void> {
-    cachedSession = null;
-    clearRequestContext();
-    if (typeof window !== "undefined") {
-      window.sessionStorage.removeItem("aegis_token");
-      window.localStorage.removeItem("aegis_cached_workspace");
+    try {
+      if (typeof window !== "undefined") {
+        await fetch("/evaluation/session/logout", {
+          method: "POST",
+          credentials: "include",
+          cache: "no-store",
+        });
+      }
+    } catch {
+      // Best-effort remote revocation; local session cleanup must proceed regardless of network/URL errors
+    } finally {
+      clearRequestContext();
+      if (typeof window !== "undefined") {
+        window.sessionStorage.removeItem("aegis_token");
+        window.sessionStorage.removeItem("aegis_auth_token");
+        window.localStorage.removeItem("aegis_cached_workspace");
+      }
     }
   },
 };

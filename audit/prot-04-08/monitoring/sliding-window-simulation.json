@@ -1,0 +1,10 @@
+{
+  "account_throttle_triggered": true,
+  "active_alerts": [
+    {
+      "rule_id": "MON-001",
+      "severity": "high",
+      "title": "Activation Brute Force Detected (Account)"
+    }
+  ]
+}

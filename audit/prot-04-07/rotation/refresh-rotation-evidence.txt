@@ -1,0 +1,20 @@
+AEGIS-DocIntel Refresh Token Rotation & Lineage Verification
+================================================================
+Timestamp: 2026-11-14T06:03:10.006274+00:00
+Protocol Scenarios: SESSION-013 through SESSION-018
+
+1. Cryptographic Rotation (SESSION-013):
+   - Every refresh operation issues a brand new access token and a brand new refresh token.
+   - Old refresh token status transitions immediately to CONSUMED.
+   - Consumed timestamp recorded with sub-millisecond precision.
+
+2. Lineage Tracking (SESSION-015, SESSION-016):
+   - Consumed token explicitly links to replacement token via replaced_by_id.
+   - All rotating tokens in a session maintain the exact same token_family_id.
+
+3. Immediate API Authorization (SESSION-017):
+   - Verified newly rotated access token immediately authorizes protected endpoints.
+
+4. Audit Record (SESSION-018):
+   - session.refreshed event emitted with actor, license, device, and family_id telemetry.
+================================================================

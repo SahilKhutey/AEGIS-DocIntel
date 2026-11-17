@@ -1,0 +1,27 @@
+============================= test session starts =============================
+platform win32 -- Python 3.12.10, pytest-9.1.1, pluggy-1.6.0 -- C:\Users\ASUS\AppData\Local\Programs\Python\Python312\python.exe
+cachedir: .pytest_cache
+hypothesis profile 'default'
+rootdir: C:\Users\ASUS\.gemini\antigravity\worktrees\Aegis-DocIntel\product_hunt_launch_packaging
+configfile: pyproject.toml
+plugins: anyio-4.12.1, hypothesis-6.156.6, langsmith-0.14.4, asyncio-1.4.0, cov-7.1.0
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collecting ... collected 15 items
+
+tests/security/evaluation/test_rem_05_sessions.py::test_ses_rem_001_session_creation PASSED [  6%]
+tests/security/evaluation/test_rem_05_sessions.py::test_ses_rem_002_session_device_and_license_binding PASSED [ 13%]
+tests/security/evaluation/test_rem_05_sessions.py::test_ses_rem_003_access_token_ttl_enforced PASSED [ 20%]
+tests/security/evaluation/test_rem_05_sessions.py::test_ses_rem_004_refresh_token_rotation PASSED [ 26%]
+tests/security/evaluation/test_rem_05_sessions.py::test_ses_rem_005_refresh_token_replay_detected PASSED [ 33%]
+tests/security/evaluation/test_rem_05_sessions.py::test_ses_rem_006_compromise_cascade_revocation PASSED [ 40%]
+tests/security/evaluation/test_rem_05_sessions.py::test_ses_rem_007_single_logout_revokes_access_token PASSED [ 46%]
+tests/security/evaluation/test_rem_05_sessions.py::test_ses_rem_008_logout_all_evaluator_sessions PASSED [ 53%]
+tests/security/evaluation/test_rem_05_sessions.py::test_ses_rem_009_license_revocation_terminates_session PASSED [ 60%]
+tests/security/evaluation/test_rem_05_sessions.py::test_ses_rem_010_revoked_session_denied_on_protected_endpoints PASSED [ 66%]
+tests/security/evaluation/test_rem_05_sessions.py::test_ses_rem_011_websocket_ticket_issuance PASSED [ 73%]
+tests/security/evaluation/test_rem_05_sessions.py::test_ses_rem_012_websocket_ticket_single_use PASSED [ 80%]
+tests/security/evaluation/test_rem_05_sessions.py::test_ses_rem_013_websocket_ticket_expiration PASSED [ 86%]
+tests/security/evaluation/test_rem_05_sessions.py::test_ses_rem_014_refresh_concurrency_race_safety PASSED [ 93%]
+tests/security/evaluation/test_rem_05_sessions.py::test_ses_rem_015_token_hashes_at_rest PASSED [100%]
+
+============================= 15 passed in 0.51s ==============================

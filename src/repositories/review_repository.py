@@ -14,18 +14,6 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Sequence, Tuple
 
-from src.engines.governance.contracts import (
-    AuditEvent,
-    CandidateType,
-    ReviewAction,
-    ReviewDecision,
-    ReviewItem,
-    ReviewRevision,
-    ReviewStatus,
-)
-from src.engines.governance.feedback import FeedbackCategory, ReviewFeedback
-
-
 class ReviewNotFoundError(KeyError):
     """Raised when a review item cannot be found for the specified tenant."""
     pass
@@ -39,6 +27,18 @@ class StaleReviewVersionError(ValueError):
 class IdempotencyConflictError(ValueError):
     """Raised when an idempotency key is reused with a conflicting payload."""
     pass
+
+
+from src.engines.governance.contracts import (
+    AuditEvent,
+    CandidateType,
+    ReviewAction,
+    ReviewDecision,
+    ReviewItem,
+    ReviewRevision,
+    ReviewStatus,
+)
+from src.engines.governance.feedback import FeedbackCategory, ReviewFeedback
 
 
 class ReviewRepository:

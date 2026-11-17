@@ -1,0 +1,8 @@
+AEGIS-DocIntel Private Code Isolation Audit
+==========================================
+
+Path 'aegis/core/private_engine': CLEAN (ABSENT FROM CLIENT)
+Path 'src/private_engine': CLEAN (ABSENT FROM CLIENT)
+Path 'src/services/private_engine': CLEAN (ABSENT FROM CLIENT)
+Path 'web/src/private_engine': CLEAN (ABSENT FROM CLIENT)
+Path 'web/src/core/private_engine': CLEAN (ABSENT FROM CLIENT)

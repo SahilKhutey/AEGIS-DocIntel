@@ -1,0 +1,5 @@
+credential_type,format,entropy_bytes,ttl_seconds,storage_at_rest,rotation_policy,security_scope
+access_token,Opaque Bearer / RS256,32 bytes (256-bit),600s (10 min),SHA-256 digest,Re-issued on refresh,Per-request bearer
+refresh_token,Opaque secret,48 bytes (384-bit),604800s (7 days),SHA-256 digest only,Rotated on every use,Token family lineage
+ws_ticket,Single-use ticket,32 bytes (256-bit),60s (1 min),Memory ephemeral,Consumed immediately,Single WebSocket connection
+session_record,JSON / Database entity,UUIDv4,604800s absolute,Authoritative state,Active until revoked/expired,Evaluator + Device + License

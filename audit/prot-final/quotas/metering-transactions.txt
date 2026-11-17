@@ -1,0 +1,21 @@
+AUDIT LOG: test_quotas.py
+Executed at: 2026-11-15T04:53:06.228131+00:00
+
+============================= test session starts =============================
+platform win32 -- Python 3.12.10, pytest-9.1.1, pluggy-1.6.0 -- C:\Users\ASUS\AppData\Local\Programs\Python\Python312\python.exe
+cachedir: .pytest_cache
+hypothesis profile 'default'
+rootdir: C:\Users\ASUS\.gemini\antigravity\worktrees\Aegis-DocIntel\product_hunt_launch_packaging
+configfile: pyproject.toml
+plugins: anyio-4.12.1, hypothesis-6.156.6, langsmith-0.14.4, asyncio-1.4.0, cov-7.1.0
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collecting ... collected 5 items
+
+tests/security/consolidated/test_quotas.py::test_quota_001_within_limit_settles_cleanly PASSED [ 20%]
+tests/security/consolidated/test_quotas.py::test_quota_002_exceeding_limit_rejected_429 PASSED [ 40%]
+tests/security/consolidated/test_quotas.py::test_quota_003_concurrent_race_at_boundary_prevents_overspending PASSED [ 60%]
+tests/security/consolidated/test_quotas.py::test_quota_004_failed_operation_rolls_back_reservation PASSED [ 80%]
+tests/security/consolidated/test_quotas.py::test_quota_005_idempotent_retry_avoids_double_charge PASSED [100%]
+
+============================== 5 passed in 0.39s ==============================
+

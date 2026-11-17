@@ -1,0 +1,20 @@
+AEGIS-DocIntel Refresh Token Replay Detection & Family Revocation
+================================================================
+Timestamp: 2026-11-14T06:03:10.006274+00:00
+Protocol Scenarios: SESSION-019 through SESSION-024
+
+1. Replay Detection (SESSION-019):
+   - Attempting to present an already-consumed refresh token returns HTTP 401 Unauthorized.
+   - Error code: REFRESH_FAILED ("Refresh token replay detected").
+
+2. Family Lockdown (SESSION-020, SESSION-021, SESSION-022):
+   - Replay trigger causes immediate revocation of the parent session.
+   - All sibling sessions sharing the token_family_id are permanently revoked.
+   - All active refresh tokens in the family transition to status REVOKED.
+
+3. Fail-Closed Boundary (SESSION-023):
+   - Active access tokens issued prior to replay are immediately denied upon compromise detection.
+
+4. Security Telemetry (SESSION-024):
+   - High-priority audit record session.refresh_replay_detected emitted with status COMPROMISE_DETECTED.
+================================================================

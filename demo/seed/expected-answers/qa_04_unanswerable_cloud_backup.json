@@ -1,0 +1,9 @@
+{
+  "query_id": "qa-04-unanswerable-backup",
+  "query": "What cloud backup regions and secondary disaster recovery zones are supported?",
+  "ground_truth_answer": "The provided documents do not contain evidence regarding cloud backup regions or secondary disaster recovery zones.",
+  "expected_behavior": "abstain",
+  "expected_facts": [],
+  "is_answerable": false,
+  "confidence_threshold": 0.0
+}

@@ -1,0 +1,13 @@
+dimension,category,unit,period_supported,basic_limit,pro_limit,enforcement_point
+documents,Storage,documents,lifetime,20,50,Gateway Upload
+storage,Storage,bytes,lifetime,104857600 (100MB),524288000 (500MB),Gateway Upload
+upload,Storage,requests,daily/lifetime,20,50,Gateway Ingress
+parsing,Engine,jobs/pages,concurrent/lifetime,2 jobs,5 jobs,Processing Pipeline
+ocr,Engine,pages,lifetime,50,200,OCR Worker
+queries,Intelligence,queries,lifetime/daily,100,500,Ask AEGIS Endpoint
+comparisons,Intelligence,comparisons,lifetime/daily,10,50,Compare Endpoint
+llm_tokens,Inference,tokens,lifetime,50000,250000,LLM Provider Adapter
+api_requests,Gateway,requests,daily,1000,5000,Gateway Middleware
+concurrent_jobs,Concurrency,jobs,concurrent,2,5,Worker Dispatcher
+exports,Output,exports,lifetime,5,25,Export Service
+processing_time,Compute,milliseconds,per_operation,30000,60000,Execution Timeout

@@ -1,0 +1,11 @@
+{
+  "workstream": "REM-01",
+  "baseline_commit": "8eeb5ea",
+  "files": [
+    "src/core/security_context.py",
+    "src/api/auth.py",
+    "src/api/auth_guard.py",
+    "src/security/token_validation.py",
+    "src/api/routers/evaluation/activation.py"
+  ]
+}

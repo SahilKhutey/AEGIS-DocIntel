@@ -1,0 +1,95 @@
+=== Baseline Auth Reference Scan ===
+Total references: 92
+
+./CHANGELOG.md:46: [dev-default-tenant] - **Frontend Authentication Bypass Remediation (`web/src/lib/auth/session.ts`):** Prohibited `dev-` tokens in production
+./CHANGELOG.md:47: [NEXT_PUBLIC_AEGIS_DEV_TOKEN] - **Browser Secret Leakage Remediation (`web/src/lib/validation/environment.ts` & `client.ts`):** Purged `NEXT_PUBLIC_AE
+./CHANGELOG.md:198: [aegis-dev-key] - **Auth Bypass Gating:** Fixed critical vulnerability in `src/api/auth.py` where `dev-*` JWTs and `aegis-dev-key` API k
+./start.py:51: [aegis-dev-key] print("  curl -H 'X-API-Key: aegis-dev-key' http://localhost:8000/health")
+./start.py:54: [aegis-dev-key] print("       -H 'X-API-Key: aegis-dev-key' \\")
+./start.py:58: [aegis-dev-key] print("       -H 'X-API-Key: aegis-dev-key' \\")
+./WP07_IMPLEMENTATION_BASELINE.md:18: [aegis-dev-key] - Development Fallback: Explicit `AEGIS_ENVIRONMENT=development` gate allowing `dev-{tenant_id}` tokens and `aegis-dev-k
+./.hypothesis/constants/7a791677eb9a8e46:4: [dev-user] [401, 'AEGIS_API_KEYS', 'AEGIS_ENVIRONMENT', 'AEGIS_JWT_AUDIENCE', 'AEGIS_JWT_ISSUER', 'AEGIS_JWT_PUBLIC_KEY', 'ApiKey',
+./.hypothesis/constants/7a791677eb9a8e46:4: [aegis-dev-key] [401, 'AEGIS_API_KEYS', 'AEGIS_ENVIRONMENT', 'AEGIS_JWT_AUDIENCE', 'AEGIS_JWT_ISSUER', 'AEGIS_JWT_PUBLIC_KEY', 'ApiKey',
+./.hypothesis/constants/eadd9052d4d52d59:4: [dev-user] [401, 50000, '1', 'AEGIS_API_KEYS', 'AEGIS_DEMO_API_KEY', 'AEGIS_DEMO_MODE', 'AEGIS_DEMO_TOKEN', 'AEGIS_ENVIRONMENT', 'A
+./.hypothesis/constants/eadd9052d4d52d59:4: [aegis-dev-key] [401, 50000, '1', 'AEGIS_API_KEYS', 'AEGIS_DEMO_API_KEY', 'AEGIS_DEMO_MODE', 'AEGIS_DEMO_TOKEN', 'AEGIS_ENVIRONMENT', 'A
+./artifacts/security/reports/AUTH_SECURITY_INVENTORY.md:16: [aegis-dev-key] | **Development Credential** | Explicit development token (`dev-{tenant}`) and key (`aegis-dev-key`). Strictly inactive 
+./docs/changelog.md:89: [aegis-dev-key] - **Auth Bypass Gating:** Fixed critical vulnerability in `src/api/auth.py` where `dev-*` JWTs and `aegis-dev-key` API k
+./docs/DEVLOG.md:472: [aegis-dev-key] - **Vulnerability Identified:** `src/api/auth.py` unconditionally granted `admin` to any `dev-*` JWT and `editor` to `ae
+./docs/DEVLOG.md:894: [aegis-dev-key] - Strictly gated development credentials (`dev-*`, `aegis-dev-key`) to `AEGIS_ENVIRONMENT=development`.
+./docs/DEVLOG.md:2205: [NEXT_PUBLIC_AEGIS_DEV_TOKEN] 2. Remediated Finding IP-011: Refactored `web/src/lib/api/client.ts` to strip hardcoded localhost defaults and `NEXT_PUB
+./docs/DEVLOG.md:2206: [NEXT_PUBLIC_AEGIS_DEV_TOKEN] 3. Remediated Finding IP-012: Purged `NEXT_PUBLIC_AEGIS_DEV_TOKEN` from `web/src/lib/validation/environment.ts` Zod sche
+./docs/MASTER_REMEDIATION_CHECKLIST.md:148: [aegis-dev-key] - [x] 🔴🔴 **Critical.** Hardcoded dev auth-bypass tokens (`dev-{tenant}` JWT prefix, `aegis-dev-key`) gated behind `AEGIS
+./docs/quickstart-mvp.md:56: [aegis-dev-key] To run locally without third-party identity providers, set the environment to `development`. This activates development 
+./docs/quickstart-mvp.md:231: [aegis-dev-key] - **HTTP 401 Unauthorized:** Ensure `Authorization: Bearer dev-<tenant_id>` or `X-API-Key: aegis-dev-key` is supplied an
+./docs/security.md:27: [aegis-dev-key] - **Issue (Phase 10)**: `dev-<tenant>` bearer tokens and the `aegis-dev-key` API key were accepted regardless of environ
+./docs/distribution/DEVLOG.md:51: [dev-default-tenant] - **Frontend Auth Bypass Remediation (`web/src/lib/auth/session.ts`):** Removed `dev-` bypass token in production/demo m
+./docs/distribution/DEVLOG.md:52: [NEXT_PUBLIC_AEGIS_DEV_TOKEN] - **Client API Client Hardening (`web/src/lib/api/client.ts`):** Stripped hardcoded `http://127.0.0.1:8000` defaults and
+./docs/distribution/DEVLOG.md:53: [NEXT_PUBLIC_AEGIS_DEV_TOKEN] - **Environment Schema Remediation (`web/src/lib/validation/environment.ts`):** Purged `NEXT_PUBLIC_AEGIS_DEV_TOKEN` fro
+./docs/distribution/DEVLOG.md:90: [NEXT_PUBLIC_AEGIS_DEV_TOKEN] - **Client Build Guard (`web/scripts/verify-production-auth.mjs`):** CI/build-time guard checking frontend code for forb
+./docs/distribution/TASKLOG.md:80: [NEXT_PUBLIC_AEGIS_DEV_TOKEN] - Refactored `web/src/lib/api/client.ts` to enforce same-origin relative `/api` paths and strip `NEXT_PUBLIC_AEGIS_DEV_T
+./docs/distribution/TASKLOG.md:81: [NEXT_PUBLIC_AEGIS_DEV_TOKEN] - Refactored `web/src/lib/validation/environment.ts` to purge `NEXT_PUBLIC_AEGIS_DEV_TOKEN`.
+./docs/distribution/prot-03-ip-exposure/00_EXECUTIVE_SUMMARY.md:32: [NEXT_PUBLIC_AEGIS_DEV_TOKEN] | **Frontend Dev Token Status** | **REMOVED** | `NEXT_PUBLIC_AEGIS_DEV_TOKEN` stripped from schema & code |
+./docs/distribution/prot-03-ip-exposure/00_EXECUTIVE_SUMMARY.md:47: [dev-default-tenant] - Eliminated fallback to `"dev-default-tenant"`.
+./docs/distribution/prot-03-ip-exposure/00_EXECUTIVE_SUMMARY.md:49: [NEXT_PUBLIC_AEGIS_DEV_TOKEN] - Removed `NEXT_PUBLIC_AEGIS_DEV_TOKEN` from Zod schema and request headers.
+./docs/distribution/prot-03-ip-exposure/01_SOURCE_EXPOSURE_REGISTER.md:23: [NEXT_PUBLIC_AEGIS_DEV_TOKEN] | **IP-012** | `web/src/lib/validation/environment.ts` | `NEXT_PUBLIC_AEGIS_DEV_TOKEN` declared in browser-visible envir
+./docs/distribution/prot-03-ip-exposure/03_FRONTEND_EXPOSURE_AUDIT.md:13: [startsWith("dev-")] if (token.startsWith("dev-")) {
+./docs/distribution/prot-03-ip-exposure/03_FRONTEND_EXPOSURE_AUDIT.md:16: [dev-user] user: { id: "dev-user", email: "dev@aegis.corp", displayName: "AEGIS Developer" },
+./docs/distribution/prot-03-ip-exposure/03_FRONTEND_EXPOSURE_AUDIT.md:16: [dev@aegis.corp] user: { id: "dev-user", email: "dev@aegis.corp", displayName: "AEGIS Developer" },
+./docs/distribution/prot-03-ip-exposure/03_FRONTEND_EXPOSURE_AUDIT.md:25: [dev-default-tenant] And defaulted to `"dev-default-tenant"` when no session storage token was found.
+./docs/distribution/prot-03-ip-exposure/03_FRONTEND_EXPOSURE_AUDIT.md:33: [dev-default-tenant] 3. **Fallback Purge:** Removed `"dev-default-tenant"` string fallback and `NEXT_PUBLIC_AEGIS_DEV_TOKEN` lookup. If unaut
+./docs/distribution/prot-03-ip-exposure/03_FRONTEND_EXPOSURE_AUDIT.md:33: [NEXT_PUBLIC_AEGIS_DEV_TOKEN] 3. **Fallback Purge:** Removed `"dev-default-tenant"` string fallback and `NEXT_PUBLIC_AEGIS_DEV_TOKEN` lookup. If unaut
+./docs/distribution/prot-03-ip-exposure/03_FRONTEND_EXPOSURE_AUDIT.md:42: [NEXT_PUBLIC_AEGIS_DEV_TOKEN] NEXT_PUBLIC_AEGIS_DEV_TOKEN: z.string().optional()
+./docs/distribution/prot-03-ip-exposure/03_FRONTEND_EXPOSURE_AUDIT.md:50: [NEXT_PUBLIC_AEGIS_DEV_TOKEN] 1. `NEXT_PUBLIC_AEGIS_DEV_TOKEN` was completely purged from `environment.ts` schema and validation parser.
+./docs/distribution/prot-03-ip-exposure/03_FRONTEND_EXPOSURE_AUDIT.md:52: [NEXT_PUBLIC_AEGIS_DEV_TOKEN] 3. Automated static analysis verifies that `NEXT_PUBLIC_AEGIS_DEV_TOKEN` appears in **0 lines** of the production build.
+./docs/distribution/prot-04-auth-licensing/02_PRODUCTION_AUTH_HARDENING.md:12: [dev-default-tenant] 1. `web/src/lib/auth/session.ts`: `dev-*` tokens were automatically granted `role: "admin"` with full system permissions
+./docs/distribution/prot-04-auth-licensing/02_PRODUCTION_AUTH_HARDENING.md:14: [NEXT_PUBLIC_AEGIS_DEV_TOKEN] 3. `web/src/lib/validation/environment.ts`: Included `NEXT_PUBLIC_AEGIS_DEV_TOKEN` in the browser-visible environment sc
+./docs/distribution/prot-04-auth-licensing/02_PRODUCTION_AUTH_HARDENING.md:21: [NEXT_PUBLIC_AEGIS_DEV_TOKEN] - Stripped `NEXT_PUBLIC_AEGIS_DEV_TOKEN` from `getDefaultAuthHeaders()`.
+./docs/distribution/prot-04-auth-licensing/02_PRODUCTION_AUTH_HARDENING.md:24: [NEXT_PUBLIC_AEGIS_DEV_TOKEN] - Purged `NEXT_PUBLIC_AEGIS_DEV_TOKEN` entirely from the Zod schema.
+./docs/distribution/prot-04-auth-licensing/02_PRODUCTION_AUTH_HARDENING.md:36: [NEXT_PUBLIC_AEGIS_DEV_TOKEN] - `NEXT_PUBLIC_AEGIS_DEV_TOKEN`
+./docs/distribution/prot-04-auth-licensing/02_PRODUCTION_AUTH_HARDENING.md:37: [dev-default-tenant] - `"dev-default-tenant"`
+./docs/distribution/prot-04-auth-licensing/evidence/release-security-checklist.md:14: [NEXT_PUBLIC_AEGIS_DEV_TOKEN] | **REQ-01** | **Production has no development bypass** | `web/scripts/verify-production-auth.mjs`, `AUTH-008` | `npm ru
+./docs/history/STATUS_2026-10-09.md:64: [aegis-dev-key] - Auth bypass token environment gating (`src/api/auth.py`): `dev-*` JWT bypass and `aegis-dev-key` API key gated strictl
+./docs/reports/P0_EXECUTION_REPORT.md:48: [aegis-dev-key] * **Development Bypass Gating:** Development credentials (`dev-*`, `aegis-dev-key`) fail closed with HTTP 401 in product
+./docs/reports/PHASE4_EXECUTION_REPORT.md:14: [aegis-dev-key] | **Production API Key Authentication** | Hardcoded stub accepting only `aegis-dev-key` in dev mode (I-20) | Constant-ti
+./docs/reports/PHASE4_EXECUTION_REPORT.md:29: [aegis-dev-key] - `_validate_api_key`: Reads `AEGIS_API_KEYS` JSON string containing raw keys or sha256 digests mapped to tenant/user/ro
+./docs/ui-ux/wp-ui-04-core-workspace/10-security-and-data-handling.md:14: [dev-default-tenant] ├─► Authenticated Request (Bearer token, Tenant Header: dev-default-tenant)
+./docs/ui-ux/wp-ui-04-core-workspace/evidence/security/tenant-isolation.txt:12: [dev-default-tenant] - Default Context: Tenant context resolves to "dev-default-tenant" or active authenticated session tenant.
+./docs/ui-ux/wp-ui-08-integration-ux-validation/02-baseline-and-environment.md:43: [dev-default-tenant] | `NEXT_PUBLIC_AEGIS_DEV_TOKEN`| No | `dev-default-tenant` | Development authentication bypass token |
+./docs/ui-ux/wp-ui-08-integration-ux-validation/02-baseline-and-environment.md:43: [NEXT_PUBLIC_AEGIS_DEV_TOKEN] | `NEXT_PUBLIC_AEGIS_DEV_TOKEN`| No | `dev-default-tenant` | Development authentication bypass token |
+./launch/RELEASE_CHECKLIST.md:11: [aegis-dev-key] - [x] **Dev-Token Bypass Disabled:** `dev-*` tokens and `aegis-dev-key` are unconditionally rejected in `production` and
+./scripts/scan_auth_references.py:4: [dev-default-tenant] "dev-default-tenant",
+./scripts/scan_auth_references.py:5: [dev-user] "dev-user",
+./scripts/scan_auth_references.py:6: [dev@aegis.corp] "dev@aegis.corp",
+./scripts/scan_auth_references.py:7: [NEXT_PUBLIC_AEGIS_DEV_TOKEN] "NEXT_PUBLIC_AEGIS_DEV_TOKEN",
+./scripts/scan_auth_references.py:8: [aegis-dev-key] "aegis-dev-key",
+./scripts/scan_auth_references.py:9: [startsWith("dev-")] 'startsWith("dev-")',
+./src/api/auth.py:85: [aegis-dev-key] "Development auth-bypass credentials ('dev-*', 'aegis-dev-key') are ENABLED."
+./src/api/auth.py:124: [dev-user] principal_id="dev-user",
+./src/api/auth.py:300: [aegis-dev-key] In development: accept 'aegis-dev-key' when explicitly enabled.
+./src/api/auth.py:334: [aegis-dev-key] if env == "development" and api_key == "aegis-dev-key":
+./src/ui/workbench.py:528: [dev-default-tenant] <option value="dev-default-tenant">default-tenant (Admin/Reviewer)</option>
+./src/ui/workbench.py:964: [dev-default-tenant] let currentAuthToken = localStorage.getItem("aegis_token") || "dev-default-tenant";
+./tests/test_aegis.py:80: [aegis-dev-key] headers={"X-API-Key": "aegis-dev-key"}
+./tests/test_auth.py:26: [aegis-dev-key] ctx = await get_current_tenant(bearer=None, api_key="aegis-dev-key")
+./tests/test_auth.py:44: [dev-user] assert ctx.user_id == "dev-user"
+./tests/test_auth.py:51: [aegis-dev-key] websocket.headers = {"x-api-key": "aegis-dev-key"}
+./tests/test_auth.py:90: [aegis-dev-key] _validate_api_key("aegis-dev-key")
+./tests/test_auth.py:104: [aegis-dev-key] _validate_api_key("aegis-dev-key")
+./tests/test_auth.py:116: [aegis-dev-key] key_ctx = _validate_api_key("aegis-dev-key")
+./tests/test_auth_guard.py:124: [aegis-dev-key] assert c.get("/v1/documents", headers={"X-API-Key": "aegis-dev-key"}).status_code == 401
+./tests/test_mvp4_authentication.py:52: [aegis-dev-key] headers = {"X-API-Key": "aegis-dev-key"}
+./tests/test_mvp6_review_api.py:20: [dev-default-tenant] AUTH_DEV = {"Authorization": "Bearer dev-default-tenant"}
+./tests/test_mvp7_integration.py:20: [dev-default-tenant] AUTH_DEV = {"Authorization": "Bearer dev-default-tenant"}
+./tests/test_production_auth.py:399: [aegis-dev-key] res = client.get("/protected", headers={"X-API-Key": "aegis-dev-key"})
+./tests/test_production_auth.py:407: [aegis-dev-key] assert client.get("/protected", headers={"X-API-Key": "aegis-dev-key"}).status_code == 401
+./tests/security/test_auth_acceptance.py:256: [aegis-dev-key] """In production mode, dev-* bearer tokens and aegis-dev-key MUST be rejected."""
+./tests/security/test_auth_acceptance.py:267: [aegis-dev-key] res_key = client.get("/v1/secure-data", headers={"X-API-Key": "aegis-dev-key"})
+./tests/security/test_auth_guard_acceptance.py:105: [dev-user] assert data["principal_id"] == "dev-user"
+./ui/index.html:515: [dev-default-tenant] <option value="dev-default-tenant">default-tenant (Admin/Reviewer)</option>
+./ui/index.html:951: [dev-default-tenant] let currentAuthToken = localStorage.getItem("aegis_token") || "dev-default-tenant";
+./web/scripts/verify-production-auth.mjs:17: [NEXT_PUBLIC_AEGIS_DEV_TOKEN] pattern: /NEXT_PUBLIC_AEGIS_DEV_TOKEN/,
+./web/scripts/verify-production-auth.mjs:21: [dev-default-tenant] pattern: /"dev-default-tenant"/,
+./web/src/lib/auth/session.ts:55: [startsWith("dev-")] if (token.startsWith("dev-")) {
+./web/src/lib/auth/session.ts:63: [dev-user] id: "dev-user",
+./web/src/lib/auth/session.ts:64: [dev@aegis.corp] email: "dev@aegis.corp",
+./web/tests/unit/integration/auth-permissions.test.ts:63: [dev-user] expect(session?.user.id).toBe("dev-user");

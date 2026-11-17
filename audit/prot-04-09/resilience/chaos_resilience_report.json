@@ -1,0 +1,68 @@
+{
+  "timestamp": "2026-11-15T04:28:04.083452+00:00",
+  "scenarios": {
+    "RES-INT-001": "PASSED",
+    "RES-INT-002": "PASSED",
+    "RES-INT-003": "PASSED",
+    "RES-INT-004": "PASSED",
+    "RES-INT-005": "PASSED",
+    "RES-INT-006": "PASSED",
+    "RES-INT-007": "PASSED",
+    "RES-INT-008": "PASSED",
+    "RES-INT-009": "PASSED",
+    "RES-INT-010": "PASSED"
+  },
+  "failure_modes_tested": [
+    {
+      "mode": "Database Disconnection",
+      "behavior": "Fail-Closed (Deny access)",
+      "status": "VERIFIED"
+    },
+    {
+      "mode": "License Authority Offline",
+      "behavior": "Fail-Closed (Deny issuance)",
+      "status": "VERIFIED"
+    },
+    {
+      "mode": "Quota Authority Offline",
+      "behavior": "Fail-Closed on metered operations",
+      "status": "VERIFIED"
+    },
+    {
+      "mode": "Audit Pipeline Failure",
+      "behavior": "Local memory ring-buffer queueing",
+      "status": "VERIFIED"
+    },
+    {
+      "mode": "Private Engine Failure",
+      "behavior": "Generic error (Zero internal stack leaks)",
+      "status": "VERIFIED"
+    },
+    {
+      "mode": "Worker Crash During Ingestion",
+      "behavior": "Atomic rollback (Zero duplicate charges)",
+      "status": "VERIFIED"
+    },
+    {
+      "mode": "Gateway Restart During Refresh",
+      "behavior": "Lockdown (Zero family branching)",
+      "status": "VERIFIED"
+    },
+    {
+      "mode": "Revocation Propagation Lag",
+      "behavior": "Bounded SLA (< 50ms) with local cache eviction",
+      "status": "VERIFIED"
+    },
+    {
+      "mode": "Duplicate Audit Event Delivery",
+      "behavior": "Idempotent deduplication via UUID",
+      "status": "VERIFIED"
+    },
+    {
+      "mode": "Prior Database Snapshot Restore",
+      "behavior": "Authoritative reconciliation (No revoked resurrection)",
+      "status": "VERIFIED"
+    }
+  ],
+  "verdict": "PASSED - 100% Fail-Closed Resilience"
+}

@@ -1,0 +1,28 @@
+============================= test session starts =============================
+platform win32 -- Python 3.12.10, pytest-9.1.1, pluggy-1.6.0 -- C:\Users\ASUS\AppData\Local\Programs\Python\Python312\python.exe
+cachedir: .pytest_cache
+hypothesis profile 'default'
+rootdir: C:\Users\ASUS\.gemini\antigravity\worktrees\Aegis-DocIntel\product_hunt_launch_packaging
+configfile: pyproject.toml
+plugins: anyio-4.12.1, hypothesis-6.156.6, langsmith-0.14.4, asyncio-1.4.0, cov-7.1.0
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collecting ... collected 60 items / 45 deselected / 15 selected
+
+tests/security/evaluation/test_quota_enforcement_protocol.py::TestReservationAndSettlementProtocol::test_res_001_valid_reservation_created PASSED [  6%]
+tests/security/evaluation/test_quota_enforcement_protocol.py::TestReservationAndSettlementProtocol::test_res_002_reservation_above_available_rejected PASSED [ 13%]
+tests/security/evaluation/test_quota_enforcement_protocol.py::TestReservationAndSettlementProtocol::test_res_003_duplicate_idempotency_key_no_double_reservation PASSED [ 20%]
+tests/security/evaluation/test_quota_enforcement_protocol.py::TestReservationAndSettlementProtocol::test_res_004_multi_dimensional_reservation_atomic PASSED [ 26%]
+tests/security/evaluation/test_quota_enforcement_protocol.py::TestReservationAndSettlementProtocol::test_res_005_partial_reservation_failure_rolls_back_all PASSED [ 33%]
+tests/security/evaluation/test_quota_enforcement_protocol.py::TestReservationAndSettlementProtocol::test_res_006_successful_settlement_commits_usage PASSED [ 40%]
+tests/security/evaluation/test_quota_enforcement_protocol.py::TestReservationAndSettlementProtocol::test_res_007_partial_operation_failure_settles_actual PASSED [ 46%]
+tests/security/evaluation/test_quota_enforcement_protocol.py::TestReservationAndSettlementProtocol::test_res_008_unused_capacity_safely_released PASSED [ 53%]
+tests/security/evaluation/test_quota_enforcement_protocol.py::TestReservationAndSettlementProtocol::test_res_009_repeated_settlement_no_double_charging PASSED [ 60%]
+tests/security/evaluation/test_quota_enforcement_protocol.py::TestReservationAndSettlementProtocol::test_res_010_settlement_after_release_rejected PASSED [ 66%]
+tests/security/evaluation/test_quota_enforcement_protocol.py::TestReservationAndSettlementProtocol::test_res_011_expired_reservation_recovered_safely PASSED [ 73%]
+tests/security/evaluation/test_quota_enforcement_protocol.py::TestReservationAndSettlementProtocol::test_res_012_worker_crash_recovered_by_reconciliation PASSED [ 80%]
+tests/security/evaluation/test_quota_enforcement_protocol.py::TestReservationAndSettlementProtocol::test_res_013_cancelled_job_releases_reservation PASSED [ 86%]
+tests/security/evaluation/test_quota_enforcement_protocol.py::TestReservationAndSettlementProtocol::test_res_014_retry_with_same_operation_id_no_duplicate_usage PASSED [ 93%]
+tests/security/evaluation/test_quota_enforcement_protocol.py::TestReservationAndSettlementProtocol::test_res_015_unknown_provider_usage_conservative_fallback PASSED [100%]
+
+====================== 15 passed, 45 deselected in 2.75s ======================
+

@@ -1,0 +1,42 @@
+# AEGIS-DocIntel — Protected Downloadable Demo Edition
+# Compose Deployment Specification
+# Version: 1.1.0
+
+services:
+  web:
+    image: ghcr.io/sahilkhutey/aegis-docintel-demo-web:v1.1.0
+    container_name: aegis-demo-web
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - NEXT_PUBLIC_DEMO_MODE=true
+      - NEXT_PUBLIC_API_URL=/api
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:3000/api/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
+    networks:
+      - aegis-demo-net
+
+  proxy:
+    image: nginx:alpine
+    container_name: aegis-demo-proxy
+    restart: unless-stopped
+    ports:
+      - "3000:80"
+    volumes:
+      - ./nginx-demo-proxy.conf:/etc/nginx/nginx.conf:ro
+    environment:
+      - AEGIS_GATEWAY_URL=${AEGIS_GATEWAY_URL:-https://gateway.aegis-docintel.io}
+    depends_on:
+      web:
+        condition: service_healthy
+    networks:
+      - aegis-demo-net
+
+networks:
+  aegis-demo-net:
+    driver: bridge

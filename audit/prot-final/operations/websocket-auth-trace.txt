@@ -1,0 +1,20 @@
+AUDIT LOG: test_websocket_security.py
+Executed at: 2026-11-15T04:53:17.186722+00:00
+
+============================= test session starts =============================
+platform win32 -- Python 3.12.10, pytest-9.1.1, pluggy-1.6.0 -- C:\Users\ASUS\AppData\Local\Programs\Python\Python312\python.exe
+cachedir: .pytest_cache
+hypothesis profile 'default'
+rootdir: C:\Users\ASUS\.gemini\antigravity\worktrees\Aegis-DocIntel\product_hunt_launch_packaging
+configfile: pyproject.toml
+plugins: anyio-4.12.1, hypothesis-6.156.6, langsmith-0.14.4, asyncio-1.4.0, cov-7.1.0
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collecting ... collected 4 items
+
+tests/security/consolidated/test_websocket_security.py::test_ws_001_ticket_issuance_requires_authenticated_session PASSED [ 25%]
+tests/security/consolidated/test_websocket_security.py::test_ws_002_ticket_is_single_use PASSED [ 50%]
+tests/security/consolidated/test_websocket_security.py::test_ws_003_unauthenticated_ticket_request_denied PASSED [ 75%]
+tests/security/consolidated/test_websocket_security.py::test_ws_004_revocation_terminates_active_websocket_authorization PASSED [100%]
+
+============================== 4 passed in 0.44s ==============================
+

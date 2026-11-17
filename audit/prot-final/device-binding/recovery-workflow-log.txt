@@ -1,0 +1,9 @@
+EMERGENCY DEVICE RECOVERY & UNBINDING AUDIT (SEC-010)
+====================================================
+1. Active device binding established with hardware fingerprint & public key.
+2. Emergency recovery code generated: REC-****-**** (SHA-256 hashed on server).
+3. Second device activation attempted without recovery -> HTTP 409 DEVICE_LIMIT_EXCEEDED (PASS)
+4. POST /v1/evaluation/device/recover with valid recovery code -> HTTP 200 SUCCESS (PASS)
+5. Bound device slot cleared; active session revoked (PASS)
+6. New device successfully binds to vacated evaluation license (PASS)
+Status: PASS

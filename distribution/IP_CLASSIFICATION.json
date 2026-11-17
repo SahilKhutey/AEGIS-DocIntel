@@ -1,0 +1,159 @@
+{
+  "schema_version": "1.0.0",
+  "project": "AEGIS-DocIntel",
+  "version": "1.1.0",
+  "classification_date": "2026-11-12",
+  "distribution_edition": "Protected Downloadable Demo Edition",
+  "summary": {
+    "total_classified_components": 18,
+    "distributable_components": 6,
+    "restricted_components": 3,
+    "private_components": 6,
+    "third_party_components": 3
+  },
+  "tiers": {
+    "DISTRIBUTABLE": {
+      "definition": "Freely packaged and shipped to end users in the downloadable evaluation bundle. Contains no trade secrets or proprietary algorithmic source code.",
+      "components": [
+        {
+          "name": "aegis-docprep",
+          "path": "aegis-docprep/",
+          "license": "Apache-2.0",
+          "nature": "Open-source standalone document preparation library",
+          "shipped_format": "Source and Wheel / Pip package"
+        },
+        {
+          "name": "web-frontend-compiled",
+          "path": "web/",
+          "license": "AEGIS Evaluation License",
+          "nature": "Next.js 16 standalone production build, strictly stripped of .map source maps",
+          "shipped_format": "Compiled container / Standalone Node.js server bundle"
+        },
+        {
+          "name": "synthetic-demo-corpus",
+          "path": "demo/seed/",
+          "license": "CC-BY-4.0 / AEGIS Evaluation License",
+          "nature": "100% synthetic hardware specifications and security whitepapers with ground-truth QA maps",
+          "shipped_format": "Markdown & JSON files in demo-data/"
+        },
+        {
+          "name": "demo-launchers-and-scripts",
+          "path": "distribution/demo-edition/launcher/",
+          "license": "Apache-2.0",
+          "nature": "PowerShell and Bash orchestration scripts (start, stop, status, verify, reset)",
+          "shipped_format": "Plain text scripts (.ps1, .sh)"
+        },
+        {
+          "name": "evaluation-public-key",
+          "path": "distribution/demo-edition/license/public-key.pem",
+          "license": "Public Domain",
+          "nature": "Ed25519 public key for local verification of signed evaluation licenses",
+          "shipped_format": "PEM encoded public key"
+        },
+        {
+          "name": "evaluation-documentation",
+          "path": "docs/distribution/",
+          "license": "CC-BY-ND-4.0",
+          "nature": "Getting started, architecture overview, security advisory, and evaluation agreements",
+          "shipped_format": "Markdown documents"
+        }
+      ]
+    },
+    "RESTRICTED": {
+      "definition": "Packaged with restrictions or interfaces that mediator access between the user's local instance and the central evaluation gateway. Protected by rate limits and device tokens.",
+      "components": [
+        {
+          "name": "local-reverse-proxy",
+          "path": "distribution/demo-edition/deploy/nginx-demo-proxy.conf",
+          "license": "AEGIS Evaluation License",
+          "nature": "Nginx configuration routing frontend requests to the Evaluation Gateway with header injection",
+          "shipped_format": "Conf file in demo package"
+        },
+        {
+          "name": "evaluation-client-sdk",
+          "path": "services/evaluation_gateway/client/",
+          "license": "AEGIS Evaluation License",
+          "nature": "Lightweight client for signing requests, validating local license, and reporting heartbeat",
+          "shipped_format": "Embedded in demo proxy / local runner"
+        },
+        {
+          "name": "demo-manifest-and-contracts",
+          "path": "distribution/demo-edition/package-manifest.json",
+          "license": "AEGIS Evaluation License",
+          "nature": "Package integrity manifest with SHA-256 digests and version tags",
+          "shipped_format": "JSON manifest"
+        }
+      ]
+    },
+    "PRIVATE": {
+      "definition": "PROPRIETARY AND CONFIDENTIAL. Core intellectual property, mathematical algorithms, optimization models, and server infrastructure. NEVER included in downloadable packages.",
+      "components": [
+        {
+          "name": "submodular-context-optimizer",
+          "path": "src/engines/context/",
+          "license": "Proprietary / Closed Source",
+          "nature": "Submodular knapsack context selection, diversity budgeting, and token-entropy packing",
+          "protection_mechanism": "Hosted exclusively on private infrastructure behind Evaluation Gateway"
+        },
+        {
+          "name": "sheaf-topology-engine",
+          "path": "src/engines/topology/",
+          "license": "Proprietary / Closed Source",
+          "nature": "Sheaf Laplacian spectral decomposition, multi-document topological consistency graphs",
+          "protection_mechanism": "Hosted exclusively on private infrastructure behind Evaluation Gateway"
+        },
+        {
+          "name": "governance-contradiction-engine",
+          "path": "src/engines/governance/",
+          "license": "Proprietary / Closed Source",
+          "nature": "Abstract interpretation, invariant propagation, and deliberate contradiction detection",
+          "protection_mechanism": "Hosted exclusively on private infrastructure behind Evaluation Gateway"
+        },
+        {
+          "name": "memory-hypergraph-orchestrator",
+          "path": "src/memory_engine/",
+          "license": "Proprietary / Closed Source",
+          "nature": "Hierarchical document memory hypergraph, persistent indexing, and causal tracing",
+          "protection_mechanism": "Hosted exclusively on private infrastructure behind Evaluation Gateway"
+        },
+        {
+          "name": "gateway-root-private-key",
+          "path": "services/evaluation_gateway/keys/private-key.pem",
+          "license": "Proprietary / Restricted",
+          "nature": "Ed25519 root private key used to sign evaluation licenses and issue device tokens",
+          "protection_mechanism": "KMS / HSM / Secure server-side vault only"
+        },
+        {
+          "name": "provider-credentials-and-internal-apis",
+          "path": ".env.production",
+          "license": "Proprietary / Secret",
+          "nature": "LLM API keys (OpenAI, Anthropic, Gemini), DB connection strings, admin routes",
+          "protection_mechanism": "Strict exclusion via .dockerignore, .gitignore, and build stripping"
+        }
+      ]
+    },
+    "THIRD_PARTY": {
+      "definition": "External libraries and components with distinct licensing obligations that must be respected.",
+      "components": [
+        {
+          "name": "PyMuPDF / fitz",
+          "license": "AGPL-3.0 / Commercial",
+          "usage": "Document parsing and PDF rendering",
+          "compliance_strategy": "Isolated in standalone aegis-docprep or invoked via clean CLI subprocess boundary"
+        },
+        {
+          "name": "Next.js / React / TailwindCSS",
+          "license": "MIT",
+          "usage": "Web frontend presentation layer",
+          "compliance_strategy": "License notice included in THIRD-PARTY-NOTICES.md"
+        },
+        {
+          "name": "FastAPI / Uvicorn / Pydantic / Cryptography",
+          "license": "BSD / Apache-2.0 / MIT",
+          "usage": "Gateway and API microservices",
+          "compliance_strategy": "Standard attribution included in release manifests"
+        }
+      ]
+    }
+  }
+}

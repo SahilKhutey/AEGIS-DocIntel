@@ -1,0 +1,15 @@
+{
+  "keys": [
+    {
+      "key_id": "aegis-license-ed25519-2026-01",
+      "status": "COMPROMISED",
+      "metadata_status": "compromised"
+    },
+    {
+      "key_id": "aegis-license-ed25519-rot-001",
+      "status": "ACTIVE_SIGNING",
+      "metadata_status": "active"
+    }
+  ],
+  "active_signing_key": "aegis-license-ed25519-rot-001"
+}

@@ -35,6 +35,52 @@ ALLOWED_ROLES: frozenset[str] = STANDARD_ROLES
 _SHA256_HEX = re.compile(r"^[0-9a-f]{64}$")
 
 
+def validate_token_roles(payload: dict) -> frozenset[str]:
+    """
+    Validates token role claims against ALLOWED_ROLES catalogue (REM-01).
+    Rejects malformed, unsupported, or contradictory role claims.
+    """
+    role = payload.get("role")
+    if role is None:
+        role = "viewer"
+    if not isinstance(role, str) or role not in ALLOWED_ROLES:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail=f"Unsupported role in token: {role}",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+
+    raw_roles = payload.get("roles")
+    if raw_roles is None:
+        roles = {role}
+    else:
+        if not isinstance(raw_roles, (list, set, tuple)) or not raw_roles:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Invalid roles claim format",
+                headers={"WWW-Authenticate": "Bearer"},
+            )
+        if not all(isinstance(r, str) and r in ALLOWED_ROLES for r in raw_roles):
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Unsupported role in roles array",
+                headers={"WWW-Authenticate": "Bearer"},
+            )
+        roles = set(raw_roles)
+
+    if role not in roles:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail=f"Primary role '{role}' contradicts roles array",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+
+    if role == "admin" and "tenant_admin" in ALLOWED_ROLES:
+        roles.add("tenant_admin")
+
+    return frozenset(roles)
+
+
 async def get_current_tenant(
     request: Request = None,
     bearer: Optional[HTTPAuthorizationCredentials] = Depends(BEARER),
@@ -47,6 +93,12 @@ async def get_current_tenant(
     if request is not None:
         cached = getattr(request.state, "tenant_context", None)
         if isinstance(cached, TenantContext):
+            client_tid = (request.headers.get("x-tenant-id") or request.headers.get("X-Tenant-ID") or "").strip()
+            if client_tid and client_tid != cached.tenant_id:
+                raise HTTPException(
+                    status_code=status.HTTP_403_FORBIDDEN,
+                    detail="Tenant header manipulation rejected",
+                )
             return cached
 
     context: TenantContext
@@ -55,13 +107,32 @@ async def get_current_tenant(
     elif api_key:
         context = _validate_api_key(api_key)
     else:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Missing authentication. Provide Bearer token or X-API-Key header.",
-            headers={"WWW-Authenticate": "Bearer"},
-        )
+        env = os.environ.get("AEGIS_ENVIRONMENT", "production").lower()
+        demo_mode = os.environ.get("AEGIS_DEMO_MODE", "false").lower() in ("true", "1", "yes")
+        allow_anon = os.environ.get("AEGIS_DEMO_ALLOW_ANONYMOUS", "false").lower() in ("true", "1", "yes")
+        if (demo_mode or env == "demo") and allow_anon:
+            context = TenantContext(
+                tenant_id="demo-tenant",
+                principal_id="demo-anonymous-visitor",
+                roles=frozenset({"viewer", "editor"}),
+                authentication_method="demo_anonymous",
+                monthly_token_limit=50_000,
+            )
+        else:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Missing authentication. Provide Bearer token or X-API-Key header.",
+                headers={"WWW-Authenticate": "Bearer"},
+            )
 
     if request is not None:
+        # SEC-006 / AUTH-REM-006: Prevent tenant header manipulation attacks
+        client_tid = (request.headers.get("x-tenant-id") or request.headers.get("X-Tenant-ID") or "").strip()
+        if client_tid and client_tid != context.tenant_id:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="Tenant header manipulation rejected",
+            )
         request.state.tenant_context = context
     return context
 
@@ -83,7 +154,35 @@ def _validate_jwt(token: str) -> TenantContext:
     from src.observability.audit_logger import audit_logger
 
     env = os.environ.get("AEGIS_ENVIRONMENT", "production").lower()
-    if env == "development" and token.startswith("dev-"):
+    demo_mode = os.environ.get("AEGIS_DEMO_MODE", "false").lower() in ("true", "1", "yes")
+
+    if (demo_mode or env == "demo") and (
+        token == os.environ.get("AEGIS_DEMO_TOKEN", "aegis-demo-token-sandbox")
+        or token == "demo-token"
+        or token.startswith("demo-")
+    ):
+        audit_logger.log(
+            action="auth.demo_jwt_success",
+            tenant_id="demo-tenant",
+            user_id="demo-visitor",
+            status="SUCCESS",
+            detail={"role": "editor"},
+        )
+        return TenantContext(
+            tenant_id="demo-tenant",
+            principal_id="demo-visitor",
+            roles=frozenset({"viewer", "editor"}),
+            authentication_method="demo_bearer",
+            monthly_token_limit=50_000,
+        )
+
+    if token.startswith("dev-"):
+        if env != "development":
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Development tokens are strictly rejected in production",
+                headers={"WWW-Authenticate": "Bearer"},
+            )
         tenant_id = token[4:] or "default-tenant"
         return TenantContext(
             tenant_id=tenant_id,
@@ -143,6 +242,24 @@ def _validate_jwt(token: str) -> TenantContext:
     if jwt_audience:
         decode_options["require"].append("aud")
 
+    is_strict = (
+        os.environ.get("AEGIS_EVALUATION_MODE", "").lower() in ("true", "1", "yes") or
+        os.environ.get("AEGIS_STRICT_JWT_VALIDATION", "").lower() in ("true", "1", "yes")
+    )
+    if is_strict:
+        if not jwt_issuer:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Evaluation production requires AEGIS_JWT_ISSUER",
+                headers={"WWW-Authenticate": "Bearer"},
+            )
+        if not jwt_audience:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Evaluation production requires AEGIS_JWT_AUDIENCE",
+                headers={"WWW-Authenticate": "Bearer"},
+            )
+
     decode_kwargs = {
         "algorithms": ["RS256"],
         "options": decode_options,
@@ -182,12 +299,20 @@ def _validate_jwt(token: str) -> TenantContext:
         )
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail=f"Invalid token: {e}",
+            detail="Invalid authentication credentials",
             headers={"WWW-Authenticate": 'Bearer error="invalid_token"'},
         )
 
-    tenant_id = payload.get("tenant_id") or payload.get("tid")
-    if not tenant_id:
+    raw_tid = payload.get("tenant_id")
+    raw_tid_alt = payload.get("tid")
+    if raw_tid and raw_tid_alt and str(raw_tid) != str(raw_tid_alt):
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Conflicting tenant_id and tid claims in token",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    tenant_id = raw_tid or raw_tid_alt
+    if not tenant_id or not isinstance(tenant_id, str) or not str(tenant_id).strip() or len(str(tenant_id)) > 256:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Token missing tenant_id claim",
@@ -195,7 +320,7 @@ def _validate_jwt(token: str) -> TenantContext:
         )
 
     user_id = payload.get("sub") or payload.get("user_id")
-    if not user_id:
+    if not user_id or not isinstance(user_id, str) or not str(user_id).strip() or len(str(user_id)) > 256:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Token missing sub (user identity) claim",
@@ -203,12 +328,7 @@ def _validate_jwt(token: str) -> TenantContext:
         )
 
     role = payload.get("role") or "viewer"
-    if role not in ALLOWED_ROLES:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail=f"Unsupported role in token: {role}",
-            headers={"WWW-Authenticate": "Bearer"},
-        )
+    roles = validate_token_roles(payload)
 
     audit_logger.log(
         action="auth.jwt_success",
@@ -217,10 +337,6 @@ def _validate_jwt(token: str) -> TenantContext:
         status="SUCCESS",
         detail={"role": role},
     )
-
-    roles = frozenset({"admin", "tenant_admin"}) if role == "admin" else frozenset({role})
-    if "roles" in payload and isinstance(payload["roles"], (list, set, tuple)):
-        roles = frozenset(payload["roles"])
 
     return TenantContext(
         tenant_id=str(tenant_id),
@@ -246,7 +362,34 @@ def _validate_api_key(api_key: str) -> TenantContext:
         )
 
     env = os.environ.get("AEGIS_ENVIRONMENT", "production").lower()
-    if env == "development" and api_key == "aegis-dev-key":
+    demo_mode = os.environ.get("AEGIS_DEMO_MODE", "false").lower() in ("true", "1", "yes")
+
+    if (demo_mode or env == "demo") and (
+        api_key == os.environ.get("AEGIS_DEMO_API_KEY", "aegis-demo-public-key")
+        or api_key == "demo-key"
+    ):
+        audit_logger.log(
+            action="auth.demo_api_key_success",
+            tenant_id="demo-tenant",
+            user_id="demo-visitor",
+            status="SUCCESS",
+            detail={"role": "editor"},
+        )
+        return TenantContext(
+            tenant_id="demo-tenant",
+            principal_id="demo-visitor",
+            roles=frozenset({"viewer", "editor"}),
+            authentication_method="demo_key",
+            monthly_token_limit=50_000,
+        )
+
+    if api_key == "aegis-dev-key":
+        if env != "development":
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Development API keys are strictly rejected in production",
+                headers={"WWW-Authenticate": "ApiKey"},
+            )
         return TenantContext(
             tenant_id="default-tenant",
             principal_id="api-user",
@@ -408,3 +551,30 @@ async def get_current_tenant_ws(
 
     await _safe_close()
     raise HTTPException(status_code=401, detail="WebSocket authentication required")
+
+
+def validate_production_auth_config(strict_evaluation: bool = False) -> None:
+    """
+    Validates that production authentication configuration is complete and fail-closed.
+    Raises RuntimeError at application startup if mandatory security parameters are missing.
+    """
+    env = os.environ.get("AEGIS_ENVIRONMENT", "production").lower()
+    if env not in ("production", "prod", "evaluation"):
+        return
+
+    public_key = os.environ.get("AEGIS_JWT_PUBLIC_KEY")
+    key_path = os.environ.get("AEGIS_JWT_PUBLIC_KEY_PATH")
+    if not public_key and (not key_path or not os.path.isfile(key_path)):
+        raise RuntimeError("Production auth misconfiguration: AEGIS_JWT_PUBLIC_KEY or AEGIS_JWT_PUBLIC_KEY_PATH is required.")
+
+    is_strict = (
+        strict_evaluation
+        or os.environ.get("AEGIS_EVALUATION_MODE", "").lower() in ("true", "1", "yes")
+        or os.environ.get("AEGIS_STRICT_JWT_VALIDATION", "").lower() in ("true", "1", "yes")
+    )
+    if is_strict:
+        if not os.environ.get("AEGIS_JWT_ISSUER"):
+            raise RuntimeError("Production auth misconfiguration: AEGIS_JWT_ISSUER is required in evaluation production.")
+        if not os.environ.get("AEGIS_JWT_AUDIENCE"):
+            raise RuntimeError("Production auth misconfiguration: AEGIS_JWT_AUDIENCE is required in evaluation production.")
+

@@ -1,0 +1,12 @@
+{
+  "backup_id": "bk-2026-03-01",
+  "restored_successfully": true,
+  "reconciliation_report": {
+    "backup_id": "bk-2026-03-01",
+    "restored_at": "2026-11-15T03:26:06.920355+00:00",
+    "restored_sessions_count": 0,
+    "resurrection_prevented_count": 0,
+    "reconciled_sessions": []
+  },
+  "non_resurrection_guarantee": "Revoked entities in authoritative set remain permanently revoked after restore."
+}

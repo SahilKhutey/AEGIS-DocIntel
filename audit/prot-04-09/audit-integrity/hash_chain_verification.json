@@ -1,0 +1,8 @@
+{
+  "timestamp": "2026-11-15T04:28:04.094451+00:00",
+  "hash_chain_valid": true,
+  "verified_events_count": 1,
+  "error": "CHAIN_VALID",
+  "tamper_detection_algorithm": "SHA-256 Chained Hash Sequence: H_i = SHA256(H_{i-1} || Canonical(E_i))",
+  "immutability_guarantee": "Strictly Append-Only. Updates and Deletes raise SecurityIntegrityError."
+}

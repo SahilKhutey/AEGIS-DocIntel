@@ -1,0 +1,104 @@
+{
+  "evaluation_features": [
+    "dashboard.view",
+    "device.manage",
+    "document.compare",
+    "document.export",
+    "document.metadata",
+    "document.parse",
+    "document.preview",
+    "document.query",
+    "document.upload",
+    "license.view",
+    "usage.view",
+    "workspace.manage"
+  ],
+  "admin_features": [
+    "admin.issue_license",
+    "admin.manage_users",
+    "admin.revoke_license",
+    "engine.admin",
+    "internal.debug"
+  ],
+  "evaluation_permissions": [
+    "device.deactivate",
+    "document.compare",
+    "document.delete",
+    "document.export",
+    "document.parse",
+    "document.query",
+    "document.read",
+    "document.upload",
+    "license.read",
+    "usage.read",
+    "workspace.read",
+    "workspace.update"
+  ],
+  "admin_permissions": [
+    "admin.engine.manage",
+    "admin.evaluation.inspect",
+    "admin.evaluation.issue",
+    "admin.evaluation.revoke",
+    "admin.evaluation.suspend",
+    "admin.users.manage"
+  ],
+  "feature_required_permissions": {
+    "dashboard.view": [
+      "license.read",
+      "usage.read"
+    ],
+    "document.upload": [
+      "document.upload"
+    ],
+    "document.preview": [
+      "document.read"
+    ],
+    "document.metadata": [
+      "document.read"
+    ],
+    "document.parse": [
+      "document.parse",
+      "document.read"
+    ],
+    "document.query": [
+      "document.query",
+      "document.read"
+    ],
+    "document.compare": [
+      "document.compare",
+      "document.read"
+    ],
+    "document.export": [
+      "document.export",
+      "document.read"
+    ],
+    "workspace.manage": [
+      "workspace.read",
+      "workspace.update"
+    ],
+    "usage.view": [
+      "usage.read"
+    ],
+    "license.view": [
+      "license.read"
+    ],
+    "device.manage": [
+      "device.deactivate"
+    ],
+    "admin.manage_users": [
+      "admin.users.manage"
+    ],
+    "admin.issue_license": [
+      "admin.evaluation.issue"
+    ],
+    "admin.revoke_license": [
+      "admin.evaluation.revoke"
+    ],
+    "engine.admin": [
+      "admin.engine.manage"
+    ],
+    "internal.debug": [
+      "admin.engine.manage"
+    ]
+  }
+}

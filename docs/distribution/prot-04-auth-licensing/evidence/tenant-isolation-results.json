@@ -1,0 +1,22 @@
+{
+  "suite": "PROT-04 Tenant & Evaluation Isolation",
+  "timestamp": "2026-11-13T04:09:00.745365+00:00",
+  "passed": 2,
+  "failed": 0,
+  "tests": [
+    {
+      "id": "TENANT-001",
+      "name": "Cross-tenant document access (IDOR probe)",
+      "status": "PASSED",
+      "expected": "404 Not Found",
+      "actual": 404
+    },
+    {
+      "id": "TENANT-002",
+      "name": "Forged tenant and workspace headers",
+      "status": "PASSED",
+      "expected": "Zero isolation breach",
+      "actual": "PASSED"
+    }
+  ]
+}

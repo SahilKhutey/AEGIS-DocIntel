@@ -14,4 +14,5 @@ evaluation/** text eol=lf
 configs/evaluation/** text eol=lf
 release/final-verification/** text eol=lf
 release/** text eol=lf
+distribution/** text eol=lf
 openapi.json text eol=lf

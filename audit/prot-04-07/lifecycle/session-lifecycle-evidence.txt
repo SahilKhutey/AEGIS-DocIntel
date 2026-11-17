@@ -1,0 +1,28 @@
+AEGIS-DocIntel Session Lifecycle & Expiration Verification
+================================================================
+Timestamp: 2026-11-14T06:03:10.006274+00:00
+Protocol Scenarios: SESSION-001 through SESSION-012
+
+1. Session Creation (SESSION-001, SESSION-002):
+   - Direct activation produces valid EvaluationSession in status ACTIVE.
+   - Device challenge activation strictly binds session to registered hardware device.
+   - Access token prefix: aegis_eval_at_
+   - Refresh token prefix: aegis_eval_rt_
+
+2. TTL and Timeout Enforcement (SESSION-003, SESSION-009, SESSION-010, SESSION-011):
+   - Access Token TTL: 600 seconds (10 minutes)
+   - Sliding Idle Timeout: 1800 seconds (30 minutes)
+   - Absolute Maximum Session Limit: 604,800 seconds (7 days)
+   - Verified that active requests slide idle_expires_at forward without exceeding absolute limit.
+   - Verified that idle-expired and absolute-expired sessions fail validation immediately.
+
+3. Zero Plaintext Secrets at Rest (SESSION-004):
+   - Confirmed that RefreshTokenRepository stores exclusively SHA-256 digests.
+   - Plaintext entropy is returned to client over TLS and immediately discarded by server.
+
+4. Tenant Isolation Binding (SESSION-005):
+   - Verified session.tenant_id strictly matches tenant-{license_id}.
+
+5. Audit Telemetry (SESSION-006):
+   - Verified session.created and session.validated audit records recorded in immutable log.
+================================================================

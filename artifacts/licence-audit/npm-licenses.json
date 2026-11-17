@@ -1,5 +1,13 @@
 [
   {
+    "package_name": "lucide-react",
+    "version": "^1.70.0",
+    "license_declared": "MIT",
+    "classification": "PERMISSIVE",
+    "ecosystem": "npm",
+    "compliance_status": "APPROVED"
+  },
+  {
     "package_name": "next",
     "version": "16.4.3",
     "license_declared": "MIT",
@@ -32,9 +40,25 @@
     "compliance_status": "APPROVED"
   },
   {
+    "package_name": "@axe-core/playwright",
+    "version": "^4.14.0",
+    "license_declared": "MIT",
+    "classification": "PERMISSIVE",
+    "ecosystem": "npm",
+    "compliance_status": "APPROVED"
+  },
+  {
     "package_name": "@playwright/test",
     "version": "^1.64.1",
     "license_declared": "Apache-2.0",
+    "classification": "PERMISSIVE",
+    "ecosystem": "npm",
+    "compliance_status": "APPROVED"
+  },
+  {
+    "package_name": "@tailwindcss/postcss",
+    "version": "^4.3.5",
+    "license_declared": "MIT",
     "classification": "PERMISSIVE",
     "ecosystem": "npm",
     "compliance_status": "APPROVED"

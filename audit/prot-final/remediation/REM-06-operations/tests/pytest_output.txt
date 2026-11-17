@@ -1,0 +1,24 @@
+============================= test session starts =============================
+platform win32 -- Python 3.12.10, pytest-9.1.1, pluggy-1.6.0 -- C:\Users\ASUS\AppData\Local\Programs\Python\Python312\python.exe
+cachedir: .pytest_cache
+hypothesis profile 'default'
+rootdir: C:\Users\ASUS\.gemini\antigravity\worktrees\Aegis-DocIntel\product_hunt_launch_packaging
+configfile: pyproject.toml
+plugins: anyio-4.12.1, hypothesis-6.156.6, langsmith-0.14.4, asyncio-1.4.0, cov-7.1.0
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collecting ... collected 12 items
+
+tests/security/evaluation/test_rem_06_operations.py::test_ops_rem_001_event_taxonomy_validation PASSED [  8%]
+tests/security/evaluation/test_rem_06_operations.py::test_ops_rem_002_structured_event_emission PASSED [ 16%]
+tests/security/evaluation/test_rem_06_operations.py::test_ops_rem_003_sensitive_credential_redaction PASSED [ 25%]
+tests/security/evaluation/test_rem_06_operations.py::test_ops_rem_004_activation_code_redaction PASSED [ 33%]
+tests/security/evaluation/test_rem_06_operations.py::test_ops_rem_005_private_key_scrubbing PASSED [ 41%]
+tests/security/evaluation/test_rem_06_operations.py::test_ops_rem_006_hash_chain_integrity PASSED [ 50%]
+tests/security/evaluation/test_rem_06_operations.py::test_ops_rem_007_tamper_detection PASSED [ 58%]
+tests/security/evaluation/test_rem_06_operations.py::test_ops_rem_008_checkpoint_anchoring PASSED [ 66%]
+tests/security/evaluation/test_rem_06_operations.py::test_ops_rem_009_alert_evaluation_on_failed_activations PASSED [ 75%]
+tests/security/evaluation/test_rem_06_operations.py::test_ops_rem_010_api_key_rotation PASSED [ 83%]
+tests/security/evaluation/test_rem_06_operations.py::test_ops_rem_011_signing_key_retirement PASSED [ 91%]
+tests/security/evaluation/test_rem_06_operations.py::test_ops_rem_012_dr_non_resurrection PASSED [100%]
+
+============================= 12 passed in 0.42s ==============================

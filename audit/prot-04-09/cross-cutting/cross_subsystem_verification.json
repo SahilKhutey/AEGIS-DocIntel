@@ -1,0 +1,28 @@
+{
+  "timestamp": "2026-11-15T04:28:03.982761+00:00",
+  "scenarios": {
+    "CROSS-001": "PASSED",
+    "CROSS-002": "PASSED",
+    "CROSS-003": "PASSED",
+    "CROSS-004": "PASSED",
+    "CROSS-005": "PASSED",
+    "CROSS-006": "PASSED",
+    "CROSS-007": "PASSED",
+    "CROSS-008": "PASSED",
+    "CROSS-009": "PASSED",
+    "CROSS-010": "PASSED",
+    "CROSS-011": "PASSED",
+    "CROSS-012": "PASSED",
+    "CROSS-013": "PASSED",
+    "CROSS-014": "PASSED",
+    "CROSS-015": "PASSED"
+  },
+  "core_invariants": {
+    "TENANT_ISOLATION": "Verified: Evaluator A cannot inspect or query Evaluator B documents (IDOR safe)",
+    "ROLE_INTEGRITY": "Verified: Evaluator modifying JWT role claim to admin rejected with HTTP 403",
+    "REVOCATION_CASCADING": "Verified: License revocation instantly cascades to session, quota, and engine execution",
+    "FAIL_CLOSED_DEFAULT": "Verified: Security authority failures result in immediate fail-closed denial",
+    "SECRETS_EXCLUSION": "Verified: Zero private signing keys or LLM provider tokens exist in client files"
+  },
+  "verdict": "PASSED"
+}

@@ -1,0 +1,43 @@
+{
+  "suite": "PROT-04 Entitlement Enforcement",
+  "timestamp": "2026-11-13T04:09:00.745365+00:00",
+  "passed": 5,
+  "failed": 0,
+  "tests": [
+    {
+      "id": "ENT-001",
+      "name": "Allowed document read",
+      "status": "PASSED",
+      "expected": "200 OK",
+      "actual": 200
+    },
+    {
+      "id": "ENT-002",
+      "name": "Disallowed user management",
+      "status": "PASSED",
+      "expected": "403 FEATURE_NOT_ENTITLED",
+      "actual": 403
+    },
+    {
+      "id": "ENT-003",
+      "name": "Disallowed platform admin",
+      "status": "PASSED",
+      "expected": "403 FEATURE_NOT_ENTITLED",
+      "actual": 403
+    },
+    {
+      "id": "ENT-004",
+      "name": "Client header role spoofing",
+      "status": "PASSED",
+      "expected": "403 Forbidden (No escalation)",
+      "actual": 403
+    },
+    {
+      "id": "ENT-005",
+      "name": "Client entitlement modification",
+      "status": "PASSED",
+      "expected": "403 Forbidden (No escalation)",
+      "actual": 403
+    }
+  ]
+}

@@ -1,0 +1,5 @@
+[
+  "src/services/evaluation/entitlement_service.py",
+  "src/api/routers/evaluation/entitlements.py",
+  "services/evaluation_gateway/entitlements.py"
+]

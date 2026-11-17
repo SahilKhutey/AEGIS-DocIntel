@@ -1,0 +1,150 @@
+{
+  "basic_policy": {
+    "policy_key": "evaluation-basic",
+    "version": "1.0",
+    "status": "ACTIVE",
+    "quotas": {
+      "documents": {
+        "dimension": "documents",
+        "limit": 20,
+        "period": "lifetime",
+        "unit": "documents",
+        "rolling_window_seconds": null
+      },
+      "storage": {
+        "dimension": "storage",
+        "limit": 104857600,
+        "period": "lifetime",
+        "unit": "bytes",
+        "rolling_window_seconds": null
+      },
+      "queries": {
+        "dimension": "queries",
+        "limit": 100,
+        "period": "lifetime",
+        "unit": "queries",
+        "rolling_window_seconds": null
+      },
+      "comparisons": {
+        "dimension": "comparisons",
+        "limit": 10,
+        "period": "lifetime",
+        "unit": "comparisons",
+        "rolling_window_seconds": null
+      },
+      "api_requests": {
+        "dimension": "api_requests",
+        "limit": 1000,
+        "period": "daily",
+        "unit": "requests",
+        "rolling_window_seconds": null
+      },
+      "concurrent_jobs": {
+        "dimension": "concurrent_jobs",
+        "limit": 2,
+        "period": "concurrent",
+        "unit": "jobs",
+        "rolling_window_seconds": null
+      },
+      "llm_tokens": {
+        "dimension": "llm_tokens",
+        "limit": 50000,
+        "period": "lifetime",
+        "unit": "tokens",
+        "rolling_window_seconds": null
+      },
+      "exports": {
+        "dimension": "exports",
+        "limit": 5,
+        "period": "lifetime",
+        "unit": "exports",
+        "rolling_window_seconds": null
+      },
+      "ocr": {
+        "dimension": "ocr",
+        "limit": 50,
+        "period": "lifetime",
+        "unit": "pages",
+        "rolling_window_seconds": null
+      }
+    },
+    "description": "AEGIS Evaluation Basic Tier Provisional Quota Policy",
+    "created_at": "2026-11-14T00:00:00Z",
+    "activated_at": "2026-11-14T00:00:00Z"
+  },
+  "pro_policy": {
+    "policy_key": "evaluation-pro",
+    "version": "1.0",
+    "status": "ACTIVE",
+    "quotas": {
+      "documents": {
+        "dimension": "documents",
+        "limit": 50,
+        "period": "lifetime",
+        "unit": "documents",
+        "rolling_window_seconds": null
+      },
+      "storage": {
+        "dimension": "storage",
+        "limit": 524288000,
+        "period": "lifetime",
+        "unit": "bytes",
+        "rolling_window_seconds": null
+      },
+      "queries": {
+        "dimension": "queries",
+        "limit": 500,
+        "period": "lifetime",
+        "unit": "queries",
+        "rolling_window_seconds": null
+      },
+      "comparisons": {
+        "dimension": "comparisons",
+        "limit": 50,
+        "period": "lifetime",
+        "unit": "comparisons",
+        "rolling_window_seconds": null
+      },
+      "api_requests": {
+        "dimension": "api_requests",
+        "limit": 5000,
+        "period": "daily",
+        "unit": "requests",
+        "rolling_window_seconds": null
+      },
+      "concurrent_jobs": {
+        "dimension": "concurrent_jobs",
+        "limit": 5,
+        "period": "concurrent",
+        "unit": "jobs",
+        "rolling_window_seconds": null
+      },
+      "llm_tokens": {
+        "dimension": "llm_tokens",
+        "limit": 250000,
+        "period": "lifetime",
+        "unit": "tokens",
+        "rolling_window_seconds": null
+      },
+      "exports": {
+        "dimension": "exports",
+        "limit": 25,
+        "period": "lifetime",
+        "unit": "exports",
+        "rolling_window_seconds": null
+      },
+      "ocr": {
+        "dimension": "ocr",
+        "limit": 200,
+        "period": "lifetime",
+        "unit": "pages",
+        "rolling_window_seconds": null
+      }
+    },
+    "description": "AEGIS Evaluation Pro Tier Expanded Quota Policy",
+    "created_at": "2026-11-14T00:00:00Z",
+    "activated_at": "2026-11-14T00:00:00Z"
+  },
+  "validation_status": "PASSED",
+  "verified_at": "2026-11-14T05:34:40.990386+00:00"
+}

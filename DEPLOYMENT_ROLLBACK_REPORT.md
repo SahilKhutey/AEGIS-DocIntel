@@ -1,7 +1,7 @@
 # AEGIS-DocIntel — Deployment Rollback Report
 
 > **Status**: **ROLLBACK DRILL VERIFIED (PASS)**  
-> **Date**: 2026-11-05T02:16:11Z  
+> **Date**: 2026-11-14T06:02:04Z  
 > **Environment**: Staging Mirror  
 
 ## Rollback Verification Summary

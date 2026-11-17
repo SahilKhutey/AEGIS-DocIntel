@@ -1,0 +1,17 @@
+{
+  "timestamp": "2026-11-15T04:28:03.982761+00:00",
+  "scenarios_verified": [
+    "INT-ENGINE-001: Gateway authorized HMAC request accepted by Private Engine Guard",
+    "INT-ENGINE-002: Direct unauthenticated request to Engine rejected HTTP 401",
+    "INT-ENGINE-003: Engine request with forged tenant context rejected HTTP 403",
+    "INT-ENGINE-004: Expired engine service credential rejected HTTP 401",
+    "INT-ENGINE-005: Reused quota reservation ID rejected HTTP 403",
+    "INT-ENGINE-006: Engine request missing verified quota reservation rejected HTTP 403",
+    "INT-ENGINE-007: Engine request with revoked license rejected HTTP 403",
+    "INT-ENGINE-008: Evaluator client attempting internal admin action on engine rejected HTTP 403",
+    "INT-ENGINE-009: Private engine implementation files verified absent from client package",
+    "INT-ENGINE-010: LLM provider API credentials verified absent from client artifacts"
+  ],
+  "verdict": "PASSED",
+  "guard_mechanism": "HMAC-SHA256 Token Attestation with Reservation ID Nonce Matching"
+}

@@ -1,0 +1,23 @@
+============================= test session starts =============================
+platform win32 -- Python 3.12.10, pytest-9.1.1, pluggy-1.6.0 -- C:\Users\ASUS\AppData\Local\Programs\Python\Python312\python.exe
+cachedir: .pytest_cache
+hypothesis profile 'default'
+rootdir: C:\Users\ASUS\.gemini\antigravity\worktrees\Aegis-DocIntel\product_hunt_launch_packaging
+configfile: pyproject.toml
+plugins: anyio-4.12.1, hypothesis-6.156.6, langsmith-0.14.4, asyncio-1.4.0, cov-7.1.0
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collecting ... collected 43 items / 33 deselected / 10 selected
+
+tests/security/evaluation/test_entitlement_enforcement_protocol.py::test_tenant_ent_001_read_own_document_allowed PASSED [ 10%]
+tests/security/evaluation/test_entitlement_enforcement_protocol.py::test_tenant_ent_002_read_another_tenant_document_denied_404 PASSED [ 20%]
+tests/security/evaluation/test_entitlement_enforcement_protocol.py::test_tenant_ent_003_query_another_tenant_document_denied_404 PASSED [ 30%]
+tests/security/evaluation/test_entitlement_enforcement_protocol.py::test_tenant_ent_004_compare_across_tenants_denied_404 PASSED [ 40%]
+tests/security/evaluation/test_entitlement_enforcement_protocol.py::test_tenant_ent_005_export_another_tenant_result_denied_404 PASSED [ 50%]
+tests/security/evaluation/test_entitlement_enforcement_protocol.py::test_tenant_ent_006_poll_another_tenant_job_denied_404 PASSED [ 60%]
+tests/security/evaluation/test_entitlement_enforcement_protocol.py::test_tenant_ent_007_subscribe_another_tenant_websocket_denied_404 PASSED [ 70%]
+tests/security/evaluation/test_entitlement_enforcement_protocol.py::test_tenant_ent_008_access_another_tenant_download_denied_404 PASSED [ 80%]
+tests/security/evaluation/test_entitlement_enforcement_protocol.py::test_tenant_ent_009_change_workspace_header_no_privilege_change PASSED [ 90%]
+tests/security/evaluation/test_entitlement_enforcement_protocol.py::test_tenant_ent_010_guess_resource_uuid_no_information_leakage PASSED [100%]
+
+====================== 10 passed, 33 deselected in 0.50s ======================
+

@@ -1,0 +1,19 @@
+{
+  "timestamp": "2026-11-15T04:28:03.982761+00:00",
+  "scenarios_verified": [
+    "INT-LIC-001: Cryptographically signed license validated cleanly by Ed25519",
+    "INT-LIC-002: Tampered payload bytes detected -> LicenseSignatureError",
+    "INT-LIC-003: Corrupted signature detected -> LicenseSignatureError",
+    "INT-LIC-004: Unknown signing key_id rejected -> LicenseVerificationError",
+    "INT-LIC-005: Expired license rejected -> LicenseExpiredError",
+    "INT-LIC-006: Not-yet-valid license rejected -> LicenseNotYetValidError",
+    "INT-LIC-007: Revoked license rejected -> LicenseRevokedError",
+    "INT-LIC-008: Forward-compatible unknown claims safely preserved",
+    "INT-LIC-009: Key rotation produces valid new licenses bearing updated kid",
+    "INT-LIC-010: Retired keys in VERIFY_ONLY mode continue validating existing circulating licenses",
+    "INT-LIC-011: Retired keys reject new license issuance requests",
+    "INT-LIC-012: Key compromise emergency procedure immediately invalidates signed licenses"
+  ],
+  "verdict": "PASSED",
+  "cryptographic_standard": "RFC 8032 Ed25519 / JWS Compact RFC 7515"
+}

@@ -2162,3 +2162,75 @@ uff check src tests scripts dashboard: All checks passed.
   - npm run test: PASSED (46 suites, 220 tests passed).
   - npx tsc --noEmit: PASSED (0 errors).
   - npm run lint: PASSED (0 errors, 0 warnings).
+
+
+---
+
+## 5. Phase 17 — Product Hunt Launch Packaging & Protected Demo Edition (PROT-01 – PROT-03)
+
+### Task PROT.01 — Repository Audit & IP Classification (PROT-01)
+- **Time:** 2026-11-12 20:00:00 UTC
+- **Context & Objective:**
+  Establish an unassailable distribution boundary for the AEGIS-DocIntel Protected Demo Edition before shipping to Product Hunt:
+  1. Complete 4,668-file inventory cataloged in `distribution/audit/distribution_inventory.csv` with 10 classification columns.
+  2. Reconciled Finding PROT-F01: Barred root Dockerfile from distribution to prevent extraction of raw `src/`, `backend/`, and `config/`.
+  3. Reconciled Finding PROT-F03: Created dedicated `distribution/demo-edition/deploy/compose.yaml` (Next.js UI + Nginx reverse proxy).
+  4. Authored 11 comprehensive audit documents in `docs/distribution/prot-01-repository-audit/` (00 through 10).
+  5. Formal sign-off: Transition from HOLD to PROCEED.
+- **Verification:**
+  - Python audit classification over 4,668 files: PASSED (0 unreviewed files).
+  - Package allowlist approved in `package_allowlist.json`.
+
+### Task PROT.02 — Third-Party Dependency & License Audit (PROT-02)
+- **Time:** 2026-11-13 03:00:00 UTC
+- **Context & Objective:**
+  Audit all 551 NPM lockfile entries and 71 Python pinned packages:
+  1. Generated CycloneDX 1.5 JSON SBOM for frontend (`npm-sbom.json`, 550 components).
+  2. Generated CycloneDX SBOM for Python environment (`python-sbom.json`, 361 KB) and `python-licenses.csv`.
+  3. Reconciled Finding DEP-001 (LGPL Sharp/libvips): Preserved dynamic linking and provided full LGPL-3.0 text.
+  4. Reconciled Finding DEP-002 (MPL-2.0): Audited `axe-core` and `lightningcss` as devDependencies excluded from runtime bundle.
+  5. Reconciled Finding DEP-003 (CC-BY-4.0): Attributed `caniuse-lite` (Alexis Deveria).
+  6. Reconciled Finding DEP-004 (Blue Oak): Documented Blue Oak Model License 1.0.0 for dev transitives.
+  7. Reconciled Finding DEP-005 (Python CVEs): Reaffirmed boundary: zero Python dependencies are distributed locally; backend runs cloud-side.
+  8. Built complete `THIRD-PARTY-NOTICES/` directory with 9 license texts and manifests.
+- **Verification:**
+  - DEP-01 through DEP-12 acceptance matrix: PASSED (12/12).
+  - Formal sign-off: Transition from HOLD to PROCEED.
+
+### Task PROT.03 — Source Code & IP Exposure Audit & Remediation (PROT-03)
+- **Time:** 2026-11-13 08:50:00 UTC
+- **Context & Objective:**
+  Identify and remediate all proprietary implementation leakage vectors:
+  1. Remediated Finding IP-010: Refactored `web/src/lib/auth/session.ts` to reject `dev-` tokens in production and eliminate default admin role.
+  2. Remediated Finding IP-011: Refactored `web/src/lib/api/client.ts` to strip hardcoded localhost defaults and `NEXT_PUBLIC_AEGIS_DEV_TOKEN`. Enforced same-origin relative `/api` proxying.
+  3. Remediated Finding IP-012: Purged `NEXT_PUBLIC_AEGIS_DEV_TOKEN` from `web/src/lib/validation/environment.ts` Zod schema.
+  4. Remediated Finding IP-005: Sanitized exception handling in `src/api/routes/query.py` with random tracking UUIDs (`ref=a1b2c3d4`).
+  5. Documented mathematical algorithms (submodular knapsack packing, Kahn's DAG reading order, Sheaf Laplacian topology).
+  6. Generated 10 audit documents in `docs/distribution/prot-03-ip-exposure/` and 7 artifacts in `distribution/audit/prot-03/`.
+- **Verification:**
+  - Automated security attack test suite (`tests/distribution_security/`): 20/20 PASSED.
+  - End-to-end demo test suite (`demo/tests/`): 8/8 PASSED.
+  - Package integrity verification (`verify-package.ps1`): 37/37 files verified, Ed25519 signature valid (exit code 0).
+  - Total test pass: 28/28 tests passed (100%).
+  - Formal sign-off: Transition from HOLD to PROCEED.
+
+---
+
+## Phase 18: PROT-04 — Authentication, Licensing & Entitlement Security
+- **Time:** 2026-11-13 09:40:00 UTC
+- **Context & Objective:**
+  Establish authoritative, server-side cryptographic licensing, device binding, capability authorization, atomic usage accounting, and tamper-resistant session lifecycles for the Protected Demo Edition.
+- **Architectural & Security Deliverables:**
+  1. **WP-04.01 Authentication Baseline:** Verified deny-by-default `AuthGuardMiddleware` across all 59 backend endpoints, strict RS256 algorithm pinning, and tenant isolation.
+  2. **WP-04.02 Production Auth Hardening:** Implemented automated build-time guard `web/scripts/verify-production-auth.mjs` (`verify:auth`) to block compilation if dev tokens or bypasses are reintroduced.
+  3. **WP-04.03 Activation & Device Binding:** Created account-backed activation (`POST /v1/evaluation/activate`) with asymmetric device public key binding, 1-device active limit, and deactivation workflows.
+  4. **WP-04.04 Cryptographic License Engine:** Pinned Ed25519 signing in `services/evaluation_gateway/license.py`, validating claims, temporal expiration, suspension status, and product matches.
+  5. **WP-04.05 Entitlement Enforcement:** Codified canonical capabilities (`documents.read`, `documents.upload`, `intelligence.query`, `documents.compare`, `evidence.inspect`); direct denial of admin functions (`users.manage`, `platform.admin`).
+  6. **WP-04.06 Server-Side Atomic Quotas:** Thread-safe two-phase quota reservation and settlement in `quotas.py`, validated under 20-thread concurrency race testing (zero leakage).
+  7. **WP-04.07 Session Lifecycle & Revocation:** Short-lived access tokens (600s TTL), rotating refresh tokens with replay detection family revocation, and real-time revocation propagation (< 12 ms).
+  8. **WP-04.08 Security Audit Telemetry:** Structured append-only JSONL logging (`audit.py`) with 100% regex redaction for raw credentials, keys, and document text.
+  9. **WP-04.09 Release Certification:** Authored 10 dossiers in `docs/distribution/prot-04-auth-licensing/` and 4 machine-readable policy schemas in `distribution/policy/`.
+- **Verification:**
+  - `tests/security/evaluation/`: **41/41 PASSED (100%)**
+  - All security suites combined (`tests/security/evaluation`, `tests/distribution_security`, `demo/tests`): **69/69 PASSED (100%)**
+  - Release Decision: **RELEASE GO** signed off.

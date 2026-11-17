@@ -1,0 +1,221 @@
+{
+  "work_package": "PROT-04.07",
+  "title": "Session Lifecycle, Refresh Rotation & Revocation",
+  "generated_at": "2026-11-14T06:03:10.006274+00:00",
+  "total_scenarios": 42,
+  "passed_scenarios": 42,
+  "failed_scenarios": 0,
+  "compliance_status": "CERTIFIED & SIGNED OFF",
+  "scenarios": [
+    {
+      "id": "SESSION-001",
+      "category": "Session Creation",
+      "status": "PASSED"
+    },
+    {
+      "id": "SESSION-002",
+      "category": "Two-Stage Binding",
+      "status": "PASSED"
+    },
+    {
+      "id": "SESSION-003",
+      "category": "TTL Enforcement",
+      "status": "PASSED"
+    },
+    {
+      "id": "SESSION-004",
+      "category": "Hash at Rest",
+      "status": "PASSED"
+    },
+    {
+      "id": "SESSION-005",
+      "category": "Tenant Binding",
+      "status": "PASSED"
+    },
+    {
+      "id": "SESSION-006",
+      "category": "Creation Audit",
+      "status": "PASSED"
+    },
+    {
+      "id": "SESSION-007",
+      "category": "Session Validation",
+      "status": "PASSED"
+    },
+    {
+      "id": "SESSION-008",
+      "category": "Forged Token Rejection",
+      "status": "PASSED"
+    },
+    {
+      "id": "SESSION-009",
+      "category": "Sliding Idle",
+      "status": "PASSED"
+    },
+    {
+      "id": "SESSION-010",
+      "category": "Idle Timeout",
+      "status": "PASSED"
+    },
+    {
+      "id": "SESSION-011",
+      "category": "Absolute Timeout",
+      "status": "PASSED"
+    },
+    {
+      "id": "SESSION-012",
+      "category": "Expiry Sweeping",
+      "status": "PASSED"
+    },
+    {
+      "id": "SESSION-013",
+      "category": "Refresh Rotation",
+      "status": "PASSED"
+    },
+    {
+      "id": "SESSION-014",
+      "category": "Consumed Transition",
+      "status": "PASSED"
+    },
+    {
+      "id": "SESSION-015",
+      "category": "Replaced Token Pointer",
+      "status": "PASSED"
+    },
+    {
+      "id": "SESSION-016",
+      "category": "Family Lineage",
+      "status": "PASSED"
+    },
+    {
+      "id": "SESSION-017",
+      "category": "Authenticated API Access",
+      "status": "PASSED"
+    },
+    {
+      "id": "SESSION-018",
+      "category": "Refresh Audit",
+      "status": "PASSED"
+    },
+    {
+      "id": "SESSION-019",
+      "category": "Replay Detection",
+      "status": "PASSED"
+    },
+    {
+      "id": "SESSION-020",
+      "category": "Parent Session Revocation",
+      "status": "PASSED"
+    },
+    {
+      "id": "SESSION-021",
+      "category": "Family Session Revocation",
+      "status": "PASSED"
+    },
+    {
+      "id": "SESSION-022",
+      "category": "Family Token Revocation",
+      "status": "PASSED"
+    },
+    {
+      "id": "SESSION-023",
+      "category": "Pre-Replay Token Invalidation",
+      "status": "PASSED"
+    },
+    {
+      "id": "SESSION-024",
+      "category": "Compromise Audit",
+      "status": "PASSED"
+    },
+    {
+      "id": "SESSION-025",
+      "category": "20-Thread Concurrency Race",
+      "status": "PASSED"
+    },
+    {
+      "id": "SESSION-026",
+      "category": "No Split Lineages",
+      "status": "PASSED"
+    },
+    {
+      "id": "SESSION-027",
+      "category": "Atomic Transition Safety",
+      "status": "PASSED"
+    },
+    {
+      "id": "SESSION-028",
+      "category": "Concurrent Validation/Refresh",
+      "status": "PASSED"
+    },
+    {
+      "id": "SESSION-029",
+      "category": "Concurrent Logout",
+      "status": "PASSED"
+    },
+    {
+      "id": "SESSION-030",
+      "category": "Read/Write Volume Stability",
+      "status": "PASSED"
+    },
+    {
+      "id": "SESSION-031",
+      "category": "Single Session Logout",
+      "status": "PASSED"
+    },
+    {
+      "id": "SESSION-032",
+      "category": "Evaluator Logout-All",
+      "status": "PASSED"
+    },
+    {
+      "id": "SESSION-033",
+      "category": "Device Deactivation Cascade",
+      "status": "PASSED"
+    },
+    {
+      "id": "SESSION-034",
+      "category": "License Revocation SLA (<50ms)",
+      "status": "PASSED"
+    },
+    {
+      "id": "SESSION-035",
+      "category": "Host Cookie Attributes",
+      "status": "PASSED"
+    },
+    {
+      "id": "SESSION-036",
+      "category": "Host Cookie Clearance",
+      "status": "PASSED"
+    },
+    {
+      "id": "SESSION-037",
+      "category": "CORS Origin Defense",
+      "status": "PASSED"
+    },
+    {
+      "id": "SESSION-038",
+      "category": "CSRF Defense",
+      "status": "PASSED"
+    },
+    {
+      "id": "SESSION-039",
+      "category": "WebSocket Ticket Handshake",
+      "status": "PASSED"
+    },
+    {
+      "id": "SESSION-040",
+      "category": "WebSocket Ticket Replay Prevention",
+      "status": "PASSED"
+    },
+    {
+      "id": "SESSION-041",
+      "category": "Job Context Retention",
+      "status": "PASSED"
+    },
+    {
+      "id": "SESSION-042",
+      "category": "Job Mid-Execution Revocation Abort",
+      "status": "PASSED"
+    }
+  ]
+}

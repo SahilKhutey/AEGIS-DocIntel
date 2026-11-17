@@ -1,0 +1,58 @@
+# AEGIS-DocIntel Evaluation Entitlements Policy (PROT-04 WP-04.05)
+# Defines the canonical capability vocabulary, evaluation tier grants, and prohibited actions.
+
+version: "1.0"
+policy_id: "aegis-evaluation-entitlements-v1"
+last_updated: "2026-11-13"
+
+canonical_capabilities:
+  - id: "documents.read"
+    name: "Read Document & Ingestion Artifacts"
+    description: "Allows viewing synthetic and evaluator-uploaded documents, metadata, and extracted text."
+    tier_default: true
+
+  - id: "documents.upload"
+    name: "Upload Evaluator Documents"
+    description: "Allows uploading local evaluation documents (.pdf, .txt, .md, .json) up to 10 MB per file."
+    tier_default: true
+
+  - id: "intelligence.query"
+    name: "Ask AEGIS Grounded Inquiries"
+    description: "Allows natural language queries with deterministic evidence citations and contradiction reasoning."
+    tier_default: true
+
+  - id: "documents.compare"
+    name: "Topological Document Comparison"
+    description: "Allows multi-document alignment, contradiction extraction, and invariance detection."
+    tier_default: true
+
+  - id: "evidence.inspect"
+    name: "Citation Inspection"
+    description: "Allows deep inspection of grounding spans and cryptographic hash anchors."
+    tier_default: true
+
+prohibited_capabilities:
+  - id: "users.manage"
+    name: "User & Role Administration"
+    reason: "Evaluator editions have a single named operator; user management is restricted to Enterprise tiers."
+    enforcement: "Server-side HTTP 403 Forbidden"
+
+  - id: "platform.admin"
+    name: "Platform Configuration"
+    reason: "Platform tuning, telemetry endpoints, and system configurations are strictly remote."
+    enforcement: "Server-side HTTP 403 Forbidden"
+
+  - id: "workspaces.create"
+    name: "Multi-Workspace Provisioning"
+    reason: "Evaluation instances are locked to a single isolated evaluation workspace."
+    enforcement: "Server-side HTTP 403 Forbidden"
+
+  - id: "models.configure"
+    name: "Model / Orchestrator Configuration"
+    reason: "LLM weights, provider API keys, and model parameters reside exclusively on private infrastructure."
+    enforcement: "Server-side HTTP 403 Forbidden"
+
+  - id: "integrations.manage"
+    name: "Third-Party Integrations"
+    reason: "Webhooks and enterprise CRM/ERP bridges are disabled in the standalone evaluation tier."
+    enforcement: "Server-side HTTP 403 Forbidden"

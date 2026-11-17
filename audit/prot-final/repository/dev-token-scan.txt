@@ -1,0 +1,7 @@
+DEVELOPMENT TOKEN & BYPASS SCAN REPORT
+=====================================
+Target: web/src/
+Bypass tokens scanned: dev-admin-token, dev-default-tenant, mock-jwt-bypass
+Matches in web/src: 0
+Production Auth Guard: ENFORCED (Mock tokens strictly rejected in production build)
+Status: PASS

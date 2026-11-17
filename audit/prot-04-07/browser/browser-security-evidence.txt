@@ -1,0 +1,8 @@
+AEGIS-DocIntel Browser Security Verification
+================================================================
+Protocol Scenarios: SESSION-035 through SESSION-038
+- Cookie Security: __Host-aegis_refresh configured with Path=/; Secure; HttpOnly; SameSite=Strict; Max-Age=604800.
+- Cookie Clearance: Logout endpoint clears cookie with Max-Age=0.
+- CORS Origin Defense: Disallowed origins (e.g. https://attacker.com) rejected with HTTP 403 CORS_ORIGIN_DENIED.
+- CSRF Protection: Requests with CSRF mismatch rejected with HTTP 403 CSRF_MISMATCH.
+================================================================

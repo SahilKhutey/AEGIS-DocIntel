@@ -1,6 +1,11 @@
 /**
  * Unified Permissions & Role Reconciliation for AEGIS-DocIntel
- * Maps frontend capability checks to canonical backend roles.
+ *
+ * CRITICAL SECURITY INVARIANT (PROT-04.02 / WP-04.02.05):
+ * Frontend permissions are STRICTLY PRESENTATION HINTS used solely for conditional UI
+ * rendering (e.g. hiding disabled action buttons or tab headers).
+ * They NEVER constitute security enforcement. The server gateway independently evaluates:
+ * Allowed = Authenticated ∧ TenantAuthorized ∧ RoleAuthorized ∧ Entitled ∧ WithinQuota ∧ NotRevoked
  */
 
 export const PERMISSIONS = [

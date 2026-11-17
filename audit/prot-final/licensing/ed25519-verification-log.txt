@@ -1,0 +1,22 @@
+AUDIT LOG: test_licensing.py
+Executed at: 2026-11-15T04:52:59.575630+00:00
+
+============================= test session starts =============================
+platform win32 -- Python 3.12.10, pytest-9.1.1, pluggy-1.6.0 -- C:\Users\ASUS\AppData\Local\Programs\Python\Python312\python.exe
+cachedir: .pytest_cache
+hypothesis profile 'default'
+rootdir: C:\Users\ASUS\.gemini\antigravity\worktrees\Aegis-DocIntel\product_hunt_launch_packaging
+configfile: pyproject.toml
+plugins: anyio-4.12.1, hypothesis-6.156.6, langsmith-0.14.4, asyncio-1.4.0, cov-7.1.0
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collecting ... collected 6 items
+
+tests/security/consolidated/test_licensing.py::test_lic_001_valid_ed25519_signed_license_verified PASSED [ 16%]
+tests/security/consolidated/test_licensing.py::test_lic_002_tampered_license_payload_fails_signature PASSED [ 33%]
+tests/security/consolidated/test_licensing.py::test_lic_003_corrupted_signature_fails_validation PASSED [ 50%]
+tests/security/consolidated/test_licensing.py::test_lic_004_unknown_key_id_rejected PASSED [ 66%]
+tests/security/consolidated/test_licensing.py::test_lic_005_revoked_license_denied_access PASSED [ 83%]
+tests/security/consolidated/test_licensing.py::test_lic_006_key_rotation_and_emergency_compromise PASSED [100%]
+
+============================== 6 passed in 0.41s ==============================
+

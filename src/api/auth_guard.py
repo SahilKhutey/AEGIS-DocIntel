@@ -28,7 +28,8 @@ the route via ``get_current_tenant_ws`` (an HTTP middleware cannot see them).
 """
 from __future__ import annotations
 
-from typing import Iterable
+import os
+from typing import Iterable, Optional
 
 from fastapi import HTTPException, status
 from starlette.responses import JSONResponse
@@ -59,6 +60,44 @@ PUBLIC_PATHS: frozenset[str] = frozenset(
 #   not be internet-reachable (tracked for the operability phase).
 PUBLIC_PREFIXES: tuple[str, ...] = ("/metrics",)
 
+# Hardened production evaluation allowlist: removes /metrics, /docs, /redoc, /openapi.json (PROT-04.02 / WP-04.02.03)
+HARDENED_PUBLIC_PATHS: frozenset[str] = frozenset(
+    {
+        "/",
+        "/ui",
+        "/health",
+        "/health/live",
+        "/health/ready",
+        "/readiness",
+    }
+)
+
+HARDENED_PUBLIC_PREFIXES: tuple[str, ...] = ()
+
+
+def get_effective_public_paths(explicit_paths: Optional[frozenset[str]] = None) -> frozenset[str]:
+    if explicit_paths is not None:
+        return explicit_paths
+    restrict = (
+        os.environ.get("AEGIS_RESTRICT_OPERATIONAL_ENDPOINTS", "").lower() in ("true", "1", "yes")
+        or os.environ.get("AEGIS_EVALUATION_MODE", "").lower() in ("true", "1", "yes")
+    )
+    if restrict:
+        return HARDENED_PUBLIC_PATHS
+    return PUBLIC_PATHS
+
+
+def get_effective_public_prefixes(explicit_prefixes: Optional[tuple[str, ...]] = None) -> tuple[str, ...]:
+    if explicit_prefixes is not None:
+        return explicit_prefixes
+    restrict = (
+        os.environ.get("AEGIS_RESTRICT_OPERATIONAL_ENDPOINTS", "").lower() in ("true", "1", "yes")
+        or os.environ.get("AEGIS_EVALUATION_MODE", "").lower() in ("true", "1", "yes")
+    )
+    if restrict:
+        return HARDENED_PUBLIC_PREFIXES
+    return PUBLIC_PREFIXES
+
 
 def _is_public(path: str, public_paths: frozenset[str], public_prefixes: Iterable[str]) -> bool:
     norm = path.rstrip("/") or "/"
@@ -82,7 +121,20 @@ def _authenticate(headers: dict[str, str]):
     api_key = headers.get("x-api-key", "").strip()
     if api_key:
         return _validate_api_key(api_key)
-        return
+
+    import os
+    env = os.environ.get("AEGIS_ENVIRONMENT", "production").lower()
+    demo_mode = os.environ.get("AEGIS_DEMO_MODE", "false").lower() in ("true", "1", "yes")
+    allow_anon = os.environ.get("AEGIS_DEMO_ALLOW_ANONYMOUS", "false").lower() in ("true", "1", "yes")
+    if (demo_mode or env == "demo") and allow_anon:
+        from src.core.security_context import TenantContext
+        return TenantContext(
+            tenant_id="demo-tenant",
+            principal_id="demo-anonymous-visitor",
+            roles=frozenset({"viewer", "editor"}),
+            authentication_method="demo_anonymous",
+            monthly_token_limit=50_000,
+        )
 
     raise HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
@@ -97,12 +149,20 @@ class AuthGuardMiddleware:
     def __init__(
         self,
         app: ASGIApp,
-        public_paths: frozenset[str] = PUBLIC_PATHS,
-        public_prefixes: tuple[str, ...] = PUBLIC_PREFIXES,
+        public_paths: Optional[frozenset[str]] = None,
+        public_prefixes: Optional[tuple[str, ...]] = None,
     ) -> None:
         self.app = app
-        self.public_paths = public_paths
-        self.public_prefixes = public_prefixes
+        self._explicit_public_paths = public_paths
+        self._explicit_public_prefixes = public_prefixes
+
+    @property
+    def public_paths(self) -> frozenset[str]:
+        return get_effective_public_paths(self._explicit_public_paths)
+
+    @property
+    def public_prefixes(self) -> tuple[str, ...]:
+        return get_effective_public_prefixes(self._explicit_public_prefixes)
 
     async def __call__(self, scope: Scope, receive: Receive, send: Send) -> None:
         if scope["type"] != "http":

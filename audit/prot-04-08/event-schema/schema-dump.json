@@ -1,0 +1,186 @@
+{
+  "$defs": {
+    "Severity": {
+      "enum": [
+        "info",
+        "warning",
+        "high",
+        "critical"
+      ],
+      "title": "Severity",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "description": "Standardized, server-authoritative security event model.\nEnforces strict extra-field rejection to maintain canonical audit schemas.",
+  "properties": {
+    "event_id": {
+      "description": "Unique event identifier (UUIDv4)",
+      "format": "uuid",
+      "title": "Event Id",
+      "type": "string"
+    },
+    "event_type": {
+      "description": "Canonical event classification name",
+      "title": "Event Type",
+      "type": "string"
+    },
+    "severity": {
+      "$ref": "#/$defs/Severity",
+      "description": "Categorized severity level"
+    },
+    "occurred_at": {
+      "description": "UTC timestamp of occurrence",
+      "format": "date-time",
+      "title": "Occurred At",
+      "type": "string"
+    },
+    "service": {
+      "default": "evaluation-gateway",
+      "description": "Originating backend service",
+      "title": "Service",
+      "type": "string"
+    },
+    "environment": {
+      "default": "production",
+      "description": "Runtime environment",
+      "title": "Environment",
+      "type": "string"
+    },
+    "request_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Per-request correlation ID",
+      "title": "Request Id"
+    },
+    "correlation_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "End-to-end operation lineage ID",
+      "title": "Correlation Id"
+    },
+    "tenant_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Associated tenant boundary",
+      "title": "Tenant Id"
+    },
+    "evaluator_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Actor evaluator subject ID",
+      "title": "Evaluator Id"
+    },
+    "session_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Active session ID if applicable",
+      "title": "Session Id"
+    },
+    "device_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Hardware device ID if applicable",
+      "title": "Device Id"
+    },
+    "result": {
+      "description": "Action outcome: allowed, denied, error, success, failure",
+      "title": "Result",
+      "type": "string"
+    },
+    "reason_code": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Sanitized reason code or policy token",
+      "title": "Reason Code"
+    },
+    "source_fingerprint": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Privacy-preserving source hash",
+      "title": "Source Fingerprint"
+    },
+    "details": {
+      "anyOf": [
+        {
+          "additionalProperties": true,
+          "type": "object"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "description": "Redacted operational metadata",
+      "title": "Details"
+    },
+    "schema_version": {
+      "default": 1,
+      "description": "Schema revision number",
+      "title": "Schema Version",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "event_type",
+    "severity",
+    "result"
+  ],
+  "title": "SecurityEvent",
+  "type": "object"
+}

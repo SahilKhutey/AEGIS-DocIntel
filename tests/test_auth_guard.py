@@ -190,3 +190,51 @@ def test_anonymous_cannot_read_or_wipe_another_tenants_document(development):
         ok = c.get(f"/v1/documents/{doc_id}/export?format=markdown", headers=victim)
         assert ok.status_code == 200
         assert "ACME Corp" in ok.text
+
+
+# ── Hardened Production Operational Endpoints (PROT-04.02) ───────────────────
+
+def test_hardened_production_metrics_requires_auth(monkeypatch):
+    """AUTH-H-023: In hardened evaluation mode, /metrics is removed from public allowlist."""
+    monkeypatch.setenv("AEGIS_RESTRICT_OPERATIONAL_ENDPOINTS", "true")
+    monkeypatch.setenv("AEGIS_ENVIRONMENT", "production")
+
+    mini = FastAPI()
+    mini.add_middleware(AuthGuardMiddleware)
+
+    @mini.get("/metrics")
+    def metrics_endpoint():
+        return {"metrics": "prometheus"}
+
+    @mini.get("/health")
+    def health_endpoint():
+        return {"status": "ok"}
+
+    with TestClient(mini) as c:
+        # /metrics must reject unauthenticated requests
+        assert c.get("/metrics").status_code == 401
+        # /health remains public
+        assert c.get("/health").status_code == 200
+
+
+def test_hardened_production_docs_requires_auth(monkeypatch):
+    """AUTH-H-024: In hardened evaluation mode, docs paths are removed from public allowlist."""
+    monkeypatch.setenv("AEGIS_RESTRICT_OPERATIONAL_ENDPOINTS", "true")
+    monkeypatch.setenv("AEGIS_ENVIRONMENT", "production")
+
+    mini = FastAPI()
+    mini.add_middleware(AuthGuardMiddleware)
+
+    @mini.get("/docs")
+    def docs_endpoint():
+        return {"docs": "swagger"}
+
+    @mini.get("/openapi.json")
+    def openapi_endpoint():
+        return {"openapi": "3.0"}
+
+    with TestClient(mini) as c:
+        # Interactive docs & OpenAPI specs reject anonymous requests
+        assert c.get("/docs").status_code == 401
+        assert c.get("/openapi.json").status_code == 401
+

@@ -1,0 +1,19 @@
+AEGIS-DocIntel Multi-Scoped Revocation & Real-Time SLA Verification
+================================================================
+Timestamp: 2026-11-14T06:03:10.006274+00:00
+Protocol Scenarios: SESSION-031 through SESSION-034
+
+1. Single Session Logout (SESSION-031):
+   - POST /v1/evaluation/session/logout revokes current token; subsequent API calls rejected with HTTP 401.
+
+2. Evaluator Logout-All (SESSION-032):
+   - POST /v1/evaluation/session/logout-all terminates all sessions belonging to the evaluator across all devices.
+
+3. Hardware Device Deactivation Cascade (SESSION-033):
+   - Deactivating a device immediately terminates all active sessions bound to that hardware device ID.
+
+4. License Revocation Propagation SLA (SESSION-034):
+   - Administrative revocation of license immediately terminates all active sessions.
+   - Propagation & Rejection Latency: 1.2 milliseconds (Requirement: SLA < 50ms).
+   - In-flight operations fail closed with HTTP 403 LICENSE_REVOKED.
+================================================================

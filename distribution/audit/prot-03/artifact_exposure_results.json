@@ -1,0 +1,12 @@
+{
+  "audit_target": "distribution/release/AEGIS-DocIntel-Demo-Edition.zip",
+  "scan_timestamp_utc": "2026-11-13T08:47:00Z",
+  "contains_python_source": false,
+  "contains_private_keys": false,
+  "contains_api_keys": false,
+  "contains_sourcemaps": false,
+  "contains_internal_tests": false,
+  "contains_internal_docs": false,
+  "total_bundled_files": 37,
+  "verdict": "SAFE_FOR_PUBLIC_DISTRIBUTION"
+}

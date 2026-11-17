@@ -1,0 +1,26 @@
+{
+  "payload": {
+    "license_id": "32bc389f-a0f5-4dee-b61a-e3d55c096850",
+    "product": "AEGIS-DocIntel",
+    "tier": "evaluation",
+    "version": "1.1.0",
+    "user_id": "product-hunt-evaluator",
+    "issued_at": "2026-11-12T14:16:02.655486+00:00",
+    "expires_at": "2026-11-26T14:16:02.655486+00:00",
+    "hardware_fingerprint": "any",
+    "features": [
+      "document_upload",
+      "document_extraction",
+      "ask_aegis",
+      "citation_inspection",
+      "document_comparison",
+      "synthetic_ground_truth"
+    ],
+    "quotas": {
+      "max_documents": 5,
+      "max_queries_per_day": 20,
+      "max_comparisons_per_day": 5
+    }
+  },
+  "signature": "LNAoAE2sB9nkvkEEIrpoysKV0wK5ufOhUMesigoE/0RKCPyRcRqsBk76+L3Z3dfWvfmSelZZl/iOGHjXtIflCw=="
+}

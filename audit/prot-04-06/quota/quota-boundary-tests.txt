@@ -1,0 +1,27 @@
+============================= test session starts =============================
+platform win32 -- Python 3.12.10, pytest-9.1.1, pluggy-1.6.0 -- C:\Users\ASUS\AppData\Local\Programs\Python\Python312\python.exe
+cachedir: .pytest_cache
+hypothesis profile 'default'
+rootdir: C:\Users\ASUS\.gemini\antigravity\worktrees\Aegis-DocIntel\product_hunt_launch_packaging
+configfile: pyproject.toml
+plugins: anyio-4.12.1, hypothesis-6.156.6, langsmith-0.14.4, asyncio-1.4.0, cov-7.1.0
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collecting ... collected 60 items / 46 deselected / 14 selected
+
+tests/security/evaluation/test_quota_enforcement_protocol.py::TestQuotaEnforcementProtocol::test_quota_001_usage_below_limit_allowed PASSED [  7%]
+tests/security/evaluation/test_quota_enforcement_protocol.py::TestQuotaEnforcementProtocol::test_quota_002_usage_at_limit_then_denied PASSED [ 14%]
+tests/security/evaluation/test_quota_enforcement_protocol.py::TestQuotaEnforcementProtocol::test_quota_003_usage_exceeds_limit_denied PASSED [ 21%]
+tests/security/evaluation/test_quota_enforcement_protocol.py::TestQuotaEnforcementProtocol::test_quota_004_missing_quota_configuration_fails_closed PASSED [ 28%]
+tests/security/evaluation/test_quota_enforcement_protocol.py::TestQuotaEnforcementProtocol::test_quota_005_unknown_quota_dimension_rejected PASSED [ 35%]
+tests/security/evaluation/test_quota_enforcement_protocol.py::TestQuotaEnforcementProtocol::test_quota_006_negative_quota_limit_rejected PASSED [ 42%]
+tests/security/evaluation/test_quota_enforcement_protocol.py::TestQuotaEnforcementProtocol::test_quota_007_expired_quota_period_rollover PASSED [ 50%]
+tests/security/evaluation/test_quota_enforcement_protocol.py::TestQuotaEnforcementProtocol::test_quota_008_lifetime_quota_no_automatic_reset PASSED [ 57%]
+tests/security/evaluation/test_quota_enforcement_protocol.py::TestQuotaEnforcementProtocol::test_quota_009_rolling_quota_sliding_window PASSED [ 64%]
+tests/security/evaluation/test_quota_enforcement_protocol.py::TestQuotaEnforcementProtocol::test_quota_010_concurrent_quota_enforced PASSED [ 71%]
+tests/security/evaluation/test_quota_enforcement_protocol.py::TestQuotaEnforcementProtocol::test_quota_011_license_wide_quota_shared_across_devices PASSED [ 78%]
+tests/security/evaluation/test_quota_enforcement_protocol.py::TestQuotaEnforcementProtocol::test_quota_012_tenant_wide_quota_isolation PASSED [ 85%]
+tests/security/evaluation/test_quota_enforcement_protocol.py::TestQuotaEnforcementProtocol::test_quota_013_quota_policy_update_applies_correct_version PASSED [ 92%]
+tests/security/evaluation/test_quota_enforcement_protocol.py::TestQuotaEnforcementProtocol::test_quota_014_quota_service_unavailable_fails_closed PASSED [100%]
+
+====================== 14 passed, 46 deselected in 2.19s ======================
+

@@ -1,0 +1,36 @@
+{
+  "suite": "PROT-04 Quota & Concurrency Enforcement",
+  "timestamp": "2026-11-13T04:09:00.745365+00:00",
+  "passed": 4,
+  "failed": 0,
+  "tests": [
+    {
+      "id": "QUOTA-001",
+      "name": "Requests within quota",
+      "status": "PASSED",
+      "expected": "200 OK",
+      "actual": 200
+    },
+    {
+      "id": "QUOTA-002",
+      "name": "Daily query quota exceeded",
+      "status": "PASSED",
+      "expected": "429 QUOTA_EXCEEDED",
+      "actual": 429
+    },
+    {
+      "id": "QUOTA-003",
+      "name": "Parallel requests crossing quota limit (race condition probe)",
+      "status": "PASSED",
+      "expected": "Exact match without race leakage",
+      "actual": "PASSED (3/10 accepted, 7/10 rejected)"
+    },
+    {
+      "id": "QUOTA-004",
+      "name": "Oversized document upload (>10 MB)",
+      "status": "PASSED",
+      "expected": "413 Payload Too Large",
+      "actual": 413
+    }
+  ]
+}

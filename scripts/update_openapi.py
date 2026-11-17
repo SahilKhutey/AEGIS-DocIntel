@@ -12,7 +12,6 @@ def generate_openapi() -> None:
     target = repo_root / "openapi.json"
     with target.open("w", encoding="utf-8") as fh:
         json.dump(app.openapi(), fh, indent=2)
-        fh.write("\n")
 
 
 if __name__ == "__main__":

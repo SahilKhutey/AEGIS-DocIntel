@@ -1,0 +1,7 @@
+AEGIS-DocIntel Background Job Security Verification
+================================================================
+Protocol Scenarios: SESSION-041 through SESSION-042
+- Authorization Context Retention: Background document processing jobs retain evaluator session context.
+- Periodic Privilege Revalidation: Engine validates session/license validity prior to executing each document batch.
+- Mid-Job Revocation Abort: Revoking session or license mid-execution causes background worker to abort immediately.
+================================================================

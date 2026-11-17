@@ -1,0 +1,31 @@
+ID,Category,Severity,Requirement,Status,Evidence
+DEV-001,Binding,HIGH,Stage 1 challenge generation with Ed25519,VERIFIED,test_dev_001_stage1_challenge_creation_ed25519 PASSED
+DEV-002,Quota,CRITICAL,Atomic 1-device active limit enforcement,VERIFIED,test_dev_002_atomic_one_device_limit_enforcement PASSED
+DEV-003,Revocation,HIGH,Device deactivation terminates active sessions,VERIFIED,test_dev_003_session_revocation_on_device_deactivation PASSED
+DEV-004,Lifecycle,MEDIUM,Deactivation frees device slot for replacement,VERIFIED,test_dev_004_deactivation_frees_device_slot_for_replacement PASSED
+DEV-005,Authentication,HIGH,Bogus activation codes rejected (HTTP 400),VERIFIED,test_dev_005_challenge_rejected_invalid_activation_code PASSED
+DEV-006,Input Validation,HIGH,Malformed public key rejected (HTTP 400),VERIFIED,test_dev_006_challenge_rejected_malformed_public_key PASSED
+DEV-007,Cryptography,CRITICAL,Invalid digital signature rejected (HTTP 401),VERIFIED,test_dev_007_activation_rejected_invalid_signature PASSED
+DEV-008,Cryptography,CRITICAL,Tampered canonical challenge rejected (HTTP 401),VERIFIED,test_dev_008_activation_rejected_tampered_canonical_message PASSED
+DEV-009,Anti-Replay,MEDIUM,Expired challenge rejected (HTTP 400),VERIFIED,test_dev_009_challenge_expiry_rejected PASSED
+DEV-010,Anti-Replay,CRITICAL,Challenge replay rejected (HTTP 400),VERIFIED,test_dev_010_challenge_single_use_replay_prevention PASSED
+DEV-011,Protocol,LOW,Non-existent challenge ID returns 404,VERIFIED,test_dev_011_activation_nonexistent_challenge_id PASSED
+DEV-012,Binding,HIGH,Installation ID mismatch rejected (HTTP 400),VERIFIED,test_dev_012_installation_id_mismatch_rejected PASSED
+DEV-013,Cryptography,MEDIUM,RSA-2048 key activation verified,VERIFIED,test_dev_013_activation_rsa_2048_key PASSED
+DEV-014,Cryptography,MEDIUM,Ed25519 raw 32-byte Base64 key verified,VERIFIED,test_dev_014_activation_ed25519_raw_base64_key PASSED
+DEV-015,Identity,MEDIUM,Deterministic SHA-256 key fingerprinting,VERIFIED,test_dev_015_key_fingerprint_deterministic_and_unique PASSED
+DEV-016,Idempotency,LOW,Idempotent re-activation of same device,VERIFIED,test_dev_016_idempotent_reactivation_same_device PASSED
+DEV-017,Management,LOW,Registered device inventory endpoint,VERIFIED,test_dev_017_devices_listing_endpoint PASSED
+DEV-018,Management,LOW,Device detail endpoint,VERIFIED,test_dev_018_device_detail_endpoint PASSED
+DEV-019,Isolation,CRITICAL,Cross-license device isolation enforced,VERIFIED,test_dev_019_cross_license_device_isolation PASSED
+DEV-020,Recovery,HIGH,Emergency recovery deactivates lost device,VERIFIED,test_dev_020_emergency_recovery_with_valid_code PASSED
+DEV-021,Recovery,HIGH,Invalid recovery code rejected (HTTP 401),VERIFIED,test_dev_021_emergency_recovery_rejected_invalid_code PASSED
+DEV-022,Monitoring,LOW,Device heartbeat updates last_seen timestamp,VERIFIED,test_dev_022_device_heartbeat_updates_timestamp PASSED
+DEV-023,Monitoring,MEDIUM,Heartbeat rejected on deactivated device,VERIFIED,test_dev_023_heartbeat_rejected_on_deactivated_device PASSED
+DEV-024,Abuse,MEDIUM,IP rate limiting on challenge requests,VERIFIED,test_dev_024_challenge_rate_limiting PASSED
+DEV-025,Privacy,HIGH,Keyed HMAC lookup conceals activation codes,VERIFIED,test_dev_025_hmac_lookup_never_leaks_or_stores_raw_codes PASSED
+DEV-026,Concurrency,CRITICAL,"Atomic race resolution: 1 win, 9 conflicts",VERIFIED,test_dev_026_concurrent_activation_race_condition PASSED
+DEV-027,Idempotency,LOW,Safe handling of repeated deactivation,VERIFIED,test_dev_027_idempotent_or_safe_duplicate_deactivation PASSED
+DEV-028,Input Validation,LOW,Whitespace/empty codes rejected (HTTP 400),VERIFIED,test_dev_028_empty_or_whitespace_activation_code_rejected PASSED
+DEV-029,Tampering,CRITICAL,Bit-flipped signature rejected (HTTP 401),VERIFIED,test_dev_029_tampered_signature_payload_byte_modification PASSED
+DEV-030,E2E,HIGH,Full end-to-end evaluation lifecycle,VERIFIED,test_dev_030_complete_evaluation_lifecycle_end_to_end PASSED

@@ -1,0 +1,39 @@
+# =================================================================
+# AEGIS-DocIntel — Demo Access & Isolation Policy
+# =================================================================
+policy_version: "1.0"
+mode: "demo_sandbox"
+
+tenant:
+  id: "demo-tenant"
+  name: "Product Hunt Evaluation Sandbox"
+  monthly_token_budget: 50000
+  storage_limit_mb: 100
+  max_documents: 10
+
+permissions:
+  anonymous_access:
+    allowed: true
+    default_role: "editor" # allows uploading evaluation files and querying
+    can_delete: false
+    can_access_admin: false
+    can_view_metrics: false
+  
+  cross_tenant_access:
+    enforce_strict_isolation: true
+    deny_behavior: "404_not_found"
+
+rate_limiting:
+  queries_per_minute: 20
+  uploads_per_hour: 10
+  reset_window_seconds: 60
+
+data_lifecycle:
+  auto_reset_enabled: true
+  auto_reset_interval_hours: 6
+  ephemeral_uploads_retention_minutes: 60
+  prevent_purging_seed_corpus: true
+
+llm_egress:
+  allow_external_transfer: false
+  default_mode: "deterministic_evidence_rag"
