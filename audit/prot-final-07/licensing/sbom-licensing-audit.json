@@ -1,0 +1,15 @@
+{
+  "evaluated_at": "2026-11-18T05:21:05.837251+00:00",
+  "client_sbom": {
+    "spec": "CycloneDX 1.5",
+    "components": 553,
+    "status": "VERIFIED"
+  },
+  "backend_sbom": {
+    "spec": "CycloneDX 1.5",
+    "components": 71,
+    "status": "VERIFIED"
+  },
+  "third_party_notices": "PRESENT",
+  "status": "COMPLIANT"
+}

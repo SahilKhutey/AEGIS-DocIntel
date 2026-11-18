@@ -1,0 +1,6 @@
+supplier_id,legal_entity,service_name,purpose,data_categories,processing_location,contract_terms,retention_policy,model_training,security_certifications,exit_plan_tested
+SUP-001,OpenAI Ireland Ltd / OpenAI LLC,OpenAI API (Platform),LLM Model Inference,Anonymized document excerpts & queries,US / EU,Commercial Enterprise API Terms,Zero-day retention option configured,NO (Enterprise API excluded from training),SOC 2 Type II; ISO 27001,true
+SUP-002,Anthropic PBC,Anthropic Claude API,LLM Model Inference,Anonymized document excerpts & queries,US,Commercial API Agreement,30-day abuse monitoring / zero retention,NO (API inputs excluded from training),SOC 2 Type II,true
+SUP-003,Amazon Web Services Inc,AWS S3 & EC2,Cloud Hosting & Object Storage,Encrypted document blobs & backups,US-East (N. Virginia),AWS Customer Agreement & BAA,Customer-controlled lifecycle rules,N/A (Infrastructure provider),ISO 27001; SOC 1/2/3; FedRAMP,true
+SUP-004,GitHub Inc (Microsoft),GitHub Actions & Packages,CI/CD Build Automation,Source code & test fixtures (synthetic),US,GitHub Enterprise Agreement,Ephemeral build runner lifecycle,N/A,SOC 1/2; ISO 27001,true
+SUP-005,Docker Inc,Docker Hub,Base container images,Public base images (Alpine/Bookworm),Global,Docker Standard Terms,N/A,N/A,SOC 2 Type II,true

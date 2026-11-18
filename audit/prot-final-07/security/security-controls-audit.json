@@ -1,0 +1,8 @@
+{
+  "evaluated_at": "2026-11-18T05:21:05.837251+00:00",
+  "controls_audited": 20,
+  "controls_verified": 20,
+  "secrets_in_client": 0,
+  "public_engine_ports": 0,
+  "status": "COMPLIANT"
+}

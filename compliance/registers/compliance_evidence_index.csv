@@ -1,0 +1,9 @@
+evidence_id,control_id,evidence_type,artifact_path,source_commit,generated_at,result,reviewer,review_status,notes
+EVD-COMP-0001,COMP-SEC-001,artifact_scan,audit/prot-final/release-engineering/signing-verification.json,0b08eac,2026-11-18T04:18:39Z,passed,release_approver,approved,Client archive boundary validated (0 engine py files)
+EVD-COMP-0002,COMP-SEC-002,configuration_audit,infrastructure/compose/production/docker-compose.yml,7490947,2026-11-18T04:35:00Z,passed,security_owner,approved,Private engine exposes internal port only
+EVD-COMP-0003,COMP-PRIV-001,policy_review,compliance/registers/data_processing_register.csv,7490947,2026-11-18T04:35:00Z,passed,privacy_owner,approved,RoPA activities mapped with documented owners
+EVD-COMP-0004,COMP-PRIV-003,automated_test,tests/security/deployment/test_dep_02_tenant_and_roles.py,7490947,2026-11-18T04:35:00Z,passed,security_owner,approved,Tenant header spoofing rejected
+EVD-COMP-0005,COMP-LIC-001,artifact_scan,release/sbom/client-sbom.cdx.json,0b08eac,2026-11-18T04:18:39Z,passed,engineering_owner,approved,CycloneDX 1.5 client SBOM generated
+EVD-COMP-0006,COMP-SUP-001,automated_test,tests/security/deployment/test_dep_04_workloads_and_providers.py,7490947,2026-11-18T04:35:00Z,passed,security_owner,approved,LLM provider keys remain server-side
+EVD-COMP-0007,COMP-REC-001,disaster_recovery_drill,audit/prot-final/deployment/backup-recovery/disaster-recovery-test.json,7490947,2026-11-18T04:35:00Z,passed,security_owner,approved,Revocations preserved post-restore
+EVD-COMP-0008,COMP-BUS-002,policy_review,audit/prot-final/deployment/reports/deployment-acceptance-summary.json,7490947,2026-11-18T04:35:00Z,passed,independent_reviewer,approved,Independent deployment gate review passed

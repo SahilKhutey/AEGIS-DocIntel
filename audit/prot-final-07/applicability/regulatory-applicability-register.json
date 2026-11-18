@@ -1,0 +1,31 @@
+{
+  "evaluated_at": "2026-11-18T05:21:05.837251+00:00",
+  "frameworks": {
+    "india_dpdp_2023": {
+      "applicable": true,
+      "role": "Data Fiduciary / Processor",
+      "status": "ALIGNED"
+    },
+    "eu_gdpr": {
+      "applicable": true,
+      "role": "Data Processor",
+      "status": "ALIGNED"
+    },
+    "us_ccpa_cpra": {
+      "applicable": true,
+      "role": "Service Provider",
+      "status": "ALIGNED"
+    },
+    "iso_27001_2022": {
+      "applicable": true,
+      "role": "Self-Attested ISMS",
+      "status": "ALIGNED"
+    },
+    "soc_2_type_ii": {
+      "applicable": true,
+      "role": "Criteria Aligned",
+      "status": "PRE_AUDIT_READY"
+    }
+  },
+  "disclaimer": "Internal technical alignment; formal certification requires external accredited audit."
+}

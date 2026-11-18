@@ -1,0 +1,61 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "AEGIS Compliance Evidence Record Schema",
+  "type": "object",
+  "required": [
+    "evidence_id",
+    "control_id",
+    "evidence_type",
+    "artifact_path",
+    "source_commit",
+    "generated_at",
+    "result"
+  ],
+  "properties": {
+    "evidence_id": {
+      "type": "string",
+      "pattern": "^EVD-COMP-[0-9]{4}$"
+    },
+    "control_id": {
+      "type": "string",
+      "pattern": "^COMP-[A-Z]+-[0-9]{3}$"
+    },
+    "evidence_type": {
+      "type": "string",
+      "enum": [
+        "automated_test",
+        "artifact_scan",
+        "configuration_audit",
+        "policy_review",
+        "supplier_assessment",
+        "incident_exercise",
+        "disaster_recovery_drill"
+      ]
+    },
+    "artifact_path": {
+      "type": "string"
+    },
+    "source_commit": {
+      "type": "string"
+    },
+    "generated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "result": {
+      "type": "string",
+      "enum": ["passed", "failed", "pending", "not_executed"]
+    },
+    "reviewer": {
+      "type": ["string", "null"]
+    },
+    "review_status": {
+      "type": "string",
+      "enum": ["approved", "pending", "rejected"]
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": false
+}

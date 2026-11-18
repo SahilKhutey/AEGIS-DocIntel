@@ -1,0 +1,9 @@
+risk_id,risk_title,category,severity,likelihood,impact,mitigation_control,residual_risk,owner,status
+RSK-001,Unintended inclusion of proprietary engine code in client bundle,IP Protection,critical,low,critical,COMP-SEC-001,low,security_owner,mitigated
+RSK-002,Client tenant spoofing via forged request headers,Tenant Isolation,critical,low,critical,COMP-PRIV-003,low,security_owner,mitigated
+RSK-003,External LLM provider using evaluator documents for training,Privacy & Data Protection,high,low,high,COMP-SUP-002,low,legal_adviser,mitigated
+RSK-004,Resurrection of revoked evaluation licenses following backup restore,Disaster Recovery,critical,low,critical,COMP-REC-001,low,security_owner,mitigated
+RSK-005,Incomplete deletion of derived document embeddings and cached reasoning,Data Governance,high,low,high,COMP-PRIV-004,low,privacy_owner,mitigated
+RSK-006,Staging credentials used against production evaluation infrastructure,Environment Isolation,critical,low,critical,COMP-SEC-003,low,security_owner,mitigated
+RSK-007,Third-party open source license obligation infringement,Licensing,medium,low,medium,COMP-LIC-002,low,engineering_owner,mitigated
+RSK-008,Excessive document parser execution causing worker denial of service,Availability,medium,low,medium,COMP-SEC-005,low,engineering_owner,mitigated

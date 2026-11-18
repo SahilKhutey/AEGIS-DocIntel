@@ -1,0 +1,15 @@
+{
+  "phase": "PROT-FINAL-07",
+  "evaluated_at": "2026-11-18T05:21:05.837251+00:00",
+  "commit": "74909474a80a9b81140a00cbeeb33a0567354b9a",
+  "scope_components": [
+    "downloadable_evaluator_client",
+    "public_evaluation_gateway",
+    "license_and_device_service",
+    "private_document_engine",
+    "database_and_object_storage",
+    "llm_and_infrastructure_suppliers",
+    "release_pipeline_and_provenance"
+  ],
+  "status": "BASELINE_LOCKED"
+}

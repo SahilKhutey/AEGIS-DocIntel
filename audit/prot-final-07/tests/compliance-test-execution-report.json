@@ -1,0 +1,28 @@
+{
+  "evaluated_at": "2026-11-18T05:21:05.837251+00:00",
+  "test_suite": "tests/security/compliance/",
+  "total_tests": 17,
+  "passed": 17,
+  "failed": 0,
+  "coverage": [
+    "COMP-001",
+    "COMP-002",
+    "COMP-003",
+    "COMP-004",
+    "COMP-005",
+    "COMP-006",
+    "COMP-007",
+    "COMP-008",
+    "COMP-009",
+    "COMP-010",
+    "COMP-011",
+    "COMP-012",
+    "COMP-013",
+    "COMP-014",
+    "COMP-015",
+    "COMP-016",
+    "COMP-017",
+    "COMP-018"
+  ],
+  "status": "ALL_TESTS_PASSED"
+}

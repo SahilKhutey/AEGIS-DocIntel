@@ -1,0 +1,21 @@
+control_id,domain,requirement,scope,owner,implementation_status,evidence_required,test_reference,risk_if_failed,approval_status
+COMP-SEC-001,information_security,Production secrets must not be included in evaluator packages,client_distribution,security_owner,verified,artifact_scan;release_manifest,COMP-003,critical,approved
+COMP-SEC-002,information_security,Private engine must not expose public network endpoints,infrastructure,security_owner,verified,port_scan;compose_audit,COMP-003,critical,approved
+COMP-SEC-003,information_security,Gateway-to-engine transport requires signed internal context,internal_network,security_owner,verified,service_auth_test,COMP-003,critical,approved
+COMP-SEC-004,information_security,Health probes must not disclose infrastructure credentials or topologies,monitoring,security_owner,verified,health_audit_test,COMP-015,high,approved
+COMP-SEC-005,information_security,Security incidents and anomalies must trigger containment and audit records,operations,security_owner,verified,incident_exercise,COMP-014,critical,approved
+COMP-PRIV-001,privacy_and_data_protection,Every personal data processing activity must have an owner and documented purpose,governance,privacy_owner,verified,ropa_audit,COMP-001,high,approved
+COMP-PRIV-002,privacy_and_data_protection,Data flows must strictly match service integrations with no undocumented egress,data_flow,privacy_owner,verified,network_policy_test,COMP-002,high,approved
+COMP-PRIV-003,privacy_and_data_protection,Cross-tenant privacy requests must be strictly denied at repository layer,identity_and_access,privacy_owner,verified,tenant_isolation_test,COMP-008,critical,approved
+COMP-PRIV-004,privacy_and_data_protection,Deletion workflow must cascade to primary storage, embeddings, caches, and scratchpads,document_lifecycle,privacy_owner,verified,cascading_deletion_test,COMP-009,high,approved
+COMP-PRIV-005,privacy_and_data_protection,Data retention policies must be automatically enforced by scheduled purge routines,lifecycle,privacy_owner,verified,retention_job_test,COMP-011,high,approved
+COMP-LIC-001,software_licensing,Downloadable client and backend engine must generate distinct verified SBOMs,supply_chain,engineering_owner,verified,sbom_audit,COMP-004,high,approved
+COMP-LIC-002,software_licensing,Third-party dependencies must have explicit reviewed notices and attribution,licensing,engineering_owner,verified,license_report,COMP-005,medium,approved
+COMP-SUP-001,contractual_controls,Model provider credentials must remain server-side with zero client exposure,ai_orchestration,security_owner,verified,provider_key_test,COMP-006,critical,approved
+COMP-SUP-002,contractual_controls,Third-party suppliers must have documented data retention and training terms,procurement,legal_adviser,verified,supplier_assessment,COMP-007,high,approved
+COMP-SUP-003,contractual_controls,Supplier exit and data-deletion procedures must be documented and tested,governance,legal_adviser,verified,supplier_exit_plan,COMP-016,medium,approved
+COMP-REC-001,records_and_auditability,Backup restoration must preserve revocation state and not resurrect revoked licenses,disaster_recovery,security_owner,verified,restore_test,COMP-012,critical,approved
+COMP-REC-002,records_and_auditability,Policy versions and effective approvals must be tracked and non-stale,governance,product_owner,verified,policy_version_test,COMP-013,medium,approved
+COMP-REC-003,records_and_auditability,All compliance evidence must be traceable to git commit SHA and artifact digest,auditability,security_owner,verified,evidence_validator,COMP-015,high,approved
+COMP-BUS-001,business_operations,Documented exceptions must have approved owners and non-expired time horizons,risk_management,product_owner,verified,exception_audit,COMP-017,high,approved
+COMP-BUS-002,business_operations,Final release gate must require independent review and approval,release_management,release_approver,verified,release_gate_review,COMP-018,critical,approved

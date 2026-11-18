@@ -1,0 +1,13 @@
+policy_id,policy_title,version,owner,approver,effective_date,next_review_date,approval_status
+POL-001,Privacy Notice (Evaluator Facing),1.1.0,privacy_owner,legal_adviser,2026-11-01,2027-11-01,approved
+POL-002,Evaluation Agreement & Terms of Use,1.1.0,product_owner,legal_adviser,2026-11-01,2027-11-01,approved
+POL-003,Acceptable Use Policy (AUP),1.1.0,security_owner,legal_adviser,2026-11-01,2027-11-01,approved
+POL-004,Data Processing Agreement (DPA),1.1.0,legal_adviser,legal_adviser,2026-11-01,2027-11-01,approved
+POL-005,Information Security Policy,1.1.0,security_owner,security_owner,2026-11-01,2027-11-01,approved
+POL-006,Data Classification Policy,1.1.0,security_owner,security_owner,2026-11-01,2027-11-01,approved
+POL-007,Data Retention & Deletion Policy,1.1.0,privacy_owner,privacy_owner,2026-11-01,2027-11-01,approved
+POL-008,Incident Response Policy,1.1.0,security_owner,security_owner,2026-11-01,2027-11-01,approved
+POL-009,Vulnerability Disclosure Policy,1.1.0,security_owner,security_owner,2026-11-01,2027-11-01,approved
+POL-010,Third-Party Dependency & Open Source Policy,1.1.0,engineering_owner,engineering_owner,2026-11-01,2027-11-01,approved
+POL-011,AI and LLM Data Handling Policy,1.1.0,engineering_owner,privacy_owner,2026-11-01,2027-11-01,approved
+POL-012,Backup & Disaster Recovery Policy,1.1.0,security_owner,security_owner,2026-11-01,2027-11-01,approved

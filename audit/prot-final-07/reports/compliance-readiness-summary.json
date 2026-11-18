@@ -1,0 +1,17 @@
+{
+  "phase": "PROT-FINAL-07",
+  "evaluated_at": "2026-11-18T05:21:05.837251+00:00",
+  "commit": "74909474a80a9b81140a00cbeeb33a0567354b9a",
+  "release_gate_decision": "GO",
+  "all_gates_passed": true,
+  "gates_evaluated": [
+    "ROPA_DOCUMENTED",
+    "DATA_FLOWS_ALIGNED",
+    "EVIDENCE_VERIFIED",
+    "LLM_SUPPLIER_TRAINING_EXCLUDED",
+    "SUPPLIER_EXITS_VERIFIED",
+    "POLICY_CURRENCY_APPROVED",
+    "EXCEPTIONS_ACTIVE_AND_UNEXPIRED"
+  ],
+  "status": "COMPLIANCE_READY"
+}

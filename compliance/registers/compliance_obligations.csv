@@ -1,0 +1,14 @@
+obligation_id,framework,jurisdiction,article_or_clause,requirement_summary,aegis_role,applicability_status,owner
+OBL-DPDP-01,India DPDP Act 2023,India,Section 4 / 5,Notice and lawful basis for personal data processing,Data Fiduciary / Data Processor,Applicable if processing Indian data principals,privacy_owner
+OBL-DPDP-02,India DPDP Act 2023,India,Section 8,Reasonable security safeguards against data breaches,Data Processor,Applicable,security_owner
+OBL-DPDP-03,India DPDP Act 2023,India,Section 12 / 13,Data principal right to access and erasure,Data Fiduciary / Processor,Applicable,privacy_owner
+OBL-GDPR-01,EU GDPR,European Union,Article 6,Lawful basis for processing evaluation personal data,Controller / Processor,Applicable to EU evaluators,privacy_owner
+OBL-GDPR-02,EU GDPR,European Union,Article 17,Right to erasure (right to be forgotten),Processor,Applicable,privacy_owner
+OBL-GDPR-03,EU GDPR,European Union,Article 28,Processor obligations & Data Processing Agreements,Processor,Applicable,legal_adviser
+OBL-GDPR-04,EU GDPR,European Union,Article 32,Security of processing and cryptographic protection,Processor,Applicable,security_owner
+OBL-CCPA-01,US State Laws / CCPA,United States - California,Civil Code 1798.100,Consumer right to know categories of collected personal data,Service Provider,Applicable,privacy_owner
+OBL-CCPA-02,US State Laws / CCPA,United States - California,Civil Code 1798.105,Consumer right to delete personal information,Service Provider,Applicable,privacy_owner
+OBL-ISO-01,ISO/IEC 27001:2022,Global,Clause 5 / 6,Information Security Management System & Risk Assessment,Organization,Aligned (Self-Attested),security_owner
+OBL-ISO-02,ISO/IEC 27001:2022,Global,Annex A.8.20,Network security & service segmentation,Infrastructure,Aligned,security_owner
+OBL-SOC2-01,SOC 2 (AICPA),Global,CC6.1 - CC6.3,Logical access controls and authentication,Platform,Aligned (Pre-audit ready),security_owner
+OBL-SOC2-02,SOC 2 (AICPA),Global,CC7.1 - CC7.3,System monitoring and incident response,Platform,Aligned,security_owner

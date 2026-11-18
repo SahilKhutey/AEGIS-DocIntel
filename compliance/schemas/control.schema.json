@@ -1,0 +1,71 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "AEGIS Compliance Control Schema",
+  "type": "object",
+  "required": [
+    "control_id",
+    "domain",
+    "requirement",
+    "scope",
+    "owner",
+    "implementation_status",
+    "evidence_required",
+    "test_reference",
+    "risk_if_failed"
+  ],
+  "properties": {
+    "control_id": {
+      "type": "string",
+      "pattern": "^COMP-[A-Z]+-[0-9]{3}$"
+    },
+    "domain": {
+      "type": "string",
+      "enum": [
+        "information_security",
+        "privacy_and_data_protection",
+        "software_licensing",
+        "contractual_controls",
+        "ai_and_automated_processing",
+        "records_and_auditability",
+        "business_operations"
+      ]
+    },
+    "requirement": {
+      "type": "string",
+      "minLength": 10
+    },
+    "scope": {
+      "type": "array",
+      "items": { "type": "string" },
+      "minItems": 1
+    },
+    "owner": {
+      "type": "string"
+    },
+    "implementation_status": {
+      "type": "string",
+      "enum": ["implemented", "partially_implemented", "not_implemented", "verified"]
+    },
+    "evidence_required": {
+      "type": "array",
+      "items": { "type": "string" },
+      "minItems": 1
+    },
+    "test_reference": {
+      "type": "string",
+      "pattern": "^COMP-[0-9]{3}$"
+    },
+    "risk_if_failed": {
+      "type": "string",
+      "enum": ["critical", "high", "medium", "low"]
+    },
+    "last_reviewed": {
+      "type": ["string", "null"]
+    },
+    "approval_status": {
+      "type": "string",
+      "enum": ["approved", "pending", "rejected"]
+    }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "AEGIS Privacy Request Schema",
+  "type": "object",
+  "required": [
+    "id",
+    "request_reference",
+    "requester_id",
+    "tenant_id",
+    "request_type",
+    "status",
+    "received_at"
+  ],
+  "properties": {
+    "id": { "type": "string" },
+    "request_reference": { "type": "string", "pattern": "^DSR-[0-9]{4}-[A-Z0-9]{6}$" },
+    "requester_id": { "type": "string" },
+    "tenant_id": { "type": "string" },
+    "request_type": {
+      "type": "string",
+      "enum": ["access", "erasure", "rectification", "restriction", "objection", "export"]
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "RECEIVED",
+        "IDENTITY_PENDING",
+        "VERIFIED",
+        "UNDER_REVIEW",
+        "APPROVED",
+        "PARTIALLY_APPROVED",
+        "REJECTED",
+        "EXECUTION_PENDING",
+        "EXECUTED",
+        "VERIFIED_CLOSED",
+        "CLOSED"
+      ]
+    },
+    "received_at": { "type": "string", "format": "date-time" },
+    "verified_at": { "type": ["string", "null"] },
+    "completed_at": { "type": ["string", "null"] },
+    "assigned_owner": { "type": "string" },
+    "decision_reason": { "type": ["string", "null"] },
+    "verification_evidence_id": { "type": ["string", "null"] }
+  },
+  "additionalProperties": false
+}

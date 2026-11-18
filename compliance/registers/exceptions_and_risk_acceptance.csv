@@ -1,0 +1,3 @@
+exception_id,business_justification,risk_owner,risk_level,mitigation_control,approval_date,expiry_date,approval_status
+EXC-001,Evaluation sandbox runs in local Windows Docker bridge during staging phase,engineering_owner,low,Isolated network with internal: true and no external DB port,2026-11-01,2027-05-01,approved
+EXC-002,Anthropic Claude API maintains 30-day abuse monitoring buffer prior to purge,legal_adviser,medium,Anonymized document snippets only; zero training allowed,2026-11-01,2027-05-01,approved

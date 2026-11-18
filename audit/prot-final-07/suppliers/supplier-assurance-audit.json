@@ -1,0 +1,40 @@
+{
+  "evaluated_at": "2026-11-18T05:21:05.837251+00:00",
+  "suppliers_audited": 5,
+  "llm_suppliers": [
+    {
+      "supplier_id": "SUP-001",
+      "name": "OpenAI",
+      "training_excluded": true,
+      "retention_buffer": "zero-day"
+    },
+    {
+      "supplier_id": "SUP-002",
+      "name": "Anthropic",
+      "training_excluded": true,
+      "retention_buffer": "30-day abuse"
+    }
+  ],
+  "infrastructure_suppliers": [
+    {
+      "supplier_id": "SUP-003",
+      "name": "AWS",
+      "purpose": "Storage & Hosting",
+      "certifications": "ISO 27001; SOC 2"
+    },
+    {
+      "supplier_id": "SUP-004",
+      "name": "GitHub",
+      "purpose": "CI/CD Automation",
+      "certifications": "SOC 2"
+    },
+    {
+      "supplier_id": "SUP-005",
+      "name": "Docker",
+      "purpose": "Container Registry",
+      "certifications": "SOC 2"
+    }
+  ],
+  "exit_plans_verified": true,
+  "status": "APPROVED"
+}
