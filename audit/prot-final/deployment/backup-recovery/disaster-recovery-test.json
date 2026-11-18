@@ -1,0 +1,20 @@
+{
+  "control_id": "DEP-010",
+  "evaluated_at": "2026-11-18T04:40:32.754668+00:00",
+  "objectives": {
+    "rpo_target_hours": 24.0,
+    "rpo_achieved_hours": 6.0,
+    "rpo_status": "COMPLIANT",
+    "rto_target_hours": 4.0,
+    "rto_achieved_seconds": 180.0,
+    "rto_status": "COMPLIANT"
+  },
+  "revocation_integrity": {
+    "authoritative_revocations": [
+      "lic-revoked-later"
+    ],
+    "post_restore_resurrections": 0,
+    "preservation_status": "VERIFIED"
+  },
+  "status": "COMPLIANT"
+}

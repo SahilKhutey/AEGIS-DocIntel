@@ -642,6 +642,52 @@ Implemented final end-to-end integration protocol, Private Engine Isolation Guar
 - **Final Release Determination:**
   - Release Engineering Verdict: **APPROVED & CERTIFIED — UNCONDITIONAL GO FOR LAUNCH (12/12 GATES SATISFIED, 100% GREEN)**.
 
+---
+
+## 2026-11-18 — PROT-FINAL-05: Deployment Infrastructure, Production Gateway & Private Engine Isolation Engineering
+
+### 1. Architectural Implementation Overview
+Moved AEGIS-DocIntel from a local single-node architecture into a production-grade, zero-trust evaluation platform:
+- **Public Evaluation Gateway Architecture (`src/gateway/`):**
+  - Implemented `TrustedInternalContext` (`request_context.py`) generating cryptographically tamper-evident authorization envelopes.
+  - Implemented `GatewayServiceAuth` (`service_auth.py`) with HMAC-SHA256 signing, replay prevention, and environment separation.
+  - Implemented `RequestValidator` (`request_validation.py`) enforcing magic bytes verification (PDF `%PDF-`, PNG, JPEG), file size limits (25 MB), path traversal checks, and client tenant header stripping (`X-Tenant-ID` stripped from client requests).
+  - Implemented `RateLimiter` (`rate_limiting.py`) with sliding-window tracking per IP and tenant.
+  - Implemented `ResponseSanitizer` (`response_sanitizer.py`) recursively stripping internal IPs (`10.x`, `172.16-31.x`, `192.168.x`), DB connection strings, passwords, and tracebacks.
+  - Implemented `PrivateEngineClient` (`upstream_client.py`) with fail-closed downstream circuit breaking.
+- **Private Engine Sandboxing & Workload Boundaries:**
+  - Implemented `SecureDocumentParser` (`src/ingestion/secure_parser.py`) enforcing 10.0s execution timeouts, ephemeral scratchpad directories (`/tmp/aegis_scratch_*`), and guaranteed deletion post-execution or worker failure.
+  - Implemented `IsolatedLLMAdapter` (`src/llm_service/isolated_adapter.py`) restricting provider credentials to server-side only, rejecting client-supplied API keys, and enforcing outbound host allowlists.
+  - Implemented `TenantScopedRepository` (`src/repositories/tenant_scoped.py`) enforcing parameterized `WHERE tenant_id = :tenant_id` queries and blocking DDL operations for `aegis_app`.
+- **Infrastructure As Code & Deployment Configurations (`infrastructure/`):**
+  - Authored environment templates (`infrastructure/environments/{development, ci, staging, production}/env.example`).
+  - Authored multi-service Docker Compose files (`infrastructure/compose/production/docker-compose.yml` and `staging/docker-compose.yml`) with rootless execution, `internal: true` networks, resource limits, and zero plaintext secrets.
+  - Authored Caddy edge reverse proxy (`infrastructure/gateway/Caddyfile`) enforcing TLS 1.3, security headers (HSTS, nosniff, CSP, frame-ancestors), and tenant header stripping.
+  - Authored PostgreSQL database schema (`infrastructure/database/init-schema.sql`), network host authentication rules (`pg_hba.conf`), and least-privilege roles (`roles.sql`).
+  - Authored network policy specification (`infrastructure/networking/network-policy.json`).
+  - Authored secret management module (`infrastructure/secrets/secret_manager.py`) rejecting staging credentials in production.
+  - Authored Prometheus monitoring configuration (`infrastructure/monitoring/prometheus.yml`) and health audit monitor (`health_monitor.py`).
+  - Authored disaster recovery tooling (`infrastructure/backup/backup.py`, `restore.py`, `verify_restore.py`) guaranteeing post-restoration revocation preservation.
+  - Authored deployment manifest validator (`infrastructure/scripts/validate_deployment_manifests.py`).
+- **Gateway Health Probes (`services/evaluation_gateway/app.py`):**
+  - Added `/health/live` and `/health/ready` endpoints disclosing operational status without exposing database hostnames, credentials, or internal topology.
+- **Deployment Security Acceptance Test Suite (`tests/security/deployment/`):**
+  - Implemented 20 automated tests covering all 18 requirements (`DEP-TEST-001` through `DEP-TEST-018`):
+    * `test_dep_01_boundary_isolation.py`: Public engine port scan, direct engine request rejection, DB network isolation, gateway auth, storage access, internal traffic. (6/6 PASSED)
+    * `test_dep_02_tenant_and_roles.py`: Untrusted tenant header stripping, DB role escalation denial, tenant query isolation. (3/3 PASSED)
+    * `test_dep_03_secrets_and_manifests.py`: Staging credential rejection in prod, zero plaintext secrets in manifests, key purpose segregation. (3/3 PASSED)
+    * `test_dep_04_workloads_and_providers.py`: Parser workload sandboxing, scratchpad wipe, LLM key protection, worker crash resilience. (3/3 PASSED)
+    * `test_dep_05_health_and_resilience.py`: Outage fail-closed behavior, zero health probe disclosures. (2/2 PASSED)
+    * `test_dep_06_backup_recovery_rollback.py`: Post-restoration revocation preservation, RPO/RTO verification, deployment rollback safety. (3/3 PASSED)
+  - Outcome: **20 / 20 PASSED in 1.74s (100% Green)**.
+  - Full suite regression outcome: **230 / 230 PASSED in 9.42s**.
+- **Formal Engineering Dossiers & Empirical Audit Evidence:**
+  - Populated 10 audit registries in `audit/prot-final/deployment/`.
+  - Authored 17 formal engineering dossiers in `docs/distribution/prot-final/deployment/` (`00_DEPLOYMENT_ARCHITECTURE.md` through `16_WP_SIGNOFF.md`).
+- **Final Deployment Assessment:**
+  - Deployment Architecture & Trust Boundaries: **APPROVED & PRODUCTION CERTIFIED (20/20 TESTS PASSED, 18/18 ACCEPTANCE OBJECTIVES SATISFIED, 100% GREEN)**.
+
+
 
 
 

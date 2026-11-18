@@ -1,0 +1,108 @@
+# AEGIS-DocIntel Staging Deployment Composition
+# PROT-FINAL-05: Workstream DEP-01 & DEP-11
+services:
+  evaluation-gateway:
+    image: aegis/evaluation-gateway:1.1.0-staging
+    restart: unless-stopped
+    user: "10001:10001"
+    security_opt:
+      - no-new-privileges:true
+    ports:
+      - "8443:443"
+      - "8080:80"
+    environment:
+      APP_ENV: staging
+      ENGINE_INTERNAL_URL: http://private-engine:8000
+      DATABASE_URL_FILE: /run/secrets/staging_database_url
+      AEGIS_INTERNAL_SERVICE_SECRET_FILE: /run/secrets/staging_internal_secret
+    networks:
+      - public-edge
+      - private-services
+    secrets:
+      - staging_database_url
+      - staging_internal_secret
+    deploy:
+      resources:
+        limits:
+          cpus: '1.5'
+          memory: 2048M
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8000/health/live || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+
+  private-engine:
+    image: aegis/private-engine:1.1.0-staging
+    restart: unless-stopped
+    user: "10002:10002"
+    security_opt:
+      - no-new-privileges:true
+    expose:
+      - "8000"
+    environment:
+      APP_ENV: staging
+      DATABASE_URL_FILE: /run/secrets/staging_database_url
+      AEGIS_INTERNAL_SERVICE_SECRET_FILE: /run/secrets/staging_internal_secret
+      AEGIS_OPENAI_API_KEY_FILE: /run/secrets/staging_openai_key
+    networks:
+      - private-services
+      - engine-data
+    secrets:
+      - staging_database_url
+      - staging_internal_secret
+      - staging_openai_key
+    deploy:
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: 4096M
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8000/readiness || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+
+  database:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    expose:
+      - "5432"
+    environment:
+      POSTGRES_DB: aegis_staging
+      POSTGRES_USER: aegis_app
+      POSTGRES_PASSWORD_FILE: /run/secrets/staging_db_password
+    networks:
+      - engine-data
+    secrets:
+      - staging_db_password
+    volumes:
+      - staging-postgres-data:/var/lib/postgresql/data
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 2048M
+
+networks:
+  public-edge:
+    driver: bridge
+  private-services:
+    driver: bridge
+    internal: true
+  engine-data:
+    driver: bridge
+    internal: true
+
+volumes:
+  staging-postgres-data:
+
+secrets:
+  staging_database_url:
+    file: ../../secrets/staging/database_url.txt
+  staging_internal_secret:
+    file: ../../secrets/staging/internal_secret.txt
+  staging_openai_key:
+    file: ../../secrets/staging/openai_key.txt
+  staging_db_password:
+    file: ../../secrets/staging/db_password.txt

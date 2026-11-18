@@ -1,0 +1,42 @@
+{
+  "control_id": "DEP-006",
+  "evaluated_at": "2026-11-18T04:40:32.754668+00:00",
+  "rules_verified": [
+    {
+      "source": "Internet",
+      "destination": "Gateway:443",
+      "action": "ALLOW"
+    },
+    {
+      "source": "Internet",
+      "destination": "Private-Engine:8000",
+      "action": "DENY (0 public port mappings)"
+    },
+    {
+      "source": "Internet",
+      "destination": "Database:5432",
+      "action": "DENY (internal network only)"
+    },
+    {
+      "source": "Gateway",
+      "destination": "Private-Engine:8000",
+      "action": "ALLOW (HMAC-SHA256 authenticated)"
+    },
+    {
+      "source": "Private-Engine",
+      "destination": "Database:5432",
+      "action": "ALLOW (SCRAM-SHA-256)"
+    },
+    {
+      "source": "Private-Engine",
+      "destination": "Approved LLM Providers",
+      "action": "ALLOW (HTTPS)"
+    },
+    {
+      "source": "Private-Engine",
+      "destination": "Unapproved Outbound",
+      "action": "DENY"
+    }
+  ],
+  "status": "COMPLIANT"
+}

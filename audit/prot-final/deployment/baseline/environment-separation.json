@@ -1,0 +1,33 @@
+{
+  "control_id": "DEP-001",
+  "evaluated_at": "2026-11-18T04:40:32.754668+00:00",
+  "commit": "0b08eac20bda09986248f8cdd3afd1f7c812712e",
+  "environments": [
+    {
+      "name": "development",
+      "data": "synthetic",
+      "credentials": "mock-dev",
+      "isolated": true
+    },
+    {
+      "name": "ci",
+      "data": "synthetic",
+      "credentials": "mock-ci",
+      "isolated": true
+    },
+    {
+      "name": "staging",
+      "data": "synthetic",
+      "credentials": "isolated-staging",
+      "isolated": true
+    },
+    {
+      "name": "production",
+      "data": "evaluator-partitioned",
+      "credentials": "kms-vault",
+      "isolated": true
+    }
+  ],
+  "staging_cred_rejected_in_prod": true,
+  "status": "COMPLIANT"
+}

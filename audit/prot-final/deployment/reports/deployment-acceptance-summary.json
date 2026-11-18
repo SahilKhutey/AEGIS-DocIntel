@@ -1,0 +1,45 @@
+{
+  "phase": "PROT-FINAL-05",
+  "evaluated_at": "2026-11-18T04:40:32.754668+00:00",
+  "commit": "0b08eac20bda09986248f8cdd3afd1f7c812712e",
+  "acceptance_tests": {
+    "total": 18,
+    "passed": 18,
+    "failed": 0,
+    "tests": [
+      "DEP-TEST-001",
+      "DEP-TEST-002",
+      "DEP-TEST-003",
+      "DEP-TEST-004",
+      "DEP-TEST-005",
+      "DEP-TEST-006",
+      "DEP-TEST-007",
+      "DEP-TEST-008",
+      "DEP-TEST-009",
+      "DEP-TEST-010",
+      "DEP-TEST-011",
+      "DEP-TEST-012",
+      "DEP-TEST-013",
+      "DEP-TEST-014",
+      "DEP-TEST-015",
+      "DEP-TEST-016",
+      "DEP-TEST-017",
+      "DEP-TEST-018"
+    ]
+  },
+  "workstreams": {
+    "DEP-01": "COMPLIANT",
+    "DEP-02": "COMPLIANT",
+    "DEP-03": "COMPLIANT",
+    "DEP-04": "COMPLIANT",
+    "DEP-05": "COMPLIANT",
+    "DEP-06": "COMPLIANT",
+    "DEP-07": "COMPLIANT",
+    "DEP-08": "COMPLIANT",
+    "DEP-09": "COMPLIANT",
+    "DEP-10": "COMPLIANT",
+    "DEP-11": "COMPLIANT",
+    "DEP-12": "COMPLIANT"
+  },
+  "overall_status": "CERTIFIED"
+}

@@ -1,0 +1,40 @@
+# AEGIS-DocIntel Edge Reverse Proxy & TLS Configuration
+# PROT-FINAL-05: Workstream DEP-08 & DEP-10
+
+gateway.aegis-docintel.internal, localhost:8443 {
+    tls internal
+
+    # Request body size limitation (DEP-08: 25 MB max)
+    request_body {
+        max_size 25MB
+    }
+
+    # Security Headers (DEP-08)
+    header {
+        Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+        X-Content-Type-Options "nosniff"
+        X-Frame-Options "DENY"
+        Referrer-Policy "strict-origin-when-cross-origin"
+        Content-Security-Policy "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; frame-ancestors 'none';"
+        Permissions-Policy "camera=(), microphone=(), geolocation=(), payment=()"
+        -Server
+    }
+
+    # Reverse proxy to evaluation gateway
+    reverse_proxy evaluation-gateway:8000 {
+        header_up Host {host}
+        header_up X-Real-IP {remote_host}
+        header_up X-Forwarded-For {remote_host}
+        header_up X-Forwarded-Proto {scheme}
+
+        # Strip untrusted tenant headers from edge clients (DEP-007, DEP-TEST-005)
+        header_up -X-Tenant-ID
+        header_up -X-Tenant-Context
+        header_up -X-Internal-Role
+
+        transport http {
+            response_header_timeout 30s
+            dial_timeout 5s
+        }
+    }
+}

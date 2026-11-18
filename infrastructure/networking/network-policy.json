@@ -1,0 +1,70 @@
+{
+  "network_policy_version": "1.1.0",
+  "generated_for": "AEGIS-DocIntel Production Deployment",
+  "rules": [
+    {
+      "direction": "ingress",
+      "source": "0.0.0.0/0",
+      "destination": "evaluation-gateway",
+      "ports": [443, 80],
+      "protocol": "TCP",
+      "action": "ALLOW",
+      "purpose": "Public evaluator HTTPS traffic to gateway"
+    },
+    {
+      "direction": "ingress",
+      "source": "0.0.0.0/0",
+      "destination": "private-engine",
+      "ports": [8000],
+      "protocol": "TCP",
+      "action": "DENY",
+      "purpose": "DEP-001 / DEP-TEST-001: Private engine is strictly unreachable from public internet"
+    },
+    {
+      "direction": "ingress",
+      "source": "0.0.0.0/0",
+      "destination": "database",
+      "ports": [5432],
+      "protocol": "TCP",
+      "action": "DENY",
+      "purpose": "DEP-004 / DEP-TEST-003: Evaluator clients cannot directly connect to database"
+    },
+    {
+      "direction": "internal",
+      "source": "evaluation-gateway",
+      "destination": "private-engine",
+      "ports": [8000],
+      "protocol": "TCP",
+      "action": "ALLOW",
+      "authentication": "HMAC-SHA256 TrustedInternalContext",
+      "purpose": "DEP-003: Authorized internal service dispatch"
+    },
+    {
+      "direction": "internal",
+      "source": "private-engine",
+      "destination": "database",
+      "ports": [5432],
+      "protocol": "TCP",
+      "action": "ALLOW",
+      "authentication": "SCRAM-SHA-256",
+      "purpose": "Internal database transactions"
+    },
+    {
+      "direction": "egress",
+      "source": "private-engine",
+      "destination": "api.openai.com, api.anthropic.com",
+      "ports": [443],
+      "protocol": "TCP",
+      "action": "ALLOW",
+      "purpose": "DEP-006: Controlled outbound LLM inference"
+    },
+    {
+      "direction": "egress",
+      "source": "private-engine",
+      "destination": "0.0.0.0/0",
+      "ports": "ALL_OTHER",
+      "action": "DENY",
+      "purpose": "DEP-006: Block unapproved outbound engine traffic"
+    }
+  ]
+}

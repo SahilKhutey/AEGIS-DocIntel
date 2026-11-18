@@ -1,0 +1,135 @@
+# AEGIS-DocIntel Production Deployment Composition
+# PROT-FINAL-05: Workstream DEP-01, DEP-03, DEP-04 & DEP-11
+services:
+  edge-proxy:
+    image: caddy:2.8-alpine
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    ports:
+      - "443:443"
+      - "80:80"
+    volumes:
+      - ../../gateway/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data
+      - caddy-config:/config
+    networks:
+      - public-edge
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 512M
+
+  evaluation-gateway:
+    image: aegis/evaluation-gateway:1.1.0
+    restart: unless-stopped
+    user: "10001:10001"
+    security_opt:
+      - no-new-privileges:true
+    expose:
+      - "8000"
+    environment:
+      APP_ENV: production
+      ENGINE_INTERNAL_URL: http://private-engine:8000
+      DATABASE_URL_FILE: /run/secrets/production_database_url
+      AEGIS_INTERNAL_SERVICE_SECRET_FILE: /run/secrets/production_internal_secret
+    networks:
+      - public-edge
+      - private-services
+    secrets:
+      - production_database_url
+      - production_internal_secret
+    deploy:
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: 2048M
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8000/health/live || exit 1"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+
+  private-engine:
+    image: aegis/private-engine:1.1.0
+    restart: unless-stopped
+    user: "10002:10002"
+    security_opt:
+      - no-new-privileges:true
+    expose:
+      - "8000"
+    environment:
+      APP_ENV: production
+      DATABASE_URL_FILE: /run/secrets/production_database_url
+      AEGIS_INTERNAL_SERVICE_SECRET_FILE: /run/secrets/production_internal_secret
+      AEGIS_OPENAI_API_KEY_FILE: /run/secrets/production_openai_key
+      AEGIS_ANTHROPIC_API_KEY_FILE: /run/secrets/production_anthropic_key
+    networks:
+      - private-services
+      - engine-data
+    secrets:
+      - production_database_url
+      - production_internal_secret
+      - production_openai_key
+      - production_anthropic_key
+    deploy:
+      resources:
+        limits:
+          cpus: '4.0'
+          memory: 8192M
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8000/readiness || exit 1"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+
+  database:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    expose:
+      - "5432"
+    environment:
+      POSTGRES_DB: aegis_production
+      POSTGRES_USER: aegis_app
+      POSTGRES_PASSWORD_FILE: /run/secrets/production_db_password
+    networks:
+      - engine-data
+    secrets:
+      - production_db_password
+    volumes:
+      - production-postgres-data:/var/lib/postgresql/data
+      - ../../database/init-schema.sql:/docker-entrypoint-initdb.d/01-init.sql:ro
+      - ../../database/pg_hba.conf:/etc/postgresql/pg_hba.conf:ro
+    deploy:
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: 4096M
+
+networks:
+  public-edge:
+    driver: bridge
+  private-services:
+    driver: bridge
+    internal: true
+  engine-data:
+    driver: bridge
+    internal: true
+
+volumes:
+  caddy-data:
+  caddy-config:
+  production-postgres-data:
+
+secrets:
+  production_database_url:
+    file: ../../secrets/production/database_url.txt
+  production_internal_secret:
+    file: ../../secrets/production/internal_secret.txt
+  production_openai_key:
+    file: ../../secrets/production/openai_key.txt
+  production_anthropic_key:
+    file: ../../secrets/production/anthropic_key.txt
+  production_db_password:
+    file: ../../secrets/production/db_password.txt

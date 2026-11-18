@@ -1,0 +1,14 @@
+{
+  "control_id": "DEP-003",
+  "evaluated_at": "2026-11-18T04:40:32.754668+00:00",
+  "verification_checks": {
+    "direct_unauthenticated_request": "REJECTED (MISSING_SERVICE_TOKEN)",
+    "tampered_signature_request": "REJECTED (INVALID_SERVICE_SIGNATURE)",
+    "staging_token_in_production": "REJECTED (STAGING_CREDENTIAL_IN_PRODUCTION_REJECTED)",
+    "expired_token_request": "REJECTED (SERVICE_TOKEN_EXPIRED)",
+    "replayed_request_id": "REJECTED (REPLAYED_REQUEST_ID)",
+    "tenant_mismatch": "REJECTED (TENANT_BOUNDARY_MISMATCH)",
+    "valid_trusted_context": "AUTHENTICATED (200 OK)"
+  },
+  "status": "COMPLIANT"
+}

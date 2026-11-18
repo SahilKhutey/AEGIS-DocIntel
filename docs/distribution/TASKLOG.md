@@ -752,5 +752,52 @@
   - `docs/distribution/prot-final/release-engineering/` (16 engineering dossiers)
 - **Result:** **PASSED / CERTIFIED & SIGNED OFF — RELEASE PIPELINE COMPLETE & CERTIFIED (24/24 TESTS PASSED, 12/12 GATES SATISFIED, 100% GREEN)**.
 
+### [2026-11-18 10:10:00] - PROT-FINAL-05: Deployment Infrastructure, Production Gateway & Private Engine Isolation Execution
+- **Context:** Transition AEGIS-DocIntel from a local application into a remotely accessible evaluation platform with zero-trust network segmentation, private engine isolation, and client trust boundary enforcement.
+- **Actions Taken:**
+  1. Implemented Public Evaluation Gateway modules in `src/gateway/`:
+     - `request_context.py`: Server-generated immutable `TrustedInternalContext`.
+     - `service_auth.py`: HMAC-SHA256 service-to-service authentication and replay protection (`GatewayServiceAuth`).
+     - `request_validation.py`: MIME and magic bytes inspection, path traversal checks, and client tenant header stripping (`RequestValidator`).
+     - `rate_limiting.py`: Sliding-window rate limiter per client IP and tenant.
+     - `response_sanitizer.py`: Deep sanitizer stripping stack traces, internal IPs, DB URIs, and credentials (`ResponseSanitizer`).
+     - `upstream_client.py`: Fail-closed upstream client forwarding authorized requests to private engine (`PrivateEngineClient`).
+  2. Implemented Private Engine Sandboxing & Workload Boundaries:
+     - `src/ingestion/secure_parser.py`: Sandboxed parsing in ephemeral scratch directory (`/tmp/aegis_scratch_*`), timeout enforcement (10.0s), and guaranteed cleanup post-execution or failure.
+     - `src/llm_service/isolated_adapter.py`: Outbound LLM provider isolation rejecting client-supplied API keys and unapproved endpoints.
+     - `src/repositories/tenant_scoped.py`: Parameterized repository enforcing `WHERE tenant_id = :tenant_id` and database role boundaries (`aegis_app` vs `aegis_migration` vs `aegis_readonly`).
+  3. Implemented Infrastructure-as-Code & Multi-Service Configurations:
+     - Environment templates: `infrastructure/environments/{development, ci, staging, production}/env.example`.
+     - Docker Compose: `infrastructure/compose/production/docker-compose.yml` and `infrastructure/compose/staging/docker-compose.yml` with `internal: true` networks, rootless users, resource limits, and Docker secrets.
+     - Edge Reverse Proxy: `infrastructure/gateway/Caddyfile` with modern TLS 1.3, security headers (HSTS, nosniff, CSP, frame-ancestors), and tenant header stripping.
+     - Dockerfiles: `infrastructure/gateway/Dockerfile` and `infrastructure/private-engine/Dockerfile`.
+     - Database Schemas: `infrastructure/database/init-schema.sql`, `pg_hba.conf`, and `roles.sql`.
+     - Network Policy: `infrastructure/networking/network-policy.json` and `security-headers.conf`.
+     - Secrets Management: `infrastructure/secrets/secret_manager.py` (rejecting staging secrets in production) and `secrets.env.example`.
+     - Monitoring: `infrastructure/monitoring/prometheus.yml` and `health_monitor.py`.
+     - Disaster Recovery: `infrastructure/backup/backup.py`, `restore.py`, and `verify_restore.py` enforcing post-restoration revocation preservation (`DEP-TEST-012`).
+     - Manifest Validator: `infrastructure/scripts/validate_deployment_manifests.py` verifying 0 plaintext secrets.
+  4. Updated Evaluation Gateway Endpoints:
+     - Added `/health/live` and `/health/ready` to `services/evaluation_gateway/app.py` with zero infrastructure disclosure.
+  5. Implemented & Executed Deployment Security Acceptance Test Suite:
+     - `tests/security/deployment/`: 20 tests covering all 18 requirements (`DEP-TEST-001` through `DEP-TEST-018`), achieving 100% pass rate.
+  6. Generated Empirical Evidence & Formal Documentation:
+     - Populated 10 audit registries in `audit/prot-final/deployment/`.
+     - Authored 17 formal engineering dossiers in `docs/distribution/prot-final/deployment/` (`00_DEPLOYMENT_ARCHITECTURE.md` through `16_WP_SIGNOFF.md`).
+- **Commands Executed:**
+  - `python infrastructure/scripts/validate_deployment_manifests.py` -> PASSED zero-trust isolation checks.
+  - `pytest tests/security/deployment/ -v` -> 20 / 20 PASSED in 1.74s (100% green).
+  - `pytest tests/security/deployment/ tests/security/release_engineering/ tests/security/penetration_testing/ tests/security/consolidated/ -q` -> 230 / 230 PASSED.
+  - `python scripts/generate_audit_prot_final_deployment.py` -> Generated all audit evidence and 17 dossiers.
+- **Deliverables:**
+  - `src/gateway/` (`request_context.py`, `service_auth.py`, `request_validation.py`, `rate_limiting.py`, `response_sanitizer.py`, `upstream_client.py`)
+  - `src/ingestion/secure_parser.py`, `src/llm_service/isolated_adapter.py`, `src/repositories/tenant_scoped.py`
+  - `infrastructure/` (`environments/`, `compose/`, `gateway/`, `private-engine/`, `database/`, `networking/`, `secrets/`, `monitoring/`, `backup/`, `scripts/`)
+  - `tests/security/deployment/` (20 automated tests across 6 modules)
+  - `audit/prot-final/deployment/` (10 evidence registries)
+  - `docs/distribution/prot-final/deployment/` (17 engineering dossiers)
+- **Result:** **PASSED / CERTIFIED & SIGNED OFF — PRODUCTION DEPLOYMENT & GATEWAY ISOLATION CERTIFIED (20/20 TESTS PASSED, 18/18 TEST OBJECTIVES SATISFIED, 100% GREEN)**.
+
+
 
 

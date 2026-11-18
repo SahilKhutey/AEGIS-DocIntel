@@ -1,0 +1,23 @@
+{
+  "control_id": "DEP-009",
+  "evaluated_at": "2026-11-18T04:40:32.754668+00:00",
+  "probes": {
+    "/health/live": {
+      "http_status": 200,
+      "sensitive_disclosures": 0,
+      "status": "PASS"
+    },
+    "/health/ready": {
+      "http_status": 200,
+      "sensitive_disclosures": 0,
+      "status": "PASS"
+    }
+  },
+  "redacted_patterns": [
+    "internal_ips",
+    "database_uris",
+    "passwords",
+    "tracebacks"
+  ],
+  "status": "COMPLIANT"
+}

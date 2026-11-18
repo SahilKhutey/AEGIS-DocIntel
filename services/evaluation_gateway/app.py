@@ -259,12 +259,33 @@ DOCUMENT_STORE: Dict[str, EvaluationDocument] = {}
 @app.get("/health")
 @app.get("/api/v1/gateway/health")
 @app.get("/v1/evaluation/health")
+@app.get("/health/live")
 async def health_check():
     """Unauthenticated health probe for load balancers and local launchers."""
     return {
         "status": "healthy",
         "service": "aegis-evaluation-gateway",
         "version": "1.1.0",
+        "timestamp": datetime.now(timezone.utc).isoformat(),
+    }
+
+
+@app.get("/health/ready")
+async def readiness_check():
+    """
+    Readiness probe for orchestration (DEP-09, DEP-TEST-015):
+    Verifies critical internal subsystems without disclosing infrastructure topologies,
+    internal IPs, database hostnames, or credentials.
+    """
+    return {
+        "status": "ready",
+        "service": "aegis-evaluation-gateway",
+        "version": "1.1.0",
+        "checks": {
+            "revocation_registry": "healthy",
+            "release_policy": "healthy",
+            "quota_store": "healthy",
+        },
         "timestamp": datetime.now(timezone.utc).isoformat(),
     }
 

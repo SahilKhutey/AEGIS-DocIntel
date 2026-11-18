@@ -1,0 +1,15 @@
+{
+  "control_id": "DEP-002",
+  "evaluated_at": "2026-11-18T04:40:32.754668+00:00",
+  "gateway_features": {
+    "authentication": "VERIFIED (JWT & device signature)",
+    "session_validation": "VERIFIED (active registry & revocation lookup)",
+    "license_verification": "VERIFIED (Ed25519 signature & tier validation)",
+    "entitlement_resolution": "VERIFIED (feature policy evaluation)",
+    "quota_reservation": "VERIFIED (atomic pre-allocation & settlement)",
+    "tenant_sanitization": "VERIFIED (client X-Tenant-ID stripped)",
+    "rate_limiting": "VERIFIED (sliding-window IP & tenant limits)",
+    "response_sanitization": "VERIFIED (tracebacks, internal IPs & DB hosts redacted)"
+  },
+  "status": "COMPLIANT"
+}

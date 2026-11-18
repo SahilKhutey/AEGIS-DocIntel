@@ -1,0 +1,30 @@
+{
+  "control_id": "DEP-004",
+  "evaluated_at": "2026-11-18T04:40:32.754668+00:00",
+  "domains": [
+    "identity",
+    "evaluation",
+    "authorization",
+    "usage",
+    "documents",
+    "security"
+  ],
+  "role_privileges": {
+    "aegis_app": {
+      "dml_allowed": true,
+      "ddl_allowed": false,
+      "role_escalation_blocked": true
+    },
+    "aegis_migration": {
+      "dml_allowed": true,
+      "ddl_allowed": true
+    },
+    "aegis_readonly": {
+      "dml_allowed": false,
+      "ddl_allowed": false,
+      "select_only": true
+    }
+  },
+  "tenant_isolation": "MANDATORY WHERE tenant_id = :tenant_id parameterization verified",
+  "status": "COMPLIANT"
+}

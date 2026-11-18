@@ -1,0 +1,13 @@
+{
+  "control_id": "DEP-005",
+  "evaluated_at": "2026-11-18T04:40:32.754668+00:00",
+  "parser_controls": {
+    "ephemeral_scratch_directory": "VERIFIED (aegis_scratch_<tenant>_<rand>)",
+    "automatic_cleanup_on_success": "VERIFIED (100% wiped)",
+    "automatic_cleanup_on_failure": "VERIFIED (100% wiped post-exception)",
+    "execution_timeout": "VERIFIED (10.0s ceiling enforced)",
+    "max_file_size": "VERIFIED (25 MB ceiling enforced)",
+    "macro_script_execution": "DISABLED"
+  },
+  "status": "COMPLIANT"
+}
