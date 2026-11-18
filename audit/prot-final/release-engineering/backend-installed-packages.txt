@@ -1,6 +1,6 @@
 absl-py==2.4.0
 aegis-docprep @ file:///C:/Users/ASUS/Documents/Aegis-DocIntel/aegis-docprep/dist/aegis_docprep-0.1.0-py3-none-any.whl#sha256=b26f7e400994b5a28e6c085ed23020513c864567c31ed06d7832490d1d8226de
--e git+https://github.com/SahilKhutey/FashXStudio.git@4a1fdd4b6e97a8233d57a02855048c246c395532#egg=ai_fashion_assistant
+-e git+https://github.com/SahilKhutey/FashXStudio.git@58b2ce3153acf9e71ae24ea3d3128c2c727eabbb#egg=ai_fashion_assistant
 aider-chat==0.86.2
 aiofiles==25.1.0
 aiohappyeyeballs==2.6.1

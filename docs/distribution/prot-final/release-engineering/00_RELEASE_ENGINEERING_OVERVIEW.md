@@ -2,7 +2,7 @@
 
 **Version:** 1.1.0  
 **Status:** APPROVED & VERIFIED  
-**Date:** 2026-11-18T03:48:37.665500+00:00  
+**Date:** 2026-11-18T04:20:09.415275+00:00  
 **Classification:** AEGIS Release Engineering Specification  
 
 ---
@@ -18,7 +18,7 @@ The **PROT-FINAL-04** phase establishes the production build, release engineerin
 
 | ID | Requirement | Target Condition | Verification Result |
 |---|---|---|---|
-| **REL-001** | Source Traceability | Every release maps deterministically to a verified Git commit | **PASSED** (commit `cee7fc9b8b`) |
+| **REL-001** | Source Traceability | Every release maps deterministically to a verified Git commit | **PASSED** (commit `1025069eb1`) |
 | **REL-002** | Build Isolation | Hermetic CI build runs in controlled environment | **PASSED** (isolated GitHub actions) |
 | **REL-003** | Dependency Integrity | Lockfiles and dependency hashes audited and verified | **PASSED** (npm & pip locks verified) |
 | **REL-004** | Secret Protection | Zero secrets, tokens, or private keys in artifact | **PASSED** (Gitleaks scan clean) |

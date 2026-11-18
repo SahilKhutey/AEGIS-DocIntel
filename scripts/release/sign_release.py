@@ -130,7 +130,7 @@ def sign_release() -> dict:
     signature_bytes = priv_key.sign(canonical_bytes)
     sig_b64 = base64.b64encode(signature_bytes).decode("ascii")
 
-    SIGNATURE_PATH.write_text(sig_b64, encoding="utf-8")
+    SIGNATURE_PATH.write_bytes(sig_b64.encode("utf-8"))
 
     pub_pem = pub_key.public_bytes(
         encoding=serialization.Encoding.PEM,
@@ -145,7 +145,7 @@ def sign_release() -> dict:
         "status": "ACTIVE",
         "verification_guidance": "Verify manifest.json using manifest.sig and the public key above.",
     }
-    KEY_METADATA_PATH.write_text(json.dumps(key_metadata, indent=2), encoding="utf-8")
+    KEY_METADATA_PATH.write_bytes(json.dumps(key_metadata, indent=2).encode("utf-8"))
 
     print(f"[+] Release manifest generated at {MANIFEST_PATH}")
     print(f"[+] Signature generated at {SIGNATURE_PATH}")

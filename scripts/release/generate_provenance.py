@@ -117,7 +117,7 @@ def generate_provenance() -> dict:
         },
     }
 
-    PROVENANCE_PATH.write_text(json.dumps(statement, indent=2), encoding="utf-8")
+    PROVENANCE_PATH.write_bytes(json.dumps(statement, indent=2).encode("utf-8"))
     print(f"[+] Build provenance generated at {PROVENANCE_PATH}")
     return statement
 

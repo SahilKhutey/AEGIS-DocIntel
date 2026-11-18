@@ -1,6 +1,6 @@
 {
   "control_id": "REL-008",
-  "evaluated_at": "2026-11-18T03:48:37.665500+00:00",
+  "evaluated_at": "2026-11-18T04:20:09.415275+00:00",
   "signature_details": {
     "algorithm": "Ed25519 (EdDSA)",
     "key_id": "aegis-release-ed25519-2026-01",

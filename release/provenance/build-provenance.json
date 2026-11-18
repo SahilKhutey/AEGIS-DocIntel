@@ -10,7 +10,7 @@
     {
       "name": "manifest.json",
       "digest": {
-        "sha256": "08de92bdd4143d669320df00e1ec00f8398ca3750a063b7fa98bd560e83b0804"
+        "sha256": "c8d2a57311fdd2ee1234d8e3ae1610aa56873a5e1add33706abce9dfd8625d0c"
       }
     }
   ],
@@ -22,7 +22,7 @@
         "source": {
           "uri": "git+https://github.com/SahilKhutey/AEGIS-DocIntel.git",
           "digest": {
-            "sha1": "cee7fc9b8b656e5419ec85ca527a0b7c5434da4a"
+            "sha1": "1025069eb10be62d10f431ab51ead62eef4aa2c8"
           }
         },
         "workflow": ".github/workflows/evaluation-release.yml"
@@ -55,15 +55,15 @@
         "version": "1.1.0"
       },
       "metadata": {
-        "invocationId": "inv-cee7fc9b-eval-rel",
-        "startedOn": "2026-11-18T03:41:53.118690+00:00",
-        "finishedOn": "2026-11-18T03:41:53.118690+00:00"
+        "invocationId": "inv-1025069e-eval-rel",
+        "startedOn": "2026-11-18T04:18:39.073263+00:00",
+        "finishedOn": "2026-11-18T04:18:39.073263+00:00"
       },
       "byproducts": [
         {
           "name": "client-sbom.cdx.json",
           "digest": {
-            "sha256": "617058d3e62a8d7250edcabfd4722dbad02cfe0c5f4829208ee944483a94ffb5"
+            "sha256": "9858bf6543cb5cb7149b81190578c23e4a851fd9b3e8def54079da77d011608a"
           }
         }
       ]

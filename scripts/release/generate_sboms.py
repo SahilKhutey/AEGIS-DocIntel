@@ -86,7 +86,7 @@ def generate_sboms() -> dict:
         if comp["name"] not in existing_names:
             raw_client.setdefault("components", []).append(comp)
 
-    CLIENT_SBOM_TARGET.write_text(json.dumps(raw_client, indent=2), encoding="utf-8")
+    CLIENT_SBOM_TARGET.write_bytes(json.dumps(raw_client, indent=2).encode("utf-8"))
     client_sha = sha256_file(CLIENT_SBOM_TARGET)
     print(f"[+] Client SBOM generated at {CLIENT_SBOM_TARGET} ({len(raw_client.get('components', []))} components, SHA-256: {client_sha})")
 
@@ -112,7 +112,7 @@ def generate_sboms() -> dict:
         },
     }
 
-    BACKEND_SBOM_TARGET.write_text(json.dumps(raw_backend, indent=2), encoding="utf-8")
+    BACKEND_SBOM_TARGET.write_bytes(json.dumps(raw_backend, indent=2).encode("utf-8"))
     backend_sha = sha256_file(BACKEND_SBOM_TARGET)
     print(f"[+] Backend SBOM generated at {BACKEND_SBOM_TARGET} ({len(raw_backend.get('components', []))} components, SHA-256: {backend_sha})")
 
