@@ -1,0 +1,70 @@
+{
+  "workstream": "WS-11",
+  "title": "Operational Security, Audit Hash-Chaining & DR",
+  "executed_at": "2026-11-18T03:21:33.417253+00:00",
+  "test_cases": [
+    {
+      "id": "PT-OPS-001",
+      "name": "Audit log credential data minimization",
+      "result": "PASSED",
+      "enforcement": "Strict redaction of secrets in security event records"
+    },
+    {
+      "id": "PT-OPS-002",
+      "name": "Error sanitization (zero stack traces leaked)",
+      "result": "PASSED",
+      "enforcement": "Sanitized error JSON payloads; no tracebacks"
+    },
+    {
+      "id": "PT-OPS-003",
+      "name": "Audit logging for licensing and device events",
+      "result": "PASSED",
+      "enforcement": "Immutable audit events logged for activation and query"
+    },
+    {
+      "id": "PT-OPS-004",
+      "name": "Cross-tenant denial security event generation",
+      "result": "PASSED",
+      "enforcement": "DENIED audit event generated on IDOR probe"
+    },
+    {
+      "id": "PT-OPS-005",
+      "name": "Cryptographic hash chain integrity verification",
+      "result": "PASSED",
+      "enforcement": "Hash chain verified valid: H_i = SHA-256(H_{i-1} || E_i)"
+    },
+    {
+      "id": "PT-OPS-006",
+      "name": "Audit log tamper detection",
+      "result": "PASSED",
+      "enforcement": "Corrupted record immediately detected (is_valid: False)"
+    },
+    {
+      "id": "PT-OPS-007",
+      "name": "Security incident alerting",
+      "result": "PASSED",
+      "enforcement": "Threat alerts listed on admin monitoring API"
+    },
+    {
+      "id": "PT-OPS-008",
+      "name": "Incident declaration and containment workflow",
+      "result": "PASSED",
+      "enforcement": "Incident transitioned to CONTAINED status"
+    },
+    {
+      "id": "PT-OPS-009",
+      "name": "Immediate session revocation enforcement",
+      "result": "PASSED",
+      "enforcement": "Gateway requests rejected immediately post-revocation (403)"
+    },
+    {
+      "id": "PT-OPS-010",
+      "name": "Disaster recovery non-resurrection verification",
+      "result": "PASSED",
+      "enforcement": "Revoked licenses cannot resurrect after state reloads"
+    }
+  ],
+  "total_passed": 10,
+  "total_failed": 0,
+  "status": "COMPLIANT"
+}

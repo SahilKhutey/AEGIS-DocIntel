@@ -1,0 +1,33 @@
+{
+  "system_name": "AEGIS-DocIntel Protected Evaluation Architecture",
+  "version": "1.1.0",
+  "assessment_phase": "PROT-FINAL-03",
+  "evaluated_at": "2026-11-18T03:21:33.417253+00:00",
+  "components": [
+    {
+      "name": "Client Tier (Demo Edition)",
+      "tier": "Untrusted External",
+      "composition": "Next.js Static Frontend, Reverse Proxy (nginx), PowerShell/Bash Launchers",
+      "trust_boundary": "Perimeter Ingress"
+    },
+    {
+      "name": "Evaluation Gateway",
+      "tier": "Protected DMZ",
+      "composition": "FastAPI Ingress Controller, Entitlement Enforcement, Quota Manager, Session Revocation",
+      "trust_boundary": "Gateway Security Perimeter"
+    },
+    {
+      "name": "Core Reasoning Engine",
+      "tier": "Internal Private Subnet",
+      "composition": "DAG Orchestration Engine, Foundation Model Embeddings, Enterprise Vector Indices",
+      "trust_boundary": "Air-Gapped / Isolated Engine Subnet"
+    }
+  ],
+  "zero_trust_invariants": [
+    "Zero trust in client-side state, headers, or assertions.",
+    "Server-side cryptographic license token validation (Ed25519).",
+    "Hardware device challenge-response signature verification.",
+    "Tenant boundary isolation via cryptographic token claims.",
+    "Atomic server-side quota tracking with race-condition prevention."
+  ]
+}

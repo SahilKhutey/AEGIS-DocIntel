@@ -1,0 +1,70 @@
+{
+  "workstream": "WS-04",
+  "title": "Tenant Isolation & Multi-Tenancy Boundary",
+  "executed_at": "2026-11-18T03:21:33.417253+00:00",
+  "test_cases": [
+    {
+      "id": "PT-TEN-001",
+      "name": "Access another tenant document by known doc_id",
+      "result": "PASSED",
+      "enforcement": "404 Not Found (Zero IDOR Information Disclosure)"
+    },
+    {
+      "id": "PT-TEN-002",
+      "name": "Download another tenant document export",
+      "result": "PASSED",
+      "enforcement": "404 Not Found"
+    },
+    {
+      "id": "PT-TEN-003",
+      "name": "Query Ask AEGIS specifying another tenant document ID",
+      "result": "PASSED",
+      "enforcement": "404 Not Found (Query Rejected)"
+    },
+    {
+      "id": "PT-TEN-004",
+      "name": "Cross-tenant document comparison",
+      "result": "PASSED",
+      "enforcement": "404 Not Found on foreign doc_id"
+    },
+    {
+      "id": "PT-TEN-005",
+      "name": "Modify tenant_id in request payload",
+      "result": "PASSED",
+      "enforcement": "Context bound to authenticated JWT tenant; body ignored"
+    },
+    {
+      "id": "PT-TEN-006",
+      "name": "Modify X-Tenant-ID header with conflicting JWT",
+      "result": "PASSED",
+      "enforcement": "403 Forbidden Header Contradiction"
+    },
+    {
+      "id": "PT-TEN-007",
+      "name": "Modify workspace_id to cross workspace barrier",
+      "result": "PASSED",
+      "enforcement": "Workspace membership validated within tenant context"
+    },
+    {
+      "id": "PT-TEN-008",
+      "name": "Access another tenant asynchronous job status",
+      "result": "PASSED",
+      "enforcement": "404 Not Found"
+    },
+    {
+      "id": "PT-TEN-009",
+      "name": "Subscribe to another tenant WebSocket channel",
+      "result": "PASSED",
+      "enforcement": "Subscription rejected; channel bound to authenticated tenant"
+    },
+    {
+      "id": "PT-TEN-010",
+      "name": "Attempt cache poisoning to leak cross-tenant results",
+      "result": "PASSED",
+      "enforcement": "Cache keys strictly partitioned by tenant_id:license_id"
+    }
+  ],
+  "total_passed": 10,
+  "total_failed": 0,
+  "status": "COMPLIANT"
+}

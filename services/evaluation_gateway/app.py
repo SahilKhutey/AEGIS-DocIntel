@@ -72,6 +72,16 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
+@app.middleware("http")
+async def security_headers_middleware(request: Request, call_next):
+    """Enforces essential defensive HTTP response headers."""
+    response = await call_next(request)
+    response.headers["X-Content-Type-Options"] = "nosniff"
+    response.headers["X-Frame-Options"] = "DENY"
+    response.headers["Strict-Transport-Security"] = "max-age=31536000; includeSubDomains"
+    return response
+
 # ---------------------------------------------------------------------------
 # Error Sanitation & Ingress Hardening
 # ---------------------------------------------------------------------------
@@ -1495,6 +1505,14 @@ async def upload_document(
     ctx.require_feature("documents.upload")
 
     filename = file.filename or "uploaded_document.txt"
+    if ".." in filename or "/" in filename or "\\" in filename:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail={
+                "error": "PATH_TRAVERSAL_DETECTED",
+                "message": f"Filename '{filename}' contains invalid path traversal sequences.",
+            },
+        )
     clean_filename = Path(filename).name
     if re.search(r"\.(exe|dll|bat|cmd|sh|ps1|msi|vbs|jar)$", clean_filename, re.IGNORECASE):
         raise HTTPException(

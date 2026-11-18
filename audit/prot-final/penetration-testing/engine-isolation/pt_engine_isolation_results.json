@@ -1,0 +1,70 @@
+{
+  "workstream": "WS-08",
+  "title": "Private Engine Network Isolation",
+  "executed_at": "2026-11-18T03:21:33.417253+00:00",
+  "test_cases": [
+    {
+      "id": "PT-ENG-001",
+      "name": "Direct access to internal engine network endpoint",
+      "result": "PASSED",
+      "enforcement": "Engine endpoints not exposed on perimeter gateway"
+    },
+    {
+      "id": "PT-ENG-002",
+      "name": "Engine calls without internal service auth header",
+      "result": "PASSED",
+      "enforcement": "401 Missing Internal Service Authorization"
+    },
+    {
+      "id": "PT-ENG-003",
+      "name": "Engine calls using evaluator JWT credentials",
+      "result": "PASSED",
+      "enforcement": "403 Evaluator Role Prohibited on Engine Tier"
+    },
+    {
+      "id": "PT-ENG-004",
+      "name": "Reuse expired internal service token",
+      "result": "PASSED",
+      "enforcement": "401 Internal Token Expired"
+    },
+    {
+      "id": "PT-ENG-005",
+      "name": "Modify tenant context between gateway and engine",
+      "result": "PASSED",
+      "enforcement": "Mutual TLS and HMAC signed internal context blocks tampering"
+    },
+    {
+      "id": "PT-ENG-006",
+      "name": "Access private DAG orchestration prompts",
+      "result": "PASSED",
+      "enforcement": "Zero prompt extraction routes exposed"
+    },
+    {
+      "id": "PT-ENG-007",
+      "name": "Download private model configuration",
+      "result": "PASSED",
+      "enforcement": "404 Not Found (Zero route exposure)"
+    },
+    {
+      "id": "PT-ENG-008",
+      "name": "Access internal debug endpoints (/debug, /internal)",
+      "result": "PASSED",
+      "enforcement": "404 Not Found (Disabled in production mode)"
+    },
+    {
+      "id": "PT-ENG-009",
+      "name": "Path traversal into proprietary packages (/src/core)",
+      "result": "PASSED",
+      "enforcement": "400 Bad Request: Path traversal sequences detected"
+    },
+    {
+      "id": "PT-ENG-010",
+      "name": "Validate zero private engine code in client bundle",
+      "result": "PASSED",
+      "enforcement": "Zero python/dag source files found in client package"
+    }
+  ],
+  "total_passed": 10,
+  "total_failed": 0,
+  "status": "COMPLIANT"
+}

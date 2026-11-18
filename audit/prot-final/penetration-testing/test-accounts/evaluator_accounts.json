@@ -1,0 +1,39 @@
+{
+  "generated_at": "2026-11-18T03:21:33.417253+00:00",
+  "environment": "isolated-staging",
+  "accounts": [
+    {
+      "id": "eval-a",
+      "user_id": "user-eval-a",
+      "tenant_id": "tenant-eval-a",
+      "role": "evaluator",
+      "license_id": "lic-eval-a-staging",
+      "installation_id": "inst-mac-eval-a-101",
+      "quotas": {
+        "max_documents": 20,
+        "max_queries_per_day": 100
+      }
+    },
+    {
+      "id": "eval-b",
+      "user_id": "user-eval-b",
+      "tenant_id": "tenant-eval-b",
+      "role": "evaluator",
+      "license_id": "lic-eval-b-staging",
+      "installation_id": "inst-mac-eval-b-202",
+      "quotas": {
+        "max_documents": 20,
+        "max_queries_per_day": 100
+      }
+    },
+    {
+      "id": "attacker-rogue",
+      "user_id": "user-attacker-rogue",
+      "tenant_id": "tenant-attacker-rogue",
+      "role": "unauthenticated",
+      "license_id": "lic-rogue-forged-999",
+      "installation_id": "inst-rogue-clone-000",
+      "quotas": {}
+    }
+  ]
+}

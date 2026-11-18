@@ -1,0 +1,70 @@
+{
+  "workstream": "WS-06",
+  "title": "Quota Accounting & Limit Manipulation",
+  "executed_at": "2026-11-18T03:21:33.417253+00:00",
+  "test_cases": [
+    {
+      "id": "PT-Q-001",
+      "name": "Modify local client-side usage counter",
+      "result": "PASSED",
+      "enforcement": "Server tracks usage independently in memory/db"
+    },
+    {
+      "id": "PT-Q-002",
+      "name": "Submit repeated queries to exhaust daily quota",
+      "result": "PASSED",
+      "enforcement": "429 Too Many Requests (Quota Exceeded)"
+    },
+    {
+      "id": "PT-Q-003",
+      "name": "Concurrent requests to exploit race condition",
+      "result": "PASSED",
+      "enforcement": "Atomic reservations prevent overconsumption"
+    },
+    {
+      "id": "PT-Q-004",
+      "name": "Abort operation after reservation without settlement",
+      "result": "PASSED",
+      "enforcement": "Reservations expire and auto-rollback atomically"
+    },
+    {
+      "id": "PT-Q-005",
+      "name": "Replay reservation settlement token",
+      "result": "PASSED",
+      "enforcement": "Settlement ID consumed once; duplicate raises error"
+    },
+    {
+      "id": "PT-Q-006",
+      "name": "Submit negative usage increment value",
+      "result": "PASSED",
+      "enforcement": "ValueError on negative amount; counter unaffected"
+    },
+    {
+      "id": "PT-Q-007",
+      "name": "Manipulate client clock to trigger quota reset",
+      "result": "PASSED",
+      "enforcement": "Server relies strictly on UTC server clock"
+    },
+    {
+      "id": "PT-Q-008",
+      "name": "Submit queries after quota exhaustion",
+      "result": "PASSED",
+      "enforcement": "Strict rejection with 429 status code"
+    },
+    {
+      "id": "PT-Q-009",
+      "name": "Change tenant_id in request to bypass quota",
+      "result": "PASSED",
+      "enforcement": "Quota charged to authenticated token identity"
+    },
+    {
+      "id": "PT-Q-010",
+      "name": "Manipulate token usage count reported by client",
+      "result": "PASSED",
+      "enforcement": "Gateway meters actual inference token consumption"
+    }
+  ],
+  "total_passed": 10,
+  "total_failed": 0,
+  "status": "COMPLIANT"
+}

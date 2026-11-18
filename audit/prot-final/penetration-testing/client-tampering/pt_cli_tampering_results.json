@@ -1,0 +1,70 @@
+{
+  "workstream": "WS-01",
+  "title": "Client Tampering & Reverse Engineering",
+  "executed_at": "2026-11-18T03:21:33.417253+00:00",
+  "test_cases": [
+    {
+      "id": "PT-CLI-001",
+      "name": "Modify client bundle frontend permissions",
+      "result": "PASSED",
+      "server_action": "Server ignores client claims; validates token on every request"
+    },
+    {
+      "id": "PT-CLI-002",
+      "name": "Change local evaluator role to admin",
+      "result": "PASSED",
+      "server_action": "Server extracts role from cryptographically signed JWT; rejects spoofed role (403)"
+    },
+    {
+      "id": "PT-CLI-003",
+      "name": "Modify local license file expiration date",
+      "result": "PASSED",
+      "server_action": "Ed25519 signature verification fails; license rejected (401)"
+    },
+    {
+      "id": "PT-CLI-004",
+      "name": "Change local quota counters in storage",
+      "result": "PASSED",
+      "server_action": "Quota tracked server-side; client manipulation has zero effect"
+    },
+    {
+      "id": "PT-CLI-005",
+      "name": "Bypass UI upload file-size restriction",
+      "result": "PASSED",
+      "server_action": "Server-side stream validation rejects payload exceeding byte limit (413)"
+    },
+    {
+      "id": "PT-CLI-006",
+      "name": "Bypass UI file-type restrictions",
+      "result": "PASSED",
+      "server_action": "Server validates MIME type and content headers; rejects executables (400)"
+    },
+    {
+      "id": "PT-CLI-007",
+      "name": "Modify client API base URL to direct engine",
+      "result": "PASSED",
+      "server_action": "Engine is unroutable or rejects requests lacking internal service token (401)"
+    },
+    {
+      "id": "PT-CLI-008",
+      "name": "Extract embedded engine binaries from bundle",
+      "result": "PASSED",
+      "server_action": "Zero private engine binaries or Python bytecode found in distribution"
+    },
+    {
+      "id": "PT-CLI-009",
+      "name": "Extract internal prompts from client code",
+      "result": "PASSED",
+      "server_action": "No system prompts or DAG orchestrations stored client-side"
+    },
+    {
+      "id": "PT-CLI-010",
+      "name": "Modify launcher script to skip activation",
+      "result": "PASSED",
+      "server_action": "Gateway rejects unauthenticated API calls; activation strictly required (401)"
+    }
+  ],
+  "total_passed": 10,
+  "total_failed": 0,
+  "status": "COMPLIANT"
+}

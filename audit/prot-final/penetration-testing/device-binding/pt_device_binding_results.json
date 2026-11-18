@@ -1,0 +1,46 @@
+{
+  "workstream": "WS-03",
+  "title": "Device Binding Security",
+  "executed_at": "2026-11-18T03:21:33.417253+00:00",
+  "test_cases": [
+    {
+      "id": "PT-DEV-001",
+      "name": "Activate with forged device public key challenge",
+      "result": "PASSED",
+      "enforcement": "Ed25519 signature verification on challenge nonce fails"
+    },
+    {
+      "id": "PT-DEV-002",
+      "name": "Replay consumed challenge nonce",
+      "result": "PASSED",
+      "enforcement": "Challenge ID invalidated upon consumption"
+    },
+    {
+      "id": "PT-DEV-003",
+      "name": "Exceed max device limit (1/1 active)",
+      "result": "PASSED",
+      "enforcement": "PermissionError: Device limit exceeded (1/1)"
+    },
+    {
+      "id": "PT-DEV-004",
+      "name": "Spoof installation_id with legitimate device key",
+      "result": "PASSED",
+      "enforcement": "Challenge canonical message binds installation_id"
+    },
+    {
+      "id": "PT-DEV-005",
+      "name": "Deactivate device and attempt subsequent API calls",
+      "result": "PASSED",
+      "enforcement": "Session tokens immediately revoked"
+    },
+    {
+      "id": "PT-DEV-006",
+      "name": "Recover device using emergency recovery code",
+      "result": "PASSED",
+      "enforcement": "One-time recovery code resets binding securely"
+    }
+  ],
+  "total_passed": 6,
+  "total_failed": 0,
+  "status": "COMPLIANT"
+}

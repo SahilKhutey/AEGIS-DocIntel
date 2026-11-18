@@ -1,0 +1,70 @@
+{
+  "workstream": "WS-07",
+  "title": "Session Lifecycle & Token Abuse",
+  "executed_at": "2026-11-18T03:21:33.417253+00:00",
+  "test_cases": [
+    {
+      "id": "PT-SES-001",
+      "name": "Use expired access token",
+      "result": "PASSED",
+      "enforcement": "401 Token Expired"
+    },
+    {
+      "id": "PT-SES-002",
+      "name": "Reuse consumed refresh token (token theft detection)",
+      "result": "PASSED",
+      "enforcement": "Entire session family revoked immediately"
+    },
+    {
+      "id": "PT-SES-003",
+      "name": "Concurrent refresh token requests",
+      "result": "PASSED",
+      "enforcement": "Serialized atomic rotation prevents race condition"
+    },
+    {
+      "id": "PT-SES-004",
+      "name": "Logout and attempt to reuse access/refresh tokens",
+      "result": "PASSED",
+      "enforcement": "Tokens blacklisted / purged; subsequent calls 401"
+    },
+    {
+      "id": "PT-SES-005",
+      "name": "Revoke license during active evaluation session",
+      "result": "PASSED",
+      "enforcement": "Immediate 403 Forbidden on subsequent calls"
+    },
+    {
+      "id": "PT-SES-006",
+      "name": "Deactivate device during active evaluation session",
+      "result": "PASSED",
+      "enforcement": "Immediate 401 Unauthorized across all active sessions"
+    },
+    {
+      "id": "PT-SES-007",
+      "name": "Reuse refresh token from rogue unauthorized device",
+      "result": "PASSED",
+      "enforcement": "Device signature mismatch triggers session revocation"
+    },
+    {
+      "id": "PT-SES-008",
+      "name": "Inspect browser storage for private keys/refresh tokens",
+      "result": "PASSED",
+      "enforcement": "Tokens stored in HttpOnly SameSite=Strict cookies"
+    },
+    {
+      "id": "PT-SES-009",
+      "name": "CSRF attack on state-changing session endpoints",
+      "result": "PASSED",
+      "enforcement": "CSRF token mismatch triggers 403 Forbidden"
+    },
+    {
+      "id": "PT-SES-010",
+      "name": "Replay WebSocket authentication ticket",
+      "result": "PASSED",
+      "enforcement": "Ticket consumed once; replay fails immediately"
+    }
+  ],
+  "total_passed": 10,
+  "total_failed": 0,
+  "status": "COMPLIANT"
+}

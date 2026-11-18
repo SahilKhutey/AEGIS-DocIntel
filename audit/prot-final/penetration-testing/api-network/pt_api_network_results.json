@@ -1,0 +1,130 @@
+{
+  "workstream": "WS-09",
+  "title": "API Ingress, Network Abuse & Input Validation",
+  "executed_at": "2026-11-18T03:21:33.417253+00:00",
+  "test_cases": [
+    {
+      "id": "PT-API-001",
+      "name": "HTTP verb tampering on POST-only endpoints",
+      "result": "PASSED",
+      "enforcement": "405 Method Not Allowed"
+    },
+    {
+      "id": "PT-API-002",
+      "name": "Content-Type manipulation (text/xml to JSON)",
+      "result": "PASSED",
+      "enforcement": "415/422 Unsupported Media Type"
+    },
+    {
+      "id": "PT-API-003",
+      "name": "Malformed JSON syntax submission",
+      "result": "PASSED",
+      "enforcement": "422 Unprocessable Entity"
+    },
+    {
+      "id": "PT-API-004",
+      "name": "Giant JSON payload rejection (>1000 chars query)",
+      "result": "PASSED",
+      "enforcement": "422 Schema Validation Limit Exceeded"
+    },
+    {
+      "id": "PT-API-005",
+      "name": "Deeply nested JSON recursion bomb (100 levels)",
+      "result": "PASSED",
+      "enforcement": "422 Handled safely without stack overflow"
+    },
+    {
+      "id": "PT-API-006",
+      "name": "SQL injection payloads in query strings",
+      "result": "PASSED",
+      "enforcement": "Treated as literal query text; zero DB execution"
+    },
+    {
+      "id": "PT-API-007",
+      "name": "NoSQL / MongoDB operator injection",
+      "result": "PASSED",
+      "enforcement": "422 Invalid Type (Dict rejected for Str field)"
+    },
+    {
+      "id": "PT-API-008",
+      "name": "Stored and reflected XSS payloads",
+      "result": "PASSED",
+      "enforcement": "JSON responses auto-escaped; zero unescaped HTML"
+    },
+    {
+      "id": "PT-API-009",
+      "name": "Path traversal in document IDs",
+      "result": "PASSED",
+      "enforcement": "400/404 Strict ID isolation"
+    },
+    {
+      "id": "PT-API-010",
+      "name": "Null byte injection in filenames (%00)",
+      "result": "PASSED",
+      "enforcement": "400 Bad Request: Path traversal or invalid format"
+    },
+    {
+      "id": "PT-API-011",
+      "name": "Unicode homoglyphs and RTL override",
+      "result": "PASSED",
+      "enforcement": "Processed safely without system crash"
+    },
+    {
+      "id": "PT-API-012",
+      "name": "SSRF attack against AWS/GCP metadata & loopback",
+      "result": "PASSED",
+      "enforcement": "Zero external HTTP fetch; metadata unexposed"
+    },
+    {
+      "id": "PT-API-013",
+      "name": "CRLF header injection",
+      "result": "PASSED",
+      "enforcement": "Stripped or rejected by ASGI server transport"
+    },
+    {
+      "id": "PT-API-014",
+      "name": "Pagination limit abuse (limit=9999999)",
+      "result": "PASSED",
+      "enforcement": "Clamped to maximum safe limit (100 items)"
+    },
+    {
+      "id": "PT-API-015",
+      "name": "Host header poisoning",
+      "result": "PASSED",
+      "enforcement": "Server ignores spoofed host in link generation"
+    },
+    {
+      "id": "PT-API-016",
+      "name": "CORS disallowed origin request",
+      "result": "PASSED",
+      "enforcement": "403 Forbidden: CORS_ORIGIN_DENIED"
+    },
+    {
+      "id": "PT-API-017",
+      "name": "Volumetric quota burst resilience",
+      "result": "PASSED",
+      "enforcement": "429 Quota Exceeded triggered reliably"
+    },
+    {
+      "id": "PT-API-018",
+      "name": "Concurrent duplicate document uploads",
+      "result": "PASSED",
+      "enforcement": "Processed cleanly without state corruption"
+    },
+    {
+      "id": "PT-API-019",
+      "name": "Defensive security response headers",
+      "result": "PASSED",
+      "enforcement": "X-Content-Type-Options: nosniff, X-Frame-Options: DENY"
+    },
+    {
+      "id": "PT-API-020",
+      "name": "HTTP parameter pollution (HPP)",
+      "result": "PASSED",
+      "enforcement": "Query parameters parsed deterministically"
+    }
+  ],
+  "total_passed": 20,
+  "total_failed": 0,
+  "status": "COMPLIANT"
+}

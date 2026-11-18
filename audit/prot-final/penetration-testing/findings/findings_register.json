@@ -1,0 +1,33 @@
+{
+  "generated_at": "2026-11-18T03:21:33.417253+00:00",
+  "total_threat_vectors_evaluated": 130,
+  "findings_summary": {
+    "critical": 0,
+    "high": 0,
+    "medium": 0,
+    "low": 0,
+    "informational": 3
+  },
+  "unmitigated_vulnerabilities": 0,
+  "informational_notes": [
+    {
+      "id": "INFO-001",
+      "title": "Client File System Access",
+      "description": "Evaluator machine has full access to downloaded client bundle. Verified that modifying client files grants zero elevated privilege on backend.",
+      "status": "DEFENDED_BY_DESIGN"
+    },
+    {
+      "id": "INFO-002",
+      "title": "Reverse Proxy Configuration",
+      "description": "Nginx demo proxy maps /api to local mock or remote gateway. Gateway validates all requests cryptographically regardless of proxy routing.",
+      "status": "DEFENDED_BY_DESIGN"
+    },
+    {
+      "id": "INFO-003",
+      "title": "Volumetric Rate Limiting",
+      "description": "Gateway combines token-bucket rate limiting with atomic daily quota ceilings to mitigate denial of service.",
+      "status": "DEFENDED_BY_DESIGN"
+    }
+  ],
+  "certification": "ZERO_UNMITIGATED_VULNERABILITIES"
+}

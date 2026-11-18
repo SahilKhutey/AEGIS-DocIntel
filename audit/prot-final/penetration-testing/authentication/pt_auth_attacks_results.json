@@ -1,0 +1,82 @@
+{
+  "workstream": "WS-02",
+  "title": "Authentication & Token Attack Suite",
+  "executed_at": "2026-11-18T03:21:33.417253+00:00",
+  "test_cases": [
+    {
+      "id": "PT-AUTH-001",
+      "name": "Access protected API with missing auth",
+      "result": "PASSED",
+      "enforcement": "401 Missing Authentication"
+    },
+    {
+      "id": "PT-AUTH-002",
+      "name": "Supply forged JWT with attacker RSA signature",
+      "result": "PASSED",
+      "enforcement": "401 Invalid Token Signature"
+    },
+    {
+      "id": "PT-AUTH-003",
+      "name": "Tamper JWT payload keeping original signature",
+      "result": "PASSED",
+      "enforcement": "401 Signature Cryptographic Verification Failed"
+    },
+    {
+      "id": "PT-AUTH-004",
+      "name": "Supply expired JWT token",
+      "result": "PASSED",
+      "enforcement": "401 Token Has Expired"
+    },
+    {
+      "id": "PT-AUTH-005",
+      "name": "Supply JWT with incorrect issuer (iss)",
+      "result": "PASSED",
+      "enforcement": "401 Issuer Verification Failed"
+    },
+    {
+      "id": "PT-AUTH-006",
+      "name": "Supply JWT with incorrect audience (aud)",
+      "result": "PASSED",
+      "enforcement": "401 Audience Verification Failed"
+    },
+    {
+      "id": "PT-AUTH-007",
+      "name": "Supply JWT with unknown role claim",
+      "result": "PASSED",
+      "enforcement": "403 Forbidden Role"
+    },
+    {
+      "id": "PT-AUTH-008",
+      "name": "Inject admin role into evaluator token",
+      "result": "PASSED",
+      "enforcement": "401 Signature Mismatch on Modified Role"
+    },
+    {
+      "id": "PT-AUTH-009",
+      "name": "Change tenant_id claim in JWT token",
+      "result": "PASSED",
+      "enforcement": "401 Signature Invalidated by Tenant Mutation"
+    },
+    {
+      "id": "PT-AUTH-010",
+      "name": "Replay expired session token",
+      "result": "PASSED",
+      "enforcement": "401 Expired Session Rejected"
+    },
+    {
+      "id": "PT-AUTH-011",
+      "name": "Scan client bundle for embedded API keys",
+      "result": "PASSED",
+      "enforcement": "Zero API keys found in frontend bundle"
+    },
+    {
+      "id": "PT-AUTH-012",
+      "name": "Volumetric brute force against activation",
+      "result": "PASSED",
+      "enforcement": "Activation requires valid cryptographic proof"
+    }
+  ],
+  "total_passed": 12,
+  "total_failed": 0,
+  "status": "COMPLIANT"
+}

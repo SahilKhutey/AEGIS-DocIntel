@@ -1,0 +1,100 @@
+{
+  "workstream": "WS-10",
+  "title": "IP Leakage, Secret Exposure & Package Integrity",
+  "executed_at": "2026-11-18T03:21:33.417253+00:00",
+  "test_cases": [
+    {
+      "id": "PT-IP-001",
+      "name": "Zero .env files in client package",
+      "result": "PASSED",
+      "verified": "0 .env files in distribution/demo-edition"
+    },
+    {
+      "id": "PT-IP-002",
+      "name": "Zero private keys in client package",
+      "result": "PASSED",
+      "verified": "0 PEM/DER private keys detected"
+    },
+    {
+      "id": "PT-IP-003",
+      "name": "Zero database connection strings in package",
+      "result": "PASSED",
+      "verified": "0 postgres/mysql/mongodb URIs detected"
+    },
+    {
+      "id": "PT-IP-004",
+      "name": "Zero provider API keys in client package",
+      "result": "PASSED",
+      "verified": "0 OpenAI/Google/GitHub/AWS keys detected"
+    },
+    {
+      "id": "PT-IP-005",
+      "name": "Zero internal staging admin endpoints in launchers",
+      "result": "PASSED",
+      "verified": "Launchers target public gateway endpoints only"
+    },
+    {
+      "id": "PT-IP-006",
+      "name": "Zero RFC 1918 private IPs or corp domains in package",
+      "result": "PASSED",
+      "verified": "0 internal domain or private IP leaks"
+    },
+    {
+      "id": "PT-IP-007",
+      "name": "Zero proprietary DAG engine code in distribution",
+      "result": "PASSED",
+      "verified": "0 python/bytecode files in package"
+    },
+    {
+      "id": "PT-IP-008",
+      "name": "Zero proprietary system prompts in package",
+      "result": "PASSED",
+      "verified": "0 internal prompts in client distribution"
+    },
+    {
+      "id": "PT-IP-009",
+      "name": "Zero internal golden benchmark ground truths in package",
+      "result": "PASSED",
+      "verified": "Internal mvp-golden datasets strictly excluded"
+    },
+    {
+      "id": "PT-IP-010",
+      "name": "Zero JavaScript source maps (.map) in package",
+      "result": "PASSED",
+      "verified": "0 .map files found in distribution"
+    },
+    {
+      "id": "PT-IP-011",
+      "name": "Zero Docker compose embedded secrets",
+      "result": "PASSED",
+      "verified": "Compose file utilizes parameter substitution only"
+    },
+    {
+      "id": "PT-IP-012",
+      "name": "Zero plaintext tokens in default client configs",
+      "result": "PASSED",
+      "verified": "Configs contain no static bearer tokens"
+    },
+    {
+      "id": "PT-IP-013",
+      "name": "Package manifest SHA-256 integrity check",
+      "result": "PASSED",
+      "verified": "37/37 package files match cryptographic hashes"
+    },
+    {
+      "id": "PT-IP-014",
+      "name": "Automated security event redaction verification",
+      "result": "PASSED",
+      "verified": "Passwords, keys, and tokens masked as [REDACTED]"
+    },
+    {
+      "id": "PT-IP-015",
+      "name": "Distribution file safety and permissions",
+      "result": "PASSED",
+      "verified": "Zero untrusted binary executables (.exe/.dll)"
+    }
+  ],
+  "total_passed": 15,
+  "total_failed": 0,
+  "status": "COMPLIANT"
+}

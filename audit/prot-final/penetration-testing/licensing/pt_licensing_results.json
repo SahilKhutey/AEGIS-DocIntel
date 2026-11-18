@@ -1,0 +1,52 @@
+{
+  "workstream": "WS-03",
+  "title": "Licensing Integrity",
+  "executed_at": "2026-11-18T03:21:33.417253+00:00",
+  "test_cases": [
+    {
+      "id": "PT-LIC-001",
+      "name": "Submit license with forged Ed25519 signature",
+      "result": "PASSED",
+      "enforcement": "License signature verification failure"
+    },
+    {
+      "id": "PT-LIC-002",
+      "name": "Submit expired evaluation license",
+      "result": "PASSED",
+      "enforcement": "LicenseExpiredError raised"
+    },
+    {
+      "id": "PT-LIC-003",
+      "name": "Submit license with future issued-at timestamp",
+      "result": "PASSED",
+      "enforcement": "Future not-before rejection"
+    },
+    {
+      "id": "PT-LIC-004",
+      "name": "Submit license for different product code",
+      "result": "PASSED",
+      "enforcement": "Product code mismatch rejection"
+    },
+    {
+      "id": "PT-LIC-005",
+      "name": "Submit revoked evaluation license",
+      "result": "PASSED",
+      "enforcement": "Revocation registry rejection (403)"
+    },
+    {
+      "id": "PT-LIC-006",
+      "name": "Replay valid license on multiple unauthorized machines",
+      "result": "PASSED",
+      "enforcement": "Device binding restricts concurrent activation"
+    },
+    {
+      "id": "PT-LIC-007",
+      "name": "Downgrade license token to unsigned format",
+      "result": "PASSED",
+      "enforcement": "Token parsing requires structured signed envelope"
+    }
+  ],
+  "total_passed": 7,
+  "total_failed": 0,
+  "status": "COMPLIANT"
+}

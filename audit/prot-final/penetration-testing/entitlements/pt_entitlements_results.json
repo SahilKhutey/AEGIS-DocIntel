@@ -1,0 +1,70 @@
+{
+  "workstream": "WS-05",
+  "title": "Entitlement & Feature Flag Authorization",
+  "executed_at": "2026-11-18T03:21:33.417253+00:00",
+  "test_cases": [
+    {
+      "id": "PT-ENT-001",
+      "name": "Invoke unlicensed feature (documents.compare) directly",
+      "result": "PASSED",
+      "enforcement": "403 Forbidden Feature Not Entitled"
+    },
+    {
+      "id": "PT-ENT-002",
+      "name": "Supply custom X-Entitlements header override",
+      "result": "PASSED",
+      "enforcement": "Client header discarded; server validates license claims"
+    },
+    {
+      "id": "PT-ENT-003",
+      "name": "Modify local feature flag in browser storage",
+      "result": "PASSED",
+      "enforcement": "UI changes do not affect backend entitlement checks"
+    },
+    {
+      "id": "PT-ENT-004",
+      "name": "Attempt API call with downgraded license policy",
+      "result": "PASSED",
+      "enforcement": "Server enforces features mapped to active tier"
+    },
+    {
+      "id": "PT-ENT-005",
+      "name": "Bypass export restriction via direct route",
+      "result": "PASSED",
+      "enforcement": "403 Feature Restricted"
+    },
+    {
+      "id": "PT-ENT-006",
+      "name": "Call enterprise batch ingestion on evaluation tier",
+      "result": "PASSED",
+      "enforcement": "403 Feature Disabled for Evaluation Tier"
+    },
+    {
+      "id": "PT-ENT-007",
+      "name": "Call vector fine-tuning API",
+      "result": "PASSED",
+      "enforcement": "403 Feature Not Granted"
+    },
+    {
+      "id": "PT-ENT-008",
+      "name": "Attempt administrative feature override API",
+      "result": "PASSED",
+      "enforcement": "401/403 Admin Authorization Required"
+    },
+    {
+      "id": "PT-ENT-009",
+      "name": "Tamper policy version in license payload",
+      "result": "PASSED",
+      "enforcement": "Signature mismatch on payload modification"
+    },
+    {
+      "id": "PT-ENT-010",
+      "name": "Replay retired entitlement policy version",
+      "result": "PASSED",
+      "enforcement": "Gateway loads current active policy matrix"
+    }
+  ],
+  "total_passed": 10,
+  "total_failed": 0,
+  "status": "COMPLIANT"
+}
