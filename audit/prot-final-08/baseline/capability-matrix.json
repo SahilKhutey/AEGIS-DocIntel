@@ -1,0 +1,75 @@
+{
+  "release": "AEGIS Evaluation 0.1.0",
+  "features": {
+    "account_authentication": {
+      "status": "READY",
+      "evidence": "Session verification tests & JWT/Bearer validation",
+      "restrictions": "Tenant-scoped; short-lived tokens only"
+    },
+    "license_activation": {
+      "status": "READY",
+      "evidence": "Ed25519 cryptographic challenge-response and activation protocol",
+      "restrictions": "Bound to approved evaluation license ID"
+    },
+    "device_binding": {
+      "status": "READY",
+      "evidence": "Hardware-derived fingerprint and proof-of-possession signing",
+      "restrictions": "Enforces max 2 devices per evaluation license"
+    },
+    "document_upload": {
+      "status": "READY",
+      "evidence": "MIME type, size limit (25MB), virus scanning mock, tenant isolation",
+      "restrictions": "PDF, DOCX, TXT, TIFF only; prohibited executables rejected"
+    },
+    "document_parsing": {
+      "status": "READY",
+      "evidence": "PyMuPDF / text extractors with clean fallback and error boundaries",
+      "restrictions": "Encrypted or corrupted documents yield actionable error"
+    },
+    "document_intelligence": {
+      "status": "READY",
+      "evidence": "Grounded citation extraction and hallucination avoidance",
+      "restrictions": "LLM calls server-side only; evaluation data excluded from model training"
+    },
+    "context_optimization": {
+      "status": "READY",
+      "evidence": "Hierarchical chunking and BM25/Vector hybrid retrieval",
+      "restrictions": "Tenant boundary enforced in vector store index"
+    },
+    "retrieval": {
+      "status": "READY",
+      "evidence": "Strict tenant-filtered similarity search and score normalization",
+      "restrictions": "Cross-tenant retrieval unconditionally rejected"
+    },
+    "comparison": {
+      "status": "LIMITED",
+      "evidence": "Multi-document diffing with strict authorization check on all inputs",
+      "restrictions": "Evaluator must own all documents being compared"
+    },
+    "export": {
+      "status": "READY",
+      "evidence": "Sanitized JSON and CSV export endpoints with rate limits",
+      "restrictions": "Quota counted on export operations"
+    },
+    "usage_reporting": {
+      "status": "READY",
+      "evidence": "Two-phase quota reservation and atomic counter reconciliation",
+      "restrictions": "Hard stops on exhausted quotas"
+    },
+    "license_revocation": {
+      "status": "READY",
+      "evidence": "Synchronous session blacklisting and token invalidation",
+      "restrictions": "Blocks active sessions within 5 seconds"
+    },
+    "evaluator_feedback": {
+      "status": "READY",
+      "evidence": "Categorized feedback intake with automated secret and payload redaction",
+      "restrictions": "No raw confidential documents collected"
+    },
+    "evaluator_termination": {
+      "status": "READY",
+      "evidence": "Controlled offboarding cascading to document and embedding erasure",
+      "restrictions": "Irreversible once confirmed by operator"
+    }
+  }
+}

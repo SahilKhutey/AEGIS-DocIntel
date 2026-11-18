@@ -1,0 +1,219 @@
+# AEGIS-DocIntel PROT-FINAL-08 Sensitive Pattern Review
+# Commit: 797b8102a8bbc17d3644bad90da4f7f66f816c66
+# Total Matches Found: 214
+# Note: These findings are classified for production evaluation safety.
+
+src\cli.py:40 | 'llm_api_key': os.environ.get('LLM_API_KEY', ''),
+src\config.py:42 | secret_key: str
+src\config.py:136 | api_key: str | None = None
+src\config.py:232 | secret_key="minioadmin",
+src\ael\exporter.py:170 | def get_connector(self, agent: str, api_key: str, model: str | None = None, **kwargs) -> Any:
+src\ael\exporter.py:171 | return get_canonical_connector(agent, api_key=api_key, model=model or "default", **kwargs)
+src\ael\exporter.py:177 | api_key: str,
+src\ael\exporter.py:186 | connector = self.get_connector(agent, api_key, model, **kwargs)
+src\api\auth.py:25 | ROLE_TENANT_ADMIN,
+src\api\auth.py:26 | ROLE_PLATFORM_ADMIN,
+src\api\auth.py:32 | API_KEY_HEADER = APIKeyHeader(name="X-API-Key", auto_error=False)
+src\api\auth.py:78 | if role == "admin" and "tenant_admin" in ALLOWED_ROLES:
+src\api\auth.py:79 | roles.add("tenant_admin")
+src\api\auth.py:87 | api_key: Optional[str] = Security(API_KEY_HEADER),
+src\api\auth.py:107 | elif api_key:
+src\api\auth.py:108 | context = _validate_api_key(api_key)
+src\api\auth.py:190 | roles=frozenset({"admin", "tenant_admin", "editor", "reviewer", "review_admin"}),
+src\api\auth.py:349 | def _validate_api_key(api_key: str) -> TenantContext:
+src\api\auth.py:357 | if not api_key:
+src\api\auth.py:368 | api_key == os.environ.get("AEGIS_DEMO_API_KEY", "aegis-demo-public-key")
+src\api\auth.py:369 | or api_key == "demo-key"
+src\api\auth.py:372 | action="auth.demo_api_key_success",
+src\api\auth.py:386 | if api_key == "aegis-dev-key":
+src\api\auth.py:400 | raw_keys = os.environ.get("AEGIS_API_KEYS")
+src\api\auth.py:412 | action="auth.api_key_invalid_config",
+src\api\auth.py:416 | detail={"error": "Malformed AEGIS_API_KEYS JSON"},
+src\api\auth.py:427 | detail="AEGIS_API_KEYS configuration must be a JSON object",
+src\api\auth.py:431 | supplied_hash = hashlib.sha256(api_key.encode("utf-8")).hexdigest()
+src\api\auth.py:446 | action="auth.api_key_unknown",
+src\api\auth.py:477 | action="auth.api_key_success",
+src\api\auth.py:484 | roles = frozenset({"admin", "tenant_admin"}) if role == "admin" else frozenset({role})
+src\api\auth.py:492 | authentication_method="api_key",
+src\api\auth.py:510 | api_key: Optional[str] = None,
+src\api\auth.py:517 | api_key = api_key or lower_headers.get("x-api-key")
+src\api\auth.py:520 | api_key = api_key or headers.get("X-API-Key") or headers.get("x-api-key")
+src\api\auth.py:545 | if api_key:
+src\api\auth.py:547 | return _validate_api_key(api_key)
+src\api\auth_guard.py:113 | from src.api.auth import _validate_api_key, _validate_jwt
+src\api\auth_guard.py:121 | api_key = headers.get("x-api-key", "").strip()
+src\api\auth_guard.py:122 | if api_key:
+src\api\auth_guard.py:123 | return _validate_api_key(api_key)
+src\api\models.py:115 | api_key: Optional[str] = None
+src\compliance\redaction_engine.py:66 | API_KEY_REGEX = re.compile(r'\b(?:sk-[a-zA-Z0-9_\-]{20,}|AKIA[0-9A-Z]{16}|ASIA[0-9A-Z]{16}|ghp_[0-9a-zA-Z]{30,}|github_pat_[0-9a-zA-Z_]{22,}
+src\compliance\redaction_engine.py:155 | for match in API_KEY_REGEX.finditer(text):
+src\compliance\redaction_engine.py:159 | entity_type='API_KEY',
+src\compliance\redaction_engine.py:279 | RedactionPolicy('API_KEY_TOKEN', 'redact'),
+src\compliance\redaction_engine.py:339 | RedactionPolicy('API_KEY', 'redact'),
+src\connectors\chatgpt_connector.py:46 | api_key=kwargs.get("api_key"),
+src\connectors\chatgpt_connector.py:63 | if not self.config.api_key and not self.config.endpoint:
+src\connectors\chatgpt_connector.py:90 | if self._openai is not None and self.config.api_key:
+src\connectors\chatgpt_connector.py:106 | api_key=self.config.api_key,
+src\connectors\claude_connector.py:39 | api_key=kwargs.get("api_key"),
+src\connectors\claude_connector.py:83 | if self._anthropic is not None and self.config.api_key:
+src\connectors\claude_connector.py:105 | api_key=self.config.api_key,
+src\connectors\connector_base.py:51 | api_key : Optional[str]
+src\connectors\connector_base.py:71 | api_key: Optional[str] = None
+src\connectors\connector_base.py:142 | api_key=kwargs.get("api_key"),
+src\connectors\connector_factory.py:54 | api_key=kwargs.get("api_key"),
+src\connectors\deepseek_connector.py:35 | api_key=kwargs.get("api_key"),
+src\connectors\deepseek_connector.py:67 | if self._openai is not None and self.config.api_key:
+src\connectors\deepseek_connector.py:70 | api_key=self.config.api_key,
+src\connectors\gemini_connector.py:42 | api_key=kwargs.get("api_key"),
+src\connectors\gemini_connector.py:60 | if self.config.api_key:
+src\connectors\gemini_connector.py:61 | genai.configure(api_key=self.config.api_key)
+src\connectors\gemini_connector.py:89 | if self._client is not None and self.config.api_key:
+src\connectors\gemini_connector.py:174 | if self._genai is not None and self.config.api_key:
+src\connectors\local_connector.py:38 | api_key=kwargs.get("api_key"),
+src\connectors\local_connector.py:137 | api_key=self.config.api_key or "no-key",
+src\connectors\local_connector.py:182 | if self.config.api_key:
+src\connectors\local_connector.py:183 | headers["Authorization"] = f"Bearer {self.config.api_key}"
+src\connectors\qwen_connector.py:31 | api_key=kwargs.get("api_key"),
+src\connectors\qwen_connector.py:68 | if self._openai is not None and self.config.api_key:
+src\connectors\qwen_connector.py:84 | api_key=self.config.api_key,
+src\core\authorization.py:17 | ROLE_PLATFORM_ADMIN,
+src\core\authorization.py:18 | ROLE_TENANT_ADMIN,
+src\core\authorization.py:77 | if allow_platform_admin and ROLE_PLATFORM_ADMIN in context.roles:
+src\core\config.py:35 | secret_key: str = "change-me"
+src\core\config.py:53 | llm_api_key: str = ""
+src\core\config.py:54 | openai_api_key: str = ""
+src\core\config.py:55 | anthropic_api_key: str = ""
+src\core\config.py:56 | google_api_key: str = ""
+src\core\orchestrator.py:314 | emb_api_key = self._cfg_get("openai_api_key", os.environ.get("OPENAI_API_KEY", ""))
+src\core\orchestrator.py:320 | api_key=emb_api_key,
+src\core\orchestrator.py:355 | if llm_prov == "mock" and os.environ.get("OPENAI_API_KEY"):
+src\core\orchestrator.py:358 | llm_key = self._cfg_get("openai_api_key", os.environ.get("OPENAI_API_KEY", ""))
+src\core\orchestrator.py:360 | self._llm = LLMInterface(llm_provider=llm_prov, model=llm_model, api_key=llm_key)
+src\core\security_context.py:19 | ROLE_REVIEW_ADMIN = "review_admin"
+src\core\security_context.py:20 | ROLE_TENANT_ADMIN = "tenant_admin"
+src\core\security_context.py:21 | ROLE_PLATFORM_ADMIN = "platform_admin"
+src\core\security_context.py:31 | ROLE_REVIEW_ADMIN,
+src\core\security_context.py:32 | ROLE_TENANT_ADMIN,
+src\core\security_context.py:33 | ROLE_PLATFORM_ADMIN,
+src\core\security_context.py:67 | r_set = frozenset({"admin", "tenant_admin"}) if role == "admin" else frozenset({role})
+src\core\security_context.py:98 | for r in (ROLE_PLATFORM_ADMIN, LEGACY_ADMIN, ROLE_TENANT_ADMIN, ROLE_EDITOR, ROLE_VIEWER):
+src\core\security_context.py:107 | target_roles.add(ROLE_TENANT_ADMIN)
+src\core\security_context.py:108 | if ROLE_TENANT_ADMIN in target_roles:
+src\core\security_context.py:109 | target_roles.add(LEGACY_ADMIN)
+src\core\security_context.py:114 | return bool(self.roles.intersection({ROLE_VIEWER, ROLE_EDITOR, ROLE_TENANT_ADMIN, LEGACY_ADMIN, ROLE_PLATFORM_ADMIN}))
+src\core\security_context.py:118 | return bool(self.roles.intersection({ROLE_EDITOR, ROLE_TENANT_ADMIN, LEGACY_ADMIN}))
+src\core\security_context.py:122 | return bool(self.roles.intersection({ROLE_TENANT_ADMIN, LEGACY_ADMIN}))
+src\core\security_context.py:126 | return bool(self.roles.intersection({ROLE_TENANT_ADMIN, LEGACY_ADMIN, ROLE_PLATFORM_ADMIN}))
+src\core\security_context.py:130 | return ROLE_PLATFORM_ADMIN in self.roles
+src\core\settings.py:82 | cors_origins: List[str] = field(default_factory=lambda: ["http://localhost:3000", "http://127.0.0.1:3000", "http://localhost:8080"])
+src\core\settings.py:89 | api_keys: Optional[str] = None
+src\core\settings.py:128 | cors_origins = ["http://localhost:3000", "http://127.0.0.1:3000", "http://localhost:8080"]
+src\core\settings.py:134 | api_keys = os.getenv("AEGIS_API_KEYS")
+src\core\settings.py:152 | api_keys=api_keys,
+src\core\settings.py:202 | has_api_keys = bool(settings.api_keys)
+src\core\settings.py:204 | if not has_jwt_key and not has_api_keys:
+src\core\settings.py:207 | "(AEGIS_JWT_PUBLIC_KEY / AEGIS_JWT_PUBLIC_KEY_PATH or AEGIS_API_KEYS)"
+src\core\settings.py:219 | if has_api_keys and settings.api_keys:
+src\core\settings.py:220 | for entry in settings.api_keys.split(";"):
+src\core\settings.py:227 | "Invalid AEGIS_API_KEYS format. Expected 'tenant:role:hash'"
+src\core\settings.py:232 | "Raw API keys in AEGIS_API_KEYS are forbidden in production; "
+src\gateway\response_sanitizer.py:19 | SECRET_KEY_REGEX = re.compile(r"\b(?:sk-[a-zA-Z0-9_-]{20,}|ghp_[a-zA-Z0-9]{36}|AKIA[0-9A-Z]{16})\b")
+src\gateway\response_sanitizer.py:35 | text = SECRET_KEY_REGEX.sub("[REDACTED_SECRET_KEY]", text)
+src\llm_service\isolated_adapter.py:41 | self._openai_key = os.getenv("AEGIS_OPENAI_API_KEY", "sk-live-server-side-key-secret-9999999999")
+src\llm_service\isolated_adapter.py:42 | self._anthropic_key = os.getenv("AEGIS_ANTHROPIC_API_KEY", "sk-ant-live-server-side-secret-88888888")
+src\llm_service\llm_client.py:67 | def __init__(self, api_key: str, model: str):
+src\llm_service\llm_client.py:70 | self._api_key = api_key
+src\llm_service\llm_client.py:76 | self._client = AsyncOpenAI(api_key=self._api_key)
+src\llm_service\llm_client.py:121 | def __init__(self, api_key: str, model: str):
+src\llm_service\llm_client.py:124 | self._api_key = api_key
+src\llm_service\llm_client.py:130 | self._client = AsyncAnthropic(api_key=self._api_key)
+src\llm_service\llm_client.py:191 | f"In production, configure OPENAI_API_KEY or ANTHROPIC_API_KEY. "
+src\llm_service\llm_client.py:240 | api_key = settings.llm.api_key or ""
+src\llm_service\llm_client.py:242 | if provider == "openai" and api_key:
+src\llm_service\llm_client.py:244 | return OpenAIClient(api_key=api_key, model=model)
+src\llm_service\llm_client.py:245 | elif provider == "anthropic" and api_key:
+src\llm_service\llm_client.py:247 | return AnthropicClient(api_key=api_key, model=model)
+src\observability\logging.py:24 | "api_key",
+src\security\event_redaction.py:13 | "private_key", "api_key", "activation_code", "recovery_code",
+src\security\event_redaction.py:24 | (re.compile(r"-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----[\s\S]*?-----END (?:RSA |EC |OPENSSH )?PRIVATE KEY-----"), "[REDACTED_PRIVATE
+src\security\private_engine_guard.py:144 | if payload.get("role") != "engine_admin":
+src\security\security_context.py:22 | source_ip: str = "127.0.0.1"
+src\security\token_validation.py:71 | roles=frozenset({"admin", "tenant_admin", "editor"}),
+src\services\container.py:765 | "openai_api_key": self.settings.llm.api_key or os.environ.get("OPENAI_API_KEY", ""),
+src\ui\workbench.py:528 | <option value="dev-default-tenant">default-tenant (Admin/Reviewer)</option>
+src\ui\workbench.py:964 | let currentAuthToken = localStorage.getItem("aegis_token") || "dev-default-tenant";
+src\workflows\batch_workflow.py:118 | llm_api_key=self.ingest_kwargs.get('llm_api_key', ''),
+src\workflows\export_workflow.py:124 | api_key: str | None = None,
+src\workflows\export_workflow.py:136 | api_key = api_key or ''
+src\workflows\export_workflow.py:137 | connector = get_connector(agent, api_key=api_key, model=model or '')
+src\workflows\ingest_workflow.py:110 | llm_api_key: str = '',
+src\workflows\ingest_workflow.py:139 | self._llm_api_key = llm_api_key
+src\workflows\query_workflow.py:37 | llm_api_key: str = '',
+src\workflows\query_workflow.py:42 | llm_provider=llm_provider, model=llm_model, api_key=llm_api_key,
+src\api\routers\admin.py:25 | tenant: TenantContext = Depends(require_role("admin")),
+src\api\routers\admin.py:63 | tenant: TenantContext = Depends(require_role("admin")),
+src\api\routers\webhooks.py:9 | from src.core.security_context import ROLE_TENANT_ADMIN, ROLE_PLATFORM_ADMIN, LEGACY_ADMIN
+src\api\routers\webhooks.py:25 | if not tenant.has_role(ROLE_TENANT_ADMIN, ROLE_PLATFORM_ADMIN, LEGACY_ADMIN):
+src\api\routes\query.py:354 | api_key = req.api_key
+src\api\routes\query.py:355 | if not api_key:
+src\api\routes\query.py:358 | api_key = settings.openai_api_key or settings.llm_api_key
+src\api\routes\query.py:360 | api_key = settings.google_api_key or settings.llm_api_key
+src\api\routes\query.py:362 | api_key = settings.anthropic_api_key or settings.llm_api_key
+src\api\routes\query.py:364 | api_key = settings.llm_api_key
+src\api\routes\query.py:366 | api_key = settings.llm_api_key
+src\api\routes\query.py:368 | api_key = 'EMPTY'
+src\api\routes\query.py:374 | api_key=api_key or 'EMPTY',
+src\api\routers\evaluation\activation.py:49 | client_ip = request.client.host if request.client else "127.0.0.1"
+src\api\routers\evaluation\activation.py:70 | client_ip = request.client.host if request.client else "127.0.0.1"
+src\api\routers\evaluation\activation.py:95 | client_ip = request.client.host if request.client else "127.0.0.1"
+src\api\routers\evaluation\sessions.py:26 | client_ip = request.client.host if request.client else "127.0.0.1"
+src\engines\embeddings\embedding_service.py:46 | api_key: Optional[str] = None,
+src\engines\embeddings\embedding_service.py:51 | self.api_key = api_key or os.getenv("OPENAI_API_KEY")
+src\engines\embeddings\embedding_service.py:81 | if self.api_key and not is_test and ("text-embedding" in model_name or not HAS_SENTENCE_TRANSFORMERS):
+src\engines\embeddings\embedding_service.py:178 | client = OpenAI(api_key=self.api_key)
+src\engines\embeddings\embedding_service.py:187 | resp = litellm.embedding(model=self.model_name, input=actual_list, api_key=self.api_key)
+src\engines\governance\policy.py:38 | is_admin = bool(roles.intersection({"admin", "tenant_admin", "review_admin"}))
+src\engines\governance\policy.py:39 | is_reviewer = bool(roles.intersection({"reviewer", "review_admin", "admin", "tenant_admin"}))
+src\engines\llm\llm_interface.py:17 | >>> llm = LLMInterface(provider="openai", model="gpt-4o", api_key="sk-…")
+src\engines\llm\llm_interface.py:111 | api_key:
+src\engines\llm\llm_interface.py:113 | variable (e.g. ``OPENAI_API_KEY``) is used by litellm automatically.
+src\engines\llm\llm_interface.py:128 | api_key: str = "",
+src\engines\llm\llm_interface.py:133 | self._api_key = api_key
+src\engines\llm\llm_interface.py:257 | api_key=self._api_key or None,
+src\engines\llm\llm_interface.py:271 | client = AsyncOpenAI(api_key=self._api_key or os.environ.get("OPENAI_API_KEY", ""), base_url=self._endpoint or None)
+src\engines\llm\llm_interface.py:412 | api_key=self._api_key or None,
+src\engines\llm\llm_interface.py:418 | client = AsyncOpenAI(api_key=self._api_key or os.environ.get("OPENAI_API_KEY", ""), base_url=self._endpoint or None)
+src\schemas\evaluation\authorization.py:35 | ADMIN_ROLE_PROHIBITED = "ADMIN_ROLE_PROHIBITED"
+src\schemas\evaluation\authorization.py:55 | ROLE_ADMIN = "admin"
+src\schemas\evaluation\authorization.py:56 | ROLE_PLATFORM_ADMIN = "platform_admin"
+src\schemas\evaluation\authorization.py:57 | ROLE_TENANT_ADMIN = "tenant_admin"
+src\schemas\evaluation\authorization.py:60 | ROLE_ADMIN,
+src\schemas\evaluation\authorization.py:61 | ROLE_PLATFORM_ADMIN,
+src\schemas\evaluation\authorization.py:62 | ROLE_TENANT_ADMIN,
+src\services\evaluation\activation_service.py:50 | client_ip: str = "127.0.0.1",
+src\services\evaluation\websocket_ticket_service.py:55 | client_ip: str = "127.0.0.1",
+src\services\evaluation\websocket_ticket_service.py:93 | def consume_ticket(self, ticket_id: str, client_ip: str = "127.0.0.1") -> Tuple[bool, Optional[WebSocketTicket], str]:
+src\services\security_operations\key_rotation_service.py:35 | self._active_api_keys: Dict[str, str] = {}  # key_id -> hash
+src\services\security_operations\key_rotation_service.py:37 | def register_api_key(self, key_id: str, raw_key: str) -> None:
+src\services\security_operations\key_rotation_service.py:40 | self._active_api_keys[key_id] = khash
+src\services\security_operations\key_rotation_service.py:42 | def validate_api_key(self, key_id: str, raw_key: str) -> bool:
+src\services\security_operations\key_rotation_service.py:45 | return self._active_api_keys.get(key_id) == khash
+src\services\security_operations\key_rotation_service.py:47 | def rotate_api_key(self, key_id: str) -> str:
+src\services\security_operations\key_rotation_service.py:53 | self.register_api_key(key_id, new_secret)
+src\services\security_operations\key_rotation_service.py:57 | details={"key_id": key_id, "action": "api_key_rotated"},
+web\next.config.ts:6 | "http://127.0.0.1:8000";
+web\next.config.ts:12 | allowedDevOrigins: ["127.0.0.1", "localhost"],
+web\playwright.config.ts:11 | baseURL: process.env.PLAYWRIGHT_BASE_URL || process.env.BASE_URL || "http://127.0.0.1:3000",
+web\src\features\developer\components\ApiExplorer.tsx:39 | "Authorization": "Bearer $AEGIS_API_KEY",
+web\src\features\developer\components\ApiExplorer.tsx:51 | "Authorization": "Bearer $AEGIS_API_KEY",
+web\src\features\developer\components\ApiExplorer.tsx:62 | -H "Authorization: Bearer $AEGIS_API_KEY" \\
+web\src\features\developer\schemas\developer.schema.ts:19 | host === "127.0.0.1" ||
+web\tests\fixtures\auth.fixture.ts:8 | role: "admin" | "analyst" | "reviewer" | "auditor";
+web\tests\fixtures\auth.fixture.ts:17 | role: "admin",
+web\tests\fixtures\test-data.ts:8 | role: "admin" | "analyst" | "reviewer" | "auditor";
+web\tests\fixtures\test-data.ts:12 | { id: "ws-primary", name: "Primary Workspace", role: "admin" },
+web\tests\e2e\advanced\developer.spec.ts:32 | await expect(page.getByRole("button", { name: /GET.*\/v1\/admin\/stats/i })).toBeVisible();
+web\tests\unit\advanced\developer.test.tsx:19 | expect(isSafeWebhookUrl("http://127.0.0.1:8000/hook")).toBe(false);
+web\tests\unit\integration\auth-permissions.test.ts:39 | const perms = getPermissionsForRole("admin");
+config\settings.yaml:20 | secret_key: "${S3_SECRET_KEY:minioadmin}"
+config\settings.yaml:88 | api_key: "${OPENAI_API_KEY:}"

@@ -1,0 +1,18 @@
+{
+  "audit_type": "EVALUATOR_LIFECYCLE_VERIFICATION",
+  "states_modeled": [
+    "INVITED",
+    "REGISTERED",
+    "LICENSE_ISSUED",
+    "ACTIVATION_PENDING",
+    "ACTIVE",
+    "SUSPENDED",
+    "EXPIRED",
+    "REVOKED",
+    "TERMINATED"
+  ],
+  "terminal_invariants_enforced": true,
+  "reinstatement_authorization_required": true,
+  "verification_status": "COMPLIANT",
+  "timestamp": "2026-11-18T05:59:20.043500+00:00"
+}

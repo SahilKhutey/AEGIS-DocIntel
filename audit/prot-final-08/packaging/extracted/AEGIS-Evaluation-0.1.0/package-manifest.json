@@ -1,0 +1,6 @@
+{
+  "product": "AEGIS-DocIntel",
+  "version": "0.1.0",
+  "release_channel": "controlled-evaluation",
+  "platform": "windows-x64"
+}

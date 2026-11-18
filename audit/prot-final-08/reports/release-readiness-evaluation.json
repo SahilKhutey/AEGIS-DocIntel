@@ -1,0 +1,9 @@
+{
+  "release": "AEGIS Evaluation 0.1.0",
+  "channel": "Controlled Evaluation",
+  "source_commit": "797b8102a8bbc17d3644bad90da4f7f66f816c66",
+  "artifact_sha256": "b0aa37d650c97fccbfc98686252b447820abad59d4815de124eadd71fbea0c50",
+  "evaluation_verdict": "APPROVED_FOR_CONTROLLED_DISTRIBUTION",
+  "rollout_stage": "STAGE_1_CLOSED_EVALUATION",
+  "timestamp": "2026-11-18T05:59:20.043500+00:00"
+}

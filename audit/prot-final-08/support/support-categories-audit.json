@@ -1,0 +1,38 @@
+{
+  "support_categories": {
+    "ACTIVATION": {
+      "priority": "P1",
+      "escalation": "licensing-ops"
+    },
+    "INSTALLATION": {
+      "priority": "P1",
+      "escalation": "desktop-support"
+    },
+    "AUTHENTICATION": {
+      "priority": "P1",
+      "escalation": "gateway-ops"
+    },
+    "FUNCTIONAL": {
+      "priority": "P2",
+      "escalation": "app-engineering"
+    },
+    "PERFORMANCE": {
+      "priority": "P2",
+      "escalation": "infra-ops"
+    },
+    "UX": {
+      "priority": "P3",
+      "escalation": "product-design"
+    },
+    "SECURITY": {
+      "priority": "P0",
+      "escalation": "sec-incident-response"
+    },
+    "PRIVACY": {
+      "priority": "P0",
+      "escalation": "privacy-officer"
+    }
+  },
+  "secret_redaction_verified": true,
+  "timestamp": "2026-11-18T05:59:20.043500+00:00"
+}

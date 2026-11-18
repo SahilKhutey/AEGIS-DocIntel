@@ -62,6 +62,8 @@ services/evaluation_gateway/keys/private-key.pem
 
 # Release assembly staging workspace
 release/client/AEGIS-DocIntel-Demo-Edition/
+release/client/AEGIS-Evaluation-0.1.0/
+release/client/*.zip
 
 # MkDocs build output
 site/

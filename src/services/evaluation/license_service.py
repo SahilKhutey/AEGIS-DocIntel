@@ -14,7 +14,6 @@ from services.evaluation_gateway.license import (
     export_license_token,
     parse_license_token,
     CANONICAL_PRODUCT,
-    CANONICAL_ALGORITHM,
 )
 from services.evaluation_gateway.signing_key_registry import key_registry
 from services.evaluation_gateway.revocation import registry as revocation_registry
@@ -33,12 +32,11 @@ class EvaluationLicenseService:
     ) -> Dict[str, Any]:
         return issue_evaluation_license(
             user_id=evaluator_id,
-            tenant_id=tenant_id,
             duration_days=duration_days,
-            device_limit=device_limit,
+            max_devices=device_limit,
             features=features,
             quotas=quotas,
-            key_id=key_id,
+            kid=key_id,
         )
 
     def verify_license(

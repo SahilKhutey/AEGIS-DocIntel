@@ -1,0 +1,12 @@
+AEGIS-DocIntel Third-Party Software Notices
+============================================
+
+This package includes software distributed under open source licenses:
+
+1. FastAPI (MIT License) - Copyright (c) Sebastin Ramrez
+2. Pydantic (MIT License) - Copyright (c) Samuel Colvin
+3. PyMuPDF (AGPL-3.0 / Commercial) - Copyright (c) Artifex Software, Inc.
+4. Cryptography (Apache-2.0 / BSD) - Copyright (c) The Python Cryptographic Authority
+5. Uvicorn (BSD-3-Clause) - Copyright (c) Encode OSS Ltd.
+
+Full text of licenses is available at https://evaluate.aegis.corp/licenses.

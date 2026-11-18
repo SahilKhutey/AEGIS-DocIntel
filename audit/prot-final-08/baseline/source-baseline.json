@@ -1,0 +1,32 @@
+{
+  "product": "AEGIS-DocIntel",
+  "release_channel": "controlled-evaluation",
+  "version": "0.1.0",
+  "git_branch": "product_hunt_launch_packaging",
+  "source_commit": "797b8102a8bbc17d3644bad90da4f7f66f816c66",
+  "commit_date": "2026-11-18T10:53:47+05:30",
+  "commit_subject": "feat(compliance): implement PROT-FINAL-07 compliance readiness & regulatory assurance",
+  "status": "FROZEN_BASELINE",
+  "environments": {
+    "development": {
+      "purpose": "Engineering",
+      "data": "Synthetic/developer data"
+    },
+    "ci": {
+      "purpose": "Automated testing",
+      "data": "Synthetic fixtures"
+    },
+    "staging": {
+      "purpose": "Release rehearsal",
+      "data": "Synthetic evaluation data"
+    },
+    "production_evaluation": {
+      "purpose": "External evaluators",
+      "data": "Authorized evaluator data"
+    },
+    "internal_administration": {
+      "purpose": "License and operations management",
+      "data": "Restricted operational data"
+    }
+  }
+}

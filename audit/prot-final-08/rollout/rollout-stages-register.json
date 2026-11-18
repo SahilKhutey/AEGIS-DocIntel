@@ -1,0 +1,30 @@
+{
+  "stages": [
+    {
+      "stage": "Stage 0",
+      "name": "Internal Rehearsal",
+      "cohort_size": "1-2",
+      "status": "COMPLETED"
+    },
+    {
+      "stage": "Stage 1",
+      "name": "Closed Evaluation",
+      "cohort_size": "3-5",
+      "status": "APPROVED"
+    },
+    {
+      "stage": "Stage 2",
+      "name": "Expanded Evaluation",
+      "cohort_size": "5-15",
+      "status": "HOLD"
+    },
+    {
+      "stage": "Stage 3",
+      "name": "Broader Programme",
+      "cohort_size": "15+",
+      "status": "HOLD"
+    }
+  ],
+  "selection_criteria_defined": true,
+  "timestamp": "2026-11-18T05:59:20.043500+00:00"
+}

@@ -1,0 +1,26 @@
+{
+  "product": "AEGIS-DocIntel",
+  "release_channel": "controlled-evaluation",
+  "version": "0.1.0",
+  "source_commit": "797b8102a8bbc17d3644bad90da4f7f66f816c66",
+  "build_timestamp": "2026-11-18T05:41:27.753098+00:00",
+  "platform": "windows-x64",
+  "artifact": {
+    "filename": "AEGIS-Evaluation-0.1.0.zip",
+    "sha256": "b0aa37d650c97fccbfc98686252b447820abad59d4815de124eadd71fbea0c50",
+    "size_bytes": 4221
+  },
+  "sbom": {
+    "filename": "client-sbom.cdx.json",
+    "sha256": "9858bf6543cb5cb7149b81190578c23e4a851fd9b3e8def54079da77d011608a",
+    "size_bytes": 144872
+  },
+  "minimum_gateway_version": "0.1.0",
+  "minimum_client_version": "0.1.0",
+  "signature": {
+    "algorithm": "Ed25519",
+    "key_id": "aegis-release-ed25519-2026-01",
+    "signature_hex": "aebae32f70a843314f4a5bb982d396d6e0a69772aaaf199f02c85e93c215cf3d4391055a34c3188052f0058fc459a6934bec54623d206d4f47eec6e1acbff600",
+    "signature_b64": "rrrjL3CoQzFPSlu5gtOW1uCml3KqrxmfAshek8IVzz1DkQVaNMMYgFLwBY/EWaaTS+xUYj0gbU9H7sbhrL/2AA=="
+  }
+}

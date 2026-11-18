@@ -1,0 +1,12 @@
+{
+  "total_documents": 21,
+  "guides_count": 17,
+  "legal_agreements": [
+    "EVALUATION_AGREEMENT.md",
+    "PRIVACY_NOTICE.md",
+    "THIRD_PARTY_NOTICES.txt"
+  ],
+  "target_directory": "docs/distribution/evaluator-documentation",
+  "verified_complete": true,
+  "timestamp": "2026-11-18T05:59:20.043500+00:00"
+}

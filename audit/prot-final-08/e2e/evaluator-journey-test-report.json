@@ -1,0 +1,10 @@
+{
+  "suite": "tests/security/evaluation_release",
+  "tests_executed": 33,
+  "tests_passed": 33,
+  "tests_failed": 0,
+  "pass_rate": 1.0,
+  "duration_seconds": 2.57,
+  "coverage": "REL-001 through REL-035",
+  "timestamp": "2026-11-18T05:59:20.043500+00:00"
+}

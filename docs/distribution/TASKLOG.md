@@ -840,6 +840,58 @@
   - `docs/distribution/prot-final/compliance/` (20 formal compliance dossiers)
 - **Result:** **PASSED / COMPLIANCE READY — LEGAL & REGULATORY ASSURANCE PROGRAMME CERTIFIED (17/17 TESTS PASSED, 18/18 ACCEPTANCE OBJECTIVES SATISFIED, ALL 7 RELEASE GATES PASSED, 100% GREEN)**.
 
+### [2026-11-18 11:35:00] - PROT-FINAL-08: Product Release Readiness, Evaluator Onboarding & Controlled Distribution Execution
+- **Task Goal:** Prepare AEGIS-DocIntel for its first controlled external evaluation release (`AEGIS Evaluation 0.1.0`), integrating the protected client, activation and licensing, public gateway, private engine, evaluator experience, documentation, support, operator workflows, and release operations into a controlled external evaluation programme.
+- **Actions Taken:**
+  1. Executed Mandatory Pre-Release Audit & Baseline Generation (WP-08.01):
+     - Executed sensitive pattern review, Git baseline inspection, and capability readiness matrix.
+     - Generated `audit/prot-final-08/baseline/` (`source-baseline.json`, `sensitive-pattern-review.txt`, `capability-matrix.json`).
+  2. Implemented Evaluator Lifecycle, Onboarding & Support Schemas (`src/schemas/evaluation/`):
+     - `evaluator.py`: Strict lifecycle state machine (`INVITED`, `REGISTERED`, `LICENSE_ISSUED`, `ACTIVATION_PENDING`, `ACTIVE`, `SUSPENDED`, `EXPIRED`, `REVOKED`, `TERMINATED`).
+     - `invitation.py`: Expiring high-entropy invitation tokens and acceptance protocol.
+     - `feedback.py`: Categorized feedback/defect schemas with automated secret redaction.
+     - `release.py`: Release manifests, download tokens, and Ed25519 signature validation schemas.
+  3. Implemented Evaluator Data Repositories (`src/repositories/evaluation/`):
+     - `evaluator_repository.py`: Thread-safe profile storage with monotonic audit history and irreversible terminal state guards.
+     - `invitation_repository.py`: Token hash lookup, expiration, and acceptance tracking.
+     - `feedback_repository.py`: Feedback intake with regex scrubbing of credentials, bearer tokens, and PANs.
+     - `release_repository.py`: Manifest registry, time-limited single-use download grants, and access audit log.
+  4. Implemented Evaluator Services (`src/services/evaluation/`):
+     - `evaluator_service.py`: Evaluator profile lifecycle transitions and administrative controls.
+     - `invitation_service.py`: High-entropy 256-bit token generation and acceptance flow.
+     - `onboarding_service.py`: End-to-end evaluator journey coordinator (invite -> register -> license -> device bind -> session).
+     - `release_access_service.py`: Signed download links with 15-minute TTL and Ed25519 manifest verification.
+     - `evaluator_feedback_service.py`: Structured feedback intake, defect triage, and automated routing of P0/Security submissions.
+     - `evaluator_termination_service.py`: Atomic offboarding triggering synchronous license/session revocation and cascading data erasure.
+  5. Implemented API Routers (`src/api/routers/`):
+     - Evaluator endpoints: `/v1/evaluation/profile`, `/v1/evaluation/license`, `/v1/evaluation/devices`, `/v1/evaluation/usage`, `/v1/evaluation/releases`, `/v1/evaluation/download`, `/v1/evaluation/feedback`, `/v1/evaluation/support-requests`, `/v1/evaluation/termination-request`.
+     - Administrator endpoints: `/v1/admin/evaluators`, `/v1/admin/evaluation/licenses`, `/v1/admin/evaluation/feedback`.
+  6. Packaged Windows Client Release (`scripts/release/package_evaluation_release.py`):
+     - Built `release/client/AEGIS-Evaluation-0.1.0.zip` (SHA-256: `b0aa37d650c97fccbfc98686252b447820abad59d4815de124eadd71fbea0c50`).
+     - Enforced strict boundary rules: 0 `.py` files, 0 private keys, 0 credentials.
+     - Signed release manifest `release/manifests/release-manifest-0.1.0.json` with Ed25519.
+  7. Authored Evaluator Documentation Package (`docs/distribution/evaluator-documentation/`):
+     - 17 operational guides and 3 legal agreements (`00_README.md` through `17_UNINSTALLATION_AND_DATA_DELETION.md`, `EVALUATION_AGREEMENT.md`, `PRIVACY_NOTICE.md`, `THIRD_PARTY_NOTICES.txt`).
+  8. Implemented & Verified Automated Release Test Suite (`tests/security/evaluation_release/`):
+     - 33 automated tests across 5 modules covering `REL-001` through `REL-035`:
+       * `test_rel_01_download_and_package_integrity.py`: 9/9 PASSED
+       * `test_rel_02_onboarding_and_activation.py`: 6/6 PASSED
+       * `test_rel_03_evaluator_journey_and_quotas.py`: 9/9 PASSED
+       * `test_rel_04_revocation_and_termination.py`: 5/5 PASSED
+       * `test_rel_05_support_feedback_and_operations.py`: 4/4 PASSED
+     - Result: 33/33 PASSED in 2.57s.
+     - Full security regression: 280/280 PASSED in 5.64s.
+  9. Populated Empirical Audit Evidence & Formal Engineering Dossiers:
+     - 14 audit registries in `audit/prot-final-08/`.
+     - 20 formal dossiers in `docs/distribution/prot-final/release-readiness/` (`00_RELEASE_READINESS_CHARTER.md` through `19_WP_FINAL_08_SIGNOFF.md`).
+- **Commands Executed:**
+  - `pytest tests/security/evaluation_release/ -v` -> 33 / 33 PASSED in 2.57s (100% green).
+  - `pytest tests/security/evaluation_release/ tests/security/compliance/ tests/security/deployment/ tests/security/release_engineering/ tests/security/penetration_testing/ tests/security/consolidated/ -q` -> 280 / 280 PASSED in 5.64s.
+  - `ruff check src/services/evaluation/ ...` -> All checks passed (0 warnings).
+  - `gitleaks detect` -> 0 leaks detected in staged/modified files.
+- **Result:** **PASSED / RELEASE READY — STAGE 1 CONTROLLED DISTRIBUTION AUTHORIZED (33/33 ACCEPTANCE TESTS PASSED, 280/280 REGRESSION TESTS GREEN, UNCONDITIONAL GO FOR CONTROLLED EVALUATION)**.
+
+
 
 
 

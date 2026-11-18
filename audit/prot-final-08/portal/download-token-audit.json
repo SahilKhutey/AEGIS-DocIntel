@@ -1,0 +1,9 @@
+{
+  "portal_endpoint": "https://evaluate.aegis.corp/v1/evaluation/download",
+  "token_entropy_bits": 256,
+  "default_ttl_seconds": 900,
+  "single_use_enforced": true,
+  "unauthorized_access_denied": true,
+  "audit_logging_active": true,
+  "timestamp": "2026-11-18T05:59:20.043500+00:00"
+}

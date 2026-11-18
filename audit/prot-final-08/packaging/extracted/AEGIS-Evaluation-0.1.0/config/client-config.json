@@ -1,0 +1,15 @@
+{
+  "product": "AEGIS-DocIntel",
+  "edition": "Controlled-Evaluation",
+  "version": "0.1.0",
+  "gateway_url": "https://evaluate.aegis.corp",
+  "local_proxy_port": 3000,
+  "max_upload_size_mb": 25,
+  "supported_formats": [
+    "PDF",
+    "DOCX",
+    "TXT",
+    "TIFF"
+  ],
+  "telemetry_enabled": true
+}

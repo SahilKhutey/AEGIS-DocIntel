@@ -1,0 +1,15 @@
+{
+  "operator_role_required": "admin",
+  "evaluator_role_denial_verified": true,
+  "admin_endpoints_tested": [
+    "/v1/admin/evaluators",
+    "/v1/admin/evaluators/{id}/invite",
+    "/v1/admin/evaluators/{id}/suspend",
+    "/v1/admin/evaluators/{id}/terminate",
+    "/v1/admin/evaluation/licenses",
+    "/v1/admin/evaluation/licenses/{id}/revoke",
+    "/v1/admin/evaluation/feedback"
+  ],
+  "rbac_status": "COMPLIANT",
+  "timestamp": "2026-11-18T05:59:20.043500+00:00"
+}

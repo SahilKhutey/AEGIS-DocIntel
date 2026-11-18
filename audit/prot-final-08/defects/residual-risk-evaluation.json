@@ -1,0 +1,13 @@
+{
+  "critical_defects": 0,
+  "high_defects": 0,
+  "medium_defects": 0,
+  "low_defects": 1,
+  "known_limitations": [
+    "Max 50 documents and 200 queries per 14-day evaluation license",
+    "Single registered device per evaluator license",
+    "Encrypted PDF files must be decrypted prior to upload"
+  ],
+  "residual_risk_level": "ACCEPTABLE",
+  "timestamp": "2026-11-18T05:59:20.043500+00:00"
+}

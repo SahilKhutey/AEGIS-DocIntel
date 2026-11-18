@@ -1,0 +1,9 @@
+{
+  "status": "COMPLIANT",
+  "package": "AEGIS-Evaluation-0.1.0.zip",
+  "sha256": "b0aa37d650c97fccbfc98686252b447820abad59d4815de124eadd71fbea0c50",
+  "total_files": 14,
+  "violations_count": 0,
+  "violations": [],
+  "verified_at": "2026-11-18T05:41:27.784508+00:00"
+}

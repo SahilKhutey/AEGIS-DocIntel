@@ -1,0 +1,2 @@
+AEGIS-DOCINTEL THIRD-PARTY SOFTWARE NOTICES
+Contains open source packages under MIT, Apache-2.0, and BSD-3-Clause licenses.

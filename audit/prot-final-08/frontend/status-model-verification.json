@@ -1,0 +1,15 @@
+{
+  "status_model": [
+    "UPLOADED",
+    "VALIDATING",
+    "QUEUED",
+    "PROCESSING",
+    "COMPLETED",
+    "FAILED",
+    "CANCELLED"
+  ],
+  "failure_reporting_safe": true,
+  "stack_traces_suppressed": true,
+  "quota_visibility_verified": true,
+  "timestamp": "2026-11-18T05:59:20.043500+00:00"
+}
