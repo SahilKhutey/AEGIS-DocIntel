@@ -1,0 +1,9 @@
+{
+  "control_id": "REL-009",
+  "evaluated_at": "2026-11-18T03:48:37.665500+00:00",
+  "provenance_standard": "SLSA v1.0 / in-toto Statement v1",
+  "source_commit": "cee7fc9b8b656e5419ec85ca527a0b7c5434da4a",
+  "builder_identity": "https://github.com/SahilKhutey/AEGIS-DocIntel/actions/runners/ci-release-builder",
+  "traceability_verified": true,
+  "status": "COMPLIANT"
+}

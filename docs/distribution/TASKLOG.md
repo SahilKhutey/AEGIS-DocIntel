@@ -702,4 +702,55 @@
   - `services/evaluation_gateway/app.py` (Path traversal hardening & security headers middleware)
 - **Result:** **PASSED / CERTIFIED & SIGNED OFF — PENETRATION TESTING COMPLETE (130/130 PASSED, 100% GREEN)**. The protected evaluation distribution is empirically validated against all adversary profiles.
 
+---
+
+### TASK-PROT-FINAL-04: Secure Build Pipeline, Release Engineering & Software Supply Chain Security
+- **Date:** 2026-11-18
+- **Scope:** Complete implementation and verification of PROT-FINAL-04 release engineering:
+  1. Implemented strict client distribution boundary assembler (`scripts/release/assemble_client.py`) and validator (`scripts/release/validate_artifact.py`):
+     - Assembled 38 allowlisted files into deterministic release archive `release/client/AEGIS-DocIntel-Demo-Edition.zip`.
+     - Validated 0 private engine files, 0 `.py` code files, 0 `.env` files, 0 private keys, and 0 secrets.
+  2. Implemented machine-readable CycloneDX 1.5 JSON SBOM generation (`scripts/release/generate_sboms.py`):
+     - Client distribution SBOM (`release/sbom/client-sbom.cdx.json`, 553 components).
+     - Backend deployment SBOM (`release/sbom/backend-sbom.cdx.json`, 71 components).
+  3. Implemented cryptographic Ed25519 manifest signing & verification (`scripts/release/sign_release.py` and `scripts/release/verify_release.py`):
+     - Canonical manifest `release/manifests/manifest.json`.
+     - Signature `release/signatures/manifest.sig` and key metadata `release/signatures/signing-key-metadata.json`.
+     - Key isolation: Private signing key stored outside distribution artifacts.
+  4. Implemented SLSA v1.0 / in-toto build provenance statement (`scripts/release/generate_provenance.py`):
+     - Output `release/provenance/build-provenance.json` with commit traceability and dependency hashes.
+  5. Implemented automated vulnerability & secret scanning (`scripts/release/scan_release.py`):
+     - Output `release/reports/secret-scan-report.json` (Status: CLEAN).
+     - Output `release/reports/dependency-report.json` (Status: PASS, 0 critical/high CVEs).
+  6. Implemented server-side client release policy and version blocking (`services/evaluation_gateway/release_policy.py` & `app.py`):
+     - Enforces `minimum_supported_version` ("1.0.0") and `blocked_versions` via `X-Client-Version` header inspection.
+     - Admin endpoints for dynamic version blocking, unblocking, and minimum version updates.
+     - Rollback safeguards: Rollback cannot resurrect revoked licenses or restore invalidated sessions.
+  7. Authored automated release engineering test suite (`tests/security/release_engineering/`):
+     - 24 automated tests covering `REL-001` through `REL-010` and `GATE-01` through `GATE-12` (100% PASSED).
+  8. Authored multi-stage CI/CD security pipeline in `.github/workflows/evaluation-release.yml` with pinned commit SHAs and isolated signing environment.
+  9. Populated empirical audit evidence in `audit/prot-final/release-engineering/` and authored 16 formal engineering dossiers in `docs/distribution/prot-final/release-engineering/` (`00_RELEASE_ENGINEERING_OVERVIEW.md` through `15_WP_SIGNOFF.md`).
+- **Commands Executed:**
+  - `python scripts/release/assemble_client.py` -> 38 files assembled into `AEGIS-DocIntel-Demo-Edition.zip`.
+  - `python scripts/release/validate_artifact.py` -> Artifact boundary validation PASSED (0 violations).
+  - `python scripts/release/generate_sboms.py` -> CycloneDX 1.5 JSON SBOMs generated for client and backend.
+  - `python scripts/release/sign_release.py` -> Signed manifest with Ed25519.
+  - `python scripts/release/verify_release.py` -> Independent cryptographic verification PASSED.
+  - `python scripts/release/generate_provenance.py` -> SLSA v1.0 build provenance generated.
+  - `python scripts/release/scan_release.py` -> Secret and dependency scans PASSED.
+  - `pytest tests/security/release_engineering/ -v` -> 24 / 24 PASSED in 0.78s (100% green).
+  - `python scripts/generate_audit_prot_final_release.py` -> Generated all audit evidence and 16 markdown dossiers.
+  - `ruff check src tests scripts services dashboard` -> All checks passed!
+  - `gitleaks detect --redact -v --log-opts="--no-merges --first-parent 403db8106e4c742..HEAD"` -> Clean (0 leaks).
+- **Deliverables:**
+  - `scripts/release/` (`assemble_client.py`, `validate_artifact.py`, `generate_sboms.py`, `sign_release.py`, `verify_release.py`, `generate_provenance.py`, `scan_release.py`)
+  - `release/` (`manifests/`, `sbom/`, `signatures/`, `provenance/`, `reports/`)
+  - `tests/security/release_engineering/` (24 automated tests across 6 modules)
+  - `services/evaluation_gateway/release_policy.py` & updated `app.py`
+  - `.github/workflows/evaluation-release.yml`
+  - `audit/prot-final/release-engineering/` (empirical evidence files)
+  - `docs/distribution/prot-final/release-engineering/` (16 engineering dossiers)
+- **Result:** **PASSED / CERTIFIED & SIGNED OFF — RELEASE PIPELINE COMPLETE & CERTIFIED (24/24 TESTS PASSED, 12/12 GATES SATISFIED, 100% GREEN)**.
+
+
 

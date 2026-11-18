@@ -1,0 +1,18 @@
+{
+  "control_id": "REL-002",
+  "evaluated_at": "2026-11-18T03:48:37.665500+00:00",
+  "isolation_level": "HERMETIC_CI_WORKER",
+  "build_environment": {
+    "runner": "ubuntu-latest (GitHub-hosted runner)",
+    "node_version": "22.20.5",
+    "python_version": "3.12.10",
+    "network_access": "RESTRICTED_TO_PACKAGE_REGISTRIES_DURING_FETCH",
+    "workspace_permissions": "contents: read"
+  },
+  "separation_guarantees": [
+    "Client assembly executed from strict allowlist; private engine excluded.",
+    "Signing keys isolated in dedicated release-signing environment.",
+    "Zero persistence of build tokens or credentials across jobs."
+  ],
+  "status": "COMPLIANT"
+}

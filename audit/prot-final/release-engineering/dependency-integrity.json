@@ -1,0 +1,19 @@
+{
+  "control_id": "REL-003",
+  "evaluated_at": "2026-11-18T03:48:37.665500+00:00",
+  "lockfile_verification": {
+    "npm": {
+      "path": "web/package-lock.json",
+      "lockfile_version": 3,
+      "packages_audited": 553,
+      "status": "LOCKED_AND_VERIFIED"
+    },
+    "pypi": {
+      "path": "requirements-core.txt",
+      "dependencies_audited": 28,
+      "floating_versions": 0,
+      "status": "CONSTRAINED_AND_VERIFIED"
+    }
+  },
+  "status": "COMPLIANT"
+}

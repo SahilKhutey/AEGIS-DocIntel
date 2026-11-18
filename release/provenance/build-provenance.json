@@ -1,0 +1,72 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "subject": [
+    {
+      "name": "AEGIS-DocIntel-Demo-Edition.zip",
+      "digest": {
+        "sha256": "3ace38a19fb138c40a2fea3151bf90a381ba21f920ee89bc4dae0e6c6459a14d"
+      }
+    },
+    {
+      "name": "manifest.json",
+      "digest": {
+        "sha256": "08de92bdd4143d669320df00e1ec00f8398ca3750a063b7fa98bd560e83b0804"
+      }
+    }
+  ],
+  "predicateType": "https://slsa.dev/provenance/v1",
+  "predicate": {
+    "buildDefinition": {
+      "buildType": "https://actions.github.com/AEGIS-DocIntel/evaluation-release@v1.1.0",
+      "externalParameters": {
+        "source": {
+          "uri": "git+https://github.com/SahilKhutey/AEGIS-DocIntel.git",
+          "digest": {
+            "sha1": "cee7fc9b8b656e5419ec85ca527a0b7c5434da4a"
+          }
+        },
+        "workflow": ".github/workflows/evaluation-release.yml"
+      },
+      "internalParameters": {
+        "release_version": "1.1.0",
+        "channel": "evaluation",
+        "builder_os": "ubuntu-latest",
+        "node_version": "22.x",
+        "python_version": "3.12.x"
+      },
+      "resolvedDependencies": [
+        {
+          "uri": "pkg:npm/lockfile@web/package-lock.json",
+          "digest": {
+            "sha256": "b4f3937d7da12a0132b9f6eb189e21367eb5ba5db603c81fab8e9f0a31a23a58"
+          }
+        },
+        {
+          "uri": "pkg:pypi/requirements@requirements-core.txt",
+          "digest": {
+            "sha256": "ec7bf3e686e280cf79388b15e26aa78ef8a5ab98e2a4d7889038507ba4593681"
+          }
+        }
+      ]
+    },
+    "runDetails": {
+      "builder": {
+        "id": "https://github.com/SahilKhutey/AEGIS-DocIntel/actions/runners/ci-release-builder",
+        "version": "1.1.0"
+      },
+      "metadata": {
+        "invocationId": "inv-cee7fc9b-eval-rel",
+        "startedOn": "2026-11-18T03:41:53.118690+00:00",
+        "finishedOn": "2026-11-18T03:41:53.118690+00:00"
+      },
+      "byproducts": [
+        {
+          "name": "client-sbom.cdx.json",
+          "digest": {
+            "sha256": "617058d3e62a8d7250edcabfd4722dbad02cfe0c5f4829208ee944483a94ffb5"
+          }
+        }
+      ]
+    }
+  }
+}

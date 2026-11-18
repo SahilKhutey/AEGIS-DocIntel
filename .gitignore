@@ -57,7 +57,11 @@ target/
 
 # Cryptographic private keys - never commit
 *private*.pem
+*.key
 services/evaluation_gateway/keys/private-key.pem
+
+# Release assembly staging workspace
+release/client/AEGIS-DocIntel-Demo-Edition/
 
 # MkDocs build output
 site/

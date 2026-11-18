@@ -1,0 +1,9 @@
+{
+  "status": "COMPLIANT",
+  "evaluated_at": "2026-11-18T03:38:31.999117+00:00",
+  "archive_path": "release\\client\\AEGIS-DocIntel-Demo-Edition.zip",
+  "archive_sha256": "3ace38a19fb138c40a2fea3151bf90a381ba21f920ee89bc4dae0e6c6459a14d",
+  "total_files_scanned": 38,
+  "violations_count": 0,
+  "violations": []
+}

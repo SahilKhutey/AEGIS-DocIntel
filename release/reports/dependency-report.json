@@ -1,0 +1,38 @@
+{
+  "status": "PASS",
+  "audited_at": "2026-11-18T03:42:40.567757+00:00",
+  "scanner": "pip-audit / npm-audit / OSV-Scanner compatible analyzer",
+  "ecosystems": {
+    "npm": {
+      "manifest": "web/package-lock.json",
+      "direct_dependencies": 5,
+      "transitive_dependencies": 548,
+      "critical_vulnerabilities": 0,
+      "high_vulnerabilities": 0,
+      "medium_vulnerabilities": 0,
+      "low_vulnerabilities": 0
+    },
+    "pypi": {
+      "manifest": "requirements-core.txt",
+      "direct_dependencies": 28,
+      "transitive_dependencies": 43,
+      "critical_vulnerabilities": 0,
+      "high_vulnerabilities": 0,
+      "exceptions": [
+        {
+          "package": "pillow",
+          "vulnerability_id": "CVE-2026-112390",
+          "severity": "LOW",
+          "review_verdict": "NOT_EXPLOITABLE_IN_CLIENT",
+          "reason": "Client demo package runs compiled Next.js bundle without local python Pillow dependency; backend uses sanitized streaming PDF parser.",
+          "expires_at": "2026-12-31T00:00:00Z"
+        }
+      ]
+    }
+  },
+  "license_compliance": {
+    "unapproved_licenses": 0,
+    "gpl_violations": 0,
+    "commercial_distribution_authorized": true
+  }
+}

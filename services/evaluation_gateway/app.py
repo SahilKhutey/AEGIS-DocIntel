@@ -75,7 +75,15 @@ app.add_middleware(
 
 @app.middleware("http")
 async def security_headers_middleware(request: Request, call_next):
-    """Enforces essential defensive HTTP response headers."""
+    """Enforces essential defensive HTTP response headers and client release gates."""
+    client_ver = request.headers.get("X-Client-Version")
+    if client_ver:
+        from services.evaluation_gateway.release_policy import release_policy
+        try:
+            release_policy.validate_client_version(client_ver)
+        except HTTPException as exc:
+            return JSONResponse(status_code=exc.status_code, content=exc.detail if isinstance(exc.detail, dict) else {"error": exc.detail})
+
     response = await call_next(request)
     response.headers["X-Content-Type-Options"] = "nosniff"
     response.headers["X-Frame-Options"] = "DENY"
@@ -214,6 +222,15 @@ class AdminQuotaAdjustmentRequest(BaseModel):
     amount: int = Field(..., description="Adjustment units (signed integer)")
     reason: str = Field(..., description="Audit justification")
     ticket_ref: Optional[str] = None
+
+
+class BlockVersionRequest(BaseModel):
+    version: str = Field(..., min_length=1, description="Semantic version string to block")
+    reason: Optional[str] = "Compromised or superseded release"
+
+
+class SetMinimumVersionRequest(BaseModel):
+    version: str = Field(..., min_length=1, description="Minimum supported semantic version string")
 
 
 # ---------------------------------------------------------------------------
@@ -2165,3 +2182,41 @@ async def admin_restore_backup(req: BackupRestoreRequest, admin_auth: None = Dep
     if not success:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=report)
     return {"status": "RESTORED_AND_RECONCILED", "report": report}
+
+
+# ---------------------------------------------------------------------------
+# Release Policy & Client Version Revocation Endpoints (REL-010)
+# ---------------------------------------------------------------------------
+
+@app.get("/v1/evaluation/release/policy")
+async def get_evaluation_release_policy():
+    """Public endpoint to inspect the active client release policy."""
+    from services.evaluation_gateway.release_policy import release_policy
+    return release_policy.get_policy()
+
+
+@app.post("/v1/admin/evaluation/release/policy/block")
+async def admin_block_release_version(req: BlockVersionRequest, admin_auth: None = Depends(require_admin_auth)):
+    """Admin endpoint to block a compromised or superseded client release (REL-010)."""
+    from services.evaluation_gateway.release_policy import release_policy
+    release_policy.block_version(req.version, req.reason or "Administrative revocation")
+    return {"status": "VERSION_BLOCKED", "policy": release_policy.get_policy()}
+
+
+@app.post("/v1/admin/evaluation/release/policy/unblock")
+async def admin_unblock_release_version(req: BlockVersionRequest, admin_auth: None = Depends(require_admin_auth)):
+    """Admin endpoint to unblock a client release."""
+    from services.evaluation_gateway.release_policy import release_policy
+    release_policy.unblock_version(req.version)
+    return {"status": "VERSION_UNBLOCKED", "policy": release_policy.get_policy()}
+
+
+@app.post("/v1/admin/evaluation/release/policy/minimum-version")
+async def admin_set_minimum_release_version(req: SetMinimumVersionRequest, admin_auth: None = Depends(require_admin_auth)):
+    """Admin endpoint to increase the minimum supported client version."""
+    from services.evaluation_gateway.release_policy import release_policy
+    try:
+        release_policy.set_minimum_version(req.version)
+        return {"status": "MINIMUM_VERSION_UPDATED", "policy": release_policy.get_policy()}
+    except Exception as e:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail={"error": "INVALID_VERSION", "message": str(e)})

@@ -1,0 +1,29 @@
+{
+  "artifacts": [
+    {
+      "name": "AEGIS-DocIntel-Demo-Edition.zip",
+      "sha256": "3ace38a19fb138c40a2fea3151bf90a381ba21f920ee89bc4dae0e6c6459a14d",
+      "size_bytes": 192163
+    }
+  ],
+  "build": {
+    "timestamp": "2026-11-18T03:41:15.976001+00:00",
+    "workflow": "ci-release-build"
+  },
+  "product": "AEGIS Evaluation",
+  "release_channel": "evaluation",
+  "sbom": {
+    "file": "client-sbom.cdx.json",
+    "format": "CycloneDX",
+    "sha256": "617058d3e62a8d7250edcabfd4722dbad02cfe0c5f4829208ee944483a94ffb5"
+  },
+  "signature": {
+    "algorithm": "Ed25519",
+    "key_id": "aegis-release-ed25519-2026-01"
+  },
+  "source": {
+    "commit": "cee7fc9b8b656e5419ec85ca527a0b7c5434da4a",
+    "repository": "AEGIS-DocIntel"
+  },
+  "version": "1.1.0"
+}

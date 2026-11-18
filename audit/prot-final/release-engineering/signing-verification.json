@@ -1,0 +1,13 @@
+{
+  "control_id": "REL-008",
+  "evaluated_at": "2026-11-18T03:48:37.665500+00:00",
+  "signature_details": {
+    "algorithm": "Ed25519 (EdDSA)",
+    "key_id": "aegis-release-ed25519-2026-01",
+    "manifest_path": "release/manifests/manifest.json",
+    "signature_path": "release/signatures/manifest.sig",
+    "verification_status": "VALID",
+    "tamper_detection_verified": true
+  },
+  "status": "COMPLIANT"
+}

@@ -36,6 +36,6 @@ def generate_keypair(output_dir: Path = KEYS_DIR) -> tuple[Path, Path]:
 
 if __name__ == "__main__":
     priv, pub = generate_keypair()
-    print(f"Generated Ed25519 Keypair:")
+    print("Generated Ed25519 Keypair:")
     print(f"  Private Key: {priv}")
     print(f"  Public Key:  {pub}")

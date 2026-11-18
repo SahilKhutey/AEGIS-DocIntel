@@ -148,3 +148,10 @@ edd537fcc9b57b53fe9289583a1a3dd280933201:tests/security/operations/test_security
 31f0a16dcbd205654b6bfb455ddff5db7bffe169:tests/security/evaluation/test_rem_06_operations.py:generic-api-key:211
 31f0a16dcbd205654b6bfb455ddff5db7bffe169:tests/security/evaluation/test_rem_06_operations.py:private-key:124
 31f0a16dcbd205654b6bfb455ddff5db7bffe169:tests/security/evaluation/test_rem_07_distribution.py:private-key:56
+#
+# tests/security/penetration_testing/test_pt_ip_secret_exposure.py:217, 33 (commit cee7fc9, 2026-11-18)
+# tests/security/penetration_testing/test_pt_operational_security.py:37 (commit cee7fc9, 2026-11-18)
+#   Matched `generic-api-key` and `private-key` on synthetic mock keys in PROT-FINAL-03 penetration test fixtures.
+cee7fc9b8b656e5419ec85ca527a0b7c5434da4a:tests/security/penetration_testing/test_pt_ip_secret_exposure.py:generic-api-key:217
+cee7fc9b8b656e5419ec85ca527a0b7c5434da4a:tests/security/penetration_testing/test_pt_ip_secret_exposure.py:private-key:33
+cee7fc9b8b656e5419ec85ca527a0b7c5434da4a:tests/security/penetration_testing/test_pt_operational_security.py:private-key:37

@@ -7,7 +7,7 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
-from typing import Set
+from typing import Optional, Set
 
 REVOCATION_STORE_PATH = Path(__file__).resolve().parent / "revocation_list.json"
 

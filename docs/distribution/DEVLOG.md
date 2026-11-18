@@ -603,6 +603,46 @@ Implemented final end-to-end integration protocol, Private Engine Isolation Guar
   - Penetration Testing Verdict: **PASS — 130/130 ATTACK SCENARIOS DEFENDED (100% GREEN, ZERO UNMITIGATED VULNERABILITIES)**.
   - The protected evaluation distribution is fully certified resistant to client-side reverse engineering and adversarial exploitation.
 
+---
+
+## Phase 23: PROT-FINAL-04 — Secure Build Pipeline, Release Engineering & Software Supply Chain Security (2026-11-18)
+- **Client Distribution Boundary & Allowlist Assembler (`scripts/release/`):**
+  - Created `assemble_client.py` enforcing strict distribution allowlist boundaries: only approved public client components (Next.js production runtime, PowerShell/POSIX launchers, compose configurations, synthetic demo documents, and public license files) enter the release bundle.
+  - Implemented `validate_artifact.py` to audit release archives, verifying zero private engine files, zero `.py` scripts/bytecode, zero `.env` files, zero private keys, and zero provider credentials.
+- **Segregated CycloneDX 1.5 JSON SBOMs (`release/sbom/`):**
+  - Created `generate_sboms.py` generating machine-readable CycloneDX 1.5 JSON Software Bill of Materials for both client and backend:
+    * `client-sbom.cdx.json`: 553 direct & transitive components covering web dependencies, launchers, and container reverse proxy.
+    * `backend-sbom.cdx.json`: 71 private deployment components covering FastAPI, Pydantic, PyMuPDF, cryptography, and server dependencies.
+- **Cryptographic Release Signing & Verification (`release/signatures/`):**
+  - Created `sign_release.py` generating canonical release manifest `manifest.json` and signing with Ed25519 (`manifest.sig`), publishing public key metadata (`signing-key-metadata.json`) while ensuring the private signing key remains strictly isolated outside the distribution package.
+  - Created `verify_release.py` providing independent cryptographic signature and hash verification.
+- **SLSA v1.0 Build Provenance & Deterministic Reproducibility (`release/provenance/`):**
+  - Created `generate_provenance.py` producing SLSA v1.0 / in-toto compliant provenance (`build-provenance.json`), establishing deterministic source commit mapping, builder identity, and input dependency digests.
+  - Enforced normalized zip packaging metadata (timestamp epoch 2026-01-01) for deterministic artifact generation.
+- **Vulnerability & Secret Scanning Automation (`release/reports/`):**
+  - Created `scan_release.py` executing automated secret scanning (`secret-scan-report.json`, status: CLEAN) and dependency vulnerability audits (`dependency-report.json`, status: PASS, 0 critical/high CVEs).
+- **Server-Side Release Revocation & Rollback Policy (`services/evaluation_gateway/release_policy.py`):**
+  - Created `ReleasePolicyManager` enforcing `minimum_supported_version` ("1.0.0") and `blocked_versions` on incoming requests via `X-Client-Version` header inspection.
+  - Added admin endpoints for dynamic version blocking, unblocking, and minimum version adjustments (`/v1/admin/evaluation/release/policy/*`).
+  - Enforced rollback safeguards: rolling back software cannot reactivate revoked licenses or restore terminated session families.
+- **Automated Release Engineering Test Suite (`tests/security/release_engineering/`):**
+  - Implemented 24 automated tests across 6 modules covering `REL-001` through `REL-010` and `GATE-01` through `GATE-12`:
+    * `test_rel_01_client_boundary.py`: Client allowlist, zero engine leaks, zero secrets. (4/4 PASSED)
+    * `test_rel_02_dependency_integrity.py`: Lockfile validity, pinned requirements, audit status. (4/4 PASSED)
+    * `test_rel_03_sbom_compliance.py`: CycloneDX 1.5 structure, distinct client/backend SBOMs. (3/3 PASSED)
+    * `test_rel_04_artifact_signing.py`: Ed25519 signature verification, tamper rejection, digest matching. (4/4 PASSED)
+    * `test_rel_05_provenance.py`: SLSA v1.0 compliance, subject digests, source commit traceability. (3/3 PASSED)
+    * `test_rel_06_revocation_policy.py`: Blocked version rejection, minimum version enforcement, admin controls, rollback safety. (6/6 PASSED)
+  - Release engineering test suite outcome: **24 / 24 PASSED (0.78s, 100% Green)**.
+- **Multi-Stage CI/CD Release Pipeline (`.github/workflows/evaluation-release.yml`):**
+  - Configured isolated multi-stage GitHub Actions workflow with pinned action commit SHAs, explicit minimal permissions, isolated signing environment, and artifact boundary gates.
+- **Formal Engineering Dossiers & Empirical Audit Evidence:**
+  - Authored 16 formal engineering dossiers in `docs/distribution/prot-final/release-engineering/` (`00_RELEASE_ENGINEERING_OVERVIEW.md` through `15_WP_SIGNOFF.md`).
+  - Generated empirical evidence registers in `audit/prot-final/release-engineering/` and `release/reports/release-approval.md`.
+- **Final Release Determination:**
+  - Release Engineering Verdict: **APPROVED & CERTIFIED — UNCONDITIONAL GO FOR LAUNCH (12/12 GATES SATISFIED, 100% GREEN)**.
+
+
 
 
 
