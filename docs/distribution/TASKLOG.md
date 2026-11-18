@@ -38,6 +38,11 @@
 | **TASK-WP-04.06** | PROT-04.06 | Quotas, usage accounting & resource limits | `src/services/evaluation/`, `app.py`, 60 QUOTA/RES/CONC tests | 0 (290/290 tests passed) | **COMPLETED** |
 | **TASK-PROT-FINAL-01** | PROT-FINAL-01 | Consolidated security audit & readiness assessment | `pytest tests/security/consolidated/` | 0 (56/56 tests passed 100%) | **COMPLETED** |
 | **TASK-PROT-FINAL-02** | PROT-FINAL-02 | Security remediation execution across 7 workstreams | `pytest tests/security/evaluation/test_rem_*.py` | 0 (98/98 tests passed 100%) | **COMPLETED** |
+| **TASK-PROT-FINAL-03** | PROT-FINAL-03 | Independent penetration testing & adversarial security validation | `pytest tests/security/penetration_testing/` | 0 (130/130 attack tests passed 100%) | **COMPLETED** |
+| **TASK-PROT-FINAL-04** | PROT-FINAL-04 | Secure build pipeline, release engineering & supply chain | `pytest tests/security/release_engineering/` | 0 (24/24 tests passed 100%) | **COMPLETED** |
+| **TASK-PROT-FINAL-05** | PROT-FINAL-05 | Deployment infrastructure, production gateway & private engine isolation | `pytest tests/security/deployment/` | 0 (20/20 tests passed 100%) | **COMPLETED** |
+| **TASK-PROT-FINAL-07** | PROT-FINAL-07 | Compliance readiness, legal controls & regulatory assurance | `pytest tests/security/compliance/` | 0 (17/17 tests passed 100%) | **COMPLETED** |
+| **TASK-PROT-FINAL-08** | PROT-FINAL-08 | Product release readiness, evaluator onboarding & controlled distribution | `pytest tests/security/evaluation_release/` | 0 (33/33 tests passed 100%) | **COMPLETED** |
 | **TASK-TEST-01**   | Security Suite | Distribution security attack test suite | `pytest tests/distribution_security -v` | 0 (20/20 SEC-DEMO tests passed) | **COMPLETED** |
 | **TASK-TEST-02**   | Full Regression | Combined demo & security verification | `pytest tests/distribution_security demo/tests` | 0 (28/28 tests passed 100%) | **COMPLETED** |
 

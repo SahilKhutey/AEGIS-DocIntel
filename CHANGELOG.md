@@ -6,6 +6,33 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.0-evaluation] - 2026-11-18 — Controlled Evaluation Release Readiness (PROT-FINAL-08)
+
+### Added
+- **Controlled Evaluation Release Packaging:** Packaged `AEGIS-Evaluation-0.1.0.zip` (SHA-256: `b0aa37d650c97fccbfc98686252b447820abad59d4815de124eadd71fbea0c50`) with zero-leak boundary validation (zero Python files, zero private keys, zero backend code).
+- **Cryptographic Release Signing:** Ed25519 signing of `release-manifest-0.1.0.json` with signature published in `release/signatures/release-manifest-0.1.0.sig`.
+- **Evaluator Lifecycle & Onboarding Engine (`src/schemas/evaluation/`, `src/repositories/evaluation/`, `src/services/evaluation/`):**
+  - Modeled 9-state evaluator state machine with irreversible terminal guards and atomic transition logs (`EvaluatorService`, `EvaluatorRepository`).
+  - High-entropy 256-bit invitation token generation, single-use hash tracking, and 72-hour expiration (`InvitationService`, `InvitationRepository`).
+  - End-to-end evaluator journey coordinator (`OnboardingService`).
+  - Time-limited signed download token generator (15-min TTL) and artifact integrity verification (`ReleaseAccessService`, `ReleaseRepository`).
+  - Evaluator defect and feedback pipeline with automatic regex scrubbing of credentials, Bearer tokens, and PANs (`EvaluatorFeedbackService`, `FeedbackRepository`).
+  - Controlled offboarding triggering synchronous license/session revocation and cascading data erasure (`EvaluatorTerminationService`).
+- **REST API Routers (`src/api/routers/`):**
+  - Evaluator endpoints: `/v1/evaluation/profile`, `/v1/evaluation/license`, `/v1/evaluation/devices`, `/v1/evaluation/usage`, `/v1/evaluation/releases`, `/v1/evaluation/download`, `/v1/evaluation/feedback`, `/v1/evaluation/support-requests`, `/v1/evaluation/termination-request`.
+  - Operator admin endpoints: `/v1/admin/evaluators`, `/v1/admin/evaluation/licenses`, `/v1/admin/evaluation/feedback` (protected by `admin` role requirement).
+- **Evaluator Documentation Package (`docs/distribution/evaluator-documentation/`):**
+  - 17 comprehensive operational guides (`00_README.md` through `17_UNINSTALLATION_AND_DATA_DELETION.md`).
+  - Legal agreements: `EVALUATION_AGREEMENT.md`, `PRIVACY_NOTICE.md`, `THIRD_PARTY_NOTICES.txt`.
+- **Release Verification Test Suite (`tests/security/evaluation_release/`):**
+  - 33 automated tests covering `REL-001` through `REL-035` (100% pass rate in 2.57s).
+  - 280 / 280 passed across all consolidated security and compliance suites.
+- **Formal Dossiers & Empirical Evidence:**
+  - 20 formal release readiness engineering dossiers in `docs/distribution/prot-final/release-readiness/` (`00_RELEASE_READINESS_CHARTER.md` to `19_WP_FINAL_08_SIGNOFF.md`).
+  - 14 audit registries in `audit/prot-final-08/`.
+
+---
+
 ## [1.1.0-demo] - 2026-11-13 — Product Hunt Launch Packaging & Protected Demo Edition
 
 ### Added
