@@ -1,0 +1,49 @@
+name: "Beta Evaluator Feedback"
+description: "Submit feedback, usability observations, or workflow friction from the beta evaluation release"
+title: "[BETA]: "
+labels: ["area:beta", "type:task", "status:needs-verification"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for evaluating AEGIS-DocIntel! Your feedback directly shapes our Product Hunt launch readiness.
+  - type: dropdown
+    id: workflow_tested
+    attributes:
+      label: Workflow Tested
+      description: Which workflow did you evaluate?
+      options:
+        - "Installer / Fresh Windows Setup"
+        - "Client Activation & License Verification"
+        - "Document Ingestion & File Processing"
+        - "Question Answering with Citation Verification"
+        - "Export, Uninstallation & Rollback"
+    validations:
+      required: true
+  - type: dropdown
+    id: severity_rating
+    attributes:
+      label: Severity / Friction Level
+      description: How critical is this feedback to your evaluation experience?
+      options:
+        - "launch:p0 (Critical blocker - unable to complete workflow)"
+        - "launch:p1 (Major friction - completed workflow with difficulty)"
+        - "launch:p2 (Minor enhancement / cosmetic refinement)"
+    validations:
+      required: true
+  - type: textarea
+    id: feedback_summary
+    attributes:
+      label: Evaluation Feedback & Observations
+      description: What went well, what was confusing, or what failed during your testing?
+      placeholder: "e.g., The citation bounding boxes highlighted the right paragraph, but page rendering took 4 seconds on page 12."
+    validations:
+      required: true
+  - type: textarea
+    id: system_details
+    attributes:
+      label: System & Client Details
+      description: OS build, evaluation package SHA256 or version string.
+      placeholder: "e.g., Windows 11 Enterprise 23H2, AEGIS-DocIntel Client v1.1.0-beta"
+    validations:
+      required: true

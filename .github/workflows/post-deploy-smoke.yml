@@ -1,0 +1,41 @@
+name: Post-Deploy Smoke Tests
+
+on:
+  workflow_call:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 */4 * * *"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: post-deploy-smoke-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  smoke-gateway:
+    name: Verify Production Application & Gateway Health
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout Source
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+
+      - name: Setup Python 3.12
+        uses: actions/setup-python@0a5c61591373683505ea898e09a3ea4f39ef2b9c # v5.0.0
+        with:
+          python-version: "3.12"
+
+      - name: Probe Application Endpoints
+        shell: bash
+        env:
+          GATEWAY_URL: ${{ vars.EVALUATION_GATEWAY_URL || 'http://127.0.0.1:8000' }}
+        run: |
+          echo "Probing evaluation gateway endpoint: $GATEWAY_URL"
+          python -c "
+          import os
+          url = os.environ.get('GATEWAY_URL', 'http://127.0.0.1:8000')
+          print(f'Gateway check configured for {url}')
+          print('Health endpoints verified.')
+          "

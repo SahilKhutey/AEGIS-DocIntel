@@ -1,0 +1,39 @@
+name: Release Integrity Verification
+
+on:
+  workflow_call:
+  workflow_dispatch:
+  push:
+    tags:
+      - "v[0-9]+.[0-9]+.[0-9]+"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-integrity-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  verify-signatures-and-hashes:
+    name: Verify Hashes, Manifest & Ed25519 Signatures
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout Source
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+
+      - name: Setup Python 3.12
+        uses: actions/setup-python@0a5c61591373683505ea898e09a3ea4f39ef2b9c # v5.0.0
+        with:
+          python-version: "3.12"
+          cache: "pip"
+
+      - name: Install Cryptography & Pytest
+        run: pip install cryptography pytest
+
+      - name: Run Integrity Verification Script
+        run: python scripts/release/verify_release.py
+
+      - name: Run Release Metadata Tests
+        run: pytest tests/release/test_release_metadata.py -v

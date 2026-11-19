@@ -1,0 +1,63 @@
+name: "Bug Report"
+description: "File a bug report for AEGIS-DocIntel application, processing pipeline, or client package"
+title: "[BUG]: "
+labels: ["type:bug", "status:needs-verification"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for reporting an issue! Please provide detailed reproduction steps so our engineering team can isolate and resolve the defect.
+  - type: dropdown
+    id: component
+    attributes:
+      label: Component Area
+      description: Which part of AEGIS-DocIntel is affected?
+      options:
+        - "area:product (General Product Workflow)"
+        - "area:backend (API, Extraction, Retrieval, LLM)"
+        - "area:frontend (Web UI, Dashboard, Evaluation Client)"
+        - "area:release (Installer, Portable ZIP, Packaging)"
+        - "area:security (Auth, Licensing, Tenant Boundary)"
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: Bug Description
+      description: A clear and concise description of the defect.
+      placeholder: "e.g., When uploading a password-protected PDF, extraction fails silently instead of raising an error."
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to Reproduce
+      description: Exact steps to reproduce the behavior.
+      placeholder: |
+        1. Open AEGIS-DocIntel Client
+        2. Navigate to 'Upload'
+        3. Select test document 'report.pdf'
+        4. Observe error state
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected vs Actual Behavior
+      description: What did you expect to happen, and what actually occurred?
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Environment & Version
+      description: Client version, OS version, Python/Node versions.
+      placeholder: "e.g., AEGIS-DocIntel v1.1.0, Windows 11 x64, Python 3.12"
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant Logs or Error Messages
+      description: Please paste sanitized logs or error traces. Do NOT include API keys, tokens, or confidential document content.
+      render: shell

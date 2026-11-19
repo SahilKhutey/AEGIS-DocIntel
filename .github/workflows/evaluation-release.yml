@@ -1,6 +1,7 @@
 name: AEGIS Evaluation Secure Release Pipeline
 
 on:
+  workflow_call:
   workflow_dispatch:
     inputs:
       release_version:

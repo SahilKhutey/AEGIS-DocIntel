@@ -1,0 +1,40 @@
+name: Beta Feedback Triage
+
+on:
+  issues:
+    types: [opened, labeled]
+
+permissions:
+  issues: write
+
+jobs:
+  triage:
+    name: Auto-Triage Beta Evaluator Feedback
+    if: contains(github.event.issue.labels.*.name, 'area:beta') || contains(github.event.issue.title, '[BETA]')
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Triage and Label Beta Feedback
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
+        with:
+          script: |
+            const issue = context.payload.issue;
+            const currentLabels = issue.labels.map(l => l.name);
+            const labelsToAdd = [];
+
+            if (!currentLabels.includes('area:beta')) {
+              labelsToAdd.push('area:beta');
+            }
+            if (!currentLabels.includes('status:needs-verification')) {
+              labelsToAdd.push('status:needs-verification');
+            }
+
+            if (labelsToAdd.length > 0) {
+              await github.rest.issues.addLabels({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issue.number,
+                labels: labelsToAdd
+              });
+              console.log(`Added triage labels: ${labelsToAdd.join(', ')}`);
+            }

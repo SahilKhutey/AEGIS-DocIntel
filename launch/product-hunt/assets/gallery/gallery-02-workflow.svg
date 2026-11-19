@@ -56,7 +56,7 @@
     <circle cx="40" cy="40" r="18" fill="#4338ca"/><text x="40" y="46" fill="#ffffff" font-family="sans-serif" font-weight="800" text-anchor="middle">4</text>
     <text x="75" y="46" fill="#ffffff" font-family="sans-serif" font-size="17" font-weight="700">Structured Output</text>
     <rect x="20" y="80" width="220" height="180" rx="8" fill="#0b0f19" stroke="#334155"/>
-    <text x="35" y="110" fill="#94a3b8" font-family="monospace" font-size="12">// Export & API</text>
+    <text x="35" y="110" fill="#94a3b8" font-family="monospace" font-size="12">// Export &amp; API</text>
     <text x="35" y="135" fill="#38bdf8" font-family="monospace" font-size="12">JSON_Schema.valid()</text>
     <text x="35" y="160" fill="#64748b" font-family="monospace" font-size="12">CitationBBox.bind()</text>
     <text x="35" y="185" fill="#10b981" font-family="monospace" font-size="12">AuditProof.hash()</text>

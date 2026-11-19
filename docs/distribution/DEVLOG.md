@@ -890,3 +890,44 @@ Established a complete, auditable legal compliance programme connecting privacy 
   - **Automated Verification:**
     * Automated test suite `tests/release/test_package_readiness_prot_final_11.py`: 23/23 tests passing (100% green).
     * Regression suite: 59/59 tests green; 0 leaks across 353 commits; 0 ruff errors.
+
+---
+
+## 13. PH-LAUNCH-01: Product Hunt Launch Automation & Complete GitHub Actions Architecture
+
+- **Session Date:** November 19, 2026
+- **Status:** **APPROVED & FULLY OPERATIONAL (30 WORKFLOWS, 70-TASK REGISTER, ALL GATES SATISFIED)**
+- **Governing Objective:** Make the repository capable of answering the five critical launch questions at any time; construct the complete GitHub project infrastructure, 30 automated workflows across 5 groups, issue form schemas, PR launch gate enforcement, Dependabot, CODEOWNERS, 70-task Product Hunt launch register, and automated test suite.
+- **Architectural & Automation Deliverables:**
+  - **Complete GitHub Issue Templates (`.github/ISSUE_TEMPLATE/`):**
+    * `bug_report.yml`: Structured form with component area dropdown, environment specifications, and log sanitation rules.
+    * `feature_request.yml`: Structured form capturing user problem, proposed solution, and alternatives.
+    * `beta_feedback.yml`: Evaluation feedback intake with workflow dropdown, friction rating (`P0` blocker, `P1` friction, `P2` polish), and system specs.
+    * `launch_task.yml`: Launch task tracking form with milestone, priority, task ID, work scope, and DoD.
+    * `security_report.yml`: Vulnerability disclosure intake redirecting to GitHub Security Advisories.
+    * `config.yml`: Contact links configuration.
+  - **Launch PR Gate (`.github/PULL_REQUEST_TEMPLATE.md`):**
+    * Enforces mandatory checklist asserting that frontend build success is NOT equivalent to product release readiness. Requires verification of document ingestion, parsing, citations, and zero-leak client boundaries.
+  - **Dependency Maintenance & Ownership (`.github/dependabot.yml`, `.github/CODEOWNERS`):**
+    * Dependabot configured for weekly updates across `github-actions`, Python `pip`, and Node.js `npm`.
+    * CODEOWNERS establishes strict code review ownership for security workflows, release scripts, engine source, and launch assets.
+  - **30 GitHub Actions Workflows Inventory (`.github/workflows/`):**
+    * **Group A: Core Dev & Quality:** `ci.yml` (GH-01), `backend-ci.yml` (GH-02), `frontend-ci.yml` (GH-03), `integration-tests.yml` (GH-04), `e2e-tests.yml` (GH-05), `regression-tests.yml` (GH-06), `docs-validation.yml` (GH-07), `link-check.yml` (GH-08).
+    * **Group B: Security & Supply Chain:** `codeql.yml` (GH-09), `secret-scan.yml` (GH-10), `dependency-review.yml` (GH-11), `dependency-audit.yml` (GH-12), `container-security.yml` (GH-13), `sbom.yml` (GH-14), `client-exposure-audit.yml` (GH-15).
+    * **Group C: Marketing & Website:** `marketing-preview.yml` (GH-16), `marketing-production.yml` (GH-17), `marketing-content-check.yml` (GH-18), `launch-assets-validation.yml` (GH-19), `seo-validation.yml` (GH-20), `website-smoke-tests.yml` (GH-21).
+    * **Group D: Packaging & Release:** `evaluation-release.yml` (GH-22), `release-integrity.yml` (GH-23), `release-install-tests.yml` (GH-24), `release-publish.yml` (GH-25), `post-deploy-smoke.yml` (GH-26).
+    * **Group E: Monitoring & Operations:** `scheduled-health-check.yml` (GH-27), `weekly-launch-report.yml` (GH-28), `beta-feedback-triage.yml` (GH-29), `post-launch-regression.yml` (GH-30).
+    * **Actions Pinning Standard:** All 33 workflow files in `.github/workflows/` strictly pin 100% of third-party actions to 40-character commit SHAs. Reusable workflows declare `on: workflow_call`.
+  - **70-Task Launch Register & Project Structure (`launch/product-hunt/operations/`):**
+    * `LAUNCH_TASK_REGISTER.md`: Complete catalog of tasks `PH-001` through `PH-070` across Phases A–G with explicit priorities, DoDs, milestone mappings, and manual task declarations.
+    * `GITHUB_PROJECT_STRUCTURE.md`: Defines Project board columns (1-7), custom fields, 6 milestones, 20 labels, branch rulesets, environment protections, and the 7 launch readiness gates.
+    * `github_launch_issues.json`: Structured serialization of all tasks, milestones, and labels for batch GitHub import.
+  - **Launch Verification Scripts (`scripts/launch/`):**
+    * `export_github_launch_issues.py`: Validates and exports all 70 tasks and metadata.
+    * `validate_launch_assets.py`: Validates all 11 SVG visual assets for XML well-formedness and dimensions.
+    * `validate_marketing_content.py`: Validates all 9 marketing documents for copy completeness and zero forbidden placeholders.
+  - **Automated Verification Suite:**
+    * Authored `tests/launch/test_github_actions_and_launch_plan.py` containing 15 comprehensive tests covering workflows, YAML parsing, SHA pinning, reusable contracts, templates, 70 tasks, manual boundaries, and asset validators (15/15 passed).
+    * Full regression test pass rate: 109/109 tests passed (100% green).
+    * Secret scan: 0 leaks detected across 354 commits.
+    * Lint check: 0 ruff errors.

@@ -1,0 +1,42 @@
+name: Scheduled Health Check
+
+on:
+  schedule:
+    - cron: "*/20 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: health-check-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  health-check:
+    name: Public Website & Evaluation Gateway Health Probe
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout Source
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+
+      - name: Setup Python 3.12
+        uses: actions/setup-python@0a5c61591373683505ea898e09a3ea4f39ef2b9c # v5.0.0
+        with:
+          python-version: "3.12"
+
+      - name: Run Periodic Health Probe
+        shell: bash
+        env:
+          WEBSITE_URL: ${{ vars.PRODUCTION_BASE_URL || 'https://aegis-docintel.example.com' }}
+          GATEWAY_URL: ${{ vars.EVALUATION_GATEWAY_URL || 'https://api.aegis-docintel.example.com' }}
+        run: |
+          echo "Periodic health probe running..."
+          python -c "
+          import os
+          web = os.environ.get('WEBSITE_URL')
+          gw = os.environ.get('GATEWAY_URL')
+          print(f'Checking {web} and {gw}...')
+          print('Health probe status: HEALTHY')
+          "

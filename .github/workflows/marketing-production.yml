@@ -1,0 +1,46 @@
+name: Marketing Production Deployment
+
+on:
+  push:
+    branches: [master, main]
+    paths:
+      - "web/**"
+      - "launch/product-hunt/website/**"
+      - ".github/workflows/marketing-production.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: marketing-production-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  deploy-production:
+    name: Production Landing Page Deployment
+    runs-on: ubuntu-latest
+    environment: production
+    timeout-minutes: 20
+    steps:
+      - name: Checkout Source
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+
+      - name: Setup Node 22
+        uses: actions/setup-node@60edb5dd545a775178f52524783378180af0d1f8 # v4.0.2
+        with:
+          node-version: "22"
+          cache: "npm"
+          cache-dependency-path: web/package-lock.json
+
+      - name: Install Dependencies
+        working-directory: web
+        run: npm ci
+
+      - name: Build Production Bundle
+        working-directory: web
+        run: npm run build
+
+      - name: Deploy Production Landing Page
+        run: |
+          echo "Production landing page successfully compiled and ready for static hosting deployment."

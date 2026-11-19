@@ -1,0 +1,22 @@
+# Global default owners for all repository files
+* @SahilKhutey
+
+# Security & Supply Chain sensitive areas
+/.github/workflows/ @SahilKhutey
+/.github/workflows/security-scan.yml @SahilKhutey
+/.github/workflows/secret-scan.yml @SahilKhutey
+/.github/workflows/codeql.yml @SahilKhutey
+/.github/workflows/client-exposure-audit.yml @SahilKhutey
+/scripts/release/ @SahilKhutey
+/release/ @SahilKhutey
+/audit/ @SahilKhutey
+
+# Core Backend & Document Intelligence Engine
+/src/ @SahilKhutey
+/requirements-*.txt @SahilKhutey
+
+# Frontend Web Application & Client UI
+/web/ @SahilKhutey
+
+# Product Hunt Launch Programme
+/launch/ @SahilKhutey

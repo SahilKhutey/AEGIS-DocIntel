@@ -1,0 +1,39 @@
+name: "Security Vulnerability Report"
+description: "Submit a security report or vulnerability disclosure"
+title: "[SECURITY]: "
+labels: ["area:security", "type:bug", "status:blocked"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ### STOP: Do NOT report sensitive security vulnerabilities publicly!
+        If you have discovered a security vulnerability in AEGIS-DocIntel, please report it via private security advisory:
+        👉 [Report Private Security Vulnerability](https://github.com/SahilKhutey/AEGIS-DocIntel/security/advisories/new)
+        
+        If this is an authorized non-sensitive audit task, general hardening issue, or public compliance inquiry, proceed with this form.
+  - type: dropdown
+    id: vulnerability_type
+    attributes:
+      label: Hardening Area
+      options:
+        - "Client Isolation & Boundary Leakage"
+        - "Authentication, Tokens & Session Revocation"
+        - "Dependency Vulnerability / Supply Chain"
+        - "Multi-tenant Boundary & Document Exposure"
+        - "Data Retention & Encryption at Rest"
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: Technical Summary
+      description: Non-sensitive technical description of the hardening requirement.
+    validations:
+      required: true
+  - type: textarea
+    id: impact
+    attributes:
+      label: Potential Impact
+      description: What is the threat model or risk scenario?
+    validations:
+      required: true

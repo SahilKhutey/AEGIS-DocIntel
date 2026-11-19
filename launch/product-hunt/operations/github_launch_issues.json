@@ -1,0 +1,1196 @@
+{
+  "project_name": "AEGIS-DocIntel \u2014 Product Hunt Launch Control Center",
+  "milestones": [
+    {
+      "id": "PH-01",
+      "title": "PH-01 \u2014 Product Readiness",
+      "description": "Restore & verify end-to-end document processing pipeline on real files",
+      "state": "open"
+    },
+    {
+      "id": "PH-02",
+      "title": "PH-02 \u2014 Beta Validation",
+      "description": "Security boundary audit, tenant isolation, and closed beta onboarding",
+      "state": "open"
+    },
+    {
+      "id": "PH-03",
+      "title": "PH-03 \u2014 Launch Website & Assets",
+      "description": "Positioning, marketing copy, landing page, and visual gallery assets",
+      "state": "open"
+    },
+    {
+      "id": "PH-04",
+      "title": "PH-04 \u2014 Release Candidate",
+      "description": "Packaged Windows installer, portable ZIP, SBOM, Ed25519 signing & signoff",
+      "state": "open"
+    },
+    {
+      "id": "PH-05",
+      "title": "PH-05 \u2014 Product Hunt Launch",
+      "description": "Manual maker submission, launch-day operations, monitoring & support",
+      "state": "open"
+    },
+    {
+      "id": "PH-06",
+      "title": "PH-06 \u2014 Post-Launch Stabilization",
+      "description": "Funnel conversion analysis, feedback triage, and defect remediation",
+      "state": "open"
+    }
+  ],
+  "labels": [
+    {
+      "name": "launch",
+      "color": "0e8a16",
+      "description": "Product Hunt launch scope"
+    },
+    {
+      "name": "launch:p0",
+      "color": "d93f0b",
+      "description": "Blocks launch"
+    },
+    {
+      "name": "launch:p1",
+      "color": "fbca04",
+      "description": "Required for a strong launch"
+    },
+    {
+      "name": "launch:p2",
+      "color": "0075ca",
+      "description": "Post-launch improvement"
+    },
+    {
+      "name": "area:product",
+      "color": "1d76db",
+      "description": "Product functionality"
+    },
+    {
+      "name": "area:backend",
+      "color": "5319e7",
+      "description": "Backend and APIs"
+    },
+    {
+      "name": "area:frontend",
+      "color": "1d76db",
+      "description": "Frontend"
+    },
+    {
+      "name": "area:security",
+      "color": "b60205",
+      "description": "Security and privacy"
+    },
+    {
+      "name": "area:release",
+      "color": "0052cc",
+      "description": "Build and distribution"
+    },
+    {
+      "name": "area:marketing",
+      "color": "c5def5",
+      "description": "Positioning and listing"
+    },
+    {
+      "name": "area:website",
+      "color": "bfdadc",
+      "description": "Landing page"
+    },
+    {
+      "name": "area:assets",
+      "color": "d4c5f9",
+      "description": "Logo, gallery, video and graphics"
+    },
+    {
+      "name": "area:analytics",
+      "color": "006b75",
+      "description": "Metrics and reporting"
+    },
+    {
+      "name": "area:beta",
+      "color": "f9d0c4",
+      "description": "Beta users and feedback"
+    },
+    {
+      "name": "type:bug",
+      "color": "d73a4a",
+      "description": "Defect"
+    },
+    {
+      "name": "type:task",
+      "color": "a2eeef",
+      "description": "Execution task"
+    },
+    {
+      "name": "type:research",
+      "color": "d4c5f9",
+      "description": "Research"
+    },
+    {
+      "name": "type:documentation",
+      "color": "0075ca",
+      "description": "Documentation"
+    },
+    {
+      "name": "status:blocked",
+      "color": "e11d21",
+      "description": "Waiting on a dependency"
+    },
+    {
+      "name": "status:needs-verification",
+      "color": "e99695",
+      "description": "Evidence not yet available"
+    }
+  ],
+  "task_count": 70,
+  "tasks": [
+    {
+      "id": "PH-001",
+      "title": "[PH-001] Audit current product functionality",
+      "body": "### Scope of Work\nInspect actual frontend, backend, APIs, file pipeline, LLM and optimizer\n\n### Definition of Done\nFeature functionality matrix completed\n\n### Target Milestone\nPH-01 \u2014 Product Readiness\n\n### Execution Mode\nEngineering\n",
+      "labels": [
+        "launch",
+        "launch:p0",
+        "type:task"
+      ],
+      "milestone": "PH-01 \u2014 Product Readiness",
+      "priority": "launch:p0",
+      "mode": "Engineering",
+      "work": "Inspect actual frontend, backend, APIs, file pipeline, LLM and optimizer",
+      "definition_of_done": "Feature functionality matrix completed"
+    },
+    {
+      "id": "PH-002",
+      "title": "[PH-002] Fix document upload and file lifecycle",
+      "body": "### Scope of Work\nValidate upload, persistence, retrieval and deletion\n\n### Definition of Done\nEnd-to-end file tests pass\n\n### Target Milestone\nPH-01 \u2014 Product Readiness\n\n### Execution Mode\nEngineering\n",
+      "labels": [
+        "launch",
+        "launch:p0",
+        "type:task"
+      ],
+      "milestone": "PH-01 \u2014 Product Readiness",
+      "priority": "launch:p0",
+      "mode": "Engineering",
+      "work": "Validate upload, persistence, retrieval and deletion",
+      "definition_of_done": "End-to-end file tests pass"
+    },
+    {
+      "id": "PH-003",
+      "title": "[PH-003] Restore extraction pipeline",
+      "body": "### Scope of Work\nVerify supported PDF, DOCX and TXT extraction\n\n### Definition of Done\nGround-truth extraction tests pass\n\n### Target Milestone\nPH-01 \u2014 Product Readiness\n\n### Execution Mode\nEngineering\n",
+      "labels": [
+        "launch",
+        "launch:p0",
+        "type:task"
+      ],
+      "milestone": "PH-01 \u2014 Product Readiness",
+      "priority": "launch:p0",
+      "mode": "Engineering",
+      "work": "Verify supported PDF, DOCX and TXT extraction",
+      "definition_of_done": "Ground-truth extraction tests pass"
+    },
+    {
+      "id": "PH-004",
+      "title": "[PH-004] Restore document parsing",
+      "body": "### Scope of Work\nValidate structure, metadata, tables and page references\n\n### Definition of Done\nParser fixtures pass\n\n### Target Milestone\nPH-01 \u2014 Product Readiness\n\n### Execution Mode\nEngineering\n",
+      "labels": [
+        "launch",
+        "launch:p0",
+        "type:task"
+      ],
+      "milestone": "PH-01 \u2014 Product Readiness",
+      "priority": "launch:p0",
+      "mode": "Engineering",
+      "work": "Validate structure, metadata, tables and page references",
+      "definition_of_done": "Parser fixtures pass"
+    },
+    {
+      "id": "PH-005",
+      "title": "[PH-005] Restore processing orchestration",
+      "body": "### Scope of Work\nImplement jobs, status, retry and error handling\n\n### Definition of Done\nJob lifecycle tests pass\n\n### Target Milestone\nPH-01 \u2014 Product Readiness\n\n### Execution Mode\nEngineering\n",
+      "labels": [
+        "launch",
+        "launch:p0",
+        "type:task"
+      ],
+      "milestone": "PH-01 \u2014 Product Readiness",
+      "priority": "launch:p0",
+      "mode": "Engineering",
+      "work": "Implement jobs, status, retry and error handling",
+      "definition_of_done": "Job lifecycle tests pass"
+    },
+    {
+      "id": "PH-006",
+      "title": "[PH-006] Restore retrieval and indexing",
+      "body": "### Scope of Work\nValidate chunking, indexing and evidence retrieval\n\n### Definition of Done\nRetrieval benchmark passes\n\n### Target Milestone\nPH-01 \u2014 Product Readiness\n\n### Execution Mode\nEngineering\n",
+      "labels": [
+        "launch",
+        "launch:p0",
+        "type:task"
+      ],
+      "milestone": "PH-01 \u2014 Product Readiness",
+      "priority": "launch:p0",
+      "mode": "Engineering",
+      "work": "Validate chunking, indexing and evidence retrieval",
+      "definition_of_done": "Retrieval benchmark passes"
+    },
+    {
+      "id": "PH-007",
+      "title": "[PH-007] Restore context optimization",
+      "body": "### Scope of Work\nImplement token budgets and evidence selection\n\n### Definition of Done\nToken and context tests pass\n\n### Target Milestone\nPH-01 \u2014 Product Readiness\n\n### Execution Mode\nEngineering\n",
+      "labels": [
+        "launch",
+        "launch:p0",
+        "type:task"
+      ],
+      "milestone": "PH-01 \u2014 Product Readiness",
+      "priority": "launch:p0",
+      "mode": "Engineering",
+      "work": "Implement token budgets and evidence selection",
+      "definition_of_done": "Token and context tests pass"
+    },
+    {
+      "id": "PH-008",
+      "title": "[PH-008] Validate LLM integration",
+      "body": "### Scope of Work\nCheck provider configuration, execution, timeouts and errors\n\n### Definition of Done\nReal request and response tests pass\n\n### Target Milestone\nPH-01 \u2014 Product Readiness\n\n### Execution Mode\nEngineering\n",
+      "labels": [
+        "launch",
+        "launch:p0",
+        "type:task"
+      ],
+      "milestone": "PH-01 \u2014 Product Readiness",
+      "priority": "launch:p0",
+      "mode": "Engineering",
+      "work": "Check provider configuration, execution, timeouts and errors",
+      "definition_of_done": "Real request and response tests pass"
+    },
+    {
+      "id": "PH-009",
+      "title": "[PH-009] Implement citation verification",
+      "body": "### Scope of Work\nEnsure answers refer to actual document locations\n\n### Definition of Done\nCitation test suite passes\n\n### Target Milestone\nPH-01 \u2014 Product Readiness\n\n### Execution Mode\nEngineering\n",
+      "labels": [
+        "launch",
+        "launch:p0",
+        "type:task"
+      ],
+      "milestone": "PH-01 \u2014 Product Readiness",
+      "priority": "launch:p0",
+      "mode": "Engineering",
+      "work": "Ensure answers refer to actual document locations",
+      "definition_of_done": "Citation test suite passes"
+    },
+    {
+      "id": "PH-010",
+      "title": "[PH-010] Complete primary user workflow",
+      "body": "### Scope of Work\nConnect frontend to the real processing pipeline\n\n### Definition of Done\nClean-user E2E test passes\n\n### Target Milestone\nPH-01 \u2014 Product Readiness\n\n### Execution Mode\nEngineering\n",
+      "labels": [
+        "launch",
+        "launch:p0",
+        "type:task"
+      ],
+      "milestone": "PH-01 \u2014 Product Readiness",
+      "priority": "launch:p0",
+      "mode": "Engineering",
+      "work": "Connect frontend to the real processing pipeline",
+      "definition_of_done": "Clean-user E2E test passes"
+    },
+    {
+      "id": "PH-011",
+      "title": "[PH-011] Document known limitations",
+      "body": "### Scope of Work\nIdentify unsupported features and file types\n\n### Definition of Done\nPublic limitations document approved\n\n### Target Milestone\nPH-01 \u2014 Product Readiness\n\n### Execution Mode\nDocs\n",
+      "labels": [
+        "launch",
+        "launch:p1",
+        "type:task"
+      ],
+      "milestone": "PH-01 \u2014 Product Readiness",
+      "priority": "launch:p1",
+      "mode": "Docs",
+      "work": "Identify unsupported features and file types",
+      "definition_of_done": "Public limitations document approved"
+    },
+    {
+      "id": "PH-012",
+      "title": "[PH-012] Complete authentication verification",
+      "body": "### Scope of Work\nTest login, session expiry and logout\n\n### Definition of Done\nAuth tests pass\n\n### Target Milestone\nPH-02 \u2014 Beta Validation\n\n### Execution Mode\nSecurity\n",
+      "labels": [
+        "launch",
+        "launch:p0",
+        "type:task"
+      ],
+      "milestone": "PH-02 \u2014 Beta Validation",
+      "priority": "launch:p0",
+      "mode": "Security",
+      "work": "Test login, session expiry and logout",
+      "definition_of_done": "Auth tests pass"
+    },
+    {
+      "id": "PH-013",
+      "title": "[PH-013] Complete activation and licensing",
+      "body": "### Scope of Work\nVerify activation, expiry, device limits and revocation\n\n### Definition of Done\nLicensing tests pass\n\n### Target Milestone\nPH-02 \u2014 Beta Validation\n\n### Execution Mode\nSecurity\n",
+      "labels": [
+        "launch",
+        "launch:p0",
+        "type:task"
+      ],
+      "milestone": "PH-02 \u2014 Beta Validation",
+      "priority": "launch:p0",
+      "mode": "Security",
+      "work": "Verify activation, expiry, device limits and revocation",
+      "definition_of_done": "Licensing tests pass"
+    },
+    {
+      "id": "PH-014",
+      "title": "[PH-014] Verify entitlement and quota enforcement",
+      "body": "### Scope of Work\nCheck protected features and usage limits\n\n### Definition of Done\nNegative authorization tests pass\n\n### Target Milestone\nPH-02 \u2014 Beta Validation\n\n### Execution Mode\nSecurity\n",
+      "labels": [
+        "launch",
+        "launch:p0",
+        "type:task"
+      ],
+      "milestone": "PH-02 \u2014 Beta Validation",
+      "priority": "launch:p0",
+      "mode": "Security",
+      "work": "Check protected features and usage limits",
+      "definition_of_done": "Negative authorization tests pass"
+    },
+    {
+      "id": "PH-015",
+      "title": "[PH-015] Verify tenant isolation",
+      "body": "### Scope of Work\nTest document and workspace access boundaries\n\n### Definition of Done\nCross-tenant tests fail closed\n\n### Target Milestone\nPH-02 \u2014 Beta Validation\n\n### Execution Mode\nSecurity\n",
+      "labels": [
+        "launch",
+        "launch:p0",
+        "type:task"
+      ],
+      "milestone": "PH-02 \u2014 Beta Validation",
+      "priority": "launch:p0",
+      "mode": "Security",
+      "work": "Test document and workspace access boundaries",
+      "definition_of_done": "Cross-tenant tests fail closed"
+    },
+    {
+      "id": "PH-016",
+      "title": "[PH-016] Complete upload security checks",
+      "body": "### Scope of Work\nValidate file types, size, malformed files and archive handling\n\n### Definition of Done\nSecurity tests pass\n\n### Target Milestone\nPH-02 \u2014 Beta Validation\n\n### Execution Mode\nSecurity\n",
+      "labels": [
+        "launch",
+        "launch:p0",
+        "type:task"
+      ],
+      "milestone": "PH-02 \u2014 Beta Validation",
+      "priority": "launch:p0",
+      "mode": "Security",
+      "work": "Validate file types, size, malformed files and archive handling",
+      "definition_of_done": "Security tests pass"
+    },
+    {
+      "id": "PH-017",
+      "title": "[PH-017] Approve privacy and data handling",
+      "body": "### Scope of Work\nDocument retention, LLM providers and deletion behavior\n\n### Definition of Done\nDisclosures and policies reviewed\n\n### Target Milestone\nPH-02 \u2014 Beta Validation\n\n### Execution Mode\nSecurity\n",
+      "labels": [
+        "launch",
+        "launch:p0",
+        "type:task"
+      ],
+      "milestone": "PH-02 \u2014 Beta Validation",
+      "priority": "launch:p0",
+      "mode": "Security",
+      "work": "Document retention, LLM providers and deletion behavior",
+      "definition_of_done": "Disclosures and policies reviewed"
+    },
+    {
+      "id": "PH-018",
+      "title": "[PH-018] Complete security audit",
+      "body": "### Scope of Work\nReview client exposure, secrets, dependency risks and APIs\n\n### Definition of Done\nNo unresolved critical/high blockers\n\n### Target Milestone\nPH-02 \u2014 Beta Validation\n\n### Execution Mode\nSecurity\n",
+      "labels": [
+        "launch",
+        "launch:p0",
+        "type:task"
+      ],
+      "milestone": "PH-02 \u2014 Beta Validation",
+      "priority": "launch:p0",
+      "mode": "Security",
+      "work": "Review client exposure, secrets, dependency risks and APIs",
+      "definition_of_done": "No unresolved critical/high blockers"
+    },
+    {
+      "id": "PH-019",
+      "title": "[PH-019] Create beta feedback process",
+      "body": "### Scope of Work\nPrepare issue form, severity labels and response procedure\n\n### Definition of Done\nFeedback intake tested\n\n### Target Milestone\nPH-02 \u2014 Beta Validation\n\n### Execution Mode\nOperations\n",
+      "labels": [
+        "launch",
+        "launch:p0",
+        "type:task"
+      ],
+      "milestone": "PH-02 \u2014 Beta Validation",
+      "priority": "launch:p0",
+      "mode": "Operations",
+      "work": "Prepare issue form, severity labels and response procedure",
+      "definition_of_done": "Feedback intake tested"
+    },
+    {
+      "id": "PH-020",
+      "title": "[PH-020] Run closed beta",
+      "body": "### Scope of Work\nInvite a small group and observe actual workflows\n\n### Definition of Done\nFindings and feedback report published\n\n### Target Milestone\nPH-02 \u2014 Beta Validation\n\n### Execution Mode\nOperations\n",
+      "labels": [
+        "launch",
+        "launch:p0",
+        "type:task"
+      ],
+      "milestone": "PH-02 \u2014 Beta Validation",
+      "priority": "launch:p0",
+      "mode": "Operations",
+      "work": "Invite a small group and observe actual workflows",
+      "definition_of_done": "Findings and feedback report published"
+    },
+    {
+      "id": "PH-021",
+      "title": "[PH-021] Resolve beta blockers",
+      "body": "### Scope of Work\nFix defects discovered during evaluation\n\n### Definition of Done\nCritical beta defects closed or release blocked\n\n### Target Milestone\nPH-02 \u2014 Beta Validation\n\n### Execution Mode\nEngineering\n",
+      "labels": [
+        "launch",
+        "launch:p0",
+        "type:task"
+      ],
+      "milestone": "PH-02 \u2014 Beta Validation",
+      "priority": "launch:p0",
+      "mode": "Engineering",
+      "work": "Fix defects discovered during evaluation",
+      "definition_of_done": "Critical beta defects closed or release blocked"
+    },
+    {
+      "id": "PH-022",
+      "title": "[PH-022] Finalize product positioning",
+      "body": "### Scope of Work\nDefine product category, problem and value proposition\n\n### Definition of Done\nPositioning document approved\n\n### Target Milestone\nPH-03 \u2014 Launch Website & Assets\n\n### Execution Mode\nMarketing\n",
+      "labels": [
+        "launch",
+        "launch:p1",
+        "type:task"
+      ],
+      "milestone": "PH-03 \u2014 Launch Website & Assets",
+      "priority": "launch:p1",
+      "mode": "Marketing",
+      "work": "Define product category, problem and value proposition",
+      "definition_of_done": "Positioning document approved"
+    },
+    {
+      "id": "PH-023",
+      "title": "[PH-023] Validate target users",
+      "body": "### Scope of Work\nInterview 5\u201310 relevant researchers or technical users\n\n### Definition of Done\nInterview findings documented\n\n### Target Milestone\nPH-03 \u2014 Launch Website & Assets\n\n### Execution Mode\nMarketing\n",
+      "labels": [
+        "launch",
+        "launch:p1",
+        "type:task"
+      ],
+      "milestone": "PH-03 \u2014 Launch Website & Assets",
+      "priority": "launch:p1",
+      "mode": "Marketing",
+      "work": "Interview 5\u201310 relevant researchers or technical users",
+      "definition_of_done": "Interview findings documented"
+    },
+    {
+      "id": "PH-024",
+      "title": "[PH-024] Research competitors",
+      "body": "### Scope of Work\nCompare actual features, pricing, workflow and privacy\n\n### Definition of Done\nEvidence-backed comparison completed\n\n### Target Milestone\nPH-03 \u2014 Launch Website & Assets\n\n### Execution Mode\nMarketing\n",
+      "labels": [
+        "launch",
+        "launch:p1",
+        "type:task"
+      ],
+      "milestone": "PH-03 \u2014 Launch Website & Assets",
+      "priority": "launch:p1",
+      "mode": "Marketing",
+      "work": "Compare actual features, pricing, workflow and privacy",
+      "definition_of_done": "Evidence-backed comparison completed"
+    },
+    {
+      "id": "PH-025",
+      "title": "[PH-025] Select primary use case",
+      "body": "### Scope of Work\nChoose the strongest demonstrated workflow\n\n### Definition of Done\nPrimary use case approved\n\n### Target Milestone\nPH-03 \u2014 Launch Website & Assets\n\n### Execution Mode\nProduct\n",
+      "labels": [
+        "launch",
+        "launch:p1",
+        "type:task"
+      ],
+      "milestone": "PH-03 \u2014 Launch Website & Assets",
+      "priority": "launch:p1",
+      "mode": "Product",
+      "work": "Choose the strongest demonstrated workflow",
+      "definition_of_done": "Primary use case approved"
+    },
+    {
+      "id": "PH-026",
+      "title": "[PH-026] Finalize product name",
+      "body": "### Scope of Work\nConfirm consistent AEGIS-DocIntel branding\n\n### Definition of Done\nProduct naming consistent\n\n### Target Milestone\nPH-03 \u2014 Launch Website & Assets\n\n### Execution Mode\nMarketing\n",
+      "labels": [
+        "launch",
+        "launch:p1",
+        "type:task"
+      ],
+      "milestone": "PH-03 \u2014 Launch Website & Assets",
+      "priority": "launch:p1",
+      "mode": "Marketing",
+      "work": "Confirm consistent AEGIS-DocIntel branding",
+      "definition_of_done": "Product naming consistent"
+    },
+    {
+      "id": "PH-027",
+      "title": "[PH-027] Finalize Product Hunt tagline",
+      "body": "### Scope of Work\nDescribe the real product clearly\n\n### Definition of Done\nTagline approved\n\n### Target Milestone\nPH-03 \u2014 Launch Website & Assets\n\n### Execution Mode\nMarketing\n",
+      "labels": [
+        "launch",
+        "launch:p1",
+        "type:task"
+      ],
+      "milestone": "PH-03 \u2014 Launch Website & Assets",
+      "priority": "launch:p1",
+      "mode": "Marketing",
+      "work": "Describe the real product clearly",
+      "definition_of_done": "Tagline approved"
+    },
+    {
+      "id": "PH-028",
+      "title": "[PH-028] Finalize listing description",
+      "body": "### Scope of Work\nDescribe actual shipped capabilities and limitations\n\n### Definition of Done\nDescription verified against product\n\n### Target Milestone\nPH-03 \u2014 Launch Website & Assets\n\n### Execution Mode\nMarketing\n",
+      "labels": [
+        "launch",
+        "launch:p1",
+        "type:task"
+      ],
+      "milestone": "PH-03 \u2014 Launch Website & Assets",
+      "priority": "launch:p1",
+      "mode": "Marketing",
+      "work": "Describe actual shipped capabilities and limitations",
+      "definition_of_done": "Description verified against product"
+    },
+    {
+      "id": "PH-029",
+      "title": "[PH-029] Prepare Maker comment",
+      "body": "### Scope of Work\nExplain founder story, problem and request for feedback\n\n### Definition of Done\nComment approved\n\n### Target Milestone\nPH-03 \u2014 Launch Website & Assets\n\n### Execution Mode\nMarketing\n",
+      "labels": [
+        "launch",
+        "launch:p1",
+        "type:task"
+      ],
+      "milestone": "PH-03 \u2014 Launch Website & Assets",
+      "priority": "launch:p1",
+      "mode": "Marketing",
+      "work": "Explain founder story, problem and request for feedback",
+      "definition_of_done": "Comment approved"
+    },
+    {
+      "id": "PH-030",
+      "title": "[PH-030] Prepare launch FAQ",
+      "body": "### Scope of Work\nAnswer installation, privacy, features, pricing and support questions\n\n### Definition of Done\nFAQ reviewed\n\n### Target Milestone\nPH-03 \u2014 Launch Website & Assets\n\n### Execution Mode\nMarketing\n",
+      "labels": [
+        "launch",
+        "launch:p1",
+        "type:task"
+      ],
+      "milestone": "PH-03 \u2014 Launch Website & Assets",
+      "priority": "launch:p1",
+      "mode": "Marketing",
+      "work": "Answer installation, privacy, features, pricing and support questions",
+      "definition_of_done": "FAQ reviewed"
+    },
+    {
+      "id": "PH-031",
+      "title": "[PH-031] Build Product Hunt landing page",
+      "body": "### Scope of Work\nCreate focused public product page\n\n### Definition of Done\nResponsive production page deployed\n\n### Target Milestone\nPH-03 \u2014 Launch Website & Assets\n\n### Execution Mode\nFrontend\n",
+      "labels": [
+        "launch",
+        "launch:p0",
+        "type:task"
+      ],
+      "milestone": "PH-03 \u2014 Launch Website & Assets",
+      "priority": "launch:p0",
+      "mode": "Frontend",
+      "work": "Create focused public product page",
+      "definition_of_done": "Responsive production page deployed"
+    },
+    {
+      "id": "PH-032",
+      "title": "[PH-032] Implement primary CTA",
+      "body": "### Scope of Work\nConnect visitors to the real evaluation or download path\n\n### Definition of Done\nCTA tested end-to-end\n\n### Target Milestone\nPH-03 \u2014 Launch Website & Assets\n\n### Execution Mode\nFrontend\n",
+      "labels": [
+        "launch",
+        "launch:p0",
+        "type:task"
+      ],
+      "milestone": "PH-03 \u2014 Launch Website & Assets",
+      "priority": "launch:p0",
+      "mode": "Frontend",
+      "work": "Connect visitors to the real evaluation or download path",
+      "definition_of_done": "CTA tested end-to-end"
+    },
+    {
+      "id": "PH-033",
+      "title": "[PH-033] Implement signup and activation",
+      "body": "### Scope of Work\nTest new-user onboarding\n\n### Definition of Done\nClean-user onboarding succeeds\n\n### Target Milestone\nPH-03 \u2014 Launch Website & Assets\n\n### Execution Mode\nEngineering\n",
+      "labels": [
+        "launch",
+        "launch:p0",
+        "type:task"
+      ],
+      "milestone": "PH-03 \u2014 Launch Website & Assets",
+      "priority": "launch:p0",
+      "mode": "Engineering",
+      "work": "Test new-user onboarding",
+      "definition_of_done": "Clean-user onboarding succeeds"
+    },
+    {
+      "id": "PH-034",
+      "title": "[PH-034] Add product screenshots",
+      "body": "### Scope of Work\nCapture actual application workflows\n\n### Definition of Done\nImages accurately reflect the release\n\n### Target Milestone\nPH-03 \u2014 Launch Website & Assets\n\n### Execution Mode\nAssets\n",
+      "labels": [
+        "launch",
+        "launch:p0",
+        "type:task"
+      ],
+      "milestone": "PH-03 \u2014 Launch Website & Assets",
+      "priority": "launch:p0",
+      "mode": "Assets",
+      "work": "Capture actual application workflows",
+      "definition_of_done": "Images accurately reflect the release"
+    },
+    {
+      "id": "PH-035",
+      "title": "[PH-035] Create product gallery",
+      "body": "### Scope of Work\nPrepare 3\u20135 informative images\n\n### Definition of Done\nGallery reviewed\n\n### Target Milestone\nPH-03 \u2014 Launch Website & Assets\n\n### Execution Mode\nAssets\n",
+      "labels": [
+        "launch",
+        "launch:p0",
+        "type:task"
+      ],
+      "milestone": "PH-03 \u2014 Launch Website & Assets",
+      "priority": "launch:p0",
+      "mode": "Assets",
+      "work": "Prepare 3\u20135 informative images",
+      "definition_of_done": "Gallery reviewed"
+    },
+    {
+      "id": "PH-036",
+      "title": "[PH-036] Create logo and launch graphics",
+      "body": "### Scope of Work\nPrepare consistent brand assets\n\n### Definition of Done\nAssets approved\n\n### Target Milestone\nPH-03 \u2014 Launch Website & Assets\n\n### Execution Mode\nAssets\n",
+      "labels": [
+        "launch",
+        "launch:p0",
+        "type:task"
+      ],
+      "milestone": "PH-03 \u2014 Launch Website & Assets",
+      "priority": "launch:p0",
+      "mode": "Assets",
+      "work": "Prepare consistent brand assets",
+      "definition_of_done": "Assets approved"
+    },
+    {
+      "id": "PH-037",
+      "title": "[PH-037] Create demonstration video",
+      "body": "### Scope of Work\nRecord an actual end-to-end product workflow\n\n### Definition of Done\nVideo checked for accuracy\n\n### Target Milestone\nPH-03 \u2014 Launch Website & Assets\n\n### Execution Mode\nAssets\n",
+      "labels": [
+        "launch",
+        "launch:p1",
+        "type:task"
+      ],
+      "milestone": "PH-03 \u2014 Launch Website & Assets",
+      "priority": "launch:p1",
+      "mode": "Assets",
+      "work": "Record an actual end-to-end product workflow",
+      "definition_of_done": "Video checked for accuracy"
+    },
+    {
+      "id": "PH-038",
+      "title": "[PH-038] Create architecture graphic",
+      "body": "### Scope of Work\nExplain the real product workflow\n\n### Definition of Done\nDiagram matches implementation\n\n### Target Milestone\nPH-03 \u2014 Launch Website & Assets\n\n### Execution Mode\nAssets\n",
+      "labels": [
+        "launch",
+        "launch:p1",
+        "type:task"
+      ],
+      "milestone": "PH-03 \u2014 Launch Website & Assets",
+      "priority": "launch:p1",
+      "mode": "Assets",
+      "work": "Explain the real product workflow",
+      "definition_of_done": "Diagram matches implementation"
+    },
+    {
+      "id": "PH-039",
+      "title": "[PH-039] Implement SEO and social metadata",
+      "body": "### Scope of Work\nAdd title, description, Open Graph and social preview\n\n### Definition of Done\nMetadata validated\n\n### Target Milestone\nPH-03 \u2014 Launch Website & Assets\n\n### Execution Mode\nFrontend\n",
+      "labels": [
+        "launch",
+        "launch:p1",
+        "type:task"
+      ],
+      "milestone": "PH-03 \u2014 Launch Website & Assets",
+      "priority": "launch:p1",
+      "mode": "Frontend",
+      "work": "Add title, description, Open Graph and social preview",
+      "definition_of_done": "Metadata validated"
+    },
+    {
+      "id": "PH-040",
+      "title": "[PH-040] Verify website links",
+      "body": "### Scope of Work\nTest all CTA, privacy, support and documentation links\n\n### Definition of Done\nLink-check workflow passes\n\n### Target Milestone\nPH-03 \u2014 Launch Website & Assets\n\n### Execution Mode\nOperations\n",
+      "labels": [
+        "launch",
+        "launch:p0",
+        "type:task"
+      ],
+      "milestone": "PH-03 \u2014 Launch Website & Assets",
+      "priority": "launch:p0",
+      "mode": "Operations",
+      "work": "Test all CTA, privacy, support and documentation links",
+      "definition_of_done": "Link-check workflow passes"
+    },
+    {
+      "id": "PH-041",
+      "title": "[PH-041] Verify responsive layout",
+      "body": "### Scope of Work\nTest mobile, tablet and desktop\n\n### Definition of Done\nLayout checks pass\n\n### Target Milestone\nPH-03 \u2014 Launch Website & Assets\n\n### Execution Mode\nFrontend\n",
+      "labels": [
+        "launch",
+        "launch:p0",
+        "type:task"
+      ],
+      "milestone": "PH-03 \u2014 Launch Website & Assets",
+      "priority": "launch:p0",
+      "mode": "Frontend",
+      "work": "Test mobile, tablet and desktop",
+      "definition_of_done": "Layout checks pass"
+    },
+    {
+      "id": "PH-042",
+      "title": "[PH-042] Add privacy and support information",
+      "body": "### Scope of Work\nPublish accurate policies and contact route\n\n### Definition of Done\nPages available publicly\n\n### Target Milestone\nPH-03 \u2014 Launch Website & Assets\n\n### Execution Mode\nDocs\n",
+      "labels": [
+        "launch",
+        "launch:p0",
+        "type:task"
+      ],
+      "milestone": "PH-03 \u2014 Launch Website & Assets",
+      "priority": "launch:p0",
+      "mode": "Docs",
+      "work": "Publish accurate policies and contact route",
+      "definition_of_done": "Pages available publicly"
+    },
+    {
+      "id": "PH-043",
+      "title": "[PH-043] Establish release commit",
+      "body": "### Scope of Work\nSelect approved source commit\n\n### Definition of Done\nCommit SHA recorded\n\n### Target Milestone\nPH-04 \u2014 Release Candidate\n\n### Execution Mode\nRelease\n",
+      "labels": [
+        "launch",
+        "launch:p0",
+        "type:task"
+      ],
+      "milestone": "PH-04 \u2014 Release Candidate",
+      "priority": "launch:p0",
+      "mode": "Release",
+      "work": "Select approved source commit",
+      "definition_of_done": "Commit SHA recorded"
+    },
+    {
+      "id": "PH-044",
+      "title": "[PH-044] Implement client packaging",
+      "body": "### Scope of Work\nAssemble allowlisted client package\n\n### Definition of Done\nPackage inspection passes\n\n### Target Milestone\nPH-04 \u2014 Release Candidate\n\n### Execution Mode\nRelease\n",
+      "labels": [
+        "launch",
+        "launch:p0",
+        "type:task"
+      ],
+      "milestone": "PH-04 \u2014 Release Candidate",
+      "priority": "launch:p0",
+      "mode": "Release",
+      "work": "Assemble allowlisted client package",
+      "definition_of_done": "Package inspection passes"
+    },
+    {
+      "id": "PH-045",
+      "title": "[PH-045] Build Windows installer",
+      "body": "### Scope of Work\nCreate Windows x64 installer\n\n### Definition of Done\nFresh installation succeeds\n\n### Target Milestone\nPH-04 \u2014 Release Candidate\n\n### Execution Mode\nRelease\n",
+      "labels": [
+        "launch",
+        "launch:p0",
+        "type:task"
+      ],
+      "milestone": "PH-04 \u2014 Release Candidate",
+      "priority": "launch:p0",
+      "mode": "Release",
+      "work": "Create Windows x64 installer",
+      "definition_of_done": "Fresh installation succeeds"
+    },
+    {
+      "id": "PH-046",
+      "title": "[PH-046] Build portable package",
+      "body": "### Scope of Work\nCreate portable ZIP\n\n### Definition of Done\nPortable launch succeeds\n\n### Target Milestone\nPH-04 \u2014 Release Candidate\n\n### Execution Mode\nRelease\n",
+      "labels": [
+        "launch",
+        "launch:p0",
+        "type:task"
+      ],
+      "milestone": "PH-04 \u2014 Release Candidate",
+      "priority": "launch:p0",
+      "mode": "Release",
+      "work": "Create portable ZIP",
+      "definition_of_done": "Portable launch succeeds"
+    },
+    {
+      "id": "PH-047",
+      "title": "[PH-047] Generate release manifest",
+      "body": "### Scope of Work\nInclude version, source SHA, hashes and metadata\n\n### Definition of Done\nManifest validated\n\n### Target Milestone\nPH-04 \u2014 Release Candidate\n\n### Execution Mode\nRelease\n",
+      "labels": [
+        "launch",
+        "launch:p0",
+        "type:task"
+      ],
+      "milestone": "PH-04 \u2014 Release Candidate",
+      "priority": "launch:p0",
+      "mode": "Release",
+      "work": "Include version, source SHA, hashes and metadata",
+      "definition_of_done": "Manifest validated"
+    },
+    {
+      "id": "PH-048",
+      "title": "[PH-048] Generate client SBOM",
+      "body": "### Scope of Work\nProduce software bill of materials\n\n### Definition of Done\nSBOM generated and reviewed\n\n### Target Milestone\nPH-04 \u2014 Release Candidate\n\n### Execution Mode\nRelease\n",
+      "labels": [
+        "launch",
+        "launch:p0",
+        "type:task"
+      ],
+      "milestone": "PH-04 \u2014 Release Candidate",
+      "priority": "launch:p0",
+      "mode": "Release",
+      "work": "Produce software bill of materials",
+      "definition_of_done": "SBOM generated and reviewed"
+    },
+    {
+      "id": "PH-049",
+      "title": "[PH-049] Sign release artifacts",
+      "body": "### Scope of Work\nSign metadata and eligible executables\n\n### Definition of Done\nSignature verification passes\n\n### Target Milestone\nPH-04 \u2014 Release Candidate\n\n### Execution Mode\nSecurity\n",
+      "labels": [
+        "launch",
+        "launch:p0",
+        "type:task"
+      ],
+      "milestone": "PH-04 \u2014 Release Candidate",
+      "priority": "launch:p0",
+      "mode": "Security",
+      "work": "Sign metadata and eligible executables",
+      "definition_of_done": "Signature verification passes"
+    },
+    {
+      "id": "PH-050",
+      "title": "[PH-050] Test clean installation",
+      "body": "### Scope of Work\nTest on clean Windows environment\n\n### Definition of Done\nNo developer dependencies needed\n\n### Target Milestone\nPH-04 \u2014 Release Candidate\n\n### Execution Mode\nRelease\n",
+      "labels": [
+        "launch",
+        "launch:p0",
+        "type:task"
+      ],
+      "milestone": "PH-04 \u2014 Release Candidate",
+      "priority": "launch:p0",
+      "mode": "Release",
+      "work": "Test on clean Windows environment",
+      "definition_of_done": "No developer dependencies needed"
+    },
+    {
+      "id": "PH-051",
+      "title": "[PH-051] Test complete application workflow",
+      "body": "### Scope of Work\nRun document upload through verified answer\n\n### Definition of Done\nFull E2E passes\n\n### Target Milestone\nPH-04 \u2014 Release Candidate\n\n### Execution Mode\nQA\n",
+      "labels": [
+        "launch",
+        "launch:p0",
+        "type:task"
+      ],
+      "milestone": "PH-04 \u2014 Release Candidate",
+      "priority": "launch:p0",
+      "mode": "QA",
+      "work": "Run document upload through verified answer",
+      "definition_of_done": "Full E2E passes"
+    },
+    {
+      "id": "PH-052",
+      "title": "[PH-052] Test update and uninstall",
+      "body": "### Scope of Work\nValidate upgrade, rollback strategy and uninstall\n\n### Definition of Done\nInstaller tests pass\n\n### Target Milestone\nPH-04 \u2014 Release Candidate\n\n### Execution Mode\nQA\n",
+      "labels": [
+        "launch",
+        "launch:p0",
+        "type:task"
+      ],
+      "milestone": "PH-04 \u2014 Release Candidate",
+      "priority": "launch:p0",
+      "mode": "QA",
+      "work": "Validate upgrade, rollback strategy and uninstall",
+      "definition_of_done": "Installer tests pass"
+    },
+    {
+      "id": "PH-053",
+      "title": "[PH-053] Publish known limitations",
+      "body": "### Scope of Work\nPrepare release notes and limitations\n\n### Definition of Done\nPublic documents approved\n\n### Target Milestone\nPH-04 \u2014 Release Candidate\n\n### Execution Mode\nDocs\n",
+      "labels": [
+        "launch",
+        "launch:p0",
+        "type:task"
+      ],
+      "milestone": "PH-04 \u2014 Release Candidate",
+      "priority": "launch:p0",
+      "mode": "Docs",
+      "work": "Prepare release notes and limitations",
+      "definition_of_done": "Public documents approved"
+    },
+    {
+      "id": "PH-054",
+      "title": "[PH-054] Complete release signoff",
+      "body": "### Scope of Work\nReview every P0 gate\n\n### Definition of Done\nSigned GO decision\n\n### Target Milestone\nPH-04 \u2014 Release Candidate\n\n### Execution Mode\nLeadership\n",
+      "labels": [
+        "launch",
+        "launch:p0",
+        "type:task"
+      ],
+      "milestone": "PH-04 \u2014 Release Candidate",
+      "priority": "launch:p0",
+      "mode": "Leadership",
+      "work": "Review every P0 gate",
+      "definition_of_done": "Signed GO decision"
+    },
+    {
+      "id": "PH-055",
+      "title": "[PH-055] Create personal Product Hunt maker account",
+      "body": "### Scope of Work\nVerify personal account and posting access\n\n### Definition of Done\nAccount ready\n\n### Target Milestone\nPH-05 \u2014 Product Hunt Launch\n\n### Execution Mode\nManual\n",
+      "labels": [
+        "launch",
+        "launch:p0",
+        "type:task"
+      ],
+      "milestone": "PH-05 \u2014 Product Hunt Launch",
+      "priority": "launch:p0",
+      "mode": "Manual",
+      "work": "Verify personal account and posting access",
+      "definition_of_done": "Account ready"
+    },
+    {
+      "id": "PH-056",
+      "title": "[PH-056] Create Product Hunt draft",
+      "body": "### Scope of Work\nEnter name, tagline, description and product URL\n\n### Definition of Done\nDraft saved\n\n### Target Milestone\nPH-05 \u2014 Product Hunt Launch\n\n### Execution Mode\nManual\n",
+      "labels": [
+        "launch",
+        "launch:p0",
+        "type:task"
+      ],
+      "milestone": "PH-05 \u2014 Product Hunt Launch",
+      "priority": "launch:p0",
+      "mode": "Manual",
+      "work": "Enter name, tagline, description and product URL",
+      "definition_of_done": "Draft saved"
+    },
+    {
+      "id": "PH-057",
+      "title": "[PH-057] Upload logo and gallery",
+      "body": "### Scope of Work\nAdd approved assets\n\n### Definition of Done\nPreview reviewed\n\n### Target Milestone\nPH-05 \u2014 Product Hunt Launch\n\n### Execution Mode\nManual\n",
+      "labels": [
+        "launch",
+        "launch:p0",
+        "type:task"
+      ],
+      "milestone": "PH-05 \u2014 Product Hunt Launch",
+      "priority": "launch:p0",
+      "mode": "Manual",
+      "work": "Add approved assets",
+      "definition_of_done": "Preview reviewed"
+    },
+    {
+      "id": "PH-058",
+      "title": "[PH-058] Add launch tags and makers",
+      "body": "### Scope of Work\nComplete Product Hunt page details\n\n### Definition of Done\nRequired submission fields complete\n\n### Target Milestone\nPH-05 \u2014 Product Hunt Launch\n\n### Execution Mode\nManual\n",
+      "labels": [
+        "launch",
+        "launch:p0",
+        "type:task"
+      ],
+      "milestone": "PH-05 \u2014 Product Hunt Launch",
+      "priority": "launch:p0",
+      "mode": "Manual",
+      "work": "Complete Product Hunt page details",
+      "definition_of_done": "Required submission fields complete"
+    },
+    {
+      "id": "PH-059",
+      "title": "[PH-059] Add Maker comment",
+      "body": "### Scope of Work\nPublish the prepared comment in draft\n\n### Definition of Done\nComment reviewed\n\n### Target Milestone\nPH-05 \u2014 Product Hunt Launch\n\n### Execution Mode\nManual\n",
+      "labels": [
+        "launch",
+        "launch:p0",
+        "type:task"
+      ],
+      "milestone": "PH-05 \u2014 Product Hunt Launch",
+      "priority": "launch:p0",
+      "mode": "Manual",
+      "work": "Publish the prepared comment in draft",
+      "definition_of_done": "Comment reviewed"
+    },
+    {
+      "id": "PH-060",
+      "title": "[PH-060] Verify public product URL",
+      "body": "### Scope of Work\nTest product page and download path\n\n### Definition of Done\nExternal access works\n\n### Target Milestone\nPH-05 \u2014 Product Hunt Launch\n\n### Execution Mode\nOperations\n",
+      "labels": [
+        "launch",
+        "launch:p0",
+        "type:task"
+      ],
+      "milestone": "PH-05 \u2014 Product Hunt Launch",
+      "priority": "launch:p0",
+      "mode": "Operations",
+      "work": "Test product page and download path",
+      "definition_of_done": "External access works"
+    },
+    {
+      "id": "PH-061",
+      "title": "[PH-061] Final launch rehearsal",
+      "body": "### Scope of Work\nRun installation, signup, activation and document workflow\n\n### Definition of Done\nRehearsal passes\n\n### Target Milestone\nPH-05 \u2014 Product Hunt Launch\n\n### Execution Mode\nQA\n",
+      "labels": [
+        "launch",
+        "launch:p0",
+        "type:task"
+      ],
+      "milestone": "PH-05 \u2014 Product Hunt Launch",
+      "priority": "launch:p0",
+      "mode": "QA",
+      "work": "Run installation, signup, activation and document workflow",
+      "definition_of_done": "Rehearsal passes"
+    },
+    {
+      "id": "PH-062",
+      "title": "[PH-062] Approve launch date",
+      "body": "### Scope of Work\nReview readiness and schedule\n\n### Definition of Done\nFormal GO decision\n\n### Target Milestone\nPH-05 \u2014 Product Hunt Launch\n\n### Execution Mode\nManual\n",
+      "labels": [
+        "launch",
+        "launch:p0",
+        "type:task"
+      ],
+      "milestone": "PH-05 \u2014 Product Hunt Launch",
+      "priority": "launch:p0",
+      "mode": "Manual",
+      "work": "Review readiness and schedule",
+      "definition_of_done": "Formal GO decision"
+    },
+    {
+      "id": "PH-063",
+      "title": "[PH-063] Publish Product Hunt launch",
+      "body": "### Scope of Work\nSubmit from personal maker account\n\n### Definition of Done\nProduct listing is live\n\n### Target Milestone\nPH-05 \u2014 Product Hunt Launch\n\n### Execution Mode\nManual\n",
+      "labels": [
+        "launch",
+        "launch:p0",
+        "type:task"
+      ],
+      "milestone": "PH-05 \u2014 Product Hunt Launch",
+      "priority": "launch:p0",
+      "mode": "Manual",
+      "work": "Submit from personal maker account",
+      "definition_of_done": "Product listing is live"
+    },
+    {
+      "id": "PH-064",
+      "title": "[PH-064] Monitor launch day",
+      "body": "### Scope of Work\nRespond to comments, monitor failures and support users\n\n### Definition of Done\nCoverage and incident log maintained\n\n### Target Milestone\nPH-05 \u2014 Product Hunt Launch\n\n### Execution Mode\nManual\n",
+      "labels": [
+        "launch",
+        "launch:p0",
+        "type:task"
+      ],
+      "milestone": "PH-05 \u2014 Product Hunt Launch",
+      "priority": "launch:p0",
+      "mode": "Manual",
+      "work": "Respond to comments, monitor failures and support users",
+      "definition_of_done": "Coverage and incident log maintained"
+    },
+    {
+      "id": "PH-065",
+      "title": "[PH-065] Collect launch analytics",
+      "body": "### Scope of Work\nReview visitors, signups and activation\n\n### Definition of Done\nLaunch metrics report\n\n### Target Milestone\nPH-06 \u2014 Post-Launch Stabilization\n\n### Execution Mode\nAnalytics\n",
+      "labels": [
+        "launch",
+        "launch:p1",
+        "type:task"
+      ],
+      "milestone": "PH-06 \u2014 Post-Launch Stabilization",
+      "priority": "launch:p1",
+      "mode": "Analytics",
+      "work": "Review visitors, signups and activation",
+      "definition_of_done": "Launch metrics report"
+    },
+    {
+      "id": "PH-066",
+      "title": "[PH-066] Analyze onboarding conversion",
+      "body": "### Scope of Work\nFind drop-off points\n\n### Definition of Done\nFunnel analysis completed\n\n### Target Milestone\nPH-06 \u2014 Post-Launch Stabilization\n\n### Execution Mode\nAnalytics\n",
+      "labels": [
+        "launch",
+        "launch:p1",
+        "type:task"
+      ],
+      "milestone": "PH-06 \u2014 Post-Launch Stabilization",
+      "priority": "launch:p1",
+      "mode": "Analytics",
+      "work": "Find drop-off points",
+      "definition_of_done": "Funnel analysis completed"
+    },
+    {
+      "id": "PH-067",
+      "title": "[PH-067] Analyze beta feedback",
+      "body": "### Scope of Work\nCategorize user feedback\n\n### Definition of Done\nPrioritized feedback backlog\n\n### Target Milestone\nPH-06 \u2014 Post-Launch Stabilization\n\n### Execution Mode\nOperations\n",
+      "labels": [
+        "launch",
+        "launch:p1",
+        "type:task"
+      ],
+      "milestone": "PH-06 \u2014 Post-Launch Stabilization",
+      "priority": "launch:p1",
+      "mode": "Operations",
+      "work": "Categorize user feedback",
+      "definition_of_done": "Prioritized feedback backlog"
+    },
+    {
+      "id": "PH-068",
+      "title": "[PH-068] Resolve critical post-launch defects",
+      "body": "### Scope of Work\nFix failures and regressions\n\n### Definition of Done\nCritical issues closed\n\n### Target Milestone\nPH-06 \u2014 Post-Launch Stabilization\n\n### Execution Mode\nEngineering\n",
+      "labels": [
+        "launch",
+        "launch:p0",
+        "type:task"
+      ],
+      "milestone": "PH-06 \u2014 Post-Launch Stabilization",
+      "priority": "launch:p0",
+      "mode": "Engineering",
+      "work": "Fix failures and regressions",
+      "definition_of_done": "Critical issues closed"
+    },
+    {
+      "id": "PH-069",
+      "title": "[PH-069] Publish launch retrospective",
+      "body": "### Scope of Work\nDocument outcomes and lessons\n\n### Definition of Done\nRetrospective published\n\n### Target Milestone\nPH-06 \u2014 Post-Launch Stabilization\n\n### Execution Mode\nLeadership\n",
+      "labels": [
+        "launch",
+        "launch:p1",
+        "type:task"
+      ],
+      "milestone": "PH-06 \u2014 Post-Launch Stabilization",
+      "priority": "launch:p1",
+      "mode": "Leadership",
+      "work": "Document outcomes and lessons",
+      "definition_of_done": "Retrospective published"
+    },
+    {
+      "id": "PH-070",
+      "title": "[PH-070] Prepare next product iteration",
+      "body": "### Scope of Work\nPrioritize the next development cycle\n\n### Definition of Done\nRoadmap updated\n\n### Target Milestone\nPH-06 \u2014 Post-Launch Stabilization\n\n### Execution Mode\nProduct\n",
+      "labels": [
+        "launch",
+        "launch:p1",
+        "type:task"
+      ],
+      "milestone": "PH-06 \u2014 Post-Launch Stabilization",
+      "priority": "launch:p1",
+      "mode": "Product",
+      "work": "Prioritize the next development cycle",
+      "definition_of_done": "Roadmap updated"
+    }
+  ]
+}

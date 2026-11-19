@@ -1,0 +1,60 @@
+name: "Launch Programme Task"
+description: "Track execution of a Product Hunt launch task (PH-001 through PH-070)"
+title: "[TASK]: "
+labels: ["launch", "type:task"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this issue template to track tasks across the 7 phases of the AEGIS-DocIntel Product Hunt launch programme.
+  - type: dropdown
+    id: milestone
+    attributes:
+      label: Target Milestone
+      options:
+        - "PH-01 — Product Readiness"
+        - "PH-02 — Beta Validation"
+        - "PH-03 — Launch Website & Assets"
+        - "PH-04 — Release Candidate"
+        - "PH-05 — Product Hunt Launch"
+        - "PH-06 — Post-Launch Stabilization"
+    validations:
+      required: true
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Launch Priority
+      description: Is this task a launch blocker?
+      options:
+        - "launch:p0 (Blocks launch)"
+        - "launch:p1 (Required for strong launch)"
+        - "launch:p2 (Post-launch enhancement)"
+    validations:
+      required: true
+  - type: input
+    id: task_id
+    attributes:
+      label: Launch Task Identifier
+      description: Canonical task ID from the launch task register.
+      placeholder: "e.g., PH-001, PH-031, PH-045"
+    validations:
+      required: true
+  - type: textarea
+    id: work_to_perform
+    attributes:
+      label: Scope of Work
+      description: Specific deliverables and implementation tasks.
+    validations:
+      required: true
+  - type: textarea
+    id: definition_of_done
+    attributes:
+      label: Definition of Done
+      description: Measurable criteria required to consider this task complete.
+    validations:
+      required: true
+  - type: textarea
+    id: verification_evidence
+    attributes:
+      label: Verification & Evidence Links
+      description: Paths to automated tests, audit logs, screenshots, or signed charters.

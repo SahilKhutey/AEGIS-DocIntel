@@ -1,55 +1,60 @@
-name: Frontend CI Pipeline
+name: Frontend CI
 
 on:
-  push:
-    branches: [ master, main, remediation/*, feature/*, wp-* ]
-    paths:
-      - 'web/**'
-      - '.github/workflows/frontend-ci.yml'
-  pull_request:
-    branches: [ master, main ]
-    paths:
-      - 'web/**'
-      - '.github/workflows/frontend-ci.yml'
+  workflow_call:
   workflow_dispatch:
+  push:
+    branches: [master, main]
+    paths:
+      - "web/**"
+      - ".github/workflows/frontend-ci.yml"
+  pull_request:
+    branches: [master, main]
+    paths:
+      - "web/**"
+      - ".github/workflows/frontend-ci.yml"
 
 permissions:
   contents: read
 
 concurrency:
-  group: frontend-ci-${{ github.ref }}
-  cancel-in-progress: true
+  group: frontend-ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
   frontend-quality:
-    name: Frontend Quality Gate (Lint, TypeScript, Vitest, Build)
+    name: Frontend Quality Gate (Lint, Auth Verification, Vitest, Build)
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     defaults:
       run:
         working-directory: web
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - name: Checkout Source
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
+      - name: Set up Node.js 22
+        uses: actions/setup-node@60edb5dd545a775178f52524783378180af0d1f8 # v4.0.2
         with:
           node-version: "22"
           cache: "npm"
           cache-dependency-path: web/package-lock.json
 
-      - name: Install dependencies
+      - name: Install Locked Dependencies
         run: npm ci
 
-      - name: Lint check
+      - name: ESLint Check
         run: npm run lint
 
-      - name: TypeScript typecheck
+      - name: Production Auth Surface Verification
+        run: npm run verify:auth
+
+      - name: TypeScript Validation
         run: npx tsc --noEmit
 
-      - name: Run unit & component tests
+      - name: Run Unit & Component Tests
         run: npm test
 
-      - name: Build Next.js application
+      - name: Build Next.js Application
         run: npm run build

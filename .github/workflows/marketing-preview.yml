@@ -1,0 +1,42 @@
+name: Marketing Preview
+
+on:
+  pull_request:
+    paths:
+      - "web/src/app/**"
+      - "web/src/components/**"
+      - "web/public/**"
+      - "launch/product-hunt/**"
+      - ".github/workflows/marketing-preview.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: marketing-preview-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-preview:
+    name: Build & Validate Marketing Preview
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout Source
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+
+      - name: Setup Node 22
+        uses: actions/setup-node@60edb5dd545a775178f52524783378180af0d1f8 # v4.0.2
+        with:
+          node-version: "22"
+          cache: "npm"
+          cache-dependency-path: web/package-lock.json
+
+      - name: Install Locked Dependencies
+        working-directory: web
+        run: npm ci
+
+      - name: Build Marketing Site
+        working-directory: web
+        run: npm run build

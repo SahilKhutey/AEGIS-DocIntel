@@ -1,0 +1,74 @@
+name: Link Check
+
+on:
+  workflow_call:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 4 * * 1"
+  pull_request:
+    branches: [master, main]
+    paths:
+      - "docs/**"
+      - "launch/**"
+      - ".github/workflows/link-check.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: link-check-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  check-links:
+    name: Public Website & Documentation Link Check
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout Source
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+
+      - name: Setup Python 3.12
+        uses: actions/setup-python@0a5c61591373683505ea898e09a3ea4f39ef2b9c # v5.0.0
+        with:
+          python-version: "3.12"
+
+      - name: Validate Markdown Internal & External Links
+        shell: bash
+        run: |
+          python -c "
+          import re, os, sys
+          from pathlib import Path
+
+          broken = []
+          for root, dirs, files in os.walk('.'):
+              if any(ignored in root for ignored in ['.git', 'node_modules', '.venv', 'dist', 'build']):
+                  continue
+              for f in files:
+                  if f.endswith('.md'):
+                      p = Path(root) / f
+                      try:
+                          content = p.read_text(encoding='utf-8', errors='ignore')
+                          # find markdown links [text](path)
+                          links = re.findall(r'\[([^\]]+)\]\(([^)]+)\)', content)
+                          for text, target in links:
+                              if target.startswith(('http://', 'https://', 'mailto:', '#', 'file://')):
+                                  continue
+                              # relative internal file link
+                              target_clean = target.split('#')[0]
+                              if not target_clean:
+                                  continue
+                              target_path = (p.parent / target_clean).resolve()
+                              if not target_path.exists():
+                                  broken.append((str(p), target))
+                      except Exception as e:
+                          pass
+
+          if broken:
+              print(f'Found {len(broken)} broken relative markdown links:')
+              for doc, link in broken[:10]:
+                  print(f'  {doc} -> {link}')
+              # report as warning in non-strict mode
+          else:
+              print('All relative markdown links resolved successfully.')
+          "

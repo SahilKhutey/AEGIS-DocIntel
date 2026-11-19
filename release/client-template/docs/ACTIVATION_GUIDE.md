@@ -14,7 +14,7 @@ The AEGIS-DocIntel downloadable evaluation distribution requires an authorized e
 ### Mode A: Online Challenge-Response Activation (Recommended)
 1. Launch the application.
 2. In the Activation Dialog, paste your assigned Evaluation Token:
-   `eyJhbGciOiJFZDI1NTE5In0...`
+   `<YOUR_EVALUATION_TOKEN>`
 3. Click **Activate Device**.
 4. The client transmits your local hardware challenge to the evaluation gateway, which verifies your entitlement, registers your device, and activates the session.
 

@@ -155,3 +155,7 @@ edd537fcc9b57b53fe9289583a1a3dd280933201:tests/security/operations/test_security
 cee7fc9b8b656e5419ec85ca527a0b7c5434da4a:tests/security/penetration_testing/test_pt_ip_secret_exposure.py:generic-api-key:217
 cee7fc9b8b656e5419ec85ca527a0b7c5434da4a:tests/security/penetration_testing/test_pt_ip_secret_exposure.py:private-key:33
 cee7fc9b8b656e5419ec85ca527a0b7c5434da4a:tests/security/penetration_testing/test_pt_operational_security.py:private-key:37
+#
+# release/client-template/docs/ACTIVATION_GUIDE.md:16 (commit 42556af, 2026-11-19)
+#   Matched generic-api-key on example token placeholder snippet in client activation guide.
+42556af9a0f7c2b263d39d0dc4bfc832209ae081:release/client-template/docs/ACTIVATION_GUIDE.md:generic-api-key:16

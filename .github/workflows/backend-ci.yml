@@ -1,0 +1,89 @@
+name: Backend CI
+
+on:
+  workflow_call:
+  workflow_dispatch:
+  push:
+    branches: [master, main]
+    paths:
+      - "src/**"
+      - "tests/**"
+      - "scripts/**"
+      - "requirements*.txt"
+      - ".github/workflows/backend-ci.yml"
+  pull_request:
+    branches: [master, main]
+    paths:
+      - "src/**"
+      - "tests/**"
+      - "scripts/**"
+      - "requirements*.txt"
+      - ".github/workflows/backend-ci.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: backend-ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  lint-and-typecheck:
+    name: Backend Lint & Typecheck
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout Source
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+
+      - name: Setup Python 3.12
+        uses: actions/setup-python@0a5c61591373683505ea898e09a3ea4f39ef2b9c # v5.0.0
+        with:
+          python-version: "3.12"
+          cache: "pip"
+
+      - name: Install Lint Tooling
+        run: pip install ruff
+
+      - name: Ruff Check
+        run: ruff check src tests scripts
+
+      - name: Dependency Sync Check
+        run: |
+          if [ -f scripts/check_dependency_sync.py ]; then
+            python scripts/check_dependency_sync.py
+          fi
+
+  test:
+    name: Backend Unit & Processing Tests
+    needs: lint-and-typecheck
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout Source
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+
+      - name: Setup Python 3.12
+        uses: actions/setup-python@0a5c61591373683505ea898e09a3ea4f39ef2b9c # v5.0.0
+        with:
+          python-version: "3.12"
+          cache: "pip"
+
+      - name: Install Core & Dev Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements-core.txt -r requirements-dev.txt
+
+      - name: Run Core Test Suite
+        run: |
+          pytest tests/release/ tests/product_development/ tests/security/product_hunt/ \
+            --junitxml=pytest-results.xml \
+            -v
+
+      - name: Upload Test Results
+        if: always()
+        uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
+        with:
+          name: backend-test-results
+          path: pytest-results.xml
+          if-no-files-found: warn

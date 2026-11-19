@@ -6,7 +6,38 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-## [1.0.0-beta.1] - 2026-11-19 — Production Package Engineering, Release Assembly & Distribution Readiness (PROT-FINAL-11)
+## [1.0.0-beta.2] - 2026-11-19 — Product Hunt Launch Automation & Complete GitHub Actions Architecture (PH-LAUNCH-01)
+
+### Added
+- **GitHub Governance Infrastructure (`.github/`):**
+  - Modern form issue templates: `.github/ISSUE_TEMPLATE/bug_report.yml`, `feature_request.yml`, `beta_feedback.yml`, `launch_task.yml`, `security_report.yml`, and `config.yml`.
+  - `.github/PULL_REQUEST_TEMPLATE.md` enforcing the mandatory release readiness gate rule: a successful frontend build is NOT equivalent to product release readiness.
+  - `.github/dependabot.yml` configured for weekly security and dependency updates across `github-actions`, Python `pip`, and Node.js `npm`.
+  - `.github/CODEOWNERS` defining formal review ownership across workflows, security, engine, frontend, and launch packages.
+- **Complete 30-Workflow GitHub Actions Inventory (`.github/workflows/`):**
+  - **Group A (Core Development & Quality):** `ci.yml` (GH-01), `backend-ci.yml` (GH-02), `frontend-ci.yml` (GH-03), `integration-tests.yml` (GH-04), `e2e-tests.yml` (GH-05), `regression-tests.yml` (GH-06), `docs-validation.yml` (GH-07), `link-check.yml` (GH-08).
+  - **Group B (Security & Supply Chain):** `codeql.yml` (GH-09), `secret-scan.yml` (GH-10), `dependency-review.yml` (GH-11), `dependency-audit.yml` (GH-12), `container-security.yml` (GH-13), `sbom.yml` (GH-14), `client-exposure-audit.yml` (GH-15).
+  - **Group C (Marketing & Website):** `marketing-preview.yml` (GH-16), `marketing-production.yml` (GH-17), `marketing-content-check.yml` (GH-18), `launch-assets-validation.yml` (GH-19), `seo-validation.yml` (GH-20), `website-smoke-tests.yml` (GH-21).
+  - **Group D (Packaging & Release):** `evaluation-release.yml` (GH-22), `release-integrity.yml` (GH-23), `release-install-tests.yml` (GH-24), `release-publish.yml` (GH-25), `post-deploy-smoke.yml` (GH-26).
+  - **Group E (Monitoring & Operations):** `scheduled-health-check.yml` (GH-27), `weekly-launch-report.yml` (GH-28), `beta-feedback-triage.yml` (GH-29), `post-launch-regression.yml` (GH-30).
+  - Enforced 100% full-length 40-character commit SHA pinning with version comments across all workflow files. Reusable workflows declare `on: workflow_call`.
+- **70-Task Launch Register & Project Structure (`launch/product-hunt/operations/`):**
+  - `LAUNCH_TASK_REGISTER.md` cataloging tasks `PH-001` through `PH-070` across Phases A through G with definitions of done, priorities, and milestone mappings.
+  - `GITHUB_PROJECT_STRUCTURE.md` documenting board columns, custom fields, 6 milestones, 20 labels, branch rulesets, environments, and manual task boundaries.
+  - `github_launch_issues.json` serialized for GitHub CLI and API batch issue import.
+  - Operational READMEs: `launch/product-hunt/README.md`, `website/README.md`, `beta/README.md`, `reports/README.md`.
+- **Launch Verification Scripts (`scripts/launch/`):**
+  - `export_github_launch_issues.py` for task validation and JSON export.
+  - `validate_launch_assets.py` for SVG asset integrity and dimension checks.
+  - `validate_marketing_content.py` for marketing document copy and placeholder validation.
+- **Automated Verification Test Suite (`tests/launch/test_github_actions_and_launch_plan.py`):**
+  - 15 automated tests covering workflows, YAML schemas, SHA pinning, reusable contracts, templates, 70 tasks, manual boundaries, and asset validators (15/15 passed).
+
+### Changed
+- Sanitized example token string in `release/client-template/docs/ACTIVATION_GUIDE.md` to `<YOUR_EVALUATION_TOKEN>` and updated `.gitleaksignore` with reviewed false positive entry.
+- Escaped XML ampersands across launch gallery and architecture SVG files to guarantee well-formedness.
+
+---
 
 ### Added
 - **Production Distribution Architecture & Strategy (`docs/distribution/`):**

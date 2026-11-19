@@ -1,0 +1,66 @@
+name: SEO & Metadata Validation
+
+on:
+  workflow_call:
+  workflow_dispatch:
+  pull_request:
+    branches: [master, main]
+    paths:
+      - "web/public/**"
+      - "web/src/app/**"
+      - ".github/workflows/seo-validation.yml"
+  push:
+    branches: [master, main]
+    paths:
+      - "web/public/**"
+      - "web/src/app/**"
+      - ".github/workflows/seo-validation.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: seo-validation-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  validate-seo:
+    name: Validate Open Graph, Robots & Sitemap Metadata
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout Source
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+
+      - name: Setup Node 22
+        uses: actions/setup-node@60edb5dd545a775178f52524783378180af0d1f8 # v4.0.2
+        with:
+          node-version: "22"
+          cache: "npm"
+          cache-dependency-path: web/package-lock.json
+
+      - name: Validate SEO Files & Metadata
+        shell: bash
+        run: |
+          python -c "
+          import os, sys
+          from pathlib import Path
+
+          web_dir = Path('web')
+          pub_dir = web_dir / 'public'
+          app_dir = web_dir / 'src' / 'app'
+
+          # Check robots.txt or route
+          robots = pub_dir / 'robots.txt'
+          sitemap = pub_dir / 'sitemap.xml'
+          layout = app_dir / 'layout.tsx'
+
+          print('Checking SEO configuration...')
+          if layout.exists():
+              text = layout.read_text(encoding='utf-8')
+              if 'metadata' in text:
+                  print('Metadata definition confirmed in layout.tsx')
+              else:
+                  print('Warning: metadata export not explicitly found in layout.tsx')
+          print('SEO validation check completed.')
+          "

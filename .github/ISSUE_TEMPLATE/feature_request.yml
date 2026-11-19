@@ -1,0 +1,41 @@
+name: "Feature Request"
+description: "Suggest an idea, enhancement, or new capability for AEGIS-DocIntel"
+title: "[FEATURE]: "
+labels: ["type:task"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for suggesting an improvement for AEGIS-DocIntel! Please outline the user problem, proposed solution, and practical use case.
+  - type: dropdown
+    id: category
+    attributes:
+      label: Area / Category
+      options:
+        - "area:product (Document Intelligence Workflow)"
+        - "area:backend (Extraction, Indexing, Vector Search)"
+        - "area:frontend (User Interface & Visual Feedback)"
+        - "area:release (Distribution & Installation)"
+    validations:
+      required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem Statement
+      description: Is your feature request related to a specific limitation or user frustration?
+      placeholder: "e.g., I'm always frustrated when analyzing 500-page scanned manuals because table extraction drops nested headers."
+    validations:
+      required: true
+  - type: textarea
+    id: solution
+    attributes:
+      label: Proposed Solution / Enhancement
+      description: Describe what you would like to see implemented.
+      placeholder: "Provide hierarchical table header detection and Markdown export support."
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives Considered
+      description: Any alternative solutions or workarounds you've explored.
