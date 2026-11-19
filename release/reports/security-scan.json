@@ -1,5 +1,5 @@
 {
-  "scan_timestamp": "2026-11-19T05:36:02.082299+00:00",
+  "scan_timestamp": "2026-11-19T09:18:30.063855+00:00",
   "target": "windows-x64",
   "gitleaks": {
     "leaks_found": 0,

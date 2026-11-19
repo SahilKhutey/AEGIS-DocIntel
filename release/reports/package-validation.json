@@ -9,9 +9,9 @@
   "portable": {
     "exists": true,
     "size_bytes": 34058,
-    "sha256": "c8a6baa255db58ff52e2f58051e1320728de55b4d1b00f55c772d063b175f2f2"
+    "sha256": "8822a093d04901b481bb4c0a922c115a3e70abf276aa48483b4e0b91f2944993"
   },
-  "manifest_hash": "daff6b6dcef5d1844aca1332cae8c56d67edbacd9faec7d09ef6e95c1ca06bd5",
+  "manifest_hash": "5e77e5ee2838b92fd2af7ac36440a31e2139719d67cbda2a373ef0f22d967d72",
   "checks": {
     "zero_leak": true,
     "clean_structure": true,

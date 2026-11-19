@@ -4,9 +4,9 @@
   "channel": "beta",
   "platform": "windows-x64",
   "architecture": "x86_64",
-  "source_commit": "045b48e9ff50d8c0ba0e5f37c3172ba5d201f447",
-  "build_id": "build-windows-x64-20261119053602-07057d7a",
-  "build_timestamp": "2026-11-19T05:36:02.082299+00:00",
+  "source_commit": "4ea186d8cdf4a943fbf8fc4874be586c9e2eade3",
+  "build_id": "build-windows-x64-20261119091830-d879b509",
+  "build_timestamp": "2026-11-19T09:18:30.063855+00:00",
   "artifacts": [
     {
       "filename": "AEGIS-DocIntel-Setup.exe",
@@ -17,7 +17,7 @@
     {
       "filename": "AEGIS-DocIntel-Portable.zip",
       "rel_path": "portable/AEGIS-DocIntel-Portable.zip",
-      "sha256": "c8a6baa255db58ff52e2f58051e1320728de55b4d1b00f55c772d063b175f2f2",
+      "sha256": "8822a093d04901b481bb4c0a922c115a3e70abf276aa48483b4e0b91f2944993",
       "size_bytes": 34058
     }
   ],

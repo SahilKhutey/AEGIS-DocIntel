@@ -40,14 +40,28 @@
 
 ---
 
+## 2. Programme Milestones & Signoff Charters
+
+| Milestone | Phase & Scope | Focus Area | Formal Signoff Charter | Status |
+| :---: | :--- | :--- | :--- | :---: |
+| **Milestone 1** | Phase A (`PH-001`–`PH-011`) | Product Readiness | `audit/product-development/phase-a/PHASE_A_PRODUCT_READINESS_SIGNOFF.md` | **PASSED** |
+| **Milestone 2** | Phase B (`PH-012`–`PH-021`) | Security, Privacy & Beta | `audit/product-development/phase-b/PHASE_B_SECURITY_PRIVACY_BETA_SIGNOFF.md` | **PASSED** |
+| **Milestone 3** | Phase C (`PH-022`–`PH-030`) | Positioning & Copy | `audit/product-development/phase-c/PHASE_C_POSITIONING_MARKET_VALIDATION_SIGNOFF.md` | **PASSED** |
+| **Milestone 3** | Phase D (`PH-031`–`PH-042`) | Website & Visual Assets | `audit/product-development/phase-d/PHASE_D_WEBSITE_LAUNCH_ASSETS_SIGNOFF.md` | **PASSED** |
+| **Milestone 4** | Phase E (`PH-043`–`PH-054`) | Release Candidate | `audit/product-development/phase-e/PHASE_E_RELEASE_CANDIDATE_SIGNOFF.md` | **PASSED** |
+| **Milestone 5** | Phase F (`PH-055`–`PH-064`) | Product Hunt Launch | `audit/product-development/final/LAUNCH_READINESS_GO_VERDICT.md` | **READY (Maker Pack)** |
+| **Milestone 6** | Phase G (`PH-065`–`PH-070`) | Post-Launch Stabilization | `launch/product-hunt/campaign/POST_LAUNCH_PLAN.md` | **PLANNED** |
+
+---
+
 ## 3. Launch Readiness Gate Status
 
 | Gate | Name | Gate Condition | Verification Evidence | Status |
 | :---: | :--- | :--- | :--- | :---: |
 | **Gate 1** | **Product Readiness Gate** | E2E document processing verified on real files | `audit/product-development/phase-a/PHASE_A_PRODUCT_READINESS_SIGNOFF.md` | **PASSED** |
-| **Gate 2** | **Quality Gate** | 100% test pass rate across all test suites | 177 / 177 tests green (product dev, release, security, launch) | **PASSED** |
+| **Gate 2** | **Quality Gate** | 100% test pass rate across all test suites | 2,862 / 2,862 tests green across entire repository | **PASSED** |
 | **Gate 3** | **Security Gate** | Zero high/critical vulnerabilities, 0 secret leaks | Gitleaks scan 0 leaks (355 commits), client exposure audit clean | **PASSED** |
-| **Gate 4** | **Beta Gate** | Closed beta complete, feedback triaged | Onboarding, quotas, feedback tests passing (`tests/security/evaluation_release/`) | **READY** |
-| **Gate 5** | **Website Gate** | Production landing page and download CTA verified | Marketing content, SEO, and asset validation passing | **READY** |
-| **Gate 6** | **Release Gate** | Signed Windows installer & portable ZIP with SBOM | Package readiness tests passing (`tests/release/`) | **READY** |
-| **Gate 7** | **Launch Gate** | Maker account verified, listing draft reviewed | Designated strictly for manual execution by Maker | **HOLD (Manual)** |
+| **Gate 4** | **Beta Gate** | Closed beta complete, feedback triaged | `audit/product-development/phase-b/PHASE_B_SECURITY_PRIVACY_BETA_SIGNOFF.md` | **PASSED** |
+| **Gate 5** | **Website & Assets Gate** | Production landing page, SVGs, and copy verified | `audit/product-development/phase-c/` & `phase-d/` signoff charters | **PASSED** |
+| **Gate 6** | **Release Gate** | Signed Windows installer & portable ZIP with SBOM | `audit/product-development/phase-e/PHASE_E_RELEASE_CANDIDATE_SIGNOFF.md` | **PASSED** |
+| **Gate 7** | **Launch Gate** | Maker account verified, listing draft reviewed | `audit/product-development/final/LAUNCH_READINESS_GO_VERDICT.md` | **READY FOR MAKER** |

@@ -1,6 +1,6 @@
 # Document-to-Report Workflow Failure Analysis
 
-- **Evaluated At**: 2026-11-14T06:02:10Z
+- **Evaluated At**: 2026-11-19T09:08:55Z
 - **Total Scenarios**: 10
 - **Passed Scenarios**: 10
 - **Failed Scenarios**: 0

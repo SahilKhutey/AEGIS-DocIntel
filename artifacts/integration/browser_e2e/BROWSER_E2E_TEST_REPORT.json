@@ -1,7 +1,7 @@
 {
   "work_package": "WP-08",
   "component": "browser_e2e",
-  "evaluated_at": "2026-11-14T06:02:04Z",
+  "evaluated_at": "2026-11-19T09:08:48Z",
   "total_scenarios": 18,
   "passed_scenarios": 18,
   "failed_scenarios": 0,
