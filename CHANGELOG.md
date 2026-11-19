@@ -6,6 +6,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.0-beta-baseline] - 2026-11-19 — Product Development Sprint Baseline Audit & Processing Lifecycle (PROT-FINAL-10 / PD-01)
+
+### Added
+- **Work Package PD-01 Baseline Deliverables (`audit/product-development/baseline/`):**
+  - `BASELINE_REPORT.md`: Comprehensive evaluation across all 13 subsystems (Repository, APIs, Frontend, Ingestion, Extraction, Parsing, Queues, LLM, Retrieval, Context Optimizer, Database, Tests, Deployment).
+  - `SYSTEM_COMPONENT_INVENTORY.md`: Comprehensive system inventory mapping files, modules, classes, and SQLite tables across all tiers.
+  - `FEATURE_FUNCTIONALITY_MATRIX.csv`: Strict classification of 31 capabilities into `WORKING`, `PARTIAL`, `BROKEN`, `MISSING`, or `UNVERIFIED` supported by test evidence files.
+  - `BROKEN_WORKFLOWS.md`: Technical debt register cataloging 5 architectural items (state tracking fragmentation, storage references, OCR system binaries, live LLM validation, and headless frontend mock parity).
+  - `P0_P1_P2_BACKLOG.md`: Prioritized engineering backlog dividing tasks into P0 (Core restoration), P1 (Product intelligence), and P2 (Beta hardening).
+  - `BASELINE_TEST_REPORT.md`: Measured test report documenting 2,784 total collected tests and empirical pass results (905/905 in security suite, 140/140 in processing/intelligence).
+  - `PD01_SIGNOFF.md`: Formal gate signoff charter approving PD-01 and issuing a **GO** recommendation for PROT-FINAL-11.
+- **Canonical Document Lifecycle (`src/models/document_lifecycle.py` & `docs/engineering/DOCUMENT_LIFECYCLE.md`):**
+  - Codified 16-state canonical lifecycle (`UPLOADED` -> `VALIDATING` -> `ACCEPTED` -> `QUEUED` -> `EXTRACTING` -> `PARSING` -> `NORMALIZING` -> `INDEXING` -> `READY`, and error/terminal states).
+  - Built `DocumentLifecycleManager` enforcing legal state transitions and raising `InvalidLifecycleTransitionError` on illegal jumps.
+  - Implemented immutable `LifecycleTransitionRecord` with zero-sensitive-data logging guarantees.
+- **Canonical Processing Contracts (`src/models/processing_contract.py` & `docs/engineering/PROCESSING_CONTRACTS.md`):**
+  - Codified `DocumentSource`, `ExtractedBlock`, and `ProcessingResult`.
+  - Implemented strict opaque storage reference validation (`validate_opaque_storage_reference`) rejecting client-supplied paths and directory traversal attempts (`../../etc/passwd`, `C:\Windows`).
+- **Automated Verification Test Suite (`tests/product_development/test_pd01_baseline_and_lifecycle.py`):**
+  - 10 automated tests asserting deliverable completeness, CSV matrix schema rules, state machine transitions, recoverable failure retries, and opaque storage reference enforcement.
+
+---
+
 ## [0.1.0-launch] - 2026-11-19 — Product Hunt Launch Development, Positioning & Go-to-Market Execution (PROT-FINAL-09)
 
 ### Added

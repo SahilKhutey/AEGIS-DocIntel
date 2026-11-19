@@ -1,0 +1,32 @@
+feature_id,feature_name,subsystem,status,evidence_test_file,notes
+FEAT-001,PDF Text Extraction,Ingestion,WORKING,tests/processing/extraction/test_ocr_extraction.py,PyMuPDF native text extraction passes with character recall > 98%
+FEAT-002,Scanned PDF OCR Extraction,Ingestion,PARTIAL,tests/processing/extraction/test_ocr_extraction.py,OCR functions when tesseract binary is installed; degrades gracefully to empty/warning text when missing
+FEAT-003,DOCX Structure Extraction,Ingestion,WORKING,tests/test_docx_loader.py,python-docx extracts paragraphs headings and tables accurately
+FEAT-004,Plain Text File Intake,Ingestion,WORKING,tests/test_text_loader.py,UTF-8 and ASCII text ingestion verified
+FEAT-005,Audio/Speech Transcription,Ingestion,PARTIAL,tests/test_speech_and_image_parsing.py,Loader exists but depends on optional system audio binaries
+FEAT-006,Intake File Size Limit Enforcement,Ingestion,WORKING,tests/security/product_hunt/test_ph_03_capability_claims_and_readiness.py,Files exceeding 200MB rejected with HTTP 413
+FEAT-007,MIME Type Validation,Ingestion,WORKING,tests/security/product_hunt/test_ph_03_capability_claims_and_readiness.py,Disallowed MIME types rejected with HTTP 415
+FEAT-008,Upload Idempotency Keys,Ingestion,WORKING,tests/test_mvp4_idempotency.py,Duplicate requests with identical idempotency keys return cached responses
+FEAT-009,Durable Document Persistence,Storage,WORKING,tests/integration/test_document_workflow.py,SQLite storage stores raw bytes and sha256 checksums
+FEAT-010,Restart Recovery & Stale Job Cleanup,Storage,WORKING,tests/integration/test_restart_persistence.py,Stale processing records reconciled on startup
+FEAT-011,Kahn DAG Reading Order,Parsing,WORKING,tests/processing/reading_order/test_reading_order.py,Topological sort with tie-breaking resolves multi-column reading order
+FEAT-012,Table Cell Reconstruction,Parsing,WORKING,tests/processing/tables/test_table_reconstruction.py,Table grids and header hierarchies recovered
+FEAT-013,Spatial Bounding Box Tracking,Parsing,WORKING,tests/processing/layout/test_layout_accuracy.py,Page coordinates preserved across extracted chunks
+FEAT-014,Submodular Knapsack Context Packing,Optimization,WORKING,tests/test_submodular_packer.py,Facility-location packing respects token budget with (1-1/e)/2 bound
+FEAT-015,Token Accounting & Budget Guard,Optimization,WORKING,tests/test_mvp2_context_budget.py,Estimates context tokens and prevents context overflow
+FEAT-016,Multi-Modal Hybrid Retrieval,Retrieval,WORKING,tests/intelligence/retrieval/test_retrieval_modes.py,Dense embeddings combined with BM25 keyword scoring
+FEAT-017,Pre-Retrieval Tenant Isolation,Security,WORKING,tests/security/test_multitenancy_isolation.py,Zero cross-tenant vector or metadata leakage
+FEAT-018,Offline Mock LLM Answering,Intelligence,WORKING,tests/test_llm_interface_wiring.py,Deterministic answering and citation generation in CI
+FEAT-019,Live External LLM Answering,Intelligence,UNVERIFIED,None,Requires live external API keys and network access outside sandbox
+FEAT-020,Coordinate-Grounded Citations,Intelligence,WORKING,tests/intelligence/citations/test_citation_correctness.py,Citations resolve to valid document coordinate bboxes
+FEAT-021,Fact Conflict Detection,Intelligence,WORKING,tests/intelligence/facts/test_facts_and_conflicts.py,Contradictory claims flagged across document versions
+FEAT-022,Cross-Document Comparison,Intelligence,WORKING,tests/test_mvp5_comparison.py,Multi-document semantic comparison endpoint functions
+FEAT-023,Human Review Workflow,Governance,WORKING,tests/test_mvp6_review_service.py,Claim approval rejection and decision logging operational
+FEAT-024,Background Job State Machine,Operations,WORKING,tests/test_mvp8_job_lifecycle.py,QUEUED RUNNING SUCCEEDED FAILED states validated
+FEAT-025,Exponential Backoff Retries,Operations,WORKING,tests/test_mvp8_retry_policy.py,Retry intervals scale with jitter up to max attempts
+FEAT-026,Ed25519 License Validation,Gateway,WORKING,tests/security/test_evaluator_gateway_pentest.py,Cryptographic license verification fails closed on tampering
+FEAT-027,Hardware Challenge-Response Activation,Gateway,WORKING,tests/security/test_evaluator_gateway_pentest.py,Device fingerprint challenge-response handshake verified
+FEAT-028,Atomic Quota Ledger & Holds,Gateway,WORKING,tests/security/test_quotas.py,Server-side atomic quota consumption prevents race conditions
+FEAT-029,Cascading Secure Document Deletion,Storage,WORKING,tests/integration/test_document_workflow.py,Document deletion purges SQLite records and memory indices
+FEAT-030,Next.js App Router UI,Frontend,WORKING,web/tests/unit/app-shell.test.tsx,Component rendering, navigation, and state models pass tests
+FEAT-031,End-to-End Live Browser Flow,Frontend,PARTIAL,web/tests/e2e/workflow.test.ts,E2E tests mocked in headless mode; live backend staging rehearsal needed

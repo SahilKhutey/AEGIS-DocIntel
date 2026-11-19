@@ -831,3 +831,32 @@ Established a complete, auditable legal compliance programme connecting privacy 
 
 
 
+
+---
+
+## 11. PROT-FINAL-10: Product Development Sprint & Baseline Audit (PD-01)
+
+- **Session Date:** November 19, 2026
+- **Status:** **APPROVED & SIGNED OFF (PD-01 COMPLETE — GO FOR PROT-FINAL-11)**
+- **Governing Principle:** *"Build a working document-intelligence workflow first. Validate it with real users second. Prepare the public launch third."*
+- **Key Accomplishments:**
+  - **Comprehensive 13-Subsystem Baseline Inspection:** Evaluated git history, 74 main FastAPI endpoints, 92 evaluation gateway endpoints, 17 Next.js App Router routes, file intake validation, PDF/DOCX loaders, Kahn DAG reading order, durable job service, submodular knapsack context packing, multi-tenancy isolation, SQLite persistence, 2,784 collected tests, and Docker/Caddy deployment configs.
+  - **Delivered All 7 Mandatory Baseline Deliverables (`audit/product-development/baseline/`):**
+    * `BASELINE_REPORT.md`: System state evaluation across all 13 subsystems.
+    * `SYSTEM_COMPONENT_INVENTORY.md`: Comprehensive module, file, class, and database inventory.
+    * `FEATURE_FUNCTIONALITY_MATRIX.csv`: Strict classification of 31 capabilities with test evidence citations.
+    * `BROKEN_WORKFLOWS.md`: Technical debt register detailing 5 workflow and dependency findings.
+    * `P0_P1_P2_BACKLOG.md`: Prioritized engineering backlog dividing tasks into P0 (Core restoration), P1 (Product intelligence), and P2 (Beta hardening).
+    * `BASELINE_TEST_REPORT.md`: Empirical test report (2,784 tests collected, 905 passed in security, 140 in processing/intelligence).
+    * `PD01_SIGNOFF.md`: Formal gate signoff charter approving PD-01 with an unconditional GO for PROT-FINAL-11.
+  - **Canonical Document Lifecycle Codified:**
+    * Implemented `src/models/document_lifecycle.py` enforcing 16 states (`UPLOADED` $\to$ `VALIDATING` $\to$ `ACCEPTED` $\to$ `QUEUED` $\to$ `EXTRACTING` $\to$ `PARSING` $\to$ `NORMALIZING` $\to$ `INDEXING` $\to$ `READY`, etc.) with transition validation, atomic ledgers, and zero-sensitive-data logging guarantees.
+    * Authored `docs/engineering/DOCUMENT_LIFECYCLE.md`.
+  - **Canonical Processing Contracts Codified:**
+    * Implemented `src/models/processing_contract.py` (`DocumentSource`, `ExtractedBlock`, `ProcessingResult`) with strict opaque storage reference validation (`validate_opaque_storage_reference`) rejecting client-supplied paths and directory traversal attempts (`../../etc/passwd`, `C:\Windows`).
+    * Authored `docs/engineering/PROCESSING_CONTRACTS.md`.
+  - **Automated Verification:**
+    * Added `tests/product_development/test_pd01_baseline_and_lifecycle.py` with 10 automated tests (10/10 passed).
+    * Clean regression across launch tests and 0 gitleaks detected across 352 commits.
+- **Phase Gate Recommendation:**
+  - Proceed immediately to **PROT-FINAL-11 — Core Document Processing Engine Restoration**.
