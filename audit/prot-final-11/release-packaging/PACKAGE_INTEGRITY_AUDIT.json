@@ -1,0 +1,26 @@
+{
+  "product": "AEGIS-DocIntel",
+  "version": "1.0.0-beta.1",
+  "channel": "beta",
+  "platform": "windows-x64",
+  "architecture": "x86_64",
+  "source_commit": "045b48e9ff50d8c0ba0e5f37c3172ba5d201f447",
+  "build_id": "build-windows-x64-20261119053602-07057d7a",
+  "build_timestamp": "2026-11-19T05:36:02.082299+00:00",
+  "artifacts": [
+    {
+      "filename": "AEGIS-DocIntel-Setup.exe",
+      "rel_path": "installer/AEGIS-DocIntel-Setup.exe",
+      "sha256": "13b6f879c71bfbe08888fdcfd164cbe5018d4237ed8b9cc587ae4c7e51499a40",
+      "size_bytes": 34163
+    },
+    {
+      "filename": "AEGIS-DocIntel-Portable.zip",
+      "rel_path": "portable/AEGIS-DocIntel-Portable.zip",
+      "sha256": "c8a6baa255db58ff52e2f58051e1320728de55b4d1b00f55c772d063b175f2f2",
+      "size_bytes": 34058
+    }
+  ],
+  "sbom": "client.cdx.json",
+  "signature": "release-manifest.sig"
+}

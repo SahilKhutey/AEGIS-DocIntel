@@ -1,0 +1,81 @@
+{
+  "phase": "PROT-FINAL-11",
+  "work_packages": [
+    {
+      "id": "REL-01",
+      "name": "Final repository and release baseline",
+      "status": "COMPLETED"
+    },
+    {
+      "id": "REL-02",
+      "name": "Distribution architecture and client boundary",
+      "status": "COMPLETED"
+    },
+    {
+      "id": "REL-03",
+      "name": "Production frontend build",
+      "status": "COMPLETED"
+    },
+    {
+      "id": "REL-04",
+      "name": "Launcher and local service lifecycle",
+      "status": "COMPLETED"
+    },
+    {
+      "id": "REL-05",
+      "name": "Secure configuration and client integration",
+      "status": "COMPLETED"
+    },
+    {
+      "id": "REL-06",
+      "name": "Authentication, activation and licensing integration",
+      "status": "COMPLETED"
+    },
+    {
+      "id": "REL-07",
+      "name": "Package allowlist and artifact assembly",
+      "status": "COMPLETED"
+    },
+    {
+      "id": "REL-08",
+      "name": "Windows installer and portable package",
+      "status": "COMPLETED"
+    },
+    {
+      "id": "REL-09",
+      "name": "Release metadata, checksums and SBOM",
+      "status": "COMPLETED"
+    },
+    {
+      "id": "REL-10",
+      "name": "Artifact scanning and signing",
+      "status": "COMPLETED"
+    },
+    {
+      "id": "REL-11",
+      "name": "Update and rollback implementation",
+      "status": "COMPLETED"
+    },
+    {
+      "id": "REL-12",
+      "name": "Clean-machine installation testing",
+      "status": "COMPLETED"
+    },
+    {
+      "id": "REL-13",
+      "name": "End-to-end product workflow testing",
+      "status": "COMPLETED"
+    },
+    {
+      "id": "REL-14",
+      "name": "Documentation and support package",
+      "status": "COMPLETED"
+    },
+    {
+      "id": "REL-15",
+      "name": "Release candidate and final signoff",
+      "status": "COMPLETED"
+    }
+  ],
+  "verdict": "APPROVED_FOR_DISTRIBUTION"
+}

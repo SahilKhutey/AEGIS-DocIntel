@@ -1,0 +1,31 @@
+# AEGIS Neural Hardware Accelerator: Architecture Specification v1.0
+Document ID: DOC-AEGIS-HW-V1
+Version: 1.0.4-RELEASE
+Classification: Technical Specification / Evaluation Corpus
+Author: AEGIS Systems Engineering Group
+
+## 1. Executive Summary & Core Topology
+The AEGIS Neural Hardware Accelerator (NHA-100) is a dedicated mathematical coprocessor designed for high-density document intelligence, spatial graph reduction, and submodular context optimization. The NHA-100 architecture integrates 64 heterogeneous tensor execution units organized in an 8x8 toroidal mesh.
+
+## 2. Electrical, Thermal & Processing Specifications
+
+| Parameter | Specification (v1.0) | Tolerance / Standard |
+| :--- | :--- | :--- |
+| Base Operating Frequency | 1.85 GHz | +/- 25 MHz |
+| Peak Tensor Compute (FP16) | 450 TFLOPS | Sustained matrix MAC |
+| Thermal Design Power (TDP) | 220 Watts | Active liquid cooling |
+| Submodular Context Cache | 128 MB SRAM | Distributed across 8 clusters |
+| Memory Bus Architecture | 512-bit HBM3 | 1.6 TB/sec peak bandwidth |
+| Operating Temperature Range | -40 C to +85 C | Industrial Grade |
+
+Key Operational Invariants:
+- Peak tensor compute throughput is rated at 450 TFLOPS FP16 at a base operating frequency of 1.85 GHz.
+- Submodular context packing cache is fixed at 128 MB SRAM per compute tile.
+- Maximum thermal design power (TDP) is 220 Watts.
+- The host PCIe interface operates exclusively at PCIe Gen 5.0 x16 providing 64 GB/sec bidirectional bandwidth.
+
+## 3. Reliability, Fault Tolerance & Compliance Standards
+The NHA-100 incorporates hardware-level error correcting code (ECC) on all internal SRAM and register files.
+- Fault tolerance complies with ISO 26262 ASIL-B fail-safe guidelines.
+- Mean Time Between Failures (MTBF) is certified at 1,200,000 power-on hours under nominal thermal loads.
+- Automated voltage-frequency scaling (AVFS) halts execution within 12 microseconds upon thermal threshold exceedance (105 C junction temp).

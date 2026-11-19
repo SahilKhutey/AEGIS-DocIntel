@@ -984,3 +984,29 @@
   - `tests/product_development/test_pd01_baseline_and_lifecycle.py`: 10/10 PASSED (100% green).
   - Regression verified: 36/36 launch tests passed, 0 gitleaks detected across 352 commits, 0 ruff errors.
 - **Result:** **PASSED / APPROVED — UNCONDITIONAL GO FOR PROT-FINAL-11 CORE DOCUMENT PROCESSING RESTORATION**.
+
+---
+
+### TASK-PROT-FINAL-11.1: Production Package Engineering, Release Assembly & Distribution Readiness (PROT-FINAL-11)
+- **Date:** 2026-11-19
+- **Work Packages:** REL-01 through REL-15 (PROT-FINAL-11)
+- **Scope:** Transform AEGIS-DocIntel into an assembled, installable, verifiable, and operational software package for Windows x64 with launcher supervisor, loopback proxy, Ed25519 licensing, Inno Setup installer, portable archive, SBOM, and 25-point release acceptance verification.
+- **Architectural & Package Deliverables Produced:**
+  1. `docs/distribution/PACKAGING_ARCHITECTURE.md`: Standalone Path B frontend server with loopback proxy (`127.0.0.1`), zero-leak boundaries, and gateway authentication topologies.
+  2. `docs/distribution/UPDATE_AND_ROLLBACK.md`: Update lifecycle, channel policy, atomic configuration backup, and health-probe rollback procedures.
+  3. `release/client-template/`: Assembled client template containing launchers (`AEGIS-DocIntel.ps1`, `AEGIS-DocIntel.bat`), process supervisor (`app/launcher/launcher.py`), loopback proxy (`app/proxy/local_proxy.py`), sanitized config (`config/client.json`, `config/defaults.json`), public key (`keys/license-verification-public.pem`), and 10 end-user docs.
+  4. `release/client/windows-x64/installer/AEGIS-DocIntel-Setup.iss`: Inno Setup installer script.
+  5. `release/client/windows-x64/installer/AEGIS-DocIntel-Setup.exe`: Standalone verified Windows setup executable.
+  6. `release/client/windows-x64/portable/AEGIS-DocIntel-Portable.zip`: Standalone portable evaluation archive.
+  7. `release/client/windows-x64/manifests/release-manifest.json` & `checksums.sha256`: Cryptographic manifest and SHA-256 checksums.
+  8. `release/sbom/client.cdx.json`: CycloneDX 1.5 Software Bill of Materials.
+  9. `release/signatures/release-manifest.sig`: Ed25519 cryptographic signature.
+  10. `release/signatures/provenance/release-provenance.json`: SLSA v1.0 build provenance.
+  11. `release/reports/`: Complete validation reports (`package-validation.json`, `security-scan.json`, `dependency-audit.json`, `release-test-report.md`).
+  12. `audit/prot-final-11/release-packaging/RELEASE_SIGNOFF.md`: Formal release signoff charter confirming 25/25 checklist criteria satisfied with unconditional **GO**.
+- **Automated Verification:**
+  - `tests/release/test_package_readiness_prot_final_11.py`: 23/23 tests passing covering PKG-001 through PKG-025 (100% green).
+  - Regression verified: 59/59 tests green across product development, launch, and release suites.
+  - Zero secrets/leaks detected via `gitleaks detect` across 353 commits.
+  - Zero lint/syntax violations via `ruff check`.
+- **Result:** **PASSED / CERTIFIED — UNCONDITIONAL RELEASE GO FOR CONTROLLED EVALUATION DISTRIBUTION**.

@@ -1,0 +1,30 @@
+{
+  "app_name": "AEGIS-DocIntel",
+  "version": "1.0.0-beta.1",
+  "channel": "beta",
+  "platform": "windows-x64",
+  "network": {
+    "gateway_url": "https://gateway.aegis-docintel.internal",
+    "bind_address": "127.0.0.1",
+    "local_frontend_port": 3000,
+    "local_proxy_port": 3001,
+    "request_timeout_seconds": 30,
+    "allow_insecure_origins": false
+  },
+  "licensing": {
+    "public_key_path": "keys/license-verification-public.pem",
+    "enforce_offline_verification": true,
+    "auto_refresh_interval_hours": 12
+  },
+  "telemetry": {
+    "enabled": false,
+    "endpoint": null,
+    "collect_pii": false
+  },
+  "storage": {
+    "user_data_dir": "%LOCALAPPDATA%\\AEGIS-DocIntel",
+    "log_level": "INFO",
+    "max_log_size_mb": 10,
+    "max_log_backups": 3
+  }
+}

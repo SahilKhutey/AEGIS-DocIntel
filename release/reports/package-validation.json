@@ -1,0 +1,20 @@
+{
+  "status": "PASSED",
+  "version": "1.0.0-beta.1",
+  "installer": {
+    "exists": true,
+    "size_bytes": 34163,
+    "sha256": "13b6f879c71bfbe08888fdcfd164cbe5018d4237ed8b9cc587ae4c7e51499a40"
+  },
+  "portable": {
+    "exists": true,
+    "size_bytes": 34058,
+    "sha256": "c8a6baa255db58ff52e2f58051e1320728de55b4d1b00f55c772d063b175f2f2"
+  },
+  "manifest_hash": "daff6b6dcef5d1844aca1332cae8c56d67edbacd9faec7d09ef6e95c1ca06bd5",
+  "checks": {
+    "zero_leak": true,
+    "clean_structure": true,
+    "signatures_valid": true
+  }
+}

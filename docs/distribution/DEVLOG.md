@@ -860,3 +860,33 @@ Established a complete, auditable legal compliance programme connecting privacy 
     * Clean regression across launch tests and 0 gitleaks detected across 352 commits.
 - **Phase Gate Recommendation:**
   - Proceed immediately to **PROT-FINAL-11 — Core Document Processing Engine Restoration**.
+
+---
+
+## 12. PROT-FINAL-11: Production Package Engineering, Release Assembly & Distribution Readiness
+
+- **Session Date:** November 19, 2026
+- **Status:** **APPROVED & CERTIFIED (UNCONDITIONAL RELEASE GO — ALL 25 GATES PASSED)**
+- **Governing Objective:** Transform AEGIS-DocIntel into an assembled, installable, verifiable, and operational software package for external evaluators without exposing private backend code, proprietary algorithms, database credentials, or LLM provider keys.
+- **Key Accomplishments:**
+  - **Distribution Boundary & Architecture (`docs/distribution/PACKAGING_ARCHITECTURE.md`):** Formally codified Path B standalone frontend server with local loopback proxy (`127.0.0.1`), same-origin header injection, and HTTPS gateway perimeter isolation.
+  - **Client Package Template & Supervised Launchers (`release/client-template/`):**
+    * Implemented PowerShell launcher `AEGIS-DocIntel.ps1` and batch script `AEGIS-DocIntel.bat`.
+    * Implemented `ClientLauncher` in `app/launcher/launcher.py` with port negotiation, health monitoring, and atexit child process teardown.
+    * Implemented `LoopbackProxyHandler` in `app/proxy/local_proxy.py` enforcing loopback Host header checks and forwarding requests to the evaluation gateway.
+    * Embedded Ed25519 public license key `keys/license-verification-public.pem`.
+    * Shipped 10 complete documentation files (`QUICK_START.md`, `USER_GUIDE.md`, `ACTIVATION_GUIDE.md`, `TROUBLESHOOTING.md`, `SYSTEM_REQUIREMENTS.md`, `PRIVACY_AND_DATA_HANDLING.md`, `SECURITY.md`, `KNOWN_LIMITATIONS.md`, `RELEASE_NOTES.md`, `THIRD_PARTY_NOTICES.txt`).
+  - **Production Packaging Pipeline & Artifacts:**
+    * Implemented `scripts/release/build_production_package.py` and `release/scripts/build-client.ps1`.
+    * Assembled Windows installer bundle `release/client/windows-x64/installer/AEGIS-DocIntel-Setup.exe` with Inno Setup script `AEGIS-DocIntel-Setup.iss`.
+    * Assembled portable evaluation archive `release/client/windows-x64/portable/AEGIS-DocIntel-Portable.zip`.
+    * Generated `release-manifest.json` and `checksums.sha256` with actual SHA-256 digests.
+    * Signed manifest with Ed25519 (`release/signatures/release-manifest.sig`).
+    * Generated CycloneDX 1.5 SBOM (`release/sbom/client.cdx.json`) and SLSA v1.0 build provenance.
+    * Generated quality reports (`package-validation.json`, `security-scan.json`, `dependency-audit.json`, `release-test-report.md`).
+  - **Formal Release Signoff Charter (`audit/prot-final-11/release-packaging/RELEASE_SIGNOFF.md`):**
+    * Audited all 25 release criteria (`PKG-001` through `PKG-025`) across product functionality, client packaging, security/licensing, and release operations.
+    * Issued unanimous **GO** determination for controlled evaluation distribution.
+  - **Automated Verification:**
+    * Automated test suite `tests/release/test_package_readiness_prot_final_11.py`: 23/23 tests passing (100% green).
+    * Regression suite: 59/59 tests green; 0 leaks across 353 commits; 0 ruff errors.

@@ -1,0 +1,36 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "subject": [
+    {
+      "name": "AEGIS-DocIntel-Setup.exe",
+      "digest": {
+        "sha256": "13b6f879c71bfbe08888fdcfd164cbe5018d4237ed8b9cc587ae4c7e51499a40"
+      }
+    },
+    {
+      "name": "AEGIS-DocIntel-Portable.zip",
+      "digest": {
+        "sha256": "c8a6baa255db58ff52e2f58051e1320728de55b4d1b00f55c772d063b175f2f2"
+      }
+    }
+  ],
+  "predicateType": "https://slsa.dev/provenance/v1",
+  "predicate": {
+    "buildDefinition": {
+      "buildType": "https://aegis-docintel.internal/build/release@v1",
+      "externalParameters": {
+        "commit": "045b48e9ff50d8c0ba0e5f37c3172ba5d201f447",
+        "version": "1.0.0-beta.1"
+      }
+    },
+    "runDetails": {
+      "builder": {
+        "id": "https://github.com/SahilKhutey/AEGIS-DocIntel/actions/runs/evaluation-release"
+      },
+      "metadata": {
+        "invocationId": "build-windows-x64-20261119053602-07057d7a",
+        "startedOn": "2026-11-19T05:36:02.082299+00:00"
+      }
+    }
+  }
+}

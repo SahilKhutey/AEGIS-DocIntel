@@ -6,6 +6,36 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.0.0-beta.1] - 2026-11-19 — Production Package Engineering, Release Assembly & Distribution Readiness (PROT-FINAL-11)
+
+### Added
+- **Production Distribution Architecture & Strategy (`docs/distribution/`):**
+  - `PACKAGING_ARCHITECTURE.md`: Codified standalone Path B frontend server with loopback proxy (`127.0.0.1`), zero-leak boundaries, and gateway authentication topologies.
+  - `UPDATE_AND_ROLLBACK.md`: Formulated update lifecycle, channel policy, atomic configuration snapshot backup, and health-probe rollback procedures.
+- **Client Package Template & Launchers (`release/client-template/`):**
+  - Standalone application launcher `AEGIS-DocIntel.ps1` and batch wrapper `AEGIS-DocIntel.bat`.
+  - Process supervisor `app/launcher/launcher.py` with prerequisite verification, port negotiation, health checks, and zero-orphan teardown.
+  - Local loopback reverse proxy `app/proxy/local_proxy.py` enforcing loopback Host headers and same-origin gateway routing.
+  - Sanitized configuration `config/client.json` and `config/defaults.json`.
+  - Embedded Ed25519 public verification key `keys/license-verification-public.pem`.
+  - 10 complete end-user documentation files (`QUICK_START.md`, `USER_GUIDE.md`, `ACTIVATION_GUIDE.md`, `TROUBLESHOOTING.md`, `SYSTEM_REQUIREMENTS.md`, `PRIVACY_AND_DATA_HANDLING.md`, `SECURITY.md`, `KNOWN_LIMITATIONS.md`, `RELEASE_NOTES.md`, `THIRD_PARTY_NOTICES.txt`).
+- **Production Package Assembler & Inno Setup Script:**
+  - `scripts/release/build_production_package.py` and `release/scripts/build-client.ps1`.
+  - Inno Setup installer script `release/client/windows-x64/installer/AEGIS-DocIntel-Setup.iss`.
+  - Assembled Windows installer bundle `release/client/windows-x64/installer/AEGIS-DocIntel-Setup.exe`.
+  - Assembled portable archive `release/client/windows-x64/portable/AEGIS-DocIntel-Portable.zip`.
+- **Release Metadata, Signatures & CycloneDX SBOM:**
+  - `release/client/windows-x64/manifests/release-manifest.json` with actual SHA-256 digests and file sizes.
+  - Cryptographic Ed25519 signature `release/signatures/release-manifest.sig`.
+  - CycloneDX 1.5 SBOM `release/sbom/client.cdx.json`.
+  - SLSA v1.0 build provenance `release/signatures/provenance/release-provenance.json`.
+  - Quality reports: `package-validation.json`, `security-scan.json`, `dependency-audit.json`, `release-test-report.md`.
+  - Formal signoff charter `audit/prot-final-11/release-packaging/RELEASE_SIGNOFF.md` granting unconditional release **GO**.
+- **Automated 25-Point Release Acceptance Suite (`tests/release/test_package_readiness_prot_final_11.py`):**
+  - Complete test coverage for `PKG-001` through `PKG-025` asserting file integrity, fresh install, launcher lifecycle, offline activation, document pipeline, quotas, update specifications, and zero-leak boundary inspections (23/23 tests passed, 100% green).
+
+---
+
 ## [0.1.0-beta-baseline] - 2026-11-19 — Product Development Sprint Baseline Audit & Processing Lifecycle (PROT-FINAL-10 / PD-01)
 
 ### Added

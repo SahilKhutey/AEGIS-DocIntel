@@ -1,0 +1,16 @@
+{
+  "query_id": "qa-02-cache",
+  "query": "What is the capacity of the submodular context packing cache across hardware revisions?",
+  "ground_truth_answer": "Across both v1.0 and v2.0 hardware architecture specifications, the submodular context packing cache capacity is an invariant fixed at 128 MB SRAM per compute tile.",
+  "expected_facts": [
+    "128 MB SRAM",
+    "submodular context packing cache",
+    "invariant"
+  ],
+  "source_documents": [
+    "aegis_neural_hardware_spec_v1.txt",
+    "aegis_neural_hardware_spec_v2.txt"
+  ],
+  "section": "2. Electrical, Thermal & Processing Specifications",
+  "confidence_threshold": 0.85
+}

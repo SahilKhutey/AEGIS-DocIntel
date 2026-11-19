@@ -1,0 +1,102 @@
+{
+  "schema_version": "1.0",
+  "name": "AEGIS-DocIntel Launch Demonstration Corpus",
+  "version": "1.2.0",
+  "description": "Pre-indexed synthetic technical and governance documents designed for 3-minute Product Hunt walkthrough and reproducible evaluation.",
+  "documents": [
+    {
+      "doc_id": "doc-seed-hw-v1",
+      "filename": "aegis_neural_hardware_spec_v1.txt",
+      "content_type": "text/plain",
+      "title": "AEGIS Neural Hardware Accelerator: Architecture Specification v1.0",
+      "category": "hardware_specification",
+      "version": "1.0.4",
+      "tags": ["hardware", "tflops", "tdp", "specs", "v1"]
+    },
+    {
+      "doc_id": "doc-seed-hw-v2",
+      "filename": "aegis_neural_hardware_spec_v2.txt",
+      "content_type": "text/plain",
+      "title": "AEGIS Neural Hardware Accelerator: Architecture Specification v2.0",
+      "category": "hardware_specification",
+      "version": "2.0.1",
+      "tags": ["hardware", "tflops", "tdp", "specs", "v2", "revision"]
+    },
+    {
+      "doc_id": "doc-seed-sec-gov",
+      "filename": "aegis_enterprise_governance_whitepaper.txt",
+      "content_type": "text/plain",
+      "title": "AEGIS-DocIntel Enterprise Security, Provenance & Governance Framework",
+      "category": "security_whitepaper",
+      "version": "1.2.0",
+      "tags": ["security", "governance", "audit", "rbac", "sha256", "gdpr"]
+    }
+  ],
+  "expected_queries": [
+    {
+      "query_id": "qa-01-throughput",
+      "query": "What is the peak FP16 tensor throughput of the NHA-100 hardware accelerator?",
+      "expected_doc_id": "doc-seed-hw-v1",
+      "answerable": true,
+      "expected_fact": "450 TFLOPS",
+      "expected_frequency": "1.85 GHz"
+    },
+    {
+      "query_id": "qa-02-cache",
+      "query": "What is the capacity of the submodular context packing cache across hardware revisions?",
+      "expected_doc_ids": ["doc-seed-hw-v1", "doc-seed-hw-v2"],
+      "answerable": true,
+      "expected_fact": "128 MB SRAM",
+      "is_invariant": true
+    },
+    {
+      "query_id": "qa-03-audit-chaining",
+      "query": "How are audit log entries cryptographically chained and what is the genesis hash?",
+      "expected_doc_id": "doc-seed-sec-gov",
+      "answerable": true,
+      "expected_fact": "SHA-256 cryptographic hashes rooted at genesis hash 0000000000000000000000000000000000000000000000000000000000000000"
+    },
+    {
+      "query_id": "qa-04-unanswerable-backup",
+      "query": "What cloud backup regions and secondary disaster recovery zones are supported?",
+      "expected_doc_ids": ["doc-seed-sec-gov", "doc-seed-hw-v1", "doc-seed-hw-v2"],
+      "answerable": false,
+      "expected_behavior": "abstain",
+      "expected_message_substring": "do not contain"
+    }
+  ],
+  "contradiction_pairs": [
+    {
+      "comparison_id": "cmp-hw-v1-vs-v2",
+      "doc_id_1": "doc-seed-hw-v1",
+      "doc_id_2": "doc-seed-hw-v2",
+      "conflicts": [
+        {
+          "attribute": "Peak Tensor Compute (FP16)",
+          "v1_value": "450 TFLOPS",
+          "v2_value": "620 TFLOPS"
+        },
+        {
+          "attribute": "Base Operating Frequency",
+          "v1_value": "1.85 GHz",
+          "v2_value": "2.20 GHz"
+        },
+        {
+          "attribute": "Thermal Design Power (TDP)",
+          "v1_value": "220 Watts",
+          "v2_value": "285 Watts"
+        }
+      ],
+      "invariants": [
+        {
+          "attribute": "Submodular Context Cache",
+          "value": "128 MB SRAM"
+        },
+        {
+          "attribute": "Fault tolerance standard",
+          "value": "ISO 26262 ASIL-B"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "reference_id": "ref-sec-gov-framework",
+  "expected_citations": [
+    {
+      "claim": "Audit logging uses SHA-256 hash chaining with a zero-filled genesis hash.",
+      "source": {
+        "doc_id": "doc-seed-sec-gov",
+        "filename": "aegis_enterprise_governance_whitepaper.txt",
+        "section": "1. Evidence Grounding & Cryptographic Audit Trails",
+        "snippet": "All audit log entries are chained sequentially using SHA-256 cryptographic hashes rooted at genesis hash 0000000000000000000000000000000000000000000000000000000000000000."
+      }
+    },
+    {
+      "claim": "Viewer role can read documents but cannot upload or delete.",
+      "source": {
+        "doc_id": "doc-seed-sec-gov",
+        "filename": "aegis_enterprise_governance_whitepaper.txt",
+        "section": "2. Multi-Tenant Isolation & Role-Based Access Control (RBAC)",
+        "snippet": "| viewer | Allowed | Denied | Denied | Denied | Denied |"
+      }
+    }
+  ]
+}

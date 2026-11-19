@@ -1,0 +1,30 @@
+# AEGIS Neural Hardware Accelerator: Architecture Specification v2.0
+Document ID: DOC-AEGIS-HW-V2
+Version: 2.0.1-REVISED
+Classification: Technical Specification / Evaluation Corpus
+Author: AEGIS Systems Engineering Group
+
+## 1. Executive Summary & Core Topology Revision
+The AEGIS Neural Hardware Accelerator Revision 2 (NHA-200) supersedes the v1.0 baseline. It incorporates upgraded silicon fabrication on the 3nm lithography node, increasing core execution density while maintaining architectural backward compatibility with the AEGIS context packing compiler.
+
+## 2. Revised Electrical, Thermal & Processing Specifications
+
+| Parameter | Specification (v2.0) | Change Relative to v1.0 |
+| :--- | :--- | :--- |
+| Base Operating Frequency | 2.20 GHz | +350 MHz (+18.9% Overclock) |
+| Peak Tensor Compute (FP16) | 620 TFLOPS | +170 TFLOPS (+37.7% Throughput) |
+| Thermal Design Power (TDP) | 285 Watts | +65 Watts (Elevated Power Profile) |
+| Submodular Context Cache | 128 MB SRAM | Unchanged (Architectural Invariant) |
+| Memory Bus Architecture | 1024-bit HBM3e | 3.2 TB/sec peak bandwidth (2x) |
+| Host Bus Interface | PCIe Gen 5.0 x32 | 128 GB/sec bidirectional |
+
+Critical Engineering Discrepancies and Revisions:
+- Peak tensor compute throughput has been increased to 620 TFLOPS FP16, operating at an overclocked frequency of 2.20 GHz (superseding v1.0's 450 TFLOPS @ 1.85 GHz).
+- Maximum thermal design power (TDP) was re-rated to 285 Watts (increased from 220 Watts due to elevated clock profiles).
+- Submodular context packing cache remains unchanged at 128 MB SRAM per compute tile to guarantee $(1 - 1/e)/2$ knapsack convergence times.
+- Host interface is expanded to PCIe Gen 5.0 x32 offering 128 GB/sec.
+
+## 3. Reliability & Interface Security
+- Fault tolerance complies with ISO 26262 ASIL-B fail-safe guidelines.
+- Encrypted memory bus uses AES-GCM-256 with hardware key cycling every 3600 seconds.
+- Mean Time Between Failures (MTBF) is verified at 1,500,000 power-on hours.
