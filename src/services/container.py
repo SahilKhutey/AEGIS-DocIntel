@@ -89,7 +89,8 @@ class RealDocumentService:
                         content_type TEXT,
                         byte_size INTEGER,
                         sha256 TEXT,
-                        error_code TEXT
+                        error_code TEXT,
+                        lifecycle_state TEXT
                     )
                 """)
                 conn.execute("CREATE INDEX IF NOT EXISTS idx_documents_tenant_status ON documents(tenant_id, status)")
@@ -104,6 +105,7 @@ class RealDocumentService:
                     ("byte_size", "INTEGER"),
                     ("sha256", "TEXT"),
                     ("error_code", "TEXT"),
+                    ("lifecycle_state", "TEXT"),
                 ]:
                     if col_name not in existing_cols:
                         conn.execute(f"ALTER TABLE documents ADD COLUMN {col_name} {col_type}")
@@ -186,14 +188,15 @@ class RealDocumentService:
             with sqlite3.connect(self.db_path, timeout=10.0) as conn:
                 conn.execute("""
                     INSERT INTO documents
-                    (doc_id, tenant_id, filename, status, page_count, chunk_count, is_scanned, language, created_at, updated_at, raw_bytes, content_type, byte_size, sha256, error_code)
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    (doc_id, tenant_id, filename, status, page_count, chunk_count, is_scanned, language, created_at, updated_at, raw_bytes, content_type, byte_size, sha256, error_code, lifecycle_state)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                     ON CONFLICT(doc_id) DO UPDATE SET
                         status = excluded.status,
                         page_count = excluded.page_count,
                         chunk_count = excluded.chunk_count,
                         updated_at = excluded.updated_at,
                         error_code = excluded.error_code,
+                        lifecycle_state = excluded.lifecycle_state,
                         raw_bytes = COALESCE(excluded.raw_bytes, documents.raw_bytes)
                 """, (
                     doc_info["doc_id"],
@@ -211,6 +214,7 @@ class RealDocumentService:
                     doc_info.get("byte_size", len(raw_bytes) if raw_bytes else 0),
                     doc_info.get("sha256", ""),
                     doc_info.get("error_code"),
+                    doc_info.get("lifecycle_state", "READY" if doc_info["status"] == "ready" else "VALIDATING"),
                 ))
                 conn.commit()
         except Exception as e:
@@ -309,6 +313,7 @@ class RealDocumentService:
             "tenant_id": str(tenant_id),
             "filename": filename,
             "status": "processing",
+            "lifecycle_state": "VALIDATING",
             "page_count": 0,
             "chunk_count": 0,
             "is_scanned": False,
@@ -339,6 +344,7 @@ class RealDocumentService:
             ready_info = {
                 **initial_info,
                 "status": "ready",
+                "lifecycle_state": "READY",
                 "page_count": page_count,
                 "chunk_count": chunk_count,
                 "updated_at": datetime.now(timezone.utc).isoformat(),
@@ -368,6 +374,7 @@ class RealDocumentService:
             failed_info = {
                 **initial_info,
                 "status": "failed",
+                "lifecycle_state": "INDEXING_FAILED",
                 "updated_at": datetime.now(timezone.utc).isoformat(),
                 "error_code": type(exc).__name__,
             }
@@ -386,7 +393,7 @@ class RealDocumentService:
                 with sqlite3.connect(self.db_path, timeout=10.0) as conn:
                     cursor = conn.execute(
                         """
-                        SELECT doc_id, tenant_id, filename, status, page_count, chunk_count, is_scanned, language, created_at, content_type, byte_size
+                        SELECT doc_id, tenant_id, filename, status, page_count, chunk_count, is_scanned, language, created_at, content_type, byte_size, lifecycle_state
                         FROM documents
                         WHERE doc_id = ? AND tenant_id = ? AND status = 'ready'
                         """,
@@ -406,6 +413,7 @@ class RealDocumentService:
                             "created_at": row[8],
                             "content_type": row[9],
                             "byte_size": row[10],
+                            "lifecycle_state": row[11] or ("READY" if row[3] == "ready" else "VALIDATING"),
                         }
             except Exception:
                 pass
@@ -424,7 +432,7 @@ class RealDocumentService:
             try:
                 with sqlite3.connect(self.db_path, timeout=10.0) as conn:
                     cursor = conn.execute(
-                        "SELECT doc_id, tenant_id, status, chunk_count FROM documents WHERE doc_id = ? AND tenant_id = ?",
+                        "SELECT doc_id, tenant_id, status, chunk_count, lifecycle_state FROM documents WHERE doc_id = ? AND tenant_id = ?",
                         (str(doc_id), str(tenant_id)),
                     )
                     row = cursor.fetchone()
@@ -434,6 +442,7 @@ class RealDocumentService:
                             "tenant_id": row[1],
                             "status": row[2],
                             "chunk_count": row[3],
+                            "lifecycle_state": row[4] or ("READY" if row[2] == "ready" else "VALIDATING"),
                         }
             except Exception:
                 pass
@@ -448,6 +457,7 @@ class RealDocumentService:
                 self.stage = "complete" if d["status"] == "ready" else d["status"]
                 self.error = None
                 self.chunks_indexed = d.get("chunk_count", 0)
+                self.lifecycle_state = d.get("lifecycle_state", "READY" if d["status"] == "ready" else "VALIDATING")
         return _Status(doc)
 
     async def list_documents(self, tenant_id: str, page: int = 1, page_size: int = 20, status: str | None = None):
@@ -571,7 +581,7 @@ class RealDocumentService:
                         conn.execute(
                             """
                             UPDATE documents
-                            SET status = 'deleting', updated_at = ?
+                            SET status = 'deleting', lifecycle_state = 'DELETION_PENDING', updated_at = ?
                             WHERE doc_id = ? AND tenant_id = ? AND status IN ('ready', 'failed', 'delete_failed')
                             """,
                             (now_iso, str(doc_id), str(tenant_id)),

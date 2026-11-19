@@ -2670,3 +2670,46 @@ Established a complete, auditable legal compliance programme connecting privacy 
     * Full regression test pass rate: 109/109 tests passed (100% green).
     * Secret scan: 0 leaks detected across 354 commits.
     * Lint check: 0 ruff errors.
+
+---
+
+## PH-LAUNCH-02: Product Readiness Verification & Core Pipeline Restoration (Phase A / Gate 1 Signoff)
+
+- **Session Date:** November 19, 2026
+- **Status:** **APPROVED & FULLY VERIFIED (ALL 11 PHASE A TASKS GREEN, GATE 1 SATISFIED)**
+- **Governing Objective:** Fulfill the non-negotiable launch readiness principle: *a successful frontend build is NOT equivalent to product readiness*. Verify document ingestion, parsing, chunking, retrieval, token budgets, and citations on real physical files before advancing toward public launch.
+- **Key Accomplishments:**
+  - **Task PH-001 (Audit Current Product Functionality):** Completed comprehensive feature functionality matrix in `audit/product-development/baseline/`.
+  - **Task PH-002 (Fix Document Upload & File Lifecycle):**
+    * Updated `RealDocumentService` in `src/services/container.py` to persist and track `lifecycle_state` (`VALIDATING`, `READY`, `INDEXING_FAILED`, `DELETION_PENDING`).
+    * Created `tests/product_development/test_ph002_file_lifecycle.py` verifying opaque storage reference path traversal blocking, ingestion lifecycle progression, raw bytes checksum verification, cascading store deletion, and stale processing crash recovery (5/5 tests passed).
+  - **Task PH-003 (Restore Extraction Pipeline):**
+    * Created `tests/product_development/test_ph003_extraction_pipeline.py` verifying PDF (`sample.pdf`, `real_research_paper.pdf`), DOCX (`sample.docx`), TXT (`aegis_neural_hardware_spec_v1.txt`), and corrupt file handling (4/4 tests passed).
+  - **Task PH-004 (Restore Document Parsing):**
+    * Enhanced `NormalizedDocument` in `src/core/normalized_document.py` with property aliases (`source_id`, `source_path`, `format`) ensuring bi-directional compatibility.
+    * Created `tests/product_development/test_ph004_document_parsing.py` validating NormalizedDocument block hierarchy, LayoutDetector section/heading inference, UniversalParser plain text parsing, and SpatialReadingGraph Kahn's priority queue DAG reading order determinism (Theorem 6.2 permutation invariance) (4/4 tests passed).
+  - **Task PH-005 (Restore Processing Orchestration):**
+    * Created `tests/product_development/test_ph005_processing_orchestration.py` verifying durable job submission, input fingerprint idempotency deduplication, worker lease acquisition, transient retry with exponential backoff, permanent failure dead-lettering, and cross-tenant job isolation (4/4 tests passed).
+  - **Task PH-006 (Restore Retrieval & Indexing):**
+    * Created `tests/product_development/test_ph006_retrieval_and_indexing.py` verifying ElasticChunker table preservation, cosine semantic search, multi-signal Reciprocal Rank Fusion (RRF), and RetrievedEvidence provenance schemas (4/4 tests passed).
+  - **Task PH-007 (Restore Context Optimization):**
+    * Created `tests/product_development/test_ph007_context_optimization.py` verifying submodular knapsack optimization under hard token capacity constraints, query-adaptive token budgets (factoid vs comparison vs summary), ContextBuilder 1-based source map assembly, and deterministic text chunking (4/4 tests passed).
+  - **Task PH-008 (Validate LLM Integration):**
+    * Created `tests/product_development/test_ph008_llm_integration.py` verifying LLMService completion, streaming chunking, token pricing and operational cost calculation (`calc_cost`), server-side credential isolation (rejection of client-supplied API keys), and outbound network destination allowlist enforcement (5/5 tests passed).
+  - **Task PH-009 (Implement Citation Verification):**
+    * Created `tests/product_development/test_ph009_citation_verification.py` verifying RetrievedEvidence grounded citation validation, detection of hallucinated/foreign chunk IDs, canonical CitationReference model validation, and CitationVerifier excerpt matching (4/4 tests passed).
+  - **Task PH-010 (Complete Primary User Workflow):**
+    * Created `tests/product_development/test_ph010_primary_workflow.py` validating full clean-user end-to-end journey from document upload, status polling, RAG query with citations, cross-tenant isolation enforcement (HTTP 404), through cascading deletion (HTTP 204) (1/1 test passed).
+  - **Task PH-011 (Document Known Limitations):**
+    * Updated `launch/KNOWN_LIMITATIONS.md` with explicit processing boundaries, size limits, lease timeouts, and fail-closed citation abstention behaviors.
+  - **Gate 1 Formal Charter:**
+    * Published `audit/product-development/phase-a/PHASE_A_PRODUCT_READINESS_SIGNOFF.md` certifying unanimous GO determination.
+- **Verification Summary:**
+  - `tests/product_development/`: 45/45 passed (100% green).
+  - `tests/security/evaluation_release/`: 33/33 passed (100% green).
+  - `tests/security/product_hunt/`: 26/26 passed (100% green).
+  - `tests/launch/`: 15/15 passed (100% green).
+  - `tests/release/`: 58/58 passed (100% green).
+  - Total across all launch test suites: 177 passed, 0 failed.
+  - Secret scan: 0 leaks detected across 355 commits (`gitleaks detect`).
+  - Code style: 0 errors (`ruff check`).

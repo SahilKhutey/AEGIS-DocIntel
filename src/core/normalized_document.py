@@ -189,6 +189,26 @@ class NormalizedDocument:
     @property
     def full_text(self) -> str: return "\n\n".join(p.text for p in self.pages)
 
+    @property
+    def source_id(self) -> str:
+        return self.doc_id
+
+    @source_id.setter
+    def source_id(self, val: str) -> None:
+        self.doc_id = val
+
+    @property
+    def source_path(self) -> str:
+        return self.filename
+
+    @source_path.setter
+    def source_path(self, val: str) -> None:
+        self.filename = val
+
+    @property
+    def format(self) -> str:
+        return self.metadata.get("format", "")
+
     def all_blocks(self) -> list[NormalizedBlock]:
         return [b for p in self.pages for b in p.blocks]
 

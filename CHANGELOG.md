@@ -6,6 +6,34 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.0.0-beta.3] - 2026-11-19 — Product Readiness Verification & Core Pipeline Restoration (PH-LAUNCH-02 / Phase A)
+
+### Added
+- **Phase A Product Development Test Suites (`tests/product_development/`):**
+  - `test_ph002_file_lifecycle.py` (5 tests): Opaque storage reference security, forward lifecycle progression (`VALIDATING` -> `READY`), raw bytes checksum verification, cascading store deletion, and crash recovery from stale processing states.
+  - `test_ph003_extraction_pipeline.py` (4 tests): Ground-truth extraction, character recall, page counts, and metadata across real PDF (`sample.pdf`, `real_research_paper.pdf`), DOCX (`sample.docx`), and synthetic technical specification TXT (`aegis_neural_hardware_spec_v1.txt`), plus typed exception handling on corrupt payloads.
+  - `test_ph004_document_parsing.py` (4 tests): NormalizedDocument block hierarchies, LayoutDetector section and heading level enrichment, and SpatialReadingGraph Kahn's priority queue DAG reading order determinism (Theorem 6.2 permutation invariance).
+  - `test_ph005_processing_orchestration.py` (4 tests): Durable job submission, input fingerprint idempotency deduplication, worker lease acquisition and lifecycle state transitions, transient retry with exponential backoff, permanent failure dead-lettering, and cross-tenant job isolation.
+  - `test_ph006_retrieval_and_indexing.py` (4 tests): ElasticChunker multi-modal chunking respecting atomic table boundaries, dense cosine semantic search, multi-signal Reciprocal Rank Fusion (RRF), and RetrievedEvidence provenance.
+  - `test_ph007_context_optimization.py` (4 tests): Monotone submodular knapsack optimization under hard token capacity constraints, query-adaptive token budget sizing (factoid vs comparison vs summary), ContextBuilder 1-based source map assembly, and deterministic text chunking.
+  - `test_ph008_llm_integration.py` (5 tests): LLMService completion, streaming chunking, token pricing and operational cost calculation (`calc_cost`), server-side credential isolation (rejection of client-supplied API keys), and outbound network destination allowlist enforcement.
+  - `test_ph009_citation_verification.py` (4 tests): RetrievedEvidence grounded citation validation, detection of hallucinated/foreign chunk IDs, canonical CitationReference model validation, and CitationVerifier excerpt matching.
+  - `test_ph010_primary_workflow.py` (1 test): Full clean-user end-to-end journey from document upload, status polling, RAG query with citations, cross-tenant isolation enforcement (HTTP 404), through cascading deletion (HTTP 204).
+- **Formal Phase A Product Readiness Signoff Charter (`audit/product-development/phase-a/PHASE_A_PRODUCT_READINESS_SIGNOFF.md`):**
+  - Unanimous GO decision certifying that all 11 Milestone 1 tasks (`PH-001` through `PH-011`) have passed verification on real documents, satisfying Launch Readiness Gate 1.
+- **Processing Boundaries & Known Limitations (`launch/KNOWN_LIMITATIONS.md`):**
+  - Explicit documentation of supported file types, size limits (50MB), job lease timeouts (300s), and fail-closed citation abstention behaviors.
+
+### Changed
+- **`src/services/container.py` (`RealDocumentService`):**
+  - Added `lifecycle_state TEXT` column migration to SQLite storage schema.
+  - Enforced lifecycle state tracking (`VALIDATING` -> `READY` / `INDEXING_FAILED` / `DELETION_PENDING`) across `_persist_doc`, `ingest`, and `delete`.
+  - Returned `lifecycle_state` attribute in document query and status responses.
+- **`src/core/normalized_document.py` (`NormalizedDocument`):**
+  - Added property aliases `source_id`, `source_path`, and `format` to guarantee full bi-directional interface compatibility across both legacy and modern pipeline engines.
+
+---
+
 ## [1.0.0-beta.2] - 2026-11-19 — Product Hunt Launch Automation & Complete GitHub Actions Architecture (PH-LAUNCH-01)
 
 ### Added

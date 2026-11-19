@@ -39,3 +39,13 @@ In adherence to our core engineering principles, we believe in radical transpare
 - **Prometheus Metrics Exposure:** The `/metrics` endpoint labels series with `tenant_id`. Consequently, Nginx reverse proxy configurations **strictly block public access to `/metrics` (returning HTTP 404)** to prevent cross-tenant enumeration.
 - **Standalone Development Bypass:** Development authentication tokens (`dev-*`) are strictly rejected whenever `AEGIS_ENVIRONMENT=production` or `demo`. The public live demo accepts only scoped demo credentials.
 - **Cosign Provenance Signing:** Cryptographic container signature verification remains a roadmap item for v1.3.0.
+
+---
+
+## 6. Document Processing & Ingestion Boundaries (PH-011)
+
+- **Supported Ingestion Formats:** PDF (native text and scanned with OCR fallback), DOCX (modern zipped XML), TXT (UTF-8).
+- **Unsupported Ingestion Formats:** Legacy proprietary binaries (`.doc`, `.xls`, `.ppt`), password-encrypted or DRM-locked files, and password-protected archives fail closed with typed `EncryptedDocumentError` or `FormatError`.
+- **File Size and Quota Limits:** 50 MB per document in standard evaluation tier; maximum 100 documents per evaluation tenant workspace.
+- **Processing Timeouts & Leases:** Hard operation timeout of 300 seconds per background job attempt; maximum 4 automatic retries with exponential backoff before dead-letter failure.
+- **Citation Precision & Abstention:** When document context contains insufficient evidence to substantiate a query, the model is bound by contract to abstain ("Insufficient evidence") rather than extrapolate or fabricate citations.
