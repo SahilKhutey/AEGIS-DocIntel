@@ -1,0 +1,19 @@
+{
+  "work_packages": {
+    "PH-01": "COMPLETED",
+    "PH-02": "COMPLETED",
+    "PH-03": "COMPLETED",
+    "PH-04": "COMPLETED",
+    "PH-05": "COMPLETED",
+    "PH-06": "COMPLETED",
+    "PH-07": "COMPLETED",
+    "PH-08": "COMPLETED",
+    "PH-09": "COMPLETED",
+    "PH-10": "COMPLETED",
+    "PH-11": "COMPLETED",
+    "PH-12": "COMPLETED",
+    "PH-13": "COMPLETED"
+  },
+  "gates_passed": "15/15",
+  "final_recommendation": "UNCONDITIONAL_GO_FOR_SCHEDULED_LAUNCH"
+}

@@ -1,0 +1,15 @@
+{
+  "audit_phase": "PROT-FINAL-09",
+  "timestamp": "2026-11-19T09:25:00Z",
+  "release_version": "0.1.0-evaluation",
+  "commit_hash": "52e0402",
+  "package_filename": "AEGIS-Evaluation-0.1.0.zip",
+  "package_sha256": "b0aa37d650c97fccbfc98686252b447820abad59d4815de124eadd71fbea0c50",
+  "boundary_scan": {
+    "total_files": 37,
+    "python_files": 0,
+    "private_keys": 0,
+    "hardcoded_credentials": 0,
+    "status": "PASS_ZERO_LEAK"
+  }
+}

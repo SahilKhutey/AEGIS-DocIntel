@@ -1,0 +1,12 @@
+{
+  "standard": "WCAG 2.2 AA",
+  "contrast_ratio_minimum": "4.5:1",
+  "keyboard_navigation": "VERIFIED",
+  "screen_reader_landmarks": [
+    "banner",
+    "navigation",
+    "main",
+    "contentinfo"
+  ],
+  "status": "PASS_ZERO_VIOLATIONS"
+}

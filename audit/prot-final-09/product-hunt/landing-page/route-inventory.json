@@ -1,0 +1,29 @@
+{
+  "marketing_routes": [
+    {
+      "path": "/",
+      "purpose": "Hero, Problem, Solution, Demo, Trust, CTA",
+      "status": "ACTIVE"
+    },
+    {
+      "path": "/features",
+      "purpose": "In-depth feature breakdown",
+      "status": "ACTIVE"
+    },
+    {
+      "path": "/demo",
+      "purpose": "Interactive walkthrough & video",
+      "status": "ACTIVE"
+    },
+    {
+      "path": "/security",
+      "purpose": "Trust center, pentest proof, data protection",
+      "status": "ACTIVE"
+    },
+    {
+      "path": "/evaluation",
+      "purpose": "Evaluator onboarding, download, activation",
+      "status": "ACTIVE"
+    }
+  ]
+}

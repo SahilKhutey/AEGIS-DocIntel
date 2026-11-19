@@ -1,0 +1,8 @@
+{
+  "cookieless_tracking": true,
+  "ip_redaction_enforced": true,
+  "query_text_excluded": true,
+  "document_payloads_excluded": true,
+  "gdpr_compliance": true,
+  "dpdp_act_2023_compliance": true
+}

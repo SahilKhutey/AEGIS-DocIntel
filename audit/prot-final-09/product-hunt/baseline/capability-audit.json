@@ -1,0 +1,46 @@
+{
+  "audit_name": "Product Hunt Advertised Feature vs Live Implementation Audit",
+  "verified_features": [
+    {
+      "claim": "Spatial layout-aware parsing",
+      "implementation": "src/ingestion/secure_parser.py",
+      "verified": true
+    },
+    {
+      "claim": "Kahn DAG reading order",
+      "implementation": "src/engines/topology/",
+      "verified": true
+    },
+    {
+      "claim": "Submodular knapsack packing",
+      "implementation": "services/evaluation_gateway/quotas.py",
+      "verified": true
+    },
+    {
+      "claim": "Grounded coordinate citations",
+      "implementation": "src/api/routes/query.py",
+      "verified": true
+    },
+    {
+      "claim": "Multi-document comparison",
+      "implementation": "src/api/routes/compare.py",
+      "verified": true
+    },
+    {
+      "claim": "Ed25519 cryptographic licensing",
+      "implementation": "services/evaluation_gateway/license.py",
+      "verified": true
+    },
+    {
+      "claim": "Hardware-bound challenge-response",
+      "implementation": "services/evaluation_gateway/activation.py",
+      "verified": true
+    },
+    {
+      "claim": "Zero model training on user files",
+      "implementation": "compliance/registers/third_party_supplier_register.csv",
+      "verified": true
+    }
+  ],
+  "overall_status": "ALL_CLAIMS_VERIFIED"
+}

@@ -1,0 +1,30 @@
+{
+  "suites": [
+    {
+      "suite": "test_ph_01_positioning_and_copy",
+      "scope": "PH-01, PH-02, PH-05 character counts & copy invariants",
+      "tests": 6
+    },
+    {
+      "suite": "test_ph_02_visual_assets_and_dimensions",
+      "scope": "PH-06, PH-07 SVG dimensions & storyboard timeline",
+      "tests": 6
+    },
+    {
+      "suite": "test_ph_03_capability_claims_and_readiness",
+      "scope": "PH-03, PH-08 code alignment & limitation bounds",
+      "tests": 5
+    },
+    {
+      "suite": "test_ph_04_analytics_privacy_and_telemetry",
+      "scope": "PH-09 zero-PII schema & math invariants",
+      "tests": 4
+    },
+    {
+      "suite": "test_ph_05_launch_operations_and_signoff",
+      "scope": "PH-10, PH-11, PH-12, PH-13 runbook & signoff gates",
+      "tests": 5
+    }
+  ],
+  "total_tests": 26
+}

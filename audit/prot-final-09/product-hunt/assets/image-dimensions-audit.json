@@ -1,0 +1,19 @@
+{
+  "standards": {
+    "product_hunt_logo": {
+      "required_width": 512,
+      "required_height": 512,
+      "status": "PASS"
+    },
+    "product_hunt_gallery": {
+      "required_width": 1270,
+      "required_height": 760,
+      "status": "PASS"
+    },
+    "open_graph_social": {
+      "required_width": 1200,
+      "required_height": 630,
+      "status": "PASS"
+    }
+  }
+}

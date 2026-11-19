@@ -1,0 +1,28 @@
+{
+  "target_segments": [
+    {
+      "id": "SEG-01",
+      "name": "Researchers and Academics",
+      "priority": "P0",
+      "conversion_hook": "Citation grounding and multi-paper synthesis"
+    },
+    {
+      "id": "SEG-02",
+      "name": "Analysts and Knowledge Workers",
+      "priority": "P0",
+      "conversion_hook": "Cross-revision diffing and data isolation"
+    },
+    {
+      "id": "SEG-03",
+      "name": "Developers and Technical Teams",
+      "priority": "P1",
+      "conversion_hook": "Layout-aware parsing and schema-validated JSON"
+    },
+    {
+      "id": "SEG-04",
+      "name": "Students and Independent Learners",
+      "priority": "P2",
+      "conversion_hook": "Structured concept trees and summaries"
+    }
+  ]
+}

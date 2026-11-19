@@ -1,0 +1,7 @@
+{
+  "templates": {
+    "thank_you_general": "Thanks for taking a look at AEGIS-DocIntel! Let me know if you run into any formatting or table issues on your documents.",
+    "technical_architecture": "Great question! Standard tools flatten PDFs into flat text, whereas AEGIS extracts spatial bounding boxes and sorts them with a Kahn DAG before submodular knapsack context packing.",
+    "privacy_question": "Your uploads are strictly isolated and never used for model training under our provider and architecture agreements."
+  }
+}

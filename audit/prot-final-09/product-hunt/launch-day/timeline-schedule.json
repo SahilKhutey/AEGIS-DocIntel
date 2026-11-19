@@ -1,0 +1,8 @@
+{
+  "launch_day": {
+    "pacific_time_opening": "00:01 PT",
+    "indian_standard_time_opening": "13:31 IST",
+    "coverage_duration_hours": 24,
+    "primary_operator": "Sahil Khutey"
+  }
+}

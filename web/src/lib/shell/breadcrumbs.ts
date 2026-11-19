@@ -60,6 +60,26 @@ const ROUTE_BREADCRUMBS: Record<string, BreadcrumbDefinition[]> = {
     { label: "Workspace", href: "/" },
     { label: "Developer" },
   ],
+
+  "/features": [
+    { label: "Product", href: "/" },
+    { label: "Features & Architecture" },
+  ],
+
+  "/demo": [
+    { label: "Product", href: "/" },
+    { label: "75-Second Walkthrough" },
+  ],
+
+  "/security": [
+    { label: "Product", href: "/" },
+    { label: "Security & Trust Center" },
+  ],
+
+  "/evaluation": [
+    { label: "Product", href: "/" },
+    { label: "Evaluation Onboarding" },
+  ],
 };
 
 export function getBreadcrumbs(pathname: string): BreadcrumbDefinition[] {

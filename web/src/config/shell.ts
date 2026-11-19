@@ -103,6 +103,44 @@ export const SHELL_NAVIGATION: ShellNavigationGroup[] = [
     ],
   },
   {
+    id: "product",
+    label: "Product & Launch",
+    items: [
+      {
+        id: "features",
+        label: "Features & Architecture",
+        href: "/features",
+        icon: "file-search",
+        requiredPermissions: ["workspace.read"],
+        status: "active",
+      },
+      {
+        id: "demo",
+        label: "75s Walkthrough",
+        href: "/demo",
+        icon: "workflow",
+        requiredPermissions: ["workspace.read"],
+        status: "active",
+      },
+      {
+        id: "security",
+        label: "Security & Trust",
+        href: "/security",
+        icon: "clipboard-check",
+        requiredPermissions: ["workspace.read"],
+        status: "active",
+      },
+      {
+        id: "evaluation",
+        label: "Evaluation Portal",
+        href: "/evaluation",
+        icon: "plug",
+        requiredPermissions: ["workspace.read"],
+        status: "active",
+      },
+    ],
+  },
+  {
     id: "system",
     label: "System",
     items: [

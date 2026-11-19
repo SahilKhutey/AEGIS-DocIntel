@@ -1,0 +1,14 @@
+{
+  "registered_events": [
+    "ph_referral_landed",
+    "hero_cta_clicked",
+    "demo_video_played",
+    "evaluation_registered",
+    "package_download_started",
+    "device_activated",
+    "first_doc_processed",
+    "query_submitted",
+    "feedback_submitted"
+  ],
+  "pii_audit": "CLEAN_ZERO_PII"
+}

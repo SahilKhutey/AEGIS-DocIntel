@@ -1,0 +1,20 @@
+{
+  "escalation_tiers": {
+    "P0_CRITICAL": {
+      "sla_minutes": 5,
+      "action": "Fail-closed circuit breaker & hotfix"
+    },
+    "P1_HIGH": {
+      "sla_minutes": 15,
+      "action": "Worker scaling & queue clearance"
+    },
+    "P2_MEDIUM": {
+      "sla_minutes": 60,
+      "action": "Frontend or doc patch"
+    },
+    "P3_LOW": {
+      "sla_minutes": 240,
+      "action": "Backlog item creation"
+    }
+  }
+}

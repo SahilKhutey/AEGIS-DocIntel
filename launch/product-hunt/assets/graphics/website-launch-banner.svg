@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 400" width="1200" height="400">
+  <defs>
+    <linearGradient id="bgB" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#0b0f19"/><stop offset="100%" stop-color="#1e293b"/></linearGradient>
+    <linearGradient id="glow" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#ff6154"/><stop offset="100%" stop-color="#ff8976"/></linearGradient>
+  </defs>
+  <rect width="1200" height="400" fill="url(#bgB)"/>
+  <circle cx="950" cy="200" r="140" fill="#ff6154" opacity="0.08"/>
+
+  <rect x="80" y="60" width="240" height="34" rx="17" fill="#2d1515" stroke="#ff6154" stroke-width="1.5"/>
+  <text x="200" y="82" fill="#ff8976" font-family="sans-serif" font-size="13" font-weight="700" text-anchor="middle" letter-spacing="1">FEATURED ON PRODUCT HUNT</text>
+
+  <text x="80" y="150" fill="#ffffff" font-family="sans-serif" font-size="44" font-weight="800">AEGIS-DocIntel is LIVE</text>
+  <text x="80" y="200" fill="#94a3b8" font-family="sans-serif" font-size="20">Join our controlled evaluation release. Turn complex documents</text>
+  <text x="80" y="230" fill="#94a3b8" font-family="sans-serif" font-size="20">into structured, mathematically grounded intelligence.</text>
+
+  <g transform="translate(80, 280)">
+    <rect width="220" height="50" rx="8" fill="url(#glow)"/>
+    <text x="110" y="32" fill="#ffffff" font-family="sans-serif" font-size="16" font-weight="700" text-anchor="middle">Try Evaluation ↗</text>
+
+    <rect x="240" y="0" width="220" height="50" rx="8" fill="#1e293b" stroke="#334155"/>
+    <text x="350" y="32" fill="#e2e8f0" font-family="sans-serif" font-size="16" font-weight="600" text-anchor="middle">View Discussion 💬</text>
+  </g>
+</svg>

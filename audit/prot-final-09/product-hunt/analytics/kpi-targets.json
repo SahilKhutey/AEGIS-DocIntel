@@ -1,0 +1,10 @@
+{
+  "targets": {
+    "page_visits": 100,
+    "registrations": 20,
+    "activations": 10,
+    "first_document_completions": 10,
+    "feedback_submissions": 5,
+    "critical_defects": 0
+  }
+}

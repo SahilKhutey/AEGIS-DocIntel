@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1270 760" width="1270" height="760">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0b0f19" />
+      <stop offset="100%" stop-color="#1e293b" />
+    </linearGradient>
+    <linearGradient id="card" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b" />
+      <stop offset="100%" stop-color="#0f172a" />
+    </linearGradient>
+    <linearGradient id="blueG" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#3b82f6" />
+      <stop offset="100%" stop-color="#60a5fa" />
+    </linearGradient>
+    <linearGradient id="emeraldG" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#10b981" />
+      <stop offset="100%" stop-color="#34d399" />
+    </linearGradient>
+  </defs>
+
+  <rect width="1270" height="760" fill="url(#bg)" />
+
+  <!-- Badge -->
+  <rect x="80" y="70" width="230" height="34" rx="17" fill="#1e3a8a" stroke="#3b82f6" stroke-width="1.5" />
+  <text x="195" y="92" fill="#93c5fd" font-family="system-ui, -apple-system, sans-serif" font-size="13" font-weight="700" text-anchor="middle" letter-spacing="1">AEGIS-DOCINTEL 0.1.0</text>
+
+  <!-- Headline -->
+  <text x="80" y="160" fill="#ffffff" font-family="system-ui, -apple-system, sans-serif" font-size="44" font-weight="800">Turn Complex Documents</text>
+  <text x="80" y="215" fill="url(#blueG)" font-family="system-ui, -apple-system, sans-serif" font-size="44" font-weight="800">Into Structured Intelligence.</text>
+
+  <!-- Subheading -->
+  <text x="80" y="270" fill="#94a3b8" font-family="system-ui, -apple-system, sans-serif" font-size="19" font-weight="400">Layout-aware spatial parsing, submodular knapsack context packing,</text>
+  <text x="80" y="300" fill="#94a3b8" font-family="system-ui, -apple-system, sans-serif" font-size="19" font-weight="400">and 100% grounded coordinate citations across multi-page files.</text>
+
+  <!-- Feature Pills -->
+  <g transform="translate(80, 340)">
+    <rect x="0" y="0" width="165" height="40" rx="8" fill="#1e293b" stroke="#334155" />
+    <text x="82" y="25" fill="#e2e8f0" font-family="system-ui, sans-serif" font-size="14" font-weight="600" text-anchor="middle">Spatial Kahn DAG</text>
+
+    <rect x="180" y="0" width="185" height="40" rx="8" fill="#1e293b" stroke="#334155" />
+    <text x="272" y="25" fill="#e2e8f0" font-family="system-ui, sans-serif" font-size="14" font-weight="600" text-anchor="middle">Knapsack Optimization</text>
+
+    <rect x="380" y="0" width="175" height="40" rx="8" fill="#1e293b" stroke="#334155" />
+    <text x="467" y="25" fill="#e2e8f0" font-family="system-ui, sans-serif" font-size="14" font-weight="600" text-anchor="middle">Grounded Citations</text>
+
+    <rect x="570" y="0" width="180" height="40" rx="8" fill="#1e293b" stroke="#334155" />
+    <text x="660" y="25" fill="#10b981" font-family="system-ui, sans-serif" font-size="14" font-weight="600" text-anchor="middle">Zero-Leak Boundary</text>
+  </g>
+
+  <!-- Mockup UI Card -->
+  <g transform="translate(80, 420)">
+    <rect width="1110" height="280" rx="16" fill="url(#card)" stroke="#334155" stroke-width="1.5" />
+    <rect x="0" y="0" width="1110" height="46" rx="16" fill="#1e293b" />
+    <circle cx="28" cy="23" r="6" fill="#ef4444" />
+    <circle cx="48" cy="23" r="6" fill="#f59e0b" />
+    <circle cx="68" cy="23" r="6" fill="#10b981" />
+    <text x="100" y="28" fill="#64748b" font-family="monospace" font-size="13">https://aegis-docintel.internal/workspace/ask-aegis</text>
+
+    <!-- Query bar -->
+    <rect x="30" y="70" width="700" height="44" rx="8" fill="#0f172a" stroke="#3b82f6" />
+    <text x="48" y="97" fill="#f1f5f9" font-family="system-ui, sans-serif" font-size="14">What is the peak compute throughput and power consumption of the neural chip?</text>
+
+    <!-- Answer Box -->
+    <rect x="30" y="130" width="700" height="120" rx="8" fill="#0f172a" stroke="#334155" />
+    <text x="48" y="160" fill="#38bdf8" font-family="system-ui, sans-serif" font-size="14" font-weight="700">Answer (Grounded Invariant):</text>
+    <text x="48" y="188" fill="#e2e8f0" font-family="system-ui, sans-serif" font-size="14">Peak compute throughput is 620 TFLOPS with a TDP of 285W (v2 spec).</text>
+    <rect x="48" y="206" width="220" height="26" rx="6" fill="#064e3b" stroke="#10b981" />
+    <text x="158" y="223" fill="#34d399" font-family="monospace" font-size="12" text-anchor="middle">p.2 · bbox(42, 110, 280, 145)</text>
+
+    <!-- Right Side Sidebar Inspector -->
+    <rect x="760" y="70" width="320" height="180" rx="8" fill="#0f172a" stroke="#334155" />
+    <text x="780" y="98" fill="#94a3b8" font-family="system-ui, sans-serif" font-size="13" font-weight="700">CITATION AUDIT INSPECTOR</text>
+    <line x1="780" y1="112" x2="1060" y2="112" stroke="#334155" />
+    <text x="780" y="136" fill="#e2e8f0" font-family="system-ui, sans-serif" font-size="12">Document: aegis_neural_hardware_v2.pdf</text>
+    <text x="780" y="158" fill="#e2e8f0" font-family="system-ui, sans-serif" font-size="12">Spatial Hash: sha256:7c9e12...b4</text>
+    <text x="780" y="180" fill="#10b981" font-family="system-ui, sans-serif" font-size="12">✓ Ed25519 Cryptographically Grounded</text>
+    <text x="780" y="202" fill="#64748b" font-family="system-ui, sans-serif" font-size="12">Zero Model Training Invariant Active</text>
+  </g>
+</svg>

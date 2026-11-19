@@ -1,0 +1,81 @@
+{
+  "assets": [
+    {
+      "filename": "logo.svg",
+      "type": "logo",
+      "dimensions": "512x512",
+      "format": "SVG",
+      "status": "VERIFIED"
+    },
+    {
+      "filename": "logo-512x512.svg",
+      "type": "logo",
+      "dimensions": "512x512",
+      "format": "SVG",
+      "status": "VERIFIED"
+    },
+    {
+      "filename": "gallery-01-hero.svg",
+      "type": "gallery",
+      "dimensions": "1270x760",
+      "format": "SVG",
+      "status": "VERIFIED"
+    },
+    {
+      "filename": "gallery-02-workflow.svg",
+      "type": "gallery",
+      "dimensions": "1270x760",
+      "format": "SVG",
+      "status": "VERIFIED"
+    },
+    {
+      "filename": "gallery-03-retrieval.svg",
+      "type": "gallery",
+      "dimensions": "1270x760",
+      "format": "SVG",
+      "status": "VERIFIED"
+    },
+    {
+      "filename": "gallery-04-structured-output.svg",
+      "type": "gallery",
+      "dimensions": "1270x760",
+      "format": "SVG",
+      "status": "VERIFIED"
+    },
+    {
+      "filename": "gallery-05-trust-security.svg",
+      "type": "gallery",
+      "dimensions": "1270x760",
+      "format": "SVG",
+      "status": "VERIFIED"
+    },
+    {
+      "filename": "architecture-workflow.svg",
+      "type": "architecture",
+      "dimensions": "1270x760",
+      "format": "SVG",
+      "status": "VERIFIED"
+    },
+    {
+      "filename": "website-launch-banner.svg",
+      "type": "banner",
+      "dimensions": "1200x400",
+      "format": "SVG",
+      "status": "VERIFIED"
+    },
+    {
+      "filename": "og-image-1200x630.svg",
+      "type": "social_og",
+      "dimensions": "1200x630",
+      "format": "SVG",
+      "status": "VERIFIED"
+    },
+    {
+      "filename": "twitter-card-1200x630.svg",
+      "type": "social_twitter",
+      "dimensions": "1200x630",
+      "format": "SVG",
+      "status": "VERIFIED"
+    }
+  ]
+}
