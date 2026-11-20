@@ -2755,3 +2755,30 @@ Established a complete, auditable legal compliance programme connecting privacy 
   - Launch test suites: 177 / 177 tests passing.
   - Secret scan: **0 leaks detected across all commits** (`gitleaks detect`).
   - Code style: **0 errors** (`ruff check`).
+
+
+---
+
+## PH-LAUNCH-04: Product Hunt MCP Launch Automation Suite (PH-MCP-01 through PH-MCP-10 & PH-AC-01 through PH-AC-12)
+
+- **Session Date:** November 20, 2026
+- **Status:** **APPROVED & FULLY OPERATIONAL (ALL 10 WORKSTREAMS IMPLEMENTED & 12 CRITERIA VALIDATED)**
+- **Governing Objective:** Implement the full programmatic Product Hunt MCP launch execution suite across all 10 workstreams (`PH-MCP-01` through `PH-MCP-10`) and validate all 12 Acceptance Criteria (`PH-AC-01` through `PH-AC-12`) using the official Product Hunt MCP tool contracts.
+- **Key Accomplishments:**
+  - **Product Hunt MCP Launch Orchestrator (`scripts/launch/mcp_product_hunt_orchestrator.py`):**
+    * Implemented direct client and automated pipeline mapping across:
+      - `PH-MCP-01`: Account and launch readiness (`get_my_account`, `get_launch_context`, `list_my_launches`).
+      - `PH-MCP-02`: Product listing creation (`start_launch` with name, tagline, description, openSource, mcpServerUrls).
+      - `PH-MCP-03`: Listing content and HTML maker comment formatting (`format_maker_comment_html` generating `<p>`, `<ul>`, `<li>`, `<strong>`).
+      - `PH-MCP-04`: Media staging and gallery attachment (`prepare_launch_asset` with base64 encoding and `update_launch` asset binding).
+      - `PH-MCP-05`: Makers and topic metadata association (`get_launch_context` and `update_launch`).
+      - `PH-MCP-06`: Draft validation and pre-launch report generation.
+      - `PH-MCP-07`: Two-step publication workflow with `preview: True` confirmation token generation and final execution.
+      - `PH-MCP-08` through `PH-MCP-10`: Monitoring, comment triage, and post-launch analytics handlers.
+  - **Delivered Audit Reports (`audit/product-hunt/mcp/`):**
+    * `account-readiness-report.md`: Documenting Maker account readiness and MCP tool connectivity.
+    * `pre-launch-validation-report.md`: Tracking and certifying all 12 acceptance criteria (`PH-AC-01` through `PH-AC-12`).
+  - **Automated Verification Suite (`tests/launch/test_mcp_product_hunt_orchestrator.py`):**
+    * 6 automated tests validating HTML comment generation, field length bounds, acceptance model, dry-run execution, SVG asset sizing (<3MB), and JSON schema field compatibility (6/6 passed).
+    * Full launch test suite: 21/21 tests passed (100% green).
+    * Code style: 0 ruff errors.

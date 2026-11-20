@@ -65,3 +65,40 @@
 | **Gate 5** | **Website & Assets Gate** | Production landing page, SVGs, and copy verified | `audit/product-development/phase-c/` & `phase-d/` signoff charters | **PASSED** |
 | **Gate 6** | **Release Gate** | Signed Windows installer & portable ZIP with SBOM | `audit/product-development/phase-e/PHASE_E_RELEASE_CANDIDATE_SIGNOFF.md` | **PASSED** |
 | **Gate 7** | **Launch Gate** | Maker account verified, listing draft reviewed | `audit/product-development/final/LAUNCH_READINESS_GO_VERDICT.md` | **READY FOR MAKER** |
+
+
+---
+
+## 4. Product Hunt MCP Launch Workstreams (PH-MCP-01 through PH-MCP-10)
+
+| Workstream | Name | Implementation / Tool | Deliverable / Output | Status |
+| :--- | :--- | :--- | :--- | :---: |
+| `PH-MCP-01` | Account & Launch Readiness | `get_my_account`, `get_launch_context`, `list_my_launches` | `audit/product-hunt/mcp/account-readiness-report.md` | **READY** |
+| `PH-MCP-02` | Product Listing Creation | `start_launch` (URL, name, tagline, description, openSource) | Verified Product Hunt Draft Object | **READY** |
+| `PH-MCP-03` | Listing Content & HTML Comment | `update_launch` (`commentBody` HTML formatting) | Formatted First Maker Comment | **READY** |
+| `PH-MCP-04` | Media & Launch Assets | `prepare_launch_asset` (base64 SVG staging) | Staged Thumbnail & 5 Gallery Slides | **READY** |
+| `PH-MCP-05` | Makers & Launch Metadata | `get_launch_context` (maker IDs, category topics) | Validated Submission Metadata | **READY** |
+| `PH-MCP-06` | Draft Validation & Scheduling | `get_launch` (full field check & pre-launch audit) | `audit/product-hunt/mcp/pre-launch-validation-report.md` | **PASSED** |
+| `PH-MCP-07` | Two-Step Publication | `submit_launch` (preview token -> confirmation token) | Published Product Hunt Listing | **GATED** |
+| `PH-MCP-08` | Launch-Day Monitoring | `get_launch`, `get_product_profile`, `get_product_leaderboard` | Launch Day Monitoring Log | **PREPARED** |
+| `PH-MCP-09` | Community & Feedback | `get_product_profile` (comment tracking & categorization) | Feedback Triage Backlog | **PREPARED** |
+| `PH-MCP-10` | Post-Launch Analytics | Conversion tracking & post-launch performance | Post-Launch Performance Report | **PREPARED** |
+
+---
+
+## 5. Product Hunt Acceptance Criteria Verification (PH-AC-01 through PH-AC-12)
+
+| Criteria ID | Acceptance Criterion | Verification Method | Status |
+| :--- | :--- | :--- | :---: |
+| `PH-AC-01` | Account access verified | MCP `get_my_account` / OAuth | **READY (OAuth Gate)** |
+| `PH-AC-02` | Product listing draft created | MCP `start_launch` (idempotent key) | **READY (Payload Verified)** |
+| `PH-AC-03` | Product description verified | 302 characters (<= 500 ceiling) | **VERIFIED** |
+| `PH-AC-04` | Logo and gallery uploaded | 512x512 logo, 5x 1270x760 slides | **VERIFIED (<3MB)** |
+| `PH-AC-05` | Makers correctly associated | Maker `@SahilKhutey` verified | **VERIFIED** |
+| `PH-AC-06` | Website & product links verified | GitHub repository verified live | **VERIFIED** |
+| `PH-AC-07` | Pricing and availability verified | Free / Open Source Evaluation Beta | **VERIFIED** |
+| `PH-AC-08` | Core document workflow works E2E | Phase A pipeline verified (45 tests) | **PASSED (Gate 1)** |
+| `PH-AC-09` | Security & privacy readiness | Phase B security verified (95 tests) | **PASSED (Gate 3)** |
+| `PH-AC-10` | Beta validation completed | Closed beta & feedback workflow verified | **PASSED (Gate 4)** |
+| `PH-AC-11` | Final listing approved | Content & visual assets signoffs | **PASSED (Gate 5)** |
+| `PH-AC-12` | Publication confirmed | Two-step Maker confirmation token gate | **HOLD (Maker Action)** |
